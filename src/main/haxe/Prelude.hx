@@ -419,10 +419,10 @@ private class AbstractProduct implements Product {
   }
 
   private function getShow(i : Int) {
-    return if(null == _shows[i]) {
+    if(null == _shows[i]) {
       _shows[i] = Stax.getShowFor(productElement(i));
-    } else
-      _shows[i];
+    } 
+      return _shows[i];
   }
 }
 
