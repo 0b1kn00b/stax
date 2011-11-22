@@ -314,6 +314,12 @@ class ArrayExtensions {
     return r;
   }
   
+  public static function mapper < A, B > (src: Array<A>, f: A -> B): Array<B>
+		return src.map(f)
+
+  public static function proj < A, B > (f: A -> B) return function (src: Array<A>): Array<B>
+		return src.map(f)
+
   public static function compare<T>(v1: Array<T>, v2: Array<T>) {
       return compareWith(v1, v2, Stax.getOrderFor(v1[0]));
   } 
@@ -389,10 +395,17 @@ class ArrayExtensions {
     return -1;
   }
   
-  public static function map<T, S>(a: Array<T>, f: T -> S): Array<S> {
+  inline public static function map<T, S>(a: Array<T>, f: T -> S): Array<S> {
     var n: Array<S> = [];
     
     for (e in a) n.push(f(e));
+    
+    return n;
+  } 
+  public static function mapWithIndex<T, S>(a: Array<T>, f: T -> Int -> S): Array<S> {
+    var n: Array<S> = [];
+    var i = 0;
+    for (e in a) n.push(f(e, i++));
     
     return n;
   }
@@ -431,17 +444,37 @@ class ArrayExtensions {
   }
   
   public static function zip<A, B>(a: Array<A>, b: Array<B>): Array<Tuple2<A, B>> {
+		return zipWith(a, b, Tuple2.create);
+  }
+
+  public static function zipWith<A, B, C>(a: Array<A>, b: Array<B>, f : A -> B -> C): Array<C> {
     var len = Math.floor(Math.min(a.length, b.length));
     
-    var r: Array<Tuple2<A, B>> = [];
+    var r: Array<C> = [];
     
     for (i in 0...len) {
-      r.push(Tuple2.create(a[i], b[i]));
+      r.push(f(a[i], b[i]));
     }
     
     return r;
   }
-  
+
+  public static function zipWithIndex<A>(a: Array<A>): Array<Tuple2<A, Int>> {
+		return zipWithIndexWith(a, Tuple2.create);
+  }
+
+  public static function zipWithIndexWith<A, B>(a: Array<A>, f : A -> Int -> B): Array<B> {
+    var len = a.length;
+    
+    var r: Array<B> = [];
+    
+    for (i in 0...len) {
+      r.push(f(a[i], i));
+    }
+    
+    return r;
+  }
+	
   public static function append<T>(a: Array<T>, t: T): Array<T> {
     var copy = snapshot(a);
     
@@ -481,6 +514,12 @@ class ArrayExtensions {
     
     return a;
   }  
+  public static function foreachWithIndex<T>(a: Array<T>, f: T -> Int -> Void): Array<T> {
+    var i = 0;
+		for (e in a) f(e, i++);
+    
+    return a;
+  }  
   public static function take<T>(a: Array<T>, n: Int): Array<T> {
     return a.slice(0, n.min(a.length));
   }
@@ -505,6 +544,22 @@ class ArrayExtensions {
     
     return r;
   }
+
+	public static function splitAt<T>(srcArr : Array<T>, index : Int) : Tuple2 < Array<T>, Array<T> > return
+		srcArr.slice(0, index).entuple(srcArr.slice(index))
+
+	public static function sliceBy<T>(srcArr : Array<T>, sizeSrc : Array<Int>) : Array<Array<T>> return {
+		var slices = [];		
+		var restIndex = 0;
+		for (size in sizeSrc) {
+			var newRestIndex = restIndex + size;
+			var slice = srcArr.slice(restIndex, newRestIndex);
+			slices.push(slice);
+			restIndex = newRestIndex;
+		}
+		slices;
+	}
+	
   public static function decompose<T>(v: Array<T>): JValue {
     return if (v.size() != 0){
       var d = TranscodeJValue.getDecomposerFor(Type.typeof(v[0]));
@@ -513,7 +568,7 @@ class ArrayExtensions {
     else{
       JArray([]);
     }
-  }
+  }	
   public static function extract<T>(c: Class<Array<Dynamic>>, v: JValue, e: JExtractorFunction<T>): Array<T> {
     return switch(v) {
       case JArray(v): v.map(e);
@@ -864,7 +919,7 @@ class OptionExtensions {
   public static function toOption<T>(t: T): Option<T> {
     return if (t == null) None; else Some(t);
   }
-  
+	  
   public static function toArray<T>(o: Option<T>): Array<T> {
     return switch (o) {
       case None:    [];
@@ -878,6 +933,7 @@ class OptionExtensions {
       case Some(v): Some(f(v));
     }
   }
+	
   public static function then<T, S>(o1: Option<T>, o2: Option<S>): Option<S> {
     return o2;
   }
@@ -891,7 +947,7 @@ class OptionExtensions {
   public static function filter<T>(o: Option<T>, f: T -> Bool): Option<T> {
     return switch (o) {
       case None: None;
-      case Some(v): if (f(v)) Some(v) else None;
+      case Some(v): if (f(v)) o else None;
     }
   }
   
@@ -906,16 +962,24 @@ class OptionExtensions {
     }
   }
   
-  public static function zip<T, S>(o1: Option<T>, o2: Option<S>): Option<Tuple2<T, S>> {
+  public static function zip<T, S>(o1: Option<T>, o2: Option<S>) {
     return switch (o1) {
       case None: None;
-      case Some(v1): switch (o2) {
-        case None: None;
-        case Some(v2): Some(v1.entuple(v2));
-      }
+      case Some(v1): o2.map(v1.entuple);
     }
   }
-  
+
+  public static function zipWith<T, S, V>(o1: Option<T>, o2: Option<S>, f : T -> S -> V) : Option<V> {
+    return switch (o1) {
+      case None: None;
+      case Some(v1):
+				switch (o2) {
+					case None : None;
+					case Some(v2) : Some(f(v1, v2));
+				}
+    }
+  }
+
   public static function get<T>(o: Option<T>): T {
     return switch (o) {
       case None: Stax.error("Error: Option is empty");
@@ -935,15 +999,14 @@ class OptionExtensions {
     return OptionExtensions.orElse(o1, o2.toThunk());
   }
   
-  public static function orEither<T, S>(o1: Option<T>, thunk: Thunk<S>): Either<T, S> {
+  public static function orEither<T, S>(o1: Option<T>, thunk: Thunk<S>): Either<S, T> {
     return switch (o1) {
-      case None: EitherExtensions.toRight(thunk());
-      
-      case Some(v): EitherExtensions.toLeft(v);
+      case None: EitherExtensions.toLeft(thunk());
+      case Some(v): EitherExtensions.toRight(v);
     }
   }
   
-  public static function orEitherC<T, S>(o1: Option<T>, c: S): Either<T, S> {
+  public static function orEitherC<T, S>(o1: Option<T>, c: S): Either<S, T> {
     return OptionExtensions.orEither(o1, c.toThunk());
   }
   
@@ -961,9 +1024,16 @@ class OptionExtensions {
   public static function isEmpty<T>(o: Option<T>): Bool {
     return switch(o) {
       case None:    true;
-      case Some(v): false;
+      case Some(_): false;
     }
   }
+  public static function isDefined<T>(o: Option<T>): Bool {
+    return switch(o) {
+      case None:    false;
+      case Some(_): true;
+    }
+  }
+	
   public static function decompose<T>(v: Option<T>): JValue {
     return v.map(function(v) {return TranscodeJValue.getDecomposerFor(Type.typeof(v))(v);}).getOrElse(JNull.toThunk());
   }
