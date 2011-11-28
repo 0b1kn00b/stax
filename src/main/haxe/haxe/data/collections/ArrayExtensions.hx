@@ -20,7 +20,14 @@ import Prelude;
 using PreludeExtensions;
 
 class ArrayExtensions { 
-  public static function partition<T>(arr: Array<T>, f: T -> Bool): Tuple2<Array<T>, Array<T>> {
+	
+	/**
+	 * Divide an Array into two using function f on each element;
+	 * @param 	arr The Array to partition.
+	 * @param 	f		A function, returning true puts into the left Array, false into the right Array
+	 * @return			A Tuple2 containing the two resulting Arrays
+	 */
+  public static function partition<T>(arr: Array<T>, f: T -> Bool): Tuple2 < Array<T>, Array<T> > {
     return arr.foldl(Tuple2.create([], []), function(a, b) {
       if(f(b))
         a._1.push(b);
@@ -29,7 +36,12 @@ class ArrayExtensions {
       return a;
     });
   }
-  
+  /**
+   * Divide an Array into two until the first false returned from function f.
+	 * @param		arr		The Array to partition
+	 * @param		f			A function, returning true puts into the left Array unless a false has been returned.
+	 * @return 				A Tuple containing the two resulting Arrays
+   */
   public static function partitionWhile<T>(arr: Array<T>, f: T -> Bool): Tuple2<Array<T>, Array<T>> {
     var partitioning = true;
     
@@ -48,6 +60,13 @@ class ArrayExtensions {
     });
   }
 
+	/**
+	 * Process Array elements and append to another Array.
+	 * @param		src		An Array.
+	 * @param		dest	An Array to output to.
+	 * @param		f			A function that accepts one Array element.
+	 * @return				The process dest Array.
+	 */
   public static function mapTo<A, B>(src: Array<A>, dest: Array<B>, f: A -> B): Array<B> {
     return src.foldl(dest.snapshot(), function(a, b) {
       a.push(f(b));
@@ -55,6 +74,11 @@ class ArrayExtensions {
     });
   }
 
+	/**
+	 * Takes an Array of Arrays of type T, and returns an Array of type T;
+	 * @param 	arrs	An Array of Arrays of type T;
+	 * @return				An Array of Type T.
+	 */
   public static function flatten<T>(arrs: Array<Array<T>>): Array<T> {
 		var res : Array<T> = [];
 		for (arr in arrs) {
@@ -65,6 +89,9 @@ class ArrayExtensions {
 		return res;
 	}
   
+	/**
+	 * 
+	 */
 	public static function interleave<T>(alls: Array<Array<T>>): Array<T> {
 		var res = [];		
 		if (alls.length > 0) {

@@ -1,0 +1,6 @@
+-cp .
+-cp ../src/main/haxe
+-swf tst.swf
+-xml doc.xml
+-main ImportAll
+-x chxdoc docs.xml
