@@ -90,7 +90,13 @@ class ArrayExtensions {
 	}
   
 	/**
-	 * 
+	 * Takes an Array of Arrays of type T, and groups them by position in a flattened output.
+	 * [0,1,2],[0,1,2] 	= [0,0,1,1,2,2]
+	 * n.b. If the input Arrays are of different lengths, the operation will extend to the end of the 
+	 * shortest array only.
+	 * [0,1,2],[0,1]		= [0,0,1,1]
+	 * @param 	alls	An Array of Arrays of type T.
+	 * @return 				A flattened, by position Array of the input elements
 	 */
 	public static function interleave<T>(alls: Array<Array<T>>): Array<T> {
 		var res = [];		
@@ -110,7 +116,10 @@ class ArrayExtensions {
 		}
 		return res;
 	}
-	
+	/**
+	 * Generate Arrays from an Array, then return flattened and appended to Array dest.
+	 * @param 	src			
+	 */
   public static function flatMapTo<A, B>(src: Array<A>, dest: Array<B>, f: A -> Array<B>): Array<B> {
     return src.foldl(dest, function(a, b) {
 			for (e  in f(b))
