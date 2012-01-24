@@ -232,7 +232,7 @@ class Stream<T> {
     /**
      * Calls the specified function for each event.
      */
-    public function forEach(f: T -> Void): Stream<T> {
+    public function foreach(f: T -> Void): Stream<T> {
         Streams.create(
             function(pulse: Pulse<T>): Propagation<T> {
                 f(pulse.value);
@@ -249,7 +249,7 @@ class Stream<T> {
      * Calls the specified function for each event.
      */
     public function each(f: T -> Void): Stream<T> {
-        return forEach(f);
+        return foreach(f);
     }
     
     /**
@@ -1496,14 +1496,14 @@ class Signal<T> {
      * Calls the specified function for each event.
      */
     public function whenChanges(f: T -> Void): Void {
-      changes().forEach(f);
+      changes().foreach(f);
     }
 
     /**
      * Calls the specified function for each event.
      */
     public function nowAndWhenChanges(f: T -> Void): Void {
-      changes().forEach(f);
+      changes().foreach(f);
       f(valueNow());
     }
     

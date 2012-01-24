@@ -1,4 +1,5 @@
 /*
+/*
  HaXe library written by John A. De Goes <john@socialmedia.com>
  Contributed by Social Media Networks
 
@@ -349,7 +350,7 @@ class Arrays {
     return false;
   }
   
-  public static function forEach<T>(a: Array<T>, f: T -> Void): Array<T> {
+  public static function foreach<T>(a: Array<T>, f: T -> Void): Array<T> {
     for (e in a) f(e);
     
     return a;

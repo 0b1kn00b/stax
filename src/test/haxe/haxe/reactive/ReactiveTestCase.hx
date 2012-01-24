@@ -98,7 +98,7 @@ class ReactiveTestCase extends TestCase {
     
     var arr1: Iterable<Int> = [1, 2, 3, 4, 5, 6, 7];
     
-    var sForEach = stream.forEach(function(v) { self.incrementCounter(); });
+    var sForEach = stream.foreach(function(v) { self.incrementCounter(); });
     pump(stream, arr1, sForEach);
     
     assertEquals(counter, 7);
@@ -2539,7 +2539,7 @@ class ReactiveTestCase extends TestCase {
     var signal = Signals.constant(toCollection([10, 15, 25, 30, 40, 45, 50]));
     var self = this;
     
-    var forEach = SignalCollectionExtensions.forEach(signal, function(v) { self.incrementCounter(); });
+    var foreach = SignalCollectionExtensions.foreach(signal, function(v) { self.incrementCounter(); });
     
     assertEquals(7, getCounter());
     resetCounter();

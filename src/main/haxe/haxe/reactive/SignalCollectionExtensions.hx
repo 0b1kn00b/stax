@@ -61,7 +61,7 @@ class SignalCollectionExtensions {
         return b.map(function(c) { return c.forAny(tester); });
     }
     
-    public static function forEach<C, T>(b: Signal<Collection<C, T>>, f: T -> Void): Signal<Collection<C, T>> {
+    public static function foreach<C, T>(b: Signal<Collection<C, T>>, f: T -> Void): Signal<Collection<C, T>> {
         return b.map(function(c) { return cast c.foreach(f); });
     }
     

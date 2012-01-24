@@ -571,7 +571,7 @@ class Quirks {
     var val: Int = untyped elem[offsetValueExtract];
 
     if (extra != "border"){
-      which.forEach(function(v) {
+      which.foreach(function(v) {
         if (extra != ""){
            val -= getCssPropertyIfSet( elem, 'padding-' + v).map(function(s) return s.toInt(0)).getOrElseC(0);
         }
