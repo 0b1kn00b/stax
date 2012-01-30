@@ -26,7 +26,10 @@ class Stax {
 	public static inline function tool<A>(?order:OrderFunction<A>,?equal:EqualFunction<A>,?hash:HashFunction<A>,?show:ShowFunction<A>):CollectionTools<A>{
 		return { order : order , equal : equal , show : show , hash : hash };
 	}
-  
+
+  public static function noop0(){
+    return function(){};
+  }  
   public static function noop1<A>() {
     return function(a: A) { }
   }
@@ -42,7 +45,6 @@ class Stax {
   public static function noop5<A, B, C, D, E>() {
     return function(a: A, b: B, c: C, d: D, e: E) { }
   }
-
   public static function identity<A>(): Function<A, A> {
     return function(a: A) { return a; }
   }
