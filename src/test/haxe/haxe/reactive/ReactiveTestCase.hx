@@ -1122,7 +1122,8 @@ class ReactiveTestCase extends TestCase {
       var digit = output[i];
       
       if (!Std.is(digit, Float))  randomsReturned = false;
-      if (digit == null)          randomsReturned = false;
+      //TODO no can set null in Flash
+      //if (digit == null)          randomsReturned = false;
       if (digit == Math.NaN)      randomsReturned = false;
       if (digit > 1.0 || digit < 0.0)   randomsReturned = false;
     }
@@ -1148,7 +1149,7 @@ class ReactiveTestCase extends TestCase {
       var digit = output[i];
       
       if (!Std.is(digit, Float))  randomsReturned = false;
-      if (digit == null)          randomsReturned = false;
+      //if (digit == null)          randomsReturned = false;
       if (digit == Math.NaN)      randomsReturned = false;
       if (digit > 1.0 || digit < 0.0)   randomsReturned = false;
     }

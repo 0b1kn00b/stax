@@ -355,7 +355,7 @@ class Arrays {
     
     return a;
   }  
-  public static function forEachWithIndex<T>(a: Array<T>, f: T -> Int -> Void): Array<T> {
+  public static function foreachWithIndex<T>(a: Array<T>, f: T -> Int -> Void): Array<T> {
     var i = 0;
 		for (e in a) f(e, i++);
     
