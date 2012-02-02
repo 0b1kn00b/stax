@@ -314,7 +314,7 @@ class Iterables {
   }
    
   public static function find<T>(iter: Iterable<T>, f: T -> Bool): Option<T> {
-    return iter.toArray().find(f);
+    return Arrays.find(iter.toArray(),f);
   }
   public static function foreach<T>(iter : Iterable<T>, f : T-> Void ):Void {
     for (e in iter) f(e);
