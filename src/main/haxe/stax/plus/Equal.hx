@@ -62,9 +62,13 @@ class Equal {
             });    
           } else if(Type.getInstanceFields(c).remove("equals")) {
             _createEqualImpl(function(a, b) return (cast a).equals(b));
-          } else {
-            Stax.error("class "+Type.getClassName(c)+" has not equals method");
+          }else{
+            _createEqualImpl( function(a,b) return a == b );
           }
+          /*
+          else {
+            Stax.error("class "+Type.getClassName(c)+" has not equals method");
+          }*/
       }
     case TEnum(e):
       _createEqualImpl(function(a, b) {
