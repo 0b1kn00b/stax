@@ -11,24 +11,22 @@ import stax.plus.Equal;
 import stax.plus.Show;
 import stax.plus.Hasher;
 
-typedef TTuple2<A,B> = {
-	_1 : A,
-	_2 : B
-}
-typedef TTuple3<A,B,C> = { > TTuple2<A,B>,
-	_3 : C,
-}
-typedef TTuple4<A,B,C,D> = { > TTuple3<A,B,C>,
-	_4 : C,
-}
-typedef TTuple5<A,B,C,D,E> = { > TTuple4<A,B,C,D>,
-	_5 : C,
-}
-
 class Tuples {
-	public static function entuple<A, B>(a: A, b: B): Tuple2<A, B> {
-    return Tuple2.create(a, b);
+	public static function entuple<A, B>(_1: A, _2: B): Tuple2<A, B> {
+    return Tuple2.create(_1, _2);
   }
+	public static inline function t2<A,B>(_1:A,_2:B):Tuple2<A,B>{
+		return Tuple2.create(_1, _2);
+	}
+	public static inline function t3<A,B,C>(_1:A,_2:B,_3:C):Tuple3<A,B,C>{
+		return Tuple3.create(_1, _2, _3);
+	}
+	public static inline function t4<A,B,C,D>(_1:A,_2:B,_3:C,_4:D):Tuple4<A,B,C,D>{
+		return Tuple4.create(_1, _2, _3, _4);
+	}
+	public static inline function t5<A,B,C,D,E>(_1:A,_2:B,_3:C,_4:D,_5:E):Tuple5<A,B,C,D,E>{
+		return Tuple5.create(_1, _2, _3, _4, _5);
+	}
 }
 interface Product {
   public var productPrefix (getProductPrefix, null): String;
@@ -159,16 +157,26 @@ class Tuple2<A, B> extends AbstractProduct {
   public function compare(other : Tuple2<A, B>): Int {
     return productCompare(other);
   }
-	public function entuple<C>(c: C): Tuple3<A, B, C> {
-    return Tuple3.create(_1, _2, c);
+	public function entuple<C>(_3: C): Tuple3<A, B, C> {
+    return Tuple3.create(_1, _2, _3);
   }	
   public function equals(other : Tuple2<A, B>): Bool {
     return productEquals(other);
   }
-
-  public static function create<A, B>(a: A, b: B): Tuple2<A, B> {
-    return new Tuple2<A, B>(a, b);
+	public static function fromType<A,B>(t:TTuple2<A,B>):Tuple2<A,B>{
+		return Tuple2.create(t._1, t._2);
+	}
+	public static function toType<A,B>(t:Tuple2<A,B>):TTuple2<A,B> {
+		return { _1 : t._1 , _2 : t._2 };
+	}
+  public static function create<A, B>(_1: A, _2: B): Tuple2<A, B> {
+    return new Tuple2<A, B>(_1, _2);
   }
+	public static function patch<A,B>(t0:Tuple2<A,B>,t1:Tuple2<A,B>):Tuple2<A,B>{
+		var _1 = t1._1 == null ? t0._1 : t1._1;
+		var _2 = t1._2 == null ? t0._2 : t1._2;
+		return Tuples.t2(_1, _2);
+	}
 
 }
 class Tuple3< A, B, C> extends AbstractProduct {
@@ -205,9 +213,15 @@ class Tuple3< A, B, C> extends AbstractProduct {
     return productEquals(other);
   }
 
-  public static function create<A, B, C>(a: A, b: B, c: C): Tuple3<A, B, C> {
-    return new Tuple3<A, B, C>(a, b, c);
+  public static function create<A, B, C>(_1: A, _2: B, _3: C): Tuple3<A, B, C> {
+    return new Tuple3<A, B, C>(_1, _2, _3);
   }
+	public static function patch<A,B,C>(t0:Tuple3<A,B,C>,t1:Tuple3<A,B,C>):Tuple3<A,B,C>{
+		var _1 = t1._1 == null ? t0._1 : t1._1;
+		var _2 = t1._2 == null ? t0._2 : t1._2;
+		var _3 = t1._3 == null ? t0._3 : t1._3;
+		return Tuples.t3(_1, _2, _3);
+	}
 }
 class Tuple4< A, B, C, D> extends AbstractProduct {
   public var _1 (default, null): A;
@@ -237,8 +251,8 @@ class Tuple4< A, B, C, D> extends AbstractProduct {
     return 4;
   }
 
-  public function entuple<E>(e: E): Tuple5<A, B, C, D, E> {
-    return Tuple5.create(_1, _2, _3, _4, e);
+  public function entuple<E>(_5: E): Tuple5<A, B, C, D, E> {
+    return Tuple5.create(_1, _2, _3, _4, _5);
   }
 
   public function compare(other : Tuple4<A, B, C, D>): Int {
@@ -249,9 +263,16 @@ class Tuple4< A, B, C, D> extends AbstractProduct {
     return productEquals(other);
   }
 
-  public static function create<A, B, C, D>(a: A, b: B, c: C, d: D): Tuple4<A, B, C, D> {
-    return new Tuple4<A, B, C, D>(a, b, c, d);
+  public static function create<A, B, C, D>(_1: A, _2: B, _3: C, _4: D): Tuple4<A, B, C, D> {
+    return new Tuple4<A, B, C, D>(_1, _2, _3, _4);
   }
+	public static function patch<A,B,C,D>(t0:Tuple4<A,B,C,D>,t1:Tuple4<A,B,C,D>):Tuple4<A,B,C,D>{
+		var _1 = t1._1 == null ? t0._1 : t1._1;
+		var _2 = t1._2 == null ? t0._2 : t1._2;
+		var _3 = t1._3 == null ? t0._3 : t1._3;
+		var _4 = t1._4 == null ? t0._4 : t1._4;
+		return Tuples.t4(_1, _2, _3, _4);
+	}
 }
 
 class Tuple5< A, B, C, D, E> extends AbstractProduct {
@@ -292,7 +313,130 @@ class Tuple5< A, B, C, D, E> extends AbstractProduct {
     return productEquals(other);
   }
 
-  public static function create<A, B, C, D, E>(a: A, b: B, c: C, d: D, e: E): Tuple5<A, B, C, D, E> {
-    return new Tuple5<A, B, C, D, E>(a, b, c, d, e);
+  public static function create<A, B, C, D, E>(_1: A, _2: B, _3: C, _4: D, _5: E): Tuple5<A, B, C, D, E> {
+    return new Tuple5<A, B, C, D, E>(_1, _2, _3, _4, _5);
   }
+	public static function patch<A,B,C,D,E>(t0:Tuple5<A,B,C,D,E>,t1:Tuple5<A,B,C,D,E>):Tuple5<A,B,C,D,E>{
+		var _1 = t1._1 == null ? t0._1 : t1._1;
+		var _2 = t1._2 == null ? t0._2 : t1._2;
+		var _3 = t1._3 == null ? t0._3 : t1._3;
+		var _4 = t1._4 == null ? t0._4 : t1._4;
+		var _5 = t1._5 == null ? t0._5 : t1._5;
+		return Tuples.t5(_1, _2, _3, _4, _5);
+	}
+}
+
+typedef TTuple2Dynamic = TTuple2<Dynamic,Dynamic>;
+typedef TTuple3Dynamic = TTuple3<Dynamic,Dynamic,Dynamic>;
+typedef TTuple4Dynamic = TTuple4<Dynamic,Dynamic,Dynamic,Dynamic>;
+typedef TTuple5Dynamic = TTuple5<Dynamic,Dynamic,Dynamic,Dynamic,Dynamic>;
+
+class TTuples {
+	public static inline function t2<A,B>(_1:A,_2:B):TTuple2<A,B>{
+		return { _1 : _1, _2 : _2 };
+	}
+	public static inline function t3<A,B,C>(_1:A,_2:B,_3:C):TTuple3<A,B,C>{
+		return { _1 : _1, _2 : _2, _3 : _3};
+	}
+	public static inline function t4<A,B,C,D>(_1:A,_2:B,_3:C,_4:D):TTuple4<A,B,C,D>{
+		return { _1 : _1, _2 : _2, _3 : _3, _4 : _4 };
+	}
+	public static inline function t5<A,B,C,D,E>(_1:A,_2:B,_3:C,_4:D,_5:E):TTuple5<A,B,C,D,E>{
+		return { _1 : _1, _2 : _2, _3 : _3, _4 : _4, _5 : _5 };
+	}
+}
+typedef TTuple2<A,B> = {
+	_1 : Null<A>,
+	_2 : Null<B>,
+}
+typedef TTuple3<A,B,C> = { > TTuple2<A,B>,
+	_3 : Null<C>,
+}
+typedef TTuple4<A,B,C,D> = { > TTuple3<A,B,C>,
+	_4 : Null<D>,
+}
+typedef TTuple5<A,B,C,D,E> = { > TTuple4<A,B,C,D>,
+	_5 : Null<E>,
+}
+class T2 {
+	public static function first<A,B>(t:TTuple2<A,B>):A{
+		return t._1;
+	}
+	public static function second<A,B>(t:TTuple2<A,B>):B{
+		return t._2;
+	}
+	public static function entuple<A,B>(_1:A,_2:B):TTuple2<A,B>{
+		return TTuples.t2(_1, _2);
+	}
+	public static function apply<A,B,C>(args:TTuple2<A,B>,f:A->B->C):C{
+		return f(args._1, args._2);
+	}
+	public static function call<A,B,C>(f:A->B->C,args:TTuple2<A,B>):C{
+		return f(args._1, args._2);
+	}
+	public static function patch<A,B>(t0:TTuple2<A,B>,t1:TTuple2<A,B>):TTuple2<A,B>{
+		var _1 = t1._1 == null ? t0._1 : t1._1;
+		var _2 = t1._2 == null ? t0._2 : t1._2;
+		return TTuples.t2(_1, _2);
+	}
+	public static function toArray<A,B>(v:TTuple2<A,B>):Array<Dynamic>{
+		return [v._1, v._2];
+	}
+	public static function fromArray(arr:Array<Dynamic>):TTuple2<Dynamic,Dynamic>{
+		return TTuples.t2(arr[0], arr[1]);
+	}
+}
+class T3 {
+	public static function entuple<A,B,C>(a:TTuple2<A,B>,b:C):TTuple3<A,B,C>{
+		return TTuples.t3(a._1, a._2 , b);
+	}
+	public static function apply<A,B,C,D>(args:TTuple3<A,B,C>,f:A->B->C->D):D{
+		return f(args._1, args._2, args._3);
+	}
+	public static function call<A,B,C,D>(f:A->B->C->D,args:TTuple3<A,B,C>):D{
+		return f(args._1, args._2, args._3);
+	}
+	public static function patch<A,B,C>(t0:TTuple3<A,B,C>,t1:TTuple3<A,B,C>):TTuple3<A,B,C>{
+		var _1 = t1._1 == null ? t0._1 : t1._1;
+		var _2 = t1._2 == null ? t0._2 : t1._2;
+		var _3 = t1._3 == null ? t0._3 : t1._3;
+		return TTuples.t3(_1, _2, _3);
+	}
+}
+class T4 {
+	public static function entuple<A,B,C,D>(a:TTuple3<A,B,C>,b:D):TTuple4<A,B,C,D>{
+		return TTuples.t4(a._1, a._2, a._3, b);
+	}
+	public static function call<A,B,C,D,E>(f:A->B->C->D->E,args:TTuple4<A,B,C,D>):E{
+		return f(args._1, args._2, args._3, args._4);
+	}
+	public static function apply<A,B,C,D,E>(args:TTuple4<A,B,C,D>,f:A->B->C->D->E):E{
+		return f(args._1, args._2, args._3,args._4);
+	}
+	public static function patch<A,B,C,D>(t0:TTuple4<A,B,C,D>,t1:TTuple4<A,B,C,D>):TTuple4<A,B,C,D>{
+		var _1 = t1._1 == null ? t0._1 : t1._1;
+		var _2 = t1._2 == null ? t0._2 : t1._2;
+		var _3 = t1._3 == null ? t0._3 : t1._3;
+		var _4 = t1._4 == null ? t0._4 : t1._4;
+		return TTuples.t4(_1, _2, _3, _4);
+	}
+}
+class T5 {
+	public static function entuple<A,B,C,D,E>(a:TTuple4<A,B,C,D>,b:E):TTuple5<A,B,C,D,E>{
+		return TTuples.t5(a._1, a._2 , a._3, a._4 ,b);
+	}
+	public static function call<A,B,C,D,E,F>(f:A->B->C->D->E->F,args:TTuple5<A,B,C,D,E>):F{
+		return f(args._1, args._2, args._3, args._4, args._5);
+	}	
+	public static function apply<A,B,C,D,E,F>(args:TTuple5<A,B,C,D,E>,f:A->B->C->D->E->F):F{
+		return f(args._1, args._2, args._3, args._4, args._5);
+	}
+	public static function patch<A,B,C,D,E>(t0:TTuple5<A,B,C,D,E>,t1:TTuple5<A,B,C,D,E>):TTuple5<A,B,C,D,E>{
+		var _1 = t1._1 == null ? t0._1 : t1._1;
+		var _2 = t1._2 == null ? t0._2 : t1._2;
+		var _3 = t1._3 == null ? t0._3 : t1._3;
+		var _4 = t1._4 == null ? t0._4 : t1._4;
+		var _5 = t1._5 == null ? t0._5 : t1._5;
+		return TTuples.t5(_1, _2, _3, _4, _5);
+	}
 }
