@@ -20,9 +20,11 @@ package stax;
 using Stax;
 import Stax;
 
-import Prelude; 
+
 import stax.Tuples;
 using stax.Tuples;
+
+import Prelude; 
 
 import stax.plus.Equal;
 
@@ -33,7 +35,7 @@ using stax.Arrays;
 
 class Arrays { 
   public static function partition<T>(arr: Array<T>, f: T -> Bool): Tuple2<Array<T>, Array<T>> {
-    return arr.foldl(Tuple2.create([], []), function(a, b) {
+    return arr.foldl(Tuples.t2([], []), function(a, b) {
       if(f(b))
         a._1.push(b);
       else
@@ -45,7 +47,7 @@ class Arrays {
   public static function partitionWhile<T>(arr: Array<T>, f: T -> Bool): Tuple2<Array<T>, Array<T>> {
     var partitioning = true;
     
-    return arr.foldl(Tuple2.create([], []), function(a, b) {
+    return arr.foldl(Tuples.t2([], []), function(a, b) {
       if (partitioning) {
         if (f(b))
           a._1.push(b);
@@ -253,7 +255,7 @@ class Arrays {
     return intersectBy(arr1, arr2, Equal.getEqualFor(arr1[0]));
   }
 	public static function splitAt<T>(srcArr : Array<T>, index : Int) : Tuple2 < Array<T>, Array<T> > return
-		srcArr.slice(0, index).entuple(srcArr.slice(index))   
+	stax.Tuples.t2(srcArr.slice(0, index),srcArr.slice(index))  
   
   public static function indexOf<T>(a: Array<T>, t: T): Int {
     var index = 0;
@@ -290,7 +292,7 @@ class Arrays {
   }
   
   public static function zip<A, B>(a: Array<A>, b: Array<B>): Array<Tuple2<A, B>> {
-		return zipWith(a, b, Tuple2.create);
+		return zipWith(a, b, Tuples.t2);
   }
 
   public static function zipWith<A, B, C>(a: Array<A>, b: Array<B>, f : A -> B -> C): Array<C> {
@@ -306,7 +308,7 @@ class Arrays {
   }
 
   public static function zipWithIndex<A>(a: Array<A>): Array<Tuple2<A, Int>> {
-		return zipWithIndexWith(a, Tuple2.create);
+		return zipWithIndexWith(a, Tuples.t2);
   }
 
   public static function zipWithIndexWith<A, B>(a: Array<A>, f : A -> Int -> B): Array<B> {

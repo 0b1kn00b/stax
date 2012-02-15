@@ -50,27 +50,27 @@ class FoldableExtensions {
   }
   
   public static function partition<A, B>(foldable: Foldable<A, B>, f: B -> Bool): Tuple2<A, A> {
-    return cast foldable.foldl(Tuple2.create(foldable.empty(), foldable.empty()), function(a, b) {
-      return if (f(b)) Tuple2.create(cast a._1.append(b), a._2); else Tuple2.create(a._1, cast a._2.append(b));
+    return cast foldable.foldl(Tuples.t2(foldable.empty(), foldable.empty()), function(a, b) {
+      return if (f(b)) Tuples.t2(cast a._1.append(b), a._2); else Tuples.t2(a._1, cast a._2.append(b));
     });
   }
   
   public static function partitionWhile<A, B>(foldable: Foldable<A, B>, f: B -> Bool): Tuple2<A, A> {
     var partitioning = true;
     
-    return cast foldable.foldl(Tuple2.create(foldable.empty(), foldable.empty()), function(a, b) {
+    return cast foldable.foldl(Tuples.t2(foldable.empty(), foldable.empty()), function(a, b) {
       return if (partitioning) {
         if (f(b)) {
-          Tuple2.create(cast a._1.append(b), a._2);
+          Tuples.t2(cast a._1.append(b), a._2);
         }
         else {
           partitioning = false;
           
-          Tuple2.create(a._1, cast a._2.append(b));
+          Tuples.t2(a._1, cast a._2.append(b));
         }
       }
       else {
-        Tuple2.create(a._1, cast a._2.append(b));
+        Tuples.t2(a._1, cast a._2.append(b));
       }
     });
   }

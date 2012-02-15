@@ -15,6 +15,9 @@
 */
 package haxe.net;
 
+import stax.Tuples;
+using stax.Tuples;
+
 import Prelude;
 using Stax;
 
@@ -23,8 +26,7 @@ import haxe.data.collections.Map;
 
 using stax.Strings;
  
-import stax.Tuples;
-using stax.Tuples;
+
 using stax.Options;
 
 using haxe.functional.Foldable;

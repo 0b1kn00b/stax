@@ -27,21 +27,21 @@ using haxe.functional.PartialFunctionExtensions;
 
 class PartialFunctionTestCase extends TestCase {
     public function testIsDefinedAtForPartialFunction1() {
-      var f = [Tuple2.create(function(i: Int) return i > 0, function(i: Int) return i * i)].toPartialFunction();
+      var f = [Tuples.t2(function(i: Int) return i > 0, function(i: Int) return i * i)].toPartialFunction();
       
       assertTrue(f.isDefinedAt(2));
       assertFalse(f.isDefinedAt(-2));
     }
     
     public function testCallForPartialFunction1() {
-      var f = [Tuple2.create(function(i: Int) return i > 0, function(i: Int) return i * i)].toPartialFunction();
+      var f = [Tuples.t2(function(i: Int) return i > 0, function(i: Int) return i * i)].toPartialFunction();
       
       assertEquals(4, f.call(2));
     }
     
     public function testOrElseForPartialFunction1() {
-      var f1 = [Tuple2.create(function(i: Int) return i > 0, function(i: Int) return i * i)].toPartialFunction();
-      var f2 = [Tuple2.create(function(i: Int) return i < 0, function(i: Int) return i * i)].toPartialFunction();
+      var f1 = [Tuples.t2(function(i: Int) return i > 0, function(i: Int) return i * i)].toPartialFunction();
+      var f2 = [Tuples.t2(function(i: Int) return i < 0, function(i: Int) return i * i)].toPartialFunction();
       
       var f = f1.orElse(f2);
       
@@ -52,7 +52,7 @@ class PartialFunctionTestCase extends TestCase {
     }
     
     public function testOrAlwaysCForPartialFunction1() {
-      var f = [Tuple2.create(function(i: Int) return i > 0, function(i: Int) return i * i)].toPartialFunction();
+      var f = [Tuples.t2(function(i: Int) return i > 0, function(i: Int) return i * i)].toPartialFunction();
       
       assertTrue(f.orAlwaysC(9.toThunk()).isDefinedAt(-2));
     }

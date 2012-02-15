@@ -1038,7 +1038,7 @@ class ReactiveTestCase extends TestCase {
     var boolStream: Stream<Bool> =      Streams.identity();
     var ifTrueStream: Stream<String> =  boolStream.map(function(v) { return "Is True"; } );
     
-    var conditions: Iterable<Tuple2<Stream<Bool>, Stream<String>>> = [Tuple2.create(boolStream, ifTrueStream)];
+    var conditions: Iterable<Tuple2<Stream<Bool>, Stream<String>>> = [Tuples.t2(boolStream, ifTrueStream)];
     var boolArray = [true, false, true];
     
     var conded = Streams.cond(conditions).toArray();
@@ -1379,15 +1379,15 @@ class ReactiveTestCase extends TestCase {
     
     var all = zipped.changes().toArray();
     
-    assertEquals(Tuple2.create(0, 1), zipped.valueNow());
+    assertEquals(Tuples.t2(0, 1), zipped.valueNow());
     
     mySignal.sendSignal(2);
     
-    assertEquals(Tuple2.create(2, 3), zipped.valueNow());
+    assertEquals(Tuples.t2(2, 3), zipped.valueNow());
     
     mySignal.sendSignal(3);
     
-    assertEquals(Tuple2.create(3, 4), zipped.valueNow());
+    assertEquals(Tuples.t2(3, 4), zipped.valueNow());
   }
   
   public function testSignalZip3():Void {
@@ -1398,15 +1398,15 @@ class ReactiveTestCase extends TestCase {
     
     var zipped = mySignal.zip3(mappedSignal1, mappedSignal2);
     
-    assertEquals(Tuple3.create(0, 1, 2), zipped.valueNow());
+    assertEquals(Tuples.t3(0, 1, 2), zipped.valueNow());
     
     mySignal.sendSignal(2);
     
-    assertEquals(Tuple3.create(2, 3, 4), zipped.valueNow());
+    assertEquals(Tuples.t3(2, 3, 4), zipped.valueNow());
     
     mySignal.sendSignal(3);
     
-    assertEquals(Tuple3.create(3, 4, 5), zipped.valueNow());
+    assertEquals(Tuples.t3(3, 4, 5), zipped.valueNow());
   }
     
   public function testSignalZip4():Void {
@@ -1418,15 +1418,15 @@ class ReactiveTestCase extends TestCase {
     
     var zipped = mySignal.zip4(mappedSignal1, mappedSignal2, mappedSignal3);
     
-    assertEquals(Tuple4.create(0, 1, 2, 4), zipped.valueNow());
+    assertEquals(Tuples.t4(0, 1, 2, 4), zipped.valueNow());
     
     mySignal.sendSignal(2);
     
-    assertEquals(Tuple4.create(2, 3, 4, 8), zipped.valueNow());
+    assertEquals(Tuples.t4(2, 3, 4, 8), zipped.valueNow());
     
     mySignal.sendSignal(3);
     
-    assertEquals(Tuple4.create(3, 4, 5, 10), zipped.valueNow());
+    assertEquals(Tuples.t4(3, 4, 5, 10), zipped.valueNow());
   }
   
   public function testSignalZip5():Void {
@@ -1439,15 +1439,15 @@ class ReactiveTestCase extends TestCase {
     
     var zipped = mySignal.zip5(mappedSignal1, mappedSignal2, mappedSignal3, mappedSignal4);
     
-    assertEquals(Tuple5.create(0, 1, 2, 4, -2), zipped.valueNow());
+    assertEquals(Tuples.t5(0, 1, 2, 4, -2), zipped.valueNow());
     
     mySignal.sendSignal(2);
     
-    assertEquals(Tuple5.create(2, 3, 4, 8, 6), zipped.valueNow());
+    assertEquals(Tuples.t5(2, 3, 4, 8, 6), zipped.valueNow());
     
     mySignal.sendSignal(3);
     
-    assertEquals(Tuple5.create(3, 4, 5, 10, 10), zipped.valueNow());
+    assertEquals(Tuples.t5(3, 4, 5, 10, 10), zipped.valueNow());
   }
 
   public function testSignalZipN():Void {
@@ -1642,27 +1642,27 @@ class ReactiveTestCase extends TestCase {
     
     advanceTime(5);
     
-    assertEquals(Tuple3.create(1, 0, 0), streams.valueNow());
+    assertEquals(Tuples.t3(1, 0, 0), streams.valueNow());
     
     advanceTime(5);
     
-    assertEquals(Tuple3.create(2, 0, 1), streams.valueNow());
+    assertEquals(Tuples.t3(2, 0, 1), streams.valueNow());
     
     advanceTime(5);
       
-    assertEquals(Tuple3.create(3, 1, 2), streams.valueNow());
+    assertEquals(Tuples.t3(3, 1, 2), streams.valueNow());
     
     advanceTime(5);
     
-    assertEquals(Tuple3.create(4, 2, 3), streams.valueNow());
+    assertEquals(Tuples.t3(4, 2, 3), streams.valueNow());
     
     advanceTime(5);
     
-    assertEquals(Tuple3.create(4, 3, 3), streams.valueNow());
+    assertEquals(Tuples.t3(4, 3, 3), streams.valueNow());
     
     advanceTime(5);
     
-    assertEquals(Tuple3.create(4, 4, 3), streams.valueNow());
+    assertEquals(Tuples.t3(4, 4, 3), streams.valueNow());
   }
   
   public function testSignalDelayS(): Void {
@@ -1677,23 +1677,23 @@ class ReactiveTestCase extends TestCase {
     
     advanceTime(5);
     
-    assertEquals(Tuple3.create(1, 0, 0), streams.valueNow());
+    assertEquals(Tuples.t3(1, 0, 0), streams.valueNow());
     
     advanceTime(5);
     
-    assertEquals(Tuple3.create(2, 1, 1), streams.valueNow());
+    assertEquals(Tuples.t3(2, 1, 1), streams.valueNow());
     
     advanceTime(5);
     
-    assertEquals(Tuple3.create(3, 2, 2), streams.valueNow());
+    assertEquals(Tuples.t3(3, 2, 2), streams.valueNow());
     
     advanceTime(5);
     
-    assertEquals(Tuple3.create(4, 3, 3), streams.valueNow());
+    assertEquals(Tuples.t3(4, 3, 3), streams.valueNow());
     
     advanceTime(5);
     
-    assertEquals(Tuple3.create(4, 4, 3), streams.valueNow());
+    assertEquals(Tuples.t3(4, 4, 3), streams.valueNow());
   }
   
   public function testSignalSend(): Void {
@@ -1774,7 +1774,7 @@ class ReactiveTestCase extends TestCase {
     
     var t = Signals.constant(true);
     
-    var conditions: Array<Tuple2<Signal<Bool>, Signal<String>>> = [Tuple2.create(t, trueSignal)];
+    var conditions: Array<Tuple2<Signal<Bool>, Signal<String>>> = [Tuples.t2(t, trueSignal)];
     
     var conded = Signals.cond(conditions, falseSignal);
     
@@ -2396,7 +2396,7 @@ class ReactiveTestCase extends TestCase {
     
     var zipped = SignalCollectionExtensions.zipS(signal1, signal2).valueNow();
     
-    assertEquals([Tuple2.create(1, 6), Tuple2.create(2, 7), Tuple2.create(3, 8)], zipped.toArray());
+    assertEquals([Tuples.t2(1, 6), Tuples.t2(2, 7), Tuples.t2(3, 8)], zipped.toArray());
   }
 /*F 
   public function testSignalCollectionZip3(): Void {
@@ -3209,7 +3209,7 @@ class ReactiveTestCase extends TestCase {
             masterStream.sendEvent(e);
         }
         
-        return Tuple2.create(eventStream1, eventStream2);
+        return Tuples.t2(eventStream1, eventStream2);
     }
 
     /*F

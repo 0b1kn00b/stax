@@ -29,7 +29,7 @@ class Meta {
     return Type.getInstanceFields(c).map(function(v){ 
       var fieldMeta = _getMetaDataField(c, v);     
       var inc = (fieldMeta == null || !Reflect.hasField(fieldMeta, name) || Reflect.field(fieldMeta, name)); 
-      return Tuple3.create(v, inc, if(fieldMeta != null && Reflect.hasField(fieldMeta, "index")) Reflect.field(fieldMeta, "index"); else i++);                
+      return Tuples.t3(v, inc, if(fieldMeta != null && Reflect.hasField(fieldMeta, "index")) Reflect.field(fieldMeta, "index"); else i++);                
     }).filter(function(v) {
       return v._2;
     }).sortWith(function(a, b) {

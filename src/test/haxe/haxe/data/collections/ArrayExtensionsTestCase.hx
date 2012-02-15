@@ -32,12 +32,12 @@ using Stax;
 class ArraysTestCase extends TestCase {
   public function testPartition() {
     var t = [1,2,3,4,5,6].partition(function(v) return v % 2 != 0);  
-    assertEquals(Tuple2.create([1,3,5], [2,4,6]), t);
+    assertEquals(Tuples.t2([1,3,5], [2,4,6]), t);
   }
   
   public function testPartitionWhile() {
     var t = [1,2,3,4,5,6].partitionWhile(function(v) return v < 4);
-    assertEquals(Tuple2.create([1,2,3], [4,5,6]), t);
+    assertEquals(Tuples.t2([1,2,3], [4,5,6]), t);
   } 
   
   public function testMapTo() { 
@@ -136,7 +136,7 @@ class ArraysTestCase extends TestCase {
   }
   
   public function testToMap() {
-    var map = [Tuple2.create("a", 1), Tuple2.create("b", 2)].toMap();
+    var map = [Tuples.t2("a", 1), Tuples.t2("b", 2)].toMap();
     assertIs(map, haxe.data.collections.Map);
     assertEquals(2, map.size());
   }

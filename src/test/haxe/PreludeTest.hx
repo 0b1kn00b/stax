@@ -163,11 +163,11 @@ class PreludeTestCase extends TestCase {
 
   public function testTupleOrder() {    
     var tests = [
-     Tuple2.create(Tuple2.create("b",0), Tuple2.create("a",0)),
-     Tuple2.create(Tuple2.create("a",1), Tuple2.create("a",0)), 
-     Tuple2.create(Tuple3.create("a",0,0.1), Tuple3.create("a",0,0.05)),
-     Tuple2.create(Tuple4.create("a",0,0.1,"b"), Tuple4.create("a",0,0.1,"a")),
-     Tuple2.create(Tuple5.create("a",0,0.1,"a",1), Tuple5.create("a",0,0.1,"a",0)), 
+     Tuples.t2(Tuples.t2("b",0), Tuples.t2("a",0)),
+     Tuples.t2(Tuples.t2("a",1), Tuples.t2("a",0)), 
+     Tuples.t2(Tuples.t3("a",0,0.1), Tuples.t3("a",0,0.05)),
+     Tuples.t2(Tuples.t4("a",0,0.1,"b"), Tuples.t4("a",0,0.1,"a")),
+     Tuples.t2(Tuples.t5("a",0,0.1,"a",1), Tuples.t5("a",0,0.1,"a",0)), 
     ];
   
     for(test in tests) {
@@ -178,11 +178,11 @@ class PreludeTestCase extends TestCase {
 
   public function testTupleEqual() {    
     var tests = [
-      Tuple2.create(Tuple2.create("b",0), Tuple2.create("b",0)),
-      Tuple2.create(Tuple2.create("a",1), Tuple2.create("a",1)), 
-      Tuple2.create(Tuple3.create("a",0,0.1), Tuple3.create("a",0,0.1)),
-      Tuple2.create(Tuple4.create("a",0,0.1,"b"), Tuple4.create("a",0,0.1,"b")),
-      Tuple2.create(Tuple5.create("a",0,0.1,"a",1), Tuple5.create("a",0,0.1,"a",1)), 
+      Tuples.t2(Tuples.t2("b",0), Tuples.t2("b",0)),
+      Tuples.t2(Tuples.t2("a",1), Tuples.t2("a",1)), 
+      Tuples.t2(Tuples.t3("a",0,0.1), Tuples.t3("a",0,0.1)),
+      Tuples.t2(Tuples.t4("a",0,0.1,"b"), Tuples.t4("a",0,0.1,"b")),
+      Tuples.t2(Tuples.t5("a",0,0.1,"a",1), Tuples.t5("a",0,0.1,"a",1)), 
     ];
     
     for(test in tests) {
@@ -193,11 +193,11 @@ class PreludeTestCase extends TestCase {
 
   public function testTupleString() {    
     var tests = [
-      Tuple2.create(Tuple2.create("b",0), "Tuple2(b, 0)"),
-      Tuple2.create(Tuple2.create("a",1), "Tuple2(a, 1)"), 
-      Tuple2.create(Tuple3.create("a",0,0.1), "Tuple3(a, 0, 0.1)"),
-      Tuple2.create(Tuple4.create("a",0,0.1,"b"), "Tuple4(a, 0, 0.1, b)"),
-      Tuple2.create(Tuple5.create("a",0,0.1,"a",1), "Tuple5(a, 0, 0.1, a, 1)"), 
+      Tuples.t2(Tuples.t2("b",0), "Tuple2(b, 0)"),
+      Tuples.t2(Tuples.t2("a",1), "Tuple2(a, 1)"), 
+      Tuples.t2(Tuples.t3("a",0,0.1), "Tuple3(a, 0, 0.1)"),
+      Tuples.t2(Tuples.t4("a",0,0.1,"b"), "Tuple4(a, 0, 0.1, b)"),
+      Tuples.t2(Tuples.t5("a",0,0.1,"a",1), "Tuple5(a, 0, 0.1, a, 1)"), 
     ];
     
     for(test in tests) {
@@ -208,11 +208,11 @@ class PreludeTestCase extends TestCase {
 
   public function testTupleHashCode() {    
     var tests = [
-      Hasher.getHashFor(Tuple2.create("b",0)),
-      Hasher.getHashFor(Tuple2.create("a",1)), 
-      Hasher.getHashFor(Tuple3.create("a",0,0.1)),
-      Hasher.getHashFor(Tuple4.create("a",0,0.1,"b")),
-      Hasher.getHashFor(Tuple5.create("a",0,0.1,"a",1)), 
+      Hasher.getHashFor(Tuples.t2("b",0)),
+      Hasher.getHashFor(Tuples.t2("a",1)), 
+      Hasher.getHashFor(Tuples.t3("a",0,0.1)),
+      Hasher.getHashFor(Tuples.t4("a",0,0.1,"b")),
+      Hasher.getHashFor(Tuples.t5("a",0,0.1,"a",1)), 
     ];
    
     while(tests.length > 0)

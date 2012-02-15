@@ -63,7 +63,7 @@ class JValueTestCase extends TestCase {
   }
 
   public function testTuple2() {
-    var a = [Tuple2.create(123, "foo"), Tuple2.create(0, "bar")];
+    var a = [Tuples.t2(123, "foo"), Tuples.t2(0, "bar")];
 
     doTest(Tuple2JValue.decompose,
           function(v){return Tuple2JValue.extract(v, function(v){return IntJValue.extract(Int, v);}, function(v){return StringJValue.extract(String, v);});},
@@ -71,7 +71,7 @@ class JValueTestCase extends TestCase {
   }
 
   public function testTuple3() {
-    var a = [Tuple3.create(123, "foo", true), Tuple3.create(0, "bar", false)];
+    var a = [Tuples.t3(123, "foo", true), Tuples.t3(0, "bar", false)];
 
     doTest(Tuple3JValue.decompose,
           function(v){return Tuple3JValue.extract(v, function(v){return IntJValue.extract(Int, v);}, function(v){return StringJValue.extract(String, v);}, function(v){return BoolJValue.extract(Bool, v);});},
@@ -80,7 +80,7 @@ class JValueTestCase extends TestCase {
   }
 
   public function testTuple4() {
-    var a = [Tuple4.create(123, "foo", true, 0.25), Tuple4.create(0, "bar", false, 0.5)];
+    var a = [Tuples.t4(123, "foo", true, 0.25), Tuples.t4(0, "bar", false, 0.5)];
 
     doTest(Tuple4JValue.decompose,
           function(v){return Tuple4JValue.extract(v, function(v){return IntJValue.extract(Int, v);}, function(v){return StringJValue.extract(String, v);}, function(v){return BoolJValue.extract(Bool, v);}, function(v){return FloatJValue.extract(Float, v);});},
@@ -88,7 +88,7 @@ class JValueTestCase extends TestCase {
   }
 
   public function testTuple5() {
-    var a = [Tuple5.create(123, "foo", true, 0.25, "biz"), Tuple5.create(0, "bar", false, 0.5, "bop")];
+    var a = [Tuples.t5(123, "foo", true, 0.25, "biz"), Tuples.t5(0, "bar", false, 0.5, "bop")];
 
     doTest(Tuple5JValue.decompose,
           function(v){return Tuple5JValue.extract(v, function(v){return IntJValue.extract(Int, v);}, function(v){return StringJValue.extract(String, v);}, function(v){return BoolJValue.extract(Bool, v);}, function(v){return FloatJValue.extract(Float, v);}, function(v){return StringJValue.extract(String, v);});},
@@ -114,7 +114,7 @@ class JValueTestCase extends TestCase {
   }
 
   public function testMap() {
-    var a: Array<Map<Int, String>> = [Map.create().addAll([Tuple2.create(123, "foo"), Tuple2.create(-23, "bar"), Tuple2.create(0, "baz")]), Map.create()];
+    var a: Array<Map<Int, String>> = [Map.create().addAll([Tuples.t2(123, "foo"), Tuples.t2(-23, "bar"), Tuples.t2(0, "baz")]), Map.create()];
 
     doTest(MapJValue.decompose,
            function(v){return MapJValue.extract(v, function(v){return IntJValue.extract(Int, v);}, function(v){return StringJValue.extract(String, v);});}, a);

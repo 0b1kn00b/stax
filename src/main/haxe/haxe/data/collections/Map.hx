@@ -16,10 +16,12 @@
 */
 package haxe.data.collections;
 
-import Prelude;
+
 using Stax;
 
 import stax.Tuples;
+import Prelude;
+
 
 import haxe.functional.Foldable;
 import haxe.functional.PartialFunction;
@@ -78,7 +80,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
     
     this._size    = size;
     this._buckets = buckets;
-    this._pf      = [Tuple2.create(
+    this._pf      = [stax.Tuples.t2(
       containsKey,
       function(k) {
         return switch(self.get(k)) {
@@ -132,7 +134,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   }
   
   public function set(k: K, v: V): Map<K, V> {
-    return add(Tuple2.create(k, v));
+    return add(stax.Tuples.t2(k, v));
   }
   
   public function add(t: Tuple2<K, V>): Map<K, V> {

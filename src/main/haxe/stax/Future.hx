@@ -4,10 +4,13 @@ package stax;
  * ...
  * @author 0b1kn00b
  */
+
+import stax.Tuples;
+
 import Prelude;
 using Prelude;
 
-import stax.Tuples;
+
 using stax.Options;
 using stax.Dynamics;
 
@@ -220,7 +223,7 @@ class Future<T> {
     var deliverZip = function() {
       if (f1.isDelivered() && f2.isDelivered()) {
         zipped.deliver(
-          Tuple2.create(f1.value().get(), f2.value().get())
+          Tuples.t2(f1.value().get(), f2.value().get())
         );
       }
     }

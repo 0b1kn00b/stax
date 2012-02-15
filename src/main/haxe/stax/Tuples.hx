@@ -11,24 +11,22 @@ import stax.plus.Equal;
 import stax.plus.Show;
 import stax.plus.Hasher;
 
-typedef TTuple2<A,B> = {
-	_1 : A,
-	_2 : B
-}
-typedef TTuple3<A,B,C> = { > TTuple2<A,B>,
-	_3 : C,
-}
-typedef TTuple4<A,B,C,D> = { > TTuple3<A,B,C>,
-	_4 : C,
-}
-typedef TTuple5<A,B,C,D,E> = { > TTuple4<A,B,C,D>,
-	_5 : C,
-}
-
 class Tuples {
-	public static function entuple<A, B>(a: A, b: B): Tuple2<A, B> {
-    return Tuple2.create(a, b);
+	public static function entuple<A, B>(a: A, b: B): stax.Tuple2<A, B> {
+    return new Tuple2(a, b);
   }
+	public static inline function t2<A,B>(_1:A,_2:B):stax.Tuple2<A,B>{
+		return new Tuple2(_1, _2);
+	}
+	public static inline function t3<A,B,C>(_1:A,_2:B,_3:C):stax.Tuple3<A,B,C>{
+		return new Tuple3(_1, _2, _3);
+	}
+	public static inline function t4<A,B,C,D>(_1:A,_2:B,_3:C,_4:D):stax.Tuple4<A,B,C,D>{
+		return new Tuple4(_1, _2, _3, _4);
+	}
+	public static inline function t5<A,B,C,D,E>(_1:A,_2:B,_3:C,_4:D,_5:E):stax.Tuple5<A,B,C,D,E>{
+		return new Tuple5(_1, _2, _3, _4, _5);
+	}
 }
 interface Product {
   public var productPrefix (getProductPrefix, null): String;
@@ -130,11 +128,14 @@ class AbstractProduct implements Product {
       _shows[i];
   }
 }
-
 class Tuple2<A, B> extends AbstractProduct {
   public var _1 (default, null): A;
   public var _2 (default, null): B;
 
+	public function new (_1:A, _2:B) {
+		super([_1, _2]);
+	}
+	
 	public function apply<C>(f : A -> B -> C ) : C
 		return f(_1, _2)
 
@@ -142,72 +143,74 @@ class Tuple2<A, B> extends AbstractProduct {
 	public static function first<A, B>(t : Tuple2<A, B>) return t._1
 	public static function second<A, B>(t : Tuple2<A, B>) return t._2
 	
-  function new(first: A, second: B) {
-    super([first, second]);
-
-    this._1  = first; this._2 = second;
-  }
-
   override private function getProductPrefix(): String {
-    return "Tuple2";
-  }
-
-  override private function getProductArity(): Int {
-    return 2;
-  }
-
-  public function compare(other : Tuple2<A, B>): Int {
-    return productCompare(other);
-  }
-	public function entuple<C>(c: C): Tuple3<A, B, C> {
-    return Tuple3.create(_1, _2, c);
-  }	
-  public function equals(other : Tuple2<A, B>): Bool {
-    return productEquals(other);
-  }
-
-  public static function create<A, B>(a: A, b: B): Tuple2<A, B> {
-    return new Tuple2<A, B>(a, b);
-  }
-
-}
-class Tuple3< A, B, C> extends AbstractProduct {
-  public var _1 (default, null): A;
-  public var _2 (default, null): B;
-  public var _3 (default, null): C;
-
-  function new(first: A, second: B, third: C) {
-    super([first, second, third]);
-
-    this._1 = first; this._2 = second; this._3 = third;
-  }
-
-	public function apply<D>(f : A -> B -> C -> D ) : D
-		return f(_1, _2, _3)
-
-	public static function first<A, B, C>(t : Tuple3<A, B, C>) return t._1
-	public static function second<A, B, C>(t : Tuple3<A, B, C>) return t._2
-	public static function third<A, B, C>(t : Tuple3<A, B, C>) return t._3
-	
-  override private function getProductPrefix(): String {
-    return "Tuple3";
+    return "stax.Tuple3";
   }
 
   override private function getProductArity(): Int {
     return 3;
   }
 
-  public function compare(other : Tuple3<A, B, C>): Int {
+  public function compare(other : stax.Tuple2<A, B>): Int {
     return productCompare(other);
   }
 
-  public function equals(other : Tuple3<A, B, C>): Bool {
+  public function equals(other : stax.Tuple2<A, B>): Bool {
     return productEquals(other);
   }
 
-  public static function create<A, B, C>(a: A, b: B, c: C): Tuple3<A, B, C> {
-    return new Tuple3<A, B, C>(a, b, c);
+/*  public static function create<A, B>(_1: A, _2: B): stax.Tuple2<A, B> {
+    return new stax.Tuple2<A, B>(_1, _2);
+  }*/
+	public static function patch<A,B>(t0:stax.Tuple2<A,B>,t1:stax.Tuple2<A,B>):stax.Tuple2<A,B>{
+		var _1 = t1._1 == null ? t0._1 : t1._1;
+		var _2 = t1._2 == null ? t0._2 : t1._2;
+		return Tuples.t2(_1, _2);
+	}
+}
+class Tuple3<A, B, C> extends AbstractProduct {
+  public var _1 (default, null) : A;
+  public var _2 (default, null) : B;
+	public var _3	(default, null) : C;
+	
+	public function new (_1:A, _2:B, _3:C) {
+		super([_1, _2, _3]);
+	}
+	public function apply<D>(f : A -> B -> C -> D) : D {
+		return f(_1, _2, _3);
+	}
+	
+
+		
+	public static function first<A, B>(t : Tuple2<A, B>) return t._1
+	public static function second<A, B>(t : Tuple2<A, B>) return t._2
+	public static function third<A, B, C>(t : stax.Tuple3<A, B, C>) return t._3
+	
+  override private function getProductPrefix(): String {
+    return "stax.Tuple3";
   }
+
+  override private function getProductArity(): Int {
+    return 3;
+  }
+
+  public function compare(other : stax.Tuple3<A, B, C>): Int {
+    return productCompare(other);
+  }
+
+  public function equals(other : stax.Tuple3<A, B, C>): Bool {
+    return productEquals(other);
+  }
+/*
+  public static function create<A, B, C>(_1: A, _2: B, _3: C): stax.Tuple3<A, B, C> {
+    return new stax.Tuple3<A, B, C>(_1, _2, _3);
+  }*/
+	public static function patch<A,B,C>(t0:stax.Tuple3<A,B,C>,t1:stax.Tuple3<A,B,C>):stax.Tuple3<A,B,C>{
+		var _1 = t1._1 == null ? t0._1 : t1._1;
+		var _2 = t1._2 == null ? t0._2 : t1._2;
+		var _3 = t1._3 == null ? t0._3 : t1._3;
+		return Tuples.t3(_1, _2, _3);
+	}
 }
 class Tuple4< A, B, C, D> extends AbstractProduct {
   public var _1 (default, null): A;
@@ -215,7 +218,7 @@ class Tuple4< A, B, C, D> extends AbstractProduct {
   public var _3 (default, null): C;
   public var _4 (default, null): D;
 
-  function new(first: A, second: B, third: C, fourth: D) {
+  public function new(first: A, second: B, third: C, fourth: D) {
     super([first, second, third, fourth]);
 
     this._1 = first; this._2 = second; this._3 = third; this._4 = fourth;
@@ -224,34 +227,41 @@ class Tuple4< A, B, C, D> extends AbstractProduct {
 	public function apply<E>(f : A -> B -> C -> D -> E) : E
 		return f(_1, _2, _3, _4)
 
-	public static function first<A, B, C, D>(t : Tuple4<A, B, C, D>) return t._1
-	public static function second<A, B, C, D>(t : Tuple4<A, B, C, D>) return t._2
-	public static function third<A, B, C, D>(t : Tuple4<A, B, C, D>) return t._3
-	public static function fourth<A, B, C, D>(t : Tuple4<A, B, C, D>) return t._4
+	public static function first<A, B, C, D>(t : stax.Tuple4<A, B, C, D>) return t._1
+	public static function second<A, B, C, D>(t : stax.Tuple4<A, B, C, D>) return t._2
+	public static function third<A, B, C, D>(t : stax.Tuple4<A, B, C, D>) return t._3
+	public static function fourth<A, B, C, D>(t : stax.Tuple4<A, B, C, D>) return t._4
 	
   override private function getProductPrefix(): String {
-    return "Tuple4";
+    return "stax.Tuple4";
   }
 
   override private function getProductArity(): Int {
     return 4;
   }
 
-  public function entuple<E>(e: E): Tuple5<A, B, C, D, E> {
-    return Tuple5.create(_1, _2, _3, _4, e);
+  public function entuple<E>(_5: E): stax.Tuple5<A, B, C, D, E> {
+    return stax.Tuples.t5(_1, _2, _3, _4, _5);
   }
 
-  public function compare(other : Tuple4<A, B, C, D>): Int {
+  public function compare(other : stax.Tuple4<A, B, C, D>): Int {
     return productCompare(other);
   }
 
-  public function equals(other : Tuple4<A, B, C, D>): Bool {
+  public function equals(other : stax.Tuple4<A, B, C, D>): Bool {
     return productEquals(other);
   }
 
-  public static function create<A, B, C, D>(a: A, b: B, c: C, d: D): Tuple4<A, B, C, D> {
-    return new Tuple4<A, B, C, D>(a, b, c, d);
-  }
+ /* public static function create<A, B, C, D>(_1: A, _2: B, _3: C, _4: D): stax.Tuple4<A, B, C, D> {
+    return new Tuple4<A, B, C, D>(_1, _2, _3, _4);
+  }*/
+	public static function patch<A,B,C,D>(t0:stax.Tuple4<A,B,C,D>,t1:stax.Tuple4<A,B,C,D>):stax.Tuple4<A,B,C,D>{
+		var _1 = t1._1 == null ? t0._1 : t1._1;
+		var _2 = t1._2 == null ? t0._2 : t1._2;
+		var _3 = t1._3 == null ? t0._3 : t1._3;
+		var _4 = t1._4 == null ? t0._4 : t1._4;
+		return Tuples.t4(_1, _2, _3, _4);
+	}
 }
 
 class Tuple5< A, B, C, D, E> extends AbstractProduct {
@@ -261,7 +271,7 @@ class Tuple5< A, B, C, D, E> extends AbstractProduct {
   public var _4 (default, null): D;
   public var _5 (default, null): E;
 
-  function new(first: A, second: B, third: C, fourth: D, fifth: E) {
+  public function new(first: A, second: B, third: C, fourth: D, fifth: E) {
     super([first, second, third, fourth, fifth]);
 
     this._1 = first; this._2 = second; this._3 = third; this._4 = fourth; this._5 = fifth;
@@ -270,29 +280,36 @@ class Tuple5< A, B, C, D, E> extends AbstractProduct {
 	public function apply<F>(f : A -> B -> C -> D -> E -> F) : F
 		return f(_1, _2, _3, _4, _5)
 	
-	public static function first<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>) return t._1
-	public static function second<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>) return t._2
-	public static function third<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>) return t._3
-	public static function fourth<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>) return t._4
-	public static function fifth<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>) return t._5
+	public static function first<A, B, C, D, E>(t : stax.Tuple5<A, B, C, D, E>) return t._1
+	public static function second<A, B, C, D, E>(t : stax.Tuple5<A, B, C, D, E>) return t._2
+	public static function third<A, B, C, D, E>(t : stax.Tuple5<A, B, C, D, E>) return t._3
+	public static function fourth<A, B, C, D, E>(t : stax.Tuple5<A, B, C, D, E>) return t._4
+	public static function fifth<A, B, C, D, E>(t : stax.Tuple5<A, B, C, D, E>) return t._5
 	
   override private function getProductPrefix(): String {
-    return "Tuple5";
+    return "stax.Tuple5";
   }
 
   override private function getProductArity(): Int {
     return 5;
   }
 
-  public function compare(other : Tuple5<A, B, C, D, E>): Int {
+  public function compare(other : stax.Tuple5<A, B, C, D, E>): Int {
     return productCompare(other);
   }
 
-  public function equals(other : Tuple5<A, B, C, D, E>): Bool {
+  public function equals(other : stax.Tuple5<A, B, C, D, E>): Bool {
     return productEquals(other);
-  }
-
-  public static function create<A, B, C, D, E>(a: A, b: B, c: C, d: D, e: E): Tuple5<A, B, C, D, E> {
-    return new Tuple5<A, B, C, D, E>(a, b, c, d, e);
-  }
+  }/*
+  public static function create<A, B, C, D, E>(_1: A, _2: B, _3: C, _4: D, _5: E): stax.Tuple5<A, B, C, D, E> {
+    return new Tuple5<A, B, C, D, E>(_1, _2, _3, _4, _5);
+  }*/
+	public static function patch<A,B,C,D,E>(t0:stax.Tuple5<A,B,C,D,E>,t1:stax.Tuple5<A,B,C,D,E>):stax.Tuple5<A,B,C,D,E>{
+		var _1 = t1._1 == null ? t0._1 : t1._1;
+		var _2 = t1._2 == null ? t0._2 : t1._2;
+		var _3 = t1._3 == null ? t0._3 : t1._3;
+		var _4 = t1._4 == null ? t0._4 : t1._4;
+		var _5 = t1._5 == null ? t0._5 : t1._5;
+		return Tuples.t5(_1, _2, _3, _4, _5);
+	}
 }

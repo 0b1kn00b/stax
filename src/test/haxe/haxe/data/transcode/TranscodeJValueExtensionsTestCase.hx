@@ -52,26 +52,26 @@ class TranscodeJValueExtensionsTestCase extends TestCase {
   }
 
   public function testTuple2() {
-    var a = [Tuple2.create(123, "foo"), Tuple2.create(0, "bar")];
+    var a = [Tuples.t2(123, "foo"), Tuples.t2(0, "bar")];
 
     doTest(a, [TranscodeJValue.getExtractorFor(TInt), TranscodeJValue.getExtractorFor(TClass(String))]);
   }
 
   public function testTuple3() {
-    var a = [Tuple3.create(123, "foo", true), Tuple3.create(0, "bar", false)];
+    var a = [Tuples.t3(123, "foo", true), Tuples.t3(0, "bar", false)];
 
     doTest(a, [TranscodeJValue.getExtractorFor(TInt), TranscodeJValue.getExtractorFor(TClass(String)), TranscodeJValue.getExtractorFor(TBool)]);
 
   }
 
   public function testTuple4() {
-    var a = [Tuple4.create(123, "foo", true, 0.25), Tuple4.create(0, "bar", false, 0.5)];
+    var a = [Tuples.t4(123, "foo", true, 0.25), Tuples.t4(0, "bar", false, 0.5)];
 
     doTest(a, [TranscodeJValue.getExtractorFor(TInt), TranscodeJValue.getExtractorFor(TClass(String)), TranscodeJValue.getExtractorFor(TBool), TranscodeJValue.getExtractorFor(TFloat)]);
   }
 
   public function testTuple5() {
-    var a = [Tuple5.create(123, "foo", true, 0.25, "biz"), Tuple5.create(0, "bar", false, 0.5, "bop")];
+    var a = [Tuples.t5(123, "foo", true, 0.25, "biz"), Tuples.t5(0, "bar", false, 0.5, "bop")];
 
     doTest(a, [TranscodeJValue.getExtractorFor(TInt), TranscodeJValue.getExtractorFor(TClass(String)), TranscodeJValue.getExtractorFor(TBool), TranscodeJValue.getExtractorFor(TFloat), TranscodeJValue.getExtractorFor(TClass(String))]);
   }
@@ -95,7 +95,7 @@ class TranscodeJValueExtensionsTestCase extends TestCase {
   }
 
   public function testMap() {
-    var a: Array<Map<Int, String>> = [Map.create().addAll([Tuple2.create(123, "foo"), Tuple2.create(-23, "bar"), Tuple2.create(0, "baz")]), Map.create()];
+    var a: Array<Map<Int, String>> = [Map.create().addAll([Tuples.t2(123, "foo"), Tuples.t2(-23, "bar"), Tuples.t2(0, "baz")]), Map.create()];
 		
 		doTest(a, [TranscodeJValue.getExtractorFor(TInt), TranscodeJValue.getExtractorFor(TClass(String))]);
   }

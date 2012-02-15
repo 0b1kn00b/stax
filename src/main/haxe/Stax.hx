@@ -88,6 +88,7 @@ class Stax {
 
   public static function error<T>(msg: String): T { throw msg; return null; }
 }
+
 class ArrayLamda {
 	inline public static function map<T, S>(a: Array<T>, f: T -> S): Array<S> {
     var n: Array<S> = [];

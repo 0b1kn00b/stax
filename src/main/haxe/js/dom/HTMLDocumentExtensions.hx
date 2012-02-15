@@ -17,8 +17,10 @@ package js.dom;
 
 import Dom;
 import js.Env;
-import Prelude;
 import stax.Tuples;
+
+import Prelude;
+
 
 using stax.Maths;
 import stax.Options;

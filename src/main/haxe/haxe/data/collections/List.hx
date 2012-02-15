@@ -16,10 +16,11 @@
 */
 package haxe.data.collections;
 
-using Stax;
+import Prelude;
 
 import stax.Tuples;
-import Prelude;
+using Stax;
+
 
 import haxe.functional.Foldable;
 import haxe.data.collections.Collection;
@@ -301,7 +302,7 @@ class List<T> implements Collection<List<T>, T> {
     var r = List.create();
 
     for (i in 0...len) {
-      r = r.cons(Tuple2.create(iterator1.next(), iterator2.next()));
+      r = r.cons(Tuples.t2(iterator1.next(), iterator2.next()));
     }
 
     return r;

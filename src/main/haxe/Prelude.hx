@@ -58,12 +58,11 @@ enum Either<A, B> {
   Left(v: A);
   Right(v: B);
 }
-
-typedef FailureOrSuccess<A, B> = Either<A, B>
-typedef OrderFunction<T>  = Function2<T, T, Int>;
-typedef EqualFunction<T>  = Function2<T, T, Bool>;
-typedef ShowFunction<T>   = Function<T, String>;
-typedef HashFunction<T> = Function<T, Int>;   
+typedef FailureOrSuccess<A, B> 	= Either<A, B>
+typedef OrderFunction<T>  			= Function2<T, T, Int>;
+typedef EqualFunction<T>  			= Function2<T, T, Bool>;
+typedef ShowFunction<T>   			= Function<T, String>;
+typedef HashFunction<T> 				= Function<T, Int>;   
 
 typedef CollectionTools<T> = {
 		order : Null<OrderFunction<T>>,

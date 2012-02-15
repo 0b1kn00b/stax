@@ -6,10 +6,14 @@ package stax.plus;
  */
 import Type;
 
-import Prelude;
+
 import Stax;
 import stax.Tuples;
 import stax.Maths;
+typedef Tuple2<A,B> 		= stax.Tuple2<A,B>;
+typedef Tuple3<A,B,C> 	= stax.Tuple3<A,B,C>;
+
+import Prelude;
 
 using Stax;
 using stax.plus.Order;
@@ -67,7 +71,7 @@ class Order {
               Reflect.field(fieldMeta, "order");
             else
               1;
-            return Tuple3.create(v, weight, if(fieldMeta != null && Reflect.hasField(fieldMeta, "index")) Reflect.field(fieldMeta, "index"); else i++);                
+            return Tuples.t3(v, weight, if(fieldMeta != null && Reflect.hasField(fieldMeta, "index")) Reflect.field(fieldMeta, "index"); else i++);                
           }).filter(function(v){return v._2 != 0;}).sortWith(function(a, b) {
             var c = a._3 - b._3;
             if(c != 0)
@@ -75,7 +79,7 @@ class Order {
             return Strings.compare(a._1, b._1);
           });
 		      _createOrderImpl(function(a, b) {       
-            var values = fields.filter(function(v) return !Reflect.isFunction(Reflect.field(a, v._1))).map(function(v){return Tuple3.create(Reflect.field(a, v._1), Reflect.field(b, v._1), v._2);});
+            var values = fields.filter(function(v) return !Reflect.isFunction(Reflect.field(a, v._1))).map(function(v){return Tuples.t3(Reflect.field(a, v._1), Reflect.field(b, v._1), v._2);});
             for (value in values) {
               var c = getOrderFor(value._1)(value._1, value._2) * value._3;
               if (c != 0) return c;

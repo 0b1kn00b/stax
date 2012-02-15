@@ -1,7 +1,7 @@
 # @tm-preview                          
 -cp ./src/main/haxe/
 -cp ./src/test/haxe/
--js test.js
+-js bin/test.js
 -main StaxTestSuite
 #-debug
 # @tm-html <form></form> 

@@ -88,7 +88,11 @@ class Iterables {
     return result;
   }
   
-  
+  /**
+   * Take elements 1...n from the Iterable
+	 * @param iter
+	 * @return Iterable
+   */
   public static function tail<T>(iter: Iterable<T>): Iterable<T> {
     return switch (tailOption(iter)) {
       case None: Stax.error('Iterable has no tail');
@@ -320,11 +324,11 @@ class Iterables {
     for (e in iter) f(e);
 	}
   public static function forAll<T>(iter: Iterable<T>, f: T -> Bool): Bool {
-    return iter.toArray().forAll(f);
+    return Arrays.forAll(iter.toArray(),f);
   }
   
   public static function forAny<T>(iter: Iterable<T>, f: T -> Bool): Bool {
-    return iter.toArray().forAny(f);
+    return Arrays.forAny(iter.toArray(),f);
   }
 	public static inline function first<T>(iter:Iterable<T>):T{
 		return iter.head();

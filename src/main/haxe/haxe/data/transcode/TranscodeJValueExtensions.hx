@@ -71,7 +71,7 @@ class MapOps {
     var extract0 = function(v: Array<JValue>){
       return Map.create(Strings.compare, Strings.equals, StringHasher.hashCode, Strings.toString, vorder, vequal, vhash, vshow).addAll(v.map(function(j) {
         return switch(j) {
-          case JField(k, v): Tuple2.create(k, ve(v));
+          case JField(k, v): Tuples.t2(k, ve(v));
 
           default: Stax.error("Expected field but was: " + v);
         }

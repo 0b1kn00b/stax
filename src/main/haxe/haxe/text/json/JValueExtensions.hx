@@ -17,10 +17,11 @@
 
 package haxe.text.json;
 
+import stax.Tuples;
 import Prelude;
 using Stax;
 
-import stax.Tuples;
+
 
 import haxe.text.json.JValue;
 import haxe.data.transcode.TranscodeJValueExtensions;
@@ -115,7 +116,7 @@ class JValueExtensions {
   }
   public static function extractField(v: JValue): Tuple2<String, JValue> {
     return switch (v) {
-      case JField (k, v): Tuple2.create(k, v);
+      case JField (k, v): Tuples.t2(k, v);
       default						: Stax.error("Expected JField but found: " + v);
     }
   }  
@@ -138,7 +139,7 @@ class JValueExtensions {
   public static function extractFields(v: JValue): Array<Tuple2<String, JValue>> {
     return extractArray(v).flatMap(function(j) {
       return switch(j) {
-        case JField(k, v): [Tuple2.create(k, v)];
+        case JField(k, v): [Tuples.t2(k, v)];
         
         default: [];
       }
@@ -174,7 +175,7 @@ class AbstractProductJValue {
 class Tuple2JValue {
 	public static function extract<A, B>(v: JValue, e1: JExtractorFunction<A>, e2: JExtractorFunction<B>): Tuple2<A, B> {
     return switch(v) {
-      case JArray(v): Tuple2.create(e1(v[0]), e2(v[1]));
+      case JArray(v): Tuples.t2(e1(v[0]), e2(v[1]));
 
       default: Stax.error("Expected Array but was: " + v);
     }
@@ -189,7 +190,7 @@ class Tuple3JValue{
   }
   public static function extract<A, B, C>(v: JValue, e1: JExtractorFunction<A>, e2: JExtractorFunction<B>, e3: JExtractorFunction<C>): Tuple3<A, B, C> {
     return switch(v) {
-      case JArray(v): Tuple3.create(e1(v[0]), e2(v[1]), e3(v[2]));
+      case JArray(v): Tuples.t3(e1(v[0]), e2(v[1]), e3(v[2]));
 
       default: Stax.error("Expected Array but was: " + v);
     }
@@ -201,7 +202,7 @@ class Tuple4JValue{
   }
   public static function extract<A, B, C, D>(v: JValue, e1: JExtractorFunction<A>, e2: JExtractorFunction<B>, e3: JExtractorFunction<C>, e4: JExtractorFunction<D>): Tuple4<A, B, C, D> {
     return switch(v) {
-      case JArray(v): Tuple4.create(e1(v[0]), e2(v[1]), e3(v[2]), e4(v[3]));
+      case JArray(v): Tuples.t4(e1(v[0]), e2(v[1]), e3(v[2]), e4(v[3]));
 
       default: Stax.error("Expected Array but was: " + v);
     }
@@ -213,7 +214,7 @@ class Tuple5JValue{
   }
   public static function extract<A, B, C, D, E>(v: JValue, e1: JExtractorFunction<A>, e2: JExtractorFunction<B>, e3: JExtractorFunction<C>, e4: JExtractorFunction<D>, e5: JExtractorFunction<E>): Tuple5<A, B, C, D, E> {
     return switch(v) {
-      case JArray(v): Tuple5.create(e1(v[0]), e2(v[1]), e3(v[2]), e4(v[3]), e5(v[4]));
+      case JArray(v): Tuples.t5(e1(v[0]), e2(v[1]), e3(v[2]), e4(v[3]), e5(v[4]));
 
       default: Stax.error("Expected Array but was: " + v);
     }

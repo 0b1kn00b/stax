@@ -62,12 +62,12 @@ class FoldableExtensionsTestCase extends TestCase {
   
   public function testPartition() {
     var t = [1,2,3,4,5,6].toSet().partition(function(v) return v % 2 != 0);  
-    assertEquals(Tuple2.create([1,3,5].toSet(), [2,4,6].toSet()), t);
+    assertEquals(Tuples.t2([1,3,5].toSet(), [2,4,6].toSet()), t);
   }
   
   public function testPartitionWhile() {
     var t = [1,2,3,4,5,6].toSet().partitionWhile(function(v) return v < 4);
-    assertEquals(Tuple2.create([1,2,3].toSet(), [4,5,6].toSet()), t);
+    assertEquals(Tuples.t2([1,2,3].toSet(), [4,5,6].toSet()), t);
   }
   
   public function testScanl() {

@@ -15,14 +15,15 @@
 */
 package haxe.net;
 
+import stax.Tuples; using stax.Tuples;
+
 import Prelude;
 using Stax;
 
 import haxe.data.collections.Map;
 import haxe.net.HttpHeader;
 
-import stax.Tuples;
-using stax.Tuples;
+
 
 using stax.Strings;
  

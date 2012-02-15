@@ -4,9 +4,11 @@ package stax.plus;
  * ...
  * @author 0b1kn00b
  */
+
+import stax.Tuples;
+
 import Prelude;
 import Type;
-import stax.Tuples;
 
 import stax.Maths;
 using Stax;
@@ -51,7 +53,7 @@ class Equal {
           if(Meta._hasMetaDataClass(c)) {  
             var fields = Meta._fieldsWithMeta(c, "equalHash");
             _createEqualImpl(function(a, b) {         
-              var values = fields.map(function(v){return Tuple2.create(Reflect.field(a, v), Reflect.field(b, v));});
+              var values = fields.map(function(v){return Tuples.t2(Reflect.field(a, v), Reflect.field(b, v));});
               for (value in values) {
                 if(Reflect.isFunction(value._1))
                   continue;

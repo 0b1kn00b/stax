@@ -43,7 +43,7 @@ private class PartialFunction1Impl<A, Z> implements PartialFunction1<A, Z> {
   
   public function orElse(that: PartialFunction1<A, Z>): PartialFunction1<A, Z> {
     return PartialFunction1Impl.create(this._def.concat(
-      [Tuple2.create(that.isDefinedAt, that.call)]
+      [Tuples.t2(that.isDefinedAt, that.call)]
     ));
   }
   
@@ -104,7 +104,7 @@ private class PartialFunction2Impl<A, B, Z> implements PartialFunction2<A, B, Z>
   
   public function orElse(that: PartialFunction2<A, B, Z>): PartialFunction2<A, B, Z> {
     return PartialFunction2Impl.create(this._def.concat(
-      [Tuple2.create(that.isDefinedAt, that.call)]
+      [Tuples.t2(that.isDefinedAt, that.call)]
     ));
   }
   
@@ -165,7 +165,7 @@ private class PartialFunction3Impl<A, B, C, Z> implements PartialFunction3<A, B,
   
   public function orElse(that: PartialFunction3<A, B, C, Z>): PartialFunction3<A, B, C, Z> {
     return PartialFunction3Impl.create(this._def.concat(
-      [Tuple2.create(that.isDefinedAt, that.call)]
+      [Tuples.t2(that.isDefinedAt, that.call)]
     ));
   }
   
@@ -226,7 +226,7 @@ private class PartialFunction4Impl<A, B, C, D, Z> implements PartialFunction4<A,
   
   public function orElse(that: PartialFunction4<A, B, C, D, Z>): PartialFunction4<A, B, C, D, Z> {
     return PartialFunction4Impl.create(this._def.concat(
-      [Tuple2.create(that.isDefinedAt, that.call)]
+      [Tuples.t2(that.isDefinedAt, that.call)]
     ));
   }
   
@@ -287,7 +287,7 @@ private class PartialFunction5Impl<A, B, C, D, E, Z> implements PartialFunction5
   
   public function orElse(that: PartialFunction5<A, B, C, D, E, Z>): PartialFunction5<A, B, C, D, E, Z> {
     return PartialFunction5Impl.create(this._def.concat(
-      [Tuple2.create(that.isDefinedAt, that.call)]
+      [Tuples.t2(that.isDefinedAt, that.call)]
     ));
   }
   

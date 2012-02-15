@@ -16,8 +16,9 @@
 */
 package haxe.data.collections;
 
-import Prelude;
 import stax.Tuples;
+import Prelude;
+
 import haxe.functional.Foldable;
 import haxe.test.TestCase;
 import haxe.data.collections.Map;
@@ -145,29 +146,29 @@ class MapTestCase extends TestCase {
 
   public function testEquals() { 
   assertTrue (map().equals(map()));
-  assertTrue (map([Tuple2.create(1, "a")]).equals(map([Tuple2.create(1, "a")])));
-  assertFalse(map([Tuple2.create(1, "a")]).equals(map([Tuple2.create(2, "a")])));
-  assertFalse(map([Tuple2.create(1, "a")]).equals(map([Tuple2.create(1, "b")])));   
-  assertFalse(map([Tuple2.create(1, "a")]).equals(map([Tuple2.create(1, "a"), Tuple2.create(2, "a")])));
+  assertTrue (map([Tuples.t2(1, "a")]).equals(map([Tuples.t2(1, "a")])));
+  assertFalse(map([Tuples.t2(1, "a")]).equals(map([Tuples.t2(2, "a")])));
+  assertFalse(map([Tuples.t2(1, "a")]).equals(map([Tuples.t2(1, "b")])));   
+  assertFalse(map([Tuples.t2(1, "a")]).equals(map([Tuples.t2(1, "a"), Tuples.t2(2, "a")])));
   }
 
   public function testCompare() {  
   assertTrue(map().compare(map()) == 0);
-  assertTrue(map([Tuple2.create(1, "a")]).compare(map([Tuple2.create(1, "a")])) == 0);   
-  assertTrue(map([Tuple2.create(1, "a")]).compare(map([Tuple2.create(2, "a")])) < 0);
-  assertTrue(map([Tuple2.create(1, "a")]).compare(map([Tuple2.create(1, "b")])) < 0);   
-  assertTrue(map([Tuple2.create(1, "a")]).compare(map([Tuple2.create(1, "a"), Tuple2.create(2, "a")])) < 0);   
-  assertTrue(map([Tuple2.create(2, "a")]).compare(map([Tuple2.create(1, "b")])) > 0); 
+  assertTrue(map([Tuples.t2(1, "a")]).compare(map([Tuples.t2(1, "a")])) == 0);   
+  assertTrue(map([Tuples.t2(1, "a")]).compare(map([Tuples.t2(2, "a")])) < 0);
+  assertTrue(map([Tuples.t2(1, "a")]).compare(map([Tuples.t2(1, "b")])) < 0);   
+  assertTrue(map([Tuples.t2(1, "a")]).compare(map([Tuples.t2(1, "a"), Tuples.t2(2, "a")])) < 0);   
+  assertTrue(map([Tuples.t2(2, "a")]).compare(map([Tuples.t2(1, "b")])) > 0); 
   }
 
   public function testToString() {    
   assertEquals("Map ()", map().toString());
-  assertEquals("Map (1 -> a, 2 -> a)", map([Tuple2.create(1, "a"), Tuple2.create(2, "a")]).toString());
+  assertEquals("Map (1 -> a, 2 -> a)", map([Tuples.t2(1, "a"), Tuples.t2(2, "a")]).toString());
   }     
 
   public function testHashCode() {     
   assertNotEquals(0, map().hashCode());
-  assertNotEquals(0, map([Tuple2.create(1, "a"), Tuple2.create(2, "a")]).hashCode());              
+  assertNotEquals(0, map([Tuples.t2(1, "a"), Tuples.t2(2, "a")]).hashCode());              
   }
     
   function defaultMap(): Map<Int, String> {
