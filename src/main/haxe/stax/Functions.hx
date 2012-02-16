@@ -15,7 +15,7 @@ class CodeBlocks{
       return null;
     }
   }
-}
+}	
 class Functions0 {
 	
 	public static function enclose<R>(f:Thunk<R>):CodeBlock{

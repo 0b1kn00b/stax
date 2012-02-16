@@ -5,17 +5,19 @@ package com.sf;
  * @author 0b1kn00b
  */
 import stax.error.OutOfBoundsError;
+import stax.error.AbstractMethodError;
 
+import Prelude;
 import Tuples;
 
 import haxe.PosInfos;
 import haxe.rtti.Generic;
-using com.sf.Tuples;
+
 import haxe.PosInfos;
-import com.sf.Option;
-using com.sf.Option;
-import com.sf.Functions;
-import com.sf.error.AbstractMethodError;
+
+import stax.Options;using stax.Options;
+import stax.Functions;
+
 
 import com.sf.log.Logger;using com.sf.log.Logger;
 
