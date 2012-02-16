@@ -33,6 +33,12 @@ interface LoggerFacade {
   public function fatal(s: String, ?p: PosInfos): Void;
 }
 
+class Log {
+	public function log(value:Dynamic,?level:LogLevel):Void{
+		if level == null ? Debug : level;
+		LogHandlers.Trace( level , Std.string(value) );
+	}
+}
 enum LogLevel { All; Debug; Info; Warning; Error; Fatal; None; }
 
 class Logger {
