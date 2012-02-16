@@ -8,7 +8,22 @@ import Prelude;
 
 using stax.Dynamics;
 
+class CodeBlocks{
+  public static function promote(c:CodeBlock):Thunk<Dynamic>{
+    return function(){
+      c();
+      return null;
+    }
+  }
+}
 class Functions0 {
+	
+	public static function enclose<R>(f:Thunk<R>):CodeBlock{
+		return
+			function():Void{
+				f();
+			}
+	}
   public static function swallow(f: Void -> Void): Void -> Void {
     return function() {
       try {
