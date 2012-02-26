@@ -153,7 +153,7 @@ class Iterables {
       var t1 = i1.next();
       var t2 = i2.next();
       
-      result.push(t1.entuple(t2));
+      result.push(Tuples.t2(t1,t2));
     }
     
     return result;
@@ -310,7 +310,7 @@ class Iterables {
   }
   
   public static function appendAll<T>(iter: Iterable<T>, i: Iterable<T>): Iterable<T> {
-    return iter.toArray().appendAll(i);
+    return Arrays.appendAll(iter.toArray(),i);
   }
   
   public static function isEmpty<T>(iter: Iterable<T>): Bool {
@@ -318,7 +318,7 @@ class Iterables {
   }
    
   public static function find<T>(iter: Iterable<T>, f: T -> Bool): Option<T> {
-    return iter.toArray().find(f);
+    return Arrays.find(iter.toArray(),f);
   }
   public static function foreach<T>(iter : Iterable<T>, f : T-> Void ):Void {
     for (e in iter) f(e);

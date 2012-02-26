@@ -9,7 +9,7 @@ import haxe.PosInfos;
 class AbstractMethodError extends Error {
 	
 	public function new(?pos:PosInfos) {
-		super( "Called abstract method at " + pos );
+		super( "Called abstract method at " + Std.string(pos) );
 	}
 	
 }

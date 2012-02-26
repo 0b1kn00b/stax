@@ -24,6 +24,8 @@ import haxe.io.Bytes;
 import haxe.test.Assertation;
 import haxe.test.MustMatchers;
 import haxe.PosInfos;
+import stax.error.AssertionError;
+
 using stax.Options;
 
 
@@ -67,13 +69,22 @@ class Assert {
   * unless you know what you are doing.
   */
   public static function isTrue(cond : Bool, ?msg : String, ?pos : PosInfos) {
-    if (results == null) throw "Assert.results is not currently bound to any assert context";
-    if (null == msg)
-      msg = "expected true";
-    if(cond)
-      results.add(Success(pos));
-    else
-      results.add(Failure(msg, pos));
+		if (null == msg)	msg = "expected true";
+		if (results == null) {
+				if (cond) {
+					
+				}else {
+						throw new AssertionError(msg);
+				}
+		}else {
+			if(cond)
+				results.add(Success(pos));
+			else
+				results.add(Failure(msg, pos));
+		}
+		return cond;
+    //if (results == null) throw "Assert.results is not currently bound to any assert context";
+    
   }
   /**
   * Asserts successfully when the condition is false.
@@ -85,7 +96,7 @@ class Assert {
   public static function isFalse(value : Bool, ?msg : String, ?pos : PosInfos) {
     if (null == msg)
       msg = "expected false";
-    isTrue(value == false, msg, pos);
+    return isTrue(value == false, msg, pos);
   }
   /**
   * Asserts successfully when the value is null.
@@ -97,7 +108,7 @@ class Assert {
   public static function isNull(value : Dynamic, ?msg : String, ?pos : PosInfos) {
     if (msg == null)
       msg = "expected null but was " + q(value);
-    isTrue(value == null, msg, pos);
+    return isTrue(value == null, msg, pos);
   }
   /**
   * Asserts successfully when the value is not null.
@@ -109,7 +120,7 @@ class Assert {
   public static function notNull(value : Dynamic, ?msg : String, ?pos : PosInfos) {
     if (null == msg)
       msg = "expected false";
-    isTrue(value != null, msg, pos);
+    return isTrue(value != null, msg, pos);
   }
   /**
   * Asserts successfully when the 'value' parameter is of the of the passed type 'type'.
@@ -121,7 +132,7 @@ class Assert {
   */
   public static function is(value : Dynamic, type : Dynamic, ?msg : String , ?pos : PosInfos) {
     if (msg == null) msg = "expected type " + typeToString(type) + " but was " + typeToString(value);
-    isTrue(Std.is(value, type), msg, pos);
+    return isTrue(Std.is(value, type), msg, pos);
   }
   
   /**
@@ -137,7 +148,7 @@ class Assert {
   */
   public static function notEquals(expected : Dynamic, value : Dynamic, ?msg : String , ?pos : PosInfos) {
     if(msg == null) msg = "expected " + q(expected) + " and testa value " + q(value) + " should be different";
-    isFalse(expected == value, msg, pos);
+    return isFalse(expected == value, msg, pos);
   }
   
   /**
@@ -155,7 +166,7 @@ class Assert {
     if (equal == null) equal = Equal.getEqualFor(expected);
     
     if(msg == null) msg = "expected " + q(expected) + " but was " + q(value);
-    isTrue(equal(expected, value), msg, pos);
+    return isTrue(equal(expected, value), msg, pos);
   }
   
   /**
@@ -171,7 +182,7 @@ class Assert {
   */
   public static function matches(pattern : EReg, value : Dynamic, ?msg : String , ?pos : PosInfos) {
     if(msg == null) msg = "the value " + q(value) + "does not match the provided pattern";
-    isTrue(pattern.match(value), msg, pos);
+    return isTrue(pattern.match(value), msg, pos);
   }
 
   /**
@@ -187,7 +198,7 @@ class Assert {
   * unless you know what you are doing.
   * @todo test the approximation argument
   */
-  public static function floatEquals(expected : Float, value : Float, ?approx : Float, ?msg : String , ?pos : PosInfos) : Void {
+  public static function floatEquals(expected : Float, value : Float, ?approx : Float, ?msg : String , ?pos : PosInfos) {
     if (msg == null) msg = "expected " + expected + " but was " + value;
     if (Math.isNaN(expected))
       if (Math.isNaN(value))
@@ -511,9 +522,10 @@ class Assert {
       recursive = true;
     var status = { recursive : recursive, path : '', error : null };
     if(sameAs(expected, value, status)) {
-      Assert.isTrue(true, msg, pos);
+      return Assert.isTrue(true, msg, pos);
     } else {
       Assert.fail(msg == null ? status.error : msg, pos);
+			return false;
     }
   }
 
@@ -539,10 +551,11 @@ class Assert {
       var name = Type.getClassName(type);
       if (name == null) name = ""+type;
       fail("exception of type " + name + " not raised", pos);
+			return false;
     } catch (ex : Dynamic) {
       var name = Type.getClassName(type);
       if (name == null) name = ""+type;
-      isTrue(Std.is(ex, type), "expected throw of type " + name + " but was "  + ex, pos);
+      return isTrue(Std.is(ex, type), "expected throw of type " + name + " but was "  + ex, pos);
     }
   }
   /**
@@ -555,9 +568,10 @@ class Assert {
   */
   public static function equalsOneOf<T>(value : T, possibilities : Array<T>, ?msg : String , ?pos : PosInfos) {
     if(Lambda.has(possibilities, value)) {
-      isTrue(true, msg, pos);
+      return isTrue(true, msg, pos);
     } else {
       fail(msg == null ? "value " + q(value) + " not found in the expected possibilities " + possibilities : msg, pos);
+			return false;
     }
   }
   /**
@@ -570,9 +584,10 @@ class Assert {
   */
   public static function contains<T>(values : Iterable<T>, match : T, ?msg : String , ?pos : PosInfos) {
     if(Lambda.has(values, match)) {
-      isTrue(true, msg, pos);
+      return isTrue(true, msg, pos);
     } else {
-      fail(msg == null ? "values " + values + " do not contain "+match: msg, pos);
+      fail(msg == null ? "values " + values + " do not contain " + match: msg, pos);
+			return false;
     }
   }
   
@@ -586,9 +601,10 @@ class Assert {
   */
   public static function notContains<T>(values : Iterable<T>, match : T, ?msg : String , ?pos : PosInfos) {
     if(!Lambda.has(values, match)) {
-      isTrue(true, msg, pos);
+      return isTrue(true, msg, pos);
     } else {
-      fail(msg == null ? "values " + values + " do contain "+match: msg, pos);
+      fail(msg == null ? "values " + values + " do contain " + match: msg, pos);
+			return false;
     }
   }
   
@@ -601,9 +617,10 @@ class Assert {
    */
   public static function stringContains(match : String, value : String, ?msg : String , ?pos : PosInfos) {
     if (value != null && value.indexOf(match) >= 0) {
-      isTrue(true, msg, pos);
+      return isTrue(true, msg, pos);
     } else {
       fail(msg == null ? "value " + q(value) + " does not contain " + q(match) : msg, pos);
+			return false;
     }
   }
   
@@ -611,7 +628,7 @@ class Assert {
     if (null == value)
     {
       fail(msg == null ? "null argument value" : msg, pos);
-      return;
+      return false;
     }
     var p = 0;
     for (s in sequence)
@@ -632,11 +649,11 @@ class Assert {
             msg += " begin";
         }
         fail(msg, pos);
-        return;
+        return false;
       }
       p = p2 + s.length;
     }
-    isTrue(true, msg, pos);
+    return isTrue(true, msg, pos);
   }
   
   /**
@@ -646,7 +663,7 @@ class Assert {
   * unless you know what you are doing.
   */
   public static function fail(msg = "failure expected", ?pos : PosInfos) {
-    isTrue(false, msg, pos);
+    return isTrue(false, msg, pos);
   }
   /**
   * Creates a warning message.

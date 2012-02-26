@@ -15,11 +15,11 @@
 */
 package stax;
 
+
+import stax.Tuples;using stax.Tuples;
 import Prelude;
 using Stax;
 
-import stax.Tuples;
-using stax.Tuples;
 using stax.Arrays;
 
 import Type;
@@ -27,7 +27,7 @@ import Type;
 typedef Object = {};
 
 class Objects {
-  
+	
   inline public static function copyDeep(d: Object): Object return 
     copy(d, false)
     
@@ -87,7 +87,7 @@ class Objects {
   
   public static function mapValues<T, S>(d: Dynamic<T>, f: T -> S): Dynamic<S> {
     return setAll({}, Reflect.fields(d).map(function(name) {
-      return name.entuple(f(Reflect.field(d, name)));
+      return Tuples.t2(name,f(Reflect.field(d, name)));
     }));
   }
   
@@ -167,10 +167,10 @@ class Objects {
   }
   
   public static function extractAll<T>(d: Dynamic<T>): Array<Tuple2<String, T>> {
-    return Reflect.fields(d).map(function(name) return name.entuple(Reflect.field(d, name)));
+    return Reflect.fields(d).map(function(name) return Tuples.t2(name,Reflect.field(d, name)));
   }
   
-  public static function extractAllAny(d: Object): Array<Tuple2<String, Dynamic>> {
+  public static function extractAllAny(d: Object): Array < Tuple2 < String, Dynamic >> {
     return extractAll(d);
   }
   

@@ -12,9 +12,10 @@ import stax.plus.Show;
 import stax.plus.Hasher;
 
 class Tuples {
+	/*
 	public static function entuple<A, B>(a: A, b: B): stax.Tuple2<A, B> {
     return new Tuple2(a, b);
-  }
+  }*/
 	public static inline function t2<A,B>(_1:A,_2:B):stax.Tuple2<A,B>{
 		return new Tuple2(_1, _2);
 	}
@@ -133,9 +134,13 @@ class Tuple2<A, B> extends AbstractProduct {
   public var _2 (default, null): B;
 
 	public function new (_1:A, _2:B) {
-		super([_1, _2]);
+		this._1 = _1;
+		this._2 = _2;
+		super([_1,_2]);
 	}
-	
+	public static function entuple<A, B, C>(t:stax.Tuple2<A,B>,c:C): stax.Tuple3<A, B, C> {
+    return new Tuple3(t._1, t._2, c);
+  }
 	public function apply<C>(f : A -> B -> C ) : C
 		return f(_1, _2)
 
@@ -144,11 +149,11 @@ class Tuple2<A, B> extends AbstractProduct {
 	public static function second<A, B>(t : Tuple2<A, B>) return t._2
 	
   override private function getProductPrefix(): String {
-    return "stax.Tuple3";
+    return "stax.Tuple2";
   }
 
   override private function getProductArity(): Int {
-    return 3;
+    return 2;
   }
 
   public function compare(other : stax.Tuple2<A, B>): Int {
@@ -174,14 +179,17 @@ class Tuple3<A, B, C> extends AbstractProduct {
 	public var _3	(default, null) : C;
 	
 	public function new (_1:A, _2:B, _3:C) {
+		this._1 = _1;
+		this._2 = _2;
+		this._3 = _3;
 		super([_1, _2, _3]);
 	}
 	public function apply<D>(f : A -> B -> C -> D) : D {
 		return f(_1, _2, _3);
 	}
-	
-
-		
+	public static function entuple<A, B, C, D>(t:stax.Tuple3<A,B,C>,d:D): stax.Tuple4<A, B, C, D> {
+    return new Tuple4(t._1, t._2, t._3, d);
+  }
 	public static function first<A, B>(t : Tuple2<A, B>) return t._1
 	public static function second<A, B>(t : Tuple2<A, B>) return t._2
 	public static function third<A, B, C>(t : stax.Tuple3<A, B, C>) return t._3

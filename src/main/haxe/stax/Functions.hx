@@ -6,8 +6,8 @@ package stax;
  */
 import Prelude;
 
-using stax.Dynamics;
 
+using stax.Dynamics;
 class CodeBlocks{
   public static function promote(c:CodeBlock):Thunk<Dynamic>{
     return function(){
@@ -94,6 +94,13 @@ class Functions1 {
     return function(p1) {
       f1(p1);
       f2(p1);
+    }
+  }
+	 public static function curry<P1, R>(f: Function1<P1, R>) {
+    return function() {
+      return function(p1: P1) {
+        return f(p1);
+      }
     }
   }
   public static function returning<P1, R1, R2>(f: Function<P1, R1>, thunk: Thunk<R2>): Function<P1, R2> {

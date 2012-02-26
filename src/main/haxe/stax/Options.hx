@@ -59,7 +59,7 @@ class Options {
   public static function zip<T, S>(o1: Option<T>, o2: Option<S>) {
     return switch (o1) {
       case None: None;
-      case Some(v1): o2.map(callback( stax.Tuples.entuple , v1));
+      case Some(v1): o2.map(callback( stax.Tuples.t2 , v1));
     }
   }
 

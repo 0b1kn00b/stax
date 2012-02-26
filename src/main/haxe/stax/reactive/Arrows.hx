@@ -1,15 +1,22 @@
-package com.sf;
+package stax.reactive;
 
+/**
+ * Used with permission of Sledorze.
+ */
+import Prelude;
 import stax.Options;using stax.Options;
 import stax.reactive.Arrows;using stax.reactive.Arrows;
-import Tuples,using Tuples;
+import Tuples; using Tuples;
 import stax.Methods;using stax.Methods;
 import haxe.test.Assert; using haxe.test.Assert;
-import haxe.io.Logger; using haxe.io.Logger;
+import haxe.io.log.Logger; using haxe.io.log.Logger;
 
+#if flash
 import flash.events.Event;
 import flash.events.IEventDispatcher;
 import flash.events.EventDispatcher;
+#end
+
 
 import haxe.Timer;
 typedef DynArrow = Arrow<Dynamic,Dynamic>;
@@ -50,18 +57,27 @@ class Viaz<I,O> implements Arrow<I,O>{
 	static public function then<I,O,NO>(before:Arrow<I,O>, after:Arrow<O,NO>):Arrow<I,NO> { return new ThenArrow(before, after); }
 	static public function lift<I,O>(lift:Method<I,O,I->O>):Arrow<I,O>{ return new FunctionArrow(lift); }
 	static public function pair<A,B,C,D>(pair_:Arrow<A,B>,_pair:Arrow<C,D>):Arrow<Tuple2<A,C>,Tuple2<B,D>>{ return new Pair(pair_,_pair); }
-	static public function or<I,O>(or_:Arrow<I,O>, _or:Arrow<I,O>):Arrow<I,O>{ return new OrArrow(or_, _or);}
-	static public function repeat<I,O>(a:Arrow<I,RepeatV<I,O>>):Arrow<I,O>{return new RepeatArrow(a);}
+	static public function repeat < I, O > (a:Arrow < I, RepeatV < I, O >> ):Arrow<I,O>{return new RepeatArrow(a);}
+	#if !(neko || php)
 	static public function delay<I,O>(a:Arrow<I,O>,delay:Int):Arrow<I,O>{return new DelayArrow(a,delay);}
-	static public function split<A,B,C>(split_:Arrow<A,B>,_split:Arrow<A,C>):Arrow<A,Tuple2<B,C>> { return new Split(split_,_split); }
+	#end
+	static public function split<A,B,C>(split_:Arrow<A,B>,_split:Arrow<A,C>):Arrow<A,Tuple2<B,C>> { return new Split(split_,_split
+	); }
+	#if flash
 	static public function event(evt:String):Arrow<IEventDispatcher,Event>{ return new EventArrow(evt); }
+	#end
+	static public function or<P1,P2,R0>(or_:Arrow<P1,R0>,_or:Arrow<P2,R0>):Arrow<Either<P1,P2>,R0>
+	{
+			return new Or(or_, _or);
+	}
+	static public function future<I>(future:Future<I>):Arrow < Future<I>, I > { return new FutureArrow(); }
 	static public function runCPS<I,O>(a:Arrow<I,O>,i:I,cont:Method<O,Void,O->Void>):Void { return a.withInput(i, cont); }
 
 	static public function runCont<I,O>(a:Arrow<I,O>,i:I,cont:Method<O,Void,O->Void>):Method<O,Void,O->Void>->Void{
 		return function (cont:Method<O,Void,O->Void>) a.withInput(i, cont);
 	}
 	static public function trace<A,B>(a:Arrow<A,B>):Arrow<A,B>{
-		var m : Method<B,B,B->B> = new Method1( function(x:B):B { Debug(Std.string(x)).log() ; return x;}, 'trace' ); 
+		var m : Method<B,B,B->B> = new Method1( function(x:B):B { Std.string(x).log() ; return x;}, 'trace' ); 
 		return new ThenArrow( a , new FunctionArrow( m ) );
 	}
 	static public function run<I,O>(a:Arrow<I,O>,i:I,?cont:Method<O,Void,O->Void>):Void{
@@ -79,6 +95,7 @@ class Stack{
 		
 	}
 }
+#if !(neko || php || cpp )
 class Arrows{
 	static public function trampoline<I>(f:I->Void){
 		return 
@@ -91,6 +108,7 @@ class Arrows{
 			}.toMethod('trampoline');
 	}
 }
+#end
 class ThenArrow< I, O, NO > implements Arrow<I, NO> {
 	var a : Arrow < I, O >;
 	var b : Arrow < O, NO >;
@@ -100,7 +118,7 @@ class ThenArrow< I, O, NO > implements Arrow<I, NO> {
 	}
 
 	inline public function withInput(i : I, cont : Method<NO,Void,NO->Void>) : Void {
-		cont.isNotNull();
+		cont.notNull();
 				
 		var m  = function (reta : O) { this.b.withInput(reta, cont);}.toMethod('then');
 		a.withInput(i, m);
@@ -111,28 +129,6 @@ class FunctionArrow<I,O> implements Arrow<I,O> {
 	public function new (m : Method<I,O,I->O>) { this.m = m;}
 
 	inline public function withInput(i : I, cont : Method<O,Void,O->Void>) : Void { cont.execute(m.execute(i)); }
-}
-
-class OrArrow < I, O > implements Arrow < I, O > {
-	var a : Arrow<I, O>;
-	var b : Arrow<I, O>;
-	
-	public function new (a : Arrow < I, O > , b : Arrow < I, O > ) {
-		this.a = a;
-		this.b = b;
-	}
-
-	inline public function withInput(i : I, cont : Method<O,Void,O->Void>) : Void {
-		var fulfilled = false;
-		var resdone = function (res : O) {
-			if (!fulfilled) {
-				fulfilled = true;
-				cont.execute(res);
-			}
-		}.toMethod('or');
-		a.withInput(i, resdone);
-		b.withInput(i, resdone);
-	}
 }
 enum RepeatV<RV, DV> {
 	Repeat(x:RV);
@@ -148,13 +144,23 @@ class RepeatArrow <I, O > implements Arrow < I , O > {
 		var thiz = this;
 		function withRes(res : RepeatV < I, O > ) {
 			switch (res) {
-				case Repeat(rv): thiz.a.withInput(rv, withRes.trampoline()); //  break this recursion!
+				case Repeat(rv): thiz.a.withInput(rv, cast withRes#if (flash || js).trampoline()#end); //  break this recursion!
 				case Done(dv): cont.execute(dv);
 			}
 		}
 		a.withInput(i, withRes.toMethod('repeat'));
 	}
 }
+/*class MapArrow <I,O> implements Arrow<Iterable<I>,O>{
+	var method : Method1<I,O,I -> O>;
+	public function new(fn) {
+		this.method = fn.toMethod('map');
+	}
+	inline public function withInput(i : I, cont : Method < O, Void, O->Void > ) {
+		
+	}
+}*/
+#if !(neko || php || cpp )
 class DelayArrow<I,O> implements Arrow<I,O> {
 	private var a 			: Arrow <I,O>;
 	private var delay 	: Int;
@@ -169,6 +175,8 @@ class DelayArrow<I,O> implements Arrow<I,O> {
 		Timer.delay( f , delay );
 	}
 }
+#end
+#if flash
 class EventArrow<Event> implements Arrow<flash.events.IEventDispatcher,Event>{
 	var name : String;
 	public function new(name:String){
@@ -187,7 +195,7 @@ class EventArrow<Event> implements Arrow<flash.events.IEventDispatcher,Event>{
 		canceller = function(){ i.removeEventListener(name,handler); }
 	}
 }
-
+#end
 class Pair<A,B,C,D> implements Arrow<Tuple2<A,C>,Tuple2<B,D>>{
 	public var l 		: Arrow<A,B>;
 	public var r 		: Arrow<C,D>;
@@ -197,7 +205,7 @@ class Pair<A,B,C,D> implements Arrow<Tuple2<A,C>,Tuple2<B,D>>{
 		this.r = r;
 	}
 	public function withInput(i : Tuple2<A,C>, cont : Method<Tuple2<B,D>,Void,Tuple2<B,D>->Void> ) : Void{
-		cont.isNotNull();
+		cont.notNull();
 
 		var ol : Option<B> 	= null;
 		var or : Option<D> 	= null;
@@ -222,8 +230,8 @@ class Pair<A,B,C,D> implements Arrow<Tuple2<A,C>,Tuple2<B,D>>{
 				or = v == null ? None : Some(v);
 				check();
 			}
-		l.withInput( i.a , hl.toMethod('left') );
-		r.withInput( i.b , hr.toMethod('right'));
+		l.withInput( i._1 , hl.toMethod('left') );
+		r.withInput( i._2 , hr.toMethod('right'));
 	}
 }
 class Split<A,B,C> implements Arrow<A,Tuple2<B,C>>{
@@ -237,28 +245,63 @@ class Split<A,B,C> implements Arrow<A,Tuple2<B,C>>{
 		a.withInput( Tuples.t2(i,i) , cont);
 	}
 }
+class Or< L, R , R0 > implements Arrow < Either < L, R >, R0 > {
+	var a : Arrow<L,R0>;
+	var b : Arrow<R,R0>;
+	
+	public function new(l, r) {
+		this.a = l;
+		this.b = r;
+	}
+	public function withInput(i : Either<L,R>, cont : Method < R0, Void, R0->Void > ) : Void {
+		switch (i) {
+			case Left(v) 	: a.withInput(v,cont);
+			case Right(v)	: b.withInput(v,cont);
+		}
+	}
+}
 #if js
+	/*
 import js.Dom;
+import js.Env;
 class JSArrow {
+
 	static public function elementA<I>(name : String) : Arrow<I, HTMLElement> {
 		// Env.document.getElementsByName(name)[0];
 		return null;
 	}
 }
+*/
 #end
 class M1A{
-	static public function lift<P,R>(m:Method1<P,R>){
-		return cast(m).lift();
+	static public function lift<P,R>(m:Method1<P,R>):Arrow<P,R>{
+		return Viaz.lift(m);
 	}
 }
 class F1A{
-	static public function lift<P,R>(f:P->R){
+	static public function lift<P,R>(f:P->R):Arrow<P,R>{
 		return f.toMethod('anonymous').lift();
+	}
+	static public function thenA<P1,P2,R>(f:P1->P2,a:Arrow<P2,R>):Arrow<P1,R>{
+		return lift(f).then(a);
+	}
+}
+class F1F {
+	static public function thenF<P1,P2,R>(f1:P1->P2,f2:P2->R){
+		var a1 = F1A.lift(f1);
+		var a2 = F1A.lift(f2);
+		return a1.then(a2);
+	}
+}
+class A1F {
+	static public function thenF<P1,P2,R>(a:Arrow<P1,P2>,f:P2->R){
+		var a2 = F1A.lift(f);
+		return a.then(a2);
 	}
 }
 class M2A{
 	static public function lift<P1,P2,R>(m:Method2<P1,P2,R>){
-		return m.lift();
+		return new stax.reactive.FunctionArrow(cast m);
 	}
 }
 class F2A{
@@ -268,7 +311,7 @@ class F2A{
 }
 class M3A{
 	static public function lift<P1,P2,P3,R>(m:Method3<P1,P2,P3,R>){
-		return m.lift();
+		return Viaz.lift(cast m);
 	}
 }
 class F3A{
@@ -278,7 +321,7 @@ class F3A{
 }
 class M4A{
 	static public function lift<P1,P2,P3,P4,R>(m:Method4<P1,P2,P3,P4,R>){
-		return m.lift();
+		return Viaz.lift(cast m);
 	}
 }
 class F4A{
@@ -288,7 +331,7 @@ class F4A{
 }
 class M5A{
 	static public function lift<P1,P2,P3,P4,P5,R>(m:Method5<P1,P2,P3,P4,P5,R>){
-		return m.lift();
+		return Viaz.lift(cast m);
 	}
 }
 class F5A{

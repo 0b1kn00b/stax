@@ -29,6 +29,7 @@ using haxe.test.ui.common.ReportTools;
 
 /**
 * @todo add documentation
+* @todo default outputhandler
 */
 class PlainTextReport implements IReport<PlainTextReport> {
   public var displaySuccessResults : SuccessResultsDisplayMode;

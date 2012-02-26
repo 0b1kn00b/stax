@@ -46,6 +46,8 @@ class PrintReport extends PlainTextReport {
     if (php.Lib.isCli()) {
 #elseif neko
     if (!neko.Web.isModNeko) {
+#elseif nodejs
+		if (true) {
 #end
       newline = "\n";
       indent  = "  ";

@@ -61,8 +61,8 @@ class T2 {
 	}
 }
 class T3 {
-	public static function entuple<A,B,C>(a:Tuple2<A,B>,b:C):Tuple3<A,B,C>{
-		return Tuples.t3(a._1, a._2 , b);
+	public static function entuple<A,B,C>(a:Tuple2<A,B>,c:C):Tuple3<A,B,C>{
+		return Tuples.t3(a._1, a._2 , c);
 	}
 	public static function apply<A,B,C,D>(args:Tuple3<A,B,C>,f:A->B->C->D):D{
 		return f(args._1, args._2, args._3);

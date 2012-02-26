@@ -1,4 +1,4 @@
-package com.sf;
+package stax;
 
 /**
  * ...
@@ -8,7 +8,7 @@ import stax.error.OutOfBoundsError;
 import stax.error.AbstractMethodError;
 
 import Prelude;
-import Tuples;
+import Tuples; using Tuples;
 
 import haxe.PosInfos;
 import haxe.rtti.Generic;
@@ -19,7 +19,7 @@ import stax.Options;using stax.Options;
 import stax.Functions;
 
 
-import com.sf.log.Logger;using com.sf.log.Logger;
+import haxe.io.log.Logger;using haxe.io.log.Logger;
 
 typedef DynMethod = Method<Dynamic,Dynamic,Dynamic>;
 
@@ -35,7 +35,6 @@ class Method < I, O, F > {
 		this.name = n;
 		return this;
 	}
-	public var call (default,null)	: Dynamic;
 	public var convention 			: MethodConvention;
 	
 	public var fn 	(default,null) 	: F;
@@ -50,14 +49,10 @@ class Method < I, O, F > {
 		this.pos 	= pos;
 		this.name 	= name;
 		if(fn == null){
-			Warning("Setting null function" + this).log();
+			Log.log("Setting null function" + this,Warning).log();
 		}
 		this.convention = Patch;
 		this.fn = fn;
-		call 	= Reflect.makeVarArgs(__call__);
-	}
-	private function __call__(v:Array<Dynamic>){
-		execute( v.toTuple() );
 	}
 	public function execute(?v:I,?pos):O{
 		if( isEmpty() ) new AbstractMethodError().log();
@@ -82,7 +77,7 @@ class Method < I, O, F > {
 		return fn == null;
 	}
 	public function toString(){
-		return "Method "  + name + "[ " + pos.toString() + " ]";
+		return "Method "  + name + "[ " + pos + " ]";
 	}
 }
 class Method0 <O> extends Method<Void,O,Void->O >{
@@ -116,7 +111,7 @@ class Method1 < I, O > extends Method < I, O, I->O > {
 					fn(args);
 			}
 		}catch(e:Dynamic){
-			Error(["Declared:",this,"\nCalled:",Logger.toString(pos),"\nError",e].join(" ")).log();
+			Log.log(["Declared:",this,"\nCalled:","\nError",e].join(" "));
 		}
 		//Debug(type(o)).log();
 		return o;
@@ -130,7 +125,7 @@ class Method1 < I, O > extends Method < I, O, I->O > {
 	}
 	override public function replaceAt(i:Int, v:Dynamic):Method<I,O,I->O> {
 		if (i != 0) {
-			throw new OutofBoundsError();
+			throw new OutOfBoundsError();
 		}
 		this.args = v;
 		return this;
@@ -151,7 +146,7 @@ class Method2<A,B,O> extends Method<Tuple2<A,B>,O,A->B->O>{
 				v = args;
 			default :
 		}
-		return fn(v.a, v.b);
+		return fn(v._1, v._2);
 	}
 	override public function patch(args:Tuple2<A,B>):Method<Tuple2<A,B>,O,A->B->O>{
 		this.args = this.args.patch(args);
@@ -159,11 +154,11 @@ class Method2<A,B,O> extends Method<Tuple2<A,B>,O,A->B->O>{
 	}
 	override public function replaceAt(i:Int, v:Dynamic):Method<Tuple2<A,B>,O,A->B->O> {
 		if (i > 1) {
-			throw new OutofBoundsError();
+			throw new OutOfBoundsError();
 		}else {
 			switch (i) {
-				case 0 : args.a = v;
-				case 1 : args.b = v;
+				case 0 : args._1 = v;
+				case 1 : args._2 = v;
 			}
 		}
 		return this;
@@ -192,7 +187,7 @@ class Method3<A,B,C,O> extends Method<Tuple3<A,B,C>,O,A->B->C->O>{
 				v = args;
 			default :
 		}
-		return fn(v.a, v.b, v.c);
+		return fn(v._1, v._2, v._3);
 	}
 	override public function patch(args:Tuple3<A,B,C>):Method<Tuple3<A,B,C>,O,A->B->C->O>{
 		this.args = T3.patch(this.args,args);
@@ -200,12 +195,12 @@ class Method3<A,B,C,O> extends Method<Tuple3<A,B,C>,O,A->B->C->O>{
 	}
 	override public function replaceAt(i:Int, v:Dynamic):Method<Tuple3<A,B,C>,O,A->B->C->O> {
 		if (i > 2) {
-			throw new OutofBoundsError();
+			throw new OutOfBoundsError();
 		}else {
 			switch (i) {
-				case 0 : args.a = v;
-				case 1 : args.b = v;
-				case 2 : args.c = v;
+				case 0 : args._1 = v;
+				case 1 : args._2 = v;
+				case 2 : args._3 = v;
 			}
 		}
 		return this;
@@ -232,7 +227,7 @@ class Method4<A,B,C,D,O> extends Method<Tuple4<A,B,C,D>,O,A->B->C->D->O>{
 				v = args;
 			default :
 		}
-		return fn(v.a, v.b, v.c, v.d);
+		return fn(v._1, v._2, v._3, v._4);
 	}
 	override public function patch(args:Tuple4<A,B,C,D>):Method<Tuple4<A,B,C,D>,O,A->B->C->D->O>{
 		this.args = T4.patch(this.args,args);
@@ -240,13 +235,13 @@ class Method4<A,B,C,D,O> extends Method<Tuple4<A,B,C,D>,O,A->B->C->D->O>{
 	}
 	override public function replaceAt(i:Int, v:Dynamic):Method<Tuple4<A,B,C,D>,O,A->B->C->D->O> {
 		if (i > 3) {
-			throw new OutofBoundsError();
+			throw new OutOfBoundsError();
 		}else {
 			switch (i) {
-				case 0 : args.a = v;
-				case 1 : args.b = v;
-				case 2 : args.c = v;
-				case 3 : args.d = v;
+				case 0 : args._1 = v;
+				case 1 : args._2 = v;
+				case 2 : args._3 = v;
+				case 3 : args._4 = v;
 			}
 		}
 		return this;
@@ -273,7 +268,7 @@ class Method5<A,B,C,D,E,O> extends Method<Tuple5<A,B,C,D,E>,O,A->B->C->D->E->O>{
 				v = args;
 			default :
 		}
-		return fn(v.a, v.b, v.c, v.d,v.e);
+		return fn(v._1, v._2, v._3, v._4, v._5);
 	}
 	override public function patch(args	:Tuple5<A,B,C,D,E>):Method<Tuple5<A,B,C,D,E>,O,A->B->C->D->E->O>{
 		this.args = T5.patch(this.args,args);		
@@ -281,14 +276,14 @@ class Method5<A,B,C,D,E,O> extends Method<Tuple5<A,B,C,D,E>,O,A->B->C->D->E->O>{
 	}
 	override public function replaceAt(i:Int, v:Dynamic):Method<Tuple5<A,B,C,D,E>,O,A->B->C->D->E->O> {
 		if (i > 4) {
-			throw new OutofBoundsError();
+			throw new OutOfBoundsError();
 		}else {
 			switch (i) {
-				case 0 : args.a = v;
-				case 1 : args.b = v;
-				case 2 : args.c = v;
-				case 3 : args.d = v;
-				case 4 : args.e = v;
+				case 0 : args._1 = v;
+				case 1 : args._2 = v;
+				case 2 : args._3 = v;
+				case 3 : args._4 = v;
+				case 4 : args._5 = v;
 			}
 		}
 		this.args = v;
@@ -306,7 +301,7 @@ class Methods {
 			case None : null;
 		}
 	}
-	public static function applyOr<I,O,F>(o:Option<Method<I,O,F>>,x:I,f0:Callback,?pos:PosInfos):Option<O>{
+	public static function applyOr<I,O,F>(o:Option<Method<I,O,F>>,x:I,f0:CodeBlock,?pos:PosInfos):Option<O>{
 		return switch(o){
 			case Some(f) 	: Options.toOption(f.execute(x,pos));
 			case None 		: f0(); None;

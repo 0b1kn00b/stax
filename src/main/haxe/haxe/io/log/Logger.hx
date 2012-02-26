@@ -34,9 +34,9 @@ interface LoggerFacade {
 }
 
 class Log {
-	public function log(value:Dynamic,?level:LogLevel):Void{
-		if level == null ? Debug : level;
-		LogHandlers.Trace( level , Std.string(value) );
+	public static function log<A>(value:A,?level:LogLevel,?pos:PosInfos):Void{
+		level = level == null ? Debug : level;
+		LogHandlers.Trace( level , Std.string(value) , pos );
 	}
 }
 enum LogLevel { All; Debug; Info; Warning; Error; Fatal; None; }

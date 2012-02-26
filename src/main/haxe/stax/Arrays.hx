@@ -324,7 +324,7 @@ class Arrays {
   }
 	
   public static function append<T>(a: Array<T>, t: T): Array<T> {
-    var copy = ArrayLamda.snapshot(a);
+    var copy = ArrayLambda.snapshot(a);
     
     copy.push(t);
     
