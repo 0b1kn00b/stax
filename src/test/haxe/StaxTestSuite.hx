@@ -15,46 +15,47 @@
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 import PreludeTest;
-import haxe.functional.FoldableExtensionsTestCase;
+																																using Stax;
+import stx.functional.FoldableExtensionsTestCase;
 
 import Prelude;
 
-import haxe.test.Runner;
-import haxe.test.ui.Report;
+import stx.test.Runner;
+import stx.test.ui.Report;
                    
-import haxe.text.json.JsonTestCase;
-import haxe.io.log.LoggerTestCase;        
-import haxe.data.collections.ArrayExtensionsTestCase;
-import haxe.data.collections.MapTestCase;
-import haxe.data.collections.SetTestCase;
-import haxe.data.collections.ListTestCase;
-import haxe.data.transcode.JValueTestCase;
-import haxe.functional.PartialFunctionTestCase;         
-import haxe.functional.FoldableExtensionsTestCase;
-import haxe.time.ScheduledExecutorTestCase;
-import haxe.net.UrlExtensionsTestCase;
-import haxe.net.HttpHeaderExtensionsTestCase;
-import haxe.reactive.ReactiveTestCase;
-import haxe.util.StringExtensionsTestCase;
-import haxe.util.GuidTestCase;
-import haxe.util.ObjectExtensionsTestCase;
-import haxe.util.OrderExtensionsTestCase;
-import haxe.framework.InjectorTestCase;
-import haxe.math.geom.PointTestCase;
-import haxe.math.tween.TweenTestCase;
-import haxe.data.transcode.TranscodeJValueExtensionsTestCase;
+import stx.text.json.JsonTestCase;
+import stx.io.log.LoggerTestCase;        
+import stx.data.collections.ArrayExtensionsTestCase;
+import stx.data.collections.MapTestCase;
+import stx.data.collections.SetTestCase;
+import stx.data.collections.ListTestCase;
+import stx.data.transcode.JValueTestCase;
+import stx.functional.PartialFunctionTestCase;         
+import stx.functional.FoldableExtensionsTestCase;
+import stx.time.ScheduledExecutorTestCase;
+import stx.net.UrlExtensionsTestCase;
+import stx.net.HttpHeaderExtensionsTestCase;
+import stx.reactive.ReactiveTestCase;
+import stx.util.StringExtensionsTestCase;
+import stx.util.GuidTestCase;
+import stx.util.ObjectExtensionsTestCase;
+import stx.util.OrderExtensionsTestCase;
+import stx.framework.InjectorTestCase;
+import stx.math.geom.PointTestCase;
+import stx.math.tween.TweenTestCase;
+import stx.data.transcode.TranscodeJValueExtensionsTestCase;
 
-import haxe.time.ScheduledExecutor;
-import haxe.framework.Injector;
+import stx.time.ScheduledExecutor;
+import stx.framework.Injector;
 
 #if js
-import haxe.io.http.HttpStringTestCase;
+import stx.io.http.HttpStringTestCase;
 
 import js.dom.HTMLElementExtensionsTestCase;
 import js.dom.HTMLDocumentExtensionsTestCase;
 import js.dom.QuirksTestCase;
 import js.io.IFrameIOTestCase;
-import haxe.io.http.HttpJValueJsonpTestCase;
+import stx.io.http.HttpJValueJsonpTestCase;
 #end
 
 class StaxTestSuite {
@@ -93,9 +94,12 @@ class StaxTestSuite {
           , new QuirksTestCase()
           , new ObjectExtensionsTestCase()
           , new TranscodeJValueExtensionsTestCase()
+					, new stx.OutcomeTest()
+					, new stx.error.ErrorTest()
+					, new stx.reactive.ArrowsTest()
           #end
   
-        ]);
+        ]);// .filter( function(x) return Std.is(x, stx.reactive.ArrowsTest) ) );
 
         Report.create(runner);
 

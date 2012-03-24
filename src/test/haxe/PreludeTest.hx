@@ -15,22 +15,21 @@
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 import Prelude;
+import Tuples;
 
-import stax.Future;
-using stax.Future;
+import stx.Future;								using stx.Future;
 
-import stax.Tuples;
 
-import stax.plus.Equal;
-import stax.plus.Order;
-import stax.plus.Show;
-import stax.plus.Hasher;
 
-import haxe.test.TestCase;
+import stx.plus.Equal;
+import stx.plus.Order;
+import stx.plus.Show;
+import stx.plus.Hasher;
 
-using stax.Options;
+import stx.test.TestCase;
+																	using stx.Options;
 
-using stax.Functions;
+using stx.Functions;
 class PreludeTestCase extends TestCase {
   public function new() {
     super();
@@ -163,11 +162,11 @@ class PreludeTestCase extends TestCase {
 
   public function testTupleOrder() {    
     var tests = [
-     Tuple2.create(Tuple2.create("b",0), Tuple2.create("a",0)),
-     Tuple2.create(Tuple2.create("a",1), Tuple2.create("a",0)), 
-     Tuple2.create(Tuple3.create("a",0,0.1), Tuple3.create("a",0,0.05)),
-     Tuple2.create(Tuple4.create("a",0,0.1,"b"), Tuple4.create("a",0,0.1,"a")),
-     Tuple2.create(Tuple5.create("a",0,0.1,"a",1), Tuple5.create("a",0,0.1,"a",0)), 
+     Tuples.t2(Tuples.t2("b",0), Tuples.t2("a",0)),
+     Tuples.t2(Tuples.t2("a",1), Tuples.t2("a",0)), 
+     Tuples.t2(Tuples.t3("a",0,0.1), Tuples.t3("a",0,0.05)),
+     Tuples.t2(Tuples.t4("a",0,0.1,"b"), Tuples.t4("a",0,0.1,"a")),
+     Tuples.t2(Tuples.t5("a",0,0.1,"a",1), Tuples.t5("a",0,0.1,"a",0)), 
     ];
   
     for(test in tests) {
@@ -178,11 +177,11 @@ class PreludeTestCase extends TestCase {
 
   public function testTupleEqual() {    
     var tests = [
-      Tuple2.create(Tuple2.create("b",0), Tuple2.create("b",0)),
-      Tuple2.create(Tuple2.create("a",1), Tuple2.create("a",1)), 
-      Tuple2.create(Tuple3.create("a",0,0.1), Tuple3.create("a",0,0.1)),
-      Tuple2.create(Tuple4.create("a",0,0.1,"b"), Tuple4.create("a",0,0.1,"b")),
-      Tuple2.create(Tuple5.create("a",0,0.1,"a",1), Tuple5.create("a",0,0.1,"a",1)), 
+      Tuples.t2(Tuples.t2("b",0), Tuples.t2("b",0)),
+      Tuples.t2(Tuples.t2("a",1), Tuples.t2("a",1)), 
+      Tuples.t2(Tuples.t3("a",0,0.1), Tuples.t3("a",0,0.1)),
+      Tuples.t2(Tuples.t4("a",0,0.1,"b"), Tuples.t4("a",0,0.1,"b")),
+      Tuples.t2(Tuples.t5("a",0,0.1,"a",1), Tuples.t5("a",0,0.1,"a",1)), 
     ];
     
     for(test in tests) {
@@ -193,11 +192,11 @@ class PreludeTestCase extends TestCase {
 
   public function testTupleString() {    
     var tests = [
-      Tuple2.create(Tuple2.create("b",0), "Tuple2(b, 0)"),
-      Tuple2.create(Tuple2.create("a",1), "Tuple2(a, 1)"), 
-      Tuple2.create(Tuple3.create("a",0,0.1), "Tuple3(a, 0, 0.1)"),
-      Tuple2.create(Tuple4.create("a",0,0.1,"b"), "Tuple4(a, 0, 0.1, b)"),
-      Tuple2.create(Tuple5.create("a",0,0.1,"a",1), "Tuple5(a, 0, 0.1, a, 1)"), 
+      Tuples.t2(Tuples.t2("b",0), "Tuple2(b, 0)"),
+      Tuples.t2(Tuples.t2("a",1), "Tuple2(a, 1)"), 
+      Tuples.t2(Tuples.t3("a",0,0.1), "Tuple3(a, 0, 0.1)"),
+      Tuples.t2(Tuples.t4("a",0,0.1,"b"), "Tuple4(a, 0, 0.1, b)"),
+      Tuples.t2(Tuples.t5("a",0,0.1,"a",1), "Tuple5(a, 0, 0.1, a, 1)"), 
     ];
     
     for(test in tests) {
@@ -208,11 +207,11 @@ class PreludeTestCase extends TestCase {
 
   public function testTupleHashCode() {    
     var tests = [
-      Hasher.getHashFor(Tuple2.create("b",0)),
-      Hasher.getHashFor(Tuple2.create("a",1)), 
-      Hasher.getHashFor(Tuple3.create("a",0,0.1)),
-      Hasher.getHashFor(Tuple4.create("a",0,0.1,"b")),
-      Hasher.getHashFor(Tuple5.create("a",0,0.1,"a",1)), 
+      Hasher.getHashFor(Tuples.t2("b",0)),
+      Hasher.getHashFor(Tuples.t2("a",1)), 
+      Hasher.getHashFor(Tuples.t3("a",0,0.1)),
+      Hasher.getHashFor(Tuples.t4("a",0,0.1,"b")),
+      Hasher.getHashFor(Tuples.t5("a",0,0.1,"a",1)), 
     ];
    
     while(tests.length > 0)
@@ -244,7 +243,7 @@ class PreludeTestCase extends TestCase {
 
   public function testOrderForAnonymousTyped() {
     var o1 = { name : "haxe"};                      
-    var o2 = { name : "stax"};
+    var o2 = { name : "stx"};
     var o3 = { name : "haxe"};
     var order = Order.getOrderFor(o1);
     assertTrue(order(o2, o1)      > 0);
@@ -347,7 +346,7 @@ class PreludeTestCase extends TestCase {
 
   public function testEqualForAnonymousTyped() {
     var o1 = { name : "haxe"};                      
-    var o2 = { name : "stax"};
+    var o2 = { name : "stx"};
     var o3 = { name : "haxe"};
     var equal = Equal.getEqualFor(o1);
     assertFalse(equal(o2, o1));
@@ -373,7 +372,7 @@ class PreludeTestCase extends TestCase {
     assertEquals("a",     getShow("a")); 
     assertEquals("1",  getShow(1));
     assertEquals("0.123",  getShow(0.123)); 
-    assertEquals("{name:stax}",  getShow({ name : "stax" })); 
+    assertEquals("{name:stx}",  getShow({ name : "stx" })); 
     assertEquals("[[1, 2], [3, 4]]", getShow([[1,2],[3,4]]));
     assertEquals("PreludeTest", getShow(this));
     assertEquals("_PreludeTest.HasEquals", getShow(new HasEquals(1)));

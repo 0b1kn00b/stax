@@ -19,16 +19,16 @@ import Dom;
 import Prelude;
 import js.Env;
 import js.dom.Quirks;
-import haxe.data.collections.Map;
+import stx.data.collections.Map;
 
-using stax.Options;
-using stax.Arrays;
+using stx.Options;
+using stx.Arrays;
 
-using stax.Dynamics;
-using stax.Strings;
+using stx.Dynamics;
+using stx.Strings;
 
 using js.dom.DomExtensions;
-using haxe.util.ObjectExtensions;
+using stx.util.ObjectExtensions;
 
 
 /** Feature detection library */
@@ -1127,7 +1127,7 @@ class BrowserSupport {
     return testFeatureAndMemorize("offsetDoesNotIncludeMarginInBodyOffset", function(v) {
       if (Env.document != null && Env.document.body != null) {
         return Env.document.body.into(function(body) {
-          var bodyMarginTop = Quirks.getComputedCssProperty(body, "margin-top").map(function(s) return s.toInt(0)).getOrElseC(0);
+          var bodyMarginTop = Quirks.getComputedCssProperty(body, "margin-top").map(function(s) return s.int(0)).getOrElseC(0);
 
           return Some(body.offsetTop != bodyMarginTop);
         });

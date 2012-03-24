@@ -1,11 +1,24 @@
 package resources;
 
-import haxe.test.TestCase;
-import haxe.test.Runner;
-import haxe.test.ui.Report;
+import stx.test.TestCase;
+import stx.test.Runner;
+import stx.test.ui.Report;
 
-import haxe.reactive.SignalCollection;
-using stax.Iterables;
+import stx.reactive.SignalCollection;
+import Stax;																using Stax;
+import stx.Iterables; 											using stx.Iterables;
+
+class BCollectionTester {
+  public static function main (): Void {
+    var runner = (new Runner()).addAll([
+      new CollectionTester()
+    ]);
+    
+    Report.create(runner);
+    
+    runner.run();
+  }
+}
 
 class CollectionTester extends TestCase {
   
@@ -179,32 +192,7 @@ class CollectionTester extends TestCase {
         
     assertIterableEquals([1,2,3,4,6,9,10], a.union(b));
   }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+	
   private function assertIterableEquals<T>(i1: Iterable<T>, i2: Iterable<T>): Void {
     var size1 = i1.size();
     var size2 = i2.size();
@@ -229,17 +217,5 @@ class CollectionTester extends TestCase {
       ++index;
     }
     assertTrue(true);
-  }
-}
-
-class BCollectionTester {
-  public static function main (): Void {
-    var runner = (new Runner()).addAll([
-      new CollectionTester()
-    ]);
-    
-    Report.create(runner);
-    
-    runner.run();
   }
 }

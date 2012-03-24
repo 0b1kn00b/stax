@@ -9,16 +9,16 @@ import Prelude;
 
 import Type;
 
-import stax.Tuples;
-import stax.Maths;
-import stax.plus.Show;
+import stx.Tuples;
+import stx.Maths;
+import stx.plus.Show;
 
 
 using Prelude;
 using Stax;
-using stax.Options;
-using stax.Strings;
-using stax.plus.Show;
+using stx.Options;
+using stx.Strings;
+using stx.plus.Show;
 
 
 
@@ -26,7 +26,6 @@ class Stax {
 	public static inline function tool<A>(?order:OrderFunction<A>,?equal:EqualFunction<A>,?hash:HashFunction<A>,?show:ShowFunction<A>):CollectionTools<A>{
 		return { order : order , equal : equal , show : show , hash : hash };
 	}
-
   public static function noop0(){
     return function(){};
   }  
@@ -48,7 +47,6 @@ class Stax {
   public static function identity<A>(): Function<A, A> {
     return function(a: A) { return a; }
   }
-
   public static function unfold<T, R>(initial: T, unfolder: T -> Option<Tuple2<T, R>>): Iterable<R> {
     return {
       iterator: function(): Iterator<R> {
@@ -85,10 +83,11 @@ class Stax {
       }
     }
   }
-
-  public static function error<T>(msg: String): T { throw msg; return null; }
+	
+  public static function error<T>(msg: String): T { throw msg;  return null; }
 }
-class ArrayLamda {
+
+class ArrayLambda {
 	inline public static function map<T, S>(a: Array<T>, f: T -> S): Array<S> {
     var n: Array<S> = [];
     
@@ -134,6 +133,16 @@ class IterableLambda {
     for (e in i) a.push(e);
     return a;
   }
+	public static function toIterable<T>(it:Iterator<T>):Iterable<T> {
+		return {
+			iterator : function () {
+				return {
+						next 			: it.next,
+						hasNext		: it.hasNext
+				}
+			}
+		}
+	}
 	public static function map<T, Z>(iter: Iterable<T>, f: T -> Z): Iterable<Z> {
     return foldl(iter, [], function(a, b) {
       a.push(f(b));
@@ -147,7 +156,7 @@ class IterableLambda {
       return a;
     });
   }  
-	public static function foldl<T, Z>(iter: Iterable<T>, seed: Z, mapper: Z -> T -> Z): Z {
+	static public function foldl<T, Z>(iter: Iterable<T>, seed: Z, mapper: Z -> T -> Z): Z {
     var folded = seed;
     
     for (e in iter) { folded = mapper(folded, e); }
@@ -155,7 +164,7 @@ class IterableLambda {
     return folded;
   }   
   public static function filter<T>(iter: Iterable<T>, f: T -> Bool): Iterable<T> {
-    return ArrayLamda.filter(iter.toArray(), f);
+    return ArrayLambda.filter(iter.toArray(), f);
   }
 	public static function size<T>(iterable: Iterable<T>): Int {
     var size = 0;
@@ -163,5 +172,23 @@ class IterableLambda {
     for (e in iterable) ++size;
     
     return size;
+  }
+}
+class IntIters {
+	public static function to(start: Int, end: Int): Iterable<Int> {
+    return {
+      iterator: function() {
+        var cur = start;
+    
+        return {
+          hasNext: function(): Bool { return cur <= end; },      
+          next:    function(): Int  { var next = cur; ++cur; return next; }
+        }
+      }
+    }
+  }
+  
+  public static function until(start: Int, end: Int): Iterable<Int> {
+    return to(start, end - 1);
   }
 }

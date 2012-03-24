@@ -5,10 +5,10 @@ import Dom;
 import js.Env;
 import js.dom.Quirks;
 
-import haxe.test.TestCase;
+import stx.test.TestCase;
 using js.dom.Quirks;
 
-using stax.Options;
+using stx.Options;
 
 class QuirksTestCase extends TestCase {
   var element: HTMLElement;

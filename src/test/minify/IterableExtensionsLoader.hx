@@ -5,17 +5,17 @@ package ;
  * @author 0b1kn00b
  */
 
-import stax.Iterables;
-//import stax.Arrays;
-//import haxe.data.collections.Map;
+import stx.Iterables;
+//import stx.Arrays;
+//import stx.data.collections.Map;
 /* import Prelude;
 
-import stax.Tuples;
-using stax.Tuples;
+import stx.Tuples;
+using stx.Tuples;
 
-import stax.ArrayOps;
+import stx.ArrayOps;
  
-using stax.IterableOps;*/
+using stx.IterableOps;*/
 
 
 class IterableExtensionsLoader {

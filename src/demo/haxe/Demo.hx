@@ -5,8 +5,8 @@ import js.Env;
 import js.io.IFrameIO;
 import js.dom.Quirks;
 import js.detect.BrowserSupport;
-import haxe.framework.Injector;
-import haxe.time.ScheduledExecutor;
+import stx.framework.Injector;
+import stx.time.ScheduledExecutor;
 
 
 using js.dom.HTMLDocumentExtensions;

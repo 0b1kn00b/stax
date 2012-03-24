@@ -17,8 +17,8 @@ package js.io;
 
 import Dom;
 import Prelude;
-import haxe.test.Assert;
-import haxe.test.TestCase;
+import stx.test.Assert;
+import stx.test.TestCase;
 import js.Env;
 import js.dom.Quirks;
 import js.io.IFrameIO;

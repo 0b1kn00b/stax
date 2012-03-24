@@ -17,12 +17,14 @@ package js.dom;
 
 import Dom;
 import js.Env;
-import Prelude;
-import stax.Tuples;
+import stx.Tuples;
 
-using stax.Maths;
-import stax.Options;
-using stax.Options;
+import Prelude;
+
+
+using stx.Maths;
+import stx.Options;
+using stx.Options;
 
 
 /** 

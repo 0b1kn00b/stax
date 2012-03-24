@@ -1,0 +1,5 @@
+classPaths=src/main/haxe
+src=src/main/test/minify
+test=bin/tests
+report=bin/reports
+hxml=test.hxml

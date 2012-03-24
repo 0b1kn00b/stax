@@ -50,20 +50,30 @@ enum Option<T> {
   Some(v: T);
 }
 
+enum TraversalOrder {
+	PreOrder;
+	InOrder;
+	PostOrder;
+	LevelOrder;
+}
+typedef Tree<T> = {
+	data 	: T,
+	left 	: Tree<T>,
+	right	: Tree<T>,
+}
 /** Either represents a type that is either a "left" value or a "right" value,
- * but not both. Either is often used to represent success/failure, where the
+ * but not both. Either is often used to represent success/failure, where theimport stx.Tuples;
  * left side represents failure, and the right side represents success.
  */
 enum Either<A, B> {
   Left(v: A);
   Right(v: B);
 }
-
-typedef FailureOrSuccess<A, B> = Either<A, B>
-typedef OrderFunction<T>  = Function2<T, T, Int>;
-typedef EqualFunction<T>  = Function2<T, T, Bool>;
-typedef ShowFunction<T>   = Function<T, String>;
-typedef HashFunction<T> = Function<T, Int>;   
+typedef FailureOrSuccess<A, B> 	= Either<A, B>
+typedef OrderFunction<T>  			= Function2<T, T, Int>;
+typedef EqualFunction<T>  			= Function2<T, T, Bool>;
+typedef ShowFunction<T>   			= Function<T, String>;
+typedef HashFunction<T> 				= Function<T, Int>;   
 
 typedef CollectionTools<T> = {
 		order : Null<OrderFunction<T>>,
