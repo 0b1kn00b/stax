@@ -173,7 +173,7 @@ class ParseInput<T> {
     
 		//return null;
 		//TODO where does newRow come from
-		return ParseInput.create(rest.substr(n), consumed.concat([str]), newData, row, col);
+		return ParseInput.create(rest.substr(n), consumed.concat([str]), newData, newRow, newCol);
   }
   
   public function fail(message: String): ParseFailure {
