@@ -18,7 +18,7 @@
 package js.dom;
 
 import Dom;
-import stax.Tuples;
+import stx.Tuples;
 import js.Env;
 import js.dom.Quirks;
 import js.dom.HTMLElementExtensions;
@@ -27,7 +27,7 @@ using  js.dom.HTMLElementExtensions;
 using  js.dom.HTMLDocumentExtensions;
 
 
-import haxe.test.TestCase;
+import stx.test.TestCase;
 
 class HTMLDocumentExtensionsTestCase extends TestCase {
     var _doc:           Dom.HTMLDocument;
@@ -36,12 +36,12 @@ class HTMLDocumentExtensionsTestCase extends TestCase {
     public function new():Void {
         super();
         _doc = Env.document;
-        _testElements = _doc.newElement("div", [stax.Tuples.t2("id", "testElements")]);
+        _testElements = _doc.newElement("div", [stx.Tuples.t2("id", "testElements")]);
         _doc.getElementsByTagName("body")[0].appendChild(_testElements);
     }
     
     public function testThatNewElementWorks(): Void {
-      var e = _doc.newElement("img", [ stax.Tuples.t2("id", "foo"), stax.Tuples.t2("src", "http://thenextweb.com/apps/files/2010/03/google_logo.jpg")], "width: 300px; height: 100px; position: relative;");
+      var e = _doc.newElement("img", [ stx.Tuples.t2("id", "foo"), stx.Tuples.t2("src", "http://thenextweb.com/apps/files/2010/03/google_logo.jpg")], "width: 300px; height: 100px; position: relative;");
       
       asTestElement(e);
       
@@ -53,7 +53,7 @@ class HTMLDocumentExtensionsTestCase extends TestCase {
     }
     
     public function testThatGetIdWorks(): Void {
-      var e = asTestElement(_doc.newElement("div", [stax.Tuples.t2("id", "getIdElem")]));
+      var e = asTestElement(_doc.newElement("div", [stx.Tuples.t2("id", "getIdElem")]));
       
       assertTrue(_doc.getId("getIdElem") != null);
     }
@@ -65,9 +65,9 @@ class HTMLDocumentExtensionsTestCase extends TestCase {
     }
     
     public function testThatGetClassesWorks(): Void {
-      var e1 = asTestElement(_doc.newElement("div", [stax.Tuples.t2("class", "test-elem bob")]));
-      var e2 = asTestElement(_doc.newElement("div", [stax.Tuples.t2("class", "test-elem foo fang")]));
-      var e3 = asTestElement(_doc.newElement("div", [stax.Tuples.t2("class", "foo test-elem")]));
+      var e1 = asTestElement(_doc.newElement("div", [stx.Tuples.t2("class", "test-elem bob")]));
+      var e2 = asTestElement(_doc.newElement("div", [stx.Tuples.t2("class", "test-elem foo fang")]));
+      var e3 = asTestElement(_doc.newElement("div", [stx.Tuples.t2("class", "foo test-elem")]));
       
       var body = _doc.getTags("body")[0];
       

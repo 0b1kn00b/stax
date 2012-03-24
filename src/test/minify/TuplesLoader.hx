@@ -4,7 +4,7 @@ package ;
  * ...
  * @author 0b1kn00b
  */
-import stax.Tuples;
+import stx.Tuples;
 
 class TuplesLoader {
 

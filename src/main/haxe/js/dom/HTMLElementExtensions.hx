@@ -18,12 +18,12 @@ package js.dom;
 import Prelude;
 import Dom;
 
-using stax.Arrays;
+using stx.Arrays;
 
 using js.dom.HTMLDocumentExtensions;
 using js.dom.DomExtensions.DomCollectionExtensions;
 
-using stax.Options;
+using stx.Options;
 
 class HTMLElementExtensions {
   

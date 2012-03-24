@@ -21,36 +21,36 @@ import Prelude;
 
 import js.Env;
 import js.dom.Quirks;
-import haxe.data.collections.List;
-import haxe.data.collections.Map;
-import haxe.time.ScheduledExecutor;
-import haxe.text.json.Json;
-import haxe.net.Url;
-import haxe.io.log.Logger;
+import stx.data.collections.List;
+import stx.data.collections.Map;
+import stx.time.ScheduledExecutor;
+import stx.text.json.Json;
+import stx.net.Url;
+import stx.io.log.Logger;
 
 
-import stax.Future;
-import stax.Tuples;
+import stx.Future;
+import stx.Tuples;
 
 using Stax;
-using stax.Tuples;
-using stax.Arrays;
-using stax.Strings;
-using stax.Maths;
-using stax.Options;
-using stax.Dynamics;
-using stax.Iterables;
+using stx.Tuples;
+using stx.Arrays;
+using stx.Strings;
+using stx.Maths;
+using stx.Options;
+using stx.Dynamics;
+using stx.Iterables;
 
-using stax.plus.Hasher;
+using stx.plus.Hasher;
 
-using haxe.data.collections.Map;
-using haxe.data.collections.List;
+using stx.data.collections.Map;
+using stx.data.collections.List;
 
-using haxe.functional.FoldableExtensions;
-using haxe.util.StringExtensions;
+using stx.functional.FoldableExtensions;
+using stx.util.StringExtensions;
 
-using haxe.net.UrlExtensions;
-using haxe.framework.Injector;
+using stx.net.UrlExtensions;
+using stx.framework.Injector;
 
 
 /** A bidirectional communication layer capable of crossing frames hosted on 
@@ -492,7 +492,7 @@ class IFrameIOPollingHashtag extends AbstractIFrameIO, implements IFrameIO {
   private function analyzeReceivedFragments(messageKey: MessageKey, fragments: Array<FragmentDelivery>): Void {
     if (fragments.length >= messageKey.fragmentCount) {
       // All fragments received -- we can send data to listeners:
-      fragments.sort(function(a, b) return a.fragmentId.toInt() - b.fragmentId.toInt());
+      fragments.sort(function(a, b) return a.fragmentId.int() - b.fragmentId.int());
       
       var fullData = fragments.foldl('', function(a, b) return a + b.data);
     
@@ -512,14 +512,14 @@ class IFrameIOPollingHashtag extends AbstractIFrameIO, implements IFrameIO {
     return fragmentsReceived.values().foldl(List.nil(), function(allMissing, fragments) {
       var firstFrag = fragments[0];
       
-      fragments.sort(function(a, b) return a.fragmentId.toInt() - b.fragmentId.toInt());
+      fragments.sort(function(a, b) return a.fragmentId.int() - b.fragmentId.int());
       
       //trace('length = ' + fragments.length);
       
       return fragments.toList().gaps(
         function(a, b) {
-          var lastId = a.fragmentId.toInt();
-          var curId  = b.fragmentId.toInt();
+          var lastId = a.fragmentId.int();
+          var curId  = b.fragmentId.int();
           
           //trace('lastId = ' + lastId + ', curId = ' + curId);
           
@@ -549,7 +549,7 @@ class IFrameIOPollingHashtag extends AbstractIFrameIO, implements IFrameIO {
   }
   
   private static function messageKeyFrom(o: {messageId: String, from: String, to: String, fragmentCount: String}): MessageKey {
-    return new MessageKey(o.messageId.toInt(), o.from, o.to, o.fragmentCount.toInt());
+    return new MessageKey(o.messageId.int(), o.from, o.to, o.fragmentCount.int());
   }
   
   private function startSender(): Void {

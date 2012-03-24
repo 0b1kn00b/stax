@@ -62,20 +62,12 @@ typedef Tree<T> = {
 	right	: Tree<T>,
 }
 /** Either represents a type that is either a "left" value or a "right" value,
- * but not both. Either is often used to represent success/failure, where the
+ * but not both. Either is often used to represent success/failure, where theimport stx.Tuples;
  * left side represents failure, and the right side represents success.
  */
 enum Either<A, B> {
   Left(v: A);
   Right(v: B);
-}
-enum Arrity<T> {
-		One(v:T);
-		Many(a:Array<T>);
-}
-typedef KV<T> = {
-	key 		: String,
-	value		: T
 }
 typedef FailureOrSuccess<A, B> 	= Either<A, B>
 typedef OrderFunction<T>  			= Function2<T, T, Int>;

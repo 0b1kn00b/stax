@@ -23,8 +23,8 @@ import js.dom.Quirks;
 using  js.dom.HTMLElementExtensions;
 using  js.dom.HTMLDocumentExtensions;
 
-import haxe.unit.TestCase;
-import haxe.unit.TestRunner;
+import stx.unit.TestCase;
+import stx.unit.TestRunner;
 
 class DomTest extends TestCase {
   var _doc: Env.HTMLDocument;
@@ -2073,7 +2073,7 @@ class DomTest extends TestCase {
 
 class DomTester {
   public static function main():Void {
-    var tr = new haxe.unit.TestRunner();
+    var tr = new stx.unit.TestRunner();
       
       var tester1 = new DomTest();
       

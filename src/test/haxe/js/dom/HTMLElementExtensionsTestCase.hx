@@ -23,7 +23,7 @@ import js.dom.Quirks;
 import js.dom.HTMLElementExtensions;
 using  js.dom.HTMLElementExtensions;
 
-import haxe.test.TestCase;
+import stx.test.TestCase;
 
 class HTMLElementExtensionsTestCase extends TestCase {
     var _doc: Dom.HTMLDocument;

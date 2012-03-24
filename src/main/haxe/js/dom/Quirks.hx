@@ -22,23 +22,23 @@ using Stax;
 import Dom;
 import js.Env;
 import js.detect.BrowserSupport;
-import haxe.functional.Predicate;
-import haxe.data.collections.Map;
-using stax.Arrays;
+import stx.functional.Predicate;
+import stx.data.collections.Map;
+using stx.Arrays;
 
-import haxe.util.Guid;
+import stx.util.Guid;
 
-using stax.Strings;
-using stax.Dynamics;
-using stax.Options;
-using stax.Maths;
+using stx.Strings;
+using stx.Dynamics;
+using stx.Options;
+using stx.Maths;
  
 
-import stax.Dynamics;
+import stx.Dynamics;
 
 using js.dom.DomExtensions;
-using haxe.util.StringExtensions;
-using haxe.util.ObjectExtensions;
+using stx.util.StringExtensions;
+using stx.util.ObjectExtensions;
 
 
 
@@ -405,8 +405,8 @@ class Quirks {
       var left = body.offsetLeft;
 
       if (BrowserSupport.offsetDoesNotIncludeMarginInBodyOffset()) {
-        top  += getComputedCssProperty(body, 'margin-top').map(function(s) return s.toInt(0)).getOrElseC(0);
-        left += getComputedCssProperty(body, 'margin-left').map(function(s) return s.toInt(0)).getOrElseC(0);
+        top  += getComputedCssProperty(body, 'margin-top').map(function(s) return s.int(0)).getOrElseC(0);
+        left += getComputedCssProperty(body, 'margin-left').map(function(s) return s.int(0)).getOrElseC(0);
       }
 
       return { x: left, y: top };
@@ -424,8 +424,8 @@ class Quirks {
       });
 
       var curOffset = getOffset(elem).getOrElseC({ x: 0, y: 0});
-      var curTop    = getComputedCssProperty( elem, 'top' ).map(function(s) return s.toInt(0)).getOrElseC(0);
-      var curLeft   = getComputedCssProperty( elem, 'left').map(function(s) return s.toInt(0)).getOrElseC(0);
+      var curTop    = getComputedCssProperty( elem, 'top' ).map(function(s) return s.int(0)).getOrElseC(0);
+      var curLeft   = getComputedCssProperty( elem, 'left').map(function(s) return s.int(0)).getOrElseC(0);
 
       elem.style.top  = ((offset.y - curOffset.y) + curTop).toString() + "px";
       elem.style.left = ((offset.x - curOffset.x) + curLeft).toString() + "px";
@@ -549,7 +549,7 @@ class Quirks {
           return getWH(elem, offsetValueExtract, which, extra);
         });
       }
-      return Some(Math.max(0, Math.round(val)).toInt());
+      return Some(Math.max(0, Math.round(val)).int());
     }
   }
   private static function swap<T>(elem: HTMLElement, values: Map<String, String>, functionCallback: Function<HTMLElement, T>): T{
@@ -573,13 +573,13 @@ class Quirks {
     if (extra != "border"){
       which.foreach(function(v) {
         if (extra != ""){
-           val -= getCssPropertyIfSet( elem, 'padding-' + v).map(function(s) return s.toInt(0)).getOrElseC(0);
+           val -= getCssPropertyIfSet( elem, 'padding-' + v).map(function(s) return s.int(0)).getOrElseC(0);
         }
         if (extra == "margin"){
-          val += getCssPropertyIfSet( elem, 'margin-' + v).map(function(s) return s.toInt(0)).getOrElseC(0);
+          val += getCssPropertyIfSet( elem, 'margin-' + v).map(function(s) return s.int(0)).getOrElseC(0);
         }
         else{
-          val -= getCssPropertyIfSet( elem, 'border-' + v + '-width').map(function(s) return s.toInt(0)).getOrElseC(0);
+          val -= getCssPropertyIfSet( elem, 'border-' + v + '-width').map(function(s) return s.int(0)).getOrElseC(0);
         }
       });
     }
@@ -635,8 +635,8 @@ class Quirks {
           left += elem.offsetLeft;
 
           if (BrowserSupport.offsetDoesNotAddBorder() && !(BrowserSupport.offsetAddsBorderForTableAndCells() && ~/^t(able|d|h)$/i.match(elem.nodeName))) {
-            top  += computedStyle.borderTopWidth.toInt(0);
-            left += computedStyle.borderLeftWidth.toInt(0);
+            top  += computedStyle.borderTopWidth.int(0);
+            left += computedStyle.borderLeftWidth.int(0);
           }
 
           prevOffsetParent = offsetParent;
@@ -644,8 +644,8 @@ class Quirks {
         }
 
         if (BrowserSupport.offsetSubtractsBorderForOverflowNotVisible() && computedStyle.overflow != "visible") {
-          top  += computedStyle.borderTopWidth.toInt(0);
-          left += computedStyle.borderLeftWidth.toInt(0);
+          top  += computedStyle.borderTopWidth.int(0);
+          left += computedStyle.borderLeftWidth.int(0);
         }
 
         prevComputedStyle = computedStyle;
@@ -657,8 +657,8 @@ class Quirks {
       }
 
       if (BrowserSupport.positionFixed() && prevComputedStyle.position == "fixed") {
-        top  += Math.max(docElem.scrollTop,  body.scrollTop).toInt();
-        left += Math.max(docElem.scrollLeft, body.scrollLeft).toInt();
+        top  += Math.max(docElem.scrollTop,  body.scrollTop).int();
+        left += Math.max(docElem.scrollLeft, body.scrollLeft).int();
       }
 
       return Some({ x: left, y: top });
@@ -673,13 +673,13 @@ class Quirks {
 
     var parentOffset = if (RootPattern.match(offsetParent.nodeName)) { x: 0, y: 0 } else getOffset(offsetParent).getOrElseC({ x: 0, y: 0 });
 
-    offset.x -= getCssPropertyIfSet(elem, "marginTop").getOrElseC("0").toInt();
-    offset.y -= getCssPropertyIfSet(elem, "marginLeft").getOrElseC("0").toInt();
+    offset.x -= getCssPropertyIfSet(elem, "marginTop").getOrElseC("0").int();
+    offset.y -= getCssPropertyIfSet(elem, "marginLeft").getOrElseC("0").int();
 
 
     // Add offsetParent borders
-    parentOffset.x += getCssPropertyIfSet(offsetParent, "borderTopWidth").getOrElseC("0").toInt();
-    parentOffset.y += getCssPropertyIfSet(offsetParent, "borderLeftWidth").getOrElseC("0").toInt();
+    parentOffset.x += getCssPropertyIfSet(offsetParent, "borderTopWidth").getOrElseC("0").int();
+    parentOffset.y += getCssPropertyIfSet(offsetParent, "borderLeftWidth").getOrElseC("0").int();
 
     // Subtract the two offsets
     return Some({

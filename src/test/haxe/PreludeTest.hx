@@ -15,22 +15,21 @@
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 import Prelude;
+import Tuples;
 
-import stax.Future;
-using stax.Future;
+import stx.Future;								using stx.Future;
 
-import stax.Tuples;
 
-import stax.plus.Equal;
-import stax.plus.Order;
-import stax.plus.Show;
-import stax.plus.Hasher;
 
-import haxe.test.TestCase;
+import stx.plus.Equal;
+import stx.plus.Order;
+import stx.plus.Show;
+import stx.plus.Hasher;
 
-using stax.Options;
+import stx.test.TestCase;
+																	using stx.Options;
 
-using stax.Functions;
+using stx.Functions;
 class PreludeTestCase extends TestCase {
   public function new() {
     super();
@@ -244,7 +243,7 @@ class PreludeTestCase extends TestCase {
 
   public function testOrderForAnonymousTyped() {
     var o1 = { name : "haxe"};                      
-    var o2 = { name : "stax"};
+    var o2 = { name : "stx"};
     var o3 = { name : "haxe"};
     var order = Order.getOrderFor(o1);
     assertTrue(order(o2, o1)      > 0);
@@ -347,7 +346,7 @@ class PreludeTestCase extends TestCase {
 
   public function testEqualForAnonymousTyped() {
     var o1 = { name : "haxe"};                      
-    var o2 = { name : "stax"};
+    var o2 = { name : "stx"};
     var o3 = { name : "haxe"};
     var equal = Equal.getEqualFor(o1);
     assertFalse(equal(o2, o1));
@@ -373,7 +372,7 @@ class PreludeTestCase extends TestCase {
     assertEquals("a",     getShow("a")); 
     assertEquals("1",  getShow(1));
     assertEquals("0.123",  getShow(0.123)); 
-    assertEquals("{name:stax}",  getShow({ name : "stax" })); 
+    assertEquals("{name:stx}",  getShow({ name : "stx" })); 
     assertEquals("[[1, 2], [3, 4]]", getShow([[1,2],[3,4]]));
     assertEquals("PreludeTest", getShow(this));
     assertEquals("_PreludeTest.HasEquals", getShow(new HasEquals(1)));
