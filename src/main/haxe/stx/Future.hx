@@ -38,7 +38,9 @@ class Future<T> {
     _cancelers  = [];
     _canceled   = [];
   }
-
+	public function isEmpty(){
+		return _listeners.length == 0;
+	}
   /** Creates a "dead" future that is canceled and will never be delivered.
    */
   public static function dead<T>(): Future<T> {

@@ -57,10 +57,10 @@ class Zippers {
 	}
 }
 class EnumZipper {
-	static public function param<T,C,N>(z:Zipper<T,Enum<C>>,index : Int):Zipper<T,N>{
+	static public function param<T,C,N>(z:Zipper<T,EnumValue>,index : Int):Zipper<T,N>{
 		//Typing hack.
-		var n : N 			= z.current.enumParameters()[index];
-		var f	: Enum<C> -> N 	= function(x) { return x.enumParameters()[index]; }
+		var n : N 			= Type.enumParameters(z.current)[index];
+		var f	: EnumValue -> N 	= function(x) { return Type.enumParameters(x)[index]; }
 		return z.map( f );
 	}
 }

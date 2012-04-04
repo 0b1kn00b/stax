@@ -99,7 +99,7 @@ class StaxTestSuite {
 					, new stx.reactive.ArrowsTest()
           #end
   
-        ]);// .filter( function(x) return Std.is(x, stx.reactive.ArrowsTest) ) );
+        ].filter( function(x) return Std.is(x, stx.OutcomeTest) ));
 
         Report.create(runner);
 

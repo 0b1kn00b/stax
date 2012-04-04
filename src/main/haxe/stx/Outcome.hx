@@ -17,98 +17,187 @@ import stx.error.NullReferenceError;
 
 		
 class Outcome<A,B>  {
-
+	public static var count : Int = 0;
+	
   var fut:Future<Either<A,B>>;
   public var userCancel:Arrow<A,A>;
+	private var done : Bool;
 	
-  var err:A;
-
-  public function new(?cancel:Arrow<A,A>) {		
-    fut = new Future();
-    err = null;
-    if (cancel != null){
-      userCancel = cancel;
-		}else {
-			userCancel = function(x:Dynamic):Dynamic { trace( x ); return x; } .lift();
+	public var id : Int;
+	
+  var err: Option<A>;
+	
+  public function new(?cancel:Arrow < A, A > ) {		
+		done 		= false;
+		id			= count++;
+		//trace(this + 'new');
+    fut 		= new Future();
+		err 		= None;
+		if (cancel != null) {
+				onError(cancel);
 		}
   }
-	public function isDone() {
-		return fut.isDone();
+	public function toString() {
+		return 'Outcome: [' + id + '] ';
 	}
-  function onCancel(e:A) {
-		//trace('here' + userCancel);
-      err = e;
-			userCancel.run(e);
+	public function isDone() {
+		return fut.isDone() && this.done;
+	}
+  function onCancel(e:A):Void {
+		//trace(this + ' cancel: ' + e + ' already done? ' + isDone());
+		if (isDone()) return;
+      err = Some(e);
+			if (userCancel != null) {
+				userCancel.run(e);
+				//trace(this + 'running canceller');
+			}else {
+				//trace(this + ' no canceller');
+			}			
+			done = true;
   }
-	public function foreach(f) {
+	public function foreach(f): Outcome<A,B> {
 		return deliverTo(f);
 	}
   public function future():Future<Either<A,B>> {
     return fut;
   }
-  
-  public function onError(cb:Arrow<A,A>) {
-		//trace('set error handler');
-    userCancel = userCancel.then(cb);
+  public function onError(cb:Arrow<A,A>) : Outcome < A, B > {
+		if (cb == null) { throw new stx.error.NullReferenceError('cb'); }
+		
+		//trace(this + ' onError set ' + userCancel + ' ' + cb + 'with error ' + err);
+		if (userCancel == null) {
+			userCancel = cb;
+		}else {
 			//userCancel = cb;
+			userCancel = userCancel.then(cb);
+		}
+		switch (err) {
+			case Some(v):
+				//trace(this + ' calling on set error handler');
+				switch (err) {
+					case Some(v):
+						err = Some(v);
+						if (userCancel != null) {
+								userCancel.run(v);
+								//trace(this + 'running canceller');
+							}
+					default:
+						
+				}
+			default:
+				
+		}
     return cast this;
   }
-
-  public function error():A {
+  public function error() : Option<A> {
     return err;
   }
-  
-  public function deliverTo(cb:B->Void) {
+  public function deliverTo(cb:B->Void): Outcome<A,B> {
+		
     fut.deliverTo(function(e) {
+			//trace(this + 'deliver future');
         switch(e) {
         case Right(v):
           cb(v);
-        case Left(msg):
-          onCancel(msg);
+					//trace(this + 'success delivered');
+        case Left(v):
+					//trace(this + 'fail delivered');
+          onCancel(v);
         }
       });
     return cast this;
   }
   
-  public function resolve(e:Either < A, B >,?pos ) {
-	
-    fut.deliver(e,pos);
+  public function resolve(e:Either < A, B > , ?pos ) {
+		//trace(this + 'resolve: ' + e);
+		fut.deliver(e, pos);
+		switch (e) {
+			case Left(v):
+					if (!isDone()) {
+						onCancel(v);
+					}
+			default:
+				
+		}
   }
 	public function left(a:A):Outcome<A,B> {
-		fut.deliver(Left(a));
+		resolve(Left(a));
 		return cast this;
 	}
 	public function right(b:B):Outcome<A,B> {
-		fut.deliver(Right(b));
+		resolve(Right(b));
 		return cast this;
 	}
-  public function map<S>(f: B -> S): Outcome<A,S> {
-    var nf = new Outcome(userCancel);
+  public function map<S>(f: B -> S): Outcome < A, S > {
+		//trace(this + 'map');
+    var nf = new Outcome();
+		var uc = userCancel;
+		nf.err = err;
+		
+		this.onError(
+				function(x) {
+					//trace( this + 'next future fail');
+					nf.onCancel(x);
+					return x;
+				}.lift()
+		);
     fut.deliverTo(function(e) {
+			//trace(this + 'calling map');
         switch(e) {
         case Right(t):
+					//trace(this + 'map ok ' + e);
           nf.right(f(t));
         case Left(msg):
-          onCancel(msg);
-          nf.cancel();
+					//trace(this + 'map fail ' + msg);
+					onCancel(msg);
+					//nf.onCancel(msg);
+					//nf.cancel();
+					//nf.left(msg);//cancel();
         }
-      });      
+      });
     return nf;
   }
-  
-  public function flatMap<S>(cb:B->Outcome<A,S>):Outcome<A,S> {
-    var nf = new Outcome(userCancel);
+  public function flatMap<S>(cb:B->Outcome < A, S > ):Outcome < A, S > {		
+		//trace(this + 'flatmap');
+    var nf = new Outcome();
+		nf.err = err;
+		this.onError(
+				function(x) {
+					nf.onCancel(x);
+					return x;
+				}.lift()
+		);
     fut.deliverTo(function(either) {
+			//trace(this + 'calling flatmap: ' + either);
         switch(either) {
         case Right(result):
 						var op = cb(result);
-						op.onError( nf.userCancel );
+								//trace( 'flatmap result is ' + op);
+								op.onError(
+										function(x) {
+											//trace(this + 'flatmapped fail: ' + nf);
+											nf.onCancel(x);
+											return x;
+										}.lift()
+								);
+		/*						this.onError( 
+										function(x) {
+											//trace(this + 'this fail in flatmap');
+											nf.left(x);
+											return x;
+										}.lift()
+								);*/
 						op.deliverTo(function(r) {
+							//trace(this + 'flatmap ok ' + err);
               nf.resolve(Right(r));
             });
         case Left(msg):
-          onCancel(msg);
-          nf.cancel();
+						//trace(this + 'flatmap fail ' + err);
+						/*onCancel(msg);
+						nf.onCancel(msg);*/
+						//nf.left(msg);
+						//nf.cancel();
+						//nf.onCancel(msg);//nf.cancel();
         }
       });
     return nf;
@@ -140,28 +229,43 @@ class Outcome<A,B>  {
 	}
 	public function toCallback(cb:A -> B -> Void) {
 		if (cb == null) {
-			throw new NullReferenceError('callback');
+			throw new NullReferenceError('cb');
 		}
 		this.deliverTo( 
 				function(b) {
-							cb(null, b);
+					//trace(this + 'cb');
+					cb(null, b);
 				}
 		);
-		onError(function(x) {cb(x, null); return x; } .lift() );
+		//trace(this + 'callback set');
+		onError(function(x) { //trace(this + 'cb error');
+			cb(x, null); return x; }.lift()  );
 		return cast this;
 	}
   public static function
   waitFor(toJoin:Array<Outcome<Dynamic,Dynamic>>):Outcome<String,Array<Dynamic>> {
+		//trace('wait for');
     var
       oc = new Outcome(),
       results = [];
-    
+			toJoin.foreach(
+				function(x) {
+					//trace('wait failer setup');
+					x.onError(
+						function(x) {
+							oc.userCancel.run(x);
+							return x;
+						}.lift()
+					);
+				}
+			);
     Future.waitFor(toJoin.map(function(outcome) return outcome.future())).deliverTo(function(aoc) {
 				var failed : Bool = false;
         aoc.foreach(function(el:Either < Dynamic, Dynamic > ) {
 					if(!failed){
             if (el.isLeft()) {
 							failed = true;
+							//trace(oc + 'wait fail ' + el.left().get());
               oc.resolve(Left(el.left().get()));
               return;
             }
@@ -169,6 +273,7 @@ class Outcome<A,B>  {
           }
 				});
 				if (!failed ) {
+					//trace(oc + 'wait succeed' );
 					oc.resolve(Right(results));
 				}
       });

@@ -61,9 +61,9 @@ class Hasher {
           }
         }
       case TEnum(e):
-        _createHashImpl(function(v : T) {
-        var hash = Type.enumConstructor(v).hashCode() * 6151;
-        for(i in Type.enumParameters(v))
+        _createHashImpl(function(v : T) { 
+        var hash = Type.enumConstructor(cast v).hashCode() * 6151;
+        for(i in Type.enumParameters(cast v))
           hash += Hasher.getHashFor(i)(i) * 6151;
         return hash;
       });
