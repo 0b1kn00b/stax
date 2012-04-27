@@ -15,15 +15,15 @@
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package stx.functional;
-import stx.data.collections.List; 
-using stx.data.collections.List; 
+import stx.ds.List; 
+using stx.ds.List; 
 
-import stx.data.collections.Map;
+import stx.ds.Map;
 
-import stx.data.collections.Set;
-using stx.data.collections.Set;
+import stx.ds.Set;
+using stx.ds.Set;
 
-using stx.data.collections.Group;
+using stx.ds.Group;
 
 import Prelude;
 import stx.test.TestCase;

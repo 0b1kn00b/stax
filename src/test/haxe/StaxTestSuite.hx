@@ -25,10 +25,10 @@ import stx.test.ui.Report;
                    
 import stx.text.json.JsonTestCase;
 import stx.io.log.LoggerTestCase;        
-import stx.data.collections.ArrayExtensionsTestCase;
-import stx.data.collections.MapTestCase;
-import stx.data.collections.SetTestCase;
-import stx.data.collections.ListTestCase;
+import stx.ds.ArrayExtensionsTestCase;
+import stx.ds.MapTestCase;
+import stx.ds.SetTestCase;
+import stx.ds.ListTestCase;
 import stx.data.transcode.JValueTestCase;
 import stx.functional.PartialFunctionTestCase;         
 import stx.functional.FoldableExtensionsTestCase;
@@ -63,7 +63,7 @@ class StaxTestSuite {
     Injector.forever(
       function(c) {
         var runner = (new Runner()).addAll([   
-          new PreludeTestCase(),    
+          new PreludeTest(),    
           new JValueTestCase(),   
           new ArraysTestCase(),
           new MapTestCase(),
@@ -94,12 +94,12 @@ class StaxTestSuite {
           , new QuirksTestCase()
           , new ObjectExtensionsTestCase()
           , new TranscodeJValueExtensionsTestCase()
-					, new stx.OutcomeTest()
+					//, new stx.OutcomeTest()
 					, new stx.error.ErrorTest()
 					, new stx.reactive.ArrowsTest()
+					, new stx.TupleTest()
           #end
-  
-        ].filter( function(x) return Std.is(x, stx.OutcomeTest) ));
+        ]);// .filter( function(x) return Std.is(x, PreludeTest) ));
 
         Report.create(runner);
 

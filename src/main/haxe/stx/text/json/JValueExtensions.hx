@@ -17,7 +17,7 @@
 
 package stx.text.json;
 
-import stx.Tuples;
+import stx.Tuples;							using stx.Tuples;
 import Prelude;
 using Stax;
 
@@ -167,9 +167,16 @@ class OptionJValue {
     }
   }	
 }
+/*class ObjectJValue {
+	public static function extract( c : Dynamic ) {
+		Reflect.fields( c ) {
+				
+		}
+	}
+}*/
 class AbstractProductJValue {
-	public static function productDecompose(t:AbstractProduct): JValue {	
-    return JArray(t._productElements.map(function(t){return TranscodeJValue.getDecomposerFor(Type.typeof(t))(t);}));
+	public static function productDecompose(t:Product): JValue {	
+    return JArray(t.elements().map(function(t){return TranscodeJValue.getDecomposerFor(Type.typeof(t))(t);}));
   }
 }
 class Tuple2JValue {

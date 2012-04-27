@@ -16,11 +16,11 @@
 package stx.math.tween;
 
 import Prelude;
-import stx.data.collections.Set;
-using stx.data.collections.Set;
+import stx.ds.Set;
+using stx.ds.Set;
 
-using stx.data.collections.Group;
-using stx.data.collections.Map;
+using stx.ds.Group;
+using stx.ds.Map;
 
 import stx.Options;
 using stx.Options;

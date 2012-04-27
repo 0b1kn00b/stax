@@ -16,7 +16,7 @@
 package stx;
 
 
-import stx.Tuples;using stx.Tuples;
+import stx.Tuples;						using stx.Tuples;
 import Prelude;
 using Stax;
 
@@ -26,11 +26,18 @@ import Type;
 
 typedef Object = {};
 
+@note('0b1kn00b','Does this handle reference loops, should it, could it?')
 class Objects {
 	
   inline public static function copyDeep(d: Object): Object return 
     copy(d, false)
-    
+  
+	/**
+	 * Generic copy function
+	 * @param	d
+	 * @param	shallow		specifies depth of copy
+	 * @return
+	 */	
   public static function copy(d: Object, shallow: Bool = true): Object {
     var res = { };
     copyTo(d, res, shallow);

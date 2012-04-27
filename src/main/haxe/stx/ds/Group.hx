@@ -1,4 +1,4 @@
-package stx.data.collections;
+package stx.ds;
 
 /**
  * ...
@@ -10,7 +10,7 @@ import stx.functional.Foldable;
 using Stax;
 using stx.Iterables;
 using stx.Arrays;
-using stx.data.collections.Group;
+using stx.ds.Group;
 
 class Group {
 

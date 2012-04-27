@@ -39,6 +39,9 @@ typedef Reducer<T> = T -> T -> T
 
 typedef Factory<T> = Void -> T
 
+/**
+ * A function which takes no parameter and returns a result.
+ */
 typedef Thunk<T> = Void -> T
 
 /** An option represents an optional value -- the value may or may not be
@@ -62,7 +65,7 @@ typedef Tree<T> = {
 	right	: Tree<T>,
 }
 /** Either represents a type that is either a "left" value or a "right" value,
- * but not both. Either is often used to represent success/failure, where theimport stx.Tuples;
+ * but not both. Either is often used to represent success/failure, where the
  * left side represents failure, and the right side represents success.
  */
 enum Either<A, B> {
@@ -75,6 +78,7 @@ typedef EqualFunction<T>  			= Function2<T, T, Bool>;
 typedef ShowFunction<T>   			= Function<T, String>;
 typedef HashFunction<T> 				= Function<T, Int>;   
 
+@todo('0b1kn00b','Would perhaps prefer the collection tools to be interfaces.')
 typedef CollectionTools<T> = {
 		order : Null<OrderFunction<T>>,
 		equal	: Null<EqualFunction<T>>,
@@ -82,7 +86,7 @@ typedef CollectionTools<T> = {
 		hash	: Null<HashFunction<T>>,
 }
 class FieldOrder {
-  public static inline var Ascending = 1;
-  public static inline var Descending = -1;
-  public static inline var Ignore = 0;
+  public static inline var Ascending	 	= 1;
+  public static inline var Descending 	= -1;
+  public static inline var Ignore 			= 0;
 }

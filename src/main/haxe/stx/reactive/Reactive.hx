@@ -16,7 +16,7 @@
 package stx.reactive;
 import Prelude;
 import stx.Tuples;
-import stx.plus.Equal;
+import stx.ds.plus.Equal;
 
 import stx.reactive.Streams;
 

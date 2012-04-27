@@ -19,13 +19,13 @@ package stx.data.transcode;
 import Prelude;
 import stx.Tuples;
 
-import stx.plus.Equal;
+import stx.ds.plus.Equal;
 
 import stx.test.TestCase;
 import stx.text.json.JValue;
-import stx.data.collections.Set;
-import stx.data.collections.Map;
-import stx.data.collections.List;
+import stx.ds.Set;
+import stx.ds.Map;
+import stx.ds.List;
 import stx.data.transcode.TranscodeJValue;
 import stx.data.transcode.TranscodeJValueExtensions;
 
@@ -114,7 +114,7 @@ class JValueTestCase extends TestCase {
   }
 
   public function testMap() {
-    var a: Array<Map<Int, String>> = [Map.create().addAll([Tuples.t2(123, "foo"), Tuples.t2(-23, "bar"), Tuples.t2(0, "baz")]), Map.create()];
+    var a: Array<Map<Int, String>> = [Map.create().addAll([stx.Tuples.t2(123, "foo"), stx.Tuples.t2(-23, "bar"), stx.Tuples.t2(0, "baz")]), Map.create()];
 
     doTest(MapJValue.decompose,
            function(v){return MapJValue.extract(v, function(v){return IntJValue.extract(Int, v);}, function(v){return StringJValue.extract(String, v);});}, a);

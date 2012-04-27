@@ -6,8 +6,8 @@ import stx.Tuples;
 import Prelude;
 import stx.test.TestCase;
 import stx.reactive.Reactive;
-import stx.data.collections.List;
-import stx.data.collections.Collection;
+import stx.ds.List;
+import stx.ds.Collection;
 import stx.reactive.SignalCollectionExtensions;
 import stx.reactive.SignalSignal;
 import stx.reactive.SignalFloat;
@@ -20,7 +20,7 @@ import stx.reactive.Streams;
 import stx.reactive.Collections;
 
 
-using stx.data.collections.List;
+using stx.ds.List;
 
 using stx.functional.FoldableExtensions;
 
@@ -1008,6 +1008,7 @@ class ReactiveTestCase extends TestCase {
     
     var self = this;
     
+		
     var bundle = _timeouts.pop();
     
     assertEquals(0, bundle.timeout);

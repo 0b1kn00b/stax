@@ -20,7 +20,7 @@ import stx.Future;
 import stx.io.http.Http;
 import stx.net.Url;
 import stx.net.HttpResponseCode;
-import stx.data.collections.Map;
+import stx.ds.Map;
 import stx.Options;
 using stx.Options;
 

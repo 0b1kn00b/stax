@@ -14,17 +14,17 @@
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package stx.data.collections;
+package stx.ds;
 
 import Prelude;
-using stx.plus.Show;
+using stx.ds.plus.Show;
 
 import stx.test.TestCase;
 using stx.Arrays;
-using stx.data.collections.Set;
-using stx.data.collections.List;
-using stx.data.collections.Map;
-using stx.data.collections.Group;
+using stx.ds.Set;
+using stx.ds.List;
+using stx.ds.Map;
+using stx.ds.Group;
  
 import stx.Tuples;
 using Stax;
@@ -137,19 +137,19 @@ class ArraysTestCase extends TestCase {
   
   public function testToMap() {
     var map = [Tuples.t2("a", 1), Tuples.t2("b", 2)].toMap();
-    assertIs(map, stx.data.collections.Map);
+    assertIs(map, stx.ds.Map);
     assertEquals(2, map.size());
   }
   
   public function testToList() {
     var list = [1,2,3].toList();
-    assertIs(list, stx.data.collections.List);
+    assertIs(list, stx.ds.List);
     assertEquals(3, list.size());
   }
   
   public function testToSet() {
     var set = [1,2,2,3,1].toSet();
-    assertIs(set, stx.data.collections.Set);
+    assertIs(set, stx.ds.Set);
     assertEquals(3, set.size());
   }
   

@@ -23,7 +23,7 @@ import Dom;
 import js.Env;
 import js.detect.BrowserSupport;
 import stx.functional.Predicate;
-import stx.data.collections.Map;
+import stx.ds.Map;
 using stx.Arrays;
 
 import stx.util.Guid;

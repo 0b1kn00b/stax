@@ -1,4 +1,4 @@
-package stx.plus;
+package stx.ds.plus;
 
 /**
  * ...
@@ -9,9 +9,9 @@ import Stax;
 using Stax;
 
 import Type;
-import stx.plus.Show;
-
-using stx.plus.Hasher;
+import stx.ds.plus.Show;
+import stx.Tuples;										using stx.Tuples;
+using stx.ds.plus.Hasher;
 
 class Hasher {
 	static function _createHashImpl<T>(impl : HashFunction<Dynamic>) return function(v : T) if(null == v) return 0 else return impl(v)
@@ -122,5 +122,11 @@ class IntHasher {
 class BoolHasher {
 	public static function hashCode(v : Bool) : Int {
     return if (v) 786433 else 393241;  
+  }
+}
+@todo('0b1kn00b','Cache hashers')
+class ProductHasher {
+	static public function getHash(p:Product, i : Int) {
+    Hasher.getHashFor(p.element(i));
   }
 }

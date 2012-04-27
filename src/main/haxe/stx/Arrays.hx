@@ -26,7 +26,7 @@ using stx.Tuples;
 
 import Prelude; 
 
-import stx.plus.Equal;
+import stx.ds.plus.Equal;
 
 using stx.Maths;
 using stx.Options;
@@ -353,17 +353,17 @@ class Arrays {
     return if (a.length == 0) None; else Some(a[a.length - 1]);
   }
   
+	/**
+	 * Does the array contain the value?
+	 * @param t a value which may be in the array.
+	 * @return bool 
+	 */
   public static function contains<T>(a: Array<T>, t: T): Bool {
     for (e in a) if (t == e) return true;
     
     return false;
   }
-  
-  public static function foreach<T>(a: Array<T>, f: T -> Void): Array<T> {
-    for (e in a) f(e);
     
-    return a;
-  }  
   public static function foreachWithIndex<T>(a: Array<T>, f: T -> Int -> Void): Array<T> {
     var i = 0;
 		for (e in a) f(e, i++);

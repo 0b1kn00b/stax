@@ -1,22 +1,17 @@
-package stx.plus;
+package stx.ds.plus;
 
 /**
  * ...
  * @author 0b1kn00b
  */
+												using Std;
 import Type;
-
-
-import Stax;
-import stx.Tuples;
+import Stax;						using Stax;
+import stx.Tuples;			using stx.Tuples;
 import stx.Maths;
-typedef Tuple2<A,B> 		= stx.Tuple2<A,B>;
-typedef Tuple3<A,B,C> 	= stx.Tuple3<A,B,C>;
 
 import Prelude;
-
-using Stax;
-using stx.plus.Order;
+												using stx.ds.plus.Order;
 
 class Order {
 
@@ -45,10 +40,11 @@ class Order {
     case TUnknown:
       function(a : T, b : T) return (a == b) ? 0 : ((cast a) > (cast b) ? 1 : -1);
     case TObject:
-      _createOrderImpl(function(a, b){
+      _createOrderImpl(function(a, b) {
         for(key in Reflect.fields(a)) {
           var va = Reflect.field(a, key);
-          var v = getOrderFor(va)(va, Reflect.field(b, key));
+					var vb = Reflect.field(b, key);
+          var v = getOrderFor(va)(va, vb);
           if(0 != v)
             return v;
         }
@@ -139,5 +135,18 @@ class ArrayOrder {
         if (c != 0) return c;
       }
       return 0;
+  }
+}
+class ProductOrder {
+	static public function getOrder(p:Product, i : Int) {
+    return Order.getOrderFor(p.element(i));
+  }
+	static public function compare(one:Product, other:Product): Int {
+    for (i in 1...one.arity()+1) {
+      var c = getOrder(one, i)(one.element(i), other.element(i));
+      if(c != 0)
+        return c;
+    }
+    return 0;
   }
 }
