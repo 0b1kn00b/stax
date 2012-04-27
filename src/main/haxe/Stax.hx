@@ -5,22 +5,19 @@ package ;
  * @author 0b1kn00b
  */
 
+import stx.Tuples;
 import Prelude;
 
 import Type;
 
-import stx.Tuples;
 import stx.Maths;
-import stx.plus.Show;
-
+import stx.ds.plus.Show;
 
 using Prelude;
 using Stax;
 using stx.Options;
 using stx.Strings;
-using stx.plus.Show;
-
-
+using stx.ds.plus.Show;
 
 class Stax {
 	public static inline function tool<A>(?order:OrderFunction<A>,?equal:EqualFunction<A>,?hash:HashFunction<A>,?show:ShowFunction<A>):CollectionTools<A>{
@@ -126,8 +123,13 @@ class ArrayLambda {
 	public static function snapshot<T>(a: Array<T>): Array<T> {
     return [].concat(a);
   }
+	public static function foreach<T>(a: Array<T>, f: T -> Void): Array<T> {
+    for (e in a) f(e);
+    
+    return a;
+  }
 }
-class IterableLambda {
+class IterableLambda{
 	public static function toArray<T>(i: Iterable<T>) {
     var a = [];
     for (e in i) a.push(e);
@@ -173,6 +175,9 @@ class IterableLambda {
     
     return size;
   }
+	public static function foreach<T>(iter : Iterable<T>, f : T-> Void ):Void {
+    for (e in iter) f(e);
+	}
 }
 class IntIters {
 	public static function to(start: Int, end: Int): Iterable<Int> {

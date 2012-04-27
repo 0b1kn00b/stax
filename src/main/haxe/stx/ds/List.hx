@@ -14,7 +14,7 @@
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package stx.data.collections;
+package stx.ds;
 
 import Prelude;
 
@@ -23,22 +23,22 @@ using Stax;
 
 
 import stx.functional.Foldable;
-import stx.data.collections.Collection;
+import stx.ds.Collection;
 import stx.functional.FoldableExtensions;
 
 import stx.Maths;
 using  stx.Maths;
 
-import stx.plus.Order; using stx.plus.Order;
-import stx.plus.Hasher; using stx.plus.Hasher;
-import stx.plus.Show; using stx.plus.Show;
-import stx.plus.Equal; using stx.plus.Equal;
+import stx.ds.plus.Order; using stx.ds.plus.Order;
+import stx.ds.plus.Hasher; using stx.ds.plus.Hasher;
+import stx.ds.plus.Show; using stx.ds.plus.Show;
+import stx.ds.plus.Equal; using stx.ds.plus.Equal;
 
 using stx.functional.FoldableExtensions;
 
 class ArrayToList {
   public static function toList<T>(arr : Array<T>) {
-    return stx.data.collections.List.create().addAll(arr);
+    return stx.ds.List.create().addAll(arr);
   }	
 }
 class FoldableToList {
@@ -67,7 +67,7 @@ class List<T> implements Collection<List<T>, T> {
   public var show  (getShow, null) : ShowFunction<T>;
 
 	public static function toList<T>(i: Iterable<T>) {
-    return stx.data.collections.List.create().addAll(i);
+    return stx.ds.List.create().addAll(i);
   }
   public static function nil<T>(?order : OrderFunction<T>, ?tools : CollectionTools<T>): List<T> {
     return new Nil(tools);

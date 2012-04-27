@@ -20,7 +20,7 @@ import Type;
 import stx.Tuples;
 
 import stx.Strings;
-import stx.plus.Hasher;
+import stx.ds.plus.Hasher;
 
 
 using stx.Dynamics;
@@ -28,7 +28,7 @@ using stx.Dynamics;
 import Prelude;
 using Stax;
 import stx.Arrays;
-import stx.data.collections.Map;
+import stx.ds.Map;
 import stx.data.transcode.Transcode;
 import stx.data.transcode.TranscodeJValue;
 
@@ -98,7 +98,7 @@ class TranscodeJValue{
 					}
 		}
 	}
-
+	@note0('0bk1kn00b','I don´t understand why TObject can´t be decomposed')
   public static function getDecomposerFor<T>(v: ValueType): JDecomposerFunction<T>{
     return switch (v){
       case TBool:
@@ -110,7 +110,7 @@ class TranscodeJValue{
       case TUnknown:
         _createDecomposeImpl(function(v) return Stax.error("Can't decompose TUnknown: " + v));
       case TObject:
-        _createDecomposeImpl(function(v) return Stax.error("Can't decompose TObject: " + v));
+        _createDecomposeImpl( ObjectJValue.decompose );
       case TClass(c):
         switch(Type.getClassName(c)) {
         case "String":
@@ -119,11 +119,11 @@ class TranscodeJValue{
           _createDecomposeImpl(DateJValue.decompose);
         case "Array":
           _createDecomposeImpl(ArrayJValue.decompose);
-				case "stx.data.collections.List":
+				case "stx.ds.List":
 					_createDecomposeImpl(ListJValue.decompose);
-				case "stx.data.collections.Map":
+				case "stx.ds.Map":
 					_createDecomposeImpl(MapJValue.decompose);
-				case "stx.data.collections.Set":
+				case "stx.ds.Set":
 					_createDecomposeImpl(SetJValue.decompose);
 				case "stx.Tuple2":
 					_createDecomposeImpl(Tuple2JValue.decompose);
@@ -171,7 +171,7 @@ class TranscodeJValue{
       case TUnknown:
         _createExtractorImpl(function(v) return Stax.error("Can't extract TUnknown: " + v));
       case TObject:
-        _createExtractorImpl(function(v) return Stax.error("Can't extract TObject: " + v));
+        _createExtractorImpl(function(v) return ObjectJValue.extract(v));
       case TClass(c):
 					var t : Class<Dynamic> = c;
 					var cname = Type.getClassName(c);
@@ -182,11 +182,11 @@ class TranscodeJValue{
           _createExtractorImpl(function(v){return DateJValue.extract(Date, v);});
         case "Array":
           _createExtractorImpl(function(v) { return ArrayJValue.extract(Array, v, args[0]); } );
-				case 'stx.data.collections.List':
+				case 'stx.ds.List':
 					_createExtractorImpl(function(v) { return ListJValue.extract(v, args[0] , args[1]); } );
-				case 'stx.data.collections.Map':
+				case 'stx.ds.Map':
 					_createExtractorImpl(function(v) { return MapJValue.extract(v, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]); } );
-				case 'stx.data.collections.Set':
+				case 'stx.ds.Set':
 					_createExtractorImpl(function(v) { return SetJValue.extract(v, args[0], args[1]); } );
 				case 'stx.Tuple2'	: 
 					_createExtractorImpl(function(v) { return Tuple2JValue.extract( v, args[0], args[1]); } );

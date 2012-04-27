@@ -1,23 +1,27 @@
-package stx.plus;
+package stx.ds.plus;
 
 /**
  * ...
  * @author 0b1kn00b
  */
 
-import stx.Tuples;
+import Stax;											using Stax;
+import stx.Tuples;								using stx.Tuples;
 
 import Prelude;
 import Type;
 
 import stx.Maths;
-using Stax;
-import Stax;
 
 class Equal {
 
-	/** Returns an EqualFunction (T -> T -> Bool). It works for any type. Custom Classes must provide
-   * an "equals(other : T) : Bool" method or a "compare(other : T) : Int" method otherwise an exception will be thrown.
+	/**
+	 */
+/*	public static function equals<A>(a:Dynamic, b:Dynamic):Bool {
+		return true;
+	}*/
+	/** Returns an EqualFunction (T -> T -> Bool). It works for any type. Custom Classes can provide
+   * an "equals(other : T) : Bool" method or a "compare(other : T) : Int" method otherwise  simple comparison operators will be used.
    */
   public static function getEqualFor<T>(t : T) : EqualFunction<T> {
     return getEqualForType(Type.typeof(t));
@@ -112,4 +116,21 @@ class ArrayEqual {
     
     return true;
   }
+}
+class ProductEqual {
+	static public function getEqual(p:Product,i : Int) {
+    return Equal.getEqualFor(p.element(i));
+  }
+	static public function productEquals(p:Product, other : Product): Bool {
+    for(i in 0...p.arity())
+      if(!getEqual(p,i)(p.element(i), other.element(i)))
+        return false;
+    return true;
+  }
+	static public function equals(p:Product, other:Product):Bool {
+		for(i in 0...p.arity())
+      if(!getEqual(p,i)(p.element(i), other.element(i)))
+        return false;
+    return true;
+	}
 }

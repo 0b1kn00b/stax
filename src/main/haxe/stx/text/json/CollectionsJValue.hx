@@ -4,12 +4,14 @@ package stx.text.json;
  * ...
  * @author 0b1kn00b
  */
+import stx.Tuples;
 import Prelude;
+
 using Stax;
 
-import stx.data.collections.Set;
-import stx.data.collections.List;
-import stx.data.collections.Map;
+import stx.ds.Set;
+import stx.ds.List;
+import stx.ds.Map;
 import stx.data.transcode.TranscodeJValue;
 
 
@@ -40,7 +42,7 @@ class SetJValue {
   }	
 }
 class ListJValue {
-  public static function decompose<T>(l:stx.data.collections.List<T>): JValue {
+  public static function decompose<T>(l:stx.ds.List<T>): JValue {
     return ArrayJValue.decompose(l.toArray());
   }
 

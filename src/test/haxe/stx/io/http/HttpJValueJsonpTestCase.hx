@@ -26,7 +26,7 @@ import stx.text.json.Json;
 
 using stx.text.json.JValueExtensions;
 using stx.Options;
-using stx.data.collections.Map;
+using stx.ds.Map;
 
 class HttpJValueJsonpTestCase extends TestCase {
   var h: HttpJValue;

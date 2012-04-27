@@ -57,7 +57,7 @@ class Iterables {
   
   public static function tailOption<T>(iter: Iterable<T>): Option<Iterable<T>> {
     var iterator = iter.iterator();
-    return if (!iter.drop(1).iterator().hasNext()) None;
+    return if (!iterator.hasNext()) None;
            else Some(drop(iter, 1));
   }
   
@@ -110,7 +110,7 @@ class Iterables {
     return r;
   }
   /**
-   * Take elements 1...n from the Iterable
+   * Take element[1...n] from the Iterable, or if Iterable.size() == 1, element[0]
 	 * @param iter
 	 * @return Iterable
    */
@@ -358,9 +358,7 @@ class Iterables {
   public static function find<T>(iter: Iterable<T>, f: T -> Bool): Option<T> {
     return Arrays.find(iter.toArray(),f);
   }
-  public static function foreach<T>(iter : Iterable<T>, f : T-> Void ):Void {
-    for (e in iter) f(e);
-	}
+  
   public static function forAll<T>(iter: Iterable<T>, f: T -> Bool): Bool {
     return Arrays.forAll(iter.toArray(),f);
   }

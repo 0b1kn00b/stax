@@ -18,7 +18,7 @@ package stx.reactive;
 import Prelude;
 import stx.Tuples;
 import stx.reactive.Reactive;
-import stx.data.collections.Collection;
+import stx.ds.Collection;
 
 using Stax;
 using stx.Iterables;

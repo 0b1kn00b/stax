@@ -15,5 +15,4 @@ class Hashes {
 		}
 		return hash;
 	}
-	
 }

@@ -20,7 +20,7 @@ import stx.Tuples; using stx.Tuples;
 import Prelude;
 using Stax;
 
-import stx.data.collections.Map;
+import stx.ds.Map;
 import stx.net.HttpHeader;
 
 

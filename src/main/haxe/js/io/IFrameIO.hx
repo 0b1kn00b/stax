@@ -21,8 +21,8 @@ import Prelude;
 
 import js.Env;
 import js.dom.Quirks;
-import stx.data.collections.List;
-import stx.data.collections.Map;
+import stx.ds.List;
+import stx.ds.Map;
 import stx.time.ScheduledExecutor;
 import stx.text.json.Json;
 import stx.net.Url;
@@ -41,10 +41,10 @@ using stx.Options;
 using stx.Dynamics;
 using stx.Iterables;
 
-using stx.plus.Hasher;
+using stx.ds.plus.Hasher;
 
-using stx.data.collections.Map;
-using stx.data.collections.List;
+using stx.ds.Map;
+using stx.ds.List;
 
 using stx.functional.FoldableExtensions;
 using stx.util.StringExtensions;

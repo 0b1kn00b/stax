@@ -19,7 +19,7 @@ import Prelude;
 using Stax;
 
 import stx.reactive.Reactive;
-import stx.data.collections.Collection;
+import stx.ds.Collection;
 
 import stx.Tuples;
 using stx.Iterables;
@@ -79,8 +79,8 @@ class Streams {
             }
         );
         
-        //stream.sendLater(val);
-        stream.sendEvent(val);
+        stream.sendLater(val);
+        //stream.sendEvent(val);
         
         return stream;
     }

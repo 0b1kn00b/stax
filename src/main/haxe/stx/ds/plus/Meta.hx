@@ -1,4 +1,4 @@
-package stx.plus;
+package stx.ds.plus;
 
 /**
  * ...
@@ -7,10 +7,10 @@ package stx.plus;
 import stx.Tuples;
 
 using Stax;
-using stx.plus.Order;
+using stx.ds.plus.Order;
 
 class Meta {
-
+	@deprecate('0b1kn00b','thx')
 	public static function _hasMetaDataClass(c : Class<Dynamic>) {
     var m = haxe.rtti.Meta.getType(c); 
     return null != m && Reflect.hasField(m, "DataClass");
@@ -24,6 +24,7 @@ class Meta {
       return null;
     return Reflect.field(fm, "DataField").copy().pop();
   }              
+	@deprecate('0b1kn00b','thx')
   public static function _fieldsWithMeta(c : Class<Dynamic>, name : String) {   
     var i = 0;   
     return Type.getInstanceFields(c).map(function(v){ 

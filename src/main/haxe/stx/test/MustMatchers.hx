@@ -16,9 +16,9 @@
 package stx.test;
 
 import Prelude;
-import stx.plus.Equal;
+import stx.ds.plus.Equal;
 
-import stx.data.collections.Collection;
+import stx.ds.Collection;
 using stx.Strings;
 
 using stx.functional.FoldableExtensions;

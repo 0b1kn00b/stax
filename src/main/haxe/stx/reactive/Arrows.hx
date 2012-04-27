@@ -6,7 +6,7 @@ package stx.reactive;
 import Prelude;
 import stx.Options;using stx.Options;
 import stx.reactive.Arrows;using stx.reactive.Arrows;
-import Tuples; using Tuples;
+import stx.Tuples; using stx.Tuples;
 import stx.Methods;using stx.Methods;
 import stx.test.Assert; using stx.test.Assert;
 import stx.io.log.Logger; using stx.io.log.Logger;

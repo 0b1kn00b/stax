@@ -3,16 +3,16 @@ package stx.data.transcode;
 import haxe.Stack;
 import Prelude;
 
-import stx.plus.Equal;
+import stx.ds.plus.Equal;
 
 import Type;
 import stx.Tuples;
 import Prelude;
 import stx.test.TestCase;
 import stx.text.json.JValue;
-import stx.data.collections.Set;
-import stx.data.collections.Map;
-import stx.data.collections.List;
+import stx.ds.Set;
+import stx.ds.Map;
+import stx.ds.List;
 import stx.data.transcode.TranscodeJValue;
 import stx.data.transcode.TranscodeJValueExtensions;
 

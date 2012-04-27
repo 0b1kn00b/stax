@@ -5,7 +5,10 @@ import Prelude;
 
 import stx.test.TestCase;
 
+import stx.ds.Collection;
+import stx.Tuples;
 import stx.reactive.Reactive;
+import stx.reactive.ReactiveTestCase;
 
 import stx.reactive.SignalCollection;
 import stx.reactive.SignalSignal;
@@ -21,7 +24,7 @@ import stx.reactive.Collections;
 
 using stx.functional.FoldableExtensions;
 
-class TimeoutBundle {
+/*class TimeoutBundle {
     public var func    (default, null): Void -> Void;
     public var timeout (default, null): Int;
     
@@ -33,7 +36,7 @@ class TimeoutBundle {
     public static function from(f: Void -> Void, t: Int): TimeoutBundle {
         return new TimeoutBundle(f, t);
     }
-}
+}*/
 
 
 class ReactiveTester extends TestCase {

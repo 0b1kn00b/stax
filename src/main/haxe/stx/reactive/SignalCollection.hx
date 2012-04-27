@@ -18,8 +18,8 @@ package stx.reactive;
 import Prelude;
 import stx.Tuples;
 import stx.reactive.Reactive;
-import stx.data.collections.Collection;
-import stx.data.collections.List;
+import stx.ds.Collection;
+import stx.ds.List;
 
 
 using stx.functional.FoldableExtensions;

@@ -15,7 +15,7 @@
 */
 package stx.net;
 
-import stx.data.collections.Map;
+import stx.ds.Map;
 
 typedef Url = String
 

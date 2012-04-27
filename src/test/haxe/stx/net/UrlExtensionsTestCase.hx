@@ -22,7 +22,7 @@ import stx.test.TestCase;
 import stx.net.Url;
 
 using stx.net.UrlExtensions;
-using stx.data.collections.Map;
+using stx.ds.Map;
 using stx.Options;
 using stx.Strings;
 using stx.Functions;

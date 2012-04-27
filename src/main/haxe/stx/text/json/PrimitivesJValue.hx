@@ -10,7 +10,7 @@ import stx.data.transcode.TranscodeJValue;
 import stx.data.transcode.TranscodeJValueExtensions;
 import stx.text.json.JValue;
 
-using stx.plus.Show;
+using stx.ds.plus.Show;
 
 import stx.Maths;
 using stx.Maths;
@@ -89,6 +89,37 @@ class DateJValue {
       default: Stax.error("Expected Number but found: " + v);
     }
   }	
+}
+class ObjectJValue {
+	public static function decompose(d:Dynamic) {
+		 return JObject(
+				Reflect.fields (d).map (
+						function (f) {
+							var val = Reflect.field(d, f);
+								return JField (f, 
+										TranscodeJValue.getDecomposerFor(Type.typeof(val))(val) 
+								);
+						}
+				)
+		);
+	}
+	public static function extract(v:JValue):Dynamic {
+		switch (v) {
+      case JNull:        return null;
+      case JString (v):  return v;
+      case JNumber (v):  return v;
+      case JBool (v):    return v;
+      case JArray (xs):  return xs.map(function (x) {return extract(x);});
+      case JObject (fs): return fs.foldl({}, function (o: Dynamic, e: JValue) {
+        var field = JValueExtensions.extractField(e);
+        
+        Reflect.setField (o, field._1, extract(field._2)); 
+        
+        return o;
+      });
+      case JField(k, v): return Stax.error("Cannot convert JField to object");
+		}
+	}
 }
 class ArrayJValue {
   public static function decompose<T>(v: Array<T>): JValue {

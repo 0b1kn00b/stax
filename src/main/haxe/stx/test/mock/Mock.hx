@@ -18,8 +18,8 @@ package stx.test.mock;
 
 import stx.test.TestCase;
 import Prelude;
-import stx.data.collections.Map;
-import stx.data.collections.List;
+import stx.ds.Map;
+import stx.ds.List;
 
 
 

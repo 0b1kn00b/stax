@@ -23,7 +23,7 @@ class Ints {
   public static function toFloat(v: Int): Float { return v; }
     
   public static function compare(v1: Int, v2: Int) : Int {
-    return v1 - v2;
+    return if (v1 < v2) -1 else if (v1 > v2) 1 else 0;
   }
   public static function equals(v1: Int, v2: Int) : Bool {
     return v1 == v2;

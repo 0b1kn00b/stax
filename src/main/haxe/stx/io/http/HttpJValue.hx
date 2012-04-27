@@ -23,7 +23,7 @@ import stx.net.Url;
 import stx.net.HttpResponseCode;
 import stx.text.json.JValue;
 import stx.text.json.Json;
-import stx.data.collections.Map;
+import stx.ds.Map;
 
 import stx.Future;
 

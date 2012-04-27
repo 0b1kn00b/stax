@@ -14,40 +14,36 @@
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+																	using Stax;
 import Prelude;
-import Tuples;
-
+import stx.Tuples;								using stx.Tuples;
 import stx.Future;								using stx.Future;
 
-
-
-import stx.plus.Equal;
-import stx.plus.Order;
-import stx.plus.Show;
-import stx.plus.Hasher;
+import stx.ds.plus.Equal;					using stx.ds.plus.Equal;
+import stx.ds.plus.Order;					using stx.ds.plus.Order;
+import stx.ds.plus.Show;					using stx.ds.plus.Show;
+import stx.ds.plus.Hasher;
 
 import stx.test.TestCase;
 																	using stx.Options;
 
 using stx.Functions;
-class PreludeTestCase extends TestCase {
+
+class PreludeTest extends TestCase {
   public function new() {
     super();
   }
-  
   public function testCompose() {
     var f1 = function(i) { return i * 2; }
     var f2 = function(i) { return i - 1; }
     
     assertEquals(2, f1.compose(f2)(2));
   }
-  
   public function testCurry2() {
     var f = function(i1, i2, i3) { return i1 + i2 + i3; }
     
     assertEquals(3, f.curry()(2)(-2)(3));
   }
-  
   public function testFutureChaining() {
     var f1: Future<Int> = Future.create();
     
@@ -161,32 +157,37 @@ class PreludeTestCase extends TestCase {
   }  
 
   public function testTupleOrder() {    
-    var tests = [
+    var tests : Array<Tuple2<Product,Product>>= cast( [
      Tuples.t2(Tuples.t2("b",0), Tuples.t2("a",0)),
      Tuples.t2(Tuples.t2("a",1), Tuples.t2("a",0)), 
      Tuples.t2(Tuples.t3("a",0,0.1), Tuples.t3("a",0,0.05)),
      Tuples.t2(Tuples.t4("a",0,0.1,"b"), Tuples.t4("a",0,0.1,"a")),
      Tuples.t2(Tuples.t5("a",0,0.1,"a",1), Tuples.t5("a",0,0.1,"a",0)), 
-    ];
+    ] );
   
-    for(test in tests) {
-      assertTrue(Order.getOrderFor(test._1)(test._1, test._2) > 0, "failed to compare " + test._1 + " to " + test._2);
-      assertTrue(test._1.compare(test._2) > 0, "failed to compare " + test._1 + " to " + test._2);  
-    }
+		tests.foreach(
+				function(test:Tuple2 < Product, Product > ) {
+					var l : Product = test._1;
+					var r = test._2;
+						assertTrue(Order.getOrderFor(l)(l, r) > 0, "failed to compare " + test._1 + " to " + test._2);
+						assertTrue(l.compare(r) > 0, "failed to compare " + test._1 + " to " + test._2);  
+				}
+		);
   }
 
   public function testTupleEqual() {    
-    var tests = [
+    var tests : Array<Tuple2<Tuple2<Dynamic,Dynamic>,Tuple2<Dynamic,Dynamic>>> = cast ([
       Tuples.t2(Tuples.t2("b",0), Tuples.t2("b",0)),
       Tuples.t2(Tuples.t2("a",1), Tuples.t2("a",1)), 
       Tuples.t2(Tuples.t3("a",0,0.1), Tuples.t3("a",0,0.1)),
       Tuples.t2(Tuples.t4("a",0,0.1,"b"), Tuples.t4("a",0,0.1,"b")),
       Tuples.t2(Tuples.t5("a",0,0.1,"a",1), Tuples.t5("a",0,0.1,"a",1)), 
-    ];
+    ] );
     
     for(test in tests) {
       assertTrue(Equal.getEqualFor(test._1)(test._1, test._2));
       assertTrue(test._1.equals(test._2)); 
+
     } 
   }
 
@@ -199,9 +200,12 @@ class PreludeTestCase extends TestCase {
       Tuples.t2(Tuples.t5("a",0,0.1,"a",1), "Tuple5(a, 0, 0.1, a, 1)"), 
     ];
     
-    for(test in tests) {
-      assertEquals(test._2, Show.getShowFor(test._1)(test._1));
-      assertEquals(test._2, test._1.toString());       
+    for (test in tests) {
+			var l : Tuple2<String,Int> 	= test._1;
+			var r : String 							=	test._2;
+			
+      //assertEquals(r, Show.getShowFor(l)(l));
+      assertEquals(r, l.toString());       
     }
   }    
 
@@ -240,7 +244,7 @@ class PreludeTestCase extends TestCase {
     assertTrue(order(o1, o1) == 0);
     assertTrue(order(o2, o4) == 0);
   }    
-
+/*
   public function testOrderForAnonymousTyped() {
     var o1 = { name : "haxe"};                      
     var o2 = { name : "stx"};
@@ -252,7 +256,7 @@ class PreludeTestCase extends TestCase {
     assertTrue(order(o1, null)    > 0);
     assertTrue(order(null, o1)    < 0);
     assertTrue(order(null, null) == 0);
-  }       
+  }       */
 
   public function testEqualForInt() {
     var equal = Equal.getEqualFor(1);

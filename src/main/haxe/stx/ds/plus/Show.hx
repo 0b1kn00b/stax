@@ -1,18 +1,16 @@
-package stx.plus;
+package stx.ds.plus;
 
 /**
  * ...
  * @author 0b1kn00b
  */
 import Prelude;
-import Stax;
-using Stax;
+import Stax;										using Stax;
+import stx.Tuples;							using stx.Tuples;
 
 import Type;
 import stx.Maths;
-import stx.plus.Show;
-
-using stx.plus.Show;
+import stx.ds.plus.Show;				using stx.ds.plus.Show;
 
 class Show {
   static function _createShowImpl<T>(impl : ShowFunction<Dynamic>) : ShowFunction<T> {
@@ -138,7 +136,19 @@ class IntShow {
   }
 }
 class FloatShow {
-	public static function toString(v: Int) : String {
+	public static function toString(v: Float) : String {
     return "" + v;
+  }
+}
+class ProductShow {
+	public static function getProductShow(p:Product, i : Int) {
+    return Show.getShowFor(p.element(i));
+  }
+	public static function toString(p:Product): String {
+		var productPrefix = 'Tuple' + p.arity();
+    var s = productPrefix + "(" + p.getProductShow(1)(p.element(1));
+    for(i in 2...p.arity()+1)
+      s += ", " + p.getProductShow(i)(p.element(i));
+    return s + ")";
   }
 }

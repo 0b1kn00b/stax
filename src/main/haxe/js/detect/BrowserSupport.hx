@@ -19,7 +19,7 @@ import Dom;
 import Prelude;
 import js.Env;
 import js.dom.Quirks;
-import stx.data.collections.Map;
+import stx.ds.Map;
 
 using stx.Options;
 using stx.Arrays;

@@ -22,7 +22,7 @@ import Prelude;
 using Stax;
 
 import stx.net.Url;
-import stx.data.collections.Map;
+import stx.ds.Map;
 
 using stx.Strings;
  
