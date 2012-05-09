@@ -96,7 +96,7 @@ class StaxTestSuite {
           , new QuirksTestCase()
           , new ObjectExtensionsTestCase()
           , new TranscodeJValueExtensionsTestCase()
-					, new stx.OutcomeTest()
+					//, new stx.OutcomeTest()
 					, new stx.error.ErrorTest()
 					, new stx.reactive.ArrowsTest()
 					, new stx.TupleTest()
