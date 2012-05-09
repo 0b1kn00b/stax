@@ -36,7 +36,7 @@ typedef Function9<P1, P2, P3, P4, P5, P6, P7, P8, P9, R> = P1 -> P2 -> P3 -> P4 
 typedef Function10<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, R> = P1 -> P2 -> P3 -> P4 -> P5 -> P6 -> P7 -> P8 -> P9 -> P10 -> R
 
 typedef Reducer<T> = T -> T -> T
-
+//typedef State<S,T> = S -> Tuple2<T,S>
 typedef Factory<T> = Void -> T
 
 /**

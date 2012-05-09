@@ -332,7 +332,7 @@ class Stream<T> {
         return this;
     }
     
-		#if (js || flash || nodejs )
+		
     /**
      * Sends an event later. This function should not be used except to create
      * "pure" streams.
@@ -344,6 +344,7 @@ class Stream<T> {
      *
      */
     public function sendLaterIn(value: Dynamic, millis: Int): Stream<T> {
+			#if (js || flash || nodejs )
         var self = this;
         
         External.setTimeout(
@@ -353,7 +354,10 @@ class Stream<T> {
             millis
         );
         
-        return this;
+			#else
+				sendEvent(value);
+			#end
+			return this;
     }
     
     /**
@@ -364,6 +368,7 @@ class Stream<T> {
     public function sendLater(value: Dynamic): Stream<T> {
         return sendLaterIn(value, 0);
     }
+		#if (js || flash || nodejs )
 		/**
      * Delays this stream by the specified number of milliseconds.
      *

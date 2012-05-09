@@ -26,7 +26,7 @@ using stx.Iterables;
 class Iterables {
 	 public static function foldl1<T, T>(iter: Iterable<T>, mapper: T -> T -> T): T {
     var folded = iter.head();
-    
+		
 		switch (iter.tailOption()) {
 			case Some(v) 	:
 				for (e in v) { folded = mapper(folded, e); }
@@ -44,8 +44,11 @@ class Iterables {
   
   public static function headOption<T>(iter: Iterable<T>): Option<T> {
     var iterator = iter.iterator();
-    return if (iterator.hasNext()) Some(iterator.next());
-           else None;
+    return if (iterator.hasNext()) {
+			var o = iterator.next();
+			Some(o);
+		}else {None;
+		}
   }
   
   public static function head<T>(iter: Iterable<T>): T {
@@ -70,8 +73,11 @@ class Iterables {
     }
     
     var result = [];
-    
-    while (iterator.hasNext()) result.push(iterator.next());
+		
+    while (iterator.hasNext()) {
+			
+			result.push(iterator.next());
+		}
     
     return result;
   }
@@ -369,7 +375,9 @@ class Iterables {
 	public static inline function first<T>(iter:Iterable<T>):T{
 		return iter.head();
 	}
-	public static function unwind<T>(root:T,children:T->Iterable<T>,breadth : Bool = false ):Iterable<T> {
+	//BUG next
+	public static function unwind<T>(root:T, children:T->Iterable<T>, breadth : Bool = false ):Iterable<T> {
+		//trace("unwind");
 		var stack 	= [];
 		var manage 	= function (x:Iterable<T>, y:Iterable<T>) { stack = x.appendAll(y).toArray(); };
 			if (breadth == true) manage = manage.flip();
@@ -378,8 +386,10 @@ class Iterables {
 			var next: T = null;
 			var mng		= manage.lazy(children(progress), stack);
 			var nxt		= function() next = stack.shift() ;
+			//trace(stack);
 			var call	= function(x) return x() ;
 			var o			= children(progress);
+			//trace(o);
 			if(o!=null)(o.size() > 0 ? [mng, nxt] : stack.size() > 0 ? [nxt, mng] : []).foreach(call);
 			return Some( next.entuple(progress) );
 		}	

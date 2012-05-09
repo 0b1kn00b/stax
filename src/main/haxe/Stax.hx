@@ -20,31 +20,31 @@ using stx.Strings;
 using stx.ds.plus.Show;
 
 class Stax {
-	public static inline function tool<A>(?order:OrderFunction<A>,?equal:EqualFunction<A>,?hash:HashFunction<A>,?show:ShowFunction<A>):CollectionTools<A>{
+	inline static public  function tool<A>(?order:OrderFunction<A>,?equal:EqualFunction<A>,?hash:HashFunction<A>,?show:ShowFunction<A>):CollectionTools<A>{
 		return { order : order , equal : equal , show : show , hash : hash };
 	}
-  public static function noop0(){
+  static public function noop0(){
     return function(){};
   }  
-  public static function noop1<A>() {
+  static public function noop1<A>() {
     return function(a: A) { }
   }
-  public static function noop2<A, B>() {
+  static public function noop2<A, B>() {
     return function(a: A, b: B) { }
   }
-  public static function noop3<A, B, C>() {
+  static public function noop3<A, B, C>() {
     return function(a: A, b: B, c: C) { }
   }
-  public static function noop4<A, B, C, D>() {
+  static public function noop4<A, B, C, D>() {
     return function(a: A, b: B, c: C, d: D) { }
   }
-  public static function noop5<A, B, C, D, E>() {
+  static public function noop5<A, B, C, D, E>() {
     return function(a: A, b: B, c: C, d: D, e: E) { }
   }
-  public static function identity<A>(): Function<A, A> {
+  static public function identity<A>(): Function<A, A> {
     return function(a: A) { return a; }
   }
-  public static function unfold<T, R>(initial: T, unfolder: T -> Option<Tuple2<T, R>>): Iterable<R> {
+  static public function unfold<T, R>(initial: T, unfolder: T -> Option<Tuple2<T, R>>): Iterable<R> {
     return {
       iterator: function(): Iterator<R> {
         var _next: Option<R> = None;
@@ -81,18 +81,18 @@ class Stax {
     }
   }
 	
-  public static function error<T>(msg: String): T { throw msg;  return null; }
+  static public function error<T>(msg: String): T { throw msg;  return null; }
 }
 
 class ArrayLambda {
-	inline public static function map<T, S>(a: Array<T>, f: T -> S): Array<S> {
+	inline static public function map<T, S>(a: Array<T>, f: T -> S): Array<S> {
     var n: Array<S> = [];
     
     for (e in a) n.push(f(e));
     
     return n;
   }
-	public static function flatMap<T, S>(a: Array<T>, f: T -> Iterable<S>): Array<S> {
+	inline static public function flatMap<T, S>(a: Array<T>, f: T -> Iterable<S>): Array<S> {
     var n: Array<S> = [];
     
     for (e1 in a) {
@@ -101,14 +101,14 @@ class ArrayLambda {
     
     return n;
   }
-	public static function foldl<T, Z>(a: Array<T>, z: Z, f: Z -> T -> Z): Z {
+	inline static public function foldl<T, Z>(a: Array<T>, z: Z, f: Z -> T -> Z): Z {
     var r = z;
     
     for (e in a) { r = f(r, e); }
     
     return r;
   }
-	public static function filter<T>(a: Array<T>, f: T -> Bool): Array<T> {
+	inline static public function filter<T>(a: Array<T>, f: T -> Bool): Array<T> {
     var n: Array<T> = [];
     
     for (e in a)
@@ -117,25 +117,25 @@ class ArrayLambda {
     return n;
   }
 	
-	public static function size<T>(a: Array<T>): Int {
+	static public function size<T>(a: Array<T>): Int {
     return a.length;
   }
-	public static function snapshot<T>(a: Array<T>): Array<T> {
+	static public function snapshot<T>(a: Array<T>): Array<T> {
     return [].concat(a);
   }
-	public static function foreach<T>(a: Array<T>, f: T -> Void): Array<T> {
+	static public function foreach<T>(a: Array<T>, f: T -> Void): Array<T> {
     for (e in a) f(e);
     
     return a;
   }
 }
 class IterableLambda{
-	public static function toArray<T>(i: Iterable<T>) {
+	inline static public function toArray<T>(i: Iterable<T>) {
     var a = [];
     for (e in i) a.push(e);
     return a;
   }
-	public static function toIterable<T>(it:Iterator<T>):Iterable<T> {
+	static public function toIterable<T>(it:Iterator<T>):Iterable<T> {
 		return {
 			iterator : function () {
 				return {
@@ -145,14 +145,14 @@ class IterableLambda{
 			}
 		}
 	}
-	public static function map<T, Z>(iter: Iterable<T>, f: T -> Z): Iterable<Z> {
+	static public function map<T, Z>(iter: Iterable<T>, f: T -> Z): Iterable<Z> {
     return foldl(iter, [], function(a, b) {
       a.push(f(b));
       return a;
     });
   }
   
-  public static function flatMap<T, Z>(iter: Iterable<T>, f: T -> Iterable<Z>): Iterable<Z> {
+  static public function flatMap<T, Z>(iter: Iterable<T>, f: T -> Iterable<Z>): Iterable<Z> {
     return foldl(iter, [], function(a, b) {
       for (e in f(b)) a.push(e);
       return a;
@@ -165,22 +165,22 @@ class IterableLambda{
     
     return folded;
   }   
-  public static function filter<T>(iter: Iterable<T>, f: T -> Bool): Iterable<T> {
+  static public function filter<T>(iter: Iterable<T>, f: T -> Bool): Iterable<T> {
     return ArrayLambda.filter(iter.toArray(), f);
   }
-	public static function size<T>(iterable: Iterable<T>): Int {
+	static public function size<T>(iterable: Iterable<T>): Int {
     var size = 0;
     
     for (e in iterable) ++size;
     
     return size;
   }
-	public static function foreach<T>(iter : Iterable<T>, f : T-> Void ):Void {
+	static public function foreach<T>(iter : Iterable<T>, f : T-> Void ):Void {
     for (e in iter) f(e);
 	}
 }
 class IntIters {
-	public static function to(start: Int, end: Int): Iterable<Int> {
+	static public function to(start: Int, end: Int): Iterable<Int> {
     return {
       iterator: function() {
         var cur = start;
@@ -193,7 +193,7 @@ class IntIters {
     }
   }
   
-  public static function until(start: Int, end: Int): Iterable<Int> {
+  static public function until(start: Int, end: Int): Iterable<Int> {
     return to(start, end - 1);
   }
 }

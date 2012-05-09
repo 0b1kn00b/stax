@@ -245,6 +245,7 @@ class Outcome<A,B>  {
   public static function
   waitFor(toJoin:Array<Outcome<Dynamic,Dynamic>>):Outcome<String,Array<Dynamic>> {
 		//trace('wait for');
+		var f0 = false;
     var
       oc = new Outcome(),
       results = [];
@@ -253,7 +254,10 @@ class Outcome<A,B>  {
 					//trace('wait failer setup');
 					x.onError(
 						function(x) {
-							oc.userCancel.run(x);
+							if (oc.userCancel != null && !f0) {
+								oc.userCancel.run(x);
+								f0 = true;
+							}
 							return x;
 						}.lift()
 					);

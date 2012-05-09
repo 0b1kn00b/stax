@@ -96,12 +96,12 @@ class StaxTestSuite {
           , new QuirksTestCase()
           , new ObjectExtensionsTestCase()
           , new TranscodeJValueExtensionsTestCase()
-					//, new stx.OutcomeTest()
+					, new stx.OutcomeTest()
 					, new stx.error.ErrorTest()
 					, new stx.reactive.ArrowsTest()
 					, new stx.TupleTest()
           #end
-        ]);// .filter( function(x) return Std.is(x, PreludeTest) ));
+        ].filter( function(x) return Std.is(x, stx.reactive.ArrowsTest) ));
 
         Report.create(runner);
 

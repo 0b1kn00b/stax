@@ -17,7 +17,6 @@ class OutcomeTest extends TestCase{
 	public function new() {
 		super();
 	}
-	
 	public function testRight() {
 		var a = new Outcome();
 		a.foreach( 
@@ -225,7 +224,6 @@ class OutcomeTest extends TestCase{
 				}
 		);
 	}
-	
 	public function testWaitFailer11() {
 		var async 	= Assert.createAsync( function() { } ,200);
 		var outcome1 = 'ok1'.succeed();

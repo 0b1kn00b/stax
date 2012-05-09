@@ -272,18 +272,18 @@ class FutureArrow<I> implements Arrow<Future<I>,I>{
 		);
 	}
 }
-class OutcomeArrow<I> implements Arrow<Future<I>,I>{
+/*class OutcomeArrow<I,E> implements Arrow<Outcome<I,E>,I>{
 	public function new() {
 		
 	}
-	public function withInput(?i : Future<I>, cont : Method < I, Void, I->Void > ) : Void {
+	public function withInput(?i : Outcome<I,E>, cont : Method < I, Void, I->Void > ) : Void {
 		i.foreach(
 				function(p1:I) {
 					cont.execute(p1);
 				}
 		);
 	}
-}
+}*/
 class ArrowApply {
 	
 }

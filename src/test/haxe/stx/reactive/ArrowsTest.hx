@@ -47,7 +47,7 @@ class ArrowsTest extends TestCase{
 		 * command = Arrow<Tuple2<State,A>,Either<Arrow<Tuple2<State,A>,Tuple2<State,B>>,Tuple2<State,C>>
 		 */
 		var state = { };
-		var a = new StateArrow(deferred.lift()).run( state.entuple(''));
+		//var a = new StateArrow(deferred.lift()).run( state.entuple(''));
 		//deferred.lift().then ( handle.lift() ).run( state.entuple('x') );
 	}/*
 	public static function handle<S,A,B>(s:StateResult<S,A,B>,cont:Method<Tuple2<S,B>,StateResult<S,A,B>>){
