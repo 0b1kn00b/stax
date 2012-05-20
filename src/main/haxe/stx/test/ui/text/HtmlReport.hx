@@ -42,7 +42,7 @@ import js.Lib;
 #end
 
 /**
-* @todo add documentation
+* @:todo add documentation
 */
 class HtmlReport implements IReport < HtmlReport > {
 	#if( !nodejs )

@@ -20,8 +20,8 @@ import stx.test.Runner;
 import stx.test.TestResult;
 
 /**
-* @todo add documentation
-* @todo add tests for this class
+* @:todo add documentation
+* @:todo add tests for this class
 */
 class ResultAggregator {
   var runner : Runner;

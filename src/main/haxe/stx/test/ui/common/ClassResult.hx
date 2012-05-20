@@ -18,7 +18,7 @@ package stx.test.ui.common;
 import stx.test.TestResult;
 
 /**
-* @todo add documentation
+* @:todo add documentation
 */
 class ClassResult {
   var fixtures : Hash<FixtureResult>;

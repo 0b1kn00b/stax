@@ -18,7 +18,7 @@ package stx.test.ui.common;
 import stx.test.Dispatcher;
 
 /**
-* @todo add documentation
+* @:todo add documentation
 */
 class ResultStats {
   public var assertations(default, null) : Int;

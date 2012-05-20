@@ -19,8 +19,8 @@ import stx.test.TestResult;
 import stx.test.Assertation;
 
 /**
-* @todo add documentation
-* @todo add tests for this class
+* @:todo add documentation
+* @:todo add tests for this class
 */
 class PackageResult {
   public var packageName(default, null) : String;

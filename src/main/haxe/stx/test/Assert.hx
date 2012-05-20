@@ -196,7 +196,7 @@ class Assert {
   * @param msg: An optional error message. If not passed a default one will be used
   * @param pos: Code position where the Assert call has been executed. Don't fill it
   * unless you know what you are doing.
-  * @todo test the approximation argument
+  * @:todo test the approximation argument
   */
   public static function floatEquals(expected : Float, value : Float, ?approx : Float, ?msg : String , ?pos : PosInfos) {
     if (msg == null) msg = "expected " + expected + " but was " + value;
@@ -541,7 +541,7 @@ class Assert {
   * @param msg: An optional error message. If not passed a default one will be used
   * @param pos: Code position where the Assert call has been executed. Don't fill it
   * unless you know what you are doing.
-  * @todo test the optional type parameter
+  * @:todo test the optional type parameter
   */
   public static function throwsException(method:Void -> Void, ?type:Class<Dynamic>, ?msg : String , ?pos : PosInfos) {
     if(type == null)

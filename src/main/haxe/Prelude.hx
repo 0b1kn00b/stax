@@ -78,7 +78,7 @@ typedef EqualFunction<T>  			= Function2<T, T, Bool>;
 typedef ShowFunction<T>   			= Function<T, String>;
 typedef HashFunction<T> 				= Function<T, Int>;   
 
-@todo('0b1kn00b','Would perhaps prefer the collection tools to be interfaces.')
+@:todo('0b1kn00b','Would perhaps prefer the collection tools to be interfaces.')
 typedef CollectionTools<T> = {
 		order : Null<OrderFunction<T>>,
 		equal	: Null<EqualFunction<T>>,

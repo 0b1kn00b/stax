@@ -32,7 +32,7 @@ import cpp.Lib;
 #end
 
 /**
-* @todo add documentation
+* @:todo add documentation
 */
 class PrintReport extends PlainTextReport {
   var useTrace : Bool;

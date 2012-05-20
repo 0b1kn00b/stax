@@ -20,7 +20,7 @@ private enum EventException {
 }
 
 /**
-* @todo add documentation
+* @:todo add documentation
 */
 class Dispatcher<T> {
 

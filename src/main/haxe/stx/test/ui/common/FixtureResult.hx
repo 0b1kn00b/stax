@@ -18,7 +18,7 @@ package stx.test.ui.common;
 import stx.test.Assertation;
 
 /**
-* @todo add documentation
+* @:todo add documentation
 */
 class FixtureResult {
   public var methodName(default, null) : String;

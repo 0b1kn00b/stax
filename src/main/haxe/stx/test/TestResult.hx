@@ -18,7 +18,7 @@ package stx.test;
 import stx.test.Assertation;
 
 /**
-* @todo add documentation
+* @:todo add documentation
 */
 class TestResult {
   public var pack          : String;

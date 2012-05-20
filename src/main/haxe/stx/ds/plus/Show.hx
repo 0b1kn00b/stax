@@ -24,7 +24,7 @@ class Show {
   }
   
   /**
-   *  @todo Reflect.fields doesn't work consistenly across platforms so we may probably pass to use Type.getInstanceFields. The problem here
+   *  @:todo Reflect.fields doesn't work consistenly across platforms so we may probably pass to use Type.getInstanceFields. The problem here
    *  is that we must check if the fields are functions before grabbing the value.
    */
   public static function getShowForType<T>(v : ValueType) : ShowFunction<T> {

@@ -18,7 +18,7 @@ package stx.test;
 import stx.test.Assertation;
 
 /**
-* @todo add documentation
+* @:todo add documentation
 */
 class TestHandler<T> {
   private static inline var POLLING_TIME = 10;

@@ -16,7 +16,7 @@
 package stx.test;
 
 /**
-* @todo add documentation
+* @:todo add documentation
 */
 class TestFixture<T> {
   public var target(default, null): T;

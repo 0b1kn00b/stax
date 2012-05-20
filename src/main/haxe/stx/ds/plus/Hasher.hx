@@ -124,7 +124,7 @@ class BoolHasher {
     return if (v) 786433 else 393241;  
   }
 }
-@todo('0b1kn00b','Cache hashers')
+@:todo('0b1kn00b','Cache hashers')
 class ProductHasher {
 	static public function getHash(p:Product, i : Int) {
     Hasher.getHashFor(p.element(i));

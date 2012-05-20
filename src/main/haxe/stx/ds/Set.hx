@@ -158,7 +158,7 @@ class Set<T> implements Collection<Set<T>, T> {
   }
   
   /**
-   *  @todo inject *Functions here?
+   *  @:todo inject *Functions here?
    */ 
   private function copyWithMod(newMap: Map<T, T>): Set<T> {
     return new Set<T>(newMap);
