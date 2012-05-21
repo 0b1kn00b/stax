@@ -106,7 +106,7 @@ class Order {
     case TNull:
       _createOrderImpl(function(a, b) return Stax.error("at least one of the arguments should be null"));
     case TFunction:
-    Stax.error("unable to compare on a function");
+				Stax.error("unable to compare on a function");
     }
   }
 }
