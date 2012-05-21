@@ -375,7 +375,7 @@ class Iterables {
 	public static inline function first<T>(iter:Iterable<T>):T{
 		return iter.head();
 	}
-	//BUG next
+	@:bug('#0b1kn00b: something wrong with next');
 	public static function unwind<T>(root:T, children:T->Iterable<T>, breadth : Bool = false ):Iterable<T> {
 		//trace("unwind");
 		var stack 	= [];
