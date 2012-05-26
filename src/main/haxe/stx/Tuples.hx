@@ -4,8 +4,8 @@ package stx;
  * ...
  * @author 0b1kn00b
  */
+import Prelude;
 import stx.ds.plus.Show;				using stx.ds.plus.Show;
-
 
 typedef Product = {
 	
@@ -24,6 +24,10 @@ typedef Tuple5<A,B,C,D,E> = { > Tuple4<A,B,C,D>,
 	_5 : Null<E>,
 }
 class Products {
+	/**
+	 * Returns the number of parameters in the Tuple. 
+	 * @param	p
+	 */
 	static public function arity(p:Product) {
 		return 
 				if ( Reflect.hasField( p , '_5' ) ) {
@@ -114,6 +118,15 @@ class T2 {
 	public static function fromArray(arr:Array<Dynamic>):stx.Tuple2<Dynamic,Dynamic>{
 		return stx.Tuples.t2(arr[0], arr[1]);
 	}
+	/**
+	 * Returns a function that takes two parameters and returns a Tuple2
+	 */
+	public static function from<A,B>():Function2<A,B,Tuple2<A,B>>{
+		return 
+				function(a:A, b:B) {
+					return Tuples.t2(a, b);
+				}
+	}
 }
 class T3 {
 	public static function entuple<A,B,C>(a:stx.Tuple2<A,B>,c:C):stx.Tuple3<A,B,C>{
@@ -151,6 +164,12 @@ class T4 {
 	}
 }
 class T5 {
+	public static function first<A,B,C,D,E>(t:Tuple5<A,B,C,D,E>):A{
+		return t._1;
+	}
+	public static function second<A,B,C,D,E>(t:Tuple5<A,B,C,D,E>):B{
+		return t._2;
+	}
 	public static function entuple<A,B,C,D,E>(a:stx.Tuple4<A,B,C,D>,b:E):stx.Tuple5<A,B,C,D,E>{
 		return stx.Tuples.t5(a._1, a._2 , a._3, a._4 ,b);
 	}

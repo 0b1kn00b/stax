@@ -78,10 +78,10 @@ class Functions0 {
   }
 }
 class Functions1 {
-  public static function swallow<A>(f: Function<A, Void>): Function<A, Void> {
+  public static function swallow<A>(f: Function1<A, Void>): Function1<A, Void> {
     return toEffect(swallowWith(f, null));
   }
-  public static function swallowWith<P1, R>(f: Function<P1, R>, d: R): Function<P1, R> {
+  public static function swallowWith<P1, R>(f: Function1<P1, R>, d: R): Function1<P1, R> {
     return function(a) {
       try {
         return f(a);
@@ -103,32 +103,32 @@ class Functions1 {
       }
     }
   }
-  public static function returning<P1, R1, R2>(f: Function<P1, R1>, thunk: Thunk<R2>): Function<P1, R2> {
+  public static function returning<P1, R1, R2>(f: Function1<P1, R1>, thunk: Thunk<R2>): Function1<P1, R2> {
     return function(p1) {
       f(p1);
       
       return thunk();
     }
   }
-  public static function returningC<P1, R1, R2>(f: Function<P1, R2>, value: R2): Function<P1, R2> {
+  public static function returningC<P1, R1, R2>(f: Function1<P1, R2>, value: R2): Function1<P1, R2> {
     return returning(f, value.toThunk());
   }
-  public static function compose<U, V, W>(f1: Function<V, W>, f2: Function<U, V>): Function<U, W> {
+  public static function compose<U, V, W>(f1: Function1<V, W>, f2: Function1<U, V>): Function1<U, W> {
     return function(u: U): W {
       return f1(f2(u));
     }
   }
-  public static function andThen<U, V, W>(f1: Function<U, V>, f2: Function<V, W>): Function<U, W> {
+  public static function andThen<U, V, W>(f1: Function1<U, V>, f2: Function1<V, W>): Function1<U, W> {
     return compose(f2, f1);
   }
-  public static function lazy<P1, R>(f: Function<P1, R>, p1: P1): Thunk<R> {
+  public static function lazy<P1, R>(f: Function1<P1, R>, p1: P1): Thunk<R> {
     var r = null;
     
     return function() {
       return if (r == null) { r = f(p1); r; } else r;
     }
   }
-  public static function toEffect<P1, R>(f: Function<P1, R>): P1 -> Void {
+  public static function toEffect<P1, R>(f: Function1<P1, R>): P1 -> Void {
     return function(p1) {
       f(p1);
     }
@@ -168,14 +168,14 @@ class Functions2{
       return f(p1, p2);
     }
   }
-  public static function curry<P1, P2, R>(f: Function2<P1, P2, R>): Function<P1, Function<P2, R>> {
+  public static function curry<P1, P2, R>(f: Function2<P1, P2, R>): Function1<P1, Function1<P2, R>> {
     return function(p1: P1) {
       return function(p2: P2) {
         return f(p1, p2);
       }
     }
   }
-  public static function uncurry<P1, P2, R>(f: Function<P1, Function<P2, R>>): Function2<P1, P2, R> {
+  public static function uncurry<P1, P2, R>(f: Function1<P1, Function1<P2, R>>): Function2<P1, P2, R> {
     return function(p1: P1, p2: P2) {
       return f(p1)(p2);
     }
@@ -222,7 +222,7 @@ class Functions3{
   public static function returningC(f, value) {
     return returning(f, value.toThunk());
   }
-  public static function curry<P1, P2, P3, R>(f: Function3<P1, P2, P3, R>): Function<P1, Function<P2, Function<P3, R>>> {
+  public static function curry<P1, P2, P3, R>(f: Function3<P1, P2, P3, R>): Function1<P1, Function1<P2, Function1<P3, R>>> {
     return function(p1: P1) {
       return function(p2: P2) {
         return function(p3: P3) {
@@ -231,7 +231,7 @@ class Functions3{
       }
     }
   }
-  public static function uncurry<P1, P2, P3, R>(f: Function<P1, Function<P2, Function<P3, R>>>): Function3<P1, P2, P3, R> {
+  public static function uncurry<P1, P2, P3, R>(f: Function1<P1, Function1<P2, Function1<P3, R>>>): Function3<P1, P2, P3, R> {
     return function(p1: P1, p2: P2, p3: P3) {
       return f(p1)(p2)(p3);
     }
@@ -278,7 +278,7 @@ class Functions4{
   public static function returningC(f, value) {
     return returning(f, value.toThunk());
   }
-  public static function curry<P1, P2, P3, P4, R>(f: Function4<P1, P2, P3, P4, R>): Function<P1, Function<P2, Function<P3, Function<P4, R>>>> {
+  public static function curry<P1, P2, P3, P4, R>(f: Function4<P1, P2, P3, P4, R>): Function1<P1, Function1<P2, Function1<P3, Function1<P4, R>>>> {
     return function(p1: P1) {
       return function(p2: P2) {
         return function(p3: P3) {
@@ -289,7 +289,7 @@ class Functions4{
       }
     }
   }
-  public static function uncurry<P1, P2, P3, P4, R>(f: Function<P1, Function<P2, Function<P3, Function<P4, R>>>>): Function4<P1, P2, P3, P4, R> {
+  public static function uncurry<P1, P2, P3, P4, R>(f: Function1<P1, Function1<P2, Function1<P3, Function1<P4, R>>>>): Function4<P1, P2, P3, P4, R> {
     return function(p1: P1, p2: P2, p3: P3, p4: P4) {
       return f(p1)(p2)(p3)(p4);
     }
@@ -336,7 +336,7 @@ class Functions5{
   public static function returningC(f, value) {
     return returning(f, value.toThunk());
   }
-  public static function curry<P1, P2, P3, P4, P5, R>(f: Function5<P1, P2, P3, P4, P5, R>): Function<P1, Function<P2, Function<P3, Function<P4, Function<P5, R>>>>> {
+  public static function curry<P1, P2, P3, P4, P5, R>(f: Function5<P1, P2, P3, P4, P5, R>): Function1<P1, Function1<P2, Function1<P3, Function1<P4, Function1<P5, R>>>>> {
     return function(p1: P1) {
       return function(p2: P2) {
         return function(p3: P3) {
@@ -349,7 +349,7 @@ class Functions5{
       }
     }
   }
-  public static function uncurry<P1, P2, P3, P4, P5, R>(f: Function<P1, Function<P2, Function<P3, Function<P4, Function<P5, R>>>>>): Function5<P1, P2, P3, P4, P5, R> {
+  public static function uncurry<P1, P2, P3, P4, P5, R>(f: Function1<P1, Function1<P2, Function1<P3, Function1<P4, Function1<P5, R>>>>>): Function5<P1, P2, P3, P4, P5, R> {
     return function(p1: P1, p2: P2, p3: P3, p4: P4, p5: P5) {
       return f(p1)(p2)(p3)(p4)(p5);
     }

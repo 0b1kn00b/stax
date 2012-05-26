@@ -138,6 +138,7 @@ class Streams {
         }
     }
     #if (js || flash)
+		
     /**
      * Creates a stream of time events, spaced out by the specified number of
      * milliseconds.
@@ -148,7 +149,6 @@ class Streams {
         return timerS(Signals.constant(time));
     }
     
-		
     /**
      * Creates a stream of time events, spaced out by the specified number of
      * milliseconds.
@@ -180,6 +180,7 @@ class Streams {
         return stream;
     }
     #end
+		
     /**
      * Zips together the specified streams.
      */

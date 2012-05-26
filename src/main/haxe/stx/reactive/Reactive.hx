@@ -31,7 +31,6 @@ class External {
 		#if ( js || flash )
     public static dynamic function setTimeout (f, time):Dynamic {
 				return haxe.Timer.delay(f, time);
-		//return null;
 		}
     
     public static var cancelTimeout: Timeout -> Void = function(timer) { cast(timer, haxe.Timer).stop(); }

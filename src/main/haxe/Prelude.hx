@@ -22,7 +22,7 @@ enum Unit {
 
 typedef AnyRef = {}
 typedef CodeBlock = Void -> Void
-typedef Function<P1, R> = P1 -> R
+//typedef Function<P1, R> = P1 -> R
 typedef Function0<R> = Void -> R
 typedef Function1<P1, R> = P1 -> R
 typedef Function2<P1, P2, R> = P1 -> P2 -> R
@@ -75,8 +75,8 @@ enum Either<A, B> {
 typedef FailureOrSuccess<A, B> 	= Either<A, B>
 typedef OrderFunction<T>  			= Function2<T, T, Int>;
 typedef EqualFunction<T>  			= Function2<T, T, Bool>;
-typedef ShowFunction<T>   			= Function<T, String>;
-typedef HashFunction<T> 				= Function<T, Int>;   
+typedef ShowFunction<T>   			= Function1<T, String>;
+typedef HashFunction<T> 				= Function1<T, Int>;   
 
 @:todo('0b1kn00b','Would perhaps prefer the collection tools to be interfaces.')
 typedef CollectionTools<T> = {

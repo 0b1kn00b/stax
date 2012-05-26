@@ -13,7 +13,7 @@ class Dynamics {
 	 * @param 		f			Modifier function.
 	 * @return 		a			The input value after f(a).
 	 */
-  public static function withEffect<T>(t: T, f: Function<T, Void>): T {
+  public static function withEffect<T>(t: T, f: Function1<T, Void>): T {
     f(t);
     
     return t;
@@ -24,7 +24,7 @@ class Dynamics {
 	 * @param 		f			Modifier function.
 	 * @return 		a			The input value after f(a).
 	 */
-  public static function withEffectP<A, B>(a: A, f: Function<A, B>): A {
+  public static function withEffectP<A, B>(a: A, f: Function1<A, B>): A {
     f(a);
     
     return a;
@@ -70,7 +70,7 @@ class Dynamics {
 	 * @param			t		Any value
 	 * @return 				A function taking any value and returning the value of input parameter t.
 	 */
-  public static function toConstantFunction<S, T>(t: T): Function<S, T> {
+  public static function toConstantFunction<S, T>(t: T): Function1<S, T> {
     return function(s: S) {
       return t;
     }

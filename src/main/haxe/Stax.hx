@@ -41,7 +41,7 @@ class Stax {
   static public function noop5<A, B, C, D, E>() {
     return function(a: A, b: B, c: C, d: D, e: E) { }
   }
-  static public function identity<A>(): Function<A, A> {
+  static public function identity<A>(): Function1<A, A> {
     return function(a: A) { return a; }
   }
   static public function unfold<T, R>(initial: T, unfolder: T -> Option<Tuple2<T, R>>): Iterable<R> {
