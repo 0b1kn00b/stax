@@ -8,17 +8,18 @@ import stx.error.OutOfBoundsError;
 import stx.error.AbstractMethodError;
 
 import Prelude;
-import stx.Tuples; using stx.Tuples;
+import stx.Tuples; 											using stx.Tuples;
 
 import haxe.PosInfos;
 
 import haxe.PosInfos;
 
-import stx.Options;using stx.Options;
+import stx.Options;											using stx.Options;
 import stx.Functions;
 
 
-import stx.io.log.Logger;using stx.io.log.Logger;
+import stx.Log;													using stx.Log;
+																				using Std;
 
 typedef DynMethod = Method<Dynamic,Dynamic,Dynamic>;
 
@@ -41,28 +42,28 @@ class Method < I, O, F > {
 	public var length (get_length, null) : Int;
 	
 	private function get_length():Int{
-		new AbstractMethodError().log();
+		throw new AbstractMethodError();
 		return -1;
 	}
 	public function new(fn,name:String,?pos:PosInfos){
 		this.pos 	= pos;
 		this.name 	= name;
 		if(fn == null){
-			Log.log("Setting null function" + this,Warning).log();
+			trace("Setting null function".warning()); 
 		}
 		this.convention = Patch;
 		this.fn = fn;
 	}
 	public function execute(?v:I,?pos):O{
-		if( isEmpty() ) new AbstractMethodError().log();
+		if( isEmpty() ) throw new AbstractMethodError();
 		return null;
 	}
 	public function patch(args:I):Method<I,O,F>{
-		new AbstractMethodError().log();
+		throw new AbstractMethodError();
 		return null;
 	}
 	public function replaceAt(i:Int,v:Dynamic):Method<I,O,F>{
-		new AbstractMethodError().log();
+		throw new AbstractMethodError();
 		return null;
 	}
 	public function equals(m:Method<Dynamic,Dynamic,Dynamic>):Bool {
@@ -100,7 +101,7 @@ class Method1 < I, O > extends Method < I, O, I->O > {
 	}
 	override public function execute(?v:I,?pos:PosInfos):O {
 		if ( fn == null || isEmpty() ){
-			new AbstractMethodError().log();
+			throw new AbstractMethodError();
 		}
 		var o : O = null;
 		try{
@@ -109,8 +110,8 @@ class Method1 < I, O > extends Method < I, O, I->O > {
 				case Ignore:
 					fn(args);
 			}
-		}catch(e:Dynamic){
-			Log.log(["Declared:",this,"\nCalled:","\nError",e].join(" "));
+		}catch (e:Dynamic) {
+			trace( 'Declared $this \n called $e'.format() );
 		}
 		//Debug(type(o)).log();
 		return o;

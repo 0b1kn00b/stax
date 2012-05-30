@@ -26,8 +26,7 @@ import stx.ds.Map;
 import stx.time.ScheduledExecutor;
 import stx.text.json.Json;
 import stx.net.Url;
-import stx.io.log.Logger;
-
+import stx.Log;								using stx.Log;
 
 import stx.Future;
 import stx.Tuples;
@@ -219,8 +218,6 @@ class IFrameIOAutoDetect implements IFrameIO {
 class IFrameIOPostMessage extends AbstractIFrameIO, implements IFrameIO {
   var bindTarget: Window;
   
-  static var log = Logger.debug();
-  
   public function new(w: Window) {
     super();
     
@@ -247,7 +244,7 @@ class IFrameIOPostMessage extends AbstractIFrameIO, implements IFrameIO {
         }
       }
       else {
-        log.warning('Received data but from wrong domain: expected: ' + originUrl + ', but found: ' + event.origin);
+        ('Received data but from wrong domain: expected: ' + originUrl + ', but found: ' + event.origin).warning();
       }
     }
     
@@ -265,7 +262,7 @@ class IFrameIOPostMessage extends AbstractIFrameIO, implements IFrameIO {
       targetWindow.postMessage(Json.encodeObject(data), targetUrl);
     }
     catch (e: Dynamic) {
-      log.fatal('Error while posting message to ' + targetUrl + ' (originally ' + targetUrl_ + '): ' + e.message);
+      trace(('Error while posting message to ' + targetUrl + ' (originally ' + targetUrl_ + '): ' + e.message).fatal());
     }
     
     return this;
@@ -315,7 +312,6 @@ class IFrameIOPollingHashtag extends AbstractIFrameIO, implements IFrameIO {
   var senderFuture:       Option<Future<Void>>;
   var receiverFuture:     Option<Future<Void>>;
   
-  static var log = Logger.debug();
   
   public function new(w: Window) {
     super();
