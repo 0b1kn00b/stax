@@ -23,6 +23,7 @@ enum EnvironmentType {
   Safari(version: String);
   Chrome(version: String);
   Unknown(what: String);
+	Opera(version:String);
 }
 
 enum OSType {
@@ -31,7 +32,7 @@ enum OSType {
   Android;
   Mac;
   Linux;
-  Unknown;
+  Unknown(userAgent:String);
 }
 
 class Host {
@@ -56,24 +57,24 @@ class Host {
     
     var userAgent = Env.navigator.userAgent;
 
-    return if (OperaPattern.matches(userAgent)) Opera(OperaPattern.matched(1));
-    else if (ChromePattern.matches(userAgent)) Chrome(ChromePattern.matched(1));
-    else if (SafariPattern.matches(userAgent)) Safari(SafariPattern.matched(1));
-    else if (FirefoxPattern.matches(userAgent)) Firefox(FirefoxPattern.matched(1));
-    else if (IEPattern.matches(userAgent)) IE(IEPattern.matched(1));
+    return if (OperaPattern.match(userAgent)) Opera(OperaPattern.matched(1));
+    else if (ChromePattern.match(userAgent)) Chrome(ChromePattern.matched(1));
+    else if (SafariPattern.match(userAgent)) Safari(SafariPattern.matched(1));
+    else if (FirefoxPattern.match(userAgent)) Firefox(FirefoxPattern.matched(1));
+    else if (IEPattern.match(userAgent)) IE(IEPattern.matched(1));
     else Unknown(userAgent);
   }
   
   private static function detectOS(): OSType {
-    if (Env.navigator == null) return Unknown;
+    if (Env.navigator == null) return OSType.Unknown('unknown');
     
     var userAgent = Env.navigator.userAgent;
     
-    return if (WindowsPattern.matches(userAgent)) Windows;
-    else if (MacMobilePattern.matches(userAgent)) MacMobile;
-    else if (AndroidPattern.matches(userAgent)) Android;
-    else if (MacPattern.matches(userAgent)) Mac;
-    else if (LinuxPattern.matches(userAgent)) Linux;
-    else Unknown(userAgent);
+    return if (WindowsPattern.match(userAgent)) OSType.Windows;
+    else if (MacMobilePattern.match(userAgent)) OSType.MacMobile;
+    else if (AndroidPattern.match(userAgent)) OSType.Android;
+    else if (MacPattern.match(userAgent)) OSType.Mac;
+    else if (LinuxPattern.match(userAgent)) OSType.Linux;
+    else OSType.Unknown(userAgent);
   }
 }
