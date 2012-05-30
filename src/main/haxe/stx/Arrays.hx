@@ -202,7 +202,10 @@ class Arrays {
       }
     });
   }
-  
+  /**
+   * Calls the predicate with all elements of 'arr' and produces true if the predicate returns true after being called 
+	 * with any element, false otherwise.
+   */
   public static function forAny<T>(arr: Array<T>, f: T -> Bool): Bool {
     return arr.foldl(false, function(a, b) {
       return switch (a) {
@@ -218,7 +221,13 @@ class Arrays {
       case None:    false;
     }
   }
-
+	public static function reversed<T>(iter: Array<T>): Array<T> {
+    return IterableLambda.foldl(iter, [], function(a, b) {
+      a.unshift(b);
+      
+      return a;
+    });
+  }
   public static function existsP<T>(arr:Array<T>, ref: T, f: T -> T -> Bool): Bool {
     var result = false;
 
