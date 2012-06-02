@@ -1,4 +1,4 @@
-package stx.text.json;
+package stx.data.transcode;
 
 /**
  * ...
