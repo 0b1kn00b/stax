@@ -98,7 +98,7 @@ class TranscodeJValue{
 					}
 		}
 	}
-	@note0('0bk1kn00b','I don´t understand why TObject can´t be decomposed')
+	@note('#0bk1kn00b: I don´t understand why TObject can´t be decomposed')
   public static function getDecomposerFor<T>(v: ValueType): JDecomposerFunction<T>{
     return switch (v){
       case TBool:
