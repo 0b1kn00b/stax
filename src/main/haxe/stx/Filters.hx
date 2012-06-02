@@ -5,6 +5,10 @@ package stx;
  * @author 0b1kn00b
  */
 
-class Iterators {
+class Filters {
 
+	public function new() {
+		
+	}
+	
 }

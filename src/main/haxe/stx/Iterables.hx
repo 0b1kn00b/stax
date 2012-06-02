@@ -218,6 +218,9 @@ class Iterables {
       return b;
     });
   }
+	/**
+	 * Returns the Iterable with elements in reverse order.
+	 */
   public static function reversed<T>(iter: Iterable<T>): Iterable<T> {
     return IterableLambda.foldl(iter, [], function(a, b) {
       a.unshift(b);
@@ -225,7 +228,9 @@ class Iterables {
       return a;
     });
   }
-  
+  /**
+   * Returns that all elements in 'iter' are true.
+   */
   public static function and<T>(iter: Iterable<Bool>): Bool {
     var iterator = iter.iterator();
     
@@ -235,7 +240,9 @@ class Iterables {
     }
     return true;
   }
-  
+  /**
+   * Returns that any element in 'iter' is true.
+   */
   public static function or<T>(iter: Iterable<Bool>): Bool {
     var iterator = iter.iterator();
     
@@ -244,7 +251,9 @@ class Iterables {
     }
     return false;
   }
-  
+  /**
+   * 
+   */
   public static function scanl<T>(iter:Iterable<T>, init: T, f: T -> T -> T): Iterable<T> {
     var result = [init];
     

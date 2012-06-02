@@ -48,7 +48,7 @@ enum LogListing {
 	Include(s:String);
 	Exclude(s:String);
 }
-class Logger {
+class Log {
 	public static function debug(v:Dynamic) {
 		return new LogItem(LogLevel.Debug, v);
 	}
@@ -65,7 +65,7 @@ class Logger {
 		return new LogItem(LogLevel.Fatal, v);
 	}
 	public static function trace(v:Dynamic, ?pos:PosInfos) {
-		var log = Log.inject(pos);
+		var log = Logger.inject(pos);
 		switch (Type.typeof(v)) {
 			case TClass(c)	:
 					if ( Type.getClassName(c) == Type.getClassName(LogItem) ){
@@ -81,7 +81,7 @@ class Logger {
 			default				:
 				log.trace(v,pos);
 		}
-		var log = Log.inject(pos);
+		var log = Logger.inject(pos);
 	}
 	public static function format(p: PosInfos) {
     return p.fileName + ":" + p.lineNumber + " (" + p.className + ":" + p.methodName + "): ";
@@ -96,15 +96,15 @@ class Logger {
 	public static function func(s:String):String { return '.*\\(.*:$s\\)'.format(); }
 	public static function file(s:String):String { return '$s.*\\(.*:'.format(); }
 }
-@DefaultImplementation('stx.io.log.DefaultLog')
-interface Log {
+@DefaultImplementation('stx.DefaultLogger')
+interface Logger {
 	public function check(v:Dynamic, ?pos:PosInfos):Bool;
 	public function trace(v:Dynamic, ?pos:PosInfos):Void;
 	public 	var level				: LogLevel;
 }
-class DefaultLog {
+class DefaultLogger {
 	public static function create(listings) {
-		return new DefaultLog(listings);
+		return new DefaultLogger(listings);
 	}
 	private var listings 										: Array<LogListing>;
 	private var permissive									: Bool;
@@ -141,8 +141,8 @@ class DefaultLog {
 								.map( Arrays.first )
 								.forAll( callback(checker, pos) ));
 				}
-		trace('________________'.debug());
-		trace(listings.debug());
+		//trace('________________'.debug());
+		//trace(listings.debug());
 		var o = (listings
 						.partition(function(x:EnumValue):Bool { return (x.constructorOf() == 'Include'); })
 						.apply( 
@@ -166,19 +166,19 @@ class DefaultLog {
 											);
 								}
 						));	
-		trace( ('output : ' + Logger.format(pos) + ' ' + o).debug() );
-		trace('________________'.debug());
+		//trace( ('output : ' + Log.format(pos) + ' ' + o).debug() );
+		//trace('________________'.debug());
 		return o;
 	}
 	private function checker(pos:PosInfos, v:String):Bool {	
-		trace(v.debug());
-		trace(Logger.format(pos).debug());
+		//trace(v.debug());
+		//trace(Log.format(pos).debug());
 		var reg = new EReg(v, '');
-		var matches = reg.match( Logger.format(pos) );
+		var matches = reg.match( Log.format(pos) );
 		if (matches) {
-			trace( ('matched = ' + reg.matched(0)).debug() );
+			//trace( ('matched = ' + reg.matched(0)).debug() );
 		}
-		trace(matches.debug());
+		//trace(matches.debug());
 		return matches;
 				
 	}

@@ -9,7 +9,6 @@ import stx.reactive.Arrows;using stx.reactive.Arrows;
 import stx.Tuples; using stx.Tuples;
 import stx.Methods;using stx.Methods;
 import stx.test.Assert; using stx.test.Assert;
-import stx.io.log.Logger; using stx.io.log.Logger;
 
 #if flash
 import flash.events.Event;
@@ -77,12 +76,15 @@ class Viaz<I,O> implements Arrow<I,O>{
 		return function (cont:Method<O,Void,O->Void>) a.withInput(i, cont);
 	}
 	static public function trace<A,B>(a:Arrow<A,B>):Arrow<A,B>{
-		var m : Method<B,B,B->B> = new Method1( function(x:B):B { Std.string(x).log() ; return x;}, 'trace' ); 
+		var m : Method<B,B,B->B> = new Method1( function(x:B):B { haxe.Log.trace(x) ; return x;}, 'trace' ); 
 		return new ThenArrow( a , new FunctionArrow( m ) );
 	}
 	static public function run<I,O>(a:Arrow<I,O>,?i:I,?cont:Method<O,Void,O->Void>):Void{
 		var c = cont == null ?  new Method1(function(x){},'terminal') : cont;
 		runCPS( a , i , c );
+	}
+	static public function promise() {
+		return new PromiseArrow();
 	}
 }
 class Stack{
@@ -272,18 +274,18 @@ class FutureArrow<I> implements Arrow<Future<I>,I>{
 		);
 	}
 }
-/*class PromiseArrow<I,E> implements Arrow<Promise<I,E>,I>{
+class PromiseArrow<I,E> implements Arrow<Promise<Dynamic,I>,I>{
 	public function new() {
 		
 	}
-	public function withInput(?i : Promise<I,E>, cont : Method < I, Void, I->Void > ) : Void {
+	public function withInput(?i : Promise<Dynamic,I>, cont : Method < I, Void, I->Void > ) : Void {
 		i.foreach(
 				function(p1:I) {
 					cont.execute(p1);
 				}
 		);
 	}
-}*/
+}
 class ArrowApply {
 	
 }

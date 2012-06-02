@@ -40,7 +40,7 @@ class Dynamics {
   }
 	
 	/**
-	 * Rtturns a Thunk that applies a Thunk one time only and stores the result, after which each successive call returns the stored value.
+	 * Returns a Thunk that applies a Thunk one time only and stores the result, after which each successive call returns the stored value.
 	 * @param  	t		The Thunk to call once
 	 * @return 			A Thunk which will call the input Thunk once.
 	 */

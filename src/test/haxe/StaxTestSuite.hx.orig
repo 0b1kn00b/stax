@@ -23,7 +23,8 @@ import Prelude;
 import stx.test.Runner;
 import stx.test.ui.Report;
                    
-import stx.text.json.JsonTestCase;        
+import stx.text.json.JsonTestCase;
+import stx.io.log.LoggerTestCase;        
 import stx.ds.ArrayExtensionsTestCase;
 import stx.ds.MapTestCase;
 import stx.ds.SetTestCase;
@@ -69,6 +70,7 @@ class StaxTestSuite {
           new MapTestCase(),
           new SetTestCase(),
           new ListTestCase(),
+          new LoggerTestCase(),
           new JsonTestCase(),   
           new FoldableExtensionsTestCase(),
           new PartialFunctionTestCase(),   
@@ -98,9 +100,12 @@ class StaxTestSuite {
 					, new stx.error.ErrorTest()
 					, new stx.reactive.ArrowsTest()
 					, new stx.TupleTest()
-					, new stx.io.log.LogTest()
           #end
-        ].filter( function(x) return Std.is(x, stx.io.log.LogTest) ));
+<<<<<<< HEAD
+        ].filter( function(x) return Std.is(x, stx.reactive.ArrowsTest) ));
+=======
+        ]);// .filter( function(x) return Std.is(x, PreludeTest) ));
+>>>>>>> 556b68e78c425412d2fa2327834449ed8ea0b742
 
         Report.create(runner);
 

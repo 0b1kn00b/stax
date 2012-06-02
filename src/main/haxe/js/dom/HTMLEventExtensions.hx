@@ -18,7 +18,6 @@ package js.dom;
 import Dom;
 import js.Env;
 import Prelude;
-import PreludeExtensions;
 
 
 

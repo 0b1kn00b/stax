@@ -5,20 +5,37 @@ using Lambda;
 
 import Dom;
 import js.Env;
+import js.Dom;
 #end
 
 class HTMLParser {
   #if js
-  public static function parseIntoElements (s: String): Array<Node> {
+  public static function parseIntoElements (s: String): Array<HtmlDom> {
     var d                      = Lib.document,
-        container: HTMLElement = cast d.createElement ("div"),
-        convert_script         = function (node_as_text): Node {var r = ~/^<script ([^>]+)>/, new_script_node = d.createElement ("script");
-                                                                if (r.match (node_as_text)) ~/(\w+)=(["'])([^\1]*)\1/.customReplace (r.matched (1), function (matches) {
-                                                                                              new_script_node.setAttribute (matches.matched (1), matches.matched (3)); return "";});
-                                                                var r2 = ~/^<script[^>]*>(.*)<\/script>/, can_have_children = untyped (new_script_node.canHaveChildren);
-                                                                if (r2.match (node_as_text)) if (can_have_children == null || can_have_children) new_script_node.appendChild (d.createTextNode (r2.matched (1)));
-                                                                                             else                                                untyped (new_script_node.text = r2.matched (1));
-                                                                return new_script_node;},
+        container: HtmlDom = cast d.createElement ("div"),
+        convert_script         = 
+						function (node_as_text): HtmlDom {
+							var r = ~/^<script ([^>]+)>/, 
+							new_script_node = d.createElement ("script");
+							
+							if (r.match (node_as_text)) {
+								~/(\w+)=(["'])([^\1]*)\1/.customReplace (r.matched (1), 
+										function (matches) {
+											new_script_node.setAttribute (matches.matched (1), matches.matched (3)); return "";
+										}
+								);
+							}
+							var r2 = ~/^<script[^>]*>(.*)<\/script>/, 
+									can_have_children = untyped (new_script_node.canHaveChildren);
+										
+							if (r2.match (node_as_text)) 
+									if (can_have_children == null || can_have_children) {
+											new_script_node.appendChild (d.createTextNode (r2.matched (1)));
+									}else { 
+										untyped (new_script_node.text = r2.matched (1));
+									}
+							return new_script_node;
+						},
         parsed                 = parse (s);
 
     container.innerHTML = parsed[0];

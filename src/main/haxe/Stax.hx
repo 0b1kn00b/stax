@@ -20,6 +20,9 @@ using stx.Strings;
 using stx.ds.plus.Show;
 
 class Stax {
+	public static function here(?pos:haxe.PosInfos) {
+		return pos;
+	}
 	inline static public  function tool<A>(?order:OrderFunction<A>,?equal:EqualFunction<A>,?hash:HashFunction<A>,?show:ShowFunction<A>):CollectionTools<A>{
 		return { order : order , equal : equal , show : show , hash : hash };
 	}

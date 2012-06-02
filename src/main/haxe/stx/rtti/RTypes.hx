@@ -26,7 +26,6 @@ class RTypes {
 				}
 	}
 	public static function ancestors(v:Classdef, ?a:Array<Classdef>) {
-		var enums = new Enums();
 		var arr = (a == null) ? [] : a;
 				arr.push( v );
 		var scp = v.superClass;
@@ -34,7 +33,7 @@ class RTypes {
 		var superclass = Type.resolveClass(scp.path);
 		if ( superclass != null ) {
 			return ancestors( 
-				enums.params( typetree( cast superclass ) )[0] , arr 
+				Enums.params( typetree( cast superclass ) )[0] , arr 
 			);
 		}
 		return arr;

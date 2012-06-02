@@ -38,6 +38,7 @@ class BrowserSupport {
 
   /**
    * Determines if the browser supports "css transformation".
+	 * @return 
    */
   public static function cssTransformationSupported(): Bool {
     return testFeatureAndMemorize("cssTransformationSupported", function(v){
