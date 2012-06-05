@@ -1070,8 +1070,8 @@ class BrowserSupport {
   public static function opacity(): Bool {
     return testSupport('<div></div>', 'div', function(e) {
       var filter = untyped e.style.filter;
-
-      return filter == null;
+      untyped (e).opacity = 0.5;
+      return ( untyped(e).opacity == 0.5 || filter == null);
     });
   }
 
