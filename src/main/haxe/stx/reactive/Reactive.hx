@@ -14,7 +14,7 @@
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package stx.reactive;
-import Prelude;
+import stx.Prelude;
 import stx.Tuples;
 import stx.ds.plus.Equal;
 

@@ -7,7 +7,7 @@ package stx.ds;
 using Type;
 using Reflect;
 
-import Prelude;
+import stx.Prelude;
 using Stax;
 
 using stx.Maths;

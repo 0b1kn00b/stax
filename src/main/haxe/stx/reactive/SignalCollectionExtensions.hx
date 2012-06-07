@@ -15,7 +15,7 @@
 */
 package stx.reactive;
 
-import Prelude;
+import stx.Prelude;
 import stx.Tuples;
 import stx.reactive.Reactive;
 import stx.ds.Collection;

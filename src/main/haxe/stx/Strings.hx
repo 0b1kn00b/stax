@@ -7,7 +7,7 @@ package stx;
 using stx.Maths;
 using stx.Options;
 
-import Prelude;
+import stx.Prelude;
 
 class Strings {
   static var SepAlphaPattern        = ~/(-|_)([a-z])/g;

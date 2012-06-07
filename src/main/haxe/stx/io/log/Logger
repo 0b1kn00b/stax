@@ -16,7 +16,7 @@
 */
 package stx.io.log;
 
-import Prelude;
+import stx.Prelude;
 import haxe.PosInfos;
 
 using stx.Dynamics;

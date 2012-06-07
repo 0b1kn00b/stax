@@ -1,6 +1,6 @@
 package stx.reactive;
 
-import Prelude;
+import stx.Prelude;
 
 
 import stx.test.TestCase;

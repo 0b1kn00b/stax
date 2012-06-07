@@ -4,7 +4,7 @@ package stx;
  * ...
  * @author 0b1kn00b
  */
-import Prelude;
+import stx.Prelude;
 
 class Bools {
   public static function toInt(v: Bool): Float { return if (v) 1 else 0; }

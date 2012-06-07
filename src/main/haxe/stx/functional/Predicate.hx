@@ -16,7 +16,7 @@
 */
 package stx.functional;
 
-import Prelude;
+import stx.Prelude;
 import stx.ds.plus.Equal;
 using stx.Strings;
 

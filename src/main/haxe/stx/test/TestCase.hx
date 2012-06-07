@@ -15,7 +15,7 @@
 */
 package stx.test;
 
-import Prelude;
+import stx.Prelude;
 import stx.test.Assert;
 import stx.test.MustMatchers;
 import stx.test.MustMatcherExtensions;

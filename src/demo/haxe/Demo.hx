@@ -1,5 +1,5 @@
 
-import Prelude;
+import stx.Prelude;
 import Dom;
 import js.Env;
 import js.io.IFrameIO;

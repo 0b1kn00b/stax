@@ -19,7 +19,7 @@ package stx.functional;
 import stx.Tuples;
 using stx.Tuples;
 
-import Prelude;
+import stx.Prelude;
 import stx.functional.PartialFunction;
 
 private class PartialFunction1Impl<A, Z> implements PartialFunction1<A, Z> {

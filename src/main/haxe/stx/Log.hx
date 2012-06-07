@@ -1,6 +1,6 @@
 package stx;
 import haxe.PosInfos;
-import Prelude;
+import stx.Prelude;
 import Type;
 														using Std;
 														using Stax;

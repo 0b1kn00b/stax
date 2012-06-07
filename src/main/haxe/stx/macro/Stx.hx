@@ -1,4 +1,4 @@
-package stx.Macro;
+package stx.macro;
 
 class Stx{
 

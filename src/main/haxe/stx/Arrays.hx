@@ -24,7 +24,7 @@ import Stax;
 import stx.Tuples;
 using stx.Tuples;
 
-import Prelude; 
+import stx.Prelude; 
 
 import stx.ds.plus.Equal;
 

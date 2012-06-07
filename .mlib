@@ -1,5 +1,5 @@
 <mlib bin="bin">
 	<resources>
-		<resource type="src" path="src/main/haxe/"/>
+		<resource type="src" path="src/main/haxe"/>
 	</resources>
 </mlib>

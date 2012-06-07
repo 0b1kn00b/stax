@@ -18,7 +18,7 @@
 package stx.io.json;
 
 import stx.Tuples;							using stx.Tuples;
-import Prelude;
+import stx.Prelude;
 using Stax;
 
 

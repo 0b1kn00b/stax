@@ -25,7 +25,7 @@ using stx.ds.Set;
 
 using stx.ds.Group;
 
-import Prelude;
+import stx.Prelude;
 import stx.test.TestCase;
 import stx.functional.FoldableExtensions;
 

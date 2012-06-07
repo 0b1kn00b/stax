@@ -5,7 +5,7 @@ package stx.io.json;
  * @author 0b1kn00b
  */
 import stx.Tuples;
-import Prelude;
+import stx.Prelude;
 
 using Stax;
 

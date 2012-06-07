@@ -3,7 +3,7 @@ package stx.reactive;
 /**
  * Used with permission of Sledorze.
  */
-import Prelude;
+import stx.Prelude;
 import stx.Options;using stx.Options;
 import stx.reactive.Arrows;using stx.reactive.Arrows;
 import stx.Tuples; using stx.Tuples;

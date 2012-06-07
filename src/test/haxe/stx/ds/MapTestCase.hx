@@ -17,7 +17,7 @@
 package stx.ds;
 
 import stx.Tuples;
-import Prelude;
+import stx.Prelude;
 
 import stx.functional.Foldable;
 import stx.test.TestCase;

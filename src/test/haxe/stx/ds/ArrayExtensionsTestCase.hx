@@ -16,7 +16,7 @@
 */
 package stx.ds;
 
-import Prelude;
+import stx.Prelude;
 using stx.ds.plus.Show;
 
 import stx.test.TestCase;

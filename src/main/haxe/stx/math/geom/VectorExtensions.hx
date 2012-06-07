@@ -15,7 +15,7 @@
 */
 package stx.math.geom;
 
-import Prelude;									
+import stx.Prelude;									
 																		using Stax;
 																		using stx.Iterables;
 																		using stx.Maths;

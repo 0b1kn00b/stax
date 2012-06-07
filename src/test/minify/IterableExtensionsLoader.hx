@@ -8,7 +8,7 @@ package ;
 import stx.Iterables;
 //import stx.Arrays;
 //import stx.ds.Map;
-/* import Prelude;
+/* import stx.Prelude;
 
 import stx.Tuples;
 using stx.Tuples;

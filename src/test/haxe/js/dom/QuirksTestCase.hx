@@ -1,12 +1,12 @@
 
 package js.dom;
 
-import Dom;
-import js.Env;
-import js.dom.Quirks;
+import stx.js.Dom;
+import stx.js.Env;
+import stx.js.dom.Quirks;
 
 import stx.test.TestCase;
-using js.dom.Quirks;
+using stx.js.dom.Quirks;
 
 using stx.Options;
 

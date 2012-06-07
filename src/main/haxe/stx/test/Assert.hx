@@ -15,7 +15,7 @@
 */
 package stx.test;
 
-import Prelude;
+import stx.Prelude;
 import stx.Future;
 
 import stx.ds.plus.Equal;

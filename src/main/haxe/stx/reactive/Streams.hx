@@ -15,7 +15,7 @@
 */
 package stx.reactive;
 
-import Prelude;
+import stx.Prelude;
 using Stax;
 
 import stx.reactive.Reactive;

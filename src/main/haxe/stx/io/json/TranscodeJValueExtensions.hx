@@ -25,7 +25,7 @@ import stx.ds.plus.Hasher;
 
 using stx.Dynamics;
 
-import Prelude;
+import stx.Prelude;
 using Stax;
 import stx.Arrays;
 import stx.ds.Map;

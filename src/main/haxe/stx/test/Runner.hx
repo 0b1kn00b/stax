@@ -22,7 +22,7 @@ using stx.Options;
 
 using stx.Functions;
 
-import Prelude;
+import stx.Prelude;
 using Stax;
 
 using stx.functional.PredicateExtensions;

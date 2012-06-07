@@ -17,7 +17,7 @@
 package stx.framework;
 
 import stx.Tuples;
-import Prelude;
+import stx.Prelude;
 using Stax;
 
 import haxe.PosInfos;

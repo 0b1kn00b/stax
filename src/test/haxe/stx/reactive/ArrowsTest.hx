@@ -7,7 +7,7 @@ package stx.reactive;
 import haxe.Timer;
 
 import stx.Tuples;										using stx.Tuples;
-import Prelude;
+import stx.Prelude;
 
 import stx.test.TestCase;
 import stx.test.Assert;							using stx.test.Assert;

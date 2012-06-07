@@ -17,20 +17,20 @@
 
 package js.dom;
 
-import Dom;
+import stx.js.Dom;
 import stx.Tuples;
-import js.Env;
-import js.dom.Quirks;
-import js.dom.HTMLElementExtensions;
-import Prelude;
-using  js.dom.HTMLElementExtensions;
-using  js.dom.HTMLDocumentExtensions;
+import stx.js.Env;
+import stx.js.dom.Quirks;
+import stx.js.dom.HTMLElementExtensions;
+import stx.Prelude;
+using  stx.js.dom.HTMLElementExtensions;
+using  stx.js.dom.HTMLDocumentExtensions;
 
 
 import stx.test.TestCase;
 
 class HTMLDocumentExtensionsTestCase extends TestCase {
-    var _doc:           Dom.HTMLDocument;
+    var _doc:           HTMLDocument;
     var _testElements:  HTMLElement;
 
     public function new():Void {

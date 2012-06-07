@@ -16,7 +16,7 @@
 */
 package stx.io.json;
 
-import Prelude;
+import stx.Prelude;
 
 typedef ExtractorFunction<I, O>  = Function<I, O>;
 typedef DecomposerFunction<I, O> = Function<I, O>;

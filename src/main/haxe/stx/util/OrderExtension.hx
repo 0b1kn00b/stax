@@ -15,7 +15,7 @@
 */
 package stx.util; 
 
-import Prelude;
+import stx.Prelude;
 
 class OrderExtension
 {

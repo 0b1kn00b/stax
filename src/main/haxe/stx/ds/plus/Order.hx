@@ -10,7 +10,7 @@ import Stax;						using Stax;
 import stx.Tuples;			using stx.Tuples;
 import stx.Maths;
 
-import Prelude;
+import stx.Prelude;
 												using stx.ds.plus.Order;
 
 class Order {

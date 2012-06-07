@@ -20,7 +20,7 @@ package stx.ds;
 using Stax;
 
 import stx.Tuples;
-import Prelude;
+import stx.Prelude;
 
 
 import stx.functional.Foldable;

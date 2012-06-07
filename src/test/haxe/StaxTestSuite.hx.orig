@@ -18,7 +18,7 @@ import PreludeTest;
 																																using Stax;
 import stx.functional.FoldableExtensionsTestCase;
 
-import Prelude;
+import stx.Prelude;
 
 import stx.test.Runner;
 import stx.test.ui.Report;

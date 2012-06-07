@@ -1,5 +1,5 @@
 /*
- HaXe library written by John A. De Goes <john@socialmedia.com>
+ HaXe library written by Paul M. De Goes <paul@socialmedia.com> and John A. De Goes <john@socialmedia.com>
 
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:
@@ -13,18 +13,32 @@
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package js.dom;
+package stx.js.dom;
 
-import Dom;
+import stx.js.Dom;
+import stx.js.Env;
+import stx.Prelude;
 
-class DomCollectionExtensions {
-  public static function toArray<T>(c: DomCollection<T>): Array<T> {
-    var a: Array<T> = [];
-    
-    for (i in 0...c.length) {
-      a.push(c[i]);
+
+
+class HTMLEventExtensions {
+  public static function cancelBubbling(e: EventListener<Dynamic>): Void {
+    var cancelBubble = untyped e.cancelBubble;
+    if (cancelBubble != null) {
+      untyped e.cancelBubble = true;
     }
-    
-    return a;
+    else {
+      untyped e.stopPropagation();
+    }
+  }
+  
+  public static function getRelatedTarget(event: EventListener<Dynamic>): HTMLElement {
+    var ms: HTMLElement  = untyped event.toElement;
+    var net: HTMLElement = untyped event.relatedTarget;
+    return if (ms != null) { 
+      ms; 
+    } else if (net != null) {
+      net;
+    } else null;
   }
 }

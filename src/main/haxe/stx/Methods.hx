@@ -7,7 +7,7 @@ package stx;
 import stx.error.OutOfBoundsError;
 import stx.error.AbstractMethodError;
 
-import Prelude;
+import stx.Prelude;
 import stx.Tuples; 											using stx.Tuples;
 
 import haxe.PosInfos;

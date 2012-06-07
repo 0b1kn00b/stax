@@ -1,6 +1,6 @@
-package js;
+package stx.js;
   
-import Dom;
+import stx.js.Dom;
 
 class Env {
   /** Top level objects */

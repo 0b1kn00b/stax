@@ -15,7 +15,7 @@
 */
 package stx.math.geom;
 
-import Prelude;
+import stx.Prelude;
 import stx.Tuples;
 using stx.Tuples;
 

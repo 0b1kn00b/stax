@@ -14,6 +14,7 @@
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+package stx;
 import Type;
 
 enum Unit {
@@ -36,7 +37,6 @@ typedef Function9<P1, P2, P3, P4, P5, P6, P7, P8, P9, R> = P1 -> P2 -> P3 -> P4 
 typedef Function10<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, R> = P1 -> P2 -> P3 -> P4 -> P5 -> P6 -> P7 -> P8 -> P9 -> P10 -> R
 
 typedef Reducer<T> = T -> T -> T
-//typedef StateMonad<S,T> = S -> Tuple2<T,S>
 typedef Factory<T> = Void -> T
 
 /**
@@ -59,11 +59,11 @@ enum TraversalOrder {
 	PostOrder;
 	LevelOrder;
 }
-typedef Tree<T> = {
+/*typedef Tree<T> = {
 	data 	: T,
 	left 	: Tree<T>,
 	right	: Tree<T>,
-}
+}*/
 /** Either represents a type that is either a "left" value or a "right" value,
  * but not both. Either is often used to represent success/failure, where the
  * left side represents failure, and the right side represents success.

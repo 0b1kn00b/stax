@@ -15,7 +15,7 @@
 */
 package stx;
 
-import Prelude;
+import stx.Prelude;
 
 import stx.test.TestCase;
 import stx.Objects;                   using stx.Options;

@@ -16,7 +16,7 @@
 */
 package stx.io.json;
 
-import Prelude;
+import stx.Prelude;
 import stx.Tuples;
 
 import stx.ds.plus.Equal;

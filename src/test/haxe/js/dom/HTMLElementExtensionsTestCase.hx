@@ -17,16 +17,16 @@
 
 package js.dom;
 
-import Dom;
-import js.Env;
-import js.dom.Quirks;
-import js.dom.HTMLElementExtensions;
-using  js.dom.HTMLElementExtensions;
+import stx.js.Dom;
+import stx.js.Env;
+import stx.js.dom.Quirks;
+import stx.js.dom.HTMLElementExtensions;
+using  stx.js.dom.HTMLElementExtensions;
 
 import stx.test.TestCase;
 
 class HTMLElementExtensionsTestCase extends TestCase {
-    var _doc: Dom.HTMLDocument;
+    var _doc: HTMLDocument;
 
     public function new():Void {
         super();

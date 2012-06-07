@@ -6,14 +6,14 @@ package ;
  */
 
 import stx.Tuples;
-import Prelude;
+import stx.Prelude;
 
 import Type;
 
 import stx.Maths;
 import stx.ds.plus.Show;
 
-using Prelude;
+using stx.Prelude;
 using Stax;
 using stx.Options;
 using stx.Strings;

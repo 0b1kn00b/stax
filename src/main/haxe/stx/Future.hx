@@ -7,7 +7,7 @@ package stx;
 
 import stx.Tuples;
 import stx.error.Error;						using stx.error.Error;						
-import Prelude;											using Prelude;
+import stx.Prelude;											using stx.Prelude;
 																		using Stax;
 																		using stx.Options;
 																		using stx.Dynamics;

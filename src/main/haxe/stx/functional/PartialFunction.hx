@@ -16,7 +16,7 @@
 */
 package stx.functional;
 
-import Prelude;
+import stx.Prelude;
 
 typedef PartialFunction<A, Z> = PartialFunction1<A, Z>
 

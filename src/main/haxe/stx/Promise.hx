@@ -4,7 +4,7 @@ package stx;
  * ...
  * @author 0b1kn00b
  */
-import Prelude;
+import stx.Prelude;
 																	using Stax;
 import stx.Future;								using stx.Future;								
 																	using stx.Functions;

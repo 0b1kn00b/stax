@@ -16,7 +16,7 @@
 */
 package stx.time;
 
-import Prelude;
+import stx.Prelude;
 import stx.test.Assert;
 import stx.test.TestCase;
 import stx.time.ScheduledExecutor;

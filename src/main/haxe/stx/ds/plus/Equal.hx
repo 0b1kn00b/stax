@@ -8,7 +8,7 @@ package stx.ds.plus;
 import Stax;											using Stax;
 import stx.Tuples;								using stx.Tuples;
 
-import Prelude;
+import stx.Prelude;
 import Type;
 
 import stx.Maths;

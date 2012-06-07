@@ -15,7 +15,7 @@
 */
 package stx.math.tween;
 
-import Prelude;
+import stx.Prelude;
 import stx.ds.Set;
 using stx.ds.Set;
 

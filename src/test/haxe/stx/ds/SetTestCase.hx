@@ -16,7 +16,7 @@
 */
 package stx.ds;
 
-import Prelude;
+import stx.Prelude;
 
 import stx.functional.Foldable;
 import stx.test.TestCase;

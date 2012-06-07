@@ -15,7 +15,7 @@
 */
 package stx.test.mock;
 
-import Prelude;
+import stx.Prelude;
 
 import stx.test.TestCase;
 import stx.test.mock.Mock;

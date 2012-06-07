@@ -15,7 +15,7 @@
 */
 package stx.io.http;
 
-import Prelude;
+import stx.Prelude;
 import stx.Future;
 import stx.io.http.Http;
 import stx.net.Url;
@@ -25,9 +25,9 @@ import stx.Options;
 using stx.Options;
 
 #if js
-import Dom;
-import js.Env;
-import js.dom.Quirks;
+import stx.js.Dom;
+import stx.js.Env;
+import stx.js.dom.Quirks;
 #end
 
 

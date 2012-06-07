@@ -15,7 +15,7 @@
 */
 package stx.io.http;
 
-import Prelude;
+import stx.Prelude;
 import stx.Future;
 import stx.ds.Map;
 import stx.net.Url;

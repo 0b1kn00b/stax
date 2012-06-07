@@ -15,7 +15,7 @@
 */
 package stx.net;
 
-import Prelude;
+import stx.Prelude;
 
 import stx.test.TestCase;
 

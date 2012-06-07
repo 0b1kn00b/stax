@@ -1,17 +1,17 @@
-package js.text.html;
+package stx.js.text.html;
 
 #if js
 using Lambda;
 
-import Dom;
-import js.Env;
+import stx.js.Dom;
+import stx.js.Env;
 import js.Dom;
 #end
 
 class HTMLParser {
   #if js
   public static function parseIntoElements (s: String): Array<HtmlDom> {
-    var d                      = Lib.document,
+    var d                      = js.Lib.document,
         container: HtmlDom = cast d.createElement ("div"),
         convert_script         = 
 						function (node_as_text): HtmlDom {

@@ -15,16 +15,16 @@
 */
 package js.io;
 
-import Dom;
-import Prelude;
+import stx.js.Dom;
+import stx.Prelude;
 import stx.test.Assert;
 import stx.test.TestCase;
-import js.Env;
-import js.dom.Quirks;
-import js.io.IFrameIO;
+import stx.js.Env;
+import stx.js.dom.Quirks;
+import stx.js.io.IFrameIO;
 using stx.Log;
 
-using js.dom.HTMLDocumentExtensions;
+using stx.js.dom.HTMLDocumentExtensions;
 
 class IFrameIOTestCase extends TestCase {
   var window1: Window;

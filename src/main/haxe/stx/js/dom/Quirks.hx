@@ -13,15 +13,15 @@
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package js.dom;
+package stx.js.dom;
 
-import Prelude;
+import stx.Prelude;
 using Stax;
 
 
-import Dom;
-import js.Env;
-import js.detect.BrowserSupport;
+import stx.js.Dom;
+import stx.js.Env;
+import stx.js.detect.BrowserSupport;
 import stx.functional.Predicate;
 import stx.ds.Map;
 using stx.Arrays;
@@ -37,7 +37,7 @@ using stx.Maths;
 import stx.Dynamics;
 
 using stx.Log;
-using js.dom.DomExtensions;
+using stx.js.dom.DomExtensions;
 using stx.Strings;
 using stx.Objects;
 

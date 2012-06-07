@@ -16,7 +16,7 @@
 
 package stx;
 
-import Prelude;
+import stx.Prelude;
 
 import Stax;										using Stax;
 import stx.Tuples;							using stx.Tuples;

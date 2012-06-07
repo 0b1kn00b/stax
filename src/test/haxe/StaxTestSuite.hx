@@ -18,7 +18,7 @@ import PreludeTest;
 																																using Stax;
 import stx.functional.FoldableExtensionsTestCase;
 
-import Prelude;
+import stx.Prelude;
 
 import stx.test.Runner;
 import stx.test.ui.Report;
@@ -59,8 +59,8 @@ import js.io.IFrameIOTestCase;
 import stx.io.http.HttpJValueJsonpTestCase;
 
 using stx.Functions;
-import Dom;
-import js.Env;
+import stx.js.Dom;
+import stx.js.Env;
 #end
 
 class StaxTestSuite {

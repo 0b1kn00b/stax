@@ -16,7 +16,7 @@
 */
 package stx.math.geom;
 
-import Prelude;
+import stx.Prelude;
 import stx.test.TestCase;
 import stx.test.Assert;
 import stx.math.geom.Point;

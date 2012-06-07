@@ -16,7 +16,7 @@
 */
 package stx.io.json;
 
-import Prelude;
+import stx.Prelude;
 using Stax;
 
 import stx.io.json.JValue;

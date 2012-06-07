@@ -21,7 +21,7 @@
  */
 package stx.io.json;
 
-import Prelude;
+import stx.Prelude;
 
 import stx.io.json.Transcode;
 import stx.io.json.JValue;

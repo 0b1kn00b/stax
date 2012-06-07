@@ -3,7 +3,7 @@ package stx.reactive;
 using Stax;
 
 import stx.Tuples;
-import Prelude;
+import stx.Prelude;
 import stx.test.TestCase;
 import stx.reactive.Reactive;
 import stx.ds.List;

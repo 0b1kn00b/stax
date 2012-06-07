@@ -16,7 +16,7 @@
 */
 package stx.io.http;
 
-import Prelude;
+import stx.Prelude;
 import stx.test.TestCase;
 import stx.test.Assert;
 import stx.io.http.Http;

@@ -17,7 +17,7 @@
 
 package stx.text;
 
-import Prelude;
+import stx.Prelude;
 												using stx.Maths;
 
 typedef Parser<A, B> = Function<A, Either<B, A>>

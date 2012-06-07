@@ -16,7 +16,7 @@
 */
 package stx.ds;
 
-import Prelude;
+import stx.Prelude;
 using Stax;
 
 import stx.functional.Foldable;

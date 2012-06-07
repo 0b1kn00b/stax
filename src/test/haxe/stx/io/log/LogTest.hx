@@ -85,7 +85,7 @@ class LogTest extends TestCase{
 		var dl = new DefaultLogger();
 		dl.check('boop', Stax.here()).isTrue();
 	}
-	public function testLogLevel() {
+	/*public function testLogLevel() {
 		Injector.enter(
 				function(config) {
 						config.bindF( 
@@ -102,9 +102,9 @@ class LogTest extends TestCase{
 								
 								
 								trace( 'dooby'.error() );
-								trace( 'woozan' );*/
+								trace( 'woozan' );
 				}
-		);
+		);*/
 		
 	}
 }

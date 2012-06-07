@@ -17,7 +17,7 @@
 package stx.test.mock;
 
 import stx.test.TestCase;
-import Prelude;
+import stx.Prelude;
 import stx.ds.Map;
 import stx.ds.List;
 

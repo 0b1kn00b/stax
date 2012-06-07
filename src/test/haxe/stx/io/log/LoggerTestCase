@@ -16,7 +16,7 @@
 */
 package stx.io.log;
 
-import Prelude;
+import stx.Prelude;
 import stx.test.TestCase;
 import stx.io.log.Logger;
 

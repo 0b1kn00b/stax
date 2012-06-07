@@ -13,12 +13,12 @@
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package js.detect;
+package stx.js.detect;
 
-import Dom;
-import Prelude;
-import js.Env;
-import js.dom.Quirks;
+import stx.js.Dom;
+import stx.Prelude;
+import stx.js.Env;
+import stx.js.dom.Quirks;
 import stx.ds.Map;
 
 using stx.Options;
@@ -27,7 +27,7 @@ using stx.Arrays;
 using stx.Dynamics;
 using stx.Strings;
 
-using js.dom.DomExtensions;
+using stx.js.dom.DomExtensions;
 using stx.Objects;
 
 

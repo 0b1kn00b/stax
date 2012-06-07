@@ -4,7 +4,7 @@ package stx;
  * ...
  * @author 0b1kn00b
  */
-import Prelude;
+import stx.Prelude;
 using stx.Options;
 using stx.Eithers;
 using stx.Dynamics;
