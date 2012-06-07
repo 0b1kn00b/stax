@@ -119,7 +119,7 @@ interface IFrameIO {
   public function request(request: Dynamic, targetUrl: String, targetWindow: Window): Future<Dynamic>;
 }
 
-private class AbstractIFrameIO implements IFrameIO {
+class AbstractIFrameIO implements IFrameIO {
   var requestCounter: Int;
   
   public function new() {
@@ -573,7 +573,7 @@ class IFrameIOPollingHashtag extends AbstractIFrameIO, implements IFrameIO {
   }
 }
 
-private class MessageKey {  
+class MessageKey {  
   public var messageId     (default, null): Int;
   public var from          (default, null): String;
   public var to            (default, null): String;

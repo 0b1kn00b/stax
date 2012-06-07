@@ -10851,11 +10851,6 @@
 		<LevelOrder/>
 		<InOrder/>
 	</enum>
-	<typedef path="stx.Tree" params="T" file="src/main/haxe/stx/Prelude.hx" module="stx.Prelude"><a>
-	<right><t path="stx.Tree"><c path="stx.Tree.T"/></t></right>
-	<left><t path="stx.Tree"><c path="stx.Tree.T"/></t></left>
-	<data><c path="stx.Tree.T"/></data>
-</a></typedef>
 	<enum path="stx.Either" params="A:B" file="src/main/haxe/stx/Prelude.hx" module="stx.Prelude">
 		<Right a="v"><c path="stx.Either.B"/></Right>
 		<Left a="v"><c path="stx.Either.A"/></Left>
@@ -10893,9 +10888,9 @@
 	<equal><t path="Null"><t path="stx.EqualFunction"><c path="stx.CollectionTools.T"/></t></t></equal>
 </a></typedef>
 	<class path="stx.FieldOrder" params="" file="src/main/haxe/stx/Prelude.hx" module="stx.Prelude">
-		<Ascending public="1" get="inline" set="null" line="90" static="1"><c path="Int"/></Ascending>
-		<Descending public="1" get="inline" set="null" line="91" static="1"><c path="Int"/></Descending>
-		<Ignore public="1" get="inline" set="null" line="92" static="1"><c path="Int"/></Ignore>
+		<Ascending public="1" get="inline" set="null" line="89" static="1"><c path="Int"/></Ascending>
+		<Descending public="1" get="inline" set="null" line="90" static="1"><c path="Int"/></Descending>
+		<Ignore public="1" get="inline" set="null" line="91" static="1"><c path="Int"/></Ignore>
 	</class>
 	<class path="stx.Promise" params="A:B" file="src/main/haxe/stx/Promise.hx">
 		<count public="1" line="20" static="1"><c path="Int"/></count>
@@ -42637,7 +42632,7 @@
  * different domains.
  </haxe_doc>
 	</class>
-	<class path="stx.js.io._IFrameIO.AbstractIFrameIO" params="" file="src/main/haxe/stx/js/io/IFrameIO.hx" private="1" module="stx.js.io.IFrameIO">
+	<class path="stx.js.io.AbstractIFrameIO" params="" file="src/main/haxe/stx/js/io/IFrameIO.hx" module="stx.js.io.IFrameIO">
 		<implements path="stx.js.io.IFrameIO"/>
 		<requestCounter><c path="Int"/></requestCounter>
 		<receive public="1" set="method" line="129"><f a="f:originUrl:?originWindow">
@@ -42730,7 +42725,7 @@
 </f></new>
 	</class>
 	<class path="stx.js.io.IFrameIOPostMessage" params="" file="src/main/haxe/stx/js/io/IFrameIO.hx" module="stx.js.io.IFrameIO">
-		<extends path="stx.js.io._IFrameIO.AbstractIFrameIO"/>
+		<extends path="stx.js.io.AbstractIFrameIO"/>
 		<implements path="stx.js.io.IFrameIO"/>
 		<normalizeOpt set="method" line="271" static="1"><f a="url">
 	<t path="stx.net.Url"/>
@@ -42776,7 +42771,7 @@
 </f></new>
 	</class>
 	<class path="stx.js.io.IFrameIOPollingHashtag" params="" file="src/main/haxe/stx/js/io/IFrameIO.hx" module="stx.js.io.IFrameIO">
-		<extends path="stx.js.io._IFrameIO.AbstractIFrameIO"/>
+		<extends path="stx.js.io.AbstractIFrameIO"/>
 		<implements path="stx.js.io.IFrameIO"/>
 		<lastMessageId line="303" static="1"><c path="Int"/></lastMessageId>
 		<newFragmentsList line="304" static="1"><t path="stx.Factory"><c path="stx.ds.List"><c path="stx.Tuple2">
@@ -42798,7 +42793,7 @@
 		<from><c path="String"/></from>
 		<fragmentCount><c path="String"/></fragmentCount>
 	</a>
-	<c path="stx.js.io._IFrameIO.MessageKey"/>
+	<c path="stx.js.io.MessageKey"/>
 </f></messageKeyFrom>
 		<executor><c path="stx.time.ScheduledExecutor"/></executor>
 		<fragmentsToSend><c path="stx.ds.List"><c path="stx.Tuple2">
@@ -42806,7 +42801,7 @@
 	<t path="stx.js.io._IFrameIO.AddressableFragment"/>
 </c></c></fragmentsToSend>
 		<fragmentsReceived><c path="stx.ds.Map">
-	<c path="stx.js.io._IFrameIO.MessageKey"/>
+	<c path="stx.js.io.MessageKey"/>
 	<c path="Array"><t path="stx.js.io._IFrameIO.FragmentDelivery"/></c>
 </c></fragmentsReceived>
 		<receivers><c path="Hash"><c path="Array"><f a="">
@@ -42853,13 +42848,13 @@
 	<c path="String"/>
 </f></extractDomain>
 		<analyzeReceivedFragments set="method" line="488"><f a="messageKey:fragments">
-	<c path="stx.js.io._IFrameIO.MessageKey"/>
+	<c path="stx.js.io.MessageKey"/>
 	<c path="Array"><t path="stx.js.io._IFrameIO.FragmentDelivery"/></c>
 	<e path="Void"/>
 </f></analyzeReceivedFragments>
 		<findMissingFragments set="method" line="507"><f a=""><c path="stx.ds.List"><t path="stx.js.io._IFrameIO.AddressableFragment"/></c></f></findMissingFragments>
 		<fragmentsReceivedFor set="method" line="539"><f a="messageKey">
-	<c path="stx.js.io._IFrameIO.MessageKey"/>
+	<c path="stx.js.io.MessageKey"/>
 	<c path="Array"><t path="stx.js.io._IFrameIO.FragmentDelivery"/></c>
 </f></fragmentsReceivedFor>
 		<startSender set="method" line="551"><f a=""><e path="Void"/></f></startSender>
@@ -42871,14 +42866,14 @@
 	<e path="Void"/>
 </f></new>
 	</class>
-	<class path="stx.js.io._IFrameIO.MessageKey" params="" file="src/main/haxe/stx/js/io/IFrameIO.hx" private="1" module="stx.js.io.IFrameIO">
+	<class path="stx.js.io.MessageKey" params="" file="src/main/haxe/stx/js/io/IFrameIO.hx" module="stx.js.io.IFrameIO">
 		<messageId public="1" set="null"><c path="Int"/></messageId>
 		<from public="1" set="null"><c path="String"/></from>
 		<to public="1" set="null"><c path="String"/></to>
 		<fragmentCount public="1" set="null"><c path="Int"/></fragmentCount>
 		<hashCode public="1" set="method" line="589"><f a=""><c path="Int"/></f></hashCode>
 		<equals public="1" set="method" line="595"><f a="other">
-	<c path="stx.js.io._IFrameIO.MessageKey"/>
+	<c path="stx.js.io.MessageKey"/>
 	<e path="Bool"/>
 </f></equals>
 		<new public="1" set="method" line="582"><f a="messageId:from:to:fragmentCount">
