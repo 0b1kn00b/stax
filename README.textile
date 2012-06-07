@@ -16,22 +16,22 @@ Stax makes heavy use of haxes 'using' instruction to allow method chaining.
 
 <pre><code>using Stax//imports some essential functions
 class Test{
-	public function main(){
-		var str = ['hello','world']
-			.map(
-				function(str){ 
-					var first_letter 	= str.substr(0,1).toUpperCase();
-					var rest 					= str.substr(1);
-					return first_letter + rest;
-				}
-			).foldl(
-				''
-				function(init,str){
-					return init + ' ' + str;
-				}
-			);
-		trace( str );
-	}
+ public function main(){
+  var str = ['hello','world']
+   .map(
+    function(str){ 
+     var first_letter 	= str.substr(0,1).toUpperCase();
+     var rest 					= str.substr(1);
+     return first_letter + rest;
+    }
+   ).foldl(
+     '',
+     function(init,str){
+      return init + ' ' + str;
+     }
+   );
+   trace( str );
+ }
 }</code></pre>
 
 In addition you can find:
