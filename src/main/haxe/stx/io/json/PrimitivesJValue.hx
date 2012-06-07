@@ -1,4 +1,4 @@
-package stx.data.transcode;
+package stx.io.json;
 
 /**
  * ...
@@ -6,9 +6,9 @@ package stx.data.transcode;
  */
 using Stax;
 
-import stx.data.transcode.TranscodeJValue;
-import stx.data.transcode.TranscodeJValueExtensions;
-import stx.text.json.JValue;
+import stx.io.json.TranscodeJValue;
+import stx.io.json.TranscodeJValueExtensions;
+import stx.io.json.JValue;
 
 using stx.ds.plus.Show;
 
@@ -27,13 +27,13 @@ class StringJValue {
 	public static function decompose(v: String): JValue {
     return JString(v);
   }
-  public static function extract(c: Class<String>, v: JValue): String {
-    return switch(v) {
+  public static function extract(c: Class<String>, val: JValue): String {
+    return switch(val) {
       case JNumber(v): v.toString();
       case JBool(v): v.toString();
       case JString(v): v;
 
-      default: Stax.error("Expected String but found: " + v);
+      default: Stax.error("Expected String but found: " + val);
     }
   }
 }

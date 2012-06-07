@@ -1,6 +1,5 @@
 /*
- HaXe JSON library written by Spencer Tipping <spencer@socialmedia.com>
- Contributed by Social Media Networks
+ HaXe library written by John A. De Goes <john@socialmedia.com>
 
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:
@@ -14,15 +13,39 @@
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+package stx;
 
-package stx.text.json;
+import Prelude;
 
-enum JValue {
-  JNull;
-  JBool(v: Bool);
-  JNumber(v: Float);
-  JString(v: String);
-  JArray(v: Array<JValue>);
-  JObject(v: Array<JValue>);
-  JField(k: String, v: JValue);
+import stx.test.TestCase;
+import stx.Objects;                   using stx.Options;
+
+using stx.Objects;
+
+class ObjectExtensionsTestCase extends TestCase {
+  public function new() {
+    super();
+  }
+  
+  public function testGet() {
+    var o = { foo: "bar" };
+    
+    assertEquals("bar", o.getAny("foo").get());
+  }
+  
+  public function testSet() {
+    var o = { foo: "bar" };
+    
+    assertEquals("baz", o.setAny("foo", "baz").getAny("foo").get());
+  }
+  
+  public function testReplaceAll() {
+    var o = { foo: "bar", bar: "foo" };
+    
+    var replaced = o.replaceAllAny({foo: "foo"}, '');
+    
+    assertEquals("bar", replaced.getAny("foo").get());
+    
+    assertTrue(replaced.getAny("bar").isEmpty());
+  }
 }

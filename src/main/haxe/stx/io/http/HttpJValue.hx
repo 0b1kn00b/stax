@@ -21,8 +21,8 @@ import stx.io.http.HttpString;
 import stx.io.http.HttpTransformer;
 import stx.net.Url;
 import stx.net.HttpResponseCode;
-import stx.text.json.JValue;
-import stx.text.json.Json;
+import stx.io.json.JValue;
+import stx.io.json.Json;
 import stx.ds.Map;
 
 import stx.Future;
@@ -69,7 +69,6 @@ class HttpJValueJsonp implements HttpJValue {
   
   public function get(url_: Url, ?params_: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<JValue>> {
     // Ignore headers or throw exception???
-    
     var future: Future<HttpResponse<JValue>> = new Future();
     
     // Request id must be globally unique even if this source is included twice

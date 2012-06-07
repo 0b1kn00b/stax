@@ -14,7 +14,7 @@
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package stx.data.transcode;
+package stx.io.json;
 
 import Type;
 import stx.Tuples;
@@ -29,18 +29,18 @@ import Prelude;
 using Stax;
 import stx.Arrays;
 import stx.ds.Map;
-import stx.data.transcode.Transcode;
-import stx.data.transcode.TranscodeJValue;
+import stx.io.json.Transcode;
+import stx.io.json.TranscodeJValue;
 
-import stx.text.json.JValue;
-import stx.text.json.PrimitivesJValue;
-import stx.text.json.CollectionsJValue;
-import stx.text.json.JValueExtensions;
+import stx.io.json.JValue;
+import stx.io.json.PrimitivesJValue;
+import stx.io.json.CollectionsJValue;
+import stx.io.json.JValueExtensions;
 
 
-using stx.data.transcode.TranscodeJValueExtensions;
+using stx.io.json.TranscodeJValueExtensions;
 using stx.functional.FoldableExtensions;
-using stx.text.json.JValueExtensions;
+using stx.io.json.JValueExtensions;
 
 class ExtractorHelpers {
     public static function extractFieldValue<T>(j: JValue, n: String, e: JExtractorFunction<T>, def: JValue) {
@@ -140,7 +140,7 @@ class TranscodeJValue{
       case TEnum(e):
          switch (Type.getEnumName(e)){
            case "Option": _createDecomposeImpl(OptionJValue.decompose);
-           case "stx.text.json.JValue" : _createDecomposeImpl(JValueExtensions.decompose);
+           case "stx.io.json.JValue" : _createDecomposeImpl(JValueExtensions.decompose);
            default: _createDecomposeImpl(function(v) {
              var name        = StringJValue.decompose(Type.getEnumName(e));
              var constructor = StringJValue.decompose(Type.enumConstructor(v));
@@ -202,7 +202,7 @@ class TranscodeJValue{
       case TEnum(e)					:
          switch (Type.getEnumName(e)){
            case "Option": _createExtractorImpl(function(v){return OptionJValue.extract(Option, v, args[0]);});
-           case "stx.text.json.JValue" : _createExtractorImpl(function(v){return JValueExtensions.extract(JValue, v);});
+           case "stx.io.json.JValue" : _createExtractorImpl(function(v){return JValueExtensions.extract(JValue, v);});
            default: _createExtractorImpl(function(v){
               switch(v){
                 case JArray(arr): {

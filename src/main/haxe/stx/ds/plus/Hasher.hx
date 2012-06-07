@@ -9,6 +9,8 @@ import Stax;
 using Stax;
 
 import Type;
+using stx.Strings;
+
 import stx.ds.plus.Show;
 import stx.Tuples;										using stx.Tuples;
 using stx.ds.plus.Hasher;
@@ -45,6 +47,8 @@ class Hasher {
           _createHashImpl(DateHasher.hashCode);
         case "Array":
           _createHashImpl(ArrayHasher.hashCode);
+        case "stx.Tuple2" , "stx.Tuple3" , "stx.Tuple4" , "stx.Tuple5" :
+          _createHashImpl(ProductHasher.hashCode);
         default:
           var fields = Type.getInstanceFields(c);
           if(Meta._hasMetaDataClass(c)) {       
@@ -127,6 +131,18 @@ class BoolHasher {
 @:todo('0b1kn00b','Cache hashers')
 class ProductHasher {
 	static public function getHash(p:Product, i : Int) {
-    Hasher.getHashFor(p.element(i));
+    return Hasher.getHashFor(p.element(i));
+  }
+  static var _baseHashes = [
+    [786433, 24593],
+    [196613, 3079, 389],
+    [1543, 49157, 196613, 97],
+    [12289, 769, 393241, 193, 53]
+  ];
+  public static function hashCode(p:Product) : Int {
+    var h = 0;
+    for(i in 0...p.length)
+      h += _baseHashes[p.length-2][i] * getHash(p,i)(p.element(i));
+    return h;
   }
 }

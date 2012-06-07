@@ -58,6 +58,8 @@ class Order {
         _createOrderImpl(Dates.compare);
       case "Array":
         _createOrderImpl(ArrayOrder.compare);
+      case "stx.Tuple2" , "stx.Tuple3" , "stx.Tuple4" , "stx.Tuple5" :
+          _createOrderImpl(ProductOrder.compare);
       default:
         if(Meta._hasMetaDataClass(c)) {
           var i = 0;
@@ -142,7 +144,7 @@ class ProductOrder {
     return Order.getOrderFor(p.element(i));
   }
 	static public function compare(one:Product, other:Product): Int {
-    for (i in 1...one.arity()+1) {
+    for (i in 0...one.length) {
       var c = getOrder(one, i)(one.element(i), other.element(i));
       if(c != 0)
         return c;

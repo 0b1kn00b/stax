@@ -404,4 +404,9 @@ class Iterables {
 		}	
 		return Stax.unfold( root , unfolder );	
 	}
+  public static function yield<A>(fn : Void -> Option<A>):Iterable<A>{
+    return {
+      iterator : Iterators.yield.lazy(fn)
+    }
+  }
 }

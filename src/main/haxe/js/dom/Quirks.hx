@@ -36,9 +36,10 @@ using stx.Maths;
 
 import stx.Dynamics;
 
+using stx.Log;
 using js.dom.DomExtensions;
-using stx.util.StringExtensions;
-using stx.util.ObjectExtensions;
+using stx.Strings;
+using stx.Objects;
 
 
 
@@ -109,9 +110,9 @@ class Quirks {
     }
     else { throw "Cannot find iframe content document for " + iframe; return null; }
   }
-
+  @bug('#0b1kn00b: why do I need to use untyped here?')
   public static function addEventListener(target: EventTarget, type: DOMString, listener: EventListener<Dynamic>, useCapture: Bool): Void untyped {
-    if (target.addEventListener != null) {
+    if (untyped __js__('target.addEventListener') != null) {
       target.addEventListener(type, listener, useCapture);
     }
     else if (target.attachEvent != null) {
@@ -120,7 +121,7 @@ class Quirks {
   }
 
   public static function removeEventListener(target: EventTarget, type: DOMString, listener: EventListener<Dynamic>, useCapture: Bool): Void untyped {
-    if (target.removeEventListener != null) {
+    if (untyped __js__('target.addEventListener') != null) {
       target.removeEventListener(type, listener, useCapture);
     }
     else if (target.detachEvent != null) {
@@ -476,7 +477,7 @@ class Quirks {
       }
       else{
         var style = elem.style;
-
+        
         if (name == "opacity" && !BrowserSupport.opacity()) {
 
           // IE has trouble with opacity if it does not have layout

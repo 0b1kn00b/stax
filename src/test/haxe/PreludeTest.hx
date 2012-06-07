@@ -16,17 +16,18 @@
 */
 																	using Stax;
 import Prelude;
-import stx.Tuples;								using stx.Tuples;
-import stx.Future;								using stx.Future;
+using stx.Tuples;
+using stx.Future;
 
-import stx.ds.plus.Equal;					using stx.ds.plus.Equal;
-import stx.ds.plus.Order;					using stx.ds.plus.Order;
-import stx.ds.plus.Show;					using stx.ds.plus.Show;
+using stx.ds.plus.Equal;
+using stx.ds.plus.Order;
+using stx.ds.plus.Show;
+
 import stx.ds.plus.Hasher;
 
 import stx.test.TestCase;
-																	using stx.Options;
 
+using stx.Options;
 using stx.Functions;
 
 class PreludeTest extends TestCase {
@@ -157,13 +158,15 @@ class PreludeTest extends TestCase {
   }  
 
   public function testTupleOrder() {    
-    var tests : Array<Tuple2<Product,Product>>= cast( [
-     Tuples.t2(Tuples.t2("b",0), Tuples.t2("a",0)),
-     Tuples.t2(Tuples.t2("a",1), Tuples.t2("a",0)), 
-     Tuples.t2(Tuples.t3("a",0,0.1), Tuples.t3("a",0,0.05)),
-     Tuples.t2(Tuples.t4("a",0,0.1,"b"), Tuples.t4("a",0,0.1,"a")),
-     Tuples.t2(Tuples.t5("a",0,0.1,"a",1), Tuples.t5("a",0,0.1,"a",0)), 
-    ] );
+    var tests : Array<Tuple2<Product,Product>>= cast( 
+      [
+       Tuples.t2(Tuples.t2("b",0), Tuples.t2("a",0)),
+       Tuples.t2(Tuples.t2("a",1), Tuples.t2("a",0)), 
+       Tuples.t2(Tuples.t3("a",0,0.1), Tuples.t3("a",0,0.05)),
+       Tuples.t2(Tuples.t4("a",0,0.1,"b"), Tuples.t4("a",0,0.1,"a")),
+       Tuples.t2(Tuples.t5("a",0,0.1,"a",1), Tuples.t5("a",0,0.1,"a",0)), 
+      ] 
+    );
   
 		tests.foreach(
 				function(test:Tuple2 < Product, Product > ) {
@@ -193,29 +196,29 @@ class PreludeTest extends TestCase {
 
   public function testTupleString() {    
     var tests = [
-      Tuples.t2(Tuples.t2("b",0), "Tuple2(b, 0)"),
-      Tuples.t2(Tuples.t2("a",1), "Tuple2(a, 1)"), 
-      Tuples.t2(Tuples.t3("a",0,0.1), "Tuple3(a, 0, 0.1)"),
-      Tuples.t2(Tuples.t4("a",0,0.1,"b"), "Tuple4(a, 0, 0.1, b)"),
-      Tuples.t2(Tuples.t5("a",0,0.1,"a",1), "Tuple5(a, 0, 0.1, a, 1)"), 
+      Tuples.t2(Tuples.t2("b",0), "stx.Tuple2(b, 0)"),
+      Tuples.t2(Tuples.t2("a",1), "stx.Tuple2(a, 1)"), 
+      Tuples.t2(Tuples.t3("a",0,0.1), "stx.Tuple3(a, 0, 0.1)"),
+      Tuples.t2(Tuples.t4("a",0,0.1,"b"), "stx.Tuple4(a, 0, 0.1, b)"),
+      Tuples.t2(Tuples.t5("a",0,0.1,"a",1), "stx.Tuple5(a, 0, 0.1, a, 1)"), 
     ];
     
     for (test in tests) {
-			var l : Tuple2<String,Int> 	= test._1;
-			var r : String 							=	test._2;
+			var l : Tuple2<String,Int> 	= test.element(0);
+			var r : String 							=	test.element(1);
 			
-      //assertEquals(r, Show.getShowFor(l)(l));
-      assertEquals(r, l.toString());       
+      assertEquals(r, Show.getShowFor(l)(l));
+      //assertEquals(r, l.toString());       
     }
   }    
-
+  @:todo('#0b1kn00b: the typer is now ignoring casts')
   public function testTupleHashCode() {    
-    var tests = [
-      Hasher.getHashFor(Tuples.t2("b",0)),
-      Hasher.getHashFor(Tuples.t2("a",1)), 
-      Hasher.getHashFor(Tuples.t3("a",0,0.1)),
-      Hasher.getHashFor(Tuples.t4("a",0,0.1,"b")),
-      Hasher.getHashFor(Tuples.t5("a",0,0.1,"a",1)), 
+    var tests : Array<HashFunction<Product>> = cast [
+      cast Hasher.getHashFor(Tuples.t2("b",0)),
+      cast Hasher.getHashFor(Tuples.t2("a",1)), 
+      cast Hasher.getHashFor(Tuples.t3("a",0,0.1)),
+      cast Hasher.getHashFor(Tuples.t4("a",0,0.1,"b")),
+      cast Hasher.getHashFor(Tuples.t5("a",0,0.1,"a",1)), 
     ];
    
     while(tests.length > 0)

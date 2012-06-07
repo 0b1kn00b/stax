@@ -14,14 +14,15 @@
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package stx.text.json;
+package stx.io.json;
 
 import Prelude;
 using Stax;
 
-import stx.text.json.JValue;
+import stx.io.json.JValue;
+using stx.io.json.TranscodeJValueExtensions;
+using stx.io.json.JValueExtensions;
 
-using stx.text.json.JValueExtensions;
 
 using stx.Functions;
 
@@ -136,9 +137,9 @@ class Json {
     //     binary search that would probably be used if there were enough gaps.
 
     var i = 0, l = s.length, mark: Int, line = 1, temp: String, type = 0;
-    var current = new Array<JValue>(),  last: Null<JValue> = null;
+    var current = new Array<JValue>(),  last: JValue = null;
     var   names = new Array<String>(),  name: Null<String> = null;
-    var                                value: Null<JValue> = null;
+    var                                value: JValue = null;
     var  states = new Array   <Int>(), state: Int = 0;
 
     while ((mark = i) < l) {

@@ -13,9 +13,5 @@ class ErrorTest extends TestCase{
 	public function new() {
 		super();
 	}
-	public function testPrintf() {
-		var arr = [1, '54', { thing : true } ];
-		arr.printf(' ${0} , ${1} , ${2} raaah' );
-	}
 	
 }

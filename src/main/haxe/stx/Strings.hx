@@ -10,6 +10,9 @@ using stx.Options;
 import Prelude;
 
 class Strings {
+  static var SepAlphaPattern        = ~/(-|_)([a-z])/g;
+  static var AlphaUpperAlphaPattern = ~/-([a-z])([A-Z])/g;
+
   static public function toBool(v: String, ?d: Bool): Bool {
     if (v == null) return d;
     
@@ -72,4 +75,44 @@ class Strings {
 	static public function append(str:String,after:String){
 		return str + after;
 	}
+  static public function cca(str:String,i:Int){
+    return str.charCodeAt(i);
+  }
+
+  public static function chunk(str: String, len: Int): Array<String> {
+    var start = 0;
+    var end   = (start + len).min(str.length);
+    
+    return if (end == 0) [];
+     else {
+       var prefix = str.substr(start, end);
+       var rest   = str.substr(end);
+
+       [prefix].concat(chunk(rest, len));
+     }
+  }
+  public static function chars(str: String): Array<String> {
+    var a = [];
+    
+    for (i in 0...str.length) {
+      a.push(str.charAt(i));
+    }
+    
+    return a;
+  }
+  public static function string(l: Iterable<String>): String {
+    var o = '';
+    for ( val in l) {
+      o += val;
+    }
+    return o;
+  }
+  
+  public static function toCamelCase(str: String): String {
+    return SepAlphaPattern.customReplace(str, function(e) { return e.matched(2).toUpperCase(); });
+  }
+  
+  public static function fromCamelCase(str: String, sep: String): String {
+    return AlphaUpperAlphaPattern.customReplace(str, function(e) { return e.matched(1) + sep + e.matched(2).toLowerCase(); });
+  }
 }

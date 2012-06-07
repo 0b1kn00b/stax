@@ -1,4 +1,4 @@
-package stx.data.transcode;
+package stx.io.json;
 
 /**
  * ...
@@ -12,14 +12,14 @@ using Stax;
 import stx.ds.Set;
 import stx.ds.List;
 import stx.ds.Map;
-import stx.data.transcode.TranscodeJValue;
+import stx.io.json.TranscodeJValue;
 
 
-import stx.text.json.PrimitivesJValue;
-using stx.text.json.PrimitivesJValue;
-using stx.text.json.CollectionsJValue;
-using stx.text.json.JValueExtensions;
-import stx.text.json.JValueExtensions;
+import stx.io.json.PrimitivesJValue;
+using stx.io.json.PrimitivesJValue;
+using stx.io.json.CollectionsJValue;
+using stx.io.json.JValueExtensions;
+import stx.io.json.JValueExtensions;
 
 class CollectionsJValue {
 

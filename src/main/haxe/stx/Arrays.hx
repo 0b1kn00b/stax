@@ -221,15 +221,18 @@ class Arrays {
    * Produces an Option Some(element) the first time the predicate returns true,
    * None otherwise.
    */
-  public static function find<T>(arr: Array<T>, f: T -> Bool): Option<T>
+  public static function find<T>(arr: Array<T>, f: T -> Bool): Option<T>{
     return arr.foldl(
 		None,
-		function(a, b) return
-			switch (a) {
-				case None: b.toOption().filter(f);
-				default: a;
-		  }
-    )
+		function(a, b) {
+      return
+		  	switch (a) {
+		  		case None: Options.toOption(b).filter(f);
+			 	default: a;
+		    }
+      }
+    );
+  }
   /**
    * Returns an Option Some(index) if an object reference is contain in 'arr'
    *^None otherwise

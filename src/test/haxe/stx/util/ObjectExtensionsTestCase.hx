@@ -18,13 +18,11 @@ package stx.util;
 import Prelude;
 
 import stx.test.TestCase;
-import stx.util.ObjectExtensions;
+import stx.Objects;                   using stx.Options;
 
-using stx.Options;
+using stx.Objects;
 
-using stx.util.ObjectExtensions;
-
-class ObjectExtensionsTestCase extends TestCase {
+class ObjectsTestCase extends TestCase {
   public function new() {
     super();
   }

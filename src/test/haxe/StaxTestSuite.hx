@@ -23,12 +23,12 @@ import Prelude;
 import stx.test.Runner;
 import stx.test.ui.Report;
                    
-import stx.text.json.JsonTestCase;        
+import stx.io.json.JsonTestCase;        
 import stx.ds.ArrayExtensionsTestCase;
 import stx.ds.MapTestCase;
 import stx.ds.SetTestCase;
 import stx.ds.ListTestCase;
-import stx.data.transcode.JValueTestCase;
+import stx.io.json.JValueTestCase;
 import stx.functional.PartialFunctionTestCase;         
 import stx.functional.FoldableExtensionsTestCase;
 import stx.time.ScheduledExecutorTestCase;
@@ -43,10 +43,11 @@ import stx.util.OrderExtensionsTestCase;
 import stx.framework.InjectorTestCase;
 import stx.math.geom.PointTestCase;
 import stx.math.tween.TweenTestCase;
-import stx.data.transcode.TranscodeJValueExtensionsTestCase;
+import stx.io.json.TranscodeJValueExtensionsTestCase;
 
 import stx.time.ScheduledExecutor;
 import stx.framework.Injector;
+import stx.Log;
 
 #if js
 import stx.io.http.HttpStringTestCase;
@@ -56,12 +57,36 @@ import js.dom.HTMLDocumentExtensionsTestCase;
 import js.dom.QuirksTestCase;
 import js.io.IFrameIOTestCase;
 import stx.io.http.HttpJValueJsonpTestCase;
+
+using stx.Functions;
+import Dom;
+import js.Env;
 #end
 
 class StaxTestSuite {
   public static function main (): Void {
-    Injector.forever(
+    #if js
+      new StaxTestSuite();
+    #else
+      new StaxTestSuite();
+    #end 
+
+  }
+  public function new(){
+      Injector.forever(
       function(c) {
+
+        c.bindF(
+          Logger,
+          function() {
+            return cast DefaultLogger.create(
+              null,
+              LogLevel.Warning
+            );
+          }
+        );
+
+        haxe.Log.trace = stx.Log.trace;
         var runner = (new Runner()).addAll([   
           new PreludeTest(),    
           new JValueTestCase(),   
@@ -92,15 +117,16 @@ class StaxTestSuite {
           , new HTMLElementExtensionsTestCase()
           , new HTMLDocumentExtensionsTestCase()
           , new QuirksTestCase()
-          , new ObjectExtensionsTestCase()
+          , new ObjectsTestCase()
           , new TranscodeJValueExtensionsTestCase()
-					//, new stx.OutcomeTest()
-					, new stx.error.ErrorTest()
-					, new stx.reactive.ArrowsTest()
-					, new stx.TupleTest()
-					, new stx.io.log.LogTest()
+          //, new stx.OutcomeTest()
+          //, new stx.error.ErrorTest()
+          //, new stx.reactive.ArrowsTest()
+          , new stx.TupleTest()
+          //, new stx.io.log.LogTest()
+          , new stx.ds.RangeTest()
           #end
-        ].filter( function(x) return Std.is(x, stx.io.log.LogTest) ));
+        ]);//.filter( function(x) return Std.is(x, stx.io.log.LogTest) ));
 
         Report.create(runner);
 

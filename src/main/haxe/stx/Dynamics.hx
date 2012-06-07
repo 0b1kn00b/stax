@@ -66,7 +66,7 @@ class Dynamics {
   }  
 	
 	/**
-	 * Returns a Function1 that will return the input value t, regardless of the Function1's input.
+	 * Produces a Function1 that will return the input value t, regardless of the Function1's input.
 	 * @param			t		Any value
 	 * @return 				A function taking any value and returning the value of input parameter t.
 	 */
@@ -74,5 +74,11 @@ class Dynamics {
     return function(s: S) {
       return t;
     }
+  }
+  /**
+  * Applies a function 'f' to a valuse of any Type.
+  */
+  public static function apply<A,B>(v:A,fn:A->Void):Void{
+  	fn(v);
   }
 }

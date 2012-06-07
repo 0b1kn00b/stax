@@ -24,7 +24,7 @@ import js.dom.Quirks;
 import stx.ds.List;
 import stx.ds.Map;
 import stx.time.ScheduledExecutor;
-import stx.text.json.Json;
+import stx.io.json.Json;
 import stx.net.Url;
 import stx.Log;								using stx.Log;
 
@@ -46,7 +46,7 @@ using stx.ds.Map;
 using stx.ds.List;
 
 using stx.functional.FoldableExtensions;
-using stx.util.StringExtensions;
+using stx.Strings;
 
 using stx.net.UrlExtensions;
 using stx.framework.Injector;
@@ -249,7 +249,7 @@ class IFrameIOPostMessage extends AbstractIFrameIO, implements IFrameIO {
     }
     
     Quirks.addEventListener(bindTarget, 'message', listener, false);
-    
+
     return this;
   }
 

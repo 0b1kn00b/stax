@@ -28,7 +28,7 @@ using stx.Dynamics;
 using stx.Strings;
 
 using js.dom.DomExtensions;
-using stx.util.ObjectExtensions;
+using stx.Objects;
 
 
 /** Feature detection library */

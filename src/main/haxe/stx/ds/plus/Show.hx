@@ -145,10 +145,10 @@ class ProductShow {
     return Show.getShowFor(p.element(i));
   }
 	public static function toString(p:Product): String {
-		var productPrefix = 'Tuple' + p.arity();
-    var s = productPrefix + "(" + p.getProductShow(1)(p.element(1));
-    for(i in 2...p.arity()+1)
-      s += ", " + p.getProductShow(i)(p.element(i));
+		var productPrefix = 'Tuple' + p.length;
+    var s = productPrefix + "(" + getProductShow(p,1)(p.element(1));
+    for(i in 2...p.length+1)
+      s += ", " + getProductShow(p,i)(p.element(i));
     return s + ")";
   }
 }

@@ -15,12 +15,8 @@ import stx.Maths;
 
 class Equal {
 
-	/**
-	 */
-/*	public static function equals<A>(a:Dynamic, b:Dynamic):Bool {
-		return true;
-	}*/
-	/** Returns an EqualFunction (T -> T -> Bool). It works for any type. Custom Classes can provide
+	/** 
+   * Returns an EqualFunction (T -> T -> Bool). It works for any type. Custom Classes can provide
    * an "equals(other : T) : Bool" method or a "compare(other : T) : Int" method otherwise  simple comparison operators will be used.
    */
   public static function getEqualFor<T>(t : T) : EqualFunction<T> {
@@ -53,6 +49,8 @@ class Equal {
           _createEqualImpl(Dates.equals);
         case "Array":
           _createEqualImpl(ArrayEqual.equals);
+        case "stx.Tuple2" , "stx.Tuple3" , "stx.Tuple4" , "stx.Tuple5" :
+          _createEqualImpl(ProductEqual.equals);
         default:    
           if(Meta._hasMetaDataClass(c)) {  
             var fields = Meta._fieldsWithMeta(c, "equalHash");
@@ -68,13 +66,12 @@ class Equal {
             });    
           } else if(Type.getInstanceFields(c).remove("equals")) {
             _createEqualImpl(function(a, b) return (cast a).equals(b));
-          }else{
+          }/*else{
             _createEqualImpl( function(a,b) return a == b );
-          }
-          /*
-          else {
-            Stax.error("class "+Type.getClassName(c)+" has not equals method");
           }*/
+          else {
+            Stax.error("class "+Type.getClassName(c)+" has no equals method");
+          }
       }
     case TEnum(e):
       _createEqualImpl(function(a, b) {
@@ -122,13 +119,13 @@ class ProductEqual {
     return Equal.getEqualFor(p.element(i));
   }
 	static public function productEquals(p:Product, other : Product): Bool {
-    for(i in 0...p.arity())
+    for(i in 0...p.length)
       if(!getEqual(p,i)(p.element(i), other.element(i)))
         return false;
     return true;
   }
 	static public function equals(p:Product, other:Product):Bool {
-		for(i in 0...p.arity())
+		for(i in 0...p.length)
       if(!getEqual(p,i)(p.element(i), other.element(i)))
         return false;
     return true;

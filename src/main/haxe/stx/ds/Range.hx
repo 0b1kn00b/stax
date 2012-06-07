@@ -32,7 +32,13 @@ class Range<T:Float> {
 	public function delta<A>():T{
 		return max - min;
 	}
-	public static function create(?min,?max){
+	public static function create(?min ,?max ){
+		if(min == null){
+			min = MIN;
+		}
+		if(max == null){
+			max = MAX;
+		}
 		return new Range( { min : min, max : max } );
 	}
 	//public static function apply<A,B>(r:Range<A>,f0 : Range<A> -> B,):B{

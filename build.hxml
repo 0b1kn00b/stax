@@ -1,4 +1,6 @@
+-lib hxunify
 -cp src/main/haxe
 -cp src/test/haxe
 -js bin/test.js
 -main StaxTestSuite
+--connect 2331

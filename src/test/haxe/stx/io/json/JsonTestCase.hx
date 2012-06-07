@@ -14,15 +14,15 @@
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package stx.text.json;
+package stx.io.json;
 
 import stx.test.TestCase;
 
-import stx.text.json.Json;
-import stx.text.json.JValue;
-import stx.text.json.JsonGenerator;
+import stx.io.json.Json;
+import stx.io.json.JValue;
+import stx.io.json.JsonGenerator;
 
-using stx.text.json.JValueExtensions;
+using stx.io.json.JValueExtensions;
 using Lambda;
 
 class JsonTestCase extends TestCase {
@@ -175,18 +175,21 @@ class JsonTestCase extends TestCase {
   public function testArrayEncodings (): Void {
     assertLooksEqual (Json.toObject (Json.decode ("[]")), []);
     assertLooksEqual (Json.toObject (Json.decode ("[1, 2, 3, 4, 5]")), [1, 2, 3, 4, 5]);
-    assertLooksEqual (Json.toObject (Json.decode ("[1, true, null, \"bar\"]")), [1, true, null, "bar"]);
+    var arr : Array<Dynamic> = [1, true, null, "bar"];
+    assertLooksEqual (Json.toObject (Json.decode ("[1, true, null, \"bar\"]")), arr);
   }
 
   public function testObjectDecodings (): Void {
     assertLooksEqual (Json.fromObject ({foo: "bar"}),                     Json.decode ("{\"foo\": \"bar\"}"));
-    assertLooksEqual (Json.fromObject ({foo: "bar", bif: [1, 2, "baz"]}), Json.decode ("{\"foo\": \"bar\", \"bif\": [1, 2, \"baz\"]}"));
+    var arr : Array<Dynamic> = [1, 2, "baz"];
+    assertLooksEqual (Json.fromObject ({foo: "bar", bif: arr}), Json.decode ("{\"foo\": \"bar\", \"bif\": [1, 2, \"baz\"]}"));
     assertLooksEqual (Json.fromObject ({}),                               Json.decode ("{}"));
   }
 
   public function testArrayDecodings (): Void {
     assertLooksEqual (Json.fromObject ([]), Json.decode ("[]"));
-    assertLooksEqual (Json.fromObject ([1, 2, "foo"]), Json.decode ("[1, 2, \"foo\"]"));
+    var arr : Array<Dynamic> = [1, 2, 'foo'];
+    assertLooksEqual (Json.fromObject (arr), Json.decode ("[1, 2, \"foo\"]"));
     assertLooksEqual (Json.fromObject ([{foo: "bar"}]), Json.decode ("[{\"foo\": \"bar\"}]"));
   }
   

@@ -1,5 +1,5 @@
 /*
- HaXe library written by John A. De Goes <john@socialmedia.com>
+ HaXe JSON library written by Spencer Tipping <spencer@socialmedia.com>
  Contributed by Social Media Networks
 
  Redistribution and use in source and binary forms, with or without
@@ -15,17 +15,14 @@
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/**
- * The extractors and decomposers in this file have been created to comply with
- * the serialization requirements of XSchema.
- */
-package stx.data.transcode;
+package stx.io.json;
 
-import Prelude;
-
-import stx.data.transcode.Transcode;
-import stx.text.json.JValue;
-
-typedef JExtractorFunction<T>  = Function<JValue, T>;
-typedef JDecomposerFunction<T> = Function<T, JValue>;
-
+enum JValue {
+  JNull;
+  JBool(v: Bool);
+  JNumber(v: Float);
+  JString(v: String);
+  JArray(v: Array<JValue>);
+  JObject(v: Array<JValue>);
+  JField(k: String, v: JValue);
+}

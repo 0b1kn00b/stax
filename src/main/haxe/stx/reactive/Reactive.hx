@@ -28,10 +28,10 @@ typedef Timeout = {}
 
 class External {
 	
-		#if ( js || flash )
+	#if ( js || flash )
     public static dynamic function setTimeout (f, time):Dynamic {
-				return haxe.Timer.delay(f, time);
-		}
+	   return haxe.Timer.delay(f, time);
+	}
     
     public static var cancelTimeout: Timeout -> Void = function(timer) { cast(timer, haxe.Timer).stop(); }
     #end
@@ -1296,16 +1296,19 @@ class Signal<T> {
     public function zipWith<A, R>(b2: Signal<A>, f : T -> A -> R): Signal<R> { 
         var self = this;
         
-        var applyF = function() {
+        var applyF = function():R {
             return f(self.valueNow(), b2.valueNow());
         }
         
-        return Streams.create(
-            function(pulse: Pulse<Dynamic>): Propagation<R> {
-                return propagate(pulse.withValue(applyF()));
-            },
-            [this, b2].map(function(b) { return cast(b.changes(), Stream<Dynamic>); })
-        ).startsWith(applyF());
+        var pulse : Pulse<Dynamic> -> Propagation<R>
+            =   function(pulse: Pulse<Dynamic>): Propagation<R> {
+                    return propagate(pulse.withValue(applyF()));
+                }
+        var arr : Array<Signal<Dynamic>> = [this, b2];
+        var out 
+            = arr.map(function(b) { return cast(b.changes(), Stream<Dynamic>); });
+
+        return cast Streams.create( pulse , out ).startsWith(applyF());
 	}
 	
     /**
@@ -1340,11 +1343,12 @@ class Signal<T> {
             return Tuples.t3(self.valueNow(), b2.valueNow(), b3.valueNow());
         }
         
+        var arr : Array<Signal<Dynamic>> = [this, b2, b3];
         return Streams.create(
             function(pulse: Pulse<Dynamic>): Propagation<Tuple3<T, B, C>> {
                 return propagate(pulse.withValue(createTuple()));
             },
-            [this, b2, b3].map(function(b) { return cast(b.changes(), Stream<Dynamic>); })
+            arr.map(function(b) { return cast(b.changes(), Stream<Dynamic>); })
         ).startsWith(createTuple());
     }
     
@@ -1366,11 +1370,12 @@ class Signal<T> {
             return Tuples.t4(self.valueNow(), b2.valueNow(), b3.valueNow(), b4.valueNow());
         }
         
+        var arr : Array<Signal<Dynamic>> = [this, b2, b3, b4];
         return Streams.create(
             function(pulse: Pulse<Dynamic>): Propagation<Tuple4<T, B, C, D>> {
                 return propagate(pulse.withValue(createTuple()));
             },
-            [this, b2, b3, b4].map(function(b) { return cast(b.changes(), Stream<Dynamic>); })
+            arr.map(function(b) { return cast(b.changes(), Stream<Dynamic>); })
         ).startsWith(createTuple());
     }
     
@@ -1392,12 +1397,14 @@ class Signal<T> {
         var createTuple = function() {
             return Tuples.t5(self.valueNow(), b2.valueNow(), b3.valueNow(), b4.valueNow(), b5.valueNow());
         }
-        
+    
+        var arr : Array<Signal<Dynamic>> =  [this, b2, b3, b4, b5];
+
         return Streams.create(
             function(pulse: Pulse<Dynamic>): Propagation<Tuple5<T, B, C, D, E>> {
                 return propagate(pulse.withValue(createTuple()));
             },
-            [this, b2, b3, b4, b5].map(function(b) { return cast(b.changes(), Stream<Dynamic>); })
+           arr.map(function(b) { return cast(b.changes(), Stream<Dynamic>); })
         ).startsWith(createTuple());
     }
     

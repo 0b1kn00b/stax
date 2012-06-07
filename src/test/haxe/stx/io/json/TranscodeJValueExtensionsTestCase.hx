@@ -1,4 +1,4 @@
-package stx.data.transcode;
+  package stx.io.json;
 
 import haxe.Stack;
 import Prelude;
@@ -9,12 +9,12 @@ import Type;
 import stx.Tuples;
 import Prelude;
 import stx.test.TestCase;
-import stx.text.json.JValue;
+import stx.io.json.JValue;
 import stx.ds.Set;
 import stx.ds.Map;
 import stx.ds.List;
-import stx.data.transcode.TranscodeJValue;
-import stx.data.transcode.TranscodeJValueExtensions;
+import stx.io.json.TranscodeJValue;
+import stx.io.json.TranscodeJValueExtensions;
 
 
 
@@ -101,6 +101,7 @@ class TranscodeJValueExtensionsTestCase extends TestCase {
   }
 
   public function testJValue() {
+    //var a = [JString("foo")];
     var a = [JNull, JString("foo"), JNumber(123.0), JBool(false), JObject([JField("foo", JString("bar"))]), JArray([JNull, JString("baz")])];
     doTest(a);
   }

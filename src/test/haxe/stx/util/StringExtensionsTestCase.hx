@@ -19,7 +19,7 @@ import Prelude;
 
 import stx.test.TestCase;
 
-using stx.util.StringExtensions;
+using stx.Strings;
 
 
 

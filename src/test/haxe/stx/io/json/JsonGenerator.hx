@@ -15,10 +15,10 @@
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package stx.text.json;
+package stx.io.json;
 
-import stx.text.json.JValue;
-using stx.text.json.JValueExtensions;
+import stx.io.json.JValue;
+using stx.io.json.JValueExtensions;
 
 class JsonGenerator {
   public static function generate (): JValue {

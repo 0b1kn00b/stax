@@ -126,9 +126,9 @@ import stx.time.Clock;
 import stx.time.ScheduledExecutor;
 import stx.Tuples;
 import stx.util.Guid;
-import stx.util.ObjectExtensions;
+import stx.Objects;
 import stx.util.OrderExtension;
-import stx.util.StringExtensions;
+import stx.Strings;
 
 @IgnoreCover
 class AllClasses

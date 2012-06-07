@@ -5,8 +5,25 @@ package stx;
  * @author 0b1kn00b
  */
 import Prelude;
+using stx.Tuples;
 
 class Eithers {
+  public static function toTuple<A,B>(e:Either<A,B>):Tuple2<A,B>{
+    return 
+      switch(e){
+        case Left(v)  : Tuples.t2(v,null);
+        case Right(v) : Tuples.t2(null,v);
+        default       : throw 'Either is neither Left not Right';null;
+      };
+  }
+  public static function toTupleO<A,B>(e:Either<A,B>):Tuple2<Option<A>,Option<B>>{
+    return 
+      switch(e){
+        case Left(v)  : Tuples.t2(Some(v),None);
+        case Right(v) : Tuples.t2(None,Some(v));
+        default       : throw 'Either is neither Left not Right';
+      };
+  }
   public static function toLeft<A, B>(v: A): Either<A, B> {
     return Left(v);
   }
@@ -86,7 +103,10 @@ class Eithers {
       case Right(v): f2(v);
     }
   }
-  
+  public static function flatMapR<A, B, C , D>(e: Either<A, B>,f : B -> Either<C,D>):Either<C,D>{
+    return
+      flatMap(e,cast Eithers.toLeft,f);
+  }
   /** Composes two Eithers together. In case of conflicts, "failure" (left) 
    * always wins.
    */

@@ -15,16 +15,16 @@
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package stx.text.json;
+package stx.io.json;
 
 import stx.test.TestCase;
 
 
-import stx.text.json.JValue;
-import stx.text.json.Json;
-import stx.text.json.JsonGenerator;
+import stx.io.json.JValue;
+import stx.io.json.Json;
+import stx.io.json.JsonGenerator;
 
-using stx.text.json.JValueSignal;
+using stx.io.json.JValueSignal;
 
 class JsonBenchmarkCase extends TestCase {
   public static function timed<T> (name: String, f: T -> Void): T -> Float {

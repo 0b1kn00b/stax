@@ -15,23 +15,22 @@
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package stx.text.json;
+package stx.io.json;
 
 import stx.Tuples;							using stx.Tuples;
 import Prelude;
 using Stax;
 
 
-
-import stx.text.json.JValue;
-import stx.data.transcode.TranscodeJValueExtensions;
-import stx.data.transcode.TranscodeJValue;
+import stx.io.json.JValue;
+import stx.io.json.TranscodeJValueExtensions;
+import stx.io.json.TranscodeJValue;
 
 using stx.Options;
 
 using stx.Dynamics;
 
-using stx.text.json.JValueExtensions;
+using stx.io.json.JValueExtensions;
 
 class JValueExtensions {  
   public static function decompose(v: JValue): JValue {

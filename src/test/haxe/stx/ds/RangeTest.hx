@@ -7,8 +7,8 @@ class RangeTest extends stx.test.TestCase{
 	
 	public function testDefaultInitialisation(){
 		var range = Range.create();
-		assertTrue(range.min == -1.7976931348623157 * Math.pow(10,308));
-		assertTrue(range.max == 1.7976931348623157 * Math.pow(10,308));
+		assertTrue(range.min == (-1.7976931348623157 * Math.pow(10,308)));
+		assertTrue(range.max == (1.7976931348623157 * Math.pow(10,308)));
 	}
 	public function testRange(){
 		var a = Range.create();

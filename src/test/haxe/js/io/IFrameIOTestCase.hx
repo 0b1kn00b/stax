@@ -22,7 +22,7 @@ import stx.test.TestCase;
 import js.Env;
 import js.dom.Quirks;
 import js.io.IFrameIO;
-
+using stx.Log;
 
 using js.dom.HTMLDocumentExtensions;
 
@@ -66,7 +66,7 @@ class IFrameIOTestCase extends TestCase {
       function(data) {
         self.assertEquals('foo', data);
         
-        trace('Successfully tested send of tiny packet');
+        //trace('Successfully tested send of tiny packet'.debug());
         
         self.XtestSendOfLargeStringPacketIsReceived();
         
@@ -92,7 +92,7 @@ class IFrameIOTestCase extends TestCase {
       function(data) {
         self.assertEquals(string, data);
         
-        trace('Successfully tested send of large packet');
+        //trace('Successfully tested send of large packet'.debug());
         
         return false;
       },

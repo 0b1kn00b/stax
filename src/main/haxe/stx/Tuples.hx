@@ -6,12 +6,7 @@ package stx;
  */
 import Prelude;
 using Stax;
-
-
-import stx.ds.plus.Order;
-import stx.ds.plus.Equal;
-import stx.ds.plus.Show;
-import stx.ds.plus.Hasher;
+  
 
 class Tuples {
 	

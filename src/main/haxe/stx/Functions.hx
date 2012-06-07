@@ -20,6 +20,15 @@ class CodeBlocks {
       return null;
     }
   }
+  public static function catching<A,B>(c:Thunk<A>):Either<Dynamic,A>{
+    var o = null;
+    try{
+      o = Right(c());
+    }catch(e:Dynamic){
+      o = Left(e);
+    }
+    return o;
+  }
 }	
 class Functions0 {
 	/**
@@ -120,6 +129,9 @@ class Functions0 {
     return function() {
       f();
     }
+  }
+  public static function map<A,B>(f:Thunk<A>,f1:A->B):Thunk<B>{
+    return function(){return f1(f());}
   }
 }
 class Functions1 {

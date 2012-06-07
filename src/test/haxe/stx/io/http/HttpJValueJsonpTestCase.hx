@@ -21,10 +21,10 @@ import stx.test.TestCase;
 import stx.test.Assert;
 import stx.io.http.Http;
 import stx.io.http.HttpJValue;
-import stx.text.json.Json;
+import stx.io.json.Json;
 
 
-using stx.text.json.JValueExtensions;
+using stx.io.json.JValueExtensions;
 using stx.Options;
 using stx.ds.Map;
 
@@ -40,13 +40,21 @@ class HttpJValueJsonpTestCase extends TestCase {
   }
   
   public function testGet() {
-    Assert.delivered(h.get('http://search.twitter.com/search.json', { q: 'santa' }.toMap()),
+    var async = Assert.createAsync( function() {} , 10000 );
+    Assert.delivered( h.get('http://search.twitter.com/search.json', { q: 'santa' }.toMap()) ,
+        function(data){
+          var results = data.body.get().get('results');
+          Assert.notNull(results);
+          async();
+        }
+    );
+    /*Assert.delivered(,
       function(data) {
         var results = data.body.get().get('results');
         
         Assert.notNull(results);
       },
       4000
-    );
+    );*/
   }
 }

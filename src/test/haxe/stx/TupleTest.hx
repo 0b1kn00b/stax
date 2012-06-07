@@ -25,11 +25,11 @@ class TupleTest extends TestCase{
 	 */
 	public function testArity() {
 		var a = Tuples.t5( null , null , null , null , null );
-		Assert.equals( 5 , a.arity() );
+		Assert.equals( 5 , a.length );
 	}
 	public function testElement() {
 		var a = Tuples.t2( 1 , 2 );
-		2.equals( a.element(2) );
+		2.equals( a.element(1) );
 	}
 	public function testElements() {
 		var a = Tuples.t2( 1, 2);

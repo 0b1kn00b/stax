@@ -1,2 +1,0 @@
-package stx.io.file;
-

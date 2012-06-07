@@ -14,7 +14,7 @@
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package stx.data.transcode;
+package stx.io.json;
 
 import Prelude;
 import stx.Tuples;
@@ -22,18 +22,18 @@ import stx.Tuples;
 import stx.ds.plus.Equal;
 
 import stx.test.TestCase;
-import stx.text.json.JValue;
+import stx.io.json.JValue;
 import stx.ds.Set;
 import stx.ds.Map;
 import stx.ds.List;
-import stx.data.transcode.TranscodeJValue;
-import stx.data.transcode.TranscodeJValueExtensions;
+import stx.io.json.TranscodeJValue;
+import stx.io.json.TranscodeJValueExtensions;
 
-using stx.data.transcode.TranscodeJValueExtensions;
-import stx.text.json.JValueExtensions;
-using stx.text.json.JValueExtensions;
-import stx.text.json.PrimitivesJValue;
-import stx.text.json.CollectionsJValue;
+using stx.io.json.TranscodeJValueExtensions;
+import stx.io.json.JValueExtensions;
+using stx.io.json.JValueExtensions;
+import stx.io.json.PrimitivesJValue;
+import stx.io.json.CollectionsJValue;
 
 class JValueTestCase extends TestCase {
   public function testBool() {

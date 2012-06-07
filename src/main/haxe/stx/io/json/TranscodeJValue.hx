@@ -14,9 +14,18 @@
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package stx.data.transcode;
+
+/**
+ * The extractors and decomposers in this file have been created to comply with
+ * the serialization requirements of XSchema.
+ */
+package stx.io.json;
 
 import Prelude;
 
-typedef ExtractorFunction<I, O>  = Function<I, O>;
-typedef DecomposerFunction<I, O> = Function<I, O>;
+import stx.io.json.Transcode;
+import stx.io.json.JValue;
+
+typedef JExtractorFunction<T>  = Function<JValue, T>;
+typedef JDecomposerFunction<T> = Function<T, JValue>;
+

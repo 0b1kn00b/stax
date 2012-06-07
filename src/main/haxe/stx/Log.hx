@@ -103,8 +103,8 @@ interface Logger {
 	public 	var level				: LogLevel;
 }
 class DefaultLogger {
-	public static function create(listings) {
-		return new DefaultLogger(listings);
+	public static function create(listings,?level) {
+		return new DefaultLogger(listings,level);
 	}
 	private var listings 										: Array<LogListing>;
 	private var permissive									: Bool;
@@ -125,7 +125,7 @@ class DefaultLogger {
 	public function check(v:Dynamic, pos:PosInfos):Bool {
 		var white = 
 				function(includes:Array<LogListing>) {
-					trace('white'.debug());
+					//trace('white'.debug());
 					return 
 						includes
 								.map( Enums.params )
@@ -134,7 +134,7 @@ class DefaultLogger {
 				}
 		var black =
 				function(excludes:Array<LogListing>) {
-					trace('black'.debug());
+					//trace('black'.debug());
 					return
 						!(excludes
 								.map( Enums.params )
@@ -145,7 +145,7 @@ class DefaultLogger {
 		//trace(listings.debug());
 		var o = (listings
 						.partition(function(x:EnumValue):Bool { return (x.constructorOf() == 'Include'); })
-						.apply( 
+						.into( 
 								function(includes, excludes){
 									return
 											(includes.length > 0)

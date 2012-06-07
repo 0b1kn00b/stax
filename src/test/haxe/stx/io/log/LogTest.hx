@@ -1,5 +1,4 @@
 package stx.io.log;
-
 /**
  * ...
  * @author 0b1kn00b
@@ -95,6 +94,7 @@ class LogTest extends TestCase{
 										return cast new DefaultLogger(['testLogLevel'.func().whitelist()], Error); 
 								}.memoize()
 						);
+						/*
 								haxe.Log.trace = Log.trace;
 								Log.trace('sdfsd'.debug());
 								Log.trace('sdfsd'.warning());
@@ -102,7 +102,7 @@ class LogTest extends TestCase{
 								
 								
 								trace( 'dooby'.error() );
-								trace( 'woozan' );
+								trace( 'woozan' );*/
 				}
 		);
 		

@@ -18,6 +18,7 @@ using Stax;
 using stx.Options;
 using stx.Strings;
 using stx.ds.plus.Show;
+using Std;
 
 class Stax {
 	public static function here(?pos:haxe.PosInfos) {
@@ -84,7 +85,7 @@ class Stax {
     }
   }
 	
-  static public function error<T>(msg: String): T { throw msg;  return null; }
+  static public function error<T>(msg: String, ?pos:haxe.PosInfos): T { throw '$msg at $pos'.format();  return null; }
 }
 
 class ArrayLambda {
@@ -163,9 +164,7 @@ class IterableLambda{
   }  
 	static public function foldl<T, Z>(iter: Iterable<T>, seed: Z, mapper: Z -> T -> Z): Z {
     var folded = seed;
-    
     for (e in iter) { folded = mapper(folded, e); }
-    
     return folded;
   }   
   static public function filter<T>(iter: Iterable<T>, f: T -> Bool): Iterable<T> {

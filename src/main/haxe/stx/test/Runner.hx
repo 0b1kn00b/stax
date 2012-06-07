@@ -32,7 +32,14 @@ using stx.functional.PredicateExtensions;
 * Once all the tests are register they are axecuted on the run() call.
 * Note that Runner does not provide any visual output. To visualize the test results use one of
 * the classes in the utest.ui package.
-* @:todo complete documentation
+*
+* Tests can be filtered both by class, by adding a filter funcion at the end of an addAll
+* and by either a prefix as the second parameter of add / addAll or a regular expression
+* as the third parameter.
+*
+* Asynchronous tests can be performed by importing stx.test.Assert and using Assert.createAsync
+* for a handler that takes no parameters, or Assert.createEvent for a handler that takes one parameter.
+* Once this handler is called the test is considered complete.
 */
 class Runner {
   var fixtures(default, null) : Array<TestFixture<Dynamic>>;

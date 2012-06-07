@@ -150,7 +150,7 @@ private class InjectorImpl {
   public static function inject<T>(interf: Class<T>, ?pos: PosInfos): T {
     var binding = getMostSpecificBinding(interf, pos);
   
-    var factory = binding.getOrElse(Stax.error.lazy('No binding defined for ' + Type.getClassName(interf)));
+    var factory = binding.getOrElse(Stax.error.lazy('No binding defined for ' + Type.getClassName(interf),Stax.here()));
   
     return factory();
   }
@@ -284,9 +284,9 @@ private class InjectorImpl {
     var f = Options.toOption(haxe.rtti.Meta.getType(c))
       .flatMap(function(m : Dynamic) { 
         return Options.toOption((Reflect.hasField(m, "DefaultImplementation") ? Reflect.field(m, "DefaultImplementation") : null)); })
-      .flatMap(function(p : Array<String>) {
+      .flatMap(function(p) {
         var cls = null;
-        return if(null == p || null == p[0] || null == (cls = Type.resolveClass(p[0]))) None else Some(Tuples.t2(cls, null != p[1] ? Type.createEnum(BindingType, p[1], []) : null)); })
+        return cast if(null == p || null == p[0] || null == (cls = Type.resolveClass(p[0]))) None else Some(Tuples.t2(cls, null != p[1] ? Type.createEnum(BindingType, p[1], []) : null)); })
       .flatMap(function(p : Tuple2<Class<Dynamic>, BindingType>) {
         return switch(bindingTypeDef(p._2)) {
           case OneToOne:
