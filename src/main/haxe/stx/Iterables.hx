@@ -26,7 +26,8 @@ using stx.Iterables;
 class Iterables {
 	 public static function foldl1<T, T>(iter: Iterable<T>, mapper: T -> T -> T): T {
     var folded = iter.head();
-		
+		//trace(iter.toArray());
+    //trace(iter.tailOption());
 		switch (iter.tailOption()) {
 			case Some(v) 	:
 				for (e in v) { folded = mapper(folded, e); }
@@ -381,7 +382,7 @@ class Iterables {
   public static function forAny<T>(iter: Iterable<T>, f: T -> Bool): Bool {
     return Arrays.forAny(iter.toArray(),f);
   }
-	public static inline function first<T>(iter:Iterable<T>):T{
+	public static function first<T>(iter:Iterable<T>):T{
 		return iter.head();
 	}
 	@:bug('#0b1kn00b: something wrong with next')
@@ -405,8 +406,10 @@ class Iterables {
 		return Stax.unfold( root , unfolder );	
 	}
   public static function yield<A>(fn : Void -> Option<A>):Iterable<A>{
+    //trace('yield');
+    var stack = [];    
     return {
-      iterator : Iterators.yield.lazy(fn)
+      iterator : function() return stx.Iterators.LazyIterator.create(fn,stack).iterator()
     }
   }
 }
