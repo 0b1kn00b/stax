@@ -8,16 +8,17 @@ import stx.Prelude;
 
 
 using stx.Dynamics;
+
 class CodeBlocks {
 	/**
 	 * Takes a Void->Void and returns a Void->Dynamic.
 	 * @param	c
 	 * @return
 	 */
-  public static function promote(c:CodeBlock):Thunk<Dynamic>{
+  public static function returningC(c:CodeBlock,val):Thunk<Dynamic>{
     return function(){
       c();
-      return null;
+      return val;
     }
   }
   public static function catching<A,B>(c:Thunk<A>):Either<Dynamic,A>{
@@ -28,6 +29,9 @@ class CodeBlocks {
       o = Left(e);
     }
     return o;
+  }
+  public static function equals(a:CodeBlock,b:CodeBlock){
+    return Reflect.compareMethods(a,b);
   }
 }	
 class Functions0 {
@@ -132,6 +136,9 @@ class Functions0 {
   }
   public static function map<A,B>(f:Thunk<A>,f1:A->B):Thunk<B>{
     return function(){return f1(f());}
+  }
+  public static function equals<A>(a:Thunk<A>,b:Thunk<A>){
+    return Reflect.compareMethods(a,b);
   }
 }
 class Functions1 {
@@ -239,6 +246,9 @@ class Functions1 {
       f(p1);
     }
   }
+  public static function equals<P1,R>(a:Function1<P1,R>,b:Function1<P1,R>){
+    return Reflect.compareMethods(a,b);
+  }
 }
 class Functions2 {  
 	/**
@@ -344,6 +354,9 @@ class Functions2 {
       f(p1, p2);
     }
   }
+  public static function equals<P1,P2,R>(a:Function2<P1,P2,R>,b:Function2<P1,P2,R>){
+    return Reflect.compareMethods(a,b);
+  }
 }
 class Functions3 {  
 	/**
@@ -442,6 +455,9 @@ class Functions3 {
     return function(p1, p2, p3) {
       f(p1, p2, p3);
     }
+  }
+  public static function equals<P1,P2,P3,R>(a:Function3<P1,P2,P3,R>,b:Function3<P1,P2,P3,R>){
+    return Reflect.compareMethods(a,b);
   }
 }
 class Functions4 {  
@@ -543,6 +559,9 @@ class Functions4 {
     return function(p1, p2, p3, p4) {
       f(p1, p2, p3, p4);
     }
+  }
+  public static function equals<P1,P2,P3,P4,R>(a:Function4<P1,P2,P3,P4,R>,b:Function4<P1,P2,P3,P4,R>){
+    return Reflect.compareMethods(a,b);
   }
 }
 class Functions5 {  
@@ -646,5 +665,8 @@ class Functions5 {
     return function(p1, p2, p3, p4, p5) {
       f(p1, p2, p3, p4, p5);
     }
+  }
+  public static function equals<P1,P2,P3,P4,P5,R>(a:Function5<P1,P2,P3,P4,P5,R>,b:Function5<P1,P2,P3,P4,P5,R>){
+    return Reflect.compareMethods(a,b);
   }
 }
