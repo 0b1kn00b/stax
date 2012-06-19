@@ -8,11 +8,20 @@ import stx.Tuples;
 
 class Hashes {
 
-	public static function toHash<A>(iter:Array < Tuple2 < String, A >> ):Hash<A> {
+/*	public static function toHash<A>(iter:Array < Tuple2 < String, A >> ):Hash<A> {
 		var hash = new Hash();
 		for (val in iter) {
 			hash.set( val._1 , val._2);
 		}
 		return hash;
+	}*/
+	public static function fromHash<A>(h:Hash<A>):Iterable<Tuple2<String,A>>{
+		return
+			h.toIterable().keys().map(
+				function(x){
+					return
+						x.entuple( h.get(x) );
+				}
+			);
 	}
 }

@@ -54,13 +54,14 @@ class Viaz<I,O> implements Arrow<I,O>{
 		var m : Function1<B,B> = function(x:B):B { haxe.Log.trace(x) ; return x;};
 		return new Then( a , new FunctionArrow( m ) );
 	}
-	static public function run<I,O>(a:Arrow<I,O>,?i:I,?cont:Function1<O,Void>):Void{
-		runCPS( a , i , cont );
+	static public function run<I,O>(a:Arrow<I,O>,?i:I,?cont:O->Void):Void{
+		runCPS( a , i , cont == null ? function(x){} : cont );
 	}
 	public static function apply(){
 		return new ArrowApply();
 	}
 }
+
 class Stack{
 	private var data : Array<Arrow<Dynamic,Dynamic>>;
 
@@ -167,7 +168,7 @@ class MapArrow <I,O> implements Arrow<Iterable<I>,Iterable<O>>{
 		 	 )
 		 ).withInput( iter , cont);
 	}
-	public static function map<I,O,P>(a:Arrow<I,O>):Arrow<Iterable<I>,Iterable<O>>{
+	public static function mapper<I,O,P>(a:Arrow<I,O>):Arrow<Iterable<I>,Iterable<O>>{
 		return new MapArrow(a);
 	}
 }
@@ -190,30 +191,30 @@ class OptionArrow<I,O> implements Arrow<Option<I>,Option<O>>{
 #if !(neko || php || cpp )
 class DelayArrow<I,O> implements Arrow<I,O> {
 	private var a 			: Arrow <I,O>;
-	private var delay 	: Int;
+	private var t 			: Int;
 
 	public function new( a : Arrow<I,O> , delay : Int){
 		this.a = a;
-		this.delay = delay;
+		this.t = delay;
 	}
 
 	public function withInput(?i : I, cont : Function1<O,Void> ) : Void{
-		var f = function(){ a.run(i,cont); }
-		Timer.delay( f , delay );
+		var f = function(){ a.runCPS(i,cont); }
+		Timer.delay( f , t );
 	}
 	static public function delay<I,O>(a:Arrow<I,O>,delay:Int):Arrow<I,O>{return new DelayArrow(a,delay);}
 }
 #end
-class EventArrow<Event> implements Arrow<sf.event.EventSystem,Event>{
+class EventArrow<T:Event> implements Arrow<sf.event.EventSystem<T>,T>{
 	var name : String;
 	public function new(name:String){
 		this.name = name;
 	}
-	public function withInput(?i : sf.event.EventSystem, cont : Function1<Event,Void> ) : Void{
+	public function withInput(?i : sf.event.EventSystem<T>, cont : Function1<T,Void> ) : Void{
 		trace("added: " + name);
 		var canceller 	: Void -> Void = null;
 		var handler 		= 
-			function(evt:sf.event.Event){
+			function(evt:T){
 				trace("called: " + name);
 				canceller();
 				cont(cast evt);
@@ -221,7 +222,7 @@ class EventArrow<Event> implements Arrow<sf.event.EventSystem,Event>{
 		i.addEventListener(name,handler);
 		canceller = function(){ i.removeEventListener(name,handler); }
 	}
-	static public function event(evt:String):Arrow<EventSystem,Event>{ 
+	static public function event<E:Event>(evt:String):Arrow<EventSystem<E>,E>{ 
 		return new EventArrow(evt); 
 	}
 }

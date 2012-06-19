@@ -60,7 +60,20 @@ class Streams {
         return Streams.create(function(pulse: Pulse<Dynamic>): Propagation<T> { throw 'zeroE : received a value; zeroE should not receive a value; the value was ' + pulse.value; return doNotPropagate; });            
     }
     
-//		#if (js || flash)
+
+    public static function toStream<T>(f:Future<T>):Stream<T>{
+        var s = Streams.create(
+                function(pulse:Pulse<Dynamic>){
+                    return Propagation.propagate(pulse.value);
+                }
+            );
+        f.foreach(
+            function(v:T){
+                s.sendEvent(v);
+            }
+        );
+        return s;
+    }
     /**
      * Creates an event stream that will send a single value.
      */

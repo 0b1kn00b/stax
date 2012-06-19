@@ -6,7 +6,7 @@ package stx;
  */
 import stx.Prelude;
 
-
+using stx.Functions;
 using stx.Dynamics;
 
 class CodeBlocks {
@@ -219,7 +219,7 @@ class Functions1 {
     }
   }
 	/**
-	 * Returns a function that calls 'f2' with the output of 'f1'.
+	 * Returns a function that calls 'f2' with the output of 'f1'trace.
 	 * @param f1
 	 * @param f2
 	 */
@@ -251,6 +251,15 @@ class Functions1 {
   }
 }
 class Functions2 {  
+  /**
+   * fill in the first parameter of the function, produces another function.
+   */
+  public static function p1<P1,P2,R>(f:Function2<P1,P2,R>,p1:P1):P2->R{
+    return f.curry()(p1);
+  }
+  public static function p2<P1,P2,R>(f:Function2<P1,P2,R>,p2:P2):P1->R{
+    return f.flip().curry()(p2);
+  }
 	/**
 	 * Produces a function that ignores any error the occurs whilst calling the input function.
 	 * @param	f

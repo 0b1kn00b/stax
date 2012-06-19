@@ -85,4 +85,7 @@ class Enums {
 	public static function enumOf( name : String ) : Enum<Dynamic> {
 		return Type.resolveEnum(name);
 	}
+	public static function alike(e1:EnumValue,e2:EnumValue):Bool{
+		return Enums.indexOf(e1) == Enums.indexOf(e2);
+	}
 }

@@ -9,7 +9,13 @@ using stx.Options;
 using Std;
 
 class Iterators {
-	
+	static public function toArray<T>( iterator : Iterator<T>) : Array<T>{
+		var o = [];
+		while (iterator.hasNext()){
+			o.push(iterator.next());
+		}
+		return o;
+	}
 }
 class LazyIterator<T>{
 	public static function create(fn,stack){
@@ -54,8 +60,5 @@ class LazyIterator<T>{
 			next 			: next,
 			hasNext		: hasNext
 		}
-	}
-	public function reset(){
-
 	}
 }

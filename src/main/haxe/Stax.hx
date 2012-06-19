@@ -89,14 +89,14 @@ class Stax {
 }
 
 class ArrayLambda {
-	inline static public function map<T, S>(a: Array<T>, f: T -> S): Array<S> {
+	static public function map<T, S>(a: Array<T>, f: T -> S): Array<S> {
     var n: Array<S> = [];
     
     for (e in a) n.push(f(e));
     
     return n;
   }
-	inline static public function flatMap<T, S>(a: Array<T>, f: T -> Iterable<S>): Array<S> {
+	static public function flatMap<T, S>(a: Array<T>, f: T -> Iterable<S>): Array<S> {
     var n: Array<S> = [];
     
     for (e1 in a) {
@@ -105,14 +105,14 @@ class ArrayLambda {
     
     return n;
   }
-	inline static public function foldl<T, Z>(a: Array<T>, z: Z, f: Z -> T -> Z): Z {
+	static public function foldl<T, Z>(a: Array<T>, z: Z, f: Z -> T -> Z): Z {
     var r = z;
     
     for (e in a) { r = f(r, e); }
     
     return r;
   }
-	inline static public function filter<T>(a: Array<T>, f: T -> Bool): Array<T> {
+	static public function filter<T>(a: Array<T>, f: T -> Bool): Array<T> {
     var n: Array<T> = [];
     
     for (e in a)
@@ -134,7 +134,7 @@ class ArrayLambda {
   }
 }
 class IterableLambda{
-	inline static public function toArray<T>(i: Iterable<T>) {
+	static public function toArray<T>(i: Iterable<T>) {
     var a = [];
     for (e in i) a.push(e);
     return a;
@@ -199,3 +199,4 @@ class IntIters {
     return to(start, end - 1);
   }
 }
+typedef P = stx.Predicates;

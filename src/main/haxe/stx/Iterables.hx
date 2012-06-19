@@ -386,6 +386,7 @@ class Iterables {
 		return iter.head();
 	}
 	@:bug('#0b1kn00b: something wrong with next')
+  /*
 	public static function unwind<T>(root:T, children:T->Iterable<T>, breadth : Bool = false ):Iterable<T> {
 		//trace("unwind");
 		var stack 	= [];
@@ -404,7 +405,25 @@ class Iterables {
 			return Some( next.entuple(progress) );
 		}	
 		return Stax.unfold( root , unfolder );	
-	}
+	}*/
+  static public function unwind<A>(root:A,children : A -> Array<A>,depth = false):Iterable<A>{
+    var index = 0;
+    var stack = [root];
+    var visit = null;
+    visit = function(x:A):Void{
+      for(v in children(x)){
+        visit(v);
+        stack.push(v);
+      }
+    }
+    visit(root);
+    return 
+      function():Option<A>{
+        var val = stack[index];
+        index++;
+        return Options.toOption(val);
+      }.yield();
+  }
   public static function yield<A>(fn : Void -> Option<A>):Iterable<A>{
     //trace('yield');
     var stack = [];    

@@ -44,10 +44,10 @@ class Options {
   /**
    * Performs 'f' on the contents of 'o' if 'o' != None
    */
-  public static function foreach<T>(o: Option<T>, f: T -> Void): Void {
+  public static function foreach<T>(o: Option<T>, f: T -> Void): Option<T> {
     return switch (o) {
-      case None: 
-      case Some(v): f(v);
+      case None     : o;
+      case Some(v)  : f(v); o;
     }
   }
   /**

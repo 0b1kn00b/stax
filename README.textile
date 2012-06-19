@@ -31,7 +31,7 @@ class Test{
      }
    );
    trace( str );
- }
+  }
 }</code></pre>
 
 In addition you can find:

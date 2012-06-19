@@ -35,4 +35,5 @@ class Bools {
   public static function equals(v1 : Bool, v2 : Bool) : Bool {
     return v1 == v2;   
   }
+
 }

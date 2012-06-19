@@ -89,5 +89,10 @@ class Signals {
     public static function sampleS(time: Signal<Int>): Signal<Int> {
         return Streams.timerS(time).startsWith(Std.int(External.now()));
     }
-		#end
+	#end
+
+    
+    public static function toSignal<T>(s:Stream<T>,?init : T): Signal<T> {
+        return new Signal<T>(cast s, init,function(pulse) { return propagate(pulse); });
+    }
 }

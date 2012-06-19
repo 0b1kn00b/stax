@@ -54,7 +54,7 @@ class Method < I, O, F > {
 		this.convention = Patch;
 		this.fn = fn;
 	}
-	public function execute(?v:I,?pos):O{
+	public function execute(?v:I,?pos:haxe.PosInfos):O{
 		if( isEmpty() ) throw new AbstractMethodError();
 		return null;
 	}

@@ -17,21 +17,15 @@
 */
 package stx;
 
-using Stax;
-import Stax;
-
-
-import stx.Tuples;
-using stx.Tuples;
-
+import Stax;                      using Stax;
+import stx.Tuples;                using stx.Tuples;
 import stx.Prelude; 
-
 import stx.ds.plus.Equal;
 
-using stx.Maths;
-using stx.Options;
-
-using stx.Arrays;
+                                  using stx.Maths;
+                                  using stx.Options;
+                                  using stx.Functions;
+                                  using stx.Arrays;
 
 class Arrays { 
   /**
@@ -534,4 +528,23 @@ class Arrays {
 		}
 		slices;
 	}
+  @:todo('#0b1kn00b: optimise')
+  public static function fromHash<T>(hash:Hash<T>):Array<Tuple2<String,T>>{
+    return 
+      hash.keys().toIterable().map(
+        function(x){
+          return x.entuple( hash.get(x) );
+        }
+      ).toArray();
+  }
+}
+class ArrayType{
+  @:experimental
+  public static function find<P>(a:Class<Array<P>>):(P->Bool)->Array<P>->Option<P>{
+    return Arrays.find.flip();
+  }
+  @:experimental
+  public static function map<P,R>(a:Class<Array<P>>):(P->R)->Array<P>->Array<R>{
+    return ArrayLambda.map.flip();
+  }
 }

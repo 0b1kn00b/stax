@@ -200,4 +200,13 @@ class Objects {
   public static function iterator(d: Object): Iterator<String> {
     return Reflect.fields(d).iterator();
   }
+  public static function toObject(a:Array<Tuple2<String,Dynamic>>):Object{
+    return a.foldl(
+      {},
+      function(init,el){
+        Reflect.setField( init , el._1, el._2 );
+        return init;
+      }
+    );
+  }
 }

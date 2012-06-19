@@ -39,6 +39,14 @@ typedef Function10<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, R> = P1 -> P2 -> P3 
 typedef Reducer<T> = T -> T -> T
 typedef Factory<T> = Void -> T
 
+typedef Predicate<A>              = Predicate1<A>
+
+typedef Predicate1<A>             = Function<A, Bool>
+typedef Predicate2<A, B>          = Function2<A, B, Bool>
+typedef Predicate3<A, B, C>       = Function3<A, B, C, Bool>
+typedef Predicate4<A, B, C, D>    = Function4<A, B, C, D, Bool>
+typedef Predicate5<A, B, C, D, E> = Function5<A, B, C, D, E, Bool>
+
 /**
  * A function which takes no parameter and returns a result.
  */

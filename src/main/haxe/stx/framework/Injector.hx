@@ -44,6 +44,7 @@ typedef Binder<T, S> = {
    * be used for creating instances of the specified type.
    */  
   function bindF(interf: Class<T>, f: Void -> T, ?b: BindingType): S;
+  
 }
 
 typedef Bindable<T> = {

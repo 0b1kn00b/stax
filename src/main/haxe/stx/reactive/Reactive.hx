@@ -155,7 +155,6 @@ private class PriorityQueue<T> {
         return ret;
     }
 }
-
 class Stream<T> {
     private var _rank: Int;
     private var _sendsTo: Array<Stream<Dynamic>>;
@@ -292,19 +291,25 @@ class Stream<T> {
 
         var inE: Stream<Dynamic> = Streams.create(
             function (pulse: Pulse<Dynamic>): Propagation<Dynamic> {
+               // trace('here');
+                //trace(pulse);
+                var first = prevE == null;
+
                 if (prevE != null) {
                     prevE.removeListener(outE, true); // XXX This is sloppy
                 }
                 
                 prevE = k(pulse.value);
+                //trace(prevE != null);
                 
                 prevE.attachListener(outE);
 
+                //prevE.propagatePulse(new Pulse(Stamp.lastStamp(), pulse.value));
+                
                 return doNotPropagate;
             },
             [m]
         );
-
         return outE;
     }
     
@@ -1130,6 +1135,7 @@ class Stream<T> {
     }
     
     private function propagatePulse(pulse: Pulse<Dynamic>) {
+
         // XXX Change so that we won't propagate more than one value per time step???
         var queue = new PriorityQueue<{stream: Stream<Dynamic>, pulse: Pulse<Dynamic>}>();
         
@@ -1199,7 +1205,7 @@ class Signal<T> {
     
     private var _last: T;
     
-    public function new(stream: Stream<Dynamic>, init: T, updater: Pulse<Dynamic> -> Propagation<T>) {
+    public function new(stream: Stream<Dynamic>, ?init: T, updater: Pulse<Dynamic> -> Propagation<T>) {
         this._last          = init;        
         this._underlyingRaw = stream;
         this._updater       = updater;
@@ -1347,7 +1353,7 @@ class Signal<T> {
         return Streams.create(
             function(pulse: Pulse<Dynamic>): Propagation<Tuple3<T, B, C>> {
                 return propagate(pulse.withValue(createTuple()));
-            },
+              },
             arr.map(function(b) { return cast(b.changes(), Stream<Dynamic>); })
         ).startsWith(createTuple());
     }

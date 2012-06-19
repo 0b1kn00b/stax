@@ -1,4 +1,5 @@
 package stx;
+using stx.Strings;
 import stx.Prelude;
 
 class Predicates {
@@ -39,7 +40,7 @@ class Predicates {
   }
   
   public static function isEqualTo<T>(ref: T, ?equal: EqualFunction<T>): Predicate<T> {
-    if (equal == null) equal = Equal.getEqualFor(ref);
+    if (equal == null) equal = stx.ds.plus.Equal.getEqualFor(ref);
     
     return function(value) {
       return equal(ref, value);
@@ -67,11 +68,16 @@ class Predicates {
   }
   
   public static function or<T>(p1: Predicate<T>, p2: Predicate<T>): Predicate<T> {
-    return function(value) {
+    return function(value:T) {
       return p1(value) || p2(value);
     }
   }
-  
+  public static function not<T>(p1: Predicate<T>):Predicate<T>{
+    return 
+      function(value:T){
+        return !p1(value);
+      }
+  }  
   public static function orAny<T>(p1: Predicate<T>, ps: Iterable<Predicate<T>>): Predicate<T> {
     return function(value) {
       var result = p1(value);

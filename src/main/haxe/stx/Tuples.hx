@@ -6,13 +6,10 @@ package stx;
  */
 import stx.Prelude;
 using Stax;
-  
+                    using stx.Tuples;  
 
 class Tuples {
 	
-	public static function entuple<A, B>(a: A, b: B): stx.Tuple2<A, B> {
-    return new Tuple2(a, b);
-  }
 	public static inline function t2<A,B>(_1:A,_2:B):stx.Tuple2<A,B>{
 		return new Tuple2(_1, _2);
 	}
@@ -25,6 +22,9 @@ class Tuples {
 	public static inline function t5<A,B,C,D,E>(_1:A,_2:B,_3:C,_4:D,_5:E):stx.Tuple5<A,B,C,D,E>{
 		return new Tuple5(_1, _2, _3, _4, _5);
 	}
+  public static inline function elements(p:Product){
+    return p.elements();
+  }
 }
 interface Product {
   public var prefix(get_prefix, null): String;
@@ -115,13 +115,16 @@ class Tuple2<A, B> extends AbstractProduct {
 	public static function entuple<A, B, C>(t:stx.Tuple2<A,B>,c:C): stx.Tuple3<A, B, C> {
     return new Tuple3(t._1, t._2, c);
   }
-	public function into<C>(f : A -> B -> C ) : C
-		return f(_1, _2)
+	public static function into<A,B,C>(t:Tuple2<A,B>, f : A -> B -> C ) : C
+		return f(t._1, t._2)
 
 		
 	public static function first<A, B>(t : Tuple2<A, B>) return t._1
 	public static function second<A, B>(t : Tuple2<A, B>) return t._2
 	
+  public static function map<A,B,C,D>(t:Tuple2<A,B>,f1: A -> C, f2: B -> D):Tuple2<C,D>{
+    return f1(t._1).entuple(f2(t._2));
+  }
   override private function get_prefix(): String {
     return "stx.Tuple2";
   }
@@ -150,9 +153,12 @@ class Tuple3<A, B, C> extends AbstractProduct {
 		this._3 = _3;
 		super([_1, _2, _3]);
 	}
-	public function into<D>(f : A -> B -> C -> D) : D {
-		return f(_1, _2, _3);
+	public static function into<A,B,C,D>(t:Tuple3<A,B,C>,f : A -> B -> C -> D) : D {
+		return f(t._1, t._2, t._3);
 	}
+  public static function map<A,B,C,D,E,F>(t:Tuple3<A,B,C>,f1: A -> D, f2: B -> E, f3 : C -> F):Tuple3<D,E,F>{
+    return f1(t._1).entuple(f2(t._2)).entuple(f3(t._3));
+  }
 	public static function entuple<A, B, C, D>(t:stx.Tuple3<A,B,C>,d:D): stx.Tuple4<A, B, C, D> {
     return new Tuple4(t._1, t._2, t._3, d);
   }
@@ -190,8 +196,8 @@ class Tuple4< A, B, C, D> extends AbstractProduct {
     this._1 = first; this._2 = second; this._3 = third; this._4 = fourth;
   }
 	
-	public function into<E>(f : A -> B -> C -> D -> E) : E
-		return f(_1, _2, _3, _4)
+	public static function into<A,B,C,D,E>(t:Tuple4<A,B,C,D>,f : A -> B -> C -> D -> E) : E
+		return f(t._1, t._2, t._3, t._4)
 
 	public static function first<A, B, C, D>(t : stx.Tuple4<A, B, C, D>) return t._1
 	public static function second<A, B, C, D>(t : stx.Tuple4<A, B, C, D>) return t._2
@@ -235,8 +241,8 @@ class Tuple5< A, B, C, D, E> extends AbstractProduct {
     this._1 = first; this._2 = second; this._3 = third; this._4 = fourth; this._5 = fifth;
   }
 
-	public function into<F>(f : A -> B -> C -> D -> E -> F) : F
-		return f(_1, _2, _3, _4, _5)
+	public static function into<A,B,C,D,E,F>(t:Tuple5<A,B,C,D,E>,f : A -> B -> C -> D -> E -> F) : F
+		return f(t._1, t._2, t._3, t._4, t._5)
 	
 	public static function first<A, B, C, D, E>(t : stx.Tuple5<A, B, C, D, E>) return t._1
 	public static function second<A, B, C, D, E>(t : stx.Tuple5<A, B, C, D, E>) return t._2
@@ -263,4 +269,9 @@ class Tuple5< A, B, C, D, E> extends AbstractProduct {
 		var _5 = t1._5 == null ? t0._5 : t1._5;
 		return Tuples.t5(_1, _2, _3, _4, _5);
 	}
+}
+class Entuple{
+  public static function entuple<A, B>(a: A, b: B): stx.Tuple2<A, B> {
+    return new Tuple2(a, b);
+  }
 }
