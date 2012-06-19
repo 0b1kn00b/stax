@@ -392,6 +392,21 @@ class ArrowApply<I,O> implements Arrow<Tuple2<Arrow<I,O>,I>,O>{
 		);
 	}
 }
+#if (neko || cpp || php || java )
+import sys.io.Process;
+import haxe.io.Input;
+
+class ProcessArrow {
+
+	public static var process : Arrow<Array<String>,Tuple2<Input,Input>>
+		=
+			function(a:Array<String>){
+				var cmd = a.shift();
+				var proc = new Process(cmd,a);
+				return Tuples.t2(proc.stderr,proc.stdout);
+			}.lift();
+}
+#end
 /*
 class StateArrow<S,A,B> implements Arrow<A,B>{
 	
