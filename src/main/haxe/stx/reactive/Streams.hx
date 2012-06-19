@@ -88,7 +88,7 @@ class Streams {
                 
                 sent = false;
                 
-                return propagate(pulse);
+                return cast propagate(pulse);
             }
         );
         

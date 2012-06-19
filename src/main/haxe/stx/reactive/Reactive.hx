@@ -486,7 +486,7 @@ class Stream<T> {
             this,
             init,
             function(pulse: Pulse<Dynamic>): Propagation<T> {
-                return propagate(pulse);
+                return cast propagate(pulse);
             }
         );
     }
