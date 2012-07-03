@@ -142,6 +142,7 @@ class Functions0 {
   }
 }
 class Functions1 {
+
 	/**
 	 * Produces a function that ignores any error the occurs whilst calling the input function.
 	 * @param	f
@@ -367,7 +368,25 @@ class Functions2 {
     return Reflect.compareMethods(a,b);
   }
 }
-class Functions3 {  
+class Functions3 {
+  public static function p1<P1,P2,P3,R>(f:Function3<P1,P2,P3,R>,p1:P1):P2->P3->R{
+    return
+      function(p2:P2,p3:P3){
+        return f(p1,p2,p3);
+      }
+  }
+  public static function p2<P1,P2,P3,R>(f:Function3<P1,P2,P3,R>,p2:P2):P1->P3->R{
+    return
+      function(p1:P1,p3:P3){
+        return f(p1,p2,p3);
+      }
+  }
+  public static function p3<P1,P2,P3,R>(f:Function3<P1,P2,P3,R>,p3:P3):P1->P2->R{
+    return
+      function(p1:P1,p2:P2){
+        return f(p1,p2,p3);
+      }
+  }
 	/**
 	 * Produces a function that ignores any error the occurs whilst calling the input function.
 	 * @param	f
@@ -470,6 +489,13 @@ class Functions3 {
   }
 }
 class Functions4 {  
+  /*
+  public static function p1<P1,P2,P3,P4,R>(f:Function4<P1,P2,P3,P4,R>,p1:P1):P2->P3->P3->R{
+    return
+      function(p2:P2,p3:P3,p4:P4){
+        return f(p1,p2,p3,p4);
+      }
+  }*/
 	/**
 	 * Produces a function that ignores any error the occurs whilst calling the input function.
 	 * @param	f
