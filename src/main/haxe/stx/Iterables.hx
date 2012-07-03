@@ -129,17 +129,22 @@ class Iterables {
     }
   }
   
-  public static function exists<T>(iter: Iterable<T>, eq: T -> T -> Bool, value: T): Bool {
+  public static function exists<T>(iter: Iterable<T>, fn: T -> Bool): Bool {
     for (element in iter)
-      if (eq(element, value)) { return true; };
+      if (fn(element)) { return true; };
     return false;
   }
-  
+  public static function contains<T>(iter:Iterable<T>,value:T,eq : T -> T -> Bool){
+    for (el in iter){
+      if( eq(value,el) ){ return true;}
+    }
+    return false;
+  }
   public static function nub<T>(iter: Iterable<T>): Iterable<T> {
     var result = [];
 
     for (element in iter)
-      if (!exists(result, function(a, b) { return a == b; }, element)) { result.push(element); };
+      if (!contains(result, element, function(a, b) { return a == b; })) { result.push(element); };
     
     return result;
   }
@@ -406,6 +411,7 @@ class Iterables {
 		}	
 		return Stax.unfold( root , unfolder );	
 	}*/
+  @:experimental
   static public function unwind<A>(root:A,children : A -> Array<A>,depth = false):Iterable<A>{
     var index = 0;
     var stack = [root];
