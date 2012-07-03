@@ -65,7 +65,7 @@ class Log {
 		return new LogItem(LogLevel.Fatal, v);
 	}
 	public static function trace(v:Dynamic, ?pos:PosInfos) {
-		var log = Logger.inject(pos);
+		var log : Logger = Logger.inject(pos);
 		switch (Type.typeof(v)) {
 			case TClass(c)	:
 					if ( Type.getClassName(c) == Type.getClassName(LogItem) ){
@@ -98,11 +98,11 @@ class Log {
 }
 @DefaultImplementation('stx.DefaultLogger')
 interface Logger {
-	public function check(v:Dynamic, ?pos:PosInfos):Bool;
+	public function check(v:Dynamic, pos:PosInfos):Bool;
 	public function trace(v:Dynamic, ?pos:PosInfos):Void;
-	public 	var level				: LogLevel;
+	public 	var level(default,null)				: LogLevel;
 }
-class DefaultLogger {
+class DefaultLogger implements Logger{
 	public static function create(listings,?level) {
 		return new DefaultLogger(listings,level);
 	}
@@ -112,7 +112,7 @@ class DefaultLogger {
 	
 	public function new(?listings:Array<LogListing>, ?level: LogLevel, ?permissive : Bool = true) {
 		this.listings 	= listings == null ? [] : listings;
-		this.level			= level == null ? Debug : level;
+		this.level			= level == null ? Warning: level;
 		this.permissive = permissive;
 	}
 	/**
