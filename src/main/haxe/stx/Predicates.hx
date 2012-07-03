@@ -2,6 +2,13 @@ package stx;
 using stx.Strings;
 import stx.Prelude;
 
+typedef Predicate<A>              = Predicate1<A>
+typedef Predicate1<A>             = Function<A, Bool>
+typedef Predicate2<A, B>          = Function2<A, B, Bool>
+typedef Predicate3<A, B, C>       = Function3<A, B, C, Bool>
+typedef Predicate4<A, B, C, D>    = Function4<A, B, C, D, Bool>
+typedef Predicate5<A, B, C, D, E> = Function5<A, B, C, D, E, Bool>
+
 class Predicates {
   public static function isNull<T>(): Predicate<T> {
     return function(value) {
