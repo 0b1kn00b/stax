@@ -115,14 +115,13 @@ class Tuple2<A, B> extends AbstractProduct {
 	public static function entuple<A, B, C>(t:stx.Tuple2<A,B>,c:C): stx.Tuple3<A, B, C> {
     return new Tuple3(t._1, t._2, c);
   }
-	public static function into<A,B,C>(t:Tuple2<A,B>, f : A -> B -> C ) : C
-		return f(t._1, t._2)
-
-		
+	public static function into<A,B,C>(t:Tuple2<A,B>, f : A -> B -> C ) : C{
+    return f(t._1, t._2);
+  }
 	public static function first<A, B>(t : Tuple2<A, B>) return t._1
 	public static function second<A, B>(t : Tuple2<A, B>) return t._2
 	
-  public static function map<A,B,C,D>(t:Tuple2<A,B>,f1: A -> C, f2: B -> D):Tuple2<C,D>{
+  public static function translate<A,B,C,D>(t:Tuple2<A,B>,f1: A -> C, f2: B -> D):Tuple2<C,D>{
     return f1(t._1).entuple(f2(t._2));
   }
   override private function get_prefix(): String {
@@ -156,7 +155,7 @@ class Tuple3<A, B, C> extends AbstractProduct {
 	public static function into<A,B,C,D>(t:Tuple3<A,B,C>,f : A -> B -> C -> D) : D {
 		return f(t._1, t._2, t._3);
 	}
-  public static function map<A,B,C,D,E,F>(t:Tuple3<A,B,C>,f1: A -> D, f2: B -> E, f3 : C -> F):Tuple3<D,E,F>{
+  public static function translate<A,B,C,D,E,F>(t:Tuple3<A,B,C>,f1: A -> D, f2: B -> E, f3 : C -> F):Tuple3<D,E,F>{
     return f1(t._1).entuple(f2(t._2)).entuple(f3(t._3));
   }
 	public static function entuple<A, B, C, D>(t:stx.Tuple3<A,B,C>,d:D): stx.Tuple4<A, B, C, D> {
