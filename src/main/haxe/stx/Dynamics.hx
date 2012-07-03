@@ -81,4 +81,8 @@ class Dynamics {
   public static function apply<A,B>(v:A,fn:A->Void):Void{
   	fn(v);
   }
+
+  public static function then<A,B>(a:A,b:B):B{
+  	return b;
+  }
 }
