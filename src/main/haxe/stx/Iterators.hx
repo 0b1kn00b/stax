@@ -16,6 +16,14 @@ class Iterators {
 		}
 		return o;
 	}
+	static public function forAll<T>( iterator : Iterator<T>, fn : T -> Bool):Bool{
+		var ok = true;
+		while ( iterator.hasNext() ){
+			ok = fn( iterator.next() );
+			if (!ok) break;
+		}
+		return ok;
+	}
 }
 class LazyIterator<T>{
 	public static function create(fn,stack){
