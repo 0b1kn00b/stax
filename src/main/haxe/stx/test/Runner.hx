@@ -25,7 +25,7 @@ using stx.Functions;
 import stx.Prelude;
 using Stax;
 
-using stx.functional.PredicateExtensions;
+using stx.Predicates;
 
 /**
 * The Runner class performs a set of tests. The tests can be added using add or addFixtures.
