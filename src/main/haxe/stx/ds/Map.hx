@@ -591,26 +591,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
     } else _valueShow;
   }
 }
-class MapExtensions {
-  public static function toObject<V>(map: Map<String, V>): Dynamic<V> {
-    return map.foldl({}, function(object, tuple) {
-      Reflect.setField(object, tuple._1, tuple._2);
-      
-      return object;
-    });
-  }
-	public static function toMap<T>(d: Dynamic<T>): Map<String, T> {
-    var map: Map<String, T> = Map.create();
-    
-    for (field in Reflect.fields(d)) {
-      var value = Reflect.field(d, field);
-      
-      map = map.set(field, value);
-    }
-    
-    return map;
-  }
-}
+
 class IterableToMap {
   public static function toMap<K, V>(i: Iterable<Tuple2<K, V>>):Map<K,V> {
     return stx.ds.Map.create().addAll(i);
@@ -628,6 +609,26 @@ class ArrayToMap {
   public static function toMap<K, V>(arr : Array<Tuple2<K, V>>) {
     return stx.ds.Map.create().addAll(arr);
   }	
+}
+class MapExtensions {
+  public static function toObject<V>(map: Map<String, V>): Dynamic<V> {
+    return map.foldl({}, function(object, tuple) {
+      Reflect.setField(object, tuple._1, tuple._2);
+      
+      return object;
+    });
+  }
+  public static function toMap<T>(d: Dynamic<T>): Map<String, T> {
+    var map: Map<String, T> = Map.create();
+    
+    for (field in Reflect.fields(d)) {
+      var value = Reflect.field(d, field);
+      
+      map = map.set(field, value);
+    }
+    
+    return map;
+  }
 }
 /*class HashToMap {
 	public stati
