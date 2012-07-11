@@ -64,7 +64,18 @@ class Iterables {
     return if (!iterator.hasNext()) None;
            else Some(drop(iter, 1));
   }
-  
+  /**
+   * Take element[1...n] from the Iterable, or if Iterable.size() == 1, element[0]
+   * @param iter
+   * @return Iterable
+   */
+  public static function tail<T>(iter: Iterable<T>): Iterable<T> {
+    return switch (tailOption(iter)) {
+      case None: Stax.error('Iterable has no tail');
+      
+      case Some(t): t;
+    }
+  }
   public static function drop<T>(iter: Iterable<T>, n: Int): Iterable<T> {
     var iterator = iter.iterator();
     
@@ -115,18 +126,6 @@ class Iterables {
     }
     
     return r;
-  }
-  /**
-   * Take element[1...n] from the Iterable, or if Iterable.size() == 1, element[0]
-	 * @param iter
-	 * @return Iterable
-   */
-  public static function tail<T>(iter: Iterable<T>): Iterable<T> {
-    return switch (tailOption(iter)) {
-      case None: Stax.error('Iterable has no tail');
-      
-      case Some(t): t;
-    }
   }
   
   public static function exists<T>(iter: Iterable<T>, fn: T -> Bool): Bool {
@@ -433,8 +432,8 @@ class Iterables {
   public static function yield<A>(fn : Void -> Option<A>):Iterable<A>{
     //trace('yield');
     var stack = [];    
-    return {
-      iterator : function() return stx.Iterators.LazyIterator.create(fn,stack).iterator()
+    return cast {
+      iterator : function() return stx.Iterators.LazyIterator.create(cast fn,stack).iterator()
     }
   }
 }
