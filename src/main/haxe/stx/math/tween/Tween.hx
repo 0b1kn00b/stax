@@ -16,17 +16,13 @@
 package stx.math.tween;
 
 import stx.Prelude;
-import stx.ds.Set;
-using stx.ds.Set;
+import stx.ds.Set;            using stx.ds.Set;
 
-using stx.ds.Group;
-using stx.ds.Map;
+using stx.ds.Group;           using stx.ds.Map;
 
-import stx.Options;
-using stx.Options;
+import stx.Options;           using stx.Options;
 
-import stx.Tuples;
-using stx.Tuples;
+import stx.Tuples;            using stx.Tuples;
 
 using stx.functional.FoldableExtensions;
 
