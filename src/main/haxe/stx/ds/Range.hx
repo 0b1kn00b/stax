@@ -1,5 +1,8 @@
 package stx.ds;
 
+using Std;
+using Type;
+
 class Range<T:Float> {
 	public static var MIN 	= -1.7976931348623157 * Math.pow(10,308);
 	public static var MAX 	=  1.7976931348623157 * Math.pow(10,308);
@@ -40,6 +43,10 @@ class Range<T:Float> {
 			max = MAX;
 		}
 		return new Range( { min : min, max : max } );
+	}
+	public function toString(){
+		var tname = this.getClass().getClassName();
+		return '$tname(min:$min,max:$max)'.format();
 	}
 	//public static function apply<A,B>(r:Range<A>,f0 : Range<A> -> B,):B{
 		//return f0(r);
