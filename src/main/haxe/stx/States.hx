@@ -11,6 +11,18 @@ class States{
 	static public function apply<S,R>(state:State<S,R>,v:S):Tuple2<R,S>{
 		return state(v);
 	}
+	/**
+	* Run the State with s, throwing away the result and returning just s.
+	*/
+	static public function exec<S,R>(state:State<S,R>,s:S):S{
+		return state(s).second();
+	}
+	/**
+	* Run the State with s, returning the result.
+	*/
+	static public function eval<S,R>(state:State<S,R>,s:S):R{
+		return state(s).first();
+	}
 	static public function map<S,R,R1>(state:State<S,R>,fn:R->R1):State<S,R1>{
 		return apply.p1(state).andThen( Tuple2.translate.p3( Stax.identity() ).p2( fn ) );
 	}
@@ -32,19 +44,19 @@ class States{
 	}
 	static public function getS<S,R>(state:State<S,R>):State<S,S>{
 		return 
-			function(s:S){
+			function(s:S):Tuple2<S,S>{
 				var o = state(s);
-				return Tuples.t2(o,o);
+				return Tuples.t2(o._2,o._2);
 			}
 	}
-	static public function putS(state:State<S,R>,n:S):State<S,R>){
+	static public function putS<S,R>(state:State<S,R>,n:S):State<S,R>{
 		return 
 			function (s:S){
-				return Tuples.t2(null,nu);
+				return Tuples.t2(null,n);
 			}
 	}
 
-	static public function stateOf<S>(v:S):State<S,Void>{
+	static public function stateOf<S>(v:S):State<S,Dynamic>{
 		return
 			function(s:S){
 				return Tuples.t2(null,s);
