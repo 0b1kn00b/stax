@@ -6,12 +6,13 @@ package stx;
  */
 
 import stx.Tuples;
-import stx.error.Error;						using stx.error.Error;						
-import stx.Prelude;											using stx.Prelude;
-																		using Stax;
-																		using stx.Options;
-																		using stx.Dynamics;
-																		using stx.Iterables;
+import stx.error.Error;           using stx.error.Error;            
+import stx.Prelude;               using stx.Prelude;
+                                  using Stax;
+                                  using stx.Options;
+                                  using stx.Dynamics;
+                                  using stx.Iterables;
+                                  using stx.Eithers;
 
 /**
  * An asynchronous operation that may complete in the future unless
@@ -38,9 +39,9 @@ class Future<T> {
     _cancelers  = [];
     _canceled   = [];
   }
-	public function isEmpty(){
-		return _listeners.length == 0;
-	}
+  public function isEmpty(){
+    return _listeners.length == 0;
+  }
   /** Creates a "dead" future that is canceled and will never be delivered.
    */
   public static function dead<T>(): Future<T> {
@@ -148,9 +149,9 @@ class Future<T> {
 
     return this;
   }
-	public function foreach(f:T->Void):Future<T> {
-		return deliverTo(f);
-	}
+  public function foreach(f:T->Void):Future<T> {
+    return deliverTo(f);
+  }
   /** Uses the specified function to transform the result of this future into
    * a different value, returning a future of that value.
    * <p>
@@ -269,10 +270,10 @@ class Future<T> {
   public static function create<T>(): Future<T> {
     return new Future<T>();
   }
-	public static function toFuture<T>(t: T): Future<T> {
+  public static function toFuture<T>(t: T): Future<T> {
     return Future.create().deliver(t);
   }
-	public function deliverMe(f:Future<T>-> Void): Future<T> {
+  public function deliverMe(f:Future<T>-> Void): Future<T> {
     if (isCanceled()) return this;
     else if (isDelivered()) f(this);
     else _listeners.push(function(g) {
@@ -280,7 +281,7 @@ class Future<T> {
       });
     return this;
   }
-	public static function waitFor(toJoin:Array<Future<Dynamic>>):Future<Array<Dynamic>> {
+  static public function waitFor(toJoin:Array<Future<Dynamic>>):Future<Array<Dynamic>> {
     var
       joinLen = toJoin.size(),
       myprm = create(),
@@ -304,5 +305,21 @@ class Future<T> {
           });
       });  
     return myprm;
+  }
+  /**
+  * Does a map if the Either is Right.
+  */
+  static public function mapRight<A,B,C>(f:Future<Either<A,B>>,fn:B->C):Future<Either<A,C>>{
+    return 
+      f.map(
+        function(x:Either<A,B>):Either<A,C>{
+          return 
+            x.mapRight(
+              function(y:B){
+                return fn(y);
+              }
+            );
+        }
+      );
   }
 }
