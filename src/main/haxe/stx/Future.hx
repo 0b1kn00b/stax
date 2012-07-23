@@ -220,14 +220,17 @@ class Future<T> {
    * execute independently of the other.
    */
   public function zip<A>(f2: Future<A>): Future<Tuple2<T, A>> {
-    var zipped: Future<Tuple2<T, A>> = new Future();
+    return zipWith( f2, Tuples.t2 );
+  }
+  public function zipWith<A,B>(f2:Future<A>,fn : T -> A -> B):Future<B>{
+    var zipped: Future<B> = new Future();
 
     var f1 = this;
 
     var deliverZip = function() {
       if (f1.isDelivered() && f2.isDelivered()) {
         zipped.deliver(
-          Tuples.t2(f1.value().get(), f2.value().get())
+          fn(f1.value().get(), f2.value().get())
         );
       }
     }
@@ -240,9 +243,8 @@ class Future<T> {
     f1.ifCanceled(function() zipped.forceCancel());
     f2.ifCanceled(function() zipped.forceCancel());
 
-    return zipped;
+    return zipped; 
   }
-
   /** Retrieves the value of the future, as an option.
    */
   public function value(): Option<T> {
@@ -306,10 +308,12 @@ class Future<T> {
       });  
     return myprm;
   }
+}
+class Promises{
   /**
   * Does a map if the Either is Right.
   */
-  static public function mapRight<A,B,C>(f:Future<Either<A,B>>,fn:B->C):Future<Either<A,C>>{
+  static public function map<A,B,C>(f:Future<Either<A,B>>,fn:B->C):Future<Either<A,C>>{
     return 
       f.map(
         function(x:Either<A,B>):Either<A,C>{
@@ -319,6 +323,37 @@ class Future<T> {
                 return fn(y);
               }
             );
+        }
+      );
+  }
+  static public function zipWith<A,B,C,D>(f0:Future<Either<A,B>>,f1:Future<Either<A,C>>,fn : B -> C -> D):Future<Either<A,D>>{
+    return 
+      f0.zipWith(f1,
+        function(a,b){
+          return 
+            switch (a) {
+              case Left(v1)       : Left(v1);
+              case Right(v1)      :
+                switch (b) {
+                  case Left(v2)   : Left(v2);
+                  case Right(v2)  : Right(fn(v1,v2));
+                }
+              }
+          }
+      );
+  }
+  static public function zip<A,B,C>(f0:Future<Either<A,B>>,f1:Future<Either<A,C>>):Future<Either<A,Tuple2<B,C>>>{
+    return zipWith(f0,f1,Tuples.t2);
+  }
+  static public function flatMap<A,B,C>(f0:Future<Either<A,B>>,fn : B -> Future<Either<A,C>>):Future<Either<A,C>>{
+    return
+      f0.flatMap(
+        function(x){
+          return
+            switch (x) {
+              case Left(v1)   : new Future().deliver(Left(v1));
+              case Right(v2)  : fn(v2);
+            }
         }
       );
   }
