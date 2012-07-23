@@ -109,6 +109,7 @@ class QuirksTestCase extends TestCase {
     element.removeClass(className);
 
     assertEquals(true, element.hasClass(className1));
+    element.removeClass(className1);
   }
   public function testHasClass(): Void {
     var className = "test-class";

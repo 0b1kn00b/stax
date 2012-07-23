@@ -291,8 +291,7 @@ class Stream<T> {
 
         var inE: Stream<Dynamic> = Streams.create(
             function (pulse: Pulse<Dynamic>): Propagation<Dynamic> {
-               // trace('here');
-                //trace(pulse);
+               
                 var first = prevE == null;
 
                 if (prevE != null) {
@@ -300,7 +299,7 @@ class Stream<T> {
                 }
                 
                 prevE = k(pulse.value);
-                //trace(prevE != null);
+                
                 
                 prevE.attachListener(outE);
 
@@ -486,7 +485,7 @@ class Stream<T> {
             this,
             init,
             function(pulse: Pulse<Dynamic>): Propagation<T> {
-                return cast propagate(pulse);
+                return propagate(cast pulse);
             }
         );
     }
@@ -655,6 +654,7 @@ class Stream<T> {
                     --count; propagate(pulse); 
                 }
                 else {
+                    
                     self.weaklyHeld = true;
                     
                     doNotPropagate;
@@ -1174,7 +1174,8 @@ class Stream<T> {
                     }
                 }
                     
-                case doNotPropagate:
+                case doNotPropagate :
+                    
             }
         }
     }
