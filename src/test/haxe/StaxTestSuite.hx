@@ -124,7 +124,7 @@ class StaxTestSuite {
           //, new stx.io.log.LogTest()
           , new stx.ds.RangeTest()
           //, new stx.StateTest()
-          , new stx.ReaderTest()
+          //, new stx.ReaderTest()
           //, new stx.reactive.StreamTest()
           #end
         ]);//.filter( function(x) return Std.is(x,js.dom.QuirksTestCase) ));
