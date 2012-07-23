@@ -119,7 +119,7 @@ class StaxTestSuite {
           , new TranscodeJValueExtensionsTestCase()
           , new stx.PromiseTest()
           //, new stx.error.ErrorTest()
-          , new stx.reactive.ArrowsTest()
+          //, new stx.reactive.ArrowsTest()
           , new stx.TupleTest()
           //, new stx.io.log.LogTest()
           , new stx.ds.RangeTest()
