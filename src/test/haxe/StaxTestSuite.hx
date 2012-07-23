@@ -34,7 +34,6 @@ import stx.functional.FoldableExtensionsTestCase;
 import stx.time.ScheduledExecutorTestCase;
 import stx.net.UrlExtensionsTestCase;
 import stx.net.HttpHeaderExtensionsTestCase;
-import stx.reactive.ReactiveTestCase;
 //import stx.reactive.ReactiveTester;
 import stx.util.StringExtensionsTestCase;
 import stx.util.GuidTestCase;
@@ -48,6 +47,7 @@ import stx.io.json.TranscodeJValueExtensionsTestCase;
 import stx.time.ScheduledExecutor;
 import stx.framework.Injector;
 import stx.Log;
+import stx.States;
 
 #if js
 import stx.io.http.HttpStringTestCase;
@@ -75,7 +75,6 @@ class StaxTestSuite {
   public function new(){
       Injector.forever(
       function(c) {
-
         c.bindF(
           Logger,
           function() {
@@ -85,7 +84,6 @@ class StaxTestSuite {
             );
           }
         );
-
         haxe.Log.trace = stx.Log.trace;
         var runner = (new Runner()).addAll([   
           new PreludeTest(),    
@@ -100,9 +98,9 @@ class StaxTestSuite {
           new TweenTestCase(),
 #if !(neko || php || cpp)  
           new ScheduledExecutorTestCase(),
+          new stx.reactive.ReactiveTestCase(),
 #end
           new UrlExtensionsTestCase(),   
-          new ReactiveTestCase(),
           //new ReactiveTester(),
           new StringExtensionsTestCase(),
           new InjectorTestCase(),
@@ -119,14 +117,17 @@ class StaxTestSuite {
           , new QuirksTestCase()
           , new ObjectsTestCase()
           , new TranscodeJValueExtensionsTestCase()
-          //, new stx.OutcomeTest()
+          , new stx.PromiseTest()
           //, new stx.error.ErrorTest()
-          //, new stx.reactive.ArrowsTest()
+          , new stx.reactive.ArrowsTest()
           , new stx.TupleTest()
           //, new stx.io.log.LogTest()
           , new stx.ds.RangeTest()
+          //, new stx.StateTest()
+          , new stx.ReaderTest()
+          //, new stx.reactive.StreamTest()
           #end
-        ]);//.filter( function(x) return Std.is(x, stx.io.log.LogTest) ));
+        ]);//.filter( function(x) return Std.is(x,js.dom.QuirksTestCase) ));
 
         Report.create(runner);
 

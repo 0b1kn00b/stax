@@ -14,24 +14,11 @@ import stx.test.Assert;							using stx.test.Assert;
 
 import stx.reactive.Arrows;					using stx.reactive.Arrows;
 import stx.Future;										using stx.Future;
-import stx.Methods;									using stx.Methods;
 
 typedef State = { };
 typedef Transformer<S,A,B> 	= Arrow<Tuple2<S,A>,Tuple2<S,B>>;
 typedef StateResult<S,A,B>	= Either<Tuple2<Tuple2<S,A>,Transformer<S,A,B>>,Tuple2<S,B>>;
 
-class StateArrow<S,I,O> implements Arrow<I,O>{
-	var state : Arrow<Tuple2<S,I>,Tuple2<S,O>>;
-	public function new(a) {
-		this.state = a;
-	}
-	public function withInput(?i : I , cont : Method<O, Void, O->Void > ) : Void {
-		//cont.execute(i);
-	}
-	public function change(a:Arrow<Tuple2<S,O>,S>){
-		return null;
-	}
-}
 class ArrowsTest extends TestCase{
 
 	public function new() {

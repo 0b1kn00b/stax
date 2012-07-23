@@ -84,9 +84,9 @@ class CollectionTester extends TestCase {
   public function testThatItXExistsWorks(): Void {
     var i: Iterable<Int> = [1, 2, 3, 4, 5];
     
-    assertTrue(i.exists(function(a, b) {return a == b;}, 2));
+    assertTrue(i.contains(2,function(a:Int, b:Int) {return a == b;}));
     
-    assertFalse(i.exists(function(a,b) {return a < b;}, 1));
+    assertFalse(i.contains(1,function(a:Int,b:Int) {return a < b;}));
   }
   
   public function testThatItXNubWorks(): Void {

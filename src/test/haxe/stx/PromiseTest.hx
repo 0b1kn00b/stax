@@ -422,7 +422,6 @@ class PromiseTest extends TestCase{
             function(x:Dynamic) {
               count++;
               return x;
-              //['notok', 'notok again'].equals(cast x);
             }.lift()
         ).flatMap(
             function(succ) {
@@ -432,7 +431,6 @@ class PromiseTest extends TestCase{
             function(x:Dynamic) {
               count++;
               return x;
-              //['notok', 'notok again'].equals(cast x);
             }.lift()
         ).map(
             function(x) {
@@ -445,7 +443,6 @@ class PromiseTest extends TestCase{
               Assert.equals( count , errors );
               async();
               return x;
-              //['notok', 'notok again'].equals(cast x);
             }.lift()
         );
   }

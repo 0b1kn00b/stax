@@ -14,7 +14,6 @@ import stx.Future;                using stx.Future;
 import stx.reactive.Arrows;     using stx.reactive.Arrows;
 
 import stx.error.NullReferenceError;
-
     
 class Promise<A,B>  {
   public static var count : Int = 0;

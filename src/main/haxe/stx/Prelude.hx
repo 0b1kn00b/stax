@@ -76,7 +76,7 @@ typedef HashFunction<T> 				= Function1<T, Int>;
 
 typedef Lense<A, B> = {
 	get : A -> B,
-  set : B -> A -> A
+  set : A -> B -> A
 }
 
 @:todo('0b1kn00b','Would perhaps prefer the collection tools to be interfaces.')

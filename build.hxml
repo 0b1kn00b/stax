@@ -1,10 +1,8 @@
 -cp src/main/haxe
 -cp src/test/haxe
+-lib hxevents
 -js bin/test.js
 -main StaxTestSuite
 
---next
--cp src/main/haxe
--cp src/test/haxe
--neko bin/test.n
--main StaxTestSuite
+--connect 2331
+

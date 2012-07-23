@@ -325,6 +325,7 @@ private class InjectorImpl {
   }
   
   private static function existsDefaultBinding(c : Class<Dynamic>):Bool {
+    
     return state[0].defaultBindings.exists(Type.getClassName(c));
   }
   
