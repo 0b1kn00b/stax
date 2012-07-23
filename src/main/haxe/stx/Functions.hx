@@ -220,7 +220,7 @@ class Functions1 {
     }
   }
 	/**
-	 * Returns a function that calls 'f2' with the output of 'f1'trace.
+	 * Returns a function that calls 'f2' with the output of 'f1'.
 	 * @param f1
 	 * @param f2
 	 */
@@ -306,6 +306,17 @@ class Functions2 {
       
       return thunk();
     }
+  }
+  /**
+   * Returns a function that calls 'f2' with the output of 'f1'.
+   * @param f1
+   * @param f2
+   */
+  public static function andThen<U, V, W, X>(f1: Function2<U, V, W>, f2: Function1<W, X>): Function2<U, V, X> {
+    return 
+      function(u:U,v:V):X{
+        return f2(f1(u,v));
+      }
   }
 	/**
 	 * Produces a function that calls 'f', ignores it's result, and returns 'value'
@@ -703,5 +714,23 @@ class Functions5 {
   }
   public static function equals<P1,P2,P3,P4,P5,R>(a:Function5<P1,P2,P3,P4,P5,R>,b:Function5<P1,P2,P3,P4,P5,R>){
     return Reflect.compareMethods(a,b);
+  }
+}
+class Functions6{
+  public static function curry<P1, P2, P3, P4, P5, P6, R>(f: Function6<P1, P2, P3, P4, P5, P6, R>)
+  : Function1<P1, Function1<P2, Function1<P3, Function1<P4, Function1<P5, Function1<P6, R> >>>>> {
+    return function(p1: P1) {
+      return function(p2: P2) {
+        return function(p3: P3) {
+          return function(p4: P4) {
+            return function(p5: P5) {
+              return function(p6: P6){
+                return f(p1, p2, p3, p4, p5, p6);
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
