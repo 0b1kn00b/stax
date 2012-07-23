@@ -76,7 +76,7 @@ class Strings {
     return StringTools.htmlUnescape(v);
   }
   /*
-  * Removes spaces at the left of the String s.
+  * Removes spaces either side of the String s.
   */
   static public function trim(v: String): String {
     return StringTools.trim(v);
