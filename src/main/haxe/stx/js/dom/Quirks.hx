@@ -597,10 +597,10 @@ class Quirks {
       var doc = elem.ownerDocument;
       var body: HTMLBodyElement = untyped doc.body;
       var docElem = untyped doc.documentElement;
-      var clientTop  = [docElem.clientTop,  body.clientTop,  0].filter(P.isNotNull()).first();
-      var clientLeft = [docElem.clientLeft, body.clientLeft, 0].filter(P.isNotNull()).first();
-      var top: Int  = box.top  + [Env.window.pageYOffset, if (BrowserSupport.boxModel()) docElem.scrollTop  else null, body.scrollTop ].filter(P.isNotNull()).first() - clientTop;
-      var left: Int = box.left + [Env.window.pageXOffset, if (BrowserSupport.boxModel()) docElem.scrollLeft else null, body.scrollLeft].filter(P.isNotNull()).first() - clientLeft;
+      var clientTop  = [docElem.clientTop,  body.clientTop,  0].filter(Predicates.isNotNull()).first();
+      var clientLeft = [docElem.clientLeft, body.clientLeft, 0].filter(Predicates.isNotNull()).first();
+      var top: Int  = box.top  + [Env.window.pageYOffset, if (BrowserSupport.boxModel()) docElem.scrollTop  else null, body.scrollTop ].filter(Predicates.isNotNull()).first() - clientTop;
+      var left: Int = box.left + [Env.window.pageXOffset, if (BrowserSupport.boxModel()) docElem.scrollLeft else null, body.scrollLeft].filter(Predicates.isNotNull()).first() - clientLeft;
 
       return Some({ x: left, y: top });
     }
