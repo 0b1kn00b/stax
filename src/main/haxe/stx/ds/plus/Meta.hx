@@ -7,6 +7,7 @@ package stx.ds.plus;
 import stx.Tuples;
 
 using Stax;
+using stx.Objects;
 using stx.ds.plus.Order;
 
 class Meta {
@@ -22,7 +23,7 @@ class Meta {
     var fm = Reflect.field(m, f);
     if(!Reflect.hasField(fm, "DataField"))
       return null;
-    return Reflect.field(fm, "DataField").copy().pop();
+    return cast(Reflect.field(fm, "DataField"),Array<Dynamic>).copy().pop();
   }              
 	@deprecate('0b1kn00b','thx')
   public static function _fieldsWithMeta(c : Class<Dynamic>, name : String) {   
