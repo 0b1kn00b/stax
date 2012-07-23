@@ -199,4 +199,3 @@ class IntIters {
     return to(start, end - 1);
   }
 }
-typedef P = stx.Predicates;
