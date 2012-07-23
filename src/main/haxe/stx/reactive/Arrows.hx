@@ -12,10 +12,6 @@ import stx.Tuples; 					using stx.Tuples;
 import stx.test.Assert; using stx.test.Assert;
 
 
-import sf.event.Event;
-import sf.event.EventSystem;
-
-
 import haxe.Timer;
 typedef DynArrow = Arrow<Dynamic,Dynamic>;
 
@@ -57,8 +53,14 @@ class Viaz<I,O> implements Arrow<I,O>{
 	static public function run<I,O>(a:Arrow<I,O>,?i:I,?cont:O->Void):Void{
 		runCPS( a , i , cont == null ? function(x){} : cont );
 	}
+	static public function runs<I,O>(a:Arrow<I,O>,i:I):Void{
+		run(a,i);
+	}
 	public static function apply(){
 		return new ArrowApply();
+	}
+	static public function futureA<A>():Arrow<Future<A>,A>{
+		return new FutureArrow();
 	}
 }
 
@@ -205,25 +207,22 @@ class DelayArrow<I,O> implements Arrow<I,O> {
 	static public function delay<I,O>(a:Arrow<I,O>,delay:Int):Arrow<I,O>{return new DelayArrow(a,delay);}
 }
 #end
-class EventArrow<T:Event> implements Arrow<sf.event.EventSystem<T>,T>{
-	var name : String;
-	public function new(name:String){
-		this.name = name;
+class EventArrow<T> implements Arrow<hxevents.Dispatcher<T>,T>{
+	public function new(){
+
 	}
-	public function withInput(?i : sf.event.EventSystem<T>, cont : Function1<T,Void> ) : Void{
-		trace("added: " + name);
+	public function withInput(?i : hxevents.Dispatcher<T>, cont : Function1<T,Void> ) : Void{
 		var canceller 	: Void -> Void = null;
 		var handler 		= 
 			function(evt:T){
-				trace("called: " + name);
 				canceller();
 				cont(cast evt);
 			}
-		i.addEventListener(name,handler);
-		canceller = function(){ i.removeEventListener(name,handler); }
+		i.add(handler);
+		canceller = function(){ i.remove(handler); }
 	}
-	static public function event<E:Event>(evt:String):Arrow<EventSystem<E>,E>{ 
-		return new EventArrow(evt); 
+	static public function eventA<E>():Arrow<hxevents.Dispatcher<E>,E>{ 
+		return new EventArrow(); 
 	}
 }
 class Pair<A,B,C,D> implements Arrow<Tuple2<A,C>,Tuple2<B,D>>{
@@ -407,6 +406,15 @@ class ProcessArrow {
 			}.lift();
 }
 #end
+
+class FutureArrow<O> implements Arrow<Future<O>,O>{
+	public function new(){
+
+	}
+	public function withInput(?i:Future<O>,cont:Function<O,Void>){
+		i.foreach( cont );
+	}
+}
 /*
 class StateArrow<S,A,B> implements Arrow<A,B>{
 	
