@@ -42,4 +42,7 @@ class Bools {
   static public function or(v1:Bool,v2:Bool):Bool{
     return v1 || v2;
   }
+  static public function not(v:Bool){
+    return !v;
+  }
 }
