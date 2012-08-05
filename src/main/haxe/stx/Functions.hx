@@ -11,16 +11,19 @@ using stx.Dynamics;
 
 class CodeBlocks {
 	/**
-	 * Takes a Void->Void and returns a Void->Dynamic.
-	 * @param	c
-	 * @return
+    Takes a Void->Void and returns a Void->Dynamic.
+	  @param	c
+    @return
 	 */
-  public static function returningC(c:CodeBlock,val):Thunk<Dynamic>{
+  public static function returningC(c:CodeBlock,?val):Thunk<Dynamic>{
     return function(){
       c();
       return val;
     }
   }
+  /**
+   Applies a Thunk and returns Either an error or it's result
+  */
   public static function catching<A,B>(c:Thunk<A>):Either<Dynamic,A>{
     var o = null;
     try{
@@ -36,7 +39,7 @@ class CodeBlocks {
 }	
 class Functions0 {
 	/**
-	 * Takes a function that returns a result, and produces one that ignores that result.
+	 Takes a function that returns a result, and produces one that ignores that result.
 	 */
 	public static function enclose<R>(f:Thunk<R>):CodeBlock{
 		return
@@ -45,8 +48,8 @@ class Functions0 {
 			}
 	}
 	/**
-	 * Takes a function 'f' and produces one that ignores any error the occurs whilst calling 'f'.
-	 * @param	f
+	  Takes a function 'f' and produces one that ignores any error the occurs whilst calling 'f'.
+	  @param	f
 	 */
   public static function swallow(f: Void -> Void): Void -> Void {
     return function() {
@@ -57,10 +60,10 @@ class Functions0 {
     }
   }
   /**
-   * Produces a function that calls 'f1' and 'f2' in left to right order.
-   * @param	f1
-   * @param	f2
-	 * @return The composite function.
+    Produces a function that calls 'f1' and 'f2' in left to right order.
+    @param	f1
+    @param	f2
+	  @return The composite function.
    */
   public static function thenDo(f1: Void -> Void, f2: Void -> Void): Void -> Void {
     return function() {
@@ -69,9 +72,9 @@ class Functions0 {
     }
   }
 	/**
-	 * Produces a function that calls 'f', ignores its result, and returns the result produced by thunk.
-	 * @param f	
-	 * @param thunk
+	  Produces a function that calls 'f', ignores its result, and returns the result produced by thunk.
+	  @param f	
+	  @param thunk
 	 */
   public static function returning<R1, R2>(f: Void -> R1, thunk: Thunk<R2>): Void -> R2 {
     return function() {
@@ -139,6 +142,12 @@ class Functions0 {
   }
   public static function equals<A>(a:Thunk<A>,b:Thunk<A>){
     return Reflect.compareMethods(a,b);
+  }
+  static public function andThen<A,B>(a:Thunk<A>,b:Function1<A,B>):Thunk<B>{
+    return 
+      function(){
+        return b(a());
+      }
   }
 }
 class Functions1 {
@@ -609,6 +618,30 @@ class Functions4 {
   public static function equals<P1,P2,P3,P4,R>(a:Function4<P1,P2,P3,P4,R>,b:Function4<P1,P2,P3,P4,R>){
     return Reflect.compareMethods(a,b);
   }
+  public static function p1<P1,P2,P3,P4,R>(f:Function4<P1,P2,P3,P4,R>,p1:P1):P2->P3->P4->R{
+    return
+      function(p2:P2,p3:P3,p4:P4){
+        return f(p1,p2,p3,p4);
+      }
+  }
+  public static function p2<P1,P2,P3,P4,R>(f:Function4<P1,P2,P3,P4,R>,p2:P2):P1->P3->P4->R{
+    return
+      function(p1:P1,p3:P3,p4:P4){
+        return f(p1,p2,p3,p4);
+      }
+  }
+  public static function p3<P1,P2,P3,P4,R>(f:Function4<P1,P2,P3,P4,R>,p3:P3):P1->P2->P4->R{
+    return
+      function(p1:P1,p2:P2,p4:P4){
+        return f(p1,p2,p3,p4);
+      }
+  }
+  public static function p4<P1,P2,P3,P4,R>(f:Function4<P1,P2,P3,P4,R>,p4:P4):P1->P2->P3->R{
+    return
+      function(p1:P1,p2:P2,p3:P3){
+        return f(p1,p2,p3,p4);
+      }
+  }
 }
 class Functions5 {  
 	/**
@@ -714,6 +747,37 @@ class Functions5 {
   }
   public static function equals<P1,P2,P3,P4,P5,R>(a:Function5<P1,P2,P3,P4,P5,R>,b:Function5<P1,P2,P3,P4,P5,R>){
     return Reflect.compareMethods(a,b);
+  }
+
+  public static function p1<P1,P2,P3,P4,P5,R>(f:Function5<P1,P2,P3,P4,P5,R>,p1:P1):P2->P3->P4->P5->R{
+    return
+      function(p2:P2,p3:P3,p4:P4,p5:P5){
+        return f(p1,p2,p3,p4,p5);
+      }
+  }
+  public static function p2<P1,P2,P3,P4,P5,R>(f:Function5<P1,P2,P3,P4,P5,R>,p2:P2):P1->P3->P4->P5->R{
+    return
+      function(p1:P1,p3:P3,p4:P4,p5:P5){
+        return f(p1,p2,p3,p4,p5);
+      }
+  }
+  public static function p3<P1,P2,P3,P4,P5,R>(f:Function5<P1,P2,P3,P4,P5,R>,p3:P3):P1->P2->P4->P5->R{
+    return
+      function(p1:P1,p2:P2,p4:P4,p5:P5){
+        return f(p1,p2,p3,p4,p5);
+      }
+  }
+  public static function p4<P1,P2,P3,P4,P5,R>(f:Function5<P1,P2,P3,P4,P5,R>,p4:P4):P1->P2->P3->P5->R{
+    return
+      function(p1:P1,p2:P2,p3:P3,p5:P5){
+        return f(p1,p2,p3,p4,p5);
+      }
+  }
+  public static function p5<P1,P2,P3,P4,P5,R>(f:Function5<P1,P2,P3,P4,P5,R>,p5:P5):P1->P2->P3->P4->R{
+    return
+      function(p1:P1,p2:P2,p3:P3,p4:P4){
+        return f(p1,p2,p3,p4,p5);
+      }
   }
 }
 class Functions6{
