@@ -308,12 +308,15 @@ class Future<T> {
       });  
     return myprm;
   }
+  static public function futureOf<A>(a:A){
+    return new Future().deliver(a);
+  }
 }
 class Promises{
   /**
   * Does a map if the Either is Right.
   */
-  static public function map<A,B,C>(f:Future<Either<A,B>>,fn:B->C):Future<Either<A,C>>{
+  static public function mapRight<A,B,C>(f:Future<Either<A,B>>,fn:B->C):Future<Either<A,C>>{
     return 
       f.map(
         function(x:Either<A,B>):Either<A,C>{
@@ -326,7 +329,7 @@ class Promises{
         }
       );
   }
-  static public function zipWith<A,B,C,D>(f0:Future<Either<A,B>>,f1:Future<Either<A,C>>,fn : B -> C -> D):Future<Either<A,D>>{
+  static public function zipRWith<A,B,C,D>(f0:Future<Either<A,B>>,f1:Future<Either<A,C>>,fn : B -> C -> D):Future<Either<A,D>>{
     return 
       f0.zipWith(f1,
         function(a,b){
@@ -342,10 +345,10 @@ class Promises{
           }
       );
   }
-  static public function zip<A,B,C>(f0:Future<Either<A,B>>,f1:Future<Either<A,C>>):Future<Either<A,Tuple2<B,C>>>{
-    return zipWith(f0,f1,Tuples.t2);
+  static public function zipR<A,B,C>(f0:Future<Either<A,B>>,f1:Future<Either<A,C>>):Future<Either<A,Tuple2<B,C>>>{
+    return zipRWith(f0,f1,Tuples.t2);
   }
-  static public function flatMap<A,B,C>(f0:Future<Either<A,B>>,fn : B -> Future<Either<A,C>>):Future<Either<A,C>>{
+  static public function flatMapR<A,B,C>(f0:Future<Either<A,B>>,fn : B -> Future<Either<A,C>>):Future<Either<A,C>>{
     return
       f0.flatMap(
         function(x){
@@ -356,5 +359,25 @@ class Promises{
             }
         }
       );
+  }
+  static public function flatMapL<A,B,C>(f0:Future<Either<A,B>>,fn : A -> Future<Either<C,B>>):Future<Either<C,B>>{
+    return
+      f0.flatMap(
+        function(x){
+          return
+            switch (x) {
+              case Right(v1)   : new Future().deliver(Right(v1));
+              case Left(v2)    : fn(v2);
+            }
+        }
+      );
+  }
+  static public function promiseOf<A,B>(e:Either<A,B>):Future<Either<A,B>>{
+    return new Future().deliver(e);
+  }
+}
+class Promises1{
+  static public function promiseOf<A>(e:A):Future<Either<Dynamic,A>>{
+    return Promises.promiseOf(Right(e));
   }
 }
