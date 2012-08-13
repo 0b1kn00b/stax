@@ -35,6 +35,8 @@ class Report {
       report = new PrintReport(runner);
     else
       report = new HtmlReport(runner, true);
+#elseif nodejs
+    report = new PrintReport(runner);
 #elseif js
     report = new HtmlReport(runner, true);
 #elseif flash

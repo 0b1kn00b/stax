@@ -29,6 +29,8 @@ import php.Lib;
 import neko.Lib;
 #elseif cpp
 import cpp.Lib;
+#elseif nodejs
+import js.Lib;
 #end
 
 /**
@@ -82,7 +84,7 @@ class PrintReport extends PlainTextReport {
     s = StringTools.replace(s, '\n', newline);
     trace(s);
   }
-#if (php || neko || cpp)
+#if (php || neko || cpp || nodejs)
   function _print(s : String) {
     Lib.print(s);
   }
