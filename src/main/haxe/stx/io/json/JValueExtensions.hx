@@ -19,7 +19,7 @@ package stx.io.json;
 
 import stx.Tuples;							using stx.Tuples;
 import stx.Prelude;
-using Stax;
+using SCore;
 
 
 import stx.io.json.JValue;
@@ -77,7 +77,7 @@ class JValueExtensions {
   public static function get(v: JValue, k: String): JValue {
     return switch (getOption(v, k)) {
       case Some(v): v;      
-      case None:    Stax.error("Expected to find field " + k + " in " + v);
+      case None:    SCore.error("Expected to find field " + k + " in " + v);
     }
   }
   public static function getOrElse(v: JValue, k: String, def: Thunk<JValue>) {
@@ -90,21 +90,21 @@ class JValueExtensions {
     return switch (v) {
       case JString(s): s;
 
-      default: Stax.error("Expected JString but found: " + v);
+      default: SCore.error("Expected JString but found: " + v);
     }
   }
   public static function extractNumber(v: JValue): Float {
     return switch (v) {
       case JNumber(n): n;
       
-      default: Stax.error("Expected JNumber but found: " + v);
+      default: SCore.error("Expected JNumber but found: " + v);
     }
   }
   public static function extractBool(v: JValue): Bool {
     return switch (v) {
       case JBool (b): b;
       
-      default: Stax.error("Expected JBool but found: " + v);
+      default: SCore.error("Expected JBool but found: " + v);
     }
   }
   public static function extractKey(v: JValue): String {
@@ -116,7 +116,7 @@ class JValueExtensions {
   public static function extractField(v: JValue): Tuple2<String, JValue> {
     return switch (v) {
       case JField (k, v): Tuples.t2(k, v);
-      default						: Stax.error("Expected JField but found: " + v);
+      default						: SCore.error("Expected JField but found: " + v);
     }
   }  
   public static function extractHash(v: JValue): Hash<JValue> {
@@ -132,7 +132,7 @@ class JValueExtensions {
         
         hash;
       
-      default: Stax.error("Expected JObject but found: " + v);
+      default: SCore.error("Expected JObject but found: " + v);
     }
   }
   public static function extractFields(v: JValue): Array<Tuple2<String, JValue>> {
@@ -150,7 +150,7 @@ class JValueExtensions {
       
       case JObject (xs): xs;
       
-      default: Stax.error("Expected JArray or JObject but found: " + v);
+      default: SCore.error("Expected JArray or JObject but found: " + v);
     }
   }
 }
@@ -183,7 +183,7 @@ class Tuple2JValue {
     return switch(v) {
       case JArray(v): Tuples.t2(e1(v[0]), e2(v[1]));
 
-      default: Stax.error("Expected Array but was: " + v);
+      default: SCore.error("Expected Array but was: " + v);
     }
   }
 	public static function decompose(t:Tuple2<Dynamic,Dynamic>): JValue {
@@ -198,7 +198,7 @@ class Tuple3JValue{
     return switch(v) {
       case JArray(v): Tuples.t3(e1(v[0]), e2(v[1]), e3(v[2]));
 
-      default: Stax.error("Expected Array but was: " + v);
+      default: SCore.error("Expected Array but was: " + v);
     }
   }
 }
@@ -210,7 +210,7 @@ class Tuple4JValue{
     return switch(v) {
       case JArray(v): Tuples.t4(e1(v[0]), e2(v[1]), e3(v[2]), e4(v[3]));
 
-      default: Stax.error("Expected Array but was: " + v);
+      default: SCore.error("Expected Array but was: " + v);
     }
   }
 }
@@ -222,7 +222,7 @@ class Tuple5JValue{
     return switch(v) {
       case JArray(v): Tuples.t5(e1(v[0]), e2(v[1]), e3(v[2]), e4(v[3]), e5(v[4]));
 
-      default: Stax.error("Expected Array but was: " + v);
+      default: SCore.error("Expected Array but was: " + v);
     }
   }
 }

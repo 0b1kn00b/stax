@@ -6,7 +6,7 @@ package stx;
  */
 import stx.Tuples;  		using stx.Tuples;
 												using stx.Iterators;
-using Stax;
+using SCore;
 
 class Hashes {
 

@@ -17,7 +17,7 @@
 */
 package stx;
 
-import Stax;                      using Stax;
+import SCore;                      using SCore;
 import stx.Tuples;                using stx.Tuples;
 import stx.Prelude; 
 import stx.ds.plus.Equal;
@@ -221,7 +221,7 @@ class Arrays {
 		function(a, b) {
       return
 		  	switch (a) {
-		  		case None: Options.toOption(b).filter(f);
+		  		case None: Options.create(b).filter(f);
 			 	default: a;
 		    }
       }

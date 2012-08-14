@@ -7,7 +7,7 @@ package stx.io.json;
 import stx.Tuples;
 import stx.Prelude;
 
-using Stax;
+using SCore;
 
 import stx.ds.Set;
 import stx.ds.List;
@@ -37,7 +37,7 @@ class SetJValue {
     return switch(v) {
       case JArray(v): Set.create(order, equal, hash, show).addAll(v.map(e));
 
-      default: Stax.error("Expected Array but was: " + v);
+      default: SCore.error("Expected Array but was: " + v);
     }
   }	
 }
@@ -50,7 +50,7 @@ class ListJValue {
     return switch(v) {
       case JArray(v): List.create(tool).addAll(v.map(e));
 
-      default: Stax.error("Expected Array but was: " + v);
+      default: SCore.error("Expected Array but was: " + v);
     }
   }	
 }
@@ -65,7 +65,7 @@ class MapJValue {
     return switch(v) {
       case JArray(v): Map.create(korder, kequal, khash, kshow, vorder, vequal, vhash, vshow).addAll(v.map(te));
 
-      default: Stax.error("Expected Array but was: " + v);
+      default: SCore.error("Expected Array but was: " + v);
     }
   }
 }

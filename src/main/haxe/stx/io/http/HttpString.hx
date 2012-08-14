@@ -64,7 +64,7 @@ class HttpStringAsync implements HttpString {
   }
   
   public function custom(method: String, _url: Url, data: String, ?_params: QueryParameters, ?_headers: Map<String, String>): Future<HttpResponse<String>> {
-    var url = if (_params != null) _url.addQueryParameters(Options.toOption(_params).getOrElseC(Map.create())); else _url;
+    var url = if (_params != null) _url.addQueryParameters(Options.create(_params).getOrElseC(Map.create())); else _url;
     var future: Future<HttpResponse<String>> = new Future();
     
     var request = Quirks.createXMLHttpRequest();
@@ -107,7 +107,7 @@ class HttpStringAsync implements HttpString {
   }
   
   private function makeHeader(?_headers: Map<String, String>, contentType: String): Map<String, String>{
-    return Options.toOption(_headers).getOrElseC(Map.create().set("Content-Type", contentType));
+    return Options.create(_headers).getOrElseC(Map.create().set("Content-Type", contentType));
   }
 }
 

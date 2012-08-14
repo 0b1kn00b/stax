@@ -25,6 +25,7 @@ import stx.functional.PartialFunction;
 private class PartialFunction1Impl<A, Z> implements PartialFunction1<A, Z> {
   var _def: Array<Tuple2<A -> Bool, A -> Z>>;
   
+  @:noUsing
   public static function create<A, Z>(def: Array<Tuple2<A -> Bool, A -> Z>>) {
     return new PartialFunction1Impl<A, Z>(def);
   }
@@ -64,7 +65,7 @@ private class PartialFunction1Impl<A, Z> implements PartialFunction1<A, Z> {
         if (d._1(a)) return d._2(a);
       }
       
-      return Stax.error("Function undefined at " + a);
+      return SCore.error("Function undefined at " + a);
     }
     
     public function toFunction(): A -> Option<Z> {
@@ -125,7 +126,7 @@ private class PartialFunction2Impl<A, B, Z> implements PartialFunction2<A, B, Z>
         if (d._1(a, b)) return d._2(a, b);
       }
       
-      return Stax.error("Function undefined at (" + a + ", " + b + ")");
+      return SCore.error("Function undefined at (" + a + ", " + b + ")");
     }
     
     public function toFunction(): A -> B -> Option<Z> {
@@ -186,7 +187,7 @@ private class PartialFunction3Impl<A, B, C, Z> implements PartialFunction3<A, B,
         if (d._1(a, b, c)) return d._2(a, b, c);
       }
       
-      return Stax.error("Function undefined at (" + a + ", " + b + ", " + c + ")");
+      return SCore.error("Function undefined at (" + a + ", " + b + ", " + c + ")");
     }
     
     public function toFunction(): A -> B -> C -> Option<Z> {
@@ -247,7 +248,7 @@ private class PartialFunction4Impl<A, B, C, D, Z> implements PartialFunction4<A,
         if (def._1(a, b, c, d)) return def._2(a, b, c, d);
       }
       
-      return Stax.error("Function undefined at (" + a + ", " + b + ", " + c + ", " + d + ")");
+      return SCore.error("Function undefined at (" + a + ", " + b + ", " + c + ", " + d + ")");
     }
     
     public function toFunction(): A -> B -> C -> D -> Option<Z> {
@@ -308,7 +309,7 @@ private class PartialFunction5Impl<A, B, C, D, E, Z> implements PartialFunction5
         if (def._1(a, b, c, d, e)) return def._2(a, b, c, d, e);
       }
       
-      return Stax.error("Function undefined at (" + a + ", " + b + ", " + c + ", " + d + ")");
+      return SCore.error("Function undefined at (" + a + ", " + b + ", " + c + ", " + d + ")");
     }
     
     public function toFunction(): A -> B -> C -> D -> E -> Option<Z> {

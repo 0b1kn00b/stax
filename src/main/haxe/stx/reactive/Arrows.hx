@@ -9,9 +9,6 @@ import stx.Options; 				using stx.Options;
 import stx.Tuples; 					using stx.Tuples;
 														using stx.Functions;
 
-import stx.test.Assert; using stx.test.Assert;
-
-
 import haxe.Timer;
 typedef DynArrow = Arrow<Dynamic,Dynamic>;
 
@@ -53,7 +50,7 @@ class Viaz<I,O> implements Arrow<I,O>{
 	static public function run<I,O>(a:Arrow<I,O>,?i:I,?cont:O->Void):Void{
 		runCPS( a , i , cont == null ? function(x){} : cont );
 	}
-	static public function runs<I,O>(a:Arrow<I,O>,i:I):Void{
+	static public function execute<I,O>(a:Arrow<I,O>,i:I):Void{
 		run(a,i);
 	}
 	public static function apply(){
@@ -96,7 +93,6 @@ class Then< I, O, NO > implements Arrow<I, NO> {
 		this.b = b;
 	}
 	inline public function withInput(?i : I, cont : Function1<NO,Void>) : Void {
-		cont.notNull();
 				
 		var m  = function (reta : O) { this.b.withInput(reta, cont);};
 		a.withInput(i, m);
@@ -234,7 +230,6 @@ class Pair<A,B,C,D> implements Arrow<Tuple2<A,C>,Tuple2<B,D>>{
 		this.r = r;
 	}
 	public function withInput(?i : Tuple2<A,C>, cont : Function1<Tuple2<B,D>,Void> ) : Void{
-		cont.notNull();
 
 		var ol : Option<B> 	= null;
 		var or : Option<D> 	= null;
@@ -490,7 +485,7 @@ class F2A{
 		return Tuple2.into.flip().curry()(f).lift();
 	}
 	static public function run<A,B,C>(arr:Arrow<Tuple2<A,B>,C>,a:A,b:B){
-		arr.run( a.entuple(b) );
+		Viaz.run(arr,a.entuple(b));
 	}
 }
 class F3A{

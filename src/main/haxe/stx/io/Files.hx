@@ -8,6 +8,9 @@ import sys.io.FileOutput;
 #end
 using stx.Functions;
 
+/**
+Safe file handlers
+*/
 class Files{
 	#if (neko || cpp || php )
 	public static function read(s:String,?binary:Bool):Either<Dynamic,FileInput>{

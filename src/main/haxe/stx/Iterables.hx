@@ -18,7 +18,7 @@ package stx;
 
 import stx.Prelude;
 
-import Stax;										using Stax;
+import SCore;										using SCore;
 import stx.Tuples;							using stx.Tuples;
 																using stx.Functions;
 using stx.Iterables;
@@ -54,7 +54,7 @@ class Iterables {
   
   public static function head<T>(iter: Iterable<T>): T {
     return switch(headOption(iter)) {
-      case None: Stax.error('Iterable has no head');
+      case None: SCore.error('Iterable has no head');
       case Some(h): h;
     }
   }
@@ -71,7 +71,7 @@ class Iterables {
    */
   public static function tail<T>(iter: Iterable<T>): Iterable<T> {
     return switch (tailOption(iter)) {
-      case None: Stax.error('Iterable has no tail');
+      case None: SCore.error('Iterable has no tail');
       
       case Some(t): t;
     }
@@ -160,7 +160,7 @@ class Iterables {
       }
       else ++curIndex;
     }
-    return Stax.error('Index not found');
+    return SCore.error('Index not found');
   }
   public static function flatten<T>(iter: Iterable<Iterable<T>>): Iterable<T> {
 		var empty : Iterable<T> = [];
@@ -408,7 +408,7 @@ class Iterables {
 			if(o!=null)(o.size() > 0 ? [mng, nxt] : stack.size() > 0 ? [nxt, mng] : []).foreach(call);
 			return Some( next.entuple(progress) );
 		}	
-		return Stax.unfold( root , unfolder );	
+		return SCore.unfold( root , unfolder );	
 	}*/
   @:experimental
   static public function unwind<A>(root:A,children : A -> Array<A>,depth = false):Iterable<A>{
@@ -426,7 +426,7 @@ class Iterables {
       function():Option<A>{
         var val = stack[index];
         index++;
-        return Options.toOption(val);
+        return Options.create(val);
       }.yield();
   }
   public static function yield<A>(fn : Void -> Option<A>):Iterable<A>{

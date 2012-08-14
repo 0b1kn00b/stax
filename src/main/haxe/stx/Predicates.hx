@@ -10,6 +10,12 @@ typedef Predicate4<A, B, C, D>    = Function4<A, B, C, D, Bool>
 typedef Predicate5<A, B, C, D, E> = Function5<A, B, C, D, E, Bool>
 
 class Predicates {
+  public static function isAny<A>() : Predicate<A>{
+    return 
+      function(value){
+        return true;
+      }
+  }
   public static function isNull<T>(): Predicate<T> {
     return function(value) {
       return value == null;

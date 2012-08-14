@@ -5,7 +5,7 @@ package stx.ds.plus;
  * @author 0b1kn00b
  */
 
-import Stax;											using Stax;
+import SCore;											using SCore;
 import stx.Tuples;								using stx.Tuples;
 
 import stx.Prelude;
@@ -70,7 +70,7 @@ class Equal {
             _createEqualImpl( function(a,b) return a == b );
           }*/
           else {
-            Stax.error("class "+Type.getClassName(c)+" has no equals method");
+            SCore.error("class "+Type.getClassName(c)+" has no equals method");
           }
       }
     case TEnum(e):
@@ -86,7 +86,7 @@ class Equal {
         return true;
       });
     case TNull:
-      _createEqualImpl(function(a, b) return Stax.error("at least one of the arguments should be null"));
+      _createEqualImpl(function(a, b) return SCore.error("at least one of the arguments should be null"));
     case TFunction:
       _createEqualImpl(Reflect.compareMethods);
 		}

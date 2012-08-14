@@ -4,7 +4,7 @@ package stx;
  * ...
  * @author 0b1kn00b
  */                 
-                                      using Stax;
+                                      using SCore;
 import stx.test.TestCase;
 import stx.test.Assert;             using stx.test.Assert;
 

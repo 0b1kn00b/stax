@@ -15,7 +15,7 @@
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 import PreludeTest;
-																																using Stax;
+																																using SCore;
 import stx.functional.FoldableExtensionsTestCase;
 
 import stx.Prelude;
@@ -115,9 +115,13 @@ class StaxTestSuite {
           , new HTMLElementExtensionsTestCase()
           , new HTMLDocumentExtensionsTestCase()
           , new QuirksTestCase()
+
+          , new stx.PromiseTest()//#0b1kn00b how to test delayed easily without timer.
+
+          #end
           , new ObjectsTestCase()
           , new TranscodeJValueExtensionsTestCase()
-          , new stx.PromiseTest()
+          
           //, new stx.error.ErrorTest()
           //, new stx.reactive.ArrowsTest()
           , new stx.TupleTest()
@@ -125,10 +129,14 @@ class StaxTestSuite {
           , new stx.ds.RangeTest()
           //, new stx.StateTest()
           //, new stx.ReaderTest()
-          //, new stx.reactive.StreamTest()
-          #end
-        ]);//.filter( function(x) return Std.is(x,js.dom.QuirksTestCase) ));
-
+          //,  new stx.reactive.StreamTest()
+          , new stx.ds.IterateeTest()
+          , new stx.ds.ZipperTest()
+          , new OptimiseTest()
+          , new stx.IntIterTest()
+          , new StaxTest()
+        ].filter( function(x) return Std.is(x,StaxTest) ));
+  
         Report.create(runner);
 
         runner.run();

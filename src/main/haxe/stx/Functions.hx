@@ -151,11 +151,22 @@ class Functions0 {
   }
 }
 class Functions1 {
-
+  /**
+    Produces a function that produces a function for each parameter in the originating function. When these
+    functions have been called, the result of the original function is produced.
+    @param f
+   */
+   public static function curry<P1, R>(f: Function1<P1, R>) {
+    return function() {
+      return function(p1: P1) {
+        return f(p1);
+      }
+    }
+  }
 	/**
-	 * Produces a function that ignores any error the occurs whilst calling the input function.
-	 * @param	f
-	 * @return 
+	 Produces a function that ignores any error the occurs whilst calling the input function.
+	  @param	f
+	  @return 
 	 */
   public static function swallow<A>(f: Function1<A, Void>): Function1<A, Void> {
     return toEffect(swallowWith(f, null));
@@ -184,18 +195,6 @@ class Functions1 {
     return function(p1) {
       f1(p1);
       f2(p1);
-    }
-  }
-	/**
-	 * Produces a function that produces a function for each parameter in the originating function. When these
-	 * functions have been called, the result of the original function is produced.
-	 * @param f
-	 */
-	 public static function curry<P1, R>(f: Function1<P1, R>) {
-    return function() {
-      return function(p1: P1) {
-        return f(p1);
-      }
     }
   }
 	/**
@@ -365,19 +364,28 @@ class Functions2 {
     }
   }
 	/**
-	 * Produdes a function that calls 'f' with the given parameters p1....pn.
+	  Produdes a function that calls 'f' with the given parameters p1....pn, and caches the result
 	 */
   public static function lazy<P1, P2, R>(f: Function2<P1, P2, R>, p1: P1, p2: P2): Thunk<R> {
     var r = null;
     
     return function() {
-      return if (r == null) { r = f(p1, p2); r; } else r;
+      return r == null ? r = f(p1, p2) : r;
     }
   }
+  /**
+    As with lazy, but calls the wrapped function every time it is called.
+  */
+  static public function defer<P1, P2, R>(f: Function2<P1, P2, R>, p1 : P1, p2 : P2):Thunk<R>{
+    return 
+      function(){
+        return f(p1,p2);
+      }
+  }
 	/**
-	 * Produces a function that calls 'f', ignoring the result.
-	 * @param f
-	 * @return 
+	  Produces a function that calls 'f', ignoring the result.
+	  @param f
+	  @return 
    */
   public static function toEffect<P1, P2, R>(f: Function2<P1, P2, R>): P1 -> P2 -> Void {
     return function(p1, p2) {

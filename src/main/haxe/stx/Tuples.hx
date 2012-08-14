@@ -4,8 +4,9 @@ package stx;
  * ...
  * @author 0b1kn00b
  */
+using Stx;
 import stx.Prelude;
-using Stax;
+using SCore;
                     using stx.Tuples;  
 
 class Tuples {
@@ -62,11 +63,11 @@ class AbstractProduct implements Product {
     return s + ")";
   }
   private function get_prefix(): String {
-    return Stax.error("Not implemented");
+    return SCore.error("Not implemented");
   }
 
   private function get_length(): Int {
-    return Stax.error("Not implemented");
+    return SCore.error("Not implemented");
   }
   
   public function elements():Array<Dynamic> {
@@ -93,7 +94,7 @@ class AbstractProduct implements Product {
             p.elements().flatMap(
               function(v){
                 return if( Std.is(v,Product) ){
-                   flatn(v).flatMap(  Stax.identity() );
+                   flatn(v).flatMap(  SCore.identity() );
                 }else{
                   [v];
                 }
@@ -124,17 +125,20 @@ class Tuple2<A, B> extends AbstractProduct {
   public static function translate<A,B,C,D>(t:Tuple2<A,B>,f1: A -> C, f2: B -> D):Tuple2<C,D>{
     return f1(t._1).entuple(f2(t._2));
   }
+  public static function swap<A,B>(t:Tuple2<A,B>):Tuple2<B,A>{
+    return Tuples.t2(t._2,t._1);
+  }
   override private function get_prefix(): String {
     return "stx.Tuple2";
   }
-
   override private function get_length(): Int {
     return 2;
   }
 
-/*  public static function create<A, B>(_1: A, _2: B): stx.Tuple2<A, B> {
+  @:noUsing
+  static public function create<A, B>(_1: A, _2: B): stx.Tuple2<A, B> {
     return new stx.Tuple2<A, B>(_1, _2);
-  }*/
+  }
 	public static function patch<A,B>(t0:stx.Tuple2<A,B>,t1:stx.Tuple2<A,B>):stx.Tuple2<A,B>{
 		var _1 = t1._1 == null ? t0._1 : t1._1;
 		var _2 = t1._2 == null ? t0._2 : t1._2;
@@ -172,10 +176,10 @@ class Tuple3<A, B, C> extends AbstractProduct {
   override private function get_length(): Int {
     return 3;
   }
-/*
-  public static function create<A, B, C>(_1: A, _2: B, _3: C): stx.Tuple3<A, B, C> {
+  @:noUsing
+  static public function create<A, B, C>(_1: A, _2: B, _3: C): stx.Tuple3<A, B, C> {
     return new stx.Tuple3<A, B, C>(_1, _2, _3);
-  }*/
+  }
 	public static function patch<A,B,C>(t0:stx.Tuple3<A,B,C>,t1:stx.Tuple3<A,B,C>):stx.Tuple3<A,B,C>{
 		var _1 = t1._1 == null ? t0._1 : t1._1;
 		var _2 = t1._2 == null ? t0._2 : t1._2;
@@ -215,9 +219,10 @@ class Tuple4< A, B, C, D> extends AbstractProduct {
     return stx.Tuples.t5(_1, _2, _3, _4, _5);
   }
 
- /* public static function create<A, B, C, D>(_1: A, _2: B, _3: C, _4: D): stx.Tuple4<A, B, C, D> {
+  @:noUsing
+  static public function create<A, B, C, D>(_1: A, _2: B, _3: C, _4: D): stx.Tuple4<A, B, C, D> {
     return new Tuple4<A, B, C, D>(_1, _2, _3, _4);
-  }*/
+  }
 	public static function patch<A,B,C,D>(t0:stx.Tuple4<A,B,C,D>,t1:stx.Tuple4<A,B,C,D>):stx.Tuple4<A,B,C,D>{
 		var _1 = t1._1 == null ? t0._1 : t1._1;
 		var _2 = t1._2 == null ? t0._2 : t1._2;
@@ -256,10 +261,10 @@ class Tuple5< A, B, C, D, E> extends AbstractProduct {
   override private function get_length(): Int {
     return 5;
   }
-  /*
+  @:noUsing
   public static function create<A, B, C, D, E>(_1: A, _2: B, _3: C, _4: D, _5: E): stx.Tuple5<A, B, C, D, E> {
     return new Tuple5<A, B, C, D, E>(_1, _2, _3, _4, _5);
-  }*/
+  }
 	public static function patch<A,B,C,D,E>(t0:stx.Tuple5<A,B,C,D,E>,t1:stx.Tuple5<A,B,C,D,E>):stx.Tuple5<A,B,C,D,E>{
 		var _1 = t1._1 == null ? t0._1 : t1._1;
 		var _2 = t1._2 == null ? t0._2 : t1._2;

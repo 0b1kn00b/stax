@@ -4,7 +4,7 @@ package stx.io.json;
  * ...
  * @author 0b1kn00b
  */
-using Stax;
+using SCore;
 
 import stx.io.json.TranscodeJValue;
 import stx.io.json.TranscodeJValueExtensions;
@@ -33,7 +33,7 @@ class StringJValue {
       case JBool(v): v.toString();
       case JString(v): v;
 
-      default: Stax.error("Expected String but found: " + val);
+      default: SCore.error("Expected String but found: " + val);
     }
   }
 }
@@ -47,7 +47,7 @@ class BoolJValue {
       case JNumber(v): if (v == 0.0) false; else true;
       case JString(v): v.toBool();
 
-      default: Stax.error("Expected Bool but found: " + v);
+      default: SCore.error("Expected Bool but found: " + v);
     }
   }	
 }
@@ -60,7 +60,7 @@ class IntJValue {
       case JNumber(v): v.int();
       case JString(v): v.int();
 
-      default: Stax.error("Expected Int but found: " + v);
+      default: SCore.error("Expected Int but found: " + v);
     }
   }
 }
@@ -73,7 +73,7 @@ class FloatJValue {
       case JNumber(v): v;
       case JString(v): v.toFloat();
 
-      default: Stax.error("Expected Float but found: " + v);
+      default: SCore.error("Expected Float but found: " + v);
     }
   }	
 }
@@ -86,7 +86,7 @@ class DateJValue {
       case JNumber(v): Date.fromTime(v);
       case JString(v): Date.fromTime(v.toFloat());
 
-      default: Stax.error("Expected Number but found: " + v);
+      default: SCore.error("Expected Number but found: " + v);
     }
   }	
 }
@@ -117,7 +117,7 @@ class ObjectJValue {
         
         return o;
       });
-      case JField(k, v): return Stax.error("Cannot convert JField to object");
+      case JField(k, v): return SCore.error("Cannot convert JField to object");
 		}
 	}
 }
@@ -135,7 +135,7 @@ class ArrayJValue {
     return switch(v) {
       case JArray(v): v.map(e);
 
-      default: Stax.error("Expected Array but was: " + v);
+      default: SCore.error("Expected Array but was: " + v);
     }
   }	
 }

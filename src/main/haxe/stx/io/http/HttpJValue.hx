@@ -78,7 +78,7 @@ class HttpJValueJsonp implements HttpJValue {
     var callbackName     = 'stx_jsonp_callback_' + requestId;
     var callbackFullName = 'stx.io.http.HttpJValueJsonp.Responders.' + callbackName;
     
-    var params = Options.toOption(params_).getOrElseC(Map.create()).set(callbackParameterName, callbackFullName);
+    var params = Options.create(params_).getOrElseC(Map.create()).set(callbackParameterName, callbackFullName);
     
     var url = url_.addQueryParameters(params);
     
@@ -127,19 +127,19 @@ class HttpJValueJsonp implements HttpJValue {
   }
   
   public function post(url: Url, data: JValue, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<JValue>> {
-    return Stax.error('JSONP does not support POST');
+    return SCore.error('JSONP does not support POST');
   }
   
   public function put(url: Url, data: JValue, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<JValue>> {
-    return Stax.error('JSONP does not support PUT');
+    return SCore.error('JSONP does not support PUT');
   }
   
   public function delete(url: Url, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<JValue>> {
-    return Stax.error('JSONP does not support DELETE');
+    return SCore.error('JSONP does not support DELETE');
   }
   
   public function custom(request: String, url: Url, data: JValue, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<JValue>> {
-    return Stax.error('JSONP does not support custom request: ' + request);
+    return SCore.error('JSONP does not support custom request: ' + request);
   }
 }
 

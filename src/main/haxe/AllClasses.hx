@@ -1,6 +1,6 @@
 package ;
 
-import Stax;
+import SCore;
 import stx.Arrays;
 import stx.Bools;
 import stx.concurrent.Actor;
@@ -55,6 +55,7 @@ import stx.io.json.TranscodeJValue;
 import stx.io.json.TranscodeJValueExtensions;
 import stx.Iterables;
 import stx.Iterators;
+#if js
 import stx.js.detect.BrowserSupport;
 import stx.js.detect.Host;
 import stx.js.dom.DomExtensions;
@@ -66,6 +67,7 @@ import stx.js.Dom;
 import stx.js.Env;
 import stx.js.io.IFrameIO;
 import stx.js.text.html.HTMLParser;
+#end
 import stx.Lenses;
 import stx.Log;
 import stx.macro.Lenses;

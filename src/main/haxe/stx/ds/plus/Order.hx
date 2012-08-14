@@ -6,7 +6,7 @@ package stx.ds.plus;
  */
 												using Std;
 import Type;
-import Stax;						using Stax;
+import SCore;						using SCore;
 import stx.Tuples;			using stx.Tuples;
 import stx.Maths;
 
@@ -26,10 +26,10 @@ class Order {
   /** Returns a OrderFunction (T -> T -> Int). It works for any type expect TFunction.
    *  Custom Classes must provide a compare(other : T) : Int method or an exception will be thrown.
    */
-  public static function getOrderFor<T>(t : T) : OrderFunction<T> {
+  static public function getOrderFor<T>(t : T) : OrderFunction<T> {
     return getOrderForType(Type.typeof(t));
   }
-  public static function getOrderForType<T>(v: ValueType) : OrderFunction<T> {
+  static public function getOrderForType<T>(v: ValueType) : OrderFunction<T> {
     return switch(v) {
     case TBool:
       _createOrderImpl(Bools.compare);
@@ -88,7 +88,7 @@ class Order {
 		    } else if(Type.getInstanceFields(c).remove("compare")) {
           _createOrderImpl(function(a, b) return (cast a).compare(b));
    		  } else {
-          Stax.error("class "+Type.getClassName(c)+" is not comparable");
+          SCore.error("class "+Type.getClassName(c)+" is not comparable");
         }
       }
     case TEnum(e):
@@ -106,27 +106,27 @@ class Order {
       return 0;
     });
     case TNull:
-      _createOrderImpl(function(a, b) return Stax.error("at least one of the arguments should be null"));
+      _createOrderImpl(function(a, b) return SCore.error("at least one of the arguments should be null"));
     case TFunction:
-				Stax.error("unable to compare on a function");
+				SCore.error("unable to compare on a function");
     }
   }
 }
 class ArrayOrder {
-	public static function sort<T>(v : Array<T>) : Array<T> {
+	static public function sort<T>(v : Array<T>) : Array<T> {
     return sortWith(v, Order.getOrderFor(v[0]));
   }
   
-  public static function sortWith<T>(v : Array<T>, order : OrderFunction<T>) : Array<T> {
+  static public function sortWith<T>(v : Array<T>, order : OrderFunction<T>) : Array<T> {
     var r = v.copy();
     r.sort(order);
     return r;
   }
-  public static function compare<T>(v1: Array<T>, v2: Array<T>) {
+  static public function compare<T>(v1: Array<T>, v2: Array<T>) {
       return compareWith(v1, v2, Order.getOrderFor(v1[0]));
   } 
   
-  public static function compareWith<T>(v1: Array<T>, v2: Array<T>, order : OrderFunction<T>) {  
+  static public function compareWith<T>(v1: Array<T>, v2: Array<T>, order : OrderFunction<T>) {  
     var c = v1.length - v2.length;
     if(c != 0)
       return c; 
@@ -150,5 +150,30 @@ class ProductOrder {
         return c;
     }
     return 0;
+  }
+}
+class Orders{
+  static public function greaterThan<T>(order : OrderFunction<T>) : EqualFunction<T> {
+    return function(v1, v2) return order(v1, v2) > 0;
+  }  
+   
+  static public function greaterThanOrEqual<T>(order : OrderFunction<T>) : EqualFunction<T> {
+     return function(v1, v2) return order(v1, v2) >= 0;
+  }  
+
+  static public function lessThan<T>(order : OrderFunction<T>) : EqualFunction<T> {
+    return function(v1, v2) return order(v1, v2) < 0;
+  }  
+
+  static public function lessThanOrEqual<T>(order : OrderFunction<T>) : EqualFunction<T> {
+     return function(v1, v2) return order(v1, v2) <= 0;
+  }
+
+  static public function equal<T>(order : OrderFunction<T>) : EqualFunction<T> {
+     return function(v1, v2) return order(v1, v2) == 0;
+  }
+
+  static public function notEqual<T>(order : OrderFunction<T>) : EqualFunction<T> {
+     return function(v1, v2) return order(v1, v2) != 0;
   }
 }

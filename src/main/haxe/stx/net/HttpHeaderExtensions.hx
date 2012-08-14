@@ -18,7 +18,7 @@ package stx.net;
 import stx.Tuples; using stx.Tuples;
 
 import stx.Prelude;
-using Stax;
+using SCore;
 
 import stx.ds.Map;
 import stx.net.HttpHeader;

@@ -182,7 +182,7 @@ class ListTestCase extends TestCase {
     assertFalse(newList([1,2,3]).equals(newList([1])));  
     
     var list = List.create( 
-			Stax.tool(
+			SCore.tool(
 				function(a : Float, b : Float) return Math.abs(a - b) < 0.25
 			)
 		).addAll([1.0, 2.1]);
@@ -199,7 +199,7 @@ class ListTestCase extends TestCase {
     assertTrue(newList([1,2,3]).compare(newList([2,2,3])) < 0);
     assertTrue(newList([1,2,3]).compare(newList([1])) > 0);  
     
-    var list = List.create(Stax.tool(function(a : Float, b : Float) return Math.abs(a-b) < 0.25 ? 0 : (a > b ? 1 : -1))).addAll([1.0, 2.1]);
+    var list = List.create(SCore.tool(function(a : Float, b : Float) return Math.abs(a-b) < 0.25 ? 0 : (a > b ? 1 : -1))).addAll([1.0, 2.1]);
 
     assertTrue(list.compare(newList([0.9, 2.0])) == 0);
   assertTrue(list.compare(newList([0.9, 2.4])) < 0); 
@@ -210,7 +210,7 @@ class ListTestCase extends TestCase {
   assertEquals("List []", newList().toString()); 
     assertEquals("List [a, b]", newList(["a", "b"]).toString());
 
-    var list = List.create(Stax.tool(function(a : String) return '"' + a +'"')).addAll(["a", "b"]);
+    var list = List.create(SCore.tool(function(a : String) return '"' + a +'"')).addAll(["a", "b"]);
 
     assertEquals('List ["a", "b"]', list.toString());
   }     

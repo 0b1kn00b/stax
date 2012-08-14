@@ -5,7 +5,7 @@ package stx.ds.plus;
  * @author 0b1kn00b
  */
 import stx.Prelude;
-import Stax;										using Stax;
+import SCore;										using SCore;
 import stx.Tuples;							using stx.Tuples;
 
 import Type;

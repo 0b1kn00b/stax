@@ -5,7 +5,7 @@ package stx;
  * @author 0b1kn00b
  */
 import stx.Prelude;
-                                  using Stax;
+                                  using SCore;
 import stx.Future;                using stx.Future;               
                                   using stx.Functions;
                                   using stx.Iterables;

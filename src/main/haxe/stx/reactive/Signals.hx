@@ -20,7 +20,7 @@ import stx.Tuples;
 import stx.reactive.Reactive;
 import stx.ds.Collection;
 
-using Stax;
+using SCore;
 using stx.Iterables;
 
 class Signals {

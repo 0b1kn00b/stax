@@ -19,7 +19,7 @@ import stx.Tuples;
 using stx.Tuples;
 
 import stx.Prelude;
-using Stax;
+using SCore;
 
 import stx.net.Url;
 import stx.ds.Map;

@@ -110,10 +110,10 @@ class HTMLDocumentExtensions {
   }
   
   public static function getTags(doc: HTMLDocument, s: String): Array<HTMLElement> {
-    return Options.getOrElseC(Options.toOption( cast doc.getElementsByTagName(s)), []);
+    return Options.getOrElseC(Options.create( cast doc.getElementsByTagName(s)), []);
   }
   
   public static function getClasses(doc: HTMLDocument, s: String): Array<HTMLElement> {
-    return Options.getOrElseC(Options.toOption(Env.getElementsByClass(s)), []);
+    return Options.getOrElseC(Options.create(Env.getElementsByClass(s)), []);
   }
 }

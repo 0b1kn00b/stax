@@ -1,5 +1,6 @@
 # @tm-preview                          
 -cp ./src/main/haxe/
 -cp ./src/test/haxe/
+-lib hxevents
 -neko bin/test.n
 -main StaxTestSuite

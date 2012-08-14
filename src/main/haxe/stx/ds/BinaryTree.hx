@@ -1,7 +1,7 @@
 package stx.ds;
 
 using Std;
-using Stax;
+using SCore;
 using stx.Arrays;
 using stx.Iterables;
 using stx.Functions;

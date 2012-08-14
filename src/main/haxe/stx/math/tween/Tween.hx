@@ -33,8 +33,8 @@ class Tween {
     var combinedFields = Reflect.fields(state1).toSet().addAll(Reflect.fields(state2));
     
     var data = combinedFields.map(function(name: String): Tuple2<String, {start: Float, delta: Float}> {
-      var start: Float = Options.toOption(Reflect.field(state1, name)).getOrElseC(def);
-      var end:   Float = Options.toOption(Reflect.field(state2, name)).getOrElseC(def);
+      var start: Float = Options.create(Reflect.field(state1, name)).getOrElseC(def);
+      var end:   Float = Options.create(Reflect.field(state2, name)).getOrElseC(def);
       
       return name.entuple({
         start:  start,

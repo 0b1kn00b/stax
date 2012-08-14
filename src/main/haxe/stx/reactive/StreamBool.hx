@@ -17,7 +17,7 @@ package stx.reactive;
 
 import stx.reactive.Reactive;
 
-using Stax;
+using SCore;
 using stx.Iterables;
 
 class StreamBool {

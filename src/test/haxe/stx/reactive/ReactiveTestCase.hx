@@ -1,6 +1,6 @@
 package stx.reactive;
 
-using Stax;
+using SCore;
 
 import stx.Tuples;
 import stx.Prelude;

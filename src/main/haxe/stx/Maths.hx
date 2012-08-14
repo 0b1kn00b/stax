@@ -175,6 +175,9 @@ class Ints {
 		}
 		return o;
 	}
+	/**
+	 Add two Ints
+	*/
 	static public inline function add(a:Int,b:Int):Int{
 		return a + b;
 	}

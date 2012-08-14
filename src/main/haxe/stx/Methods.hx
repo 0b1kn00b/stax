@@ -303,7 +303,7 @@ class Methods {
 	}
 	public static function applyOr<I,O,F>(o:Option<Method<I,O,F>>,x:I,f0:CodeBlock,?pos:PosInfos):Option<O>{
 		return switch(o){
-			case Some(f) 	: Options.toOption(f.execute(x,pos));
+			case Some(f) 	: Options.create(f.execute(x,pos));
 			case None 		: f0(); None;
 		}
 	}	

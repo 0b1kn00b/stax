@@ -3,7 +3,7 @@ import haxe.PosInfos;
 import stx.Prelude;
 import Type;
 														using Std;
-														using Stax;
+														using SCore;
 														using stx.Enums;
 														using stx.Tuples;
 														using stx.Arrays;
@@ -65,7 +65,12 @@ class Log {
 		return new LogItem(LogLevel.Fatal, v);
 	}
 	public static function trace(v:Dynamic, ?pos:PosInfos) {
-		var log : Logger = Logger.inject(pos);
+		var log : Logger = null;
+		try{
+			log = Logger.inject(pos);
+		}catch(e:Dynamic){
+			log = DefaultLogger.create();
+		}
 		switch (Type.typeof(v)) {
 			case TClass(c)	:
 					if ( Type.getClassName(c) == Type.getClassName(LogItem) ){
@@ -81,7 +86,12 @@ class Log {
 			default				:
 				log.trace(v,pos);
 		}
-		var log = Logger.inject(pos);
+	}
+	public static function printer(?p:PosInfos):Dynamic->Void{
+		return haxe.Log.trace.p2(p);
+	}
+	public static function tracer(?p:PosInfos):Dynamic->Void{
+		return Log.trace.p2(p);
 	}
 	public static function format(p: PosInfos) {
     return p.fileName + ":" + p.lineNumber + " (" + p.className + ":" + p.methodName + "): ";
@@ -103,16 +113,19 @@ interface Logger {
 	public 	var level(default,null)				: LogLevel;
 }
 class DefaultLogger implements Logger{
-	public static function create(listings,?level) {
+	public static function create(?listings,?level) {
 		return new DefaultLogger(listings,level);
 	}
 	private var listings 										: Array<LogListing>;
+	/**
+		Indicates whether non LogItems are traced.
+	*/
 	private var permissive									: Bool;
 	public 	var level				(default,null) 	: LogLevel;
 	
 	public function new(?listings:Array<LogListing>, ?level: LogLevel, ?permissive : Bool = true) {
 		this.listings 	= listings == null ? [] : listings;
-		this.level			= level == null ? Warning: level;
+		this.level			= level == null ? #if test Debug #else Warning #end: level;
 		this.permissive = permissive;
 	}
 	/**

@@ -23,7 +23,7 @@ using stx.Options;
 using stx.Functions;
 
 import stx.Prelude;
-using Stax;
+using SCore;
 
 using stx.Predicates;
 

@@ -1,6 +1,9 @@
 -cp src/main/haxe
 -cp src/test/haxe
 -lib hxevents
+-lib singleton
+-lib scuts
+-lib tink
 -js bin/test.js
 -main StaxTestSuite
 

@@ -14,13 +14,13 @@ import stx.Maths;
 import stx.ds.plus.Show;
 
 using stx.Prelude;
-using Stax;
+using SCore;
 using stx.Options;
 using stx.Strings;
 using stx.ds.plus.Show;
 using Std;
 
-class Stax {
+class SCore {
 	public static function here(?pos:haxe.PosInfos) {
 		return pos;
 	}
@@ -89,7 +89,7 @@ class Stax {
 }
 
 class ArrayLambda {
-	static public function map<T, S>(a: Array<T>, f: T -> S): Array<S> {
+	inline static public function map<T, S>(a: Array<T>, f: T -> S): Array<S> {
     var n: Array<S> = [];
     
     for (e in a) n.push(f(e));

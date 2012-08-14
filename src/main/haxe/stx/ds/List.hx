@@ -19,7 +19,7 @@ package stx.ds;
 import stx.Prelude;
 
 import stx.Tuples;
-using Stax;
+using SCore;
 
 
 import stx.functional.Foldable;
@@ -102,7 +102,7 @@ class List<T> implements Collection<List<T>, T> {
    * construct lists by prepending, and then reverse at the end if necessary.
    */
   public function cons(head: T): List<T> {
-    return new Cons(Stax.tool(_order,_equal,_hash,_show), head, this);
+    return new Cons(SCore.tool(_order,_equal,_hash,_show), head, this);
   }
 
   /** Synonym for cons. */
@@ -179,7 +179,7 @@ class List<T> implements Collection<List<T>, T> {
    * the cons() method should be used to grow the list.
    */
   public function add(t: T): List<T> {
-    return foldr(create(Stax.tool(_order, _equal, _hash, _show)).cons(t), function(b, a) {
+    return foldr(create(SCore.tool(_order, _equal, _hash, _show)).cons(t), function(b, a) {
       return a.cons(b);
     });
   }
@@ -191,7 +191,7 @@ class List<T> implements Collection<List<T>, T> {
 
     a.reverse();
 
-    var r = create( Stax.tool(_order, _equal, _hash, _show) );
+    var r = create( SCore.tool(_order, _equal, _hash, _show) );
 
     for (e in a) r = r.cons(e);
 
@@ -202,7 +202,7 @@ class List<T> implements Collection<List<T>, T> {
 
   public function remove(t: T): List<T> {
     var pre: Array<T> = [];
-    var post: List<T> = nil(Stax.tool(_order, _equal, _hash, _show));
+    var post: List<T> = nil(SCore.tool(_order, _equal, _hash, _show));
     var cur = this;      
     var eq = equal;
     for (i in 0...size()) {
@@ -283,13 +283,13 @@ class List<T> implements Collection<List<T>, T> {
 
   /** Override Foldable to provide higher performance: */
   public function filter(f: T -> Bool): List<T> {
-    return foldr(create(Stax.tool(_order, _equal, _hash, _show)), function(e, list) return if (f(e)) list.cons(e) else list);
+    return foldr(create(SCore.tool(_order, _equal, _hash, _show)), function(e, list) return if (f(e)) list.cons(e) else list);
   }
 
   /** Returns a list that contains all the elements of this list in reverse
    * order */
   public function reverse(): List<T> {
-    return foldl(create(Stax.tool(_order, _equal, _hash, _show)), function(a, b) return a.cons(b));
+    return foldl(create(SCore.tool(_order, _equal, _hash, _show)), function(a, b) return a.cons(b));
   }
 
   /** Zips this list and the specified list into a list of tuples. */
@@ -313,7 +313,7 @@ class List<T> implements Collection<List<T>, T> {
    * @param f Called with every two consecutive elements to retrieve a list of gaps.
    */
   public function gaps<G>(f: T -> T -> List<G>, ?equal: EqualFunction<G>): List<G> {
-    return zip(drop(1)).flatMapTo(List.nil(Stax.tool(null,equal)), function(tuple) return f(tuple._1, tuple._2));
+    return zip(drop(1)).flatMapTo(List.nil(SCore.tool(null,equal)), function(tuple) return f(tuple._1, tuple._2));
   }
 
   /** Returns a list that contains all the elements of this list, sorted by
@@ -322,7 +322,7 @@ class List<T> implements Collection<List<T>, T> {
   public function sort(): List<T> {
     var a = this.toArray();
     a.sort(order);
-    var result = create(Stax.tool(_order, _equal, _hash, _show));
+    var result = create(SCore.tool(_order, _equal, _hash, _show));
 
     for (i in 0...a.length) {
       result = result.cons(a[a.length - 1 - i]);
@@ -336,19 +336,19 @@ class List<T> implements Collection<List<T>, T> {
   }
   
   public function withOrderFunction(order : OrderFunction<T>) {
-    return create(Stax.tool(order,_equal,_hash,_show)).addAll(this);
+    return create(SCore.tool(order,_equal,_hash,_show)).addAll(this);
   }
   
   public function withEqualFunction(equal : EqualFunction<T>) {
-    return create(Stax.tool(_order, equal, _hash, _show)).addAll(this);
+    return create(SCore.tool(_order, equal, _hash, _show)).addAll(this);
   }
   
   public function withHashFunction(hash : HashFunction<T>) {
-    return create(Stax.tool(_order, _equal, hash, _show)).addAll(this);
+    return create(SCore.tool(_order, _equal, hash, _show)).addAll(this);
   }
   
   public function withShowFunction(show : ShowFunction<T>) {
-    return create(Stax.tool(_order, _equal, _hash, show)).addAll(this);
+    return create(SCore.tool(_order, _equal, _hash, show)).addAll(this);
   }
 
   var _equal : EqualFunction<T>;
@@ -413,11 +413,11 @@ class List<T> implements Collection<List<T>, T> {
   }
 
   private function getHead(): T {
-    return Stax.error("List has no head element");
+    return SCore.error("List has no head element");
   }
 
   private function getLast(): T {
-    return Stax.error("List has no last element");
+    return SCore.error("List has no last element");
   }
 
   private function getHeadOption(): Option<T> {
@@ -429,7 +429,7 @@ class List<T> implements Collection<List<T>, T> {
   }
 
   private function getTail(): List<T> {
-    return Stax.error("List has no head");
+    return SCore.error("List has no head");
   }
 }
 

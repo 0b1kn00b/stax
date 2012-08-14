@@ -42,6 +42,12 @@ using stx.Options;
 * </pre>
 */
 class Assert {
+  static public function asserter<A>(f: A -> String -> PosInfos -> Bool,?s:String,?pos:PosInfos){
+    return 
+      function(v:A){
+         f(v,s,pos);
+      }
+  }
   /**
   * A stack of results for the current testing workflow. It is used internally
   * by other classes of the utest library.
@@ -69,20 +75,20 @@ class Assert {
   * unless you know what you are doing.
   */
   public static function isTrue(cond : Bool, ?msg : String, ?pos : PosInfos) {
-		if (null == msg)	msg = "expected true";
-		if (results == null) {
-				if (cond) {
-					
-				}else {
-						throw new AssertionError(msg);
-				}
-		}else {
-			if(cond)
-				results.add(Success(pos));
-			else
-				results.add(Failure(msg, pos));
-		}
-		return cond;
+    if (null == msg)  msg = "expected true";
+    if (results == null) {
+        if (cond) {
+          
+        }else {
+            throw new AssertionError(msg);
+        }
+    }else {
+      if(cond)
+        results.add(Success(pos));
+      else
+        results.add(Failure(msg, pos));
+    }
+    return cond;
     //if (results == null) throw "Assert.results is not currently bound to any assert context";
     
   }
@@ -525,7 +531,7 @@ class Assert {
       return Assert.isTrue(true, msg, pos);
     } else {
       Assert.fail(msg == null ? status.error : msg, pos);
-			return false;
+      return false;
     }
   }
 
@@ -551,7 +557,7 @@ class Assert {
       var name = Type.getClassName(type);
       if (name == null) name = ""+type;
       fail("exception of type " + name + " not raised", pos);
-			return false;
+      return false;
     } catch (ex : Dynamic) {
       var name = Type.getClassName(type);
       if (name == null) name = ""+type;
@@ -571,7 +577,7 @@ class Assert {
       return isTrue(true, msg, pos);
     } else {
       fail(msg == null ? "value " + q(value) + " not found in the expected possibilities " + possibilities : msg, pos);
-			return false;
+      return false;
     }
   }
   /**
@@ -587,7 +593,7 @@ class Assert {
       return isTrue(true, msg, pos);
     } else {
       fail(msg == null ? "values " + values + " do not contain " + match: msg, pos);
-			return false;
+      return false;
     }
   }
   
@@ -604,7 +610,7 @@ class Assert {
       return isTrue(true, msg, pos);
     } else {
       fail(msg == null ? "values " + values + " do contain " + match: msg, pos);
-			return false;
+      return false;
     }
   }
   
@@ -620,7 +626,7 @@ class Assert {
       return isTrue(true, msg, pos);
     } else {
       fail(msg == null ? "value " + q(value) + " does not contain " + q(match) : msg, pos);
-			return false;
+      return false;
     }
   }
   
@@ -689,7 +695,9 @@ class Assert {
   public static dynamic function createAsync(f : Void->Void, ?timeout : Int) {
     return function(){};
   }
-  
+  static public function defAsync(?timeout:Int,?f:Void->Void){
+    return createAsync(f == null ? function(){} : f, timeout);
+  }
   
   /** Asserts the future is delivered within the specified time frame. All 
    * assertions relating to the deliverable should be contained within the 
@@ -756,7 +764,9 @@ class Assert {
   public static dynamic function createEvent<EventArg>(f : EventArg->Void, ?timeout : Int) {
     return function(e:EventArg){};
   }
-  
+  static public function defEvent<EventArg>(?timeout,?f:EventArg->Void){
+    return createEvent(f == null ? function(e:EventArg){} : f, timeout);
+  }
   static function typeToString(t : Dynamic)
   {
     try {

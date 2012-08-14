@@ -17,7 +17,7 @@
 package stx.ds;
 
 import stx.Prelude;
-using Stax;
+using SCore;
 
 import stx.functional.Foldable;
 import stx.ds.Collection;

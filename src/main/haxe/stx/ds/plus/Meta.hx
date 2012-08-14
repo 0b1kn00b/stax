@@ -6,7 +6,7 @@ package stx.ds.plus;
  */
 import stx.Tuples;
 
-using Stax;
+using SCore;
 using stx.Objects;
 using stx.ds.plus.Order;
 

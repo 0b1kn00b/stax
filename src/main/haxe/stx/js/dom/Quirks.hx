@@ -16,7 +16,7 @@
 package stx.js.dom;
 
 import stx.Prelude;
-using Stax;
+using SCore;
 
 
 import stx.js.Dom;
@@ -265,7 +265,7 @@ class Quirks {
       }
     }
 
-    return Stax.error('Invalid rule: ' + rule);
+    return SCore.error('Invalid rule: ' + rule);
   }
 
   /** Retrieves the actual property name for the specified css property.

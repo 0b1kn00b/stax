@@ -16,9 +16,11 @@
 package stx;
 
 
-import stx.Tuples;						using stx.Tuples;
+import stx.Tuples;            using stx.Tuples;
+using stx.Functions;
+
 import stx.Prelude;
-using Stax;
+using SCore;
 
 using stx.Arrays;
 
@@ -26,31 +28,34 @@ import Type;
 
 typedef Object = {};
 
+/**
+  Object defined as {} is different from Dynamic in that it does not allow closures.
+*/
 @note('0b1kn00b','Does this handle reference loops, should it, could it?')
 class Objects {
-	
-  inline public static function copyDeep(d: Object): Object return 
+  
+  inline static public function copyDeep(d: Object): Object return 
     copy(d, false)
   
-	/**
-	 * Generic copy function
-	 * @param	d
-	 * @param	shallow		specifies depth of copy
-	 * @return
-	 */	
-  public static function copy(d: Object, shallow: Bool = true): Object {
+  /**
+    Generic copy function
+    @param d
+    @param shallow   specifies depth of copy
+    @return
+   */ 
+  static public function copy(d: Object, shallow: Bool = true): Object {
     var res = { };
     copyTo(d, res, shallow);
     return res;
   }
 
-  inline public static function copyTypedDeep<T>(d: T): T return 
+  inline static public function copyTypedDeep<T>(d: T): T return 
     untyped copy(d, false)
     
-  inline public static function copyTyped<T>(d: T, shallow: Bool = true): T return
+  inline static public function copyTyped<T>(d: T, shallow: Bool = true): T return
     untyped copy(d, shallow)
   
-  public static function copyTo(src: Object, dest: Object, shallow: Bool = true): Object {
+  static public function copyTo(src: Object, dest: Object, shallow: Bool = true): Object {
     function safecopy(d: Dynamic): Dynamic
       return switch (Type.typeof(d)) {
         case TObject: copy(d, shallow);
@@ -63,54 +68,53 @@ class Objects {
       
       Reflect.setField(dest, field, if (shallow) value else safecopy(value));
     }
-    
     return src;
   }
   
-  public static function extendWith(dest: Object, src: Object, shallow: Bool = true): Object {
+  static public function extendWith(dest: Object, src: Object, shallow: Bool = true): Object {
     copyTo(src, dest, shallow);    
     return dest;
   }
-  public static function copyExtendedWith(a: Object, b: Object, shallow: Bool = true): Object {
+  static public function copyExtendedWith(a: Object, b: Object, shallow: Bool = true): Object {
     var res = copy(a, shallow);
     copyTo(b, res, shallow);    
     return res;
   }
 
-  public static function extendWithDeep(dest: Object, src: Object): Object {
+  static public function extendWithDeep(dest: Object, src: Object): Object {
     copyTo(src, dest, false);    
     return dest;
   }
 
-  public static function copyExtendedWithDeep(a: Object, b: Object): Object {
+  static public function copyExtendedWithDeep(a: Object, b: Object): Object {
     var res = copy(a, false);
     copyTo(b, res, false);    
     return res;
   }
   
-  public static function fields(d: Object): Array<String> {
+  static public function fields(d: Object): Array<String> {
     return Reflect.fields(d);
   }
   
-  public static function mapValues<T, S>(d: Dynamic<T>, f: T -> S): Dynamic<S> {
+  static public function mapValues<T, S>(d: Dynamic<T>, f: T -> S): Dynamic<S> {
     return setAll({}, Reflect.fields(d).map(function(name) {
       return Tuples.t2(name,f(Reflect.field(d, name)));
     }));
   }
   
-  public static function set<T>(d: Dynamic<T>, k: String, v: T): Dynamic<T> {
+  static public function set<T>(d: Dynamic<T>, k: String, v: T): Dynamic<T> {
     Reflect.setField(d, k, v);
     
     return d;
   }
   
-  public static function setAny(d: Object, k: String, v: Dynamic): Object {
+  static public function setAny(d: Object, k: String, v: Dynamic): Object {
     Reflect.setField(d, k, v);
     
     return d;
   }
   
-  public static function setAll<T>(d: Dynamic<T>, fields: Iterable<Tuple2<String, T>>): Dynamic<T> {
+  static public function setAll<T>(d: Dynamic<T>, fields: Iterable<Tuple2<String, T>>): Dynamic<T> {
     for (field in fields) {
       Reflect.setField(d, field._1, field._2);
     }
@@ -118,7 +122,7 @@ class Objects {
     return d;
   }
   
-  public static function replaceAll<T>(d1: Dynamic<T>, d2: Dynamic<T>, def: T): Object {
+  static public function replaceAll<T>(d1: Dynamic<T>, d2: Dynamic<T>, def: T): Object {
     var names: Array<String> = Reflect.fields(d2);
     
     var oldValues = extractValues(d1, names, def);
@@ -132,7 +136,7 @@ class Objects {
     });
   }
   
-  public static function setAllAny(d: Object, fields: Iterable<Tuple2<String, Dynamic>>): Object {
+  static public function setAllAny(d: Object, fields: Iterable<Tuple2<String, Dynamic>>): Object {
     for (field in fields) {
       Reflect.setField(d, field._1, field._2);
     }
@@ -140,7 +144,7 @@ class Objects {
     return d;
   }
   
-  public static function replaceAllAny(d1: Object, d2: Object, def: Dynamic): Object {
+  static public function replaceAllAny(d1: Object, d2: Object, def: Dynamic): Object {
     var names: Array<String> = Reflect.fields(d2);
     
     var oldValues = extractValues(d1, names, def);
@@ -154,15 +158,15 @@ class Objects {
     });
   }
   
-  public static function get<T>(d: Dynamic<T>, k: String): Option<T> {
+  static public function get<T>(d: Dynamic<T>, k: String): Option<T> {
     return if (Reflect.hasField(d, k)) Some(Reflect.field(d, k)); else None;
   }
   
-  public static function getAny(d: Object, k: String): Option<Dynamic> {
+  static public function getAny(d: Object, k: String): Option<Dynamic> {
     return if (Reflect.hasField(d, k)) Some(Reflect.field(d, k)); else None;
   }
   
-  public static function extractFieldValues(obj: Dynamic, field: String): Array<Dynamic> {
+  static public function extractFieldValues(obj: Dynamic, field: String): Array<Dynamic> {
     return Reflect.fields(obj).foldl([], function(a, fieldName): Array<Dynamic> {
       var value = Reflect.field(obj, fieldName);
       return if (fieldName == field) {
@@ -173,19 +177,18 @@ class Objects {
     });
   }
   
-  public static function extractAll<T>(d: Dynamic<T>): Array<Tuple2<String, T>> {
+  static public function extractAll<T>(d: Dynamic<T>): Array<Tuple2<String, T>> {
     return Reflect.fields(d).map(function(name) return Tuples.t2(name,Reflect.field(d, name)));
   }
   
-  public static function extractAllAny(d: Object): Array < Tuple2 < String, Dynamic >> {
+  static public function extractAllAny(d: Object): Array < Tuple2 < String, Dynamic >> {
     return extractAll(d);
   }
   
-  public static function extractValuesAny(d: Object, names: Iterable<String>, def: Dynamic): Array<Dynamic> {
+  static public function extractValuesAny(d: Object, names: Iterable<String>, def: Dynamic): Array<Dynamic> {
     return extractValues(d, names, def);
   }
-  
-  public static function extractValues<T>(d: Dynamic<T>, names: Iterable<String>, def: T): Array<T> {
+  static public function extractValues<T>(d: Dynamic<T>, names: Iterable<String>, def: T): Array<T> {
     var result: Array<T> = [];
     
     for (field in names) {
@@ -197,10 +200,10 @@ class Objects {
     return result;
   }
   
-  public static function iterator(d: Object): Iterator<String> {
+  static public function iterator(d: Object): Iterator<String> {
     return Reflect.fields(d).iterator();
   }
-  public static function toObject(a:Array<Tuple2<String,Dynamic>>):Object{
+  static public function toObject(a:Array<Tuple2<String,Dynamic>>):Object{
     return a.foldl(
       {},
       function(init,el){
@@ -208,5 +211,20 @@ class Objects {
         return init;
       }
     );
+  }
+}
+class Untyper{
+  static public function extractInstanceFields<T>(v:T):Array<Tuple2<String,Dynamic>>{
+    var fields = Type.getInstanceFields(Type.getClass(v));
+    return 
+      fields.zip(
+        fields.map(
+          Reflect.field.p1(v)
+        )
+      ).filter(
+        function(t){
+          return !Reflect.isFunction(t._2);
+        }
+      );
   }
 }

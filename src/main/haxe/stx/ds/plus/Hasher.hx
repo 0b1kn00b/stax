@@ -5,8 +5,8 @@ package stx.ds.plus;
  * @author 0b1kn00b
  */
 import stx.Prelude;
-import Stax;
-using Stax;
+import SCore;
+using SCore;
 
 import Type;
 using stx.Strings;
@@ -33,7 +33,7 @@ class Hasher {
       case TFloat:
         _createHashImpl(FloatHasher.hashCode);
       case TUnknown:
-      _createHashImpl(function(v : T) return Stax.error("can't retrieve hascode for TUnknown: " + v));
+      _createHashImpl(function(v : T) return SCore.error("can't retrieve hascode for TUnknown: " + v));
       case TObject:
         _createHashImpl(function(v){
         var s = Show.getShowFor(v)(v);
@@ -61,7 +61,7 @@ class Hasher {
           } else if(Type.getInstanceFields(c).remove("hashCode")) {
             _createHashImpl(function(v) return Reflect.callMethod(v, Reflect.field(v, "hashCode"), []));
           } else {
-            Stax.error("class does not have a hashCode method");
+            SCore.error("class does not have a hashCode method");
           }
         }
       case TEnum(e):
@@ -72,7 +72,7 @@ class Hasher {
         return hash;
       });
       case TFunction:
-        _createHashImpl(function(v : T) return Stax.error("function can't provide a hash code"));
+        _createHashImpl(function(v : T) return SCore.error("function can't provide a hash code"));
       case TNull:
         function(v) return 0;
       default:

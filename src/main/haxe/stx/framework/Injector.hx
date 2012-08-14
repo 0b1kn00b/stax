@@ -18,7 +18,7 @@ package stx.framework;
 
 import stx.Tuples;
 import stx.Prelude;
-using Stax;
+using SCore;
 
 import haxe.PosInfos;
 
@@ -142,8 +142,12 @@ private typedef Bindings = {
 
 // Exists to workaround lack of "package" or "module" access specifiers:
 private class InjectorImpl {
-  static var state: Array<Bindings> = [];
   
+
+  static var state(get_state,null): Array<Bindings>;
+  static public function get_state(){
+    return (state == null) ?  state = [] : state;
+  }
   static var classBindingsExtractor = function(b: Bindings) { return b.classBindings; }
   static var moduleBindingsExtractor = function(b: Bindings) { return b.moduleBindings; }
   static var packageBindingsExtractor = function(b: Bindings) { return b.packageBindings; }
@@ -151,7 +155,7 @@ private class InjectorImpl {
   public static function inject<T>(interf: Class<T>, ?pos: PosInfos): T {
     var binding = getMostSpecificBinding(interf, pos);
   
-    var factory = binding.getOrElse(Stax.error.lazy('No binding defined for ' + Type.getClassName(interf),Stax.here()));
+    var factory = binding.getOrElse(SCore.error.lazy('No binding defined for ' + Type.getClassName(interf),SCore.here()));
   
     return factory();
   }
@@ -282,9 +286,9 @@ private class InjectorImpl {
   private static function getDefaultImplementationBinding(c: Class<Dynamic>): Option<Void -> Dynamic> {
     if(existsDefaultBinding(c))
       return getDefaultBinding(c);
-    var f = Options.toOption(haxe.rtti.Meta.getType(c))
+    var f = Options.create(haxe.rtti.Meta.getType(c))
       .flatMap(function(m : Dynamic) { 
-        return Options.toOption((Reflect.hasField(m, "DefaultImplementation") ? Reflect.field(m, "DefaultImplementation") : null)); })
+        return Options.create((Reflect.hasField(m, "DefaultImplementation") ? Reflect.field(m, "DefaultImplementation") : null)); })
       .flatMap(function(p) {
         var cls = null;
         return cast if(null == p || null == p[0] || null == (cls = Type.resolveClass(p[0]))) None else Some(Tuples.t2(cls, null != p[1] ? Type.createEnum(BindingType, p[1], []) : null)); })
@@ -296,7 +300,12 @@ private class InjectorImpl {
             factoryFor(p._1).memoize().toOption();
         };
       });
-    addDefaultBinding(c, f);
+    try{
+      addDefaultBinding(c, f);  
+    }catch(e:Dynamic){
+      throw 'No Injector context, use stx.framework.Injector.enter';
+    }
+    
     return f;    
   }
 
@@ -325,8 +334,7 @@ private class InjectorImpl {
   }
   
   private static function existsDefaultBinding(c : Class<Dynamic>):Bool {
-    
-    return state[0].defaultBindings.exists(Type.getClassName(c));
+    return state[0] == null ? false : state[0].defaultBindings.exists(Type.getClassName(c));
   }
   
   private static function addDefaultBinding(c : Class<Dynamic>, f: Option<Void -> Dynamic>):Void {

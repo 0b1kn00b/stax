@@ -31,7 +31,7 @@ import stx.Log;								using stx.Log;
 import stx.Future;
 import stx.Tuples;
 
-using Stax;
+using SCore;
 using stx.Tuples;
 using stx.Arrays;
 using stx.Strings;
@@ -127,11 +127,11 @@ class AbstractIFrameIO implements IFrameIO {
   }
   
   public function receive(f: Dynamic -> Void, originUrl: String, ?originWindow: Window): IFrameIO {
-    return Stax.error('Not implemented');
+    return SCore.error('Not implemented');
   }
 
   public function receiveWhile(f: Dynamic -> Bool, originUrl: String, ?originWindow: Window): IFrameIO {
-    return Stax.error('Not implemented');
+    return SCore.error('Not implemented');
   }
   
   public function receiveRequests(f: Dynamic -> Future<Dynamic>, url, window: Window): IFrameIO {
@@ -150,7 +150,7 @@ class AbstractIFrameIO implements IFrameIO {
   }
 
   public function send(data: Dynamic, targetUrl: String, targetWindow: Window): IFrameIO {
-    return Stax.error('Not implemented');
+    return SCore.error('Not implemented');
   }
   
   public function request(requestData: Dynamic, targetUrl: String, targetWindow: Window): Future<Dynamic> {
@@ -278,7 +278,7 @@ class IFrameIOPostMessage extends AbstractIFrameIO, implements IFrameIO {
   
   private static function getUrlFor(w: Window, url_: Url): Url {
     return if (url_.startsWith('about:')) {
-      var allWindows = [w].concat(Stax.unfold(w, function(w) {
+      var allWindows = [w].concat(SCore.unfold(w, function(w) {
         var parentWindow = w.parent;
         
         return if (w == parentWindow) None;

@@ -41,13 +41,14 @@ typedef Factory<T> = Void -> T
 
 
 /**
- * A function which takes no parameter and returns a result.
+ A function which takes no parameter and returns a result.
  */
 typedef Thunk<T> = Void -> T
 
-/** An option represents an optional value -- the value may or may not be
- * present. Option is a much safer alternative to null that often enables
- * reduction in code size and increase in code clarity.
+/** 
+		An option represents an optional value -- the value may or may not be
+ 		present. Option is a much safer alternative to null that often enables
+  	reduction in code size and increase in code clarity.
  */
 enum Option<T> {
   None;
@@ -60,15 +61,17 @@ enum TraversalOrder {
 	PostOrder;
 	LevelOrder;
 }
-/** Either represents a type that is either a "left" value or a "right" value,
- * but not both. Either is often used to represent success/failure, where the
- * left side represents failure, and the right side represents success.
+/** 
+	Either represents a type that is either a "left" value or a "right" value,
+  but not both. Either is often used to represent success/failure, where the
+  left side represents failure, and the right side represents success.
  */
 enum Either<A, B> {
   Left(v: A);
   Right(v: B);
 }
 typedef FailureOrSuccess<A, B> 	= Either<A, B>
+
 typedef OrderFunction<T>  			= Function2<T, T, Int>;
 typedef EqualFunction<T>  			= Function2<T, T, Bool>;
 typedef ShowFunction<T>   			= Function1<T, String>;

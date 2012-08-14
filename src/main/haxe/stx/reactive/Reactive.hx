@@ -20,7 +20,7 @@ import stx.ds.plus.Equal;
 
 import stx.reactive.Streams;
 
-using Stax;
+using SCore;
 using stx.Iterables;
 
 
@@ -67,14 +67,16 @@ class Pulse<T> {
 }    
 
 class Stamp {
-    private static var _stamp: Int = 1;
+    private static var _stamp: Int = 0;
     
     public static function lastStamp(): Int {
         return _stamp;
     }
     
     public static function nextStamp(): Int {
-        return ++_stamp;
+        var o = _stamp = _stamp + 1;
+        //if(o==9007199254740992)o-=9007199254740992;
+        return o;
     }
 }
 
@@ -291,15 +293,15 @@ class Stream<T> {
 
         var inE: Stream<Dynamic> = Streams.create(
             function (pulse: Pulse<Dynamic>): Propagation<Dynamic> {
-               
                 var first = prevE == null;
 
                 if (prevE != null) {
                     prevE.removeListener(outE, true); // XXX This is sloppy
                 }
-                
                 prevE = k(pulse.value);
-                
+                if(prevE == null){
+                    throw 'null returned from flatMap function ';
+                }               
                 
                 prevE.attachListener(outE);
 
@@ -362,13 +364,15 @@ class Stream<T> {
 			#end
 			return this;
     }
-    
     /**
      * Sends an event later, "as soon as possible".
      *
      * @param value The value to send.
      */
     public function sendLater(value: Dynamic): Stream<T> {
+        return sendLaterIn(value, 0);
+    }
+    public function sendLaterTyped(value: T): Stream<T> {
         return sendLaterIn(value, 0);
     }
 		#if (js || flash || nodejs )
@@ -391,7 +395,6 @@ class Stream<T> {
 
         return resE;
     }
-    
     /**
      * Delays this stream by the specified number of milliseconds.
      * 
@@ -906,6 +909,7 @@ class Stream<T> {
 
         Streams.create(
             function(pulse: Pulse<T>): Propagation<T> { 
+                trace('pulse ' + pulse.stamp);
                 testStamp = pulse.stamp; 
                 
                 value1 = pulse.value; 
@@ -917,6 +921,8 @@ class Stream<T> {
          
         return Streams.create(
             function(pulse: Pulse<A>): Propagation<R> { 
+                trace(pulse.stamp);
+                trace(testStamp);
                 return if (testStamp == pulse.stamp) propagate(pulse.withValue(f(value1, pulse.value))); else doNotPropagate;
             },
             [as]

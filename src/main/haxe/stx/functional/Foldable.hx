@@ -30,3 +30,17 @@ interface Foldable<A, B> {
   /** Left folds over the structure. */
   function foldl<T>(t: T, f: T -> B -> T): T;
 }
+/*class FoldableArray implements tink.lang.Cls, implements Foldable<Array<T>,T>{
+
+	private var __internal__ : Array<T>;
+
+	public function new(a){
+		__internal__ = a;
+	}
+	public function append(b: B): A{
+		return stx.Arrays.append(b);
+	}
+  public function foldl<A>(t: A, f: A -> T -> A): A{
+  	return Stax.ArrayLambdas.foldl(t)	
+  }
+}*/

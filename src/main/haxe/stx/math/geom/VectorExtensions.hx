@@ -16,7 +16,7 @@
 package stx.math.geom;
 
 import stx.Prelude;									
-																		using Stax;
+																		using SCore;
 																		using stx.Iterables;
 																		using stx.Maths;
 																		using stx.Tuples;

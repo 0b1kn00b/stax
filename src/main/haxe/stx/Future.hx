@@ -8,20 +8,22 @@ package stx;
 import stx.Tuples;
 import stx.error.Error;           using stx.error.Error;            
 import stx.Prelude;               using stx.Prelude;
-                                  using Stax;
+                                  using SCore;
+                                  using stx.Arrays;
                                   using stx.Options;
                                   using stx.Dynamics;
                                   using stx.Iterables;
+                                  using stx.Future;
                                   using stx.Eithers;
 
 /**
- * An asynchronous operation that may complete in the future unless
- * successfully canceled.
- * <p>
- * Futures can be combined and chained together to form complicated
- * asynchronous control flows. Often used operations are map() and
- * flatMap().
- * <p>
+  An asynchronous operation that may complete in the future unless
+  successfully canceled.
+  <p>
+  Futures can be combined and chained together to form complicated
+  asynchronous control flows. Often used operations are map() and
+  flatMap().
+  <p>
  */
 class Future<T> {
   var _listeners: Array<T -> Void>;
@@ -42,7 +44,8 @@ class Future<T> {
   public function isEmpty(){
     return _listeners.length == 0;
   }
-  /** Creates a "dead" future that is canceled and will never be delivered.
+  /** 
+    Creates a "dead" future that is canceled and will never be delivered.
    */
   public static function dead<T>(): Future<T> {
     return new Future().withEffect(function(future) {
@@ -50,12 +53,13 @@ class Future<T> {
     });
   }
 
-  /** Delivers the value of the future to anyone awaiting it. If the value has
-   * already been delivered, this method will throw an exception.
+  /** 
+    Delivers the value of the future to anyone awaiting it. If the value has
+    already been delivered, this method will throw an exception.
    */
   public function deliver(t: T,?pos:haxe.PosInfos): Future<T> {
     return if (_isCanceled) this;
-    else if (_isSet) Stax.error("Future :" + this.value() + " already delivered at " + pos.toString());
+    else if (_isSet) SCore.error("Future :" + this.value() + " already delivered at " + pos.toString());
     else {
       _result = t;
       _isSet  = true;
@@ -68,12 +72,13 @@ class Future<T> {
     }
   }
 
-  /** Installs the specified canceler on the future. Under ordinary
-   * circumstances, the future will not be canceled unless all cancelers
-   * return true. If the future is already done, this method has no effect.
-   * <p>
-   * This method does not normally need to be called. It's provided primarily
-   * for the implementation of future primitives.
+  /** 
+    Installs the specified canceler on the future. Under ordinary
+    circumstances, the future will not be canceled unless all cancelers
+    return true. If the future is already done, this method has no effect.
+    <p>
+    This method does not normally need to be called. It's provided primarily
+    for the implementation of future primitives.
    */
   public function allowCancelOnlyIf(f: Void -> Bool): Future<T> {
     if (!isDone()) _cancelers.push(f);
@@ -275,6 +280,10 @@ class Future<T> {
   public static function toFuture<T>(t: T): Future<T> {
     return Future.create().deliver(t);
   }
+  @:noUsing
+  static public function pure<A>(v:A):Future<A>{
+    return toFuture(v);
+  }
   public function deliverMe(f:Future<T>-> Void): Future<T> {
     if (isCanceled()) return this;
     else if (isDelivered()) f(this);
@@ -372,12 +381,31 @@ class Promises{
         }
       );
   }
-  static public function promiseOf<A,B>(e:Either<A,B>):Future<Either<A,B>>{
+  @:noUsing
+  static public function pure<A,B>(e:Either<A,B>):Future<Either<A,B>>{
     return new Future().deliver(e);
   }
+  /**
+    Use this with a flatmap fold to wait for parallel futures.
+    vals.map( function_returning_future ).foldl( Future.pure(Right([])), Promises.waitfold )
+    This op stops when there is a single failure
+  */
+  static public function waitfold<A,B>(init:Future<Either<A,Array<B>>>,ft:Future<Either<A,B>>){
+    return 
+      init.flatMapR(
+        function(arr:Array<B>){
+          return 
+            ft.mapRight(
+              function(v:B):Array<B>{
+                return arr.append(v);
+              }
+            );
+        }
+      );
+  }
 }
-class Promises1{
-  static public function promiseOf<A>(e:A):Future<Either<Dynamic,A>>{
-    return Promises.promiseOf(Right(e));
+class PromisesR{
+  static public function pure<A>(e:A):Future<Either<Dynamic,A>>{
+    return Promises.pure(Right(e));
   }
 }

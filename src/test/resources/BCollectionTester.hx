@@ -5,7 +5,7 @@ import stx.test.Runner;
 import stx.test.ui.Report;
 
 import stx.reactive.SignalCollection;
-import Stax;																using Stax;
+import SCore;																using SCore;
 import stx.Iterables; 											using stx.Iterables;
 
 class BCollectionTester {

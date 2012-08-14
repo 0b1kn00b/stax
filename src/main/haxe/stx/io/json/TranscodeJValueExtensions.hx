@@ -26,7 +26,7 @@ import stx.ds.plus.Hasher;
 using stx.Dynamics;
 
 import stx.Prelude;
-using Stax;
+using SCore;
 import stx.Arrays;
 import stx.ds.Map;
 import stx.io.json.Transcode;
@@ -73,7 +73,7 @@ class MapOps {
         return switch(j) {
           case JField(k, v): Tuples.t2(k, ve(v));
 
-          default: Stax.error("Expected field but was: " + v);
+          default: SCore.error("Expected field but was: " + v);
         }
       }));
     }
@@ -82,7 +82,7 @@ class MapOps {
       case JObject(v): extract0(v);
       case JArray(v) : extract0(v);
 
-      default: Stax.error("Expected either Array or Object but was: " + v);
+      default: SCore.error("Expected either Array or Object but was: " + v);
     }
   }
 }
@@ -108,7 +108,7 @@ class TranscodeJValue{
       case TFloat:
         _createDecomposeImpl(FloatJValue.decompose);
       case TUnknown:
-        _createDecomposeImpl(function(v) return Stax.error("Can't decompose TUnknown: " + v));
+        _createDecomposeImpl(function(v) return SCore.error("Can't decompose TUnknown: " + v));
       case TObject:
         _createDecomposeImpl( ObjectJValue.decompose );
       case TClass(c):
@@ -135,7 +135,7 @@ class TranscodeJValue{
 					_createDecomposeImpl(Tuple5JValue.decompose);
         default:
 						//TODO make open to subclasses.
-            Stax.error("Decompose function cannot be created. " + v);
+            SCore.error("Decompose function cannot be created. " + v);
 				};
       case TEnum(e):
          switch (Type.getEnumName(e)){
@@ -150,11 +150,11 @@ class TranscodeJValue{
            });
          }
       case TFunction:
-        _createDecomposeImpl(function(v) {Stax.error("Can't decompose function."); return JNull;});
+        _createDecomposeImpl(function(v) {SCore.error("Can't decompose function."); return JNull;});
       case TNull:
         function(v) return JNull;
       default:
-        _createDecomposeImpl(function(v) {Stax.error("Can't decompose unknown type."); return JNull;});
+        _createDecomposeImpl(function(v) {SCore.error("Can't decompose unknown type."); return JNull;});
     }
   }
 
@@ -169,7 +169,7 @@ class TranscodeJValue{
       case TFloat:
         _createExtractorImpl(function(v){return FloatJValue.extract(Float, v);});
       case TUnknown:
-        _createExtractorImpl(function(v) return Stax.error("Can't extract TUnknown: " + v));
+        _createExtractorImpl(function(v) return SCore.error("Can't extract TUnknown: " + v));
       case TObject:
         _createExtractorImpl(function(v) return ObjectJValue.extract(v));
       case TClass(c):
@@ -197,7 +197,7 @@ class TranscodeJValue{
 				case 'stx.Tuple5'	: 
 						_createExtractorImpl(function(v) { return Tuple5JValue.extract( v, args[0], args[1], args[2], args[3], args[4]); } );
         default							:	
-						Stax.error("Extract function cannot be created. 'extract' method is missing. Type: " + valueType);
+						SCore.error("Extract function cannot be created. 'extract' method is missing. Type: " + valueType);
 			}
       case TEnum(e)					:
          switch (Type.getEnumName(e)){
@@ -213,20 +213,20 @@ class TranscodeJValue{
                         if (args == null)
                           args = [];
                         Arrays.zip(a, args).map(function(t){return t._2(t._1);});
-                      default: Stax.error("Expected JArray but was: " + v);
+                      default: SCore.error("Expected JArray but was: " + v);
                     }
                   return Type.createEnum(Type.resolveEnum(name), constructor, parameters);
                 };
-                default: Stax.error("Expected JArray but was: " + v); return null;
+                default: SCore.error("Expected JArray but was: " + v); return null;
               }
            });
          }
       case TFunction:
-        _createExtractorImpl(function(v) {Stax.error("Can't extract function."); return JNull;});
+        _createExtractorImpl(function(v) {SCore.error("Can't extract function."); return JNull;});
       case TNull:
         function(v) return null;
       default:
-        _createExtractorImpl(function(v) {Stax.error("Can't extract unknown type."); return JNull;});
+        _createExtractorImpl(function(v) {SCore.error("Can't extract unknown type."); return JNull;});
     }
   }
 }

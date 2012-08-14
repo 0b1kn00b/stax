@@ -21,7 +21,7 @@ import stx.test.TestCase;
 
 import stx.Maths;
 
-using stx.util.OrderExtension;
+using stx.ds.plus.Order;
 
 class OrderExtensionsTestCase extends TestCase {
   public function testGreaterThan() {

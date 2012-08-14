@@ -16,14 +16,15 @@
 package stx.reactive;
 
 import stx.Prelude;
-using Stax;
+using SCore;
 
 import stx.reactive.Reactive;
 import stx.ds.Collection;
 
 import stx.Tuples;
 using stx.Iterables;
- 
+using stx.Functions;
+
 
 using stx.functional.FoldableExtensions;
 
@@ -248,4 +249,66 @@ class Streams {
         return randomS(Signals.constant(time));
     }
 		#end
+
+    static public function flatMap<A,B>(s:Stream<A>,fn:A->Stream<B>){
+      return s.bind(fn);
+    }
+    static public function flatMapR<A,B,C>(s:Stream<Either<A,B>>,fn:B->Stream<C>){
+      return 
+        s.flatMap(
+          function(e:Either<A,B>){
+            return 
+              switch (e) {
+                case Left(v)    : Streams.identity().sendEvent(Left(v));
+                case Right(v)   : fn(v);
+                default         : throw 'result is neither left nor right';
+              }
+          }
+        );
+    }
+    static public function map<A,B>(s:Stream<A>,fn:A->B){
+      return s.map(fn);
+    }
+    static public function mapLeft<A,B,C>(s:Stream<Either<A,B>>,fn : A->C):Stream<Either<C,B>>{
+      return 
+        s.map(
+          function(e){
+            return switch (e) {
+              case Left(v)  : Left(fn(v));
+              case Right(v) : Right(v);
+              default       : throw 'result is neither left nor right';
+            }
+          }
+        );
+    }
+    static public function mapRight<A,B,C>(s:Stream<Either<A,B>>,fn : B->C):Stream<Either<A,C>>{
+      return 
+        s.map(
+          function(e){
+            return switch (e) {
+              case Right(v)   : Right(fn(v));
+              case Left(v)    : Left(v);
+              default         : throw 'result is neither left nor right';
+            }
+          }
+        );
+    }
+    static public function zip<A,B>(a:Stream<A>,b:Stream<B>){
+      return a.zip(b);
+    }
+    static public function shift<A>(s:Stream<A>,v:Int):Stream<A>{
+        return s.shift(v);
+    }
+}
+class StreamFutures{
+    static public function toStream<A,B>(fn:A->Future<B>,stream:Stream<A>){
+      return 
+        stream.flatMap(
+          function(a:A){
+            var o = Streams.identity();
+            fn(a).foreach( o.sendEvent.toEffect() );
+            return o;
+          }
+        );
+    }
 }
