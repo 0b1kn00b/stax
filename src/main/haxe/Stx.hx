@@ -1,6 +1,8 @@
 import stx.Prelude;
 
-//typedef Accessors           = stx.Accessors;
+#if dev
+typedef Accessors           = stx.Accessors;
+#end
 typedef Arrays              = stx.Arrays;
 typedef Bools               = stx.Bools;
 typedef Dates               = stx.Dates;

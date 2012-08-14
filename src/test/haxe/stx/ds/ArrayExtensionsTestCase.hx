@@ -132,7 +132,7 @@ class ArraysTestCase extends TestCase {
   }
   
   public function testMkString() {
-    //assertEquals("A-B-C", ["a","b","c"].mkString("-", function(s) return s.toUpperCase()));
+    assertEquals("A-B-C", ArrayShow.mkString(["a","b","c"],"-", function(s) return s.toUpperCase()));
   }
   
   public function testToMap() {
