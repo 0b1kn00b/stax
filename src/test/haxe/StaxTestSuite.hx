@@ -130,12 +130,14 @@ class StaxTestSuite {
           //, new stx.StateTest()
           //, new stx.ReaderTest()
           //,  new stx.reactive.StreamTest()
-          , new stx.ds.IterateeTest()
-          , new stx.ds.ZipperTest()
-          , new OptimiseTest()
-          , new stx.IntIterTest()
+          #if dev
           , new StaxTest()
-        ].filter( function(x) return Std.is(x,StaxTest) ));
+          , new stx.IntIterTest()
+          , new OptimiseTest()
+          , new stx.ds.ZipperTest()
+          , new stx.ds.IterateeTest()
+          #end
+        ]#if dev.filter( function(x) return Std.is(x,StaxTest) )#end);
   
         Report.create(runner);
 

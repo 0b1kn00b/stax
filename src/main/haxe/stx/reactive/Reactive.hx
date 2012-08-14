@@ -909,7 +909,7 @@ class Stream<T> {
 
         Streams.create(
             function(pulse: Pulse<T>): Propagation<T> { 
-                trace('pulse ' + pulse.stamp);
+                
                 testStamp = pulse.stamp; 
                 
                 value1 = pulse.value; 
@@ -921,8 +921,6 @@ class Stream<T> {
          
         return Streams.create(
             function(pulse: Pulse<A>): Propagation<R> { 
-                trace(pulse.stamp);
-                trace(testStamp);
                 return if (testStamp == pulse.stamp) propagate(pulse.withValue(f(value1, pulse.value))); else doNotPropagate;
             },
             [as]
