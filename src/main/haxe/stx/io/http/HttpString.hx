@@ -31,10 +31,10 @@ import stx.js.dom.Quirks;
 #end
 
 
-using stx.functional.FoldableExtensions;
-using stx.net.HttpResponseCodeExtensions;
-using stx.net.UrlExtensions;
-using stx.net.HttpHeaderExtensions;
+using stx.functional.Foldables;
+using stx.net.HttpResponseCodes;
+using stx.net.Urls;
+using stx.net.HttpHeaders;
 
 #if js
 @DefaultImplementation("stx.io.http.HttpStringAsync", "OneToMany")

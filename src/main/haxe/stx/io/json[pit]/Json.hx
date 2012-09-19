@@ -16,8 +16,13 @@
 ****/
 package stx.io.json;
 
+import stx.Prelude;
 using stx.Prelude;
+
+using stx.io.json.Transcode;
 using stx.io.json.JValue;
+
+
 using stx.Functions;
 
 class Json {
