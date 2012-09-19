@@ -14,40 +14,44 @@
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-																	using stx.Prelude;
+package stx.math.tween;
+
 import stx.Prelude;
-using stx.Tuples;
-using stx.Future;
-
-using stx.plus.Equal;
-using stx.plus.Order;
-using stx.plus.Show;
-
-import stx.plus.Hasher;
-
 import stx.test.TestCase;
+import stx.test.Assert;
+import stx.math.tween.Tween;
+import stx.math.tween.Easing;
 
-using stx.Options;
-using stx.Functions;
 
-class PreludeTest extends TestCase {
+using stx.math.tween.Tweens;
+
+class TweensTest extends TestCase {
+  static var Start = {
+    x: 0.0,
+    y: 2.0
+  }
+  static var End = {
+    x: 6.0,
+    y: 12.0
+  }
+  static var Linear = Tween.linear(Start, End);
+  
   public function new() {
     super();
   }
-  public function testCompose() {
-    var f1 = function(i) { return i * 2; }
-    var f2 = function(i) { return i - 1; }
-    
-    assertEquals(2, f1.compose(f2)(2));
+  
+  public function testLinearTweenAt0() {
+    assertFloatEquals(0.0, Linear(0).x);
+    assertFloatEquals(2.0, Linear(0).y);
   }
-  public function testCurry2() {
-    var f = function(i1, i2, i3) { return i1 + i2 + i3; }
-    
-    assertEquals(3, f.curry()(2)(-2)(3));
-  }                  
-  static function getShow<T>(v : T) return Show.getShowFor(v)(v)                           
-   
-  public function toString() return "PreludeTest"
+  
+  public function testLinearTweenAt1() {
+    assertFloatEquals(6.0, Linear(1).x);
+    assertFloatEquals(12.0, Linear(1).y);
+  }
+  
+  public function testLinearTweenAt0_5() {
+    assertFloatEquals(3.0, Linear(0.5).x);
+    assertFloatEquals(7.0, Linear(0.5).y);
+  }
 }
-
-           

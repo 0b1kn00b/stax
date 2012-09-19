@@ -17,8 +17,8 @@
 
 package stx.io.json;
 
-import stx.io.json.JValue;
-using stx.io.json.JValueExtensions;
+using stx.io.json.JValue;
+
 
 class JsonGenerator {
   public static function generate (): JValue {

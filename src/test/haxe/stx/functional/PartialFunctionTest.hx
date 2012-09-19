@@ -14,40 +14,46 @@
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-																	using stx.Prelude;
+package stx.functional;
+
 import stx.Prelude;
-using stx.Tuples;
-using stx.Future;
-
-using stx.plus.Equal;
-using stx.plus.Order;
-using stx.plus.Show;
-
-import stx.plus.Hasher;
-
 import stx.test.TestCase;
+import stx.functional.PartialFunction;
 
-using stx.Options;
-using stx.Functions;
+import stx.Tuples;
+using stx.Dynamics;
 
-class PreludeTest extends TestCase {
-  public function new() {
-    super();
-  }
-  public function testCompose() {
-    var f1 = function(i) { return i * 2; }
-    var f2 = function(i) { return i - 1; }
+using stx.functional.PartialFunctions;
+
+class PartialFunctionTest extends TestCase {
+    public function testIsDefinedAtForPartialFunction1() {
+      var f = [Tuples.t2(function(i: Int) return i > 0, function(i: Int) return i * i)].toPartialFunction();
+      
+      assertTrue(f.isDefinedAt(2));
+      assertFalse(f.isDefinedAt(-2));
+    }
     
-    assertEquals(2, f1.compose(f2)(2));
-  }
-  public function testCurry2() {
-    var f = function(i1, i2, i3) { return i1 + i2 + i3; }
+    public function testCallForPartialFunction1() {
+      var f = [Tuples.t2(function(i: Int) return i > 0, function(i: Int) return i * i)].toPartialFunction();
+      
+      assertEquals(4, f.call(2));
+    }
     
-    assertEquals(3, f.curry()(2)(-2)(3));
-  }                  
-  static function getShow<T>(v : T) return Show.getShowFor(v)(v)                           
-   
-  public function toString() return "PreludeTest"
+    public function testOrElseForPartialFunction1() {
+      var f1 = [Tuples.t2(function(i: Int) return i > 0, function(i: Int) return i * i)].toPartialFunction();
+      var f2 = [Tuples.t2(function(i: Int) return i < 0, function(i: Int) return i * i)].toPartialFunction();
+      
+      var f = f1.orElse(f2);
+      
+      assertTrue(f.isDefinedAt(-2));
+      
+      assertEquals(4, f.call(-2));
+      assertEquals(4, f.call(2));
+    }
+    
+    public function testOrAlwaysCForPartialFunction1() {
+      var f = [Tuples.t2(function(i: Int) return i > 0, function(i: Int) return i * i)].toPartialFunction();
+      
+      assertTrue(f.orAlwaysC(9.toThunk()).isDefinedAt(-2));
+    }
 }
-
-           

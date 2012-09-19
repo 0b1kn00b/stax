@@ -14,40 +14,34 @@
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-																	using stx.Prelude;
+package stx.math.geom;
+
 import stx.Prelude;
-using stx.Tuples;
-using stx.Future;
-
-using stx.plus.Equal;
-using stx.plus.Order;
-using stx.plus.Show;
-
-import stx.plus.Hasher;
-
 import stx.test.TestCase;
+import stx.test.Assert;
+import stx.math.geom.Point;
 
-using stx.Options;
-using stx.Functions;
 
-class PreludeTest extends TestCase {
+using stx.math.geom.Points;
+
+class PointTest extends TestCase {
+  static var cmpInt = function(p1: Point2d<Int>, p2: Point2d<Int>) {
+    return p1.x == p2.x && p1.y == p2.y;
+  }
+  
   public function new() {
     super();
   }
-  public function testCompose() {
-    var f1 = function(i) { return i * 2; }
-    var f2 = function(i) { return i - 1; }
+  
+  public function testMinusPlusLeavesUnchanged() {
+    var p1 = { x: 23, y: 92 };
+    var p2 = { x: -85, y: -39 };
     
-    assertEquals(2, f1.compose(f2)(2));
+    assertEquals(p2, p1.plus(p2.minus(p1)), cmpInt);
   }
-  public function testCurry2() {
-    var f = function(i1, i2, i3) { return i1 + i2 + i3; }
-    
-    assertEquals(3, f.curry()(2)(-2)(3));
-  }                  
-  static function getShow<T>(v : T) return Show.getShowFor(v)(v)                           
-   
-  public function toString() return "PreludeTest"
+  
+  public function testMap() {
+    assertEquals({x: 2, y: 9}, {x: 1, y: 3}.map(function(x) return x * 2, function(y) return y * 3), cmpInt);
+  }
+  
 }
-
-           

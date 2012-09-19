@@ -1,0 +1,4 @@
+-main Main
+-cp src/main/haxe
+-lib stx-core
+-js bin/core.js

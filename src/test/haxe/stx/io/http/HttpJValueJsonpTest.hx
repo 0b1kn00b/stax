@@ -14,40 +14,47 @@
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-																	using stx.Prelude;
+package stx.io.http;
+
 import stx.Prelude;
-using stx.Tuples;
-using stx.Future;
-
-using stx.plus.Equal;
-using stx.plus.Order;
-using stx.plus.Show;
-
-import stx.plus.Hasher;
-
 import stx.test.TestCase;
+import stx.test.Assert;
+import stx.io.http.Http;
+import stx.io.http.HttpJValue;
+import stx.io.json.Json;
 
+
+using stx.io.json.JValue;
 using stx.Options;
-using stx.Functions;
+using stx.ds.Map;
 
-class PreludeTest extends TestCase {
+class HttpJValueJsonpTest extends TestCase {
+  var h: HttpJValue;
+  
   public function new() {
     super();
   }
-  public function testCompose() {
-    var f1 = function(i) { return i * 2; }
-    var f2 = function(i) { return i - 1; }
-    
-    assertEquals(2, f1.compose(f2)(2));
+  
+  override public function before() {
+    h = new HttpJValueJsonp();
   }
-  public function testCurry2() {
-    var f = function(i1, i2, i3) { return i1 + i2 + i3; }
-    
-    assertEquals(3, f.curry()(2)(-2)(3));
-  }                  
-  static function getShow<T>(v : T) return Show.getShowFor(v)(v)                           
-   
-  public function toString() return "PreludeTest"
+  
+  public function testGet() {
+    var async = Assert.createAsync( function() {} , 10000 );
+    Assert.delivered( h.get('http://search.twitter.com/search.json', { q: 'santa' }.toMap()) ,
+        function(data){
+          var results = data.body.get().get('results');
+          Assert.notNull(results);
+          async();
+        }
+    );
+    /*Assert.delivered(,
+      function(data) {
+        var results = data.body.get().get('results');
+        
+        Assert.notNull(results);
+      },
+      4000
+    );*/
+  }
 }
-
-           

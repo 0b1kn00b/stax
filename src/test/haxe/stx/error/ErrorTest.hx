@@ -6,7 +6,7 @@ package stx.error;
  */
 import stx.test.TestCase;
 import stx.test.Assert;						using stx.test.Assert;
-import stx.error.Error;						using stx.error.Error;
+import stx.Error;						using stx.Error;
 
 class ErrorTest extends TestCase{
 

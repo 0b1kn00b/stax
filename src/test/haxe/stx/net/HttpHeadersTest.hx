@@ -14,40 +14,51 @@
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-																	using stx.Prelude;
+package stx.net;
+
 import stx.Prelude;
-using stx.Tuples;
-using stx.Future;
-
-using stx.plus.Equal;
-using stx.plus.Order;
-using stx.plus.Show;
-
-import stx.plus.Hasher;
-
 import stx.test.TestCase;
+import stx.test.Assert;
+import stx.net.HttpHeader;
 
 using stx.Options;
-using stx.Functions;
+using stx.Tuples;
 
-class PreludeTest extends TestCase {
+using stx.net.HttpHeaders;
+
+class HttpHeadersTest extends TestCase {
   public function new() {
     super();
   }
-  public function testCompose() {
-    var f1 = function(i) { return i * 2; }
-    var f2 = function(i) { return i - 1; }
+  
+  public function testThatValidHeaderCanBeParsed() {
+    var header  = " Mime-type : text/html ";
+    var headerP = "Mime-type".entuple("text/html");
     
-    assertEquals(2, f1.compose(f2)(2));
+    Assert.equals(headerP, header.toHttpHeader().get());
   }
-  public function testCurry2() {
-    var f = function(i1, i2, i3) { return i1 + i2 + i3; }
+  
+  public function testThatValidHeaderCanBeIdentified() {
+    var header = " Mime-type text/html ";
     
-    assertEquals(3, f.curry()(2)(-2)(3));
-  }                  
-  static function getShow<T>(v : T) return Show.getShowFor(v)(v)                           
-   
-  public function toString() return "PreludeTest"
+    Assert.isTrue(header.toHttpHeader().isEmpty());
+  }
+  
+  public function testThatHeadersCanBeParsedWithCrLf() {
+    var headers = " mime-type: text/html\r\n cache-expire : 0 \r\n";
+    
+    var headersP = headers.toHttpHeaders();
+    
+    Assert.equals('text/html', headersP.get('mime-type').get());
+    Assert.equals('0', headersP.get('cache-expire').get());
+  }
+  
+  public function testThatHeadersCanBeParsedWithLf() {
+    var headers = " mime-type: text/html\n cache-expire : 0 \n";
+    
+    var headersP = headers.toHttpHeaders();
+    
+    Assert.equals('text/html', headersP.get('mime-type').get());
+    Assert.equals('0', headersP.get('cache-expire').get());
+  }
 }
-
-           

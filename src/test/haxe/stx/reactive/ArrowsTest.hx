@@ -1,9 +1,5 @@
 package stx.reactive;
 
-/**
- * ...
- * @author 0b1kn00b
- */
 import haxe.Timer;
 
 import stx.Tuples;										using stx.Tuples;
