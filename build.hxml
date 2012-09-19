@@ -5,5 +5,5 @@
 -js ./bin/test.js
 -main StaxTestSuite
 
--D dev
+#-D dev
 --connect 2331
