@@ -1,9 +1,5 @@
 package stx;
 
-/**
- * ...
- * @author 0b1kn00b
- */
 import stx.Prelude;
 using stx.Options;
 using stx.Eithers;
@@ -50,7 +46,7 @@ class Options {
   */
   static public function get<T>(o: Option<T>): T {
     return switch (o) {
-      case None: SCore.error("Error: Option is empty"); null;
+      case None: Prelude.error("Error: Option is empty"); null;
       case Some(v): v;
     }
   }
@@ -113,13 +109,13 @@ class Options {
     }
   }
 	/**
-   * Swallows 'o1' and produces 'o2'.
+    Swallows 'o1' and produces 'o2'.
    */
   public static function then<T, S>(o1: Option<T>, o2: Option<S>): Option<S> {
     return o2;
   }
   /**
-   * Produces the input if predicate 'f' returns true, None otherwise.
+    Produces the input if predicate 'f' returns true, None otherwise.
    */
   public static function filter<T>(o: Option<T>, f: T -> Bool): Option<T> {
     return switch (o) {
@@ -128,7 +124,7 @@ class Options {
     }
   }
   /** 
-   * Produces an Option where 'o1' may contain another Option.
+    Produces an Option where ´o1´ may contain another Option.
    */
   public static function flatten<T>(o1: Option<Option<T>>): Option<T> {
     return switch (o1) {
@@ -137,7 +133,7 @@ class Options {
     }
   }
   /**
-   Produces a Tuple2 of `o1` and `o2`.
+   Produces a Tuple2 of ´o1´ and ´o2´.
    */
   public static function zip<T, S>(o1: Option<T>, o2: Option<S>) {
     return switch (o1) {
@@ -146,7 +142,7 @@ class Options {
     }
   }
   /**
-   * Produces the result of 'f' if both 'o1' and 'o2' are not None.
+    Produces the result of ´f´ if both 'o1' and 'o2' are not None.
    */
   public static function zipWith<T, S, V>(o1: Option<T>, o2: Option<S>, f : T -> S -> V) : Option<V> {
     return switch (o1) {
@@ -159,7 +155,7 @@ class Options {
     }
   }
   /**
-   * Produces an Either where 'o1' is on the left, or if None, the result of 'thunk' on the right.
+    Produces an Either where 'o1' is on the left, or if None, the result of 'thunk' on the right.
    */
   public static function orEither<T, S>(o1: Option<T>, thunk: Thunk<S>): Either<S, T> {
     return switch (o1) {
@@ -168,7 +164,7 @@ class Options {
     }
   }
   /**
-   * Produces an Either where 'o1' is on the left, or if None, 'c'.
+    Produces an Either where 'o1' is on the left, or if None, 'c'.
    */
   public static function orEitherC<T, S>(o1: Option<T>, c: S): Either<S, T> {
     return Options.orEither(o1, c.toThunk());

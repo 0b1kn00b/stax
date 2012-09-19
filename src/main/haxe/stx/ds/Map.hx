@@ -17,28 +17,30 @@
 package stx.ds;
 
 
-using SCore;
+using stx.Prelude;
 
 import stx.Tuples;
 import stx.Prelude;
 
+using stx.Bools;
 
 import stx.functional.Foldable;
 import stx.functional.PartialFunction;
 import stx.ds.Collection;
-import stx.functional.FoldableExtensions;
+import stx.functional.Foldables;
 
 using stx.Options;
+using stx.Functions;
 
-import stx.ds.plus.Order; using stx.ds.plus.Order;
-import stx.ds.plus.Hasher; using stx.ds.plus.Hasher;
-import stx.ds.plus.Show; using stx.ds.plus.Show;
-import stx.ds.plus.Equal; using stx.ds.plus.Equal;
+import stx.plus.Order; 
+import stx.plus.Hasher;
+import stx.plus.Show;
+import stx.plus.Equal;
 
 using stx.Iterables;
 
-using stx.functional.FoldableExtensions;
-using stx.functional.PartialFunctionExtensions;
+using stx.functional.Foldables;
+using stx.functional.PartialFunctions;
 
 /** A cross-platform, immutable map with support for arbitrary keys.
  * TODO: Use an array of lists to avoid unnecessary copying when adding/removing elements.
@@ -47,14 +49,102 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   public static var MaxLoad = 10;
   public static var MinLoad = 1;
 
-  public var keyEqual(getKeyEqual, null): EqualFunction<K>;
-  public var keyOrder(getKeyOrder, null) : OrderFunction<K>;
-  public var keyHash(getKeyHash, null) : HashFunction<K>;
-  public var keyShow(getKeyShow, null) : ShowFunction<K>;
-  public var valueEqual(getValueEqual, null): EqualFunction<V>;
-  public var valueOrder(getValueOrder, null) : OrderFunction<V>;
-  public var valueHash(getValueHash, null) : HashFunction<V>;
-  public var valueShow(getValueShow, null) : ShowFunction<V>;
+  
+  public var keyOrder(getKeyOrder,null)      : OrderFunction<K>;
+  private function getKeyOrder(){
+    return 
+      if (keyOrder == null || keyOrder == Order.nil ){
+          keys().headOption().map( Order.getOrderFor )
+          .foreach( function(x) keyOrder = x)
+          .getOrElseC( Order.getOrderFor(null) );
+      }else{
+        keyOrder;
+      }
+  }
+
+  public var valueOrder    : OrderFunction<V>;
+  private function getValueOrder(){
+    return 
+      if (valueOrder == null || valueOrder == Order.nil){
+          values().headOption().map( Order.getOrderFor )
+          .foreach( function(x) valueOrder = x)
+          .getOrElseC( Order.getOrderFor(null) );
+      }else{
+        valueOrder;
+      }
+  }
+
+  public var keyHash(getKeyHash,null)       : HashFunction<K>;
+  private function getKeyHash(){
+    return 
+      if (keyHash == null || keyHash == Hasher.nil){
+        keys().headOption()
+          .map( Hasher.getHashFor )
+          .foreach( function(x) keyHash = x)
+          .getOrElseC( Hasher.getHashFor(null) );
+      }else{
+        keyHash;
+      }
+  }
+  public var valueHash(getValueHash,null)     : HashFunction<V>;
+  private function getValueHash(){
+    return 
+      if (valueHash == null || valueHash == Hasher.nil){
+        values().headOption()
+          .map( Hasher.getHashFor )
+          .foreach( function(x) valueHash = x)
+          .getOrElseC( Hasher.getHashFor(null) );
+      }else{
+        valueHash;
+      }
+  }
+
+  public var keyShow(getKeyShow,null)       : ShowFunction<K>;
+  private function getKeyShow(){
+    return 
+      if (keyShow == null || keyShow == Show.nil){
+        keys().headOption()
+          .map( Show.getShowFor )
+          .foreach( function(x) keyShow = x)
+          .getOrElseC( Show.getShowFor(null) );
+      }else{
+        keyShow;
+      }
+  }
+  public var valueShow(getValueShow,null)   : ShowFunction<V>;
+  private function getValueShow(){
+    return 
+      if (valueShow == null || valueShow == Show.nil){
+        values().headOption()
+          .map( Show.getShowFor )
+          .foreach( function(x) valueShow = x)
+          .getOrElseC( Show.getShowFor(null) );
+      }else{
+        valueShow;
+      }
+  }
+  public var keyEqual(getKeyEqual,null)     : EqualFunction<K>;
+  private function getKeyEqual(){
+    return 
+      if (keyEqual == null || keyEqual == Equal.nil){
+          keys().headOption().map( Equal.getEqualFor )
+          .foreach( function(x){ keyEqual = x;})
+          .getOrElseC( Equal.getEqualFor(null) );
+      }else{
+        keyEqual;
+      }
+  }
+  public var valueEqual(getValueEqual,null)    : EqualFunction<V>;
+  private function getValueEqual(){
+    return 
+      if (valueEqual == null || valueEqual == Equal.nil ){
+          values().headOption().map( Equal.getEqualFor )
+          .foreach( function(x) valueEqual = x)
+          .getOrElseC( Equal.getEqualFor(null) );
+      }else{
+        valueEqual;
+      }
+  }
   
   var _buckets: Array<Array<Tuple2<K, V>>>;
   
@@ -75,17 +165,24 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   private function new(korder : OrderFunction<K>, kequal: EqualFunction<K>, khash: HashFunction<K>, kshow : ShowFunction<K>, vorder : OrderFunction<V>, vequal: EqualFunction<V>, vhash: HashFunction<V>, vshow : ShowFunction<V>, buckets: Array<Array<Tuple2<K, V>>>, size: Int) {
     var self = this;
     
-    _keyOrder = korder; _keyEqual = kequal; _keyHash = khash; _keyShow = kshow; 
-    _valueOrder = vorder;  _valueEqual = vequal; _valueHash = vhash; _valueShow = vshow;
+    this.keyOrder    = korder;
+    this.keyEqual    = kequal; 
+    this.keyHash     = khash; 
+    this.keyShow     = kshow; 
+    this.valueOrder  = vorder;  
+    this.valueEqual  = vequal; 
+    this.valueHash   = vhash; 
+    this.valueShow   = vshow;
     
-    this._size    = size;
-    this._buckets = buckets;
-    this._pf      = [stx.Tuples.t2(
+
+    this._size     = size;
+    this._buckets  = buckets;
+    this._pf       = [stx.Tuples.t2(
       containsKey,
       function(k) {
         return switch(self.get(k)) {
           case Some(v): v;
-          case None:    SCore.error("No value for this key");
+          case None:    Prelude.error("No value for this key");
         }
       }
     )].toPartialFunction();
@@ -138,22 +235,20 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   }
   
   public function add(t: Tuple2<K, V>): Map<K, V> {
-    var k = t._1;
-    var v = t._2;
-    var bucket = bucketFor(k);
+    
+    var key   : K   = t._1;
+    var value : V   = t._2;
+    var bucket  = bucketFor(key);
     
     var list = _buckets[bucket];  
-
-    if(null == _keyEqual)   _keyEqual = Equal.getEqualFor(t._1);
-    if(null == _valueEqual) _valueEqual = Equal.getEqualFor(t._2);
     
+
     for (i in 0...list.length) {
       var entry = list[i];
-      
-      if (_keyEqual(entry._1, k)) {
-        if (!_valueEqual(entry._2, v)) {
+
+      if (keyEqual(entry._1, key)) {
+        if (!valueEqual(entry._2, value)) {
           var newMap = copyWithMod(bucket);
-        
           newMap._buckets[bucket][i] = t;
                   
           return newMap;
@@ -184,7 +279,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
     
     return map;
   }
-  
+
   public function remove(t: Tuple2<K, V>): Map<K, V> {
     return removeInternal(t._1, t._2, false);
   }
@@ -200,7 +295,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   public function removeByKey(k: K): Map<K, V> {
     return removeInternal(k, null, true);
   }
-  
+
   public function removeAllByKey(i: Iterable<K>): Map<K, V> {
     var map = this;
     
@@ -210,9 +305,9 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   }
 
   public function get(k: K): Option<V> {  
-    var ke = keyEqual;
+
     for (e in listFor(k)) {
-      if (ke(e._1, k)) {
+      if (keyEqual(e._1, k)) {
         return Some(e._2);
       }
     }
@@ -234,10 +329,8 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   }
   
   public function contains(t: Tuple2<K, V>): Bool {      
-    var ke = keyEqual;
-    var ve = valueEqual;
     for (e in entries()) {
-      if (ke(e._1, t._1) && ve(t._2, t._2)) return true;
+      if (keyEqual(e._1, t._1) && valueEqual(t._2, t._2)) return true;
     }
     
     return false;
@@ -269,7 +362,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   }
   
   public function keySet(): Set<K> {
-    return Set.create(_keyOrder, _keyEqual, _keyHash, _keyShow).addAll(keys());
+    return Set.create(keyOrder, keyEqual, keyHash, keyShow).addAll(keys());
   }
   
   public function values(): Iterable<V> {
@@ -289,96 +382,93 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
       }
     }
   }
-  
+
   public function iterator(): Iterator<Tuple2<K, V>> {
-    return FoldableExtensions.iterator(this);
+    return Foldables.iterator(this);
   }
 
   public function compare(other : Map<K, V>) {
     var a1 = this.toArray();
     var a2 = other.toArray(); 
     
-    var ko = keyOrder;
-    var vo = valueOrder;        
-    
     var sorter = function(t1: Tuple2<K, V>, t2: Tuple2<K, V>): Int {
-      var c = ko(t1._1, t2._1);
+      var c = keyOrder(t1._1, t2._1);
       return if(c != 0)
         c;
       else
-        vo(t1._2, t2._2);
+        valueOrder(t1._2, t2._2);
     }
     
     a1.sort(sorter);
     a2.sort(sorter);
-    
-    return a1.compare(a2);
+
+    return ArrayOrder.compare(a1,a2);
   } 
-  
+
   public function equals(other : Map<K, V>) {
     var keys1 = this.keySet();
     var keys2 = other.keySet();
+
     if(!keys1.equals(keys2)) return false;
-    
-    var ve = valueEqual;
 
     for(key in keys1) {
       var v1 = this.get(key).get();
       var v2 = other.get(key).get();
-      if (!ve(v1, v2)) return false;
+      if (!valueEqual(v1, v2)) return false;
     }
     return true;
   }
-  
+
   public function toString() { 
-    var ksh = keyShow;
-    var vsh = valueShow;
-    return "Map " + elements().toString(function(t) { return ksh(t._1) + " -> " + vsh(t._2); });  
+    return "Map " + 
+      IterableShow.toString(entries(),
+        function(t:Tuple2<K,V>):String{ 
+          return keyShow(t._1) + " -> " + valueShow(t._2); 
+        }
+      );  
   }
-  
+
   public function hashCode() {
-    var kha = keyHash;  
-    var vha = valueHash; 
-    return foldl(786433, function(a, b) return a + (kha(b._1) * 49157 + 6151) * vha(b._2));
+    return foldl(786433, function(a, b) return a + (keyHash(b._1) * 49157 + 6151) * valueHash(b._2));
   }
-  
+
   public function load(): Int {
     return if (_buckets.length == 0) MaxLoad;
            else Math.round(this.size() / _buckets.length);
   }
-  
+
   public function withKeyOrderFunction(order : OrderFunction<K>) {
-    return create(order, _keyEqual, _keyHash, _keyShow, _valueOrder, _valueEqual, _valueHash, _valueShow).addAll(this);
+    return create(order, keyEqual, keyHash, keyShow, valueOrder, valueEqual, valueHash, valueShow).addAll(this);
   }
-  
+
   public function withKeyEqualFunction(equal : EqualFunction<K>) {
-    return create(_keyOrder, equal, _keyHash, _keyShow, _valueOrder, _valueEqual, _valueHash, _valueShow).addAll(this);
+    return create(keyOrder, equal, keyHash, keyShow, valueOrder, valueEqual, valueHash, valueShow).addAll(this);
   }
-  
+
   public function withKeyHashFunction(hash : HashFunction<K>) {
-    return create(_keyOrder, _keyEqual, hash, _keyShow, _valueOrder, _valueEqual, _valueHash, _valueShow).addAll(this);
+    return create(keyOrder, keyEqual, hash, keyShow, valueOrder, valueEqual, valueHash, valueShow).addAll(this);
   }
-  
+
   public function withKeyShowFunction(show : ShowFunction<K>) { 
-    return create(_keyOrder, _keyEqual, _keyHash, show, _valueOrder, _valueEqual, _valueHash, _valueShow).addAll(this);
+    return create(keyOrder, keyEqual, keyHash, show, valueOrder, valueEqual, valueHash, valueShow).addAll(this);
   }
-  
+
   public function withValueOrderFunction(order : OrderFunction<V>) {
-    return create(_keyOrder, _keyEqual, _keyHash, _keyShow, order, _valueEqual, _valueHash, _valueShow).addAll(this);
+    return create(keyOrder, keyEqual, keyHash, keyShow, order, valueEqual, valueHash, valueShow).addAll(this);
   }
-  
+
   public function withValueEqualFunction(equal : EqualFunction<V>) {
-    return create(_keyOrder, _keyEqual, _keyHash, _keyShow, _valueOrder, equal, _valueHash, _valueShow).addAll(this);
+    return create(keyOrder, keyEqual, keyHash, keyShow, valueOrder, equal, valueHash, valueShow).addAll(this);
   }
-  
+
   public function withValueHashFunction(hash : HashFunction<V>) {
-    return create(_keyOrder, _keyEqual, _keyHash, _keyShow, _valueOrder, _valueEqual, hash, _valueShow).addAll(this);
+    return create(keyOrder, keyEqual, keyHash, keyShow, valueOrder, valueEqual, hash, valueShow).addAll(this);
   }
-  
+
   public function withValueShowFunction(show : ShowFunction<V>) { 
-    return create(_keyOrder, _keyEqual, _keyHash, _keyShow, _valueOrder, _valueEqual, _valueHash, show).addAll(this);
+    return create(keyOrder, keyEqual, keyHash, keyShow, valueOrder, valueEqual, valueHash, show).addAll(this);
   }
-  
+
   private function entries(): Iterable<Tuple2<K, V>> {
     var buckets = _buckets;
     
@@ -420,7 +510,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
     
     return iterable;
   }
-  
+
   private function removeInternal(k: K, v: V, ignoreValue: Bool): Map<K, V> {
     var bucket = bucketFor(k);
     
@@ -449,11 +539,10 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
           return this;
         }
       }
-    }
-    
+    }   
     return this;
   }
-  
+
   private function copyWithMod(index: Int): Map<K, V> {
     var newTable = [];
     
@@ -467,9 +556,9 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
       newTable.push(_buckets[i]);
     }
     
-    return new Map<K, V>(_keyOrder, _keyEqual, _keyHash, _keyShow, _valueOrder, _valueEqual, _valueHash, _valueShow, newTable, size());      
+    return new Map<K, V>(keyOrder, keyEqual, keyHash, keyShow, valueOrder, valueEqual, valueHash, valueShow, newTable, size());      
   }
-  
+
   private function rebalance(): Void {
     var newSize = Math.round(size() / ((MaxLoad + MinLoad) / 2));
     
@@ -489,109 +578,20 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
       }
     }
   }
-  
+
   private function bucketFor(k: K): Int {
     return keyHash(k) % _buckets.length;
   }
-  
+
   private function listFor(k: K): Array<Tuple2<K, V>> {
     return if (_buckets.length == 0) []
     else _buckets[bucketFor(k)];
   }
-  
+
   public function size(): Int {
     return _size;
   }
-  
-  var _keyEqual   : EqualFunction<K>;
-  var _keyOrder   : OrderFunction<K>;
-  var _keyHash  : HashFunction<K>;
-  var _keyShow    : ShowFunction<K>;
-  var _valueEqual : EqualFunction<V>;
-  var _valueOrder : OrderFunction<V>;
-  var _valueHash: HashFunction<V>;
-  var _valueShow  : ShowFunction<V>;   
-  function getKeyOrder() {
-    return if(null == _keyOrder) {
-      var it = iterator();
-      if(!it.hasNext())
-      Order.getOrderFor(null);
-      else
-        _keyOrder = Order.getOrderFor(it.next()._1); 
-    } else _keyOrder;
-  }
-  
-  function getKeyEqual() {
-    return if(null == _keyEqual) {
-      var it = iterator();
-      if(!it.hasNext())
-      Equal.getEqualFor(null);
-      else
-        _keyEqual = Equal.getEqualFor(it.next()._1); 
-    } else _keyEqual;
-  }     
-  
-  function getKeyHash() {
-    return if(null == _keyHash) {
-      var it = iterator();
-      if(!it.hasNext())
-        Hasher.getHashFor(null);
-      else
-        _keyHash = Hasher.getHashFor(it.next()._1);  
-    } else _keyHash;
-  }
-  
-  function getKeyShow() {
-    return if(null == _keyShow) {
-      var it = iterator();
-      if(!it.hasNext())
-        Show.getShowFor(null);
-      else
-        _keyShow = Show.getShowFor(it.next()._1);  
-    } else _keyShow;
-  }
-
-  function getValueOrder() {
-    return if(null == _valueOrder) {
-      var it = iterator();
-      if(!it.hasNext())
-      Order.getOrderFor(null);
-      else
-        _valueOrder = Order.getOrderFor(it.next()._2); 
-    } else _valueOrder;
-  }     
-
-  function getValueEqual() {
-    return if(null == _valueEqual) {
-      var it = iterator();
-      if(!it.hasNext())
-      Equal.getEqualFor(null);
-      else
-        _valueEqual = Equal.getEqualFor(it.next()._2); 
-    } else _valueEqual;    
-  }   
-
-  function getValueHash() {
-    return if(null == _valueHash) {
-      var it = iterator();
-      if(!it.hasNext())
-        Hasher.getHashFor(null);
-      else
-        _valueHash = Hasher.getHashFor(it.next()._2);  
-    } else _valueHash;
-  }
-  
-  function getValueShow() {
-    return if(null == _valueShow) {
-      var it = iterator();
-      if(!it.hasNext())
-        Show.getShowFor(null);
-      else
-        _valueShow = Show.getShowFor(it.next()._2);  
-    } else _valueShow;
-  }
 }
-
 class IterableToMap {
   public static function toMap<K, V>(i: Iterable<Tuple2<K, V>>):Map<K,V> {
     return stx.ds.Map.create().addAll(i);
@@ -630,6 +630,3 @@ class MapExtensions {
     return map;
   }
 }
-/*class HashToMap {
-	public stati
-}*/

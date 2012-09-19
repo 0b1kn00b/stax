@@ -16,12 +16,12 @@
 package stx.test;
 
 import stx.Prelude;
-import stx.ds.plus.Equal;
+import stx.plus.Equal;
 
 import stx.ds.Collection;
 using stx.Strings;
 
-using stx.functional.FoldableExtensions;
+using stx.functional.Foldables;
 
 typedef MatchResult = { assertion: String, negation: String }
 typedef MustMatcher<T> = T -> Either<MatchResult, MatchResult>

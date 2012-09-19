@@ -3,7 +3,7 @@ package stx.test.resources;
 import stx.test.TestCase;
 
 import stx.reactive.SignalCollection;
-																						using SCore;
+																						using stx.Prelude;
 																						using stx.Iterables;
 
 class CollectionTester extends TestCase {

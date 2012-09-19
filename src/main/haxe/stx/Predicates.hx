@@ -1,5 +1,8 @@
 package stx;
+
 using stx.Strings;
+using stx.Functions;
+
 import stx.Prelude;
 
 typedef Predicate<A>              = Predicate1<A>
@@ -10,63 +13,88 @@ typedef Predicate4<A, B, C, D>    = Function4<A, B, C, D, Bool>
 typedef Predicate5<A, B, C, D, E> = Function5<A, B, C, D, E, Bool>
 
 class Predicates {
-  public static function isAny<A>() : Predicate<A>{
+  /**
+    Produces a predicate that succeeds on any input
+  */
+  static public function isAny<A>() : Predicate<A>{
     return 
       function(value){
         return true;
       }
   }
-  public static function isNull<T>(): Predicate<T> {
+  /**
+    Produces a predicate that succeeds on a null input
+  */
+  static public function isNull<T>(): Predicate<T> {
     return function(value) {
       return value == null;
     }
   }
-  
-  public static function isNotNull<T>(): Predicate<T> {
+  /**
+    Produces a predicate that succeeds on a non null input.
+  */
+  static public function isNotNull<T>(): Predicate<T> {
     return function(value) {
       return value != null;
     }
   }
-  
-  public static function isGreaterThan(ref: Float): Predicate<Float> {
+  /**
+    Produces a predicate that succeeds if the input is greater than ´ref´.
+  */
+  static public function isGreaterThan(ref: Float): Predicate<Float> {
     return function(value) {
       return value > ref;
     }
   }
-  
-  public static function isLessThan(ref: Float): Predicate<Float> {
+  /**
+    Produces a predicate that succeeds if the input is less than ´ref´.
+  */
+  static public function isLessThan(ref: Float): Predicate<Float> {
     return function(value) {
       return value < ref;
     }
   }
-  
-  public static function isGreaterThanInt(ref: Int): Predicate<Int> {
+  /**
+    Produces a predicate that succeeds if the input is greater than ´ref´.
+  */
+  static public function isGreaterThanInt(ref: Int): Predicate<Int> {
     return function(value) {
       return value > ref;
     }
   }
-  
-  public static function isLessThanInt(ref: Int): Predicate<Int> {
+  /**
+    Produces a predicate that succeeds if the input is less than ´ref´.
+  */
+  static public function isLessThanInt(ref: Int): Predicate<Int> {
     return function(value) {
       return value < ref;
     }
   }
-  
-  public static function isEqualTo<T>(ref: T, ?equal: EqualFunction<T>): Predicate<T> {
-    if (equal == null) equal = stx.ds.plus.Equal.getEqualFor(ref);
+  /**
+    Produces a predicate that succeeds if the input is equal to ref.
+  */
+  static public function isEqualTo<T>(ref: T, ?equal: EqualFunction<T>): Predicate<T> {
+    if (equal == null) equal = stx.plus.Equal.getEqualFor(ref);
     
     return function(value) {
       return equal(ref, value);
     }
   }
-  
-  public static function and<T>(p1: Predicate<T>, p2: Predicate<T>): Predicate<T> {
+  static public function isAlike(e:EnumValue):Predicate<EnumValue>{
+    return Enums.alike.p1(e);
+  }
+  /**
+    Produces a predicate that succeeds if both input predicates succeed.
+  */
+  static public function and<T>(p1: Predicate<T>, p2: Predicate<T>): Predicate<T> {
     return function(value) {
       return p1(value) && p2(value);
     }
   }
-  
-  public static function andAll<T>(p1: Predicate<T>, ps: Iterable<Predicate<T>>): Predicate<T> {
+  /**
+    Produces a predicate that succeeds if all input predicates succeed.
+  */
+  static public function andAll<T>(p1: Predicate<T>, ps: Iterable<Predicate<T>>): Predicate<T> {
     return function(value) {
       var result = p1(value);
       
@@ -79,19 +107,27 @@ class Predicates {
       return result;
     }
   }
-  
-  public static function or<T>(p1: Predicate<T>, p2: Predicate<T>): Predicate<T> {
+  /**
+    Produces a predicate that succeeds if one or other predicates succeed.
+  */
+  static public function or<T>(p1: Predicate<T>, p2: Predicate<T>): Predicate<T> {
     return function(value:T) {
       return p1(value) || p2(value);
     }
   }
-  public static function not<T>(p1: Predicate<T>):Predicate<T>{
+  /**
+    Produces a predicate that succeeds if the input predicate fails.
+  */
+  static public function not<T>(p1: Predicate<T>):Predicate<T>{
     return 
       function(value:T){
         return !p1(value);
       }
   }  
-  public static function orAny<T>(p1: Predicate<T>, ps: Iterable<Predicate<T>>): Predicate<T> {
+  /**
+    Produces a predicate that succeeds if any of the input predicates succeeds.
+  */
+  static public function orAny<T>(p1: Predicate<T>, ps: Iterable<Predicate<T>>): Predicate<T> {
     return function(value) {
       var result = p1(value);
       
@@ -102,31 +138,6 @@ class Predicates {
       }
       
       return result;
-    }
-  }
-  
-  public static function negate<T>(p: Predicate<T>): Predicate<T> {
-    return function(value) {
-      return !p(value);
-    }
-  }
-}
-class StringPredicates{
-  public static function startsWith(s: String): Predicate<String> {
-    return function(value: String) {
-      return value.startsWith(s);
-    }
-  }
-  
-  public static function endsWith(s: String): Predicate<String> {
-    return function(value: String) {
-      return value.endsWith(s);
-    }
-  }
-  
-  public static function contains(s: String): Predicate<String> {
-    return function(value: String) {
-      return value.contains(s);
     }
   }
 }

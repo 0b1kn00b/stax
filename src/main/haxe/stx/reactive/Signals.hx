@@ -15,12 +15,11 @@
 */
 package stx.reactive;
 
-import stx.Prelude;
+using stx.Prelude;
 import stx.Tuples;
 import stx.reactive.Reactive;
 import stx.ds.Collection;
 
-using SCore;
 using stx.Iterables;
 
 class Signals {

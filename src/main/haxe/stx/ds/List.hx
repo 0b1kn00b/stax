@@ -1,40 +1,24 @@
-/*
- HaXe library written by John A. De Goes <john@socialmedia.com>
- Contributed by Social Media Networks
-
- Redistribution and use in source and binary forms, with or without
- modification, are permitted provided that the following conditions are met:
-
- Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
- Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
- distribution.
-
- THIS SOFTWARE IS PROVIDED BY SOCIAL MEDIA NETWORKS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SOCIAL MEDIA NETWORKS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
 package stx.ds;
 
 import stx.Prelude;
 
 import stx.Tuples;
-using SCore;
+using stx.Prelude;
 
 
 import stx.functional.Foldable;
 import stx.ds.Collection;
-import stx.functional.FoldableExtensions;
+import stx.functional.Foldables;
 
-import stx.Maths;
-using  stx.Maths;
+using stx.Maths;
+using stx.Options;
 
-import stx.ds.plus.Order; using stx.ds.plus.Order;
-import stx.ds.plus.Hasher; using stx.ds.plus.Hasher;
-import stx.ds.plus.Show; using stx.ds.plus.Show;
-import stx.ds.plus.Equal; using stx.ds.plus.Equal;
+import stx.plus.Order; using stx.plus.Order;
+import stx.plus.Hasher; using stx.plus.Hasher;
+import stx.plus.Show; using stx.plus.Show;
+import stx.plus.Equal; using stx.plus.Equal;
 
-using stx.functional.FoldableExtensions;
+using stx.functional.Foldables;
 
 class ArrayToList {
   public static function toList<T>(arr : Array<T>) {
@@ -62,9 +46,50 @@ class List<T> implements Collection<List<T>, T> {
   public var lastOption  (getLastOption, null): Option<T>;
   
   public var equal (getEqual, null) : EqualFunction<T>;
+  function getEqual() {
+    return 
+      if (equal == null || equal == Equal.nil ){
+        headOption.map( Equal.getEqualFor )
+        .foreach(function(x) equal = x)
+        .getOrElseC( Equal.nil );
+      }else{
+        equal;
+      }
+  }  
   public var order (getOrder, null) : OrderFunction<T>;
+  function getOrder() {
+    return 
+      if (order == null || order == Order.nil ){
+        headOption.map( Order.getOrderFor )
+        .foreach( function(x) order = x)
+        .getOrElseC( Order.getOrderFor(null) );
+      }else{
+        order;
+      }
+  }  
+
   public var hash(getHash, null) : HashFunction<T>;
+  function getHash(){
+    return 
+      if (hash == null || hash == Hasher.nil ){
+        headOption.map( Hasher.getHashFor )
+        .foreach(function(x) hash = x)
+        .getOrElseC( Hasher.nil );
+      }else{
+        hash;
+      }
+  }
   public var show  (getShow, null) : ShowFunction<T>;
+  function getShow(){
+    return 
+      if (show == null || show == Show.nil ){
+        headOption.map( Show.getShowFor )
+        .foreach(function(x) show = x)
+        .getOrElseC( Show.nil );
+      }else{
+        show;
+      }
+  }
 
 	public static function toList<T>(i: Iterable<T>) {
     return stx.ds.List.create().addAll(i);
@@ -73,6 +98,7 @@ class List<T> implements Collection<List<T>, T> {
     return new Nil(tools);
   }
   
+  @:noUsing
   public static function create<T>(?tools:CollectionTools<T>): List<T> {
     return nil(tools);
   }
@@ -86,10 +112,10 @@ class List<T> implements Collection<List<T>, T> {
 
   private function new(?tools:CollectionTools<T>) {
 		if(tools!=null){
-				_order  = tools.order;
-				_equal  = tools.equal;  
-				_hash = tools.hash; 
-				_show   = tools.show; 
+				order   = tools.order;
+				equal   = tools.equal;  
+				hash    = tools.hash; 
+				show    = tools.show; 
 		}
   }
 
@@ -102,7 +128,7 @@ class List<T> implements Collection<List<T>, T> {
    * construct lists by prepending, and then reverse at the end if necessary.
    */
   public function cons(head: T): List<T> {
-    return new Cons(SCore.tool(_order,_equal,_hash,_show), head, this);
+    return new Cons(Prelude.tool(order,equal,hash,show), head, this);
   }
 
   /** Synonym for cons. */
@@ -179,7 +205,7 @@ class List<T> implements Collection<List<T>, T> {
    * the cons() method should be used to grow the list.
    */
   public function add(t: T): List<T> {
-    return foldr(create(SCore.tool(_order, _equal, _hash, _show)).cons(t), function(b, a) {
+    return foldr(create(Prelude.tool(order, equal, hash, show)).cons(t), function(b, a) {
       return a.cons(b);
     });
   }
@@ -191,7 +217,7 @@ class List<T> implements Collection<List<T>, T> {
 
     a.reverse();
 
-    var r = create( SCore.tool(_order, _equal, _hash, _show) );
+    var r = create( Prelude.tool(order, equal, hash, show) );
 
     for (e in a) r = r.cons(e);
 
@@ -202,7 +228,7 @@ class List<T> implements Collection<List<T>, T> {
 
   public function remove(t: T): List<T> {
     var pre: Array<T> = [];
-    var post: List<T> = nil(SCore.tool(_order, _equal, _hash, _show));
+    var post: List<T> = nil(Prelude.tool(order, equal, hash, show));
     var cur = this;      
     var eq = equal;
     for (i in 0...size()) {
@@ -283,13 +309,13 @@ class List<T> implements Collection<List<T>, T> {
 
   /** Override Foldable to provide higher performance: */
   public function filter(f: T -> Bool): List<T> {
-    return foldr(create(SCore.tool(_order, _equal, _hash, _show)), function(e, list) return if (f(e)) list.cons(e) else list);
+    return foldr(create(Prelude.tool(order, equal, hash, show)), function(e, list) return if (f(e)) list.cons(e) else list);
   }
 
   /** Returns a list that contains all the elements of this list in reverse
    * order */
   public function reverse(): List<T> {
-    return foldl(create(SCore.tool(_order, _equal, _hash, _show)), function(a, b) return a.cons(b));
+    return foldl(create(Prelude.tool(order, equal, hash, show)), function(a, b) return a.cons(b));
   }
 
   /** Zips this list and the specified list into a list of tuples. */
@@ -313,7 +339,7 @@ class List<T> implements Collection<List<T>, T> {
    * @param f Called with every two consecutive elements to retrieve a list of gaps.
    */
   public function gaps<G>(f: T -> T -> List<G>, ?equal: EqualFunction<G>): List<G> {
-    return zip(drop(1)).flatMapTo(List.nil(SCore.tool(null,equal)), function(tuple) return f(tuple._1, tuple._2));
+    return zip(drop(1)).flatMapTo(List.nil(Prelude.tool(null,equal)), function(tuple) return f(tuple._1, tuple._2));
   }
 
   /** Returns a list that contains all the elements of this list, sorted by
@@ -322,7 +348,7 @@ class List<T> implements Collection<List<T>, T> {
   public function sort(): List<T> {
     var a = this.toArray();
     a.sort(order);
-    var result = create(SCore.tool(_order, _equal, _hash, _show));
+    var result = create(Prelude.tool(order, equal, hash, show));
 
     for (i in 0...a.length) {
       result = result.cons(a[a.length - 1 - i]);
@@ -332,65 +358,25 @@ class List<T> implements Collection<List<T>, T> {
   } 
 
   public function iterator(): Iterator<T> {
-    return FoldableExtensions.iterator(this);
+    return Foldables.iterator(this);
   }
   
   public function withOrderFunction(order : OrderFunction<T>) {
-    return create(SCore.tool(order,_equal,_hash,_show)).addAll(this);
+    return create(Prelude.tool(order,equal,hash,show)).addAll(this);
   }
   
   public function withEqualFunction(equal : EqualFunction<T>) {
-    return create(SCore.tool(_order, equal, _hash, _show)).addAll(this);
+    return create(Prelude.tool(order, equal, hash, show)).addAll(this);
   }
   
   public function withHashFunction(hash : HashFunction<T>) {
-    return create(SCore.tool(_order, _equal, hash, _show)).addAll(this);
+    return create(Prelude.tool(order, equal, hash, show)).addAll(this);
   }
   
   public function withShowFunction(show : ShowFunction<T>) {
-    return create(SCore.tool(_order, _equal, _hash, show)).addAll(this);
+    return create(Prelude.tool(order, equal, hash, show)).addAll(this);
   }
 
-  var _equal : EqualFunction<T>;
-  var _order : OrderFunction<T>;
-  var _hash: HashFunction<T>;
-  var _show  : ShowFunction<T>;
-  function getOrder() {
-    return if(null == _order) {
-      if(size() == 0)
-        Order.getOrderFor(null);
-      else
-        _order = Order.getOrderFor(first);
-      } else _order;
-  }
-  
-  function getEqual() { 
-    return if(null == _equal) {
-      if(size() == 0)
-        Equal.getEqualFor(null);
-      else
-        _equal = Equal.getEqualFor(first);
-      } else _equal;
-  }
-
-  function getHash() {
-    return if(null == _hash) {
-      if(size() == 0)
-      Hasher.getHashFor(null);
-      else
-        _hash = Hasher.getHashFor(first);   
-    } else _hash;
-  }
-  
-  function getShow() {
-    return if(null == _show) {
-      if(size() == 0)
-      Show.getShowFor(null);
-      else
-        _show = Show.getShowFor(first);   
-    } else _show;
-  }
-  
   public function equals(other : List<T>) {     
     return toArray().equalsWith(other.toArray(), equal);
   }
@@ -413,11 +399,11 @@ class List<T> implements Collection<List<T>, T> {
   }
 
   private function getHead(): T {
-    return SCore.error("List has no head element");
+    return Prelude.error("List has no head element");
   }
 
   private function getLast(): T {
-    return SCore.error("List has no last element");
+    return Prelude.error("List has no last element");
   }
 
   private function getHeadOption(): Option<T> {
@@ -429,7 +415,7 @@ class List<T> implements Collection<List<T>, T> {
   }
 
   private function getTail(): List<T> {
-    return SCore.error("List has no head");
+    return Prelude.error("List has no head");
   }
 }
 

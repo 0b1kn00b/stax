@@ -1,22 +1,13 @@
 package stx;
 
-/**
- * ...
- * @author 0b1kn00b
- */
 import stx.Tuples;  		using stx.Tuples;
 												using stx.Iterators;
-using SCore;
+using stx.Prelude;
 
 class Hashes {
-
-/*	public static function toHash<A>(iter:Array < Tuple2 < String, A >> ):Hash<A> {
-		var hash = new Hash();
-		for (val in iter) {
-			hash.set( val._1 , val._2);
-		}
-		return hash;
-	}*/
+	/**
+		Creates an Iterable of Tuple2<Key,Value> from a Hash.
+	*/
 	public static function fromHash<A>(h:Hash<A>):Iterable<Tuple2<String,A>>{
 		return
 			h.keys().toIterable().map(
@@ -27,10 +18,13 @@ class Hashes {
 				}
 			);
 	}
-	public static inline function hasAll(h:Hash<Dynamic>, entries:Array<String>):Bool {
+	/**
+		Returns whether all the keys are in the hash
+	*/
+	public static inline function hasAllKeys<A>(h:Hash<A>, keys:Array<String>):Bool {
 		var ok = true;
 		
-		for (val in entries) {
+		for (val in keys) {
 			if ( !h.exists(val) ) {
 				ok = false;
 				break;
@@ -38,17 +32,15 @@ class Hashes {
 		}
 		return ok;
 	}
-	public static inline function hasAny(h:Hash<Dynamic>, entries:Array<String>):Bool {
+	/**
+		Returns whether any of the keys are in the Hash
+	*/
+	public static inline function hasAnyKey<A>(h:Hash<A>, entries:Array<String>):Bool {
 		for (val in entries) {
 			if ( h.exists(val) ) {
 				return true;
 			}
 		}
 		return false;		
-	}
-}
-class HashType{
-	static public function exists<A>(h:Hash<A>,str:String){
-		return h.exists(str);
 	}
 }

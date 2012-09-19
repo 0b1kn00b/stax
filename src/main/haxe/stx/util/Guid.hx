@@ -18,7 +18,7 @@ package stx.util;
 typedef GuidGenerator = Void -> String
 
 class Guid {
-  public static function generate(): String {
+  public static function create(): String {
     var result = "";
 
     for (j in 0...32) {
@@ -30,5 +30,15 @@ class Guid {
     }
 
     return result.toUpperCase();
+  }
+}
+class ShortCode{
+  public static function create():String{
+    var fn = function() return Math.round(Math.random() * 255);
+    var a = StringTools.hex(fn());
+    var b = StringTools.hex(fn());
+    var c = StringTools.hex(fn());
+    var d = StringTools.hex(fn());
+    return Std.format('$a$b$c$d');
   }
 }

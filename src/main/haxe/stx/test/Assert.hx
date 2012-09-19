@@ -18,7 +18,7 @@ package stx.test;
 import stx.Prelude;
 import stx.Future;
 
-import stx.ds.plus.Equal;
+import stx.plus.Equal;
 
 import haxe.io.Bytes;
 import stx.test.Assertation;

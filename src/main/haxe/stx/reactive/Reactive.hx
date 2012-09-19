@@ -16,11 +16,11 @@
 package stx.reactive;
 import stx.Prelude;
 import stx.Tuples;
-import stx.ds.plus.Equal;
+import stx.plus.Equal;
 
 import stx.reactive.Streams;
 
-using SCore;
+using stx.Prelude;
 using stx.Iterables;
 
 
@@ -351,9 +351,10 @@ class Stream<T> {
     public function sendLaterIn(value: Dynamic, millis: Int): Stream<T> {
 			#if (js || flash || nodejs )
         var self = this;
-        
+        //trace('setTimeout');
         External.setTimeout(
             function() {
+                //trace('timeout called' + value);
                 self.sendEvent(value);
             },
             millis

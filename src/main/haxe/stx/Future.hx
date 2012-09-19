@@ -1,14 +1,8 @@
 package stx;
 
-/**
- * ...
- * @author 0b1kn00b
- */
-
 import stx.Tuples;
-import stx.error.Error;           using stx.error.Error;            
+import stx.Error;           using stx.Error;            
 import stx.Prelude;               using stx.Prelude;
-                                  using SCore;
                                   using stx.Arrays;
                                   using stx.Options;
                                   using stx.Dynamics;
@@ -59,7 +53,7 @@ class Future<T> {
    */
   public function deliver(t: T,?pos:haxe.PosInfos): Future<T> {
     return if (_isCanceled) this;
-    else if (_isSet) SCore.error("Future :" + this.value() + " already delivered at " + pos.toString());
+    else if (_isSet) Prelude.error("Future :" + this.value() + " already delivered at " + pos.toString());
     else {
       _result = t;
       _isSet  = true;
@@ -86,14 +80,15 @@ class Future<T> {
     return this;
   }
 
-  /** Installs a handler that will be called if and only if the future is
-   * canceled.
-   * <p>
-   * This method does not normally need to be called, since there is no
-   * difference between a future being canceled and a future taking an
-   * arbitrarily long amount of time to evaluate. It's provided primarily
-   * for implementation of future primitives to save resources when it's
-   * explicitly known the result of a future will not be used.
+  /** 
+    Installs a handler that will be called if and only if the future is
+    canceled.
+    <p>
+    This method does not normally need to be called, since there is no
+    difference between a future being canceled and a future taking an
+    arbitrarily long amount of time to evaluate. It's provided primarily
+    for implementation of future primitives to save resources when it's
+    explicitly known the result of a future will not be used.
    */
   public function ifCanceled(f: Void -> Void): Future<T> {
     if (isCanceled()) f();
@@ -102,12 +97,13 @@ class Future<T> {
     return this;
   }
 
-  /** Attempts to cancel the future. This may succeed only if the future is
-   * not already delivered, and if all cancel conditions are satisfied.
-   * <p>
-   * If a future is canceled, the result will never be delivered.
-   *
-   * @return true if the future is canceled, false otherwise.
+  /** 
+    Attempts to cancel the future. This may succeed only if the future is
+    not already delivered, and if all cancel conditions are satisfied.
+    <p>
+    If a future is canceled, the result will never be delivered.
+   
+    @return true if the future is canceled, false otherwise.
    */
   public function cancel(): Bool {
     return if (isDone()) false;   // <-- Already done, can't be canceled
@@ -126,26 +122,30 @@ class Future<T> {
     }
   }
 
-  /** Determines if the future is "done" -- that is, delivered or canceled.
+  /** 
+    Determines if the future is "done" -- that is, delivered or canceled.
    */
   public function isDone(): Bool {
     return isDelivered() || isCanceled();
   }
 
-  /** Determines if the future is delivered.
+  /** 
+    Determines if the future is delivered.
    */
   public function isDelivered(): Bool {
     return _isSet;
   }
 
-  /** Determines if the future is canceled.
+  /** 
+    Determines if the future is canceled.
    */
   public function isCanceled(): Bool {
     return _isCanceled;
   }
 
-  /** Delivers the result of the future to the specified handler as soon as it
-   * is delivered.
+  /** 
+    Delivers the result of the future to the specified handler as soon as it
+    is delivered.
    */
   public function deliverTo(f: T -> Void): Future<T> {
     if (isCanceled()) return this;
@@ -154,13 +154,17 @@ class Future<T> {
 
     return this;
   }
+  /**
+    Alias for deliverTo
+  */
   public function foreach(f:T->Void):Future<T> {
     return deliverTo(f);
   }
-  /** Uses the specified function to transform the result of this future into
-   * a different value, returning a future of that value.
-   * <p>
-   * urlLoader.load("image.png").map(function(data) return new Image(data)).deliverTo(function(image) imageContainer.add(image));
+  /** 
+    Uses the specified function to transform the result of this future into
+    a different value, returning a future of that value.
+    <p>
+    urlLoader.load("image.png").map(function(data) return new Image(data)).deliverTo(function(image) imageContainer.add(image));
    */
   public function map<S>(f: T -> S): Future<S> {
     var fut: Future<S> = new Future();
@@ -170,24 +174,27 @@ class Future<T> {
 
     return fut;
   }
-  
+  /**
+    Drop this future, returning f.
+  */
   public function then<S>(f: Future<S>): Future<S> {
     return f;
   }
 
-  /** Maps the result of this future to another future, and returns a future
-   * of the result of that future. Useful when chaining together multiple
-   * asynchronous operations that must be completed sequentially.
-   * <p>
-   * <pre>
-   * <code>
-   * urlLoader.load("config.xml").flatMap(function(xml){
-   *   return urlLoader.load(parse(xml).mediaUrl);
-   * }).deliverTo(function(loadedMedia){
-   *   container.add(loadedMedia);
-   * });
-   * </code>
-   * </pre>
+  /** 
+    Maps the result of this future to another future, and returns a future
+    of the result of that future. Useful when chaining together multiple
+    asynchronous operations that must be completed sequentially.
+    <p>
+    <pre>
+    <code>
+    urlLoader.load("config.xml").flatMap(function(xml){
+      return urlLoader.load(parse(xml).mediaUrl);
+    }).deliverTo(function(loadedMedia){
+      container.add(loadedMedia);
+    });
+    </code>
+    </pre>
    */
   public function flatMap<S>(f: T -> Future<S>): Future<S> {
     var fut: Future<S> = new Future();
@@ -205,9 +212,10 @@ class Future<T> {
     return fut;
   }
 
-  /** Returns a new future that will be delivered only if the result of this
-   * future is accepted by the specified filter (otherwise, the new future
-   * will be canceled).
+  /** 
+    Returns a new future that will be delivered only if the result of this
+    future is accepted by the specified filter (otherwise, the new future
+    will be canceled).
    */
   public function filter(f: T -> Bool): Future<T> {
     var fut: Future<T> = new Future();
@@ -219,10 +227,11 @@ class Future<T> {
     return fut;
   }
 
-  /** Zips this future and the specified future into another future, whose
-   * result is a tuple of the individual results of the futures. Useful when
-   * an operation requires the result of two futures, but each future may
-   * execute independently of the other.
+  /** 
+    Zips this future and the specified future into another future, whose
+    result is a tuple of the individual results of the futures. Useful when
+    an operation requires the result of two futures, but each future may
+    execute independently of the other.
    */
   public function zip<A>(f2: Future<A>): Future<Tuple2<T, A>> {
     return zipWith( f2, Tuples.t2 );
@@ -250,7 +259,8 @@ class Future<T> {
 
     return zipped; 
   }
-  /** Retrieves the value of the future, as an option.
+  /** 
+    Retrieves the value of the future, as an option.
    */
   public function value(): Option<T> {
     return if (_isSet) Some(_result) else None;
@@ -292,10 +302,24 @@ class Future<T> {
       });
     return this;
   }
+}
+class Futures{
+  static public function foreach<A>(f:Future<A>,fn:A->Void):Future<A>{
+    return f.foreach(fn);
+  }
+  static public function map<A,B>(f:Future<A>,fn:A->B):Future<B>{
+    return f.map(fn);
+  }
+  static public function flatMap<A,B>(f:Future<A>,fn:A->Future<B>):Future<B>{
+    return f.flatMap(fn);
+  }
+  static public function zip<A,B>(f:Future<A>,f2:Future<B>):Future<Tuple2<A,B>>{
+    return f.zip(f2);
+  }
   static public function waitFor(toJoin:Array<Future<Dynamic>>):Future<Array<Dynamic>> {
     var
       joinLen = toJoin.size(),
-      myprm = create(),
+      myprm = Future.create(),
       combined:Array<{seq:Int,val:Dynamic}> = [],
       sequence = 0;
         
@@ -316,96 +340,5 @@ class Future<T> {
           });
       });  
     return myprm;
-  }
-  static public function futureOf<A>(a:A){
-    return new Future().deliver(a);
-  }
-}
-class Promises{
-  /**
-  * Does a map if the Either is Right.
-  */
-  static public function mapRight<A,B,C>(f:Future<Either<A,B>>,fn:B->C):Future<Either<A,C>>{
-    return 
-      f.map(
-        function(x:Either<A,B>):Either<A,C>{
-          return 
-            x.mapRight(
-              function(y:B){
-                return fn(y);
-              }
-            );
-        }
-      );
-  }
-  static public function zipRWith<A,B,C,D>(f0:Future<Either<A,B>>,f1:Future<Either<A,C>>,fn : B -> C -> D):Future<Either<A,D>>{
-    return 
-      f0.zipWith(f1,
-        function(a,b){
-          return 
-            switch (a) {
-              case Left(v1)       : Left(v1);
-              case Right(v1)      :
-                switch (b) {
-                  case Left(v2)   : Left(v2);
-                  case Right(v2)  : Right(fn(v1,v2));
-                }
-              }
-          }
-      );
-  }
-  static public function zipR<A,B,C>(f0:Future<Either<A,B>>,f1:Future<Either<A,C>>):Future<Either<A,Tuple2<B,C>>>{
-    return zipRWith(f0,f1,Tuples.t2);
-  }
-  static public function flatMapR<A,B,C>(f0:Future<Either<A,B>>,fn : B -> Future<Either<A,C>>):Future<Either<A,C>>{
-    return
-      f0.flatMap(
-        function(x){
-          return
-            switch (x) {
-              case Left(v1)   : new Future().deliver(Left(v1));
-              case Right(v2)  : fn(v2);
-            }
-        }
-      );
-  }
-  static public function flatMapL<A,B,C>(f0:Future<Either<A,B>>,fn : A -> Future<Either<C,B>>):Future<Either<C,B>>{
-    return
-      f0.flatMap(
-        function(x){
-          return
-            switch (x) {
-              case Right(v1)   : new Future().deliver(Right(v1));
-              case Left(v2)    : fn(v2);
-            }
-        }
-      );
-  }
-  @:noUsing
-  static public function pure<A,B>(e:Either<A,B>):Future<Either<A,B>>{
-    return new Future().deliver(e);
-  }
-  /**
-    Use this with a flatmap fold to wait for parallel futures.
-    vals.map( function_returning_future ).foldl( Future.pure(Right([])), Promises.waitfold )
-    This op stops when there is a single failure
-  */
-  static public function waitfold<A,B>(init:Future<Either<A,Array<B>>>,ft:Future<Either<A,B>>){
-    return 
-      init.flatMapR(
-        function(arr:Array<B>){
-          return 
-            ft.mapRight(
-              function(v:B):Array<B>{
-                return arr.append(v);
-              }
-            );
-        }
-      );
-  }
-}
-class PromisesR{
-  static public function pure<A>(e:A):Future<Either<Dynamic,A>>{
-    return Promises.pure(Right(e));
   }
 }

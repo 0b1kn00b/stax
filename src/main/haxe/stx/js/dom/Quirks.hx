@@ -15,8 +15,8 @@
 */
 package stx.js.dom;
 
-import stx.Prelude;
-using SCore;
+using stx.Prelude;
+
 
 
 import stx.js.Dom;
@@ -184,7 +184,7 @@ class Quirks {
     var doc: HTMLDocument = cast el.ownerDocument;
 
     var id = el.getAttribute('id').toOption().filter(function(id) return id != '').getOrElse(function() {
-      return ('id-' + Guid.generate()).withEffect(function(guid) {
+      return ('id-' + Guid.create()).withEffect(function(guid) {
         el.setAttribute('id', guid);
       });
     });
@@ -265,7 +265,7 @@ class Quirks {
       }
     }
 
-    return SCore.error('Invalid rule: ' + rule);
+    return Prelude.error('Invalid rule: ' + rule);
   }
 
   /** Retrieves the actual property name for the specified css property.

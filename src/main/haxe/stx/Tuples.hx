@@ -1,12 +1,7 @@
 package stx;
 
-/**
- * ...
- * @author 0b1kn00b
- */
-using Stx;
-import stx.Prelude;
-using SCore;
+using stx.Prelude;
+
                     using stx.Tuples;  
 
 class Tuples {
@@ -57,17 +52,17 @@ class AbstractProduct implements Product {
   }
 
   public function toString(): String {
-    var s = prefix + "(" + stx.ds.plus.Show.getShowFor(element(0))(element(0));
+    var s = prefix + "(" + stx.plus.Show.getShowFor(element(0))(element(0));
     for(i in 1...length)
-      s += ", " + stx.ds.plus.Show.getShowFor(element(i))(element(i));
+      s += ", " + stx.plus.Show.getShowFor(element(i))(element(i));
     return s + ")";
   }
   private function get_prefix(): String {
-    return SCore.error("Not implemented");
+    return Prelude.error("Not implemented");
   }
 
   private function get_length(): Int {
-    return SCore.error("Not implemented");
+    return Prelude.error("Not implemented");
   }
   
   public function elements():Array<Dynamic> {
@@ -94,7 +89,7 @@ class AbstractProduct implements Product {
             p.elements().flatMap(
               function(v){
                 return if( Std.is(v,Product) ){
-                   flatn(v).flatMap(  SCore.identity() );
+                   flatn(v).flatMap(  Prelude.identity() );
                 }else{
                   [v];
                 }
@@ -275,7 +270,7 @@ class Tuple5< A, B, C, D, E> extends AbstractProduct {
 	}
 }
 class Entuple{
-  public static function entuple<A, B>(a: A, b: B): stx.Tuple2<A, B> {
-    return new Tuple2(a, b);
+  static public function entuple<A,B>(a:A,b:B){
+    return Tuples.t2(a,b);
   }
 }

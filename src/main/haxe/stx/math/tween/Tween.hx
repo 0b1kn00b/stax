@@ -24,7 +24,7 @@ import stx.Options;           using stx.Options;
 
 import stx.Tuples;            using stx.Tuples;
 
-using stx.functional.FoldableExtensions;
+using stx.functional.Foldables;
 
 typedef Tweener = Float -> Dynamic<Float>
 

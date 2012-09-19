@@ -84,9 +84,13 @@ class PrintReport extends PlainTextReport {
     s = StringTools.replace(s, '\n', newline);
     trace(s);
   }
-#if (php || neko || cpp || nodejs)
+#if (php || neko || cpp )
   function _print(s : String) {
-    Lib.print(s);
+      Sys.print(s);
+  }
+#elseif nodejs
+  function _print(s : String) {
+    untyped console.log(s);
   }
 #end
 }

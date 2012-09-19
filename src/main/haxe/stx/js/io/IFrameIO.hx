@@ -1,4 +1,4 @@
-/*
+/****
  HaXe library written by John A. De Goes <john@socialmedia.com>
  Contributed by Social Media Networks
 
@@ -13,8 +13,10 @@
  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SOCIAL MEDIA NETWORKS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+****/
 package stx.js.io;
+
+import stx.macro.Tp;
 
 import stx.js.Dom;
 import stx.Prelude;
@@ -31,7 +33,7 @@ import stx.Log;								using stx.Log;
 import stx.Future;
 import stx.Tuples;
 
-using SCore;
+using stx.Prelude;
 using stx.Tuples;
 using stx.Arrays;
 using stx.Strings;
@@ -40,15 +42,15 @@ using stx.Options;
 using stx.Dynamics;
 using stx.Iterables;
 
-using stx.ds.plus.Hasher;
+using stx.plus.Hasher;
 
 using stx.ds.Map;
 using stx.ds.List;
 
-using stx.functional.FoldableExtensions;
+using stx.functional.Foldables;
 using stx.Strings;
 
-using stx.net.UrlExtensions;
+using stx.net.Urls;
 using stx.framework.Injector;
 
 
@@ -127,11 +129,11 @@ class AbstractIFrameIO implements IFrameIO {
   }
   
   public function receive(f: Dynamic -> Void, originUrl: String, ?originWindow: Window): IFrameIO {
-    return SCore.error('Not implemented');
+    return Prelude.error('Not implemented');
   }
 
   public function receiveWhile(f: Dynamic -> Bool, originUrl: String, ?originWindow: Window): IFrameIO {
-    return SCore.error('Not implemented');
+    return Prelude.error('Not implemented');
   }
   
   public function receiveRequests(f: Dynamic -> Future<Dynamic>, url, window: Window): IFrameIO {
@@ -150,7 +152,7 @@ class AbstractIFrameIO implements IFrameIO {
   }
 
   public function send(data: Dynamic, targetUrl: String, targetWindow: Window): IFrameIO {
-    return SCore.error('Not implemented');
+    return Prelude.error('Not implemented');
   }
   
   public function request(requestData: Dynamic, targetUrl: String, targetWindow: Window): Future<Dynamic> {
@@ -278,11 +280,11 @@ class IFrameIOPostMessage extends AbstractIFrameIO, implements IFrameIO {
   
   private static function getUrlFor(w: Window, url_: Url): Url {
     return if (url_.startsWith('about:')) {
-      var allWindows = [w].concat(SCore.unfold(w, function(w) {
+      var allWindows = [w].concat(Prelude.unfold(w, function(w) {
         var parentWindow = w.parent;
         
         return if (w == parentWindow) None;
-               else Some(parentWindow.entuple(parentWindow));
+               else Some(Tp.l(parentWindow,parentWindow));
       }).toArray());
       
       allWindows.flatMap(function(w) {

@@ -7,9 +7,9 @@ package stx.ds;
 import stx.functional.Foldable;
 
 
-using SCore;
-using stx.Iterables;
+using stx.Prelude;
 using stx.Arrays;
+using stx.Iterables;
 using stx.ds.Group;
 
 class Group {

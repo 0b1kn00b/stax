@@ -1,9 +1,9 @@
 package stx;
+import stx.LogLevel;
 import haxe.PosInfos;
-import stx.Prelude;
+using stx.Prelude;
 import Type;
 														using Std;
-														using SCore;
 														using stx.Enums;
 														using stx.Tuples;
 														using stx.Arrays;
@@ -13,26 +13,16 @@ import Type;
 														using stx.Functions;
 														
 														using stx.Log;
-/**
- * ...
- * @author 0b1kn00b
- */
-																using stx.framework.Injector;
+
+														using stx.framework.Injector;
  /**
-  * To use the Log 
-	* 	haxe.Log.//trace = stx.io.log.Logger.trace;
-	* then
-	* 	//trace('any normal string');
-	* 	//trace('any string'.debug());
-	* 	//trace(obj.warning());
+   To use the Log 
+	 	haxe.Log.//trace = stx.io.log.Logger.trace;
+	 then
+	 	//trace('any normal string');
+	 	//trace('any string'.debug());
+	 	//trace(obj.warning());
   */
-enum LogLevel {
-	Debug; 
-	Info;
-	Warning;
-	Error;
-	Fatal;
-}
 class LogItem {
 	public function new(level, value) {
 		this.level = level;
@@ -113,7 +103,8 @@ interface Logger {
 	public 	var level(default,null)				: LogLevel;
 }
 class DefaultLogger implements Logger{
-	public static function create(?listings,?level) {
+	@:noUsing
+	static public function create(?listings:Array<LogListing>,?level) {
 		return new DefaultLogger(listings,level);
 	}
 	private var listings 										: Array<LogListing>;

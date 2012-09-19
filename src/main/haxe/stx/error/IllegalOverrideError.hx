@@ -4,7 +4,7 @@ package stx.error;
  * ...
  * @author 0b1kn00b
  */
-																using stx.error.Error;
+																using stx.Error;
 																
 class IllegalOverrideError extends Error{
 

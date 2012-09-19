@@ -24,7 +24,7 @@ class States{
     return state(s).first();
   }
   static public function map<S,R,R1>(state:State<S,R>,fn:R->R1):State<S,R1>{
-    return apply.p1(state).andThen( Tuple2.translate.p3( SCore.identity() ).p2( fn ) );
+    return apply.p1(state).andThen( Tuple2.translate.p3( Prelude.identity() ).p2( fn ) );
   }
   static public function mapS<S,R>(state:State<S,R>,fn:S->S):State<S,R>{
     return
@@ -35,7 +35,7 @@ class States{
   }
   static public function flatMap<S,R,R1>(state:State<S,R>,fn:R->State<S,R1>):State<S,R1>{
     return apply.p1(state)
-      .andThen( Tuple2.translate.p3( SCore.identity() ).p2( fn ) )
+      .andThen( Tuple2.translate.p3( Prelude.identity() ).p2( fn ) )
       .andThen(
         function(t:Tuple2<State<S,R1>,S>) {
           return t._1(t._2);
@@ -59,7 +59,7 @@ class States{
   static public function stateOf<S>(v:S):State<S,Dynamic>{
     return
       function(s:S){
-        return Tuples.t2(null,s);
+        return Tuples.t2(null,v);
       }
   }
   static public function unit<S,A>(value:A):State<S,A>{

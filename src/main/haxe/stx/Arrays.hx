@@ -1,38 +1,33 @@
-/*
-/*
- HaXe library written by John A. De Goes <john@socialmedia.com>
- Contributed by Social Media Networks
-
- Redistribution and use in source and binary forms, with or without
- modification, are permitted provided that the following conditions are met:
-
- Redistributions of source code must retain the above snapshotright notice, this list of conditions and the following disclaimer.
- Redistributions in binary form must reproduce the above snapshotright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
- distribution.
-
- THIS SOFTWARE IS PROVIDED BY SOCIAL MEDIA NETWORKS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SOCIAL MEDIA NETWORKS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
 package stx;
 
-import SCore;                      using SCore;
+
 import stx.Tuples;                using stx.Tuples;
-import stx.Prelude; 
-import stx.ds.plus.Equal;
+using stx.Prelude; 
+import stx.plus.Equal;
 
                                   using stx.Maths;
                                   using stx.Options;
                                   using stx.Functions;
                                   using stx.Arrays;
 
-class Arrays { 
+class Arrays {
+    /**
+    Preforms a foldl, using the first value as the init value
+  */
+   public static function foldl1<T, T>(a: Array<T>, mapper: T -> T -> T): T {
+    var folded = a.first();
+    switch (Iterables.tailOption(a)) {
+      case Some(v)  :
+        for (e in v) { folded = mapper(folded, e); }
+      default       :
+    }
+    return folded;
+  }
   /**
-  * Produces a Tuple2 containing two Arrays, the left being elements where f(e) == true, 
-  * and the rest in the right.
-  * @param The array to partition
-  * @param A predicate
+   Produces a Tuple2 containing two Arrays, the left being elements where f(e) == true, 
+   and the rest in the right.
+   @param The array to partition
+   @param A predicate
   */
   public static function partition<T>(arr: Array<T>, f: T -> Bool): Tuple2<Array<T>, Array<T>> {
     return arr.foldl(Tuples.t2([], []), function(a, b) {
@@ -44,9 +39,9 @@ class Arrays {
     });
   }
   /**
-   * Produces a Tuple2 containing two Arrays, the difference from partition being that after the predicate
-   * returns true once, the rest of the elements will be in the right hand of the Tuple, regardless of
-   * the result of the predicate.
+    Produces a Tuple2 containing two Arrays, the difference from partition being that after the predicate
+    returns true once, the rest of the elements will be in the right hand of the Tuple, regardless of
+    the result of the predicate.
    */
   public static function partitionWhile<T>(arr: Array<T>, f: T -> Bool): Tuple2<Array<T>, Array<T>> {
     var partitioning = true;
@@ -66,7 +61,7 @@ class Arrays {
     });
   }
   /**
-  * Performs a map and delivers the results to the specified 'dest'
+   Performs a map and delivers the results to the specified 'dest'
   */
   public static function mapTo<A, B>(src: Array<A>, dest: Array<B>, f: A -> B): Array<B> {
     return src.foldl(dest.snapshot(), function(a, b) {
@@ -75,7 +70,7 @@ class Arrays {
     });
   }
   /**
-  * Produces an Array from an Array of Arrays
+   Produces an Array from an Array of Arrays
   */
   public static function flatten<T>(arrs: Array<Array<T>>): Array<T> {
 		var res : Array<T> = [];
@@ -87,8 +82,8 @@ class Arrays {
 		return res;
 	}
   /**
-  * Weaves an Array of arrays so that [ array0[0] , array[0] ... arrayn[0] , array0[1], array1[1] ... ]
-  * Continues to operate to the length of the shortest array, and drops the rest of the elements.return
+   Weaves an Array of arrays so that [ array0[0] , array[0] ... arrayn[0] , array0[1], array1[1] ... ]
+   Continues to operate to the length of the shortest array, and drops the rest of the elements.return
   */
   public static function interleave<T>(alls: Array<Array<T>>): Array<T> {
 		var res = [];		
@@ -109,7 +104,7 @@ class Arrays {
 		return res;
 	}
 	/**
-   * Performs a flatMap and delivers the reuslts to 'dest'
+    Performs a flatMap and delivers the reuslts to 'dest'
    */
   public static function flatMapTo<A, B>(src: Array<A>, dest: Array<B>, f: A -> Array<B>): Array<B> {
     return src.foldl(dest, function(a, b) {
@@ -119,7 +114,7 @@ class Arrays {
     });
   }
   /**
-   * Counts some property of the elements of 'arr' using a predicate. For the size of the Array @see size()
+    Counts some property of the elements of 'arr' using a predicate. For the size of the Array @see size()
    */
   public static function count<T>(arr: Array<T>, f: T -> Bool): Int {
     return arr.foldl(0, function(a, b) {
@@ -127,7 +122,7 @@ class Arrays {
     });
   }
   /**
-   * Counts some property of the elements of 'arr' until the first false is returned from the predicate
+    Counts some property of the elements of 'arr' until the first false is returned from the predicate
    */
   public static function countWhile<T>(arr: Array<T>, f: T -> Bool): Int {
     var counting = true;
@@ -145,9 +140,9 @@ class Arrays {
     });
   }
   /**
-   * Takes an initial value which is passed to function 'f' along with each element
-   * one by one, accumulating the results.return
-   * f(element,init)
+    Takes an initial value which is passed to function 'f' along with each element
+    one by one, accumulating the results.
+    f(element,init)
    */
   public static function scanl<T>(arr:Array<T>, init: T, f: T -> T -> T): Array<T> {
     var accum = init;
@@ -159,7 +154,7 @@ class Arrays {
     return result;
   }
   /**
-   * As scanl but from the end of the Array.
+    As scanl but from the end of the Array.
    */
   public static function scanr<T>(arr:Array<T>, init: T, f: T -> T -> T): Array<T> {
     var a = arr.snapshot();
@@ -167,7 +162,7 @@ class Arrays {
     return scanl(a, init, f);
   }
   /**
-   * As scanl, but using the first element as the second parameter of 'f'
+    As scanl, but using the first element as the second parameter of 'f'
    */
   public static function scanl1<T>(arr:Array<T>, f: T -> T -> T): Array<T> {   
     var result = [];              
@@ -181,7 +176,7 @@ class Arrays {
     return result;
   }
   /**
-   * As scanr, but using the first element as the second parameter of 'f'
+    As scanr, but using the first element as the second parameter of 'f'
    */
   public static function scanr1<T>(arr:Array<T>, f: T -> T -> T): Array<T> {
     var a = arr.snapshot();
@@ -189,13 +184,13 @@ class Arrays {
     return scanl1(a, f);
   }
   /**
-   * Returns the Array cast as an Iterable
+    Returns the Array cast as an Iterable
    */
   public static function elements<T>(arr: Array<T>): Iterable<T> {
     return arr.snapshot();
   }
   /**
-   * Appends the elements of 'i' to 'arr'
+    Appends the elements of ´i´ to ´arr´
    */
   public static function appendAll<T>(arr: Array<T>, i: Iterable<T>): Array<T> {
     var acc = arr.snapshot();
@@ -206,14 +201,20 @@ class Arrays {
     return acc;
   }
   /**
-   *^Produces true if the Array is empty, false otherwise
+    Produces true if the Array is empty, false otherwise
    */
   public static function isEmpty<T>(arr: Array<T>): Bool {
     return arr.length == 0;
   }
   /**
-   * Produces an Option Some(element) the first time the predicate returns true,
-   * None otherwise.
+    Produces true if the Array is empty, false otherwise
+   */
+  public static function hasValues<T>(arr: Array<T>): Bool {
+    return arr.length > 0;
+  }
+  /**
+    Produces an Option Some(element) the first time the predicate returns true,
+    None otherwise.
    */
   public static function find<T>(arr: Array<T>, f: T -> Bool): Option<T>{
     return arr.foldl(
@@ -228,8 +229,8 @@ class Arrays {
     );
   }
   /**
-   * Returns an Option Some(index) if an object reference is contain in 'arr'
-   *^None otherwise
+    Returns an Option Some(index) if an object reference is contain in 'arr'
+    None otherwise
    */
   public static function findIndexOf<T>(arr: Array<T>, obj: T): Option<Int> {
 	 var index = arr.indexOf(obj);
@@ -237,7 +238,7 @@ class Arrays {
   }
   
   /**
-   * Produces true if the predicate returns true for all elements, false otherwise.
+    Produces true if the predicate returns true for all elements, false otherwise.
    */
   public static function forAll<T>(arr: Array<T>, f: T -> Bool): Bool {
     return arr.foldl(true, function(a, b) {
@@ -248,7 +249,7 @@ class Arrays {
     });
   }
   /**
-   * Produces true if the predicate returns true for any element, false otherwise.
+    Produces true if the predicate returns true for any element, false otherwise.
    */
   public static function forAny<T>(arr: Array<T>, f: T -> Bool): Bool {
     return arr.foldl(false, function(a, b) {
@@ -259,7 +260,7 @@ class Arrays {
     });
   }
   /**
-   * Determines if a value is contained in 'arr' using a predicate.
+    Determines if a value is contained in 'arr' using a predicate.
    */
   public static function exists<T>(arr: Array<T>, f: T -> Bool): Bool {
     return switch (find(arr, f)) {
@@ -268,17 +269,7 @@ class Arrays {
     }
   }
   /**
-   * Produces an Array with the elements in reversed order.return
-   */
-	public static function reversed<T>(arr: Array<T>): Array<T> {
-    return IterableLambda.foldl(arr, [], function(a, b) {
-      a.unshift(b);
-      
-      return a;
-    });
-  }
-  /**
-   * As with 'exists' but taking a second parameter in the predicate specified by 'ref'
+    As with 'exists' but taking a second parameter in the predicate specified by 'ref'
    */
   public static function existsP<T>(arr:Array<T>, ref: T, f: T -> T -> Bool): Bool {
     var result = false;
@@ -291,8 +282,8 @@ class Arrays {
     return false;
   }
   /**
-   * Produces an Array with no duplicate elements. Equality of the elements is determined
-   * by 'f'.
+    Produces an Array with no duplicate elements. Equality of the elements is determined
+    by 'f'.
    */
   public static function nubBy<T>(arr:Array<T>, f: T -> T -> Bool): Array<T> {
     return arr.foldl([], function(a: Array<T>, b: T): Array<T> {
@@ -305,13 +296,13 @@ class Arrays {
     });
   }
   /**
-   * Produces an Array with no duplicate elements by comparing each element to all others.
+    Produces an Array with no duplicate elements by comparing each element to all others.
    */
   public static function nub<T>(arr:Array<T>): Array<T> {
     return nubBy(arr, Equal.getEqualFor(arr[0]));
   }
   /**
-   * Intersetcs two Arrays, determining equality by 'f'
+    Intersetcs two Arrays, determining equality by 'f'
    */  
   public static function intersectBy<T>(arr1: Array<T>, arr2: Array<T>, f: T -> T -> Bool): Array<T> {
     return arr1.foldl([], function(a: Array<T>, b: T): Array<T> {
@@ -319,19 +310,19 @@ class Arrays {
     });
   }
   /**
-   * Produces an Array of elements found in both 'arr' and 'arr2'.
+    Produces an Array of elements found in both 'arr' and 'arr2'.
    */
   public static function intersect<T>(arr1: Array<T>, arr2: Array<T>): Array<T> {
     return intersectBy(arr1, arr2, Equal.getEqualFor(arr1[0]));
   }
   /**
-   * Produces a Tuple2, on the left those elements before 'index', on the right those elements on or after.
+    Produces a Tuple2, on the left those elements before 'index', on the right those elements on or after.
    */
 	public static function splitAt<T>(srcArr : Array<T>, index : Int) : Tuple2 < Array<T>, Array<T> > return
 	stx.Tuples.t2(srcArr.slice(0, index),srcArr.slice(index))  
   
   /**
-   * Produces the index of element 't', for a function prodcing an Option , see findIndexOf
+    Produces the index of element 't', for a function prodcing an Option , see findIndexOf
    */
   public static function indexOf<T>(a: Array<T>, t: T): Int {
     var index = 0;
@@ -345,7 +336,7 @@ class Arrays {
     return -1;
   } 
   /**
-   * Performs a map, taking element index as a second parameter of 'f'
+    Performs a map, taking element index as a second parameter of 'f'
    */
   public static function mapWithIndex<T, S>(a: Array<T>, f: T -> Int -> S): Array<S> {
     var n: Array<S> = [];
@@ -355,13 +346,13 @@ class Arrays {
     return n;
   }
   /**
-   * Swallows a1, returning a2
+    Swallows a1, returning a2
    */
   public static function then<T, S>(a1: Array<T>, a2: Array<S>): Array<S> {
     return a2;
   }
   /**
-   * As with foldl but working in reverse.
+    As with foldl but working from the right hand side.
    */
   public static function foldr<T, Z>(a: Array<T>, z: Z, f: T -> Z -> Z): Z {
     var r = z;
@@ -375,13 +366,13 @@ class Arrays {
     return r;
   }
   /**
-   * Produces an Array of Tuple2 where Tuple2.t2(a[n],b[n]).
+    Produces an Array of Tuple2 where Tuple2.t2(a[n],b[n]).
    */
   public static function zip<A, B>(a: Array<A>, b: Array<B>): Array<Tuple2<A, B>> {
 		return zipWith(a, b, Tuples.t2);
   }
   /**
-   * Produces an Array of the result of 'f' where the left parameter is a[n], and the right b[n]
+    Produces an Array of the result of 'f' where the left parameter is a[n], and the right b[n]
    */
   public static function zipWith<A, B, C>(a: Array<A>, b: Array<B>, f : A -> B -> C): Array<C> {
     var len = Math.floor(Math.min(a.length, b.length));
@@ -395,13 +386,13 @@ class Arrays {
     return r;
   }
   /**
-   * Performs a zip where the resulting tuple has the element on the left, and it's index on the right
+    Performs a zip where the resulting tuple has the element on the left, and it's index on the right
    */
   public static function zipWithIndex<A>(a: Array<A>): Array<Tuple2<A, Int>> {
 		return zipWithIndexWith(a, Tuples.t2);
   }
   /**
-   * Performs a zip with the right hand parameter is the index of the element.+
+    Performs a zip with the right hand parameter is the index of the element.+
    */
   public static function zipWithIndexWith<A, B>(a: Array<A>, f : A -> Int -> B): Array<B> {
     var len = a.length;
@@ -415,62 +406,62 @@ class Arrays {
     return r;
   }
 	/**
-   * Adds a single element to the end of the Array.
+    Adds a single element to the end of the Array.
    */
   public static function append<T>(a: Array<T>, t: T): Array<T> {
-    var copy = ArrayLambda.snapshot(a);
+    var copy = Prelude.SArrays.snapshot(a);
     
     copy.push(t);
     
     return copy;
   }
   /**
-   * Adds a single elements to the beginning if the Array.
+    Adds a single elements to the beginning if the Array.
    */
   public static function prepend<T>(a: Array<T>, t: T): Array<T> {
-    var copy = ArrayLambda.snapshot(a);
+    var copy = Prelude.SArrays.snapshot(a);
     
     copy.unshift(t);
     
     return copy;
   } 
   /**
-   * Prodcues the first element of Array 'a'.return
+    Produces the first element of Array 'a'.return
    */
   public static function first<T>(a: Array<T>): T {
     return a[0];
   }
   /**
-   * Produces the first element of 'a' as an Option, Option.None if the Array is empty.
+    Produces the first element of 'a' as an Option, Option.None if the Array is empty.
    */
   public static function firstOption<T>(a: Array<T>): Option<T> {
     return if (a.length == 0) None; else Some(a[0]);
   }
   /**
-   * ^Produces the last element of Array 'a'
+    Produces the last element of Array 'a'
   */
   public static function last<T>(a: Array<T>): T {
     return a[a.length - 1];
   }
   /**
-   * Produces the last element of 'a' as an Option, Option.None if the Array is empty.
+    Produces the last element of 'a' as an Option, Option.None if the Array is empty.
    */
   public static function lastOption<T>(a: Array<T>): Option<T> {
     return if (a.length == 0) None; else Some(a[a.length - 1]);
   }
   
 	/**
-	 * Produces true if Array 'a' contains element 't'.
-	 * @param t a value which may be in the array.
-	 * @return bool 
+	  Produces true if Array 'a' contains element 't'.
+	  @param t a value which may be in the array.
+	  @return bool 
 	 */
-  public static function contains<T>(a: Array<T>, t: T): Bool {
+  public static function has<T>(a: Array<T>, t: T): Bool {
     for (e in a) if (t == e) return true;
     
     return false;
   }
   /**
-   * Iterates Array 'a' applying function 'f' taking the element index as a second parameter
+    Iterates Array 'a' applying function 'f' taking the element index as a second parameter
    */
   public static function foreachWithIndex<T>(a: Array<T>, f: T -> Int -> Void): Array<T> {
     var i = 0;
@@ -479,13 +470,13 @@ class Arrays {
     return a;
   } 
   /**
-   * Produces an Array from a[0] to a[n]
+    Produces an Array from a[0] to a[n]
    */
   public static function take<T>(a: Array<T>, n: Int): Array<T> {
     return a.slice(0, n.min(a.length));
   }
   /**
-   * Produces an Array from a[0] while predicate 'p' returns true
+    Produces an Array from a[0] while predicate 'p' returns true
    */
   public static function takeWhile<T>(a: Array<T>, p: T -> Bool): Array<T> {
     var r = [];
@@ -497,13 +488,13 @@ class Arrays {
     return r;
   }
   /**
-   * Produces an Array from a[n] to the last element of 'a'.
+    Produces an Array from a[n] to the last element of 'a'.
   */
   public static function drop<T>(a: Array<T>, n: Int): Array<T> {
     return if (n >= a.length) [] else a.slice(n);
   }
   /**
-   * Drops values from Array 'a' while the predicate returns true.
+    Drops values from Array 'a' while the predicate returns true.
    */
   public static function dropWhile<T>(a: Array<T>, p: T -> Bool): Array<T> {
     var r = [].concat(a);
@@ -515,7 +506,17 @@ class Arrays {
     return r;
   }
   /**
-   * Produces an Array of arrays of size 'sizeSrc'
+    Produces an Array with the elements in reversed order.return
+   */
+  public static function reversed<T>(arr: Array<T>): Array<T> {
+    return Prelude.SIterables.foldl(arr, [], function(a, b) {
+      a.unshift(b);
+      
+      return a;
+    });
+  }
+  /**
+    Produces an Array of arrays of size 'sizeSrc'
    */
 	public static function sliceBy<T>(srcArr : Array<T>, sizeSrc : Array<Int>) : Array<Array<T>> return {
 		var slices = [];		
@@ -530,21 +531,11 @@ class Arrays {
 	}
   @:todo('#0b1kn00b: optimise')
   public static function fromHash<T>(hash:Hash<T>):Array<Tuple2<String,T>>{
-    return 
-      hash.keys().toIterable().map(
-        function(x){
-          return x.entuple( hash.get(x) );
-        }
-      ).toArray();
-  }
-}
-class ArrayType{
-  @:experimental
-  public static function find<P>(a:Class<Array<P>>):(P->Bool)->Array<P>->Option<P>{
-    return Arrays.find.flip();
-  }
-  @:experimental
-  public static function map<P,R>(a:Class<Array<P>>):(P->R)->Array<P>->Array<R>{
-    return ArrayLambda.map.flip();
+    return
+      hash.keys()
+        .toIterable()
+        .map(
+          function(x) return x.entuple(hash.get(x))
+        ).toArray();
   }
 }

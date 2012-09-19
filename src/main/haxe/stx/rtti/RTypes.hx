@@ -9,7 +9,7 @@ import Type;
 import haxe.rtti.Infos;
 import haxe.rtti.CType;
 import stx.Enums;
-														using SCore;
+														using stx.Prelude;
 
 class RTypes {
 	public static function typetree(type:Class<Infos>) {

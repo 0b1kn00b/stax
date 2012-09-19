@@ -21,4 +21,4 @@ import stx.ds.Map;
 
 typedef HttpHeader = Tuple2<String, String>
 
-typedef HttpHeaders = Map<String, String>
+

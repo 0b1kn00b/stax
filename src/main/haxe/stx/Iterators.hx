@@ -1,9 +1,5 @@
 package stx;
 
-/**
- * ...
- * @author 0b1kn00b
- */
 import stx.Prelude;
 using stx.Options;
 using Std;

@@ -1,9 +1,6 @@
 package stx;
 
-/**
- * ...
- * @author 0b1kn00b
- */
+
 import stx.error.OutOfBoundsError;
 import stx.error.AbstractMethodError;
 

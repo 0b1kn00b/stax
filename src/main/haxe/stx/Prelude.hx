@@ -1,21 +1,20 @@
-/*
- HaXe library written by John A. De Goes <john@socialmedia.com>
- Contributed by Social Media Networks
-
- Redistribution and use in source and binary forms, with or without
- modification, are permitted provided that the following conditions are met:
-
- Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
- Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
- distribution.
-
- THIS SOFTWARE IS PROVIDED BY SOCIAL MEDIA NETWORKS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SOCIAL MEDIA NETWORKS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
 package stx;
+
+import stx.Tuples;
+import stx.Prelude;
+
 import Type;
+
+import stx.Maths;
+import stx.plus.Show;
+
+using stx.Prelude;
+using stx.Options;
+using stx.Strings;
+using stx.plus.Show;
+using Std;
+using stx.Prelude;
+
 
 enum Unit {
   Unit;
@@ -93,4 +92,225 @@ class FieldOrder {
   public static inline var Ascending	 	= 1;
   public static inline var Descending 	= -1;
   public static inline var Ignore 			= 0;
+}
+
+class Prelude{
+  /**
+    Creates PosInfos for the position where called
+  */
+  public static function here(?pos:haxe.PosInfos) {
+    return pos;
+  }
+  inline static public  function tool<A>(?order:OrderFunction<A>,?equal:EqualFunction<A>,?hash:HashFunction<A>,?show:ShowFunction<A>):CollectionTools<A>{
+    return { order : order , equal : equal , show : show , hash : hash };
+  }
+  /**
+    Function identity.
+    [[1,2],[3,4]].flatMap( Prelude.identity() );//[1,2,3,4]
+  */
+  static public function identity<A>(): Function1<A, A> {
+    return function(a: A) { return a; }
+  }
+  static public function unfold<T, R>(initial: T, unfolder: T -> Option<Tuple2<T, R>>): Iterable<R> {
+    return {
+      iterator: function(): Iterator<R> {
+        var _next: Option<R> = None;
+        var _progress: T = initial;
+
+        var precomputeNext = function() {
+          switch (unfolder(_progress)) {
+            case None:
+              _progress = null;
+              _next     = None;
+
+            case Some(tuple):
+              _progress = tuple._1;
+              _next     = Some(tuple._2);
+          }
+        }
+
+        precomputeNext();
+
+        return {
+          hasNext: function(): Bool {
+            return !_next.isEmpty();
+          },
+
+          next: function(): R {
+            var n = _next.get();
+
+            precomputeNext();
+
+            return n;
+          }
+        }
+      }
+    }
+  }
+  
+  static public function error<T>(msg: String, ?pos:haxe.PosInfos): T { throw '$msg at $pos'.format();  return null; }
+}
+
+class SArrays {
+  /**
+    Applies function f to each element in a, returning the results
+  */
+  inline static public function map<T, S>(a: Array<T>, f: T -> S): Array<S> {
+    var n: Array<S> = [];
+    
+    for (e in a) n.push(f(e));
+    
+    return n;
+  }
+  /**
+    Applies function f to each element in a, appending and returning the results.
+  */
+  static public function flatMap<T, S>(a: Array<T>, f: T -> Iterable<S>): Array<S> {
+    var n: Array<S> = [];
+    
+    for (e1 in a) {
+      for (e2 in f(e1)) n.push(e2);
+    }
+    
+    return n;
+  }
+  /**
+    Using starting var z, run f on each element, storing the result, and passing that result 
+    into the next call.
+      [1,2,3,4,5].foldl( 100, function(init,v) return init + v ));//(((((100 + 1) + 2) + 3) + 4) + 5)
+  */
+  static public function foldl<T, Z>(a: Array<T>, z: Z, f: Z -> T -> Z): Z {
+    var r = z;
+    
+    for (e in a) { r = f(r, e); }
+    
+    return r;
+  }
+  /**
+    Call f on each element in a, returning a collection where f(e) = true
+  */
+  static public function filter<T>(a: Array<T>, f: T -> Bool): Array<T> {
+    var n: Array<T> = [];
+    
+    for (e in a)
+      if (f(e)) n.push(e);
+    
+    return n;
+  }
+  /**
+    Returns the size of a
+  */
+  static public function size<T>(a: Array<T>): Int {
+    return a.length;
+  }
+  /**
+    Returns a copt of a.
+  */
+  static public function snapshot<T>(a: Array<T>): Array<T> {
+    return [].concat(a);
+  }
+  /**
+    Apply f to each element in a.
+  */
+  static public function foreach<T>(a: Array<T>, f: T -> Void): Array<T> {
+    for (e in a) f(e);
+    
+    return a;
+  }
+}
+class SIterables{
+  /**
+    Creates an Array from an Iterable
+  */
+  static public function toArray<T>(i: Iterable<T>) {
+    var a = [];
+    for (e in i) a.push(e);
+    return a;
+  }
+  /**
+    Creates an Iterable from an Iterator
+  */
+  static public function toIterable<T>(it:Iterator<T>):Iterable<T> {
+    return {
+      iterator : function () {
+        return {
+            next      : it.next,
+            hasNext   : it.hasNext
+        }
+      }
+    }
+  }
+  /**
+    Applies function f to each element in iter, returning the results
+  */
+  static public function map<T, Z>(iter: Iterable<T>, f: T -> Z): Iterable<Z> {
+    return foldl(iter, [], function(a, b) {
+      a.push(f(b));
+      return a;
+    });
+  }
+  /**
+    Applies function f to each element in iter, appending and returning the results.
+  */
+  static public function flatMap<T, Z>(iter: Iterable<T>, f: T -> Iterable<Z>): Iterable<Z> {
+    return foldl(iter, [], function(a, b) {
+      for (e in f(b)) a.push(e);
+      return a;
+    });
+  }
+  /**
+    Using starting var z, run f on each element, storing the result, and passing that result 
+    into the next call.
+      [1,2,3,4,5].foldl( 100, function(init,v) return init + v ));//(((((100 + 1) + 2) + 3) + 4) + 5)
+  */
+  static public function foldl<T, Z>(iter: Iterable<T>, seed: Z, mapper: Z -> T -> Z): Z {
+    var folded = seed;
+    for (e in iter) { folded = mapper(folded, e); }
+    return folded;
+  }   
+  /**
+    Call f on each element in iter, returning a collection where f(e) = true
+  */
+  static public function filter<T>(iter: Iterable<T>, f: T -> Bool): Iterable<T> {
+    return SArrays.filter(iter.toArray(), f);
+  }
+  /**
+    Returns the size of iter
+  */
+  static public function size<T>(iterable: Iterable<T>): Int {
+    var size = 0;
+    
+    for (e in iterable) ++size;
+    
+    return size;
+  }
+  /**
+    Apply f to each element in iter.
+  */
+  static public function foreach<T>(iter : Iterable<T>, f : T-> Void ):Void {
+    for (e in iter) f(e);
+  }
+}
+class IntIters {
+  /**
+    Creates an Iterable 0...n
+  */
+  static public function to(start: Int, end: Int): Iterable<Int> {
+    return {
+      iterator: function() {
+        var cur = start;
+    
+        return {
+          hasNext: function(): Bool { return cur <= end; },      
+          next:    function(): Int  { var next = cur; ++cur; return next; }
+        }
+      }
+    }
+  }
+  /**
+    Creates an Iterable 0...(n-1)
+  */
+  static public function until(start: Int, end: Int): Iterable<Int> {
+    return to(start, end - 1);
+  }
 }

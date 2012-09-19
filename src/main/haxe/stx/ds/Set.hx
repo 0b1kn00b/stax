@@ -16,19 +16,19 @@
 */
 package stx.ds;
 
-import stx.Prelude;
-using SCore;
+using stx.Prelude;
+
 
 import stx.functional.Foldable;
 import stx.ds.Collection;
-import stx.functional.FoldableExtensions;
+import stx.functional.Foldables;
 
-import stx.ds.plus.Order; using stx.ds.plus.Order;
-import stx.ds.plus.Hasher; using stx.ds.plus.Hasher;
-import stx.ds.plus.Show; using stx.ds.plus.Show;
-import stx.ds.plus.Equal; using stx.ds.plus.Equal;
+import stx.plus.Order; using stx.plus.Order;
+import stx.plus.Hasher; using stx.plus.Hasher;
+import stx.plus.Show; using stx.plus.Show;
+import stx.plus.Equal; using stx.plus.Equal;
 
-using stx.functional.FoldableExtensions;
+using stx.functional.Foldables;
 
 class FoldableToSet {
 	public static function toSet<A, B>(foldable : Foldable<A, B>) : Set<B> {  
@@ -50,7 +50,7 @@ class Set<T> implements Collection<Set<T>, T> {
   public var hash (getHash, null) : HashFunction<T>;
   public var show (getShow, null) : ShowFunction<T>;
   
-  var _map: Map<T, T>;
+  var _map: Map<T,T>;
   
 	public static function toSet<T>(i: Iterable<T>) {
     return stx.ds.Set.create().addAll(i);
@@ -67,7 +67,7 @@ class Set<T> implements Collection<Set<T>, T> {
   }
 
   private function new(map: Map<T, T>) {
-    _map = map;
+    _map = cast map;
   }
   
   public function contains(e: T): Bool {
@@ -117,7 +117,7 @@ class Set<T> implements Collection<Set<T>, T> {
   }
   
   public function iterator(): Iterator<T> {
-    return FoldableExtensions.iterator(this);
+    return Foldables.iterator(this);
   } 
           
   public function equals(other : Set<T>) {
@@ -138,23 +138,23 @@ class Set<T> implements Collection<Set<T>, T> {
   } 
   
   public function withOrderFunction(order : OrderFunction<T>) {
-    var m : FriendMap<T> = _map;
-    return create(order, m._keyEqual, m._keyHash, m._keyShow).addAll(this);
+    var m : FriendMap<T> = cast _map;
+    return create(order, m.keyEqual, m.keyHash, m.keyShow).addAll(this);
   }
   
   public function withEqualFunction(equal : EqualFunction<T>) {
-    var m : FriendMap<T> = _map;
-    return create(m._keyOrder, equal, m._keyHash, m._keyShow).addAll(this);
+    var m : FriendMap<T> = cast _map;
+    return create(m.keyOrder, equal, m.keyHash, m.keyShow).addAll(this);
   }
   
   public function withHashFunction(hash : HashFunction<T>) {
-    var m : FriendMap<T> = _map;
-    return create(m._keyOrder, m._keyEqual, hash, m._keyShow).addAll(this);
+    var m : FriendMap<T> = cast _map;
+    return create(m.keyOrder, m.keyEqual, hash, m.keyShow).addAll(this);
   }
   
   public function withShowFunction(show : ShowFunction<T>) { 
-    var m : FriendMap<T> = _map;
-    return create(m._keyOrder, m._keyEqual, m._keyHash, show).addAll(this);
+    var m : FriendMap<T> = cast _map;
+    return create(m.keyOrder, m.keyEqual, m.keyHash, show).addAll(this);
   }
   
   /**
@@ -186,8 +186,8 @@ class Set<T> implements Collection<Set<T>, T> {
 }     
 
 private typedef FriendMap<K> = {
-  private var _keyEqual  : EqualFunction<K>;
-  private var _keyOrder  : OrderFunction<K>;
-  private var _keyHash : HashFunction<K>;
-  private var _keyShow   : ShowFunction<K>;
+  private var keyEqual  : EqualFunction<K>;
+  private var keyOrder  : OrderFunction<K>;
+  private var keyHash : HashFunction<K>;
+  private var keyShow   : ShowFunction<K>;
 }

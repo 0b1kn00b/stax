@@ -16,7 +16,7 @@
 package stx.reactive;
 
 import stx.Prelude;
-using SCore;
+using stx.Prelude;
 
 import stx.reactive.Reactive;
 import stx.ds.Collection;
@@ -26,7 +26,7 @@ using stx.Iterables;
 using stx.Functions;
 
 
-using stx.functional.FoldableExtensions;
+using stx.functional.Foldables;
 
 class Streams {
     private function new() { }
@@ -269,7 +269,7 @@ class Streams {
     static public function map<A,B>(s:Stream<A>,fn:A->B){
       return s.map(fn);
     }
-    static public function mapLeft<A,B,C>(s:Stream<Either<A,B>>,fn : A->C):Stream<Either<C,B>>{
+    static public function mapL<A,B,C>(s:Stream<Either<A,B>>,fn : A->C):Stream<Either<C,B>>{
       return 
         s.map(
           function(e){
@@ -281,7 +281,7 @@ class Streams {
           }
         );
     }
-    static public function mapRight<A,B,C>(s:Stream<Either<A,B>>,fn : B->C):Stream<Either<A,C>>{
+    static public function mapR<A,B,C>(s:Stream<Either<A,B>>,fn : B->C):Stream<Either<A,C>>{
       return 
         s.map(
           function(e){

@@ -1,9 +1,5 @@
 package stx;
 
-/**
- * ...
- * @author 0b1kn00b
- */
 using stx.Maths;
 using stx.Options;
 

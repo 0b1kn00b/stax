@@ -8,7 +8,7 @@ using Type;
 using Reflect;
 
 import stx.Prelude;
-using SCore;
+using stx.Prelude;
 
 using stx.Maths;
 import stx.Tuples;

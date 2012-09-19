@@ -1,9 +1,5 @@
 package stx;
 
-/**
- * ...
- * @author 0b1kn00b
- */
 import stx.Prelude;
 using stx.Tuples;
 
@@ -79,7 +75,7 @@ class Eithers {
   /**
     Transforms the value of an Either if it is Left.
   */
-  static public function mapLeft<A, B, C>(e: Either<A, B>, f: A -> C): Either<C, B> {
+  static public function mapL<A, B, C>(e: Either<A, B>, f: A -> C): Either<C, B> {
     return switch (e) {
       case Left(v): Left(f(v));
       case Right(v): Right(v);
@@ -97,7 +93,7 @@ class Eithers {
   /**
     Transforms the value of an Either if it is Right.
   */
-  static public function mapRight<A, B, D>(e: Either<A, B>, f: B -> D): Either<A, D> {
+  static public function mapR<A, B, D>(e: Either<A, B>, f: B -> D): Either<A, D> {
     return switch (e) {
       case Left(v): Left(v);
       case Right(v): Right(f(v));
@@ -151,21 +147,5 @@ class Eithers {
         case Right(v2): Right(bc(v1, v2));
       }
     }
-  }
-  static public function toTuple<A,B>(e:Either<A,B>):Tuple2<A,B>{
-    return 
-      switch(e){
-        case Left(v)  : Tuples.t2(v,null);
-        case Right(v) : Tuples.t2(null,v);
-        default       : throw 'Either is neither Left not Right';null;
-      };
-  }
-  static public function toTupleO<A,B>(e:Either<A,B>):Tuple2<Option<A>,Option<B>>{
-    return 
-      switch(e){
-        case Left(v)  : Tuples.t2(Some(v),None);
-        case Right(v) : Tuples.t2(None,Some(v));
-        default       : throw 'Either is neither Left not Right';
-      };
   }
 }
