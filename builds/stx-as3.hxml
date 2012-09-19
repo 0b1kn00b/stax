@@ -1,0 +1,5 @@
+-cp ../src/main/haxe
+-lib hxevents
+-as3 ../src/main/avm2/
+-main AllClasses.hx
+

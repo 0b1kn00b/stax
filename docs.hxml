@@ -1,4 +1,0 @@
--cp src/main/haxe
--js bin/test.js
--xml docs.xml
--main AllClasses

@@ -1,0 +1,5 @@
+-cp ../src/main/haxe
+-js ../bin/test.js
+-lib hxevents
+-xml ../docs.xml
+-main AllClasses

@@ -1,6 +1,6 @@
 # @tm-preview                          
--cp ./src/main/haxe/
--cp ./src/test/haxe/
+-cp ../src/main/haxe/
+-cp ../src/test/haxe/
+-php ../bin
 -lib hxevents
--neko bin/test.n
 -main StaxTestSuite

@@ -1,0 +1,5 @@
+-cp ../src/main/haxe
+-lib hxevents
+-js ../src/main/js/stax.js
+-main AllClasses.hx
+

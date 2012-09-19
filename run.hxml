@@ -1,5 +1,0 @@
--neko run.n
--main Run
--cp 	tools
--lib event
--cp src/main/haxe
