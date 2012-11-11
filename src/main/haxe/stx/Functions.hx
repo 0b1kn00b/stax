@@ -22,16 +22,19 @@ class CodeBlocks {
   /**
    Applies a Thunk and returns Either an error or it's result
   */
-  public static function catching<A,B>(c:Thunk<A>):Either<Error,A>{
-    var o = null;
-    try{
-      o = Right(c());
-    }catch(e:Error){
-      o = Left(e);
-    }catch(e:Dynamic){
-      o = Left(new Error(e));
-    }
-    return o;
+  public static function catching<A,B>(c:Thunk<A>):Thunk<Either<Error,A>>{
+    return 
+      function(){
+        var o = null;
+          try{
+            o = Right(c());
+          }catch(e:Error){
+            o = Left(e);
+          }catch(e:Dynamic){
+            o = Left(new Error(e));
+          }
+        return o;
+      }
   }
   /**
     Compare function identity
@@ -41,6 +44,9 @@ class CodeBlocks {
   }
 }	
 class Functions0 {
+  static public function apply<A>(f:Void->A){
+    return f();
+  }
 	/**
 	 Takes a function that returns a result, and produces one that ignores that result.
 	 */
@@ -128,96 +134,94 @@ class Functions0 {
     
     after(state);
     
-    return result;
-  }
-  /**
-	  Produces a function that calls 'f', ignoring the result.
-	  @param f
-	  @return 
-   */
-  public static function toEffect<T>(f: Function0<T>): Void -> Void {
+    return result;   
+  }   
+  /**     
+    Produces a function that calls 'f', ignoring the result.     
+    @param f     
+    @return     
+  */   
+  public static function toEffect<T>(f: Function0<T>): Void -> Void {     
     return function() {
-      f();
-    }
-  }
-  /**
-    Compares function identity.
-  */
-  public static function equals<A>(a:Thunk<A>,b:Thunk<A>){
-    return Reflect.compareMethods(a,b);
-  }
-  /**
-    Apply Thunk followed by f1.
+      f();     
+    }   
+  }   
+  /**     
+    Compares function identity.   
+  */   
+  public static function equals<A>(a:Thunk<A>,b:Thunk<A>){     
+    return Reflect.compareMethods(a,b);   
+  }   
+  /**     
+    Apply Thunk followed by f1.   
   */
   static public function andThen<A,B>(a:Thunk<A>,b:Function1<A,B>):Thunk<B>{
-    return 
+    return        
       function(){
-        return b(a());
-      }
+        return b(a());       
+      }   
   }
-}
+} 
 class Functions1 {
-  static public function defer<P,R>(f:P->R,p:P){
-    return 
-      function(){
-        return f(p);
-      }
-  }
-  /**
-    Produces a function that produces a function for each parameter in the originating function. When these
-    functions have been called, the result of the original function is produced.
-    @param f
-   */
-   public static function curry<P1, R>(f: Function1<P1, R>) {
+  static public function apply<P,R>(f:P->R,p1:P){
+    return (p1);   
+  }   
+  /**     
+    Produces a function that produces a function for each
+    parameter in the originating function. When these
+    functions have been called, the result of the original function is produced.     
+    @param f    
+  */
+  public static function curry<P1, R>(f: Function1<P1, R>) {     
     return function() {
-      return function(p1: P1) {
-        return f(p1);
+      return function(p1: P1) { 
+        return f(p1);       
       }
-    }
-  }
-	/**
-	 Produces a function that ignores any error the occurs whilst calling the input function.
-	  @param	f
-	  @return 
-	 */
-  public static function swallow<A>(f: Function1<A, Void>): Function1<A, Void> {
-    return toEffect(swallowWith(f, null));
-  }
-	/**
-	  Produces a function that ignores any error the occurs whilst calling the input function, and produces 'd' if error occurs.
-	  @param	f
-	  @return 
-	 */
-  public static function swallowWith<P1, R>(f: Function1<P1, R>, d: R): Function1<P1, R> {
-    return function(a) {
-      try {
-        return f(a);
-      }
-      catch (e: Dynamic) { }
-      return d;
-    }
-  }
-	/**
-    Produces a function that calls 'f1' and 'f2' in left to right order with the same input, and returns no result.
-    @param	f1
-    @param	f2
-	  @return The composite function.
-   */
-  public static function thenDo<P1>(f1: P1 -> Void, f2: P1 -> Void): P1 -> Void {
-    return function(p1) {
-      f1(p1);
-      f2(p1);
-    }
-  }
-	/**
-	  Produces a function that calls 'f', ignores its result, and returns the result produced by thunk.
-	  @param f
-	  @param thunk
-	 */
-  public static function returning<P1, R1, R2>(f: Function1<P1, R1>, thunk: Thunk<R2>): Function1<P1, R2> {
-    return function(p1) {
-      f(p1);
-      
+    }   
+  }   
+  /**    
+    Produces a function that ignores any error the occurs whilst
+    calling the input function.     
+    @param  f     
+    @return     
+  */   
+  public static function swallow<A>(f: Function1<A, Void>): Function1<A, Void> {     
+    return toEffect(swallowWith(f, null));   
+  }   
+  /**     
+  Produces a function that ignores
+  any error the occurs whilst calling the input function, and produces 'd' if
+  error occurs.     
+  @param  f     
+  @return     
+  */   
+  public static function swallowWith<P1, R>(f: Function1<P1, R>, d: R): Function1<P1, R> {     
+    return
+      function(a) {
+        try {
+          return f(a);       
+        }catch (e:Dynamic) {
+        }return d;     
+      }   
+  }   
+  /**     
+    Produces a function that
+    calls 'f1' and 'f2' in left to right order with the same input, and returns no
+    result.     
+    @param  f1     
+    @param  f2     
+    @return The composite function.
+  */
+  public static function thenDo<P1>(f1: P1 -> Void, f2: P1 -> Void): P1 -> Void {     
+    return function(p1) {       f1(p1);       f2(p1);     }   
+  }   
+  /**
+  Produces a function that calls 'f', ignores its result, and returns the result
+  produced by thunk.     @param f     @param thunk    
+  */   
+  public static function returning<P1, R1, R2>(f: Function1<P1, R1>, thunk: Thunk<R2>) : Function1<P1, R2> {     
+    return function(p1) {       
+      f(p1);  
       return thunk();
     }
   }
@@ -275,6 +279,9 @@ class Functions1 {
   }
 }
 class Functions2 {  
+  static public function apply<P1,P2,R>(f:P1->P2->R,p1:P1,p2:P2){
+    return f(p1,p2);
+  }
   /**
     Places parameter 1 at the back.
   */
@@ -427,6 +434,9 @@ class Functions2 {
   }
 }
 class Functions3 {
+  static public function apply<P1,P2,P3,R>(f:P1->P2->P3->R,p1:P1,p2:P2,p3:P3){
+    return f(p1,p2,p3);
+  }
   /**
     Places first parameter at the back.
   */
@@ -549,6 +559,13 @@ class Functions3 {
       return f(p1)(p2)(p3);
     }
   }
+  public static function uncurry2<P1, P2, P3, R>(f: Function1<P1, Function1<P2, Function1<P3, R>>>): Function2<P1, P2, P3 -> R> {
+    return function(p1: P1, p2: P2) {
+      return function(p3: P3){
+        return f(p1)(p2)(p3);
+      }
+    }
+  }
 	/**
 	  Produdes a function that calls 'f' with the given parameters p1....pn.
 	 */
@@ -577,6 +594,9 @@ class Functions3 {
   }
 }
 class Functions4 {  
+  static public function apply<P1,P2,P3,P4,R>(f:P1->P2->P3->P4->R,p1:P1,p2:P2,p3:P3,p4:P4){
+   return f(p1,p2,p3,p4);
+  }
   /**
     Pushes first parameter to the last
   */
@@ -747,6 +767,9 @@ class Functions4 {
   }
 }
 class Functions5 {  
+  static public function apply<P1,P2,P3,P4,P5,R>(f:P1->P2->P3->P4->P5->R,p1:P1,p2:P2,p3:P3,p4:P4,p5:P5){
+    return f(p1,p2,p3,p4,p5);
+  }
   static public function ccw<P1,P2,P3,P4,P5,R>(f:Function5<P1,P2,P3,P4,P5,R>):P2->P3->P4->P5->P1->R{
     return 
       function(p2:P2,p3:P3,p4:P4,p5:P5,p1:P1){
