@@ -186,4 +186,24 @@ class Promises{
     v.foreachR( fn.p1(null) );
     return v;
   }
+  static public function unzip<A,B,C>(tp:Tuple2<Future<Either<A,B>>,Future<Either<A,C>>>):Future<Either<A,Tuple2<B,C>>>{
+    return 
+      tp._1.flatMapR(
+        function(b:B){
+          return tp._2.mapR( Tuples.t2.p1(b) );
+        }
+      );
+  }
+}
+class PromiseActions {
+  public static function chain(a:Array<Void->Future<Either<Error,Dynamic>>>):Future<Outcome<Array<Dynamic>>>{
+    return 
+      a.foldl(
+        Promises.success([])
+      , function(init,fn){
+          return 
+            init.flatMapR(function(x) return Promises.mapR(fn(),function(y) return x.append(y)));
+        }
+    );
+  }
 }
