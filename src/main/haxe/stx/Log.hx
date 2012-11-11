@@ -77,8 +77,12 @@ class Log {
 				log.trace(v,pos);
 		}
 	}
-	public static function printer(?p:PosInfos):Dynamic->Void{
-		return haxe.Log.trace.p2(p);
+	public static function printer<A>(?p:PosInfos):Dynamic->A{
+		return 
+			function(x){
+				haxe.Log.trace(x,p);
+				return x;
+			}
 	}
 	public static function tracer(?p:PosInfos):Dynamic->Void{
 		return Log.trace.p2(p);
