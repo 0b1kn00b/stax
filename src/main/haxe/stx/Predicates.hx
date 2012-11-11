@@ -2,6 +2,7 @@ package stx;
 
 using stx.Strings;
 using stx.Functions;
+using stx.Iterables;
 
 import stx.Prelude;
 
@@ -79,6 +80,12 @@ class Predicates {
     return function(value) {
       return equal(ref, value);
     }
+  }
+  static public function isOneOf<A>(vals:Iterable<A>,?equal: EqualFunction<A>):Predicate<A>{
+    return 
+      function(x:A){
+        return vals.forAny( isEqualTo(x,equal) );
+      }
   }
   static public function isAlike(e:EnumValue):Predicate<EnumValue>{
     return Enums.alike.p1(e);
