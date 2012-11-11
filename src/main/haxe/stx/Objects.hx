@@ -60,6 +60,7 @@ class Objects {
     copyTo(src, dest, shallow);    
     return dest;
   }
+
   static public function copyExtendedWith(a: Object, b: Object, shallow: Bool = true): Object {
     var res = copy(a, shallow);
     copyTo(b, res, shallow);    
@@ -165,7 +166,13 @@ class Objects {
   static public function extractAll<T>(d: Dynamic<T>): Array<Tuple2<String, T>> {
     return Reflect.fields(d).map(function(name) return Tuples.t2(name,Reflect.field(d, name)));
   }
-  
+  static public function extractObject<A>(d:Dynamic<A>,fieldnames:Array<String>):Array<Tuple2<String, Dynamic>>{
+    return 
+      extractAll(d)
+        .filter(
+          Tuple2.first.andThen( Predicates.isOneOf(fieldnames) )
+        );
+  }
   static public function extractAllAny(d: Object): Array < Tuple2 < String, Dynamic >> {
     return extractAll(d);
   }
@@ -197,33 +204,21 @@ class Objects {
       }
     );
   }
-  static public function hasAllFields(d:Object,fields:Array<String>):Option<String>{
+  static public function hasFields(d:Object,fields:Array<String>):Bool{
+    var vals   = d.extractAll();
+    var names  = vals.map( Pair.fst() );
+
     return 
-      extractAllAny(d)
-        .foldl(
-          None,
-            function(memo,t){
-              return 
-                switch (memo) {
-                  case None     : t._2 == null ? Some(t._1) : None;
-                  case Some(v)  : Some(v);
-                }
-            }
-        );
-  }
-}
-class Untyper{
-  static public function extractInstanceFields<T>(v:T):Array<Tuple2<String,Dynamic>>{
-    var fields = Type.getInstanceFields(Type.getClass(v));
-    return 
-      fields.zip(
-        fields.map(
-          Reflect.field.p1(v)
-        )
-      ).filter(
-        function(t){
-          return !Reflect.isFunction(t._2);
+      fields.forAll(
+        function(x){
+          names.forAny( function(y) return x == y );
         }
       );
+  }
+  static public function definedFields(d:Object,fields:Array<String>):Bool{
+    var vals   = d.extractAll();
+    return 
+      extractValues(fields,null)
+      .forAll( function(x) return x != null );
   }
 }
