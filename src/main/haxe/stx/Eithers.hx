@@ -2,6 +2,8 @@ package stx;
 
 import stx.Prelude;
 using stx.Tuples;
+using stx.Eithers;
+using stx.Functions;
 
 class Eithers {
   /**
@@ -147,5 +149,35 @@ class Eithers {
         case Right(v2): Right(bc(v1, v2));
       }
     }
+  }
+  static public function unzip<A,B,C>(tp:Tuple2<Either<A,B>,Either<A,C>>):Either<A,Tuple2<B,C>>{
+    return 
+      tp._1.flatMapR(
+        function(b:B){
+          return tp._2.mapR( Tuples.t2.p1(b) );
+        }
+      );
+  }
+  static public function flattenR<A,B,C>(e:Either<A,Either<A,C>>):Either<A,C>{
+    return
+      switch (e) {
+        case Left(v)  : Left(v);
+        case Right(v) :
+          switch (v) {
+            case Left(v)  : Left(v);
+            case Right(v) : Right(v);
+          }
+      }
+  }
+  static public function flattenL<A,B,C>(e:Either<Either<C,A>,A>):Either<C,A>{
+    return
+      switch (e) {
+        case Right(v)   : Right(v);
+        case Left(v)    :
+          switch (v) {
+            case Left(v)  : Left(v);
+            case Right(v) : Right(v);
+          }
+      }
   }
 }
