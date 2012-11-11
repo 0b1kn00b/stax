@@ -70,6 +70,7 @@ enum Either<A, B> {
   Right(v: B);
 }
 typedef FailureOrSuccess<A, B> 	= Either<A, B>
+typedef Outcome<A>              = Either<Error,A>
 
 typedef OrderFunction<T>  			= Function2<T, T, Int>;
 typedef EqualFunction<T>  			= Function2<T, T, Bool>;
@@ -108,7 +109,12 @@ class Prelude{
     Function identity.
     [[1,2],[3,4]].flatMap( Prelude.identity() );//[1,2,3,4]
   */
+  @:noUsing
   static public function identity<A>(): Function1<A, A> {
+    return function(a: A) { return a; }
+  }
+  @:noUsing
+  static public function pure<A>(): Function1<A, A> {
     return function(a: A) { return a; }
   }
   static public function unfold<T, R>(initial: T, unfolder: T -> Option<Tuple2<T, R>>): Iterable<R> {
