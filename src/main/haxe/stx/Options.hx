@@ -68,7 +68,7 @@ class Options {
    /**
     Produces `o1` if it is Some, the result of `thunk` otherwise.
    */
-  public static function orElse<T>(o1: Option<T>, thunk: Thunk<Option<T>>): Option<T> {
+  static public function orElse<T>(o1: Option<T>, thunk: Thunk<Option<T>>): Option<T> {
     return switch (o1) {
       case None: thunk();
       
@@ -102,7 +102,7 @@ class Options {
 	/**
     Produces an Array of length 0 if 'o' is None, length 1 otherwise.return
    */
-  public static function toArray<T>(o: Option<T>): Array<T> {
+  static public function toArray<T>(o: Option<T>): Array<T> {
     return switch (o) {
       case None:    [];
       case Some(v): [v];
@@ -111,13 +111,13 @@ class Options {
 	/**
     Swallows 'o1' and produces 'o2'.
    */
-  public static function then<T, S>(o1: Option<T>, o2: Option<S>): Option<S> {
+  static public function then<T, S>(o1: Option<T>, o2: Option<S>): Option<S> {
     return o2;
   }
   /**
     Produces the input if predicate 'f' returns true, None otherwise.
    */
-  public static function filter<T>(o: Option<T>, f: T -> Bool): Option<T> {
+  static public function filter<T>(o: Option<T>, f: T -> Bool): Option<T> {
     return switch (o) {
       case None: None;
       case Some(v): if (f(v)) o else None;
@@ -126,7 +126,7 @@ class Options {
   /** 
     Produces an Option where ´o1´ may contain another Option.
    */
-  public static function flatten<T>(o1: Option<Option<T>>): Option<T> {
+  static public function flatten<T>(o1: Option<Option<T>>): Option<T> {
     return switch (o1) {
       case None: None;
       case Some(o2): o2;
@@ -135,7 +135,7 @@ class Options {
   /**
    Produces a Tuple2 of ´o1´ and ´o2´.
    */
-  public static function zip<T, S>(o1: Option<T>, o2: Option<S>) {
+  static public function zip<T, S>(o1: Option<T>, o2: Option<S>) {
     return switch (o1) {
       case None: None;
       case Some(v1): o2.map(callback( stx.Tuples.t2 , v1));
@@ -144,7 +144,7 @@ class Options {
   /**
     Produces the result of ´f´ if both 'o1' and 'o2' are not None.
    */
-  public static function zipWith<T, S, V>(o1: Option<T>, o2: Option<S>, f : T -> S -> V) : Option<V> {
+  static public function zipWith<T, S, V>(o1: Option<T>, o2: Option<S>, f : T -> S -> V) : Option<V> {
     return switch (o1) {
       case None: None;
       case Some(v1):
@@ -157,7 +157,7 @@ class Options {
   /**
     Produces an Either where 'o1' is on the left, or if None, the result of 'thunk' on the right.
    */
-  public static function orEither<T, S>(o1: Option<T>, thunk: Thunk<S>): Either<S, T> {
+  static public function orEither<T, S>(o1: Option<T>, thunk: Thunk<S>): Either<S, T> {
     return switch (o1) {
       case None: Eithers.toLeft(thunk());
       case Some(v): Eithers.toRight(v);
@@ -166,7 +166,7 @@ class Options {
   /**
     Produces an Either where 'o1' is on the left, or if None, 'c'.
    */
-  public static function orEitherC<T, S>(o1: Option<T>, c: S): Either<S, T> {
+  static public function orEitherC<T, S>(o1: Option<T>, c: S): Either<S, T> {
     return Options.orEither(o1, c.toThunk());
   }
 } 
