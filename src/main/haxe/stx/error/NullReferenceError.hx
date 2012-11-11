@@ -6,9 +6,11 @@ package stx.error;
  */
 import stx.Error;			using stx.Error;
 
+using Std;
+
 class NullReferenceError extends Error {
 
 	public function new(fieldname: String, ?pos) {
-		super( [fieldname].printf(' "${0}" is null') , pos );
+		super( "'$fieldname' is null.".format() , pos );
 	}
 }
