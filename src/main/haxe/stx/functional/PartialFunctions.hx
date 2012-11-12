@@ -60,20 +60,20 @@ private class PartialFunction1Impl<A, Z> implements PartialFunction1<A, Z> {
     ]));
   }
   
-    public function call(a: A): Z {
-      for (d in _def) {
-        if (d._1(a)) return d._2(a);
-      }
-      
-      return Prelude.error("Function undefined at " + a);
+  public function call(a: A): Z {
+    for (d in _def) {
+      if (d._1(a)) return d._2(a);
     }
     
-    public function toFunction(): A -> Option<Z> {
-    var self = this;
+    return Prelude.error("Function undefined at " + a);
+  }
     
-    return function(a) {
-      return if (self.isDefinedAt(a)) Some(self.call(a));
-             else None;
+  public function toFunction(): A -> Option<Z> {
+  var self = this;
+  
+  return function(a) {
+    return if (self.isDefinedAt(a)) Some(self.call(a));
+           else None;
     }
   }
 }
