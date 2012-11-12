@@ -92,7 +92,7 @@ class ReactiveTester extends TestCase {
 */
 
     public function testForEach():Void {
-        var stream: Stream<Int> = Streams.identity();
+        var stream: Stream<Int> = Streams.pure();
         var self = this;
         
         var count = 0;
@@ -107,7 +107,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testEach():Void {
-        var stream: Stream<Int> = Streams.identity();
+        var stream: Stream<Int> = Streams.pure();
         var self = this;
         
         var count = 0;
@@ -135,7 +135,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testStreamConstant():Void {
-        var stream:  Stream<Int> = Streams.identity();
+        var stream:  Stream<Int> = Streams.pure();
 
         var constant = stream.constant(3).toArray();
         for (i in 0...3) {
@@ -146,9 +146,9 @@ class ReactiveTester extends TestCase {
     }
     
     public function testBind():Void {
-        var stream: Stream<Int> = Streams.identity();
+        var stream: Stream<Int> = Streams.pure();
 
-        var boundStreams: Array<Stream<Int>> = [Streams.identity(), Streams.identity(), Streams.identity()];
+        var boundStreams: Array<Stream<Int>> = [Streams.pure(), Streams.pure(), Streams.pure()];
 
         var binded = stream.bind(function(x) { 
             return switch(x) { 
@@ -300,7 +300,7 @@ class ReactiveTester extends TestCase {
     public function testCalm():Void {
         setupTimingTest();
         
-        var stream = Streams.identity();
+        var stream = Streams.pure();
         
         var calmed = stream.calm(10).toArray();
         
@@ -326,7 +326,7 @@ class ReactiveTester extends TestCase {
     public function testCalmS():Void {
         setupTimingTest();
         
-        var stream = Streams.identity();
+        var stream = Streams.pure();
         
         var b = Signals.constant(10);
         
@@ -354,7 +354,7 @@ class ReactiveTester extends TestCase {
     public function testBlindS():Void {
         setupTimingTest();
         
-        var stream = Streams.identity();
+        var stream = Streams.pure();
         
         var b = Signals.constant(4);
         
@@ -379,7 +379,7 @@ class ReactiveTester extends TestCase {
     public function testBlind():Void {
         setupTimingTest();
         
-        var stream = Streams.identity();
+        var stream = Streams.pure();
         
         var blinded = stream.blind(4).toArray();
         
@@ -400,7 +400,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testMap():Void {
-        var stream: Stream<Int> =  Streams.identity();
+        var stream: Stream<Int> =  Streams.pure();
         
         var arr1: Iterable<Int> =       [1, 2, 3, 4, 5, 6, 7];
         
@@ -410,9 +410,9 @@ class ReactiveTester extends TestCase {
     }
     
     public function testFlatMap():Void {
-        var stream: Stream<Int> = Streams.identity();
+        var stream: Stream<Int> = Streams.pure();
 
-        var mappedStreams: Array<Stream<Int>> = [Streams.identity(), Streams.identity(), Streams.identity()];
+        var mappedStreams: Array<Stream<Int>> = [Streams.pure(), Streams.pure(), Streams.pure()];
 
         var flattened = stream.flatMap(function(x) { 
             return switch(x) { 
@@ -440,7 +440,7 @@ class ReactiveTester extends TestCase {
 
     public function testScanl():Void {
         var stream =    stream();
-        var stream2 =   Streams.identity();
+        var stream2 =   Streams.pure();
         
         var arr1: Iterable<Int> = [1, 2, 3];
         
@@ -454,7 +454,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testScanlP():Void {
-        var stream: Stream<Int> = Streams.identity();
+        var stream: Stream<Int> = Streams.pure();
         
         var arr1: Iterable<Int> = [1, 2, 3, 4, 5, 6, 7];
         
@@ -464,7 +464,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testTake():Void {
-        var stream: Stream<Int> = Streams.identity();
+        var stream: Stream<Int> = Streams.pure();
         
         var arr1: Iterable<Int> = [1, 2, 3, 4, 5, 6, 7];
         var arr2: Iterable<Int> = [];
@@ -476,7 +476,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testTakeWhile():Void {
-        var stream: Stream<Int> = Streams.identity();
+        var stream: Stream<Int> = Streams.pure();
         
         var arr1: Iterable<Int> = [1, 2, 3, 4, 5, 6, 7];
         var arr2: Iterable<Int> = [];
@@ -492,7 +492,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testShift():Void {
-        var stream: Stream<Int> = Streams.identity();
+        var stream: Stream<Int> = Streams.pure();
         
         var arr1: Iterable<Int> = [1, 2, 3, 4, 5, 6, 7];
         
@@ -500,7 +500,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testShiftWhile():Void {
-        var stream: Stream<Int> =  Streams.identity();
+        var stream: Stream<Int> =  Streams.pure();
         
         var arr1: Iterable<Int> =       [1, 2, 3, 4, 5, 6, 7];
         
@@ -510,7 +510,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testShiftWith():Void {
-        var stream: Stream<Int> =  Streams.identity();
+        var stream: Stream<Int> =  Streams.pure();
         
         var arr1: Iterable<Int> =       [1, 2, 3, 4, 5, 6, 7];
         var arr2: Iterable<Int> =       [9, 8];
@@ -519,7 +519,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testDrop():Void {
-        var stream: Stream<Int> =  Streams.identity();
+        var stream: Stream<Int> =  Streams.pure();
         
         var arr1: Iterable<Int> =       [1, 2, 3, 4, 5, 6, 7];
         
@@ -528,7 +528,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testDropWhile():Void {
-        var stream: Stream<Int> =  Streams.identity();
+        var stream: Stream<Int> =  Streams.pure();
         
         var arr1: Iterable<Int> =       [1, 2, 3, 4, 5, 6, 7];
         
@@ -539,7 +539,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testPartition():Void {
-        var stream: Stream<Int> = Streams.identity();
+        var stream: Stream<Int> = Streams.pure();
         
         var arr1: Iterable<Int> =   [1, 2, 3, 4, 5, 6, 7];
         var greaterThanFive =       function(v) { return v > 5; }
@@ -552,7 +552,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testPartitionWhile():Void {
-        var stream: Stream<Int> = Streams.identity();
+        var stream: Stream<Int> = Streams.pure();
         
         var arr1: Iterable<Int> = [1, 2, 3, 4, 5, 6, 7];
         
@@ -573,7 +573,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testFilter():Void {
-        var stream: Stream<Int> =  Streams.identity();
+        var stream: Stream<Int> =  Streams.pure();
         
         var arr1: Iterable<Int> =       [1, 2, 3, 4, 5, 6, 7];
         var arr0: Iterable<Int> =       [];
@@ -585,7 +585,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testFilterWhile():Void {
-        var stream: Stream<Int> =  Streams.identity();
+        var stream: Stream<Int> =  Streams.pure();
         var arr1: Iterable<Int> =       [1, 2, 3, 4, 5, 6, 7];
         var arr0: Iterable<Int> =       [];
         
@@ -601,7 +601,7 @@ class ReactiveTester extends TestCase {
 
    
     public function testZip():Void {
-        var stream: Stream<Int> = Streams.identity();
+        var stream: Stream<Int> = Streams.pure();
         
         var arr0: Iterable<Int> = [];
         var arr1: Iterable<Int> = [1, 2, 3, 4, 5, 6, 7];
@@ -613,7 +613,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testZip3():Void {
-        var stream: Stream<Int> = Streams.identity();
+        var stream: Stream<Int> = Streams.pure();
         
         var arr0: Iterable<Int> = [];
         var arr1: Iterable<Int> = [1, 2, 3, 4, 5, 6, 7];
@@ -625,7 +625,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testZip4():Void {
-        var stream: Stream<Int> = Streams.identity();
+        var stream: Stream<Int> = Streams.pure();
         
         var stream2 = stream.map(function(v) { return v + 1; });
         var stream3 = stream.map(function(v) { return v * 2; });
@@ -656,7 +656,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testZip5():Void {
-        var stream: Stream<Int> = Streams.identity();
+        var stream: Stream<Int> = Streams.pure();
         
         var stream2 = stream.map(function(v) { return v + 1; });
         var stream3 = stream.map(function(v) { return v * 2; });
@@ -688,7 +688,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testGroup():Void {
-        var stream: Stream<Int> = Streams.identity();
+        var stream: Stream<Int> = Streams.pure();
         
         var arr0: Array<Int> = [];
         var arr1: Array<Int> = [1, 2, 2, 3, 4, 5, 5, 5, 6, 7];
@@ -713,7 +713,7 @@ class ReactiveTester extends TestCase {
     }
 
     public function testGroupBy():Void {
-        var stream: Stream<String> = Streams.identity();
+        var stream: Stream<String> = Streams.pure();
         
         var arr1: Iterable<String> = ["foo", "bar", "blat", "bit", "a", "chip", "chop", "dog"];
         var cmp = function(v1, v2) { return v1.length == v2.length; };
@@ -736,9 +736,9 @@ class ReactiveTester extends TestCase {
 
 
     public function testMerge():Void {
-        var stream:  Stream<Int> = Streams.identity();
-        var stream1: Stream<Int> = Streams.identity();
-        var stream2: Stream<Int> = Streams.identity();
+        var stream:  Stream<Int> = Streams.pure();
+        var stream1: Stream<Int> = Streams.pure();
+        var stream2: Stream<Int> = Streams.pure();
         
         var arr0: Iterable<Int> = [];
         var arr1: Iterable<Int> = [1, 2, 3, 4, 5, 6, 7];
@@ -763,8 +763,8 @@ class ReactiveTester extends TestCase {
     }
     
     public function testUniqueSteps():Void {
-        var stream: Stream<Int> =  Streams.identity();
-        var stream2: Stream<Int> = Streams.identity();
+        var stream: Stream<Int> =  Streams.pure();
+        var stream2: Stream<Int> = Streams.pure();
         
         var arrT: Array<Int> =  [4, 5, 6];
         var arrT2: Array<Int> = [4, 5, 6];
@@ -780,7 +780,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testUniqueEvents():Void {
-        var stream: Stream<Int> = Streams.identity();
+        var stream: Stream<Int> = Streams.pure();
         var arr: Array<Int> = [4, 5, 6, 7];
         
         var streams = stream.merge(stream.map(function(v) { return v; })).merge(stream.map(function(t) { return t + 4; }));
@@ -793,8 +793,8 @@ class ReactiveTester extends TestCase {
     }
     
     public function testUnique():Void {
-        var stream:     Stream<Int> = Streams.identity();
-        var stream2:    Stream<Int> = Streams.identity();
+        var stream:     Stream<Int> = Streams.pure();
+        var stream2:    Stream<Int> = Streams.pure();
         
         var arr:  Array<Int> = [4, 5, 6, 7];
         var arr2: Array<Int> = [1, 2, 3, 4];
@@ -836,7 +836,7 @@ class ReactiveTester extends TestCase {
     public function testSnapshot():Void {
         var stream = stream();
         
-        var mySignal = Streams.identity().startsWith(0);
+        var mySignal = Streams.pure().startsWith(0);
         mySignal.changes().sendEvent(4);
         
         var snapshot = stream.snapshot(mySignal).toArray();
@@ -940,8 +940,8 @@ class ReactiveTester extends TestCase {
 */
     
     public function testStreamsCreate():Void {
-        var stream1:  Stream<Int> = Streams.identity();
-        var stream2:  Stream<Int> = Streams.identity();
+        var stream1:  Stream<Int> = Streams.pure();
+        var stream2:  Stream<Int> = Streams.pure();
         
         var streams:Iterable<Stream<Int>> = [stream1, stream2];
         
@@ -958,7 +958,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testStreamsIdentity():Void {
-        var stream:  Stream<Int> = Streams.identity();
+        var stream:  Stream<Int> = Streams.pure();
         
         var pumped = stream.toArray();
         
@@ -978,9 +978,9 @@ class ReactiveTester extends TestCase {
     }
     
     public function testStreamsMerge():Void {
-        var stream1:  Stream<Int> = Streams.identity();
-        var stream2:  Stream<Int> = Streams.identity();
-        var stream3:  Stream<Int> = Streams.identity();
+        var stream1:  Stream<Int> = Streams.pure();
+        var stream2:  Stream<Int> = Streams.pure();
+        var stream3:  Stream<Int> = Streams.pure();
         
         var mergeArray:Iterable<Stream<Int>> = [stream1, stream2, stream3];
         
@@ -1033,7 +1033,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testStreamsConstant():Void {
-        var stream1 = Streams.identity();
+        var stream1 = Streams.pure();
         var stream2 = stream1.map(function(v) { return v * 2; });
         
         var mergeArray:Iterable<Stream<Int>> = [stream1, stream2];
@@ -1050,7 +1050,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testStreamsCond():Void {
-        var boolStream: Stream<Bool> =      Streams.identity();
+        var boolStream: Stream<Bool> =      Streams.pure();
         var ifTrueStream: Stream<String> =  boolStream.map(function(v) { return "Is True"; } );
         
         var conditions: Iterable<Tuple2<Stream<Bool>, Stream<String>>> = [Tuple2.from(boolStream, ifTrueStream)];
@@ -1094,7 +1094,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testStreamZipN():Void {
-        var stream1 = Streams.identity();
+        var stream1 = Streams.pure();
         var stream2 = stream1.map(function(v) { return v + 1; });
         
         var iterables: Iterable<Stream<Int>> = [stream1, stream2];
@@ -1245,7 +1245,7 @@ class ReactiveTester extends TestCase {
     public function testStreamStreamFlatten():Void {
         var stream =  stream();
         
-        var iterables: Stream<Stream<Bool>> = Streams.identity();
+        var iterables: Stream<Stream<Bool>> = Streams.pure();
         var boolArr =  [true, true, true];
         
         var flattened = StreamStream.flatten(iterables).toArray();
@@ -1266,7 +1266,7 @@ class ReactiveTester extends TestCase {
     public function testStreamStreamSwitchE():Void {
         var stream = stream();
         
-        var iterables: Stream<Stream<Bool>> = Streams.identity();
+        var iterables: Stream<Stream<Bool>> = Streams.pure();
         var boolArr =  [true, true, true];
         
         var switchEed = StreamStream.switchE(iterables).toArray();
@@ -1287,7 +1287,7 @@ class ReactiveTester extends TestCase {
     public function testStreamStreamJoin():Void {
         var stream = stream();
         
-        var iterables: Stream<Stream<Bool>> = Streams.identity();
+        var iterables: Stream<Stream<Bool>> = Streams.pure();
         var boolArr =  [true, true, true];
         
         var joined = StreamStream.join(iterables).toArray();
@@ -1314,7 +1314,7 @@ class ReactiveTester extends TestCase {
     public function testSignalChanges():Void {
         var stream = stream();
         
-        var mySignal = Streams.identity().startsWith(0);
+        var mySignal = Streams.pure().startsWith(0);
         var array = mySignal.changes().toArray();
         
         mySignal.changes().sendEvent(4);
@@ -1326,7 +1326,7 @@ class ReactiveTester extends TestCase {
     public function testSignalValueNow():Void {
         var stream = stream();
         
-        var mySignal = Streams.identity().startsWith(0);
+        var mySignal = Streams.pure().startsWith(0);
         
         mySignal.changes().sendEvent(3);
         
@@ -1338,7 +1338,7 @@ class ReactiveTester extends TestCase {
         
         var mapper: Stream<Int> -> Stream<Int> = function(v: Stream<Int>) { return v.map(function(val) { return val + 1; }); };
         var signalArray = [1, 2, 3, 4, 5];
-        var mySignal = Streams.identity().startsWith(0);
+        var mySignal = Streams.pure().startsWith(0);
         
         var array = mySignal.mapC(mapper).changes().toArray();
         
@@ -1354,7 +1354,7 @@ class ReactiveTester extends TestCase {
         
         var mapper: Int -> String = function(v) { return Std.string(v) + ": Iterating"; };
         var signalArray = [1, 2, 3, 4, 5];
-        var mySignal = Streams.identity().startsWith(0);
+        var mySignal = Streams.pure().startsWith(0);
         
         var array = mySignal.map(mapper).changes().toArray();
         
@@ -1368,12 +1368,12 @@ class ReactiveTester extends TestCase {
     public function testSignalMapS():Void {
         var streamM = stream();
         
-        var stream:  Stream<Int -> String> =   Streams.identity();
+        var stream:  Stream<Int -> String> =   Streams.pure();
         
         var beFunc = stream.startsWith(function(v) { return Std.string(v); });
         
         var signalArray = [1, 2];
-        var mySignal = Streams.identity().startsWith(0);
+        var mySignal = Streams.pure().startsWith(0);
         
         var array = mySignal.mapS(beFunc).changes().toArray();
         
@@ -1470,7 +1470,7 @@ class ReactiveTester extends TestCase {
         var stream = stream();
         
         var signalArray = [0, 1, 2, 3];
-        var mySignal = Streams.identity().startsWith(0);
+        var mySignal = Streams.pure().startsWith(0);
         
         var mySignals: Array<Signal<Int>> = [mySignal, mySignal.map(function(v) { return v + 1; })];
         
@@ -1714,7 +1714,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testSignalSend(): Void {
-        var mySignal = Streams.identity().startsWith(0);
+        var mySignal = Streams.pure().startsWith(0);
         
         var signalArray = [1, 2, 3, 4, 5];
         
@@ -1732,7 +1732,7 @@ class ReactiveTester extends TestCase {
 */
     
     public function testSignalsZipN():Void {
-        var mySignal =  Streams.identity().startsWith(0);
+        var mySignal =  Streams.pure().startsWith(0);
         var mySignals = [mySignal, mySignal.map(function(v) { return v + 1; })];
         
         var signalArray = [1, 2, 3, 4, 5];
@@ -1852,7 +1852,7 @@ class ReactiveTester extends TestCase {
     
     public function testSignalBoolAnd():Void {
         var mySignal1 =  Signals.constant(true);
-        var mySignal2 =  Streams.identity().startsWith(false);
+        var mySignal2 =  Streams.pure().startsWith(false);
         
         var signals: Iterable<Signal<Bool>> = [mySignal1, mySignal2];
                 
@@ -2081,7 +2081,7 @@ class ReactiveTester extends TestCase {
     }
     
     public function testSignalFloatTimes():Void {
-        var mySignal = Streams.identity().startsWith(2.0);
+        var mySignal = Streams.pure().startsWith(2.0);
         
         var times = SignalFloat.times(mySignal, 3.7);
 
@@ -2318,7 +2318,7 @@ class ReactiveTester extends TestCase {
 
     public function testSignalSignalFlatten():Void {
         var b1 = stream().startsWith(2);
-        var signals: Signal<Signal<Int>> = Streams.identity().startsWith(b1);
+        var signals: Signal<Signal<Int>> = Streams.pure().startsWith(b1);
         
         var switchBed = SignalSignal.switchS(signals);
         
@@ -2335,7 +2335,7 @@ class ReactiveTester extends TestCase {
     
     public function testSignalSignalSwitchS():Void {
         var b1 = stream().startsWith(2);
-        var signals: Signal<Signal<Int>> = Streams.identity().startsWith(b1);
+        var signals: Signal<Signal<Int>> = Streams.pure().startsWith(b1);
         
         var switchBed = SignalSignal.switchS(signals);
         
@@ -2352,7 +2352,7 @@ class ReactiveTester extends TestCase {
     
     public function testSignalSignalJoin():Void {
         var b1 = stream().startsWith(2);
-        var signals: Signal<Signal<Int>> = Streams.identity().startsWith(b1);
+        var signals: Signal<Signal<Int>> = Streams.pure().startsWith(b1);
         
         var joined = SignalSignal.join(signals);
         
@@ -3300,7 +3300,7 @@ class ReactiveTester extends TestCase {
     }
     
     private function stream<T>(): Stream<T> {
-        return Streams.identity();
+        return Streams.pure();
     }
     
     private function setupTimingTest(): Void {

@@ -1,11 +1,18 @@
 
 using stx.Prelude;
+
 import stx.test.Runner;
 import stx.test.ui.Report;
 import stx.LogLevel;
 
+import stx.Assertion;
+
 using stx.framework.Injector;
 using stx.Log;
+
+#if type_all
+  import AllClasses;
+#end
 
 class StaxTestSuite {
   public static function main (): Void {
@@ -73,18 +80,18 @@ class StaxTestSuite {
           , new stx.MathsTest()
           , new stx.BoolsTest()
 #if dev
-          , new StaxTest()
+//          , new StaxTest()
 //, new stx.ErrorTest()
 //, new stx.reactive.ArrowsTest()
 //, new stx.StateTest()
 //, new stx.ReaderTest()
 //, new stx.reactive.StreamTest()
 //, new stx.io.log.LogTest()
-          , new stx.io.FileSystemTest()
-          , new stx.IntIterTest()
-          , new OptimiseTest()
-          , new stx.ds.ZipperTest()
-          , new stx.ds.IterateeTest()
+//, new stx.io.FileSystemTest()
+//, new stx.IntIterTest()
+//, new OptimiseTest()
+//, new stx.ds.ZipperTest()
+//, new stx.ds.IterateeTest()
 #end
         ]#if dev.filter( function(x) return Std.is(x,stx.BoolsTest) )#end;
         haxe.Log.trace = stx.Log.trace;

@@ -12,8 +12,8 @@ class StreamTest extends TestCase{
 		trace('start');
 		var as = Assert.createAsync(function(){},1200);
 
-		var s0 = Streams.identity();
-		var s1 = Streams.identity();
+		var s0 = Streams.pure();
+		var s1 = Streams.pure();
 
 		var tracer = function(y){ trace(y); }
 
