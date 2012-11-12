@@ -17,7 +17,7 @@
 
 package ;
 
-import Prelude;
+import stx.Prelude;
 import stx.Arrays;
 import stx.Bools;
 import stx.Dates;
