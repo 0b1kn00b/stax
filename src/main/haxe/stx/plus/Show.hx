@@ -1,11 +1,12 @@
 package stx.plus;
 
-using stx.Prelude;
-import stx.Tuples;							using stx.Tuples;
-
 import Type;
 import stx.Maths;
-import stx.plus.Show;				using stx.plus.Show;
+
+
+using stx.Prelude;
+using stx.Tuples;
+using stx.plus.Show;
 
 typedef ShowFunction<T>         = Function1<T, String>;
 
