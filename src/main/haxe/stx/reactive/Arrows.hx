@@ -22,12 +22,13 @@ class Viaz<I,O> implements Arrow<I,O>{
 	static public function constant<I,O>(v:O):Arrow<I,O>{
 		return new FunctionArrow( function(x:I):O {return v;});
 	}
-	static public function identity<I>():Arrow<I,I>{
+	@:noUsing
+	static public function pure<I>():Arrow<I,I>{
 		return function (x:I):I {
 			return x;
 		}.lift();
 	}
-	static public function fan<I,O>(a:Arrow<I,O>):Arrow<I,Tuple2<O,O>>{
+	static public function fan<I,O>(a:Arrow<I,O>):Arrow<I,Pair<O,O>>{
 		return 
 			a.then(
 				function(x){
@@ -43,6 +44,11 @@ class Viaz<I,O> implements Arrow<I,O>{
 	static public function runCont<I,O>(a:Arrow<I,O>,i:I):Function1<O,Void>->Void{
 		return function (cont:Function1<O,Void>) a.withInput(i, cont);
 	}
+	static public function runFuture<I,O>(a:Arrow<I,O>,i:I):Future<O>{
+		var f : Future<O> = new Future();
+		a.runCPS( i, f.deliver.p2(null).toEffect() );
+		return f;
+	}
 	static public function trace<A,B>(a:Arrow<A,B>):Arrow<A,B>{
 		var m : Function1<B,B> = function(x:B):B { haxe.Log.trace(x) ; return x;};
 		return new Then( a , new FunctionArrow( m ) );
@@ -53,7 +59,8 @@ class Viaz<I,O> implements Arrow<I,O>{
 	static public function execute<I,O>(a:Arrow<I,O>,i:I):Void{
 		run(a,i);
 	}
-	public static function apply(){
+	@:noUsing
+	public static function applyA<I,O>():Arrow<Pair<Arrow<I,O>,I>,O>{
 		return new ArrowApply();
 	}
 	static public function futureA<A>():Arrow<Future<A>,A>{
@@ -100,11 +107,11 @@ class Then< I, O, NO > implements Arrow<I, NO> {
 	static public function then<I,O,NO>(before:Arrow<I,O>, after:Arrow<O,NO>):Arrow<I,NO> { 
 		return new Then(before, after); 
 	}
-	static public function join<A,B,C>(joinl:Arrow<A,B>,joinr:Arrow<B,C>):Arrow<A,Tuple2<B,C>>{
-		return new Then( joinl , Viaz.identity().split(joinr) );
+	static public function join<A,B,C>(joinl:Arrow<A,B>,joinr:Arrow<B,C>):Arrow<A,Pair<B,C>>{
+		return new Then( joinl , Viaz.pure().split(joinr) );
 	}
-	static public function bind<A,B,C>(bindl:Arrow<A,C>,bindr:Arrow<Tuple2<A,C>,B>):Arrow<A,B>{
-		return new Then( Viaz.identity().split(bindl) , bindr );
+	static public function bind<A,B,C>(bindl:Arrow<A,C>,bindr:Arrow<Pair<A,C>,B>):Arrow<A,B>{
+		return new Then( Viaz.pure().split(bindl) , bindr );
 	}
 }
 class FunctionArrow<I,O> implements Arrow<I,O> {
@@ -113,27 +120,23 @@ class FunctionArrow<I,O> implements Arrow<I,O> {
 
 	inline public function withInput(?i : I, cont : Function1<O,Void>) : Void { cont(f(i)); }
 }
-enum RepeatV<RV, DV> {
-	Repeat(x:RV);
-	Done(x:DV);
-}
 
 class RepeatArrow <I, O > implements Arrow < I , O > {
-	var a : Arrow < I, RepeatV < I, O > > ;
-	public function new < A > (a : Arrow < I, RepeatV < I, O > > ) {
+	var a : Arrow < I, Either < I, O > > ;
+	public function new < A > (a : Arrow < I, Either < I, O > > ) {
 		this.a = a;
 	}
 	inline public function withInput(?i : I, cont : Function1<O,Void>) : Void {
 		var thiz = this;
-		function withRes(res : RepeatV < I, O > ) {
+		function withRes(res : Either < I, O > ) {
 			switch (res) {
-				case Repeat(rv): thiz.a.withInput(rv, cast withRes#if (flash || js).trampoline()#end); //  break this recursion!
-				case Done(dv): cont(dv);
+				case Left(rv): thiz.a.withInput(rv, cast withRes#if (flash || js).trampoline()#end); //  break this recursion!
+				case Right(dv): cont(dv);
 			}
 		}
 		a.withInput(i, withRes);
 	}
-	static public function repeat < I, O > (a:Arrow < I, RepeatV < I, O >> ):Arrow<I,O>{
+	static public function repeat < I, O > (a:Arrow < I, Either < I, O >> ):Arrow<I,O>{
 		return new RepeatArrow(a);
 	}
 }
@@ -157,10 +160,10 @@ class MapArrow <I,O> implements Arrow<Iterable<I>,Iterable<O>>{
 		 		function(x){
 		 			return 
 			 			switch (x) {
-			 				case None 		: Done(o);
+			 				case None 		: Right(o);
 			 				case Some(v) 	: 
 			 					o.push(v);
-			 					Repeat( iter );
+			 					Left( iter );
 			 			}
 		 		}.lift()
 		 	 )
@@ -178,7 +181,7 @@ class OptionArrow<I,O> implements Arrow<Option<I>,Option<O>>{
 	}
 	public function withInput(?i:Option<I>,cont:Function1<Option<O>,Void>){
 		switch (i) {
-			case Some(v) : Viaz.apply().withInput( a.entuple(v) , Option.Some.andThen(cont));
+			case Some(v) : Viaz.applyA().withInput( a.entuple(v) , Option.Some.andThen(cont));
 			case None 	 : cont(None);
 		}
 	}
@@ -203,6 +206,7 @@ class DelayArrow<I,O> implements Arrow<I,O> {
 	static public function delay<I,O>(a:Arrow<I,O>,delay:Int):Arrow<I,O>{return new DelayArrow(a,delay);}
 }
 #end
+#if hxevents
 class EventArrow<T> implements Arrow<hxevents.Dispatcher<T>,T>{
 	public function new(){
 
@@ -221,7 +225,8 @@ class EventArrow<T> implements Arrow<hxevents.Dispatcher<T>,T>{
 		return new EventArrow(); 
 	}
 }
-class Pair<A,B,C,D> implements Arrow<Tuple2<A,C>,Tuple2<B,D>>{
+#end
+class PairArrow<A,B,C,D> implements Arrow<Pair<A,C>,Pair<B,D>>{
 	public var l 		: Arrow<A,B>;
 	public var r 		: Arrow<C,D>;
 
@@ -229,7 +234,7 @@ class Pair<A,B,C,D> implements Arrow<Tuple2<A,C>,Tuple2<B,D>>{
 		this.l = l;
 		this.r = r;
 	}
-	public function withInput(?i : Tuple2<A,C>, cont : Function1<Tuple2<B,D>,Void> ) : Void{
+	public function withInput(?i : Pair<A,C>, cont : Function1<Pair<B,D>,Void> ) : Void{
 
 		var ol : Option<B> 	= null;
 		var or : Option<D> 	= null;
@@ -257,23 +262,23 @@ class Pair<A,B,C,D> implements Arrow<Tuple2<A,C>,Tuple2<B,D>>{
 		l.withInput( i._1 , hl );
 		r.withInput( i._2 , hr );
 	}
-	static public function pair<A,B,C,D>(pair_:Arrow<A,B>,_pair:Arrow<C,D>):Arrow<Tuple2<A,C>,Tuple2<B,D>>{ 
-		return new Pair(pair_,_pair); 
+	static public function pair<A,B,C,D>(pair_:Arrow<A,B>,_pair:Arrow<C,D>):Arrow<Pair<A,C>,Pair<B,D>>{ 
+		return new PairArrow(pair_,_pair); 
 	}
-	static public function first<I,O,I2>(first:Arrow<I,O>):Arrow<Tuple2<I,I2>,Tuple2<O,I2>>{
-		return new Pair(  first , Viaz.identity() );
+	static public function first<I,O,I2>(first:Arrow<I,O>):Arrow<Pair<I,I2>,Pair<O,I2>>{
+		return new PairArrow(  first , Viaz.pure() );
 	}
-	static public function second<I,O,I2>(second:Arrow<I,O>):Arrow<Tuple2<I2,I>,Tuple2<I2,O>>{
-		return new Pair( Viaz.identity() , second );
+	static public function second<I,O,I2>(second:Arrow<I,O>):Arrow<Pair<I2,I>,Pair<I2,O>>{
+		return new PairArrow( Viaz.pure() , second );
 	}
 }
-class Cleave<A,B> implements Arrow<A,Tuple2<B,B>>{
+class Cleave<A,B> implements Arrow<A,Pair<B,B>>{
 	var a : Arrow<A,B>;
 	public function new(a){
 		this.a = a;
 	}
 	//public function withInput(?i : I, cont : Function1<O,Void> ) : Void;
-	public function withInput(?i : A, cont : Function1<Tuple2<B,B>,Void> ) : Void{
+	public function withInput(?i : A, cont : Function1<Pair<B,B>,Void> ) : Void{
 		//Debug("Split: " + i).log();
 		a.withInput( i , 
 			function(o){
@@ -281,13 +286,13 @@ class Cleave<A,B> implements Arrow<A,Tuple2<B,B>>{
 			}
 		);
 	}
-	static public function cleave<A,B>(a:Arrow<A,B>):Arrow<A,Tuple2<B,B>> {
+	static public function cleave<A,B>(a:Arrow<A,B>):Arrow<A,Pair<B,B>> {
 		return new Cleave(a);
 	}
 }
 class Merge<A,B,C,D> implements Arrow<A,D>{
-	var a : Arrow<A,Tuple2<B,C>>;
-	var b : Arrow<Tuple2<B,C>,D>;
+	var a : Arrow<A,Pair<B,C>>;
+	var b : Arrow<Pair<B,C>,D>;
 
 	public function new(a,b){
 		this.a = a;
@@ -296,19 +301,19 @@ class Merge<A,B,C,D> implements Arrow<A,D>{
 	public function withInput(?i:A,cont:Function1<D,Void>){
 		return a.then(b).withInput( i , cont );
 	}
-	public static function merge<A,B,C,D>(a:Arrow<A,Tuple2<B,C>>,b:Arrow<Tuple2<B,C>,D>):Arrow<A,D>{
+	public static function merge<A,B,C,D>(a:Arrow<A,Pair<B,C>>,b:Arrow<Pair<B,C>,D>):Arrow<A,D>{
 		return new Merge(a,b);
 	}
 }
-class Split<A,B,C> implements Arrow<A,Tuple2<B,C>>{
-	var a : Pair<A,B,A,C>;
+class Split<A,B,C> implements Arrow<A,Pair<B,C>>{
+	var a : PairArrow<A,B,A,C>;
 	public function new(l,r){
-		this.a = new Pair(l,r);
+		this.a = new PairArrow(l,r);
 	}
-	public function withInput(?i : A, cont : Function1< Tuple2<B,C> , Void > ) : Void{
+	public function withInput(?i : A, cont : Function1< Pair<B,C> , Void > ) : Void{
 		a.withInput( Tuples.t2(i,i) , cont);
 	}
-	static public function split<A,B,C>(split_:Arrow<A,B>,_split:Arrow<A,C>):Arrow<A,Tuple2<B,C>> { 
+	static public function split<A,B,C>(split_:Arrow<A,B>,_split:Arrow<A,C>):Arrow<A,Pair<B,C>> { 
 		return new Split(split_,_split); 
 	}
 }
@@ -351,6 +356,9 @@ class LeftChoice<B,C,D> implements Arrow<Either<B,D>,Either<C,D>>{
 	public static function left<B,C,D>(arr:Arrow<B,C>):Arrow<Either<B,D>,Either<C,D>>{
 		return new LeftChoice(arr);
 	}
+/*	public static function lout<A,B,C,D>(arr:Arrow<A,Either<C,D>>):Arrow<Either<A,B>,Either<C,D>>{
+		return new LeftChoice(arr).then(Eithers.flattenL.lift());
+	}*/
 }
 class RightChoice<B,C,D> implements Arrow<Either<D,B>,Either<D,C>>{
 	private var a : Arrow<B,C>;
@@ -372,12 +380,15 @@ class RightChoice<B,C,D> implements Arrow<Either<D,B>,Either<D,C>>{
 	public static function right<B,C,D>(arr:Arrow<B,C>):Arrow<Either<D,B>,Either<D,C>>{
 		return new RightChoice(arr);
 	}
+	public static function rout<A,B,C,D>(arr:Arrow<B,Either<C,D>>):Arrow<Either<C,B>,Either<C,D>>{
+		return new RightChoice(arr).then(Eithers.flattenR.lift());
+	}
 }
-class ArrowApply<I,O> implements Arrow<Tuple2<Arrow<I,O>,I>,O>{
+class ArrowApply<I,O> implements Arrow<Pair<Arrow<I,O>,I>,O>{
 
 	public function new(){
 	}
-	public function withInput(?i:Tuple2<Arrow<I,O>,I>,cont : Function1<O,Void>){
+	public function withInput(?i:Pair<Arrow<I,O>,I>,cont : Function1<O,Void>){
 		i._1.withInput(
 			i._2,
 				function(x){
@@ -392,7 +403,7 @@ import haxe.io.Input;
 
 class ProcessArrow {
 
-	public static var process : Arrow<Array<String>,Tuple2<Input,Input>>
+	public static var process : Arrow<Array<String>,Pair<Input,Input>>
 		=
 			function(a:Array<String>){
 				var cmd = a.shift();
@@ -409,35 +420,63 @@ class FutureArrow<O> implements Arrow<Future<O>,O>{
 	public function withInput(?i:Future<O>,cont:Function<O,Void>){
 		i.foreach( cont );
 	}
-}
-/*
-class StateArrow<S,A,B> implements Arrow<A,B>{
-	
-	var arrow : Tuple2<A,S>,Tuple2<B,S>;
-	
-	public static function new(a){
-		this.arrow = a;
+	static public function project<I,O>(fn:I->Future<O>):Arrow<I,O>{
+		return fn.lift().then( Viaz.futureA() );
 	}
-	static public function change<S,B,C>(a1:,f: S -> B -> S) : StateArrow<A,B> { 
-		
+}
+class StateArrows{
+		static public function write<S,A,B>(a:Arrow<Pair<A,S>,Pair<B,S>>,a1:Arrow<Pair<B,S>,S>):Arrow<Pair<A,S>,Pair<B,S>>{
+		return
+			a.join( a1 )
+			.then(
+				function(t:Pair<Pair<B,S>,S>){
+					return Tuples.t2(t._1._1,t._2);
+				}.lift()
+			);
+	}
+}
+class StateArrowImpl<S,A,B> implements Arrow<Pair<A,S>,Pair<B,S>>{
+
+	/*static public function thenUsing<A,B,C,D>(a:Arrow<A,B>,a2:Arrow<C,D>,f:B->Pair<C,B>):Arrow<A,Pair<D,B>>{
+
 	}
 	public function composeWith<C>(sa:StateArrow<S,B,C>){
 		return 
 				new StateArrow(
-						function(p1:Tuple2<A,S>){
+						function(p1:Pair<A,S>){
 							return this.then(sa);
-						}
-				)
+						}.lift()
+				);
+	}
+	*/
+	var arrow : Arrow<Pair<A,S>,Pair<B,S>>;
+	
+	public static function new(a){
+		this.arrow = a;
+	}
+	public function withInput(?i:Pair<A,S>,cont:Function<Pair<B,S>,Void>){
+		Viaz.runCPS( arrow, i , cont );
+	}
+	static public function stateA<S,A,B>(a:Arrow<Pair<A,S>,Pair<B,S>>){
+		return new StateArrowImpl(a);
+	}
+	/*
+	public function change<B,C>(fn:Function1<Pair<B,S>,S>):StateArrow<S,A,B> { 
+
+	}*/
+	public function fetch():Arrow<S,S>{
+		return null;
 	}
 	//static function composeWithUsing<C,D>(
-	static private function merge<S,B,C>(t : Tuple2<Tuple2<S,B>,S>) :Tuple2<S,B>{
+	/*static private function merge<S,B,C>(t : Pair<Pair<S,B>,S>) :Pair<S,B>{
 		return Tuples.t2(t._2,t._1._2);
-	}
+	}*/
 	public function access() { }
 	public function get() { }
 	public function set() { }
 	public function next(){ }
-}*/
+}
+
 #if js
 	/*
 import js.Dom;
@@ -482,33 +521,21 @@ class A1F {
 }
 class F2A{
 	static public function lift<P1,P2,R>(f:P1->P2->R){
-		return Tuple2.into.flip().curry()(f).lift();
-	}
-	static public function run<A,B,C>(arr:Arrow<Tuple2<A,B>,C>,a:A,b:B){
-		Viaz.run(arr,a.entuple(b));
+		return Pair.into.flip().curry()(f).lift();
 	}
 }
 class F3A{
 	static public function lift<P1,P2,P3,R>(f:P1->P2->P3->R){
 		return Tuple3.into.flip().curry()(f).lift();
 	}
-	static public function run<A,B,C,D>(arr:Arrow<Tuple3<A,B,C>,D>,a:A,b:B,c:C){
-		arr.run( a.entuple(b).entuple(c) );
-	}
 }
 class F4A{
 	static public function lift<P1,P2,P3,P4,R>(f:P1->P2->P3->P4->R){
 		return Tuple4.into.flip().curry()(f).lift();
 	}
-	static public function run<A,B,C,D,E>(arr:Arrow<Tuple4<A,B,C,D>,E>,a:A,b:B,c:C,d:D){
-		arr.run( a.entuple(b).entuple(c).entuple(d) );
-	}
 }
 class F5A{
 	static public function lift<P1,P2,P3,P4,P5,R>(f:P1->P2->P3->P4->P5->R){
 		return Tuple5.into.flip().curry()(f).lift();
-	}
-	static public function run<A,B,C,D,E,F>(arr:Arrow<Tuple5<A,B,C,D,E>,F>,a:A,b:B,c:C,d:D,e:E){
-		arr.run( a.entuple(b).entuple(c).entuple(d).entuple(e) );
 	}
 }
