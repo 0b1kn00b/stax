@@ -80,14 +80,14 @@ class ArrowFn{
   }
   @:noUsing
   static public function pure<A,B>():A->B{
-    return identityFn();
+    return cast Prelude.pure();
   }
   /**
     Returns a function that produces a `Tuple2` from a value.
   */
   static public function fan<I,O>(a:I->O):I->Tuple2<O,O>{
     return 
-      a.thenFn(
+      a.then(
         function(x){
           return Tuples.t2(x,x);
         }
