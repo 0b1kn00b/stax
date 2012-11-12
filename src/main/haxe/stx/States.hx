@@ -56,16 +56,24 @@ class States{
       }
   }
 
-  static public function stateOf<S>(v:S):State<S,Dynamic>{
+  static public function toState<S>(v:S):State<S,Dynamic>{
     return
       function(s:S){
         return Tuples.t2(null,v);
       }
   }
+  @:noUsing
   static public function unit<S,A>(value:A):State<S,A>{
     return
       function(s:S):Tuple2<A,S>{
         return Tuples.t2(value,s);
+      }
+  }
+  @:noUsing
+  static public function pure<A,B>(fn:A->B):State<A,B>{
+    return 
+      function(a){
+        return Tuples.t2(fn(a),a);
       }
   }
 }
