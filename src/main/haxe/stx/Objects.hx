@@ -205,20 +205,19 @@ class Objects {
     );
   }
   static public function hasFields(d:Object,fields:Array<String>):Bool{
-    var vals   = d.extractAll();
-    var names  = vals.map( Pair.fst() );
+    var vals   = extractAllAny(d);
+    var names  = vals.map( Pair.fst );
 
     return 
       fields.forAll(
         function(x){
-          names.forAny( function(y) return x == y );
+          return names.forAny( function(y) return x == y );
         }
       );
   }
   static public function definedFields(d:Object,fields:Array<String>):Bool{
-    var vals   = d.extractAll();
     return 
-      extractValues(fields,null)
+      extractValues(d,fields,null)
       .forAll( function(x) return x != null );
   }
 }
