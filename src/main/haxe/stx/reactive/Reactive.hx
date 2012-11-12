@@ -289,7 +289,7 @@ class Stream<T> {
         var m: Stream<T> = this;
         var prevE: Stream<Z> = null;
 
-        var outE: Stream<Z> = Streams.identity();
+        var outE: Stream<Z> = Streams.pure();
 
         var inE: Stream<Dynamic> = Streams.create(
             function (pulse: Pulse<Dynamic>): Propagation<Dynamic> {
@@ -383,7 +383,7 @@ class Stream<T> {
      * @param   time    Time in milliseconds as an Int
      */
     public function delay(time: Int): Stream<T> {
-        var resE: Stream<T> = Streams.identity();
+        var resE: Stream<T> = Streams.pure();
 
         Streams.create(
             function(pulse: Pulse<T>): Propagation<T> { 
@@ -404,7 +404,7 @@ class Stream<T> {
     public function delayS(time: Signal<Int>): Stream<T> {
         var self = this;
 
-        var receiverEE: Stream<Stream<T>> = Streams.identity();
+        var receiverEE: Stream<Stream<T>> = Streams.pure();
         
         var link = {
             from:    self, 
@@ -451,7 +451,7 @@ class Stream<T> {
      * @param time  The number of milliseconds.
      */
     public function calmS(time: Signal<Int>): Stream<T> {
-        var out: Stream<T> = Streams.identity();
+        var out: Stream<T> = Streams.pure();
       
         var towards: Timeout = null;
       

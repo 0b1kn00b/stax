@@ -38,7 +38,8 @@ class Streams {
      * @param sources   (Optional) The sources.
      *
      */
-    public static function create<I, O>(updater: Pulse<I> -> Propagation<O>, sources: Iterable<Stream<I>> = null): Stream<O> {
+    @:noUsing
+    static public function create<I, O>(updater: Pulse<I> -> Propagation<O>, sources: Iterable<Stream<I>> = null): Stream<O> {
         var sourceEvents = if (sources == null) null else (sources.toArray());
         return new Stream<O>(cast updater, sourceEvents);
     }
@@ -48,7 +49,8 @@ class Streams {
      *
      * @param sources
      */
-    public static function identity<T>(sources: Iterable<Stream<T>> = null): Stream<T> {
+    @:noUsing
+    static public function unit<T>(sources: Iterable<Stream<T>> = null): Stream<T> {
         var sourceArray = if (sources == null) null else (sources.toArray());
         return new Stream<T>(function(pulse) { return propagate(pulse); }, sourceArray);
     }
@@ -57,12 +59,12 @@ class Streams {
      * Creates an event stream that will never have any events. Calling 
      * sendEvent() on such a stream will throw an exception.
      */
-    public static function zero<T>(): Stream<T> {
+    static public function zero<T>(): Stream<T> {
         return Streams.create(function(pulse: Pulse<Dynamic>): Propagation<T> { throw 'zeroE : received a value; zeroE should not receive a value; the value was ' + pulse.value; return doNotPropagate; });            
     }
     
 
-    public static function toStream<T>(f:Future<T>):Stream<T>{
+    static public function toStream<T>(f:Future<T>):Stream<T>{
         var s = Streams.create(
                 function(pulse:Pulse<Dynamic>){
                     return Propagation.propagate(pulse.value);
@@ -78,7 +80,7 @@ class Streams {
     /**
      * Creates an event stream that will send a single value.
      */
-    public static function one<T>(val: T): Stream<T> {
+    static public function one<T>(val: T): Stream<T> {
         var sent = false;
         
         var stream = Streams.create(
@@ -102,9 +104,9 @@ class Streams {
      * Merges the specified streams, or returns a zero stream if there are no 
      * streams.
      */
-    public static function merge<T>(streams: Iterable<Stream<T>>): Stream<T> {
+    static public function merge<T>(streams: Iterable<Stream<T>>): Stream<T> {
         return if (streams.size() == 0) zero();
-        else identity(streams);
+        else unit(streams);
     }
     
     /**
@@ -114,7 +116,7 @@ class Streams {
      * @param value     The constant.
      * @param sources   (Optional) Source streams.
      */
-    public static function constant<I, O>(value: O, sources: Iterable<Stream<I>> = null): Stream<O> {
+    static public function constant<I, O>(value: O, sources: Iterable<Stream<I>> = null): Stream<O> {
         return Streams.create(
             function(pulse: Pulse<I>): Propagation<O> {
                 return propagate(pulse.withValue(value));
@@ -127,8 +129,8 @@ class Streams {
      * Creates a "receiver" stream whose sole purpose is to be used in 
      * combination with sendEvent().
      */
-    public static function receiver() {
-        return Streams.identity();
+    static public function pure<A>():Stream<A> {
+        return Streams.unit();
     }
     
     /**
@@ -145,7 +147,7 @@ class Streams {
      *                      == 'true', Stream<T> else a
      *                      zero Stream.
      */
-    public static function cond<T>(conditions: Iterable<Tuple2<Stream<Bool>, Stream<T>>>): Stream<T> {
+    static public function cond<T>(conditions: Iterable<Tuple2<Stream<Bool>, Stream<T>>>): Stream<T> {
         return switch (conditions.headOption()) {
             case None:    Streams.zero();
             case Some(h): StreamBool.ifTrue(h._1, h._2, cond(conditions.tail()));
@@ -159,7 +161,7 @@ class Streams {
      *
      * @param time The number of milliseconds.
      */
-    public static function timer(time: Int): Stream<Int> {
+    static public function timer(time: Int): Stream<Int> {
         return timerS(Signals.constant(time));
     }
     
@@ -169,8 +171,8 @@ class Streams {
      *
      * @param time The number of milliseconds.
      */
-    public static function timerS(time: Signal<Int>): Stream<Int> {
-        var stream: Stream<Int> = Streams.identity();
+    static public function timerS(time: Signal<Int>): Stream<Int> {
+        var stream: Stream<Int> = Streams.pure();
         
         var pulser: Void -> Void = null;
         var timer = null;
@@ -198,11 +200,11 @@ class Streams {
     /**
      * Zips together the specified streams.
      */
-    public static function zipN<T>(streams: Iterable<Stream<T>>): Stream<Iterable<T>> {
+    static public function zipN<T>(streams: Iterable<Stream<T>>): Stream<Iterable<T>> {
         var stamps = streams.map(function(s) { return -1;   }).toArray();
         var values = streams.map(function(s) { return null; }).toArray();
         
-        var output: Stream<T> = Streams.identity();
+        var output: Stream<T> = Streams.pure();
         
         for (index in 0...streams.size()) {
             var stream = streams.at(index);
@@ -237,7 +239,7 @@ class Streams {
      * number of milliseconds.
      */
 		#if (js || flash)
-    public static function randomS(time: Signal<Int>): Stream<Float> {
+    static public function randomS(time: Signal<Int>): Stream<Float> {
         return timerS(time).map(function(e) { return Math.random(); });
     }
     
@@ -245,7 +247,7 @@ class Streams {
      * Creates a stream of random number events, separated by the specified 
      * number of milliseconds.
      */
-    public static function random(time: Int): Stream<Float> {
+    static public function random(time: Int): Stream<Float> {
         return randomS(Signals.constant(time));
     }
 		#end
@@ -259,7 +261,7 @@ class Streams {
           function(e:Either<A,B>){
             return 
               switch (e) {
-                case Left(v)    : Streams.identity().sendEvent(Left(v));
+                case Left(v)    : Streams.pure().sendEvent(Left(v));
                 case Right(v)   : fn(v);
                 default         : throw 'result is neither left nor right';
               }
@@ -305,7 +307,7 @@ class StreamFutures{
       return 
         stream.flatMap(
           function(a:A){
-            var o = Streams.identity();
+            var o = Streams.pure();
             fn(a).foreach( o.sendEvent.toEffect() );
             return o;
           }

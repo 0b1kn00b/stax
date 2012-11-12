@@ -48,7 +48,7 @@ class Collections {
         
         if (!iterator.hasNext()) return Streams.zero();
         
-        var stream: Stream<T> = Streams.identity();
+        var stream: Stream<T> = Streams.pure();
         
         var pulser: Void -> Void = null;
         var timer = null;

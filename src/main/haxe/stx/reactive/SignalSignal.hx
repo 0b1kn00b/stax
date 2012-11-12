@@ -60,7 +60,7 @@ class SignalSignal {
 
         var prevSourceE: Stream<T> = null;
 
-        var receiverE: Stream<T> = Streams.identity();
+        var receiverE: Stream<T> = Streams.pure();
 
         //XXX could result in out-of-order propagation! Fix!
         var makerE = Streams.create(

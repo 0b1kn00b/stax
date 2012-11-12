@@ -26,7 +26,7 @@ class Signals {
     private function new() { }
     
     public static function constant<T>(value: T): Signal<T> {
-        return Streams.identity().startsWith(value);
+        return Streams.pure().startsWith(value);
     }
     
     /**
