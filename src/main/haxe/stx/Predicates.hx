@@ -40,7 +40,7 @@ class Predicates {
     }
   }
   /**
-    Produces a predicate that succeeds if the input is greater than ´ref´.
+    Produces a predicate that succeeds if the input is greater than `ref`.
   */
   static public function isGreaterThan(ref: Float): Predicate<Float> {
     return function(value) {
@@ -48,7 +48,7 @@ class Predicates {
     }
   }
   /**
-    Produces a predicate that succeeds if the input is less than ´ref´.
+    Produces a predicate that succeeds if the input is less than `ref`.
   */
   static public function isLessThan(ref: Float): Predicate<Float> {
     return function(value) {
@@ -56,7 +56,7 @@ class Predicates {
     }
   }
   /**
-    Produces a predicate that succeeds if the input is greater than ´ref´.
+    Produces a predicate that succeeds if the input is greater than `ref`.
   */
   static public function isGreaterThanInt(ref: Int): Predicate<Int> {
     return function(value) {
@@ -64,7 +64,7 @@ class Predicates {
     }
   }
   /**
-    Produces a predicate that succeeds if the input is less than ´ref´.
+    Produces a predicate that succeeds if the input is less than `ref`.
   */
   static public function isLessThanInt(ref: Int): Predicate<Int> {
     return function(value) {
@@ -81,6 +81,9 @@ class Predicates {
       return equal(ref, value);
     }
   }
+  /**
+    Produces a predicate that succeeds if the input is contained in `vals`.
+  */
   static public function isOneOf<A>(vals:Iterable<A>,?equal: EqualFunction<A>):Predicate<A>{
     return 
       function(x:A){
