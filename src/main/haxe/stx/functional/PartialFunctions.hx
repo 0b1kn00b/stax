@@ -1,19 +1,3 @@
-/*
- HaXe library written by John A. De Goes <john@socialmedia.com>
- Contributed by Social Media Networks
-
- Redistribution and use in source and binary forms, with or without
- modification, are permitted provided that the following conditions are met:
-
- Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
- Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
- distribution.
-
- THIS SOFTWARE IS PROVIDED BY SOCIAL MEDIA NETWORKS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SOCIAL MEDIA NETWORKS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
 package stx.functional;
 
 import stx.Tuples;
@@ -26,7 +10,7 @@ private class PartialFunction1Impl<A, Z> implements PartialFunction1<A, Z> {
   var _def: Array<Tuple2<A -> Bool, A -> Z>>;
   
   @:noUsing
-  public static function create<A, Z>(def: Array<Tuple2<A -> Bool, A -> Z>>) {
+  static public function create<A, Z>(def: Array<Tuple2<A -> Bool, A -> Z>>) {
     return new PartialFunction1Impl<A, Z>(def);
   }
   
@@ -79,7 +63,7 @@ private class PartialFunction1Impl<A, Z> implements PartialFunction1<A, Z> {
 }
 
 class PartialFunction1ImplExtensions {
-    public static function toPartialFunction<A, Z>(def: Array<Tuple2<A -> Bool, A -> Z>>) {
+    static public function toPartialFunction<A, Z>(def: Array<Tuple2<A -> Bool, A -> Z>>) {
       return PartialFunction1Impl.create(def);
     }
 }
@@ -87,7 +71,8 @@ class PartialFunction1ImplExtensions {
 private class PartialFunction2Impl<A, B, Z> implements PartialFunction2<A, B, Z> {
   var _def: Array<Tuple2<A -> B -> Bool, A -> B -> Z>>;
   
-  public static function create<A, B, Z>(def: Array<Tuple2<A -> B -> Bool, A -> B -> Z>>) {
+  @:noUsing
+  static public function create<A, B, Z>(def: Array<Tuple2<A -> B -> Bool, A -> B -> Z>>) {
     return new PartialFunction2Impl<A, B, Z>(def);
   }
   
@@ -140,7 +125,7 @@ private class PartialFunction2Impl<A, B, Z> implements PartialFunction2<A, B, Z>
 }
 
 class PartialFunction2ImplExtensions {
-    public static function toPartialFunction<A, B, Z>(def: Array<Tuple2<A -> B -> Bool, A -> B -> Z>>) {
+    static public function toPartialFunction<A, B, Z>(def: Array<Tuple2<A -> B -> Bool, A -> B -> Z>>) {
       return PartialFunction2Impl.create(def);
     }
 }
@@ -148,7 +133,8 @@ class PartialFunction2ImplExtensions {
 private class PartialFunction3Impl<A, B, C, Z> implements PartialFunction3<A, B, C, Z> {
   var _def: Array<Tuple2<A -> B -> C -> Bool, A -> B -> C -> Z>>;
   
-  public static function create<A, B, C, Z>(def: Array<Tuple2<A -> B -> C -> Bool, A -> B -> C -> Z>>) {
+  @:noUsing
+  static public function create<A, B, C, Z>(def: Array<Tuple2<A -> B -> C -> Bool, A -> B -> C -> Z>>) {
     return new PartialFunction3Impl<A, B, C, Z>(def);
   }
   
@@ -201,7 +187,7 @@ private class PartialFunction3Impl<A, B, C, Z> implements PartialFunction3<A, B,
 }
 
 class PartialFunction3ImplExtensions {
-    public static function toPartialFunction<A, B, C, Z>(def: Array<Tuple2<A -> B -> C -> Bool, A -> B -> C -> Z>>) {
+    static public function toPartialFunction<A, B, C, Z>(def: Array<Tuple2<A -> B -> C -> Bool, A -> B -> C -> Z>>) {
       return PartialFunction3Impl.create(def);
     }
 }
@@ -209,7 +195,8 @@ class PartialFunction3ImplExtensions {
 private class PartialFunction4Impl<A, B, C, D, Z> implements PartialFunction4<A, B, C, D, Z> {
   var _def: Array<Tuple2<A -> B -> C -> D -> Bool, A -> B -> C -> D -> Z>>;
   
-  public static function create<A, B, C, D, Z>(def: Array<Tuple2<A -> B -> C -> D -> Bool, A -> B -> C -> D -> Z>>) {
+  @:noUsing
+  static public function create<A, B, C, D, Z>(def: Array<Tuple2<A -> B -> C -> D -> Bool, A -> B -> C -> D -> Z>>) {
     return new PartialFunction4Impl<A, B, C, D, Z>(def);
   }
   
@@ -262,7 +249,7 @@ private class PartialFunction4Impl<A, B, C, D, Z> implements PartialFunction4<A,
 }
 
 class PartialFunction4ImplExtensions {
-    public static function toPartialFunction<A, B, C, D, Z>(def: Array<Tuple2<A -> B -> C -> D -> Bool, A -> B -> C -> D -> Z>>) {
+    static public function toPartialFunction<A, B, C, D, Z>(def: Array<Tuple2<A -> B -> C -> D -> Bool, A -> B -> C -> D -> Z>>) {
       return PartialFunction4Impl.create(def);
     }
 }
@@ -270,7 +257,8 @@ class PartialFunction4ImplExtensions {
 private class PartialFunction5Impl<A, B, C, D, E, Z> implements PartialFunction5<A, B, C, D, E, Z> {
   var _def: Array<Tuple2<A -> B -> C -> D -> E -> Bool, A -> B -> C -> D -> E -> Z>>;
   
-  public static function create<A, B, C, D, E, Z>(def: Array<Tuple2<A -> B -> C -> D -> E -> Bool, A -> B -> C -> D -> E -> Z>>) {
+  @:noUsing
+  static public function create<A, B, C, D, E, Z>(def: Array<Tuple2<A -> B -> C -> D -> E -> Bool, A -> B -> C -> D -> E -> Z>>) {
     return new PartialFunction5Impl<A, B, C, D, E, Z>(def);
   }
   
@@ -323,7 +311,7 @@ private class PartialFunction5Impl<A, B, C, D, E, Z> implements PartialFunction5
 }
 
 class PartialFunction5ImplExtensions {
-    public static function toPartialFunction<A, B, C, D, E, Z>(def: Array<Tuple2<A -> B -> C -> D -> E -> Bool, A -> B -> C -> D -> E -> Z>>) {
+    static public function toPartialFunction<A, B, C, D, E, Z>(def: Array<Tuple2<A -> B -> C -> D -> E -> Bool, A -> B -> C -> D -> E -> Z>>) {
       return PartialFunction5Impl.create(def);
     }
 }
