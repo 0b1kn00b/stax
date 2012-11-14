@@ -45,7 +45,7 @@ class ArrowFn{
   /**
     Returns a function that applies a function on the lhs of a tuple to the value on the rhs.
   */
-  static public function applyFn<A,I,O>(fn:A->Tuple2<I->O,I>):A->O{
+  static public function apply<A,I,O>(fn:A->Tuple2<I->O,I>):A->O{
     return 
       function(v:A):O{
         var t = fn(v);
@@ -87,7 +87,7 @@ class ArrowFn{
   */
   static public function fan<I,O>(a:I->O):I->Tuple2<O,O>{
     return 
-      a.then(
+      a.thenº(
         function(x){
           return Tuples.t2(x,x);
         }
