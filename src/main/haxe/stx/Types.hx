@@ -9,6 +9,8 @@ import stx.Prelude;
 using stx.Options;
 using stx.Functions;
 using stx.Error;
+using stx.ArrowFn;
+using stx.Types;
 
 class Types{
   /**
@@ -16,6 +18,12 @@ class Types{
   */
   static public function resolveClass(s:String):Option<Class<Dynamic>>{
     return Options.create(Type.resolveClass(s));
+  }
+  static public function getClass<A>(c:A):Option<Class<A>>{
+    return Options.create(Type.getClass(c));
+  }
+  static public function extractClassName(v:Dynamic){
+    return Type.getClassName(Type.getClass(v));
   }
   static public function getSuperClass(type:Class<Dynamic>):Option<Class<Dynamic>>{
     return Options.create(Type.getSuperClass(type));
@@ -51,9 +59,14 @@ class Types{
       return (Std.is(value, type) ? cast value : null);
    }
 
-   static public function extractAllAny<A>(v:A):Array<Tuple2<String,Dynamic>>{
-      var flds = Type.getInstanceFields(Type.getClass(v));
-      return 
-        flds.zip(flds.map(Reflect.field.p1(v)));
+   static public function extractAllAnyFromType<A>(v:A):Option<Array<Tuple2<String,Dynamic>>>{
+    return
+      Types.getClass(v)
+        .map(
+          function(x){
+            var a = Type.getInstanceFields(x);
+            return a.zip(a.map(Reflect.field.p1(v)));
+          }
+        );
    }
 }
