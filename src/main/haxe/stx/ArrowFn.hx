@@ -87,7 +87,7 @@ class ArrowFn{
   */
   static public function fan<I,O>(a:I->O):I->Tuple2<O,O>{
     return 
-      a.thenº(
+      a.then(
         function(x){
           return Tuples.t2(x,x);
         }
