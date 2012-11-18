@@ -17,7 +17,12 @@ using stx.Cont;
 using stx.Assertion;
 //using stx.Predicates;
 
-class Assertion{
+class Assertion<A,B>{
+	public var pos 	: PosInfos;
+	public var msg 	: String;
+	public var fn 	: A->B->Bool;
+}
+class Assertions{
 	static private function error(p:PosInfos,msg:String = 'ERROR'):Error{
 		return Error.create(msg,p);
 	}
@@ -47,9 +52,9 @@ class Assertion{
 		return isEqualToWith(null,pos);
 	}
 	static public function isTrue(?pos){
-		return unop(pos, true, 'Should be ´true´.');
+		return unop(pos, true, 'Should be `true`.');
 	}
 	static public function isFalse(?pos){
-		return unop(pos, false, 'Should be ´false´.');
+		return unop(pos, false, 'Should be `false`.');
 	}
 }
