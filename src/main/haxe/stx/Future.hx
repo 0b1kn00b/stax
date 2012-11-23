@@ -341,4 +341,18 @@ class Futures{
       });  
     return myprm;
   }
+  static public function bindFold<A,B>(iter:Iterable<A>,start:Future<B>,fm:B->A->Future<B>):Future<B>{
+    return 
+      iter.foldl(
+        start ,
+        function(memo : Future<B>, next : A){
+          return 
+            memo.flatMap(
+              function(b: B){
+                return fm(b,next);
+              }
+            );
+        }
+      );
+  }
 }
