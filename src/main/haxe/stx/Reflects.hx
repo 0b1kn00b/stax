@@ -28,8 +28,11 @@ class Reflects{
 				);
 		return v;
 	}
-	static public function getter<A,B>(fieldname:String):A->Option<B>{
+	static public function getterO<A,B>(fieldname:String):A->Option<B>{
 		return getField.p2(fieldname);
+	}
+	static public function getter<A,B>(fieldname:String):A->B{
+		return Reflect.field.p2(fieldname);
 	}
 	static public function set<A,B>(object:A,field:String,value:B){
 		Reflect.setField(object,field,value);
