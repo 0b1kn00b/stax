@@ -13,7 +13,7 @@ class CodeBlocks {
 	  @param	c
     @return
 	 */
-  public static function returningC(c:CodeBlock,?val):Thunk<Dynamic>{
+  public static function returningC<A>(c:Void->Void,?val:A):Thunk<A>{
     return function(){
       c();
       return val;
