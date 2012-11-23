@@ -18,7 +18,6 @@ package stx.test;
 import stx.Prelude;
 import stx.test.Assert;
 import stx.test.MustMatchers;
-import stx.test.MustMatcherExtensions;
 import haxe.PosInfos;
 import stx.Future;
 
@@ -39,7 +38,7 @@ class TestCase {
   }
   
   public function not<T>(c: MustMatcher<T>): MustMatcher<T> {
-    return MustMatcherExtensions.negate(c);
+    return Must.negate(c);
   }
   
   public function assertThat<T>(obj: T, cond: MustMatcher<T>, ?msg: String, ?pos: PosInfos) {

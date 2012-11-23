@@ -2,9 +2,8 @@ package stx.ifs;
 using stx.Functions;
 
 interface IApply<I,O>{
-	public dynamic function apply(v:I):O;
+	dynamic public function apply(v:I):O;
 }
-
 class Apply<E,A> implements IApply<E,A>{
 	@:noUsing
 	static public function pure(){

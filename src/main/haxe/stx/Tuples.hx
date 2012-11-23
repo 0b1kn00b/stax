@@ -95,7 +95,7 @@ class AbstractProduct implements Product {
                 }
               }
             );
-        }
+          }
     return flatn(this);
   }
 }
