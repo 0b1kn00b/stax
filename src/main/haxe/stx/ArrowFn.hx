@@ -33,6 +33,12 @@ class ArrowFn{
         return Tuples.t2(t._1,fn1(t._2));
       } 
   }
+  static public function pair<A,B,C,D>(fn1:A->C,fn2:B->D):Tuple2<A,B>->Tuple2<C,D>{
+    return 
+      function(t){
+        return Tuples.t2(fn1(t._1),fn2(t._2));
+      }
+  }
   /**
     Returns a function that applies fn1 to the left hand side of a Tuple and fn2 to the right.
   */
@@ -95,5 +101,14 @@ class ArrowFn{
   }
   static public function constant<A,B>(v:B):A->B{
     return function(x:A){ return v; }
+  }
+  static public function split<A,B,C>(split_:A->B,_split:A->C):A->Pair<B,C>{ 
+    return 
+      function(x){
+        return Tuples.t2( split_(x), _split(x) );
+      }
+  }
+  static public function bind<A,B,C>(bindl:A->C,bindr:Pair<A,C>->B):A->B{
+    return pure().split(bindl).then( bindr );
   }
 }
