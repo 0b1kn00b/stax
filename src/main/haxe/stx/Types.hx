@@ -22,13 +22,14 @@ class Types{
   static public function getClass<A>(c:A):Option<Class<A>>{
     return Options.create(Type.getClass(c));
   }
-  static public function extractClassName(v:Dynamic){
-    return Type.getClassName(Type.getClass(v));
+  static public function extractClassName(v:Dynamic):Option<String>{
+    return Types.getClass(v).map( Type.getClassName );
   }
   static public function getSuperClass(type:Class<Dynamic>):Option<Class<Dynamic>>{
     return Options.create(Type.getSuperClass(type));
   }
-  static public function createInstance<A>(type:Class<A>,args:Array<Dynamic>):Either<Error,A>{
+  static public function createInstance<A>(type:Class<A>,?args:Array<Dynamic>):Either<Error,A>{
+    args = if(args == null) [] else args;
     return 
       Type.createInstance.lazy(type,args).catching()();
   }
@@ -58,7 +59,6 @@ class Types{
    static public inline function of<T>(type : Class<T>, value : Dynamic) : Null<T>{
       return (Std.is(value, type) ? cast value : null);
    }
-
    static public function extractAllAnyFromType<A>(v:A):Option<Array<Tuple2<String,Dynamic>>>{
     return
       Types.getClass(v)
