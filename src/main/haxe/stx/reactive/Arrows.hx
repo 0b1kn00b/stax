@@ -4,7 +4,7 @@ package stx.reactive;
  * Used with permission of Sledorze.
  */
 import stx.Prelude;
-import stx.Options; 				using stx.Options;
+
 														using stx.reactive.Arrows;
 import stx.Tuples; 					using stx.Tuples;
 														using stx.Functions;
@@ -19,6 +19,13 @@ class Viaz<I,O> implements Arrow<I,O>{
 	public function new(){}
 	public function withInput(?i : I, cont : Function1<O,Void> ) : Void{}
 
+	static public function act<I>(fn:I->Void):Arrow<I,I>{
+		return 
+			function(x){
+				fn(x);
+				return x;
+			}.lift();
+	}
 	static public function constant<I,O>(v:O):Arrow<I,O>{
 		return new FunctionArrow( function(x:I):O {return v;});
 	}
@@ -246,7 +253,7 @@ class PairArrow<A,B,C,D> implements Arrow<Pair<A,C>,Pair<B,D>>{
 		var check 	=
 			function(){
 				if (((ol!=null) && (or!=null))){
-					merge(ol.get(),or.get());
+					merge(Options.get(ol),Options.get(or));
 				}
 			}
 		var hl 		= 
@@ -380,6 +387,9 @@ class RightChoice<B,C,D> implements Arrow<Either<D,B>,Either<D,C>>{
 	public static function right<B,C,D>(arr:Arrow<B,C>):Arrow<Either<D,B>,Either<D,C>>{
 		return new RightChoice(arr);
 	}
+	static public function rightF<B,C,D>(fn:B->C):Arrow<Either<D,B>,Either<D,C>>{
+		return right(fn.lift());
+	}
 	public static function rout<A,B,C,D>(arr:Arrow<B,Either<C,D>>):Arrow<Either<C,B>,Either<C,D>>{
 		return new RightChoice(arr).then(Eithers.flattenR.lift());
 	}
@@ -422,6 +432,9 @@ class FutureArrow<O> implements Arrow<Future<O>,O>{
 	}
 	static public function project<I,O>(fn:I->Future<O>):Arrow<I,O>{
 		return fn.lift().then( Viaz.futureA() );
+	}
+	static public function projectA<I,O>(a:Arrow<I,Future<O>>):Arrow<I,O>{
+		return a.then( Viaz.futureA()) ;
 	}
 }
 class StateArrows{
@@ -501,9 +514,6 @@ class F0A{
 class F1A{
 	static public function lift<P,R>(f:P->R):Arrow<P,R>{
 		return new FunctionArrow(f);
-	}
-	static public function thenA<P1,P2,R>(f:P1->P2,a:Arrow<P2,R>):Arrow<P1,R>{
-		return lift(f).then(a);
 	}
 }
 class F1F {
