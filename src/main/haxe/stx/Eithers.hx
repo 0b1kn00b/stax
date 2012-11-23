@@ -180,4 +180,10 @@ class Eithers {
           }
       }
   }
+  static public function either<A>(e:Either<A,A>):A{
+    return switch (e) {
+      case Left(v)  : v;
+      case Right(v) : v;
+    }
+  }
 }
