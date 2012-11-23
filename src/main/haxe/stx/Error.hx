@@ -13,7 +13,7 @@ class Error {
 		return exception;
 	}
 	
-	var msg : String;
+	public var msg(default,null) 	: String;
 	public var pos(default,null)	: PosInfos;
 	
 	public function new(msg:String,?pos:PosInfos) {
@@ -25,7 +25,7 @@ class Error {
 		return this;
 	}
 	public function toString():String{
-		return "Error: (" + this.msg + " at " + Positions.toString(pos) + ")";
+		return "ERROR:\t(" + this.msg + " at " + Positions.toString(pos) + ")";
 	}
 	@:noUsing
 	public static function create(msg:String,?pos:PosInfos){
