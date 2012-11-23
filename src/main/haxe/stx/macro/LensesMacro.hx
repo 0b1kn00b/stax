@@ -103,4 +103,4 @@ class LensesMacro<T> {
 }
 #end
 
-@:autoBuild(com.mindrocks.macros.LensesMacro.build()) interface LensesFor<T> { } 
+@:autoBuild(stx.macro.LensesMacro.build()) interface LensesFor<T> { } 

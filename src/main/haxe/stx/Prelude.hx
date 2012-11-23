@@ -38,7 +38,6 @@ typedef Function10<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, R> = P1 -> P2 -> P3 
 typedef Reducer<T> = T -> T -> T
 typedef Factory<T> = Void -> T
 
-
 /**
  A function which takes no parameter and returns a result.
  */
@@ -77,11 +76,10 @@ typedef EqualFunction<T>  			= Function2<T, T, Bool>;
 typedef ShowFunction<T>   			= Function1<T, String>;
 typedef HashFunction<T> 				= Function1<T, Int>;   
 
-typedef Lense<A, B> = {
-	get : A -> B,
-  set : A -> B -> A
+typedef Lense < A, B > = {
+  get : A -> B,
+  set : B -> A -> A
 }
-
 @:todo('0b1kn00b','Would perhaps prefer the collection tools to be interfaces.')
 typedef CollectionTools<T> = {
 		order : Null<OrderFunction<T>>,
