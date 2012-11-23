@@ -163,6 +163,10 @@ class Tuple3<A, B, C> extends AbstractProduct {
 	static public function into<A,B,C,D>(t:Tuple3<A,B,C>,f : A -> B -> C -> D) : D {
 		return f(t._1, t._2, t._3);
 	}
+  static public function fst<A, B, C>(t : Tuple3<A, B, C>) return t._1
+  static public function snd<A, B, C>(t : Tuple3<A, B, C>) return t._2
+  static public function thd<A, B, C>(t : Tuple3<A, B, C>) return t._3
+
   @:noUsing
   static public function fromArray(a:Array<Dynamic>){
     return new Tuple3(a[0],a[1],a[2]);
@@ -206,6 +210,11 @@ class Tuple4< A, B, C, D> extends AbstractProduct {
 
     this._1 = first; this._2 = second; this._3 = third; this._4 = fourth;
   }
+  static public function fst<A, B, C, D>(t : Tuple4<A, B, C, D>) return t._1
+  static public function snd<A, B, C, D>(t : Tuple4<A, B, C, D>) return t._2
+  static public function thd<A, B, C, D>(t : Tuple4<A, B, C, D>) return t._3
+  static public function frt<A, B, C, D>(t : Tuple4<A, B, C, D>) return t._4
+
 	@:noUsing
   static public function fromArray(a:Array<Dynamic>){
     return new Tuple4(a[0],a[1],a[2],a[3]);
@@ -255,6 +264,12 @@ class Tuple5< A, B, C, D, E> extends AbstractProduct {
 
     this._1 = first; this._2 = second; this._3 = third; this._4 = fourth; this._5 = fifth;
   }
+  static public function fst<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>) return t._1
+  static public function snd<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>) return t._2
+  static public function thd<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>) return t._3
+  static public function frt<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>) return t._4
+  static public function fth<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>) return t._5
+
   @:noUsing
   static public function fromArray(a:Array<Dynamic>){
     return new Tuple5(a[0],a[1],a[2],a[3],a[4]);
