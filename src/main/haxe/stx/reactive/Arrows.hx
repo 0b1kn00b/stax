@@ -46,25 +46,15 @@ class Viaz<I,O> implements Arrow<I,O>{
 	static public function as<I,O,NO>(a:Arrow<I,O>,type:Class<NO>):Arrow<I,NO>{
 		return a.then( function(x:O):NO { return cast x; }.lift() ); 
 	}
-	static public function runCPS<I,O>(a:Arrow<I,O>,i:I,cont:Function1<O,Void>):Void { return a.withInput(i, cont); }
-
-	static public function runCont<I,O>(a:Arrow<I,O>,i:I):Function1<O,Void>->Void{
+	static public function apply<I,O>(a:Arrow<I,O>,i:I):RC<Void,O>{
 		return function (cont:Function1<O,Void>) a.withInput(i, cont);
 	}
-	static public function runFuture<I,O>(a:Arrow<I,O>,i:I):Future<O>{
-		var f : Future<O> = new Future();
-		a.runCPS( i, f.deliver.p2(null).toEffect() );
-		return f;
+	static public function execute<I,O>(a:Arrow<I,O>,i:I,cont:O->Void):Void{
+		a.withInput(i,cont);
 	}
-	static public function trace<A,B>(a:Arrow<A,B>):Arrow<A,B>{
+	static public function printA<A,B>(a:Arrow<A,B>):Arrow<A,B>{
 		var m : Function1<B,B> = function(x:B):B { haxe.Log.trace(x) ; return x;};
 		return new Then( a , new FunctionArrow( m ) );
-	}
-	static public function run<I,O>(a:Arrow<I,O>,?i:I,?cont:O->Void):Void{
-		runCPS( a , i , cont == null ? function(x){} : cont );
-	}
-	static public function execute<I,O>(a:Arrow<I,O>,i:I):Void{
-		run(a,i);
 	}
 	@:noUsing
 	public static function applyA<I,O>():Arrow<Pair<Arrow<I,O>,I>,O>{
@@ -207,7 +197,7 @@ class DelayArrow<I,O> implements Arrow<I,O> {
 	}
 
 	inline public function withInput(?i : I, cont : Function1<O,Void> ) : Void{
-		var f = function(){ a.runCPS(i,cont); }
+		var f = function(){ a.execute(i,cont); }
 		Timer.delay( f , t );
 	}
 	static public function delay<I,O>(a:Arrow<I,O>,delay:Int):Arrow<I,O>{return new DelayArrow(a,delay);}
@@ -482,7 +472,7 @@ class StateArrowImpl<S,A,B> implements Arrow<Pair<A,S>,Pair<B,S>>{
 		this.arrow = a;
 	}
 	inline public function withInput(?i:Pair<A,S>,cont:Function<Pair<B,S>,Void>){
-		Viaz.runCPS( arrow, i , cont );
+		Viaz.execute( arrow, i , cont );
 	}
 	static public function stateA<S,A,B>(a:Arrow<Pair<A,S>,Pair<B,S>>){
 		return new StateArrowImpl(a);
