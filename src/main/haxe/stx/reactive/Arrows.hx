@@ -186,7 +186,7 @@ class OptionArrow<I,O> implements Arrow<Option<I>,Option<O>>{
 	public function new(a:Arrow<I,O>){
 		this.a = a;
 	}
-	public function withInput(?i:Option<I>,cont:Function1<Option<O>,Void>){
+	inline public function withInput(?i:Option<I>,cont:Function1<Option<O>,Void>){
 		switch (i) {
 			case Some(v) : Viaz.applyA().withInput( a.entuple(v) , Option.Some.andThen(cont));
 			case None 	 : cont(None);
@@ -206,7 +206,7 @@ class DelayArrow<I,O> implements Arrow<I,O> {
 		this.t = delay;
 	}
 
-	public function withInput(?i : I, cont : Function1<O,Void> ) : Void{
+	inline public function withInput(?i : I, cont : Function1<O,Void> ) : Void{
 		var f = function(){ a.runCPS(i,cont); }
 		Timer.delay( f , t );
 	}
@@ -218,7 +218,7 @@ class EventArrow<T> implements Arrow<hxevents.Dispatcher<T>,T>{
 	public function new(){
 
 	}
-	public function withInput(?i : hxevents.Dispatcher<T>, cont : Function1<T,Void> ) : Void{
+	inline public function withInput(?i : hxevents.Dispatcher<T>, cont : Function1<T,Void> ) : Void{
 		var canceller 	: Void -> Void = null;
 		var handler 		= 
 			function(evt:T){
@@ -241,7 +241,7 @@ class PairArrow<A,B,C,D> implements Arrow<Pair<A,C>,Pair<B,D>>{
 		this.l = l;
 		this.r = r;
 	}
-	public function withInput(?i : Pair<A,C>, cont : Function1<Pair<B,D>,Void> ) : Void{
+	inline public function withInput(?i : Pair<A,C>, cont : Function1<Pair<B,D>,Void> ) : Void{
 
 		var ol : Option<B> 	= null;
 		var or : Option<D> 	= null;
@@ -285,7 +285,7 @@ class Cleave<A,B> implements Arrow<A,Pair<B,B>>{
 		this.a = a;
 	}
 	//public function withInput(?i : I, cont : Function1<O,Void> ) : Void;
-	public function withInput(?i : A, cont : Function1<Pair<B,B>,Void> ) : Void{
+	inline public function withInput(?i : A, cont : Function1<Pair<B,B>,Void> ) : Void{
 		//Debug("Split: " + i).log();
 		a.withInput( i , 
 			function(o){
@@ -303,7 +303,7 @@ class CPSArrow<A,B> implements Arrow<A,B>{
 	public function new(cps){
 		this.cps = cps;
 	}
-	public function withInput(?i:A, cont: Function1<B,Void>):Void{
+	inline public function withInput(?i:A, cont: Function1<B,Void>):Void{
 			return 
 				cps(i,cont);
 	}
@@ -319,7 +319,7 @@ class Merge<A,B,C,D> implements Arrow<A,D>{
 		this.a = a;
 		this.b = b;
 	}
-	public function withInput(?i:A,cont:Function1<D,Void>){
+	inline public function withInput(?i:A,cont:Function1<D,Void>){
 		return a.then(b).withInput( i , cont );
 	}
 	public static function merge<A,B,C,D>(a:Arrow<A,Pair<B,C>>,b:Arrow<Pair<B,C>,D>):Arrow<A,D>{
@@ -331,7 +331,7 @@ class Split<A,B,C> implements Arrow<A,Pair<B,C>>{
 	public function new(l,r){
 		this.a = new PairArrow(l,r);
 	}
-	public function withInput(?i : A, cont : Function1< Pair<B,C> , Void > ) : Void{
+	inline public function withInput(?i : A, cont : Function1< Pair<B,C> , Void > ) : Void{
 		a.withInput( Tuples.t2(i,i) , cont);
 	}
 	static public function split<A,B,C>(split_:Arrow<A,B>,_split:Arrow<A,C>):Arrow<A,Pair<B,C>> { 
@@ -346,7 +346,7 @@ class Or< L, R , R0 > implements Arrow < Either < L, R >, R0 > {
 		this.a = l;
 		this.b = r;
 	}
-	public function withInput(?i : Either<L,R>, cont : Function1< R0, Void > ) : Void {
+	inline public function withInput(?i : Either<L,R>, cont : Function1< R0, Void > ) : Void {
 		switch (i) {
 			case Left(v) 	: a.withInput(v,cont);
 			case Right(v)	: b.withInput(v,cont);
@@ -362,7 +362,7 @@ class LeftChoice<B,C,D> implements Arrow<Either<B,D>,Either<C,D>>{
 	public function new(a){
 		this.a = a;
 	}
-	public function withInput(?i:Either<B,D>, cont : Function1<Either<C,D>,Void>){
+	inline public function withInput(?i:Either<B,D>, cont : Function1<Either<C,D>,Void>){
 		switch (i) {
 			case Left(v) 	:
 				new ArrowApply().withInput( Tuples.t2(a,v) ,
@@ -386,7 +386,7 @@ class RightChoice<B,C,D> implements Arrow<Either<D,B>,Either<D,C>>{
 	public function new(a){
 		this.a = a;
 	}
-	public function withInput(?i:Either<D,B>, cont : Function1<Either<D,C>, Void>){
+	inline public function withInput(?i:Either<D,B>, cont : Function1<Either<D,C>, Void>){
 		switch (i) {
 			case Right(v) 	:
 				new ArrowApply().withInput( Tuples.t2(a,v) ,
@@ -412,7 +412,7 @@ class ArrowApply<I,O> implements Arrow<Pair<Arrow<I,O>,I>,O>{
 
 	public function new(){
 	}
-	public function withInput(?i:Pair<Arrow<I,O>,I>,cont : Function1<O,Void>){
+	inline public function withInput(?i:Pair<Arrow<I,O>,I>,cont : Function1<O,Void>){
 		i._1.withInput(
 			i._2,
 				function(x){
@@ -441,7 +441,7 @@ class FutureArrow<O> implements Arrow<Future<O>,O>{
 	public function new(){
 
 	}
-	public function withInput(?i:Future<O>,cont:Function<O,Void>){
+	inline public function withInput(?i:Future<O>,cont:Function<O,Void>){
 		i.foreach( cont );
 	}
 	static public function project<I,O>(fn:I->Future<O>):Arrow<I,O>{
@@ -481,7 +481,7 @@ class StateArrowImpl<S,A,B> implements Arrow<Pair<A,S>,Pair<B,S>>{
 	public static function new(a){
 		this.arrow = a;
 	}
-	public function withInput(?i:Pair<A,S>,cont:Function<Pair<B,S>,Void>){
+	inline public function withInput(?i:Pair<A,S>,cont:Function<Pair<B,S>,Void>){
 		Viaz.runCPS( arrow, i , cont );
 	}
 	static public function stateA<S,A,B>(a:Arrow<Pair<A,S>,Pair<B,S>>){
