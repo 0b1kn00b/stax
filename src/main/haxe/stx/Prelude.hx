@@ -35,13 +35,14 @@ typedef Function8<P1, P2, P3, P4, P5, P6, P7, P8, R> = P1 -> P2 -> P3 -> P4 -> P
 typedef Function9<P1, P2, P3, P4, P5, P6, P7, P8, P9, R> = P1 -> P2 -> P3 -> P4 -> P5 -> P6 -> P7 -> P8 -> P9 -> R
 typedef Function10<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, R> = P1 -> P2 -> P3 -> P4 -> P5 -> P6 -> P7 -> P8 -> P9 -> P10 -> R
 
-typedef Reducer<T> = T -> T -> T
-typedef Factory<T> = Void -> T
-
+typedef Reducer<T>    = T -> T -> T
+typedef Factory<T>    = Void -> T
+typedef RC<R,A>       = (A -> R) -> R
+typedef Receive<A>    = RC<Void,A>
 /**
  A function which takes no parameter and returns a result.
  */
-typedef Thunk<T> = Void -> T
+typedef Thunk<T>    = Void -> T
 
 /** 
 		An option represents an optional value -- the value may or may not be
