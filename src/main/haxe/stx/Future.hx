@@ -51,9 +51,9 @@ class Future<T> {
     Delivers the value of the future to anyone awaiting it. If the value has
     already been delivered, this method will throw an exception.
    */
-  public function deliver(t: T,?pos:haxe.PosInfos): Future<T> {
+  public function deliver(t: T): Future<T> {
     return if (_isCanceled) this;
-    else if (_isSet) Prelude.error("Future :" + this.value() + " already delivered at " + pos.toString());
+    else if (_isSet) Prelude.error("Future :" + this.value() + " already delivered");
     else {
       _result = t;
       _isSet  = true;
