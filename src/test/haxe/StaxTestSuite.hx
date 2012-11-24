@@ -5,7 +5,7 @@ import stx.test.Runner;
 import stx.test.ui.Report;
 import stx.LogLevel;
 
-import stx.Assertion;
+import stx.Assert;
 
 using stx.framework.Injector;
 using stx.Log;
