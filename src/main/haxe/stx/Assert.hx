@@ -13,8 +13,7 @@ using stx.Bools;
 using stx.Dynamics;
 using stx.Options;
 using stx.Tuples;
-using stx.Cont;
-using stx.Assertion;
+using stx.Assert;
 //using stx.Predicates;
 
 class Assertion<A,B>{
@@ -22,7 +21,7 @@ class Assertion<A,B>{
 	public var msg 	: String;
 	public var fn 	: A->B->Bool;
 }
-class Assertions{
+class Assert{
 	static private function error(p:PosInfos,msg:String = 'ERROR'):Error{
 		return Error.create(msg,p);
 	}
