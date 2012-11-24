@@ -53,7 +53,7 @@ class Continuations{
   }
   static inline public var callcc = cc;
   
-  static public function toFuture<A>(cont:Receive<A>):Future<A>{
+  static public function futureOf<A>(cont:Receive<A>):Future<A>{
     var ft = Future.create();
     cont(
       function(x) ft.deliver(x)
