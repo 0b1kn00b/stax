@@ -10,7 +10,7 @@ import stx.Tuples; 					using stx.Tuples;
 														using stx.Functions;
 
 import haxe.Timer;
-typedef DynArrow = Arrow<Dynamic,Dynamic>;
+typedef AnyArrow = Arrow<Dynamic,Dynamic>;
 
 interface Arrow<I,O>{
 	public function withInput(?i : I, cont : Function1<O,Void>) : Void;
@@ -26,7 +26,7 @@ class Viaz<I,O> implements Arrow<I,O>{
 				return x;
 			}.lift();
 	}
-	static public function constant<I,O>(v:O):Arrow<I,O>{
+	static public function constantA<I,O>(v:O):Arrow<I,O>{
 		return new FunctionArrow( function(x:I):O {return v;});
 	}
 	@:noUsing
@@ -295,6 +295,20 @@ class Cleave<A,B> implements Arrow<A,Pair<B,B>>{
 	}
 	static public function cleave<A,B>(a:Arrow<A,B>):Arrow<A,Pair<B,B>> {
 		return new Cleave(a);
+	}
+}
+class CPSArrow<A,B> implements Arrow<A,B>{
+	var cps : A -> (B -> Void) -> Void;
+
+	public function new(cps){
+		this.cps = cps;
+	}
+	public function withInput(?i:A, cont: Function1<B,Void>):Void{
+			return 
+				cps(i,cont);
+	}
+	static public function cpsA<A,B>(v:A -> (B -> Void)->Void){
+		return new CPSArrow(v);
 	}
 }
 class Merge<A,B,C,D> implements Arrow<A,D>{
