@@ -39,6 +39,8 @@ typedef Reducer<T>    = T -> T -> T
 typedef Factory<T>    = Void -> T
 typedef RC<R,A>       = (A -> R) -> R
 typedef Receive<A>    = RC<Void,A>
+typedef ReceiveE<A,B> = Receive<Either<A,B>>;
+
 /**
  A function which takes no parameter and returns a result.
  */
