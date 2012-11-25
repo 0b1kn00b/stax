@@ -49,9 +49,6 @@ class Viaz<I,O> implements Arrow<I,O>{
 	static public function apply<I,O>(a:Arrow<I,O>,i:I):RC<Void,O>{
 		return function (cont:Function1<O,Void>) a.withInput(i, cont);
 	}
-	static public function execute<I,O>(a:Arrow<I,O>,i:I,cont:O->Void):Void{
-		a.withInput(i,cont);
-	}
 	static public function printA<A,B>(a:Arrow<A,B>):Arrow<A,B>{
 		var m : Function1<B,B> = function(x:B):B { haxe.Log.trace(x) ; return x;};
 		return new Then( a , new FunctionArrow( m ) );
@@ -197,7 +194,7 @@ class DelayArrow<I,O> implements Arrow<I,O> {
 	}
 
 	inline public function withInput(?i : I, cont : Function1<O,Void> ) : Void{
-		var f = function(){ a.execute(i,cont); }
+		var f = function(){ a.withInput(i,cont); }
 		Timer.delay( f , t );
 	}
 	static public function delay<I,O>(a:Arrow<I,O>,delay:Int):Arrow<I,O>{return new DelayArrow(a,delay);}
@@ -288,16 +285,15 @@ class Cleave<A,B> implements Arrow<A,Pair<B,B>>{
 	}
 }
 class CPSArrow<A,B> implements Arrow<A,B>{
-	var cps : A -> (B -> Void) -> Void;
+	var cps : A -> RC<Void,B>;
 
-	public function new(cps){
+	public function new(cps:A->RC<Void,B>){
 		this.cps = cps;
 	}
 	inline public function withInput(?i:A, cont: Function1<B,Void>):Void{
-			return 
-				cps(i,cont);
+		cps(i)(cont);
 	}
-	static public function cpsA<A,B>(v:A -> (B -> Void)->Void){
+	static public function arrowOf<A,B>(v:A -> RC<Void,B>):Arrow<A,B>{
 		return new CPSArrow(v);
 	}
 }
@@ -434,11 +430,8 @@ class FutureArrow<O> implements Arrow<Future<O>,O>{
 	inline public function withInput(?i:Future<O>,cont:Function<O,Void>){
 		i.foreach( cont );
 	}
-	static public function project<I,O>(fn:I->Future<O>):Arrow<I,O>{
+	static public function arrowOf<I,O>(fn:I->Future<O>):Arrow<I,O>{
 		return fn.lift().then( Viaz.futureA() );
-	}
-	static public function projectA<I,O>(a:Arrow<I,Future<O>>):Arrow<I,O>{
-		return a.then( Viaz.futureA()) ;
 	}
 }
 class StateArrows{
@@ -472,7 +465,7 @@ class StateArrowImpl<S,A,B> implements Arrow<Pair<A,S>,Pair<B,S>>{
 		this.arrow = a;
 	}
 	inline public function withInput(?i:Pair<A,S>,cont:Function<Pair<B,S>,Void>){
-		Viaz.execute( arrow, i , cont );
+		arrow.withInput( i , cont );
 	}
 	static public function stateA<S,A,B>(a:Arrow<Pair<A,S>,Pair<B,S>>){
 		return new StateArrowImpl(a);
