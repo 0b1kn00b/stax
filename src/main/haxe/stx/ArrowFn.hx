@@ -5,6 +5,14 @@ using stx.Tuples;
 using stx.Prelude;
 using stx.Functions;
 
+class ArrowFn0{
+  static public function then<A, B>(fn0:Thunk<A>,fn1:A->B):Thunk<B>{
+    return 
+      function():B{
+        return fn1(fn0());
+      }
+  }
+}
 /**
   Arrow class for Functions.
 */
