@@ -77,13 +77,13 @@ class Dynamics {
   /**
     Applies a function 'f' to a valuse of any Type.
   */
-  static public function apply<A,B>(v:A,fn:A->Void):Void{
+  static public function employ<A,B>(v:A,fn:A->Void):Void{
   	fn(v);
   }
   /**
     Drops value a, returns b
   */
-  static public function then<A,B>(a:A,b:B):B{
+  static public function exchange<A,B>(a:A,b:B):B{
   	return b;
   }
   /**
