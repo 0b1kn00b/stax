@@ -144,11 +144,11 @@ class Objects {
     });
   }
   
-  static public function get<T>(d: Dynamic<T>, k: String): Option<T> {
+  static public function getO<T>(d: Dynamic<T>, k: String): Option<T> {
     return if (Reflect.hasField(d, k)) Some(Reflect.field(d, k)); else None;
   }
   
-  static public function getAny(d: Object, k: String): Option<Dynamic> {
+  static public function getAnyO(d: Object, k: String): Option<Dynamic> {
     return if (Reflect.hasField(d, k)) Some(Reflect.field(d, k)); else None;
   }
   
@@ -212,6 +212,18 @@ class Objects {
       fields.forAll(
         function(x){
           return names.forAny( function(y) return x == y );
+        }
+      );
+  }
+  static public function hasAllFields(d:Object,fields:Array<String>):Option<String>{
+    return 
+      fields.foldl(
+        None,
+        function(memo,next){
+          return switch (memo){
+            case None     : Reflect.hasField(d,next) ? None : Some(next) ;
+            case Some(v)  : Some(v);
+          }
         }
       );
   }
