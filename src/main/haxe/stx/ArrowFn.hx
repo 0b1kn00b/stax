@@ -21,7 +21,10 @@ class ArrowFn{
     Returns a function that applies fn1 then fn2 on the input
   */
   static public function then<A,B,C>(fn1:A->B,fn2:B->C):A->C{
-    return fn1.andThen(fn2);
+    return 
+      function(a:A):C{
+        return fn2(fn1(a));
+      }
   }
   /**
     Returns a function that applies fn1 to the left hand side of a Tuple
