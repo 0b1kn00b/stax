@@ -26,6 +26,12 @@ class Viaz<I,O> implements Arrow<I,O>{
 				return x;
 			}.lift();
 	}
+	static public function both<A,B>(a:Arrow<A,B>):Arrow<Tuple2<A,A>,Tuple2<B,B>>{
+		return a.pair(a);
+	}
+	static public function compose<A,B,C>(a0:Arrow<B,C>,a1:Arrow<A,B>){
+		return a1.then(a0);
+	}
 	static public function constantA<I,O>(v:O):Arrow<I,O>{
 		return new FunctionArrow( function(x:I):O {return v;});
 	}
@@ -46,12 +52,20 @@ class Viaz<I,O> implements Arrow<I,O>{
 	static public function as<I,O,NO>(a:Arrow<I,O>,type:Class<NO>):Arrow<I,NO>{
 		return a.then( function(x:O):NO { return cast x; }.lift() ); 
 	}
-	static public function apply<I,O>(a:Arrow<I,O>,i:I):RC<Void,O>{
-		return function (cont:Function1<O,Void>) a.withInput(i, cont);
-	}
 	static public function printA<A,B>(a:Arrow<A,B>):Arrow<A,B>{
 		var m : Function1<B,B> = function(x:B):B { haxe.Log.trace(x) ; return x;};
 		return new Then( a , new FunctionArrow( m ) );
+	}
+	static public function ret<O>(a:Arrow<Unit,O>):RC<Void,O>{
+		return a.withInput.p1(Unit);
+	}
+	static public function cps<I,O>(a:Arrow<I,O>,i:I):RC<Void,O>{
+		return a.withInput.p1(i);
+	}
+	static public function appFt<I,O>(a:Arrow<I,O>,i:I):Future<O>{
+		var f = Future.create();
+		a.cps(i)(f.deliver.toEffect());
+		return f;
 	}
 	@:noUsing
 	public static function applyA<I,O>():Arrow<Pair<Arrow<I,O>,I>,O>{
@@ -324,7 +338,7 @@ class Split<A,B,C> implements Arrow<A,Pair<B,C>>{
 		return new Split(split_,_split); 
 	}
 }
-class Or< L, R , R0 > implements Arrow < Either < L, R >, R0 > {
+class Or<L, R, R0> implements Arrow <Either<L, R>, R0> {
 	var a : Arrow<L,R0>;
 	var b : Arrow<R,R0>;
 	
@@ -394,6 +408,7 @@ class RightChoice<B,C,D> implements Arrow<Either<D,B>,Either<D,C>>{
 		return new RightChoice(arr).then(Eithers.flattenR.lift());
 	}
 }
+typedef ArrowApplyT<I,O> = Arrow<Pair<Arrow<I,O>,I>,O>;
 class ArrowApply<I,O> implements Arrow<Pair<Arrow<I,O>,I>,O>{
 
 	public function new(){
