@@ -72,7 +72,7 @@ class Helper {
     var expr = Context.parse(exprString, pos);
 
     return {
-      name : cname,
+      name : cname + '_',
       doc : null,
       access : [APublic, AStatic],
       kind : FVar( null, expr ),
