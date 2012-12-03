@@ -1,9 +1,13 @@
--lib hxevents
--cp ./src/main/haxe
--cp ./src/test/haxe
--lib singleton
--js ./bin/test.js
 -main StaxTestSuite
 
+-cp src/main/haxe
+-cp src/test/haxe
+
+-js bin/test.js
+
+-lib singleton
+-lib hxevents
+
+-D haxe3
+
 #-D dev
---connect 2331
