@@ -10,7 +10,8 @@ import stx.Tuples; 					using stx.Tuples;
 														using stx.Functions;
 
 import haxe.Timer;
-typedef AnyArrow = Arrow<Dynamic,Dynamic>;
+typedef AnyArrow 					= Arrow<Dynamic,Dynamic>;
+typedef SourceArrow<A> 		= Arrow<Unit,A>;
 
 interface Arrow<I,O>{
 	public function withInput(?i : I, cont : Function1<O,Void>) : Void;
@@ -56,15 +57,18 @@ class Viaz<I,O> implements Arrow<I,O>{
 		var m : Function1<B,B> = function(x:B):B { haxe.Log.trace(x) ; return x;};
 		return new Then( a , new FunctionArrow( m ) );
 	}
-	static public function ret<O>(a:Arrow<Unit,O>):RC<Void,O>{
+	static public function retCps<O>(a:Arrow<Unit,O>):RC<Void,O>{
 		return a.withInput.p1(Unit);
 	}
-	static public function cps<I,O>(a:Arrow<I,O>,i:I):RC<Void,O>{
+	static public function retFt<O>(a:Arrow<Unit,O>):Future<O>{
+		return appFt(a,Unit);
+	}
+	static public function appCps<I,O>(a:Arrow<I,O>,i:I):RC<Void,O>{
 		return a.withInput.p1(i);
 	}
 	static public function appFt<I,O>(a:Arrow<I,O>,i:I):Future<O>{
 		var f = Future.create();
-		a.cps(i)(f.deliver.toEffect());
+		a.appCps(i)(f.deliver.toEffect());
 		return f;
 	}
 	@:noUsing
