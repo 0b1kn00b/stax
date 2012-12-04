@@ -136,9 +136,9 @@ class DefaultLogger implements Logger{
 					//trace('white'.debug());
 					return 
 						includes
-								.map( Enums.params )
-								.map( Arrays.first )
-								.forAny( callback(checker, pos) );
+							.map( Enums.params )
+							.map( Arrays.first )
+							.forAny( callback(checker, pos) );
 				}
 		var black =
 				function(excludes:Array<LogListing>) {
