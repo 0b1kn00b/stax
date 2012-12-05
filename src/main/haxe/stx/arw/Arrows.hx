@@ -25,16 +25,27 @@ class Arrow<I,O> implements IArrow<I,O>{
 }
 
 class Arrows{
-	@:noUsing
-	static public function constant<I,O>(v:O):Arrow<I,O>{
-		return new FunctionArrow( function(x:I):O {return v;});
-	}
+	/**
+
+	*/
 	@:noUsing
 	static public function pure<I>():Arrow<I,I>{
 		return function (x:I):I {
 			return x;
 		}.lift();
 	}
+	/**
+	 	x =====> ? -----*-----x
+	*/
+	@:noUsing
+	static public function constant<I,O>(v:O):Arrow<I,O>{
+		return new FunctionArrow( function(x:I):O {return v;});
+	}
+	/**
+
+		a----f----b =====> a-----(f(a),f(a))-----(b,b)
+
+	*/
 	static public function fan<I,O>(a:Arrow<I,O>):Arrow<I,Pair<O,O>>{
 		return 
 			a.then(
@@ -43,31 +54,71 @@ class Arrows{
 				}.lift()
 			);
 	}
+	/**
+			                         _____f(a)_____
+		a-----f-----b =====>(a,a) /           	 \(b,b)
+		                          \_____f(a)_____/
+	*/
 	static public function both<A,B>(a:Arrow<A,B>):Arrow<Tuple2<A,A>,Tuple2<B,B>>{
 		return a.pair(a);
 	}
-	static public function as<I,O,NO>(a:Arrow<I,O>,type:Class<NO>):Arrow<I,NO>{
+	static public function as<A,B,C>(a:Arrow<A,B>,type:Class<C>):Arrow<A,C>{
 		return a.then( function(x:O):NO { return cast x; }.lift() ); 
 	}
-	static public function then<I,O,NO>(before:Arrow<I,O>, after:Arrow<O,NO>):Arrow<I,NO> { 
+	/**
+		(a-----f0-----b,b-----f1-----c) =====> a-----(f1(f0(a)))-----c
+	*/
+	static public function then<A,B,C>(before:Arrow<A,B>, after:Arrow<C,D>):Arrow<A,C> { 
 		return new ThenArrow(before, after); 
 	}
+	/**         
+                                                  _____f0(a)______
+		(a-----f0-----b,c-----f1-----d) =====> (a,c) /                \(b,d)
+		                                             \_____f1(c)______/
+	*/
 	static public function pair<A,B,C,D>(pair_:Arrow<A,B>,_pair:Arrow<C,D>):Arrow<Pair<A,C>,Pair<B,D>>{ 
 		return new PairArrow(pair_,_pair); 
 	}
-	static public function first<I,O,I2>(first:Arrow<I,O>):Arrow<Pair<I,I2>,Pair<O,I2>>{
+	/**
+		                            _____f(a)_____
+		a-----f-----b =====> (a,c) /              \(b,c)
+		                           \______________/
+	*/
+	static public function first<A,B,C>(first:Arrow<A,B>):Arrow<Pair<A,C>,Pair<B,C>>{
 		return new PairArrow(  first , Arrows.pure() );
 	}
-	static public function second<I,O,I2>(second:Arrow<I,O>):Arrow<Pair<I2,I>,Pair<I2,O>>{
+	/**
+                                 ______________
+		a-----f-----b ======> (c,a) /              \(c,b)
+                                \_____f(a)_____/
+	*/
+	static public function second<A,B,C>(second:Arrow<A,B>):Arrow<Pair<C,A>,Pair<C,B>>{
 		return new PairArrow( Arrows.pure() , second );
 	}
-
+	/**
+                                              ______f0(a)____
+		(a-----f0-----b,b-----f1-----c) =====> a /               \(b,c)
+                                             \_____f1(f0(a))_/
+	*/
 	static public function join<A,B,C>(joinl:Arrow<A,B>,joinr:Arrow<B,C>):Arrow<A,Pair<B,C>>{
 		return new ThenArrow( joinl , Arrows.pure().split(joinr) );
 	}
-	static public function bind<A,B,C>(bindl:Arrow<A,C>,bindr:Arrow<Pair<A,C>,B>):Arrow<A,B>{
+	/**
+	                                                      _____f0(a)_____
+                                                  _____/_______________\(a,b)__-----f1(a,b)-----c
+		(a-----f0-----b,(a,b)-----f1-----c) =====> a /                            /
+		                                             \___________________________/
+
+	*/
+	static public function bind<A,B,C>(bindl:Arrow<A,B>,bindr:Arrow<Pair<A,B>,B>):Arrow<A,C>{
 		return new ThenArrow( Arrows.pure().split(bindl) , bindr );
 	}
+	/**
+
+
+
+
+	*/
 	static public function repeat<I,O> (a:Arrow<I,FreeM<I,O>>):Arrow<I,O>{
 		return new RepeatArrow(a);
 	}
