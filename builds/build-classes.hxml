@@ -1,0 +1,4 @@
+-cp src/main/haxe
+-js test/classes.js
+--no-output
+-main AllClasses

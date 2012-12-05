@@ -3,6 +3,7 @@ package stx.rtti;
 using stx.Prelude;
 using stx.Options;
 using stx.Functions;
+using stx.Compose;
 
 class MetaData{
 	@:noUsing
@@ -10,7 +11,7 @@ class MetaData{
 		return 
 			Options.create(haxe.rtti.Meta.getType(n))
 			.flatMap(
-				Reflect.field.p2(s).then( Options.create )
+				Reflects.getFieldO.p2(s)
 			);
 	}
 }
