@@ -33,9 +33,12 @@ class Helper {
       case TInst(t, params) : typeName(t.get().name, params.map(nameForType));
       case TAnonymous(a)    : "{" + a.get().fields.map(nameForClassField).join(",") + "}";
       case TFun(args, ret)  : args.map(function (x) return x.t).concat([ret]).map(nameForType).join(" -> ");
+      case TEnum(t, params) : typeName(t.get().name, params.map(nameForType));
       default               : throw "not allowed " + Std.string(x);
     }
-    
+  public static function classFieldsForSnd(t : Type) : Array<ClassField> {
+    return null;
+  }    
   public static function classFieldsFor(t : Type) : Array<ClassField> return
     switch (t) {
       case TMono( t )            : classFieldsFor(t.get());
