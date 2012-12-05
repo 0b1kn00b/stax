@@ -1,3 +1,9 @@
+package stx.arw;
+
+import stx.Tuples;
+import stx.Prelude;
+import stx.arw.Arrows;
+
 class SplitArrow<A,B,C> implements Arrow<A,Pair<B,C>>{
 	var a : PairArrow<A,B,A,C>;
 	public function new(l,r){

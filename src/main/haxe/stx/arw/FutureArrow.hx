@@ -1,4 +1,9 @@
 package stx.arw;
+
+import stx.Prelude;
+
+using stx.arw.Arrows;
+
 class FutureArrow<O> implements Arrow<Future<O>,O>{
 	public function new(){
 
@@ -7,6 +12,6 @@ class FutureArrow<O> implements Arrow<Future<O>,O>{
 		i.foreach( cont );
 	}
 	static public function arrowOf<I,O>(fn:I->Future<O>):Arrow<I,O>{
-		return fn.lift().then( Viaz.futureA() );
+		return fn.lift().then( Arrows.future() );
 	}
 }

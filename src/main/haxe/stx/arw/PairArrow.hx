@@ -1,3 +1,9 @@
+package stx.arw;
+
+import stx.Tuples;
+import stx.Prelude;
+import stx.arw.Arrows;
+
 class PairArrow<A,B,C,D> implements Arrow<Pair<A,C>,Pair<B,D>>{
 	public var l 		: Arrow<A,B>;
 	public var r 		: Arrow<C,D>;

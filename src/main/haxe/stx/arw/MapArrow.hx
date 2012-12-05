@@ -1,4 +1,6 @@
 package stx.arw;
+
+using stx.arw.Arrows;
 import stx.Prelude;
 
 class MapArrow <I,O> implements Arrow<Iterable<I>,Iterable<O>>{
@@ -22,7 +24,8 @@ class MapArrow <I,O> implements Arrow<Iterable<I>,Iterable<O>>{
 		 			return 
 			 			switch (x) {
 			 				case None 		: Done(o);
-			 				case Some(v) 	: 
+			 				case Some(v) 	:
+			 				 
 			 					o.push(v);
 			 					Cont( iter );
 			 			}

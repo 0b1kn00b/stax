@@ -1,4 +1,9 @@
 package stx.arw;
+
+import stx.Prelude;
+import stx.Tuples;
+using stx.arw.Arrows;
+
 class StateArrow{
 		static public function write<S,A,B>(a:Arrow<Pair<A,S>,Pair<B,S>>,a1:Arrow<Pair<B,S>,S>):Arrow<Pair<A,S>,Pair<B,S>>{
 		return

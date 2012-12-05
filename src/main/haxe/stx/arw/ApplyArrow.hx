@@ -1,3 +1,9 @@
+package stx.arw;
+
+import stx.Tuples;
+import stx.Prelude;
+import stx.arw.Arrows;
+
 typedef ArrowApplyT<I,O> = Arrow<Pair<Arrow<I,O>,I>,O>;
 class ApplyArrow<I,O> implements Arrow<Pair<Arrow<I,O>,I>,O>{
 	public function new(){

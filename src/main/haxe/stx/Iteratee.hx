@@ -6,7 +6,7 @@ import stx.Prelude;
 import stx.Error;
 import stx.Future;
 
-using stx.reactive.Arrows;
+using stx.arw.Arrows;
 using stx.Iteratee;
 using stx.Promises;
 using stx.Functions;
