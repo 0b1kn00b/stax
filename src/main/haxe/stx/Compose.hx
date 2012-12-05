@@ -154,3 +154,86 @@ class Compose2{
       }
   }
 }
+class ComposeDo{
+  /**
+    Produces a function that calls 'f1' and 'f2' in left to right order.
+    @param  f1
+    @param  f2
+    @return The composite function.
+  */
+  public static function then(f1: Void -> Void, f2: Void -> Void): Void -> Void {
+    return function() {
+      f1();
+      f2();
+    }
+  }
+}
+class ComposeDo1{
+  /**     
+    Produces a function that
+    calls 'f1' and 'f2' in left to right order with the same input, and returns no
+    result.     
+    @param  f1     
+    @param  f2     
+    @return The composite function.
+  */
+  public static function then<P1>(f1: P1 -> Void, f2: P1 -> Void): P1 -> Void {     
+    return function(p1) {       f1(p1);       f2(p1);     }   
+  }   
+}
+class ComposeDo2{
+  /**
+    Produces a function that calls 'f1' and 'f2' in left to right order with the same input, and returns no result.
+    @param  f1
+    @param  f2
+    @return The composite function.
+  */
+  public static function then<P1, P2>(f1: P1 -> P2 -> Void, f2: P1 -> P2 -> Void): P1 -> P2 -> Void {
+    return function(p1, p2) {
+      f1(p1, p2);
+      f2(p1, p2);
+    }
+  }
+}
+class ComposeDo3{
+  /**
+    Produces a function that calls 'f1' and 'f2' in left to right order with the same input, and returns no result.
+    @param  f1
+    @param  f2
+    @return The composite function.
+  */
+  public static function then<P1, P2, P3>(f1: P1 -> P2 -> P3 -> Void, f2: P1 -> P2 -> P3 -> Void): P1 -> P2 -> P3 -> Void {
+    return function(p1, p2, p3) {
+      f1(p1, p2, p3);
+      f2(p1, p2, p3);
+    }
+  }
+}
+class ComposeDo4{
+  /**
+    Produces a function that calls 'f1' and 'f2' in left to right order with the same input, and returns no result.
+    @param  f1
+    @param  f2
+    @return The composite function.
+  */
+  public static function then<P1, P2, P3, P4>(f1: P1 -> P2 -> P3 -> P4 -> Void, f2: P1 -> P2 -> P3 -> P4 -> Void): P1 -> P2 -> P3 -> P4 -> Void {
+    return function(p1, p2, p3, p4) {
+      f1(p1, p2, p3, p4);
+      f2(p1, p2, p3, p4);
+    }
+  }
+}
+class ComposeDo5{
+  /**
+    Produces a function that calls 'f1' and 'f2' in left to right order with the same input, and returns no result.
+    @param  f1
+    @param  f2
+    @return The composite function.
+  */
+  public static function then<P1, P2, P3, P4, P5>(f1: P1 -> P2 -> P3 -> P4 -> P5 -> Void, f2: P1 -> P2 -> P3 -> P4 -> P5 -> Void): P1 -> P2 -> P3 -> P4 -> P5 -> Void {
+    return function(p1, p2, p3, p4, p5) {
+      f1(p1, p2, p3, p4, p5);
+      f2(p1, p2, p3, p4, p5);
+    }
+  }
+}

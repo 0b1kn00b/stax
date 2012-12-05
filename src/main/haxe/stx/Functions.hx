@@ -68,18 +68,6 @@ class Functions0 {
       catch (e: Dynamic) { }
     }
   }
-  /**
-    Produces a function that calls 'f1' and 'f2' in left to right order.
-    @param	f1
-    @param	f2
-	  @return The composite function.
-   */
-  public static function thenDo(f1: Void -> Void, f2: Void -> Void): Void -> Void {
-    return function() {
-      f1();
-      f2();
-    }
-  }
 	/**
 	  Produces a function that calls 'f', ignores its result, and returns the result produced by thunk.
 	  @param f	
@@ -195,17 +183,6 @@ class Functions1 {
         }return d;     
       }   
   }   
-  /**     
-    Produces a function that
-    calls 'f1' and 'f2' in left to right order with the same input, and returns no
-    result.     
-    @param  f1     
-    @param  f2     
-    @return The composite function.
-  */
-  public static function thenDo<P1>(f1: P1 -> Void, f2: P1 -> Void): P1 -> Void {     
-    return function(p1) {       f1(p1);       f2(p1);     }   
-  }   
   /**
   Produces a function that calls 'f', ignores its result, and returns the result
   produced by thunk.     @param f     @param thunk    
@@ -297,18 +274,6 @@ class Functions2 {
       }
       catch (e: Dynamic) { }
       return d;
-    }
-  }
-	/**
-    Produces a function that calls 'f1' and 'f2' in left to right order with the same input, and returns no result.
-    @param	f1
-    @param	f2
-	  @return The composite function.
-   */
-  public static function thenDo<P1, P2>(f1: P1 -> P2 -> Void, f2: P1 -> P2 -> Void): P1 -> P2 -> Void {
-    return function(p1, p2) {
-      f1(p1, p2);
-      f2(p1, p2);
     }
   }
 	/**
@@ -469,18 +434,6 @@ class Functions3 {
     }
   }
 	/**
-    Produces a function that calls 'f1' and 'f2' in left to right order with the same input, and returns no result.
-    @param	f1
-    @param	f2
-	  @return The composite function.
-   */
-  public static function thenDo<P1, P2, P3>(f1: P1 -> P2 -> P3 -> Void, f2: P1 -> P2 -> P3 -> Void): P1 -> P2 -> P3 -> Void {
-    return function(p1, p2, p3) {
-      f1(p1, p2, p3);
-      f2(p1, p2, p3);
-    }
-  }
-	/**
 	  Produces a function that calls 'f', ignores its result, and returns the result produced by thunk.
 	  @param f
 	  @param thunk
@@ -609,12 +562,11 @@ class Functions4 {
       catch (e: Dynamic) { }
       return def;
     }
-  }
-	/**
+  } /**
     Produces a function that calls 'f1' and 'f2' in left to right order with the same input, and returns no result.
-    @param	f1
-    @param	f2
-	  @return The composite function.
+    @param  f1
+    @param  f2
+    @return The composite function.
    */
   public static function thenDo<P1, P2, P3, P4>(f1: P1 -> P2 -> P3 -> P4 -> Void, f2: P1 -> P2 -> P3 -> P4 -> Void): P1 -> P2 -> P3 -> P4 -> Void {
     return function(p1, p2, p3, p4) {
@@ -787,18 +739,6 @@ class Functions5 {
       }
       catch (e: Dynamic) { }
       return def;
-    }
-  }
-	/**
-    Produces a function that calls 'f1' and 'f2' in left to right order with the same input, and returns no result.
-    @param	f1
-    @param	f2
-	  @return The composite function.
-   */
-  public static function thenDo<P1, P2, P3, P4, P5>(f1: P1 -> P2 -> P3 -> P4 -> P5 -> Void, f2: P1 -> P2 -> P3 -> P4 -> P5 -> Void): P1 -> P2 -> P3 -> P4 -> P5 -> Void {
-    return function(p1, p2, p3, p4, p5) {
-      f1(p1, p2, p3, p4, p5);
-      f2(p1, p2, p3, p4, p5);
     }
   }
 	/**
