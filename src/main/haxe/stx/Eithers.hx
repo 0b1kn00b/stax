@@ -117,6 +117,13 @@ class Eithers {
     return
       flatMap(e,cast Eithers.toLeft,f);
   }
+  /**
+    Creates a new Either if the original is Left
+  */
+  static public function flatMapL<A, B, C , D>(e: Either<A, B>,f : A -> Either<C,D>):Either<C,D>{
+    return
+      flatMap(e,f,cast Eithers.toRight);
+  }
   /** 
     Composes two Eithers together. In case of conflicts, "failure" (left) 
     always wins.
