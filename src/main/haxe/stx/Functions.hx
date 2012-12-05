@@ -177,7 +177,7 @@ class Functions1 {
     @return     
   */   
   public static function swallow<A>(f: Function1<A, Void>): Function1<A, Void> {     
-    return toEffect(swallowWith(f, null));   
+    return effectOf(swallowWith(f, null));   
   }   
   /**     
   Produces a function that ignores
@@ -240,7 +240,7 @@ class Functions1 {
 	  @param f
 	  @return 
    */
-  public static function toEffect<P1, R>(f: Function1<P1, R>): P1 -> Void {
+  public static function effectOf<P1, R>(f: Function1<P1, R>): P1 -> Void {
     return function(p1) {
       f(p1);
     }
@@ -283,7 +283,7 @@ class Functions2 {
 	  @return 
 	 */
   public static function swallow<P1, P2>(f: Function2<P1, P2, Void>): Function2<P1, P2, Void> {
-    return toEffect(swallowWith(f, null));
+    return effectOf(swallowWith(f, null));
   }
 	/**
 	  Produces a function that ignores any error the occurs whilst calling the input function, and produces 'd' if error occurs.
@@ -385,7 +385,7 @@ class Functions2 {
 	  @param f
 	  @return 
    */
-  public static function toEffect<P1, P2, R>(f: Function2<P1, P2, R>): P1 -> P2 -> Void {
+  public static function effectOf<P1, P2, R>(f: Function2<P1, P2, R>): P1 -> P2 -> Void {
     return function(p1, p2) {
       f(p1, p2);
     }
@@ -452,7 +452,7 @@ class Functions3 {
 	  @return 
 	 */
   public static function swallow<A, B, C>(f: Function3<A, B, C, Void>): Function3<A, B, C, Void> {
-    return toEffect(swallowWith(f, null));
+    return effectOf(swallowWith(f, null));
   }
 	/**
 	  Produces a function that ignores any error the occurs whilst calling the input function, and produces 'd' if error occurs.
@@ -545,7 +545,7 @@ class Functions3 {
 	  @param f
 	  @return 
    */
-  public static function toEffect<P1, P2, P3, R>(f: Function3<P1, P2, P3, R>): P1 -> P2 -> P3 -> Void {
+  public static function effectOf<P1, P2, P3, R>(f: Function3<P1, P2, P3, R>): P1 -> P2 -> P3 -> Void {
     return function(p1, p2, p3) {
       f(p1, p2, p3);
     }
@@ -594,7 +594,7 @@ class Functions4 {
 	  @return 
 	 */
   public static function swallow<A, B, C, D>(f: Function4<A, B, C, D, Void>): Function4<A, B, C, D, Void> {
-    return toEffect(swallowWith(f, null));
+    return effectOf(swallowWith(f, null));
   }
 	/**
 	  Produces a function that ignores any error the occurs whilst calling the input function, and produces 'd' if error occurs.
@@ -682,7 +682,7 @@ class Functions4 {
 	  @param f
 	  @return 
    */
-  public static function toEffect<P1, P2, P3, P4, R>(f: Function4<P1, P2, P3, P4, R>): P1 -> P2 -> P3 -> P4 -> Void {
+  public static function effectOf<P1, P2, P3, P4, R>(f: Function4<P1, P2, P3, P4, R>): P1 -> P2 -> P3 -> P4 -> Void {
     return function(p1, p2, p3, p4) {
       f(p1, p2, p3, p4);
     }
@@ -773,7 +773,7 @@ class Functions5 {
 	  @return 
 	 */
   public static function swallow<A, B, C, D, E>(f: Function5<A, B, C, D, E, Void>): Function5<A, B, C, D, E, Void> {
-    return toEffect(swallowWith(f, null));
+    return effectOf(swallowWith(f, null));
   }
 	/**
 	  Produces a function that ignores any error the occurs whilst calling the input function, and produces 'd' if error occurs.
@@ -863,7 +863,7 @@ class Functions5 {
 	  @param f
 	  @return 
    */
-  public static function toEffect<P1, P2, P3, P4, P5, R>(f: Function5<P1, P2, P3, P4, P5, R>): P1 -> P2 -> P3 -> P4 -> P5 -> Void {
+  public static function effectOf<P1, P2, P3, P4, P5, R>(f: Function5<P1, P2, P3, P4, P5, R>): P1 -> P2 -> P3 -> P4 -> P5 -> Void {
     return function(p1, p2, p3, p4, p5) {
       f(p1, p2, p3, p4, p5);
     }
