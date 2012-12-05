@@ -8,7 +8,7 @@ import stx.Prelude;
 import stx.test.TestCase;
 import stx.test.Assert;							using stx.test.Assert;
 
-import stx.reactive.Arrows;					using stx.reactive.Arrows;
+import stx.arw.Arrows;					using stx.arw.Arrows;
 import stx.Future;										using stx.Future;
 
 typedef State = { };
