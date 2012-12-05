@@ -97,7 +97,7 @@ class ArrowFn{
   }
   @:noUsing
   static public function pure<A,B>():A->B{
-    return cast Prelude.pure();
+    return cast function(x) return x;
   }
   /**
     Returns a function that produces a `Tuple2` from a value.
