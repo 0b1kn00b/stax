@@ -28,15 +28,6 @@ class Dynamics {
     
     return a;
   }
-	/**
-	  Applies Function1 f to value a and returns the result.
-	  @param			a			Any value.
-	  @param    	f 		Modifier function.
-	  @usage a.into( function(x) return ... )
-	 */
-  static public function into<A, B>(a: A, f: A -> B): B {
-    return f(a);
-  }
 	
 	/**
 	  Returns a Thunk that applies a Thunk one time only and stores the result, after which each successive call returns the stored value.
@@ -77,13 +68,22 @@ class Dynamics {
   /**
     Applies a function 'f' to a valuse of any Type.
   */
-  static public function apply<A,B>(v:A,fn:A->Void):Void{
+  static public function employ<A,B>(v:A,fn:A->Void):Void{
   	fn(v);
+  }
+  /**
+    Applies Function1 f to value a and returns the result.
+    @param      a     Any value.
+    @param      f     Modifier function.
+    @usage a.into( function(x) return ... )
+   */
+  static public function with<A, B>(a: A, f: A -> B): B {
+    return f(a);
   }
   /**
     Drops value a, returns b
   */
-  static public function then<A,B>(a:A,b:B):B{
+  static public function exchange<A,B>(a:A,b:B):B{
   	return b;
   }
   /**

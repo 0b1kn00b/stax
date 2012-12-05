@@ -15,13 +15,13 @@ class ObjectsTest extends TestCase {
   public function testGet() {
     var o = { foo: "bar" };
     
-    assertEquals("bar", o.getAny("foo").get());
+    assertEquals("bar", o.getAnyO("foo").get());
   }
   
   public function testSet() {
     var o = { foo: "bar" };
     
-    assertEquals("baz", o.setAny("foo", "baz").getAny("foo").get());
+    assertEquals("baz", o.setAnyO("foo", "baz").getAnyO("foo").get());
   }
   
   public function testReplaceAll() {
@@ -29,8 +29,8 @@ class ObjectsTest extends TestCase {
     
     var replaced = o.replaceAllAny({foo: "foo"}, '');
     
-    assertEquals("bar", replaced.getAny("foo").get());
+    assertEquals("bar", replaced.getAnyO("foo").get());
     
-    assertTrue(replaced.getAny("bar").isEmpty());
+    assertTrue(replaced.getAnyO("bar").isEmpty());
   }
 }

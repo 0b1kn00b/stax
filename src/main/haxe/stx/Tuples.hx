@@ -95,7 +95,7 @@ class AbstractProduct implements Product {
                 }
               }
             );
-        }
+          }
     return flatn(this);
   }
 }
@@ -116,6 +116,15 @@ class Tuple2<A, B> extends AbstractProduct {
   }
 	static public function entuple<A, B, C>(t:stx.Tuple2<A,B>,c:C): stx.Tuple3<A, B, C> {
     return new Tuple3(t._1, t._2, c);
+  }
+  static public function spread<A,B,C>(f : A -> B -> C){
+    return 
+      function(t:Tuple2<A,B>){
+        return into(t,f);
+      }
+  }
+  static public function map<A,B>(tpl:Tuple2<A,A>,fn:A->B):Tuple2<B,B>{
+    return fromArray( tpl.elements().map(fn) );
   }
 	static public function into<A,B,C>(t:Tuple2<A,B>, f : A -> B -> C ) : C{
     return f(t._1, t._2);
@@ -163,9 +172,22 @@ class Tuple3<A, B, C> extends AbstractProduct {
 	static public function into<A,B,C,D>(t:Tuple3<A,B,C>,f : A -> B -> C -> D) : D {
 		return f(t._1, t._2, t._3);
 	}
+  static public function spread<A,B,C,D>(f : A -> B -> C -> D){
+    return 
+      function(t:Tuple3<A,B,C>){
+        return into(t,f);
+      }
+  }
+  static public function fst<A, B, C>(t : Tuple3<A, B, C>) return t._1
+  static public function snd<A, B, C>(t : Tuple3<A, B, C>) return t._2
+  static public function thd<A, B, C>(t : Tuple3<A, B, C>) return t._3
+
   @:noUsing
-  static public function fromArray(a:Array<Dynamic>){
+  static public function fromArray<A>(a:Array<A>):Tuple3<A,A,A>{
     return new Tuple3(a[0],a[1],a[2]);
+  }
+  static public function map<A,B>(tpl:Tuple3<A,A,A>,fn:A->B):Tuple3<B,B,B>{
+    return fromArray( tpl.elements().map(fn) );
   }
   static public function translate<A,B,C,D,E,F>(t:Tuple3<A,B,C>,f1: A -> D, f2: B -> E, f3 : C -> F):Tuple3<D,E,F>{
     return Tuples.t3(f1(t._1),f2(t._2),f3(t._3));
@@ -206,13 +228,27 @@ class Tuple4< A, B, C, D> extends AbstractProduct {
 
     this._1 = first; this._2 = second; this._3 = third; this._4 = fourth;
   }
+  static public function fst<A, B, C, D>(t : Tuple4<A, B, C, D>) return t._1
+  static public function snd<A, B, C, D>(t : Tuple4<A, B, C, D>) return t._2
+  static public function thd<A, B, C, D>(t : Tuple4<A, B, C, D>) return t._3
+  static public function frt<A, B, C, D>(t : Tuple4<A, B, C, D>) return t._4
+
 	@:noUsing
-  static public function fromArray(a:Array<Dynamic>){
+  static public function fromArray<A>(a:Array<A>):Tuple4<A,A,A,A>{
     return new Tuple4(a[0],a[1],a[2],a[3]);
   }
 	static public function into<A,B,C,D,E>(t:Tuple4<A,B,C,D>,f : A -> B -> C -> D -> E) : E
 		return f(t._1, t._2, t._3, t._4)
 
+  static public function spread<A,B,C,D,E>(f : A -> B -> C -> D -> E){
+    return 
+      function(t:Tuple4<A,B,C,D>){
+        return into(t,f);
+      }
+  }
+  static public function map<A,B>(tpl:Tuple4<A,A,A,A>,fn:A->B):Tuple4<B,B,B,B>{
+    return fromArray( tpl.elements().map(fn) );
+  }
 	static public function first<A, B, C, D>(t : stx.Tuple4<A, B, C, D>) return t._1
 	static public function second<A, B, C, D>(t : stx.Tuple4<A, B, C, D>) return t._2
 	static public function third<A, B, C, D>(t : stx.Tuple4<A, B, C, D>) return t._3
@@ -255,9 +291,24 @@ class Tuple5< A, B, C, D, E> extends AbstractProduct {
 
     this._1 = first; this._2 = second; this._3 = third; this._4 = fourth; this._5 = fifth;
   }
+  static public function fst<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>) return t._1
+  static public function snd<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>) return t._2
+  static public function thd<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>) return t._3
+  static public function frt<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>) return t._4
+  static public function fth<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>) return t._5
+
   @:noUsing
   static public function fromArray(a:Array<Dynamic>){
     return new Tuple5(a[0],a[1],a[2],a[3],a[4]);
+  }
+  static public function map<A,B>(tpl:Tuple5<A,A,A,A,A>,fn:A->B):Tuple5<B,B,B,B,B>{
+    return fromArray( tpl.elements().map(fn) );
+  }
+  static public function spread<A,B,C,D,E,F>(f : A -> B -> C -> D -> E -> F){
+    return 
+      function(t:Tuple5<A,B,C,D,E>){
+        return into(t,f);
+      }
   }
 	static public function into<A,B,C,D,E,F>(t:Tuple5<A,B,C,D,E>,f : A -> B -> C -> D -> E -> F) : F
 		return f(t._1, t._2, t._3, t._4, t._5)

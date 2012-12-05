@@ -4,6 +4,7 @@ package stx;
 using stx.Prelude;
 
 import stx.Tuples;
+import stx.Future;
 
 using stx.Promises;
 using stx.Eithers;
@@ -191,6 +192,20 @@ class Promises{
       tp._1.flatMapR(
         function(b:B){
           return tp._2.mapR( Tuples.t2.p1(b) );
+        }
+      );
+  }
+  static public function bindFoldR<A,B,Err>(iter:Iterable<A>,start:Future<Either<Err,B>>,fm:B->A->Future<Either<Err,B>>):Future<Either<Err,B>>{
+    return 
+      stx.Futures.bindFold(
+        iter,
+        start,
+        function(memo:Either<Err,B>,next:A){
+          return 
+              switch (memo) {
+                case Left(e)    : Promises.failure(e);
+                case Right(v1)  : fm(v1,next);
+              }
         }
       );
   }

@@ -13,11 +13,21 @@ class F{
      }
     return o;
   }
+  /**
+    Short form function
+  */
   @:noUsing
   @:macro static public function n(e:Array<Expr>):Expr{
     return { expr : EFunction( null, mk_fun(mk_args(e[0]), e[1]) ) , pos : Context.currentPos() };
   }
-   static public function mk_fun(args:Array<FunctionArg>,e:Expr):haxe.macro.Function{
+  /**
+    Partial Application.
+  
+  @:macro static public function p(fn:Expre:Array<Expr>):Expr{
+
+  }
+  */
+  static public function mk_fun(args:Array<FunctionArg>,e:Expr):haxe.macro.Function{
     return 
       {
         args    : args,

@@ -1,6 +1,6 @@
 package stx.test;
 
-import stx.test.Dispatcher;
+import hx.Dispatcher;
 
 using stx.Strings;
 using stx.Options;

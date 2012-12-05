@@ -15,6 +15,8 @@
 */
 package stx.test;
 
+import hx.Dispatcher;
+
 /**
 * @:todo add documentation
 */

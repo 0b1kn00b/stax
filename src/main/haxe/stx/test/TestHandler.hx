@@ -16,6 +16,7 @@
 package stx.test;
 
 import stx.test.Assertation;
+import hx.Dispatcher;
 
 /**
 * @:todo add documentation

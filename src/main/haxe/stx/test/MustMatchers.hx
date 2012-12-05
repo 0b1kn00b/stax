@@ -1,4 +1,4 @@
-/*
+  /*
  HaXe library written by John A. De Goes <john@socialmedia.com>
 
  Redistribution and use in source and binary forms, with or without
@@ -19,7 +19,9 @@ import stx.Prelude;
 import stx.plus.Equal;
 
 import stx.ds.Collection;
+
 using stx.Strings;
+using stx.Eithers;
 
 using stx.functional.Foldables;
 
@@ -232,6 +234,39 @@ class Must {
       }
       
       return if (value == null) Left(result); else Right(result);
+    }
+  }
+  public static function negate<T>(c: MustMatcher<T>): MustMatcher<T> {
+    var inverter = function(result) { return { assertion: result.negation, negation: result.assertion } }
+    
+    return function(value) {
+      return c(value).map(inverter, inverter);
+    }
+  }
+  
+  public static function or<T>(c1: MustMatcher<T>, c2: MustMatcher<T>): MustMatcher<T> {
+    var transformer = function(r1, r2) {
+      return {
+        assertion: '(' + r1.assertion + ') || (' + r2.assertion + ')',
+        negation:  '(' + r1.negation + ') && (' + r2.negation + ')'
+      }
+    }
+    
+    return function(value) {
+      return c1(value).composeRight(c2(value), transformer, transformer);
+    }
+  }
+  
+  public static function and<T>(c1: MustMatcher<T>, c2: MustMatcher<T>): MustMatcher<T> {
+    var transformer = function(r1, r2) {
+      return {
+        assertion: '(' + r1.assertion + ') && (' + r2.assertion + ')',
+        negation:  '(' + r1.negation + ') || (' + r2.negation + ')'
+      }
+    }
+    
+    return function(value) {
+      return c1(value).composeLeft(c2(value), transformer, transformer);
     }
   }
 }

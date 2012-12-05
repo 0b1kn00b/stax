@@ -11,7 +11,15 @@ import stx.plus.Equal;
                                   using stx.Arrays;
 
 class Arrays {
-    /**
+  @:noUsing
+  static public function create<A>():Array<A>{
+    return [];
+  }
+  @:noUsing
+  static public function one<A>(v:A):Array<A>{
+    return [v];
+  }
+  /**
     Preforms a foldl, using the first value as the init value
   */
    public static function foldl1<T, T>(a: Array<T>, mapper: T -> T -> T): T {

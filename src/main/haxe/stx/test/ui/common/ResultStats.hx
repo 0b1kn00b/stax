@@ -15,7 +15,7 @@
 */
 package stx.test.ui.common;
 
-import stx.test.Dispatcher;
+import hx.Dispatcher;
 
 /**
 * @:todo add documentation

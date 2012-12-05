@@ -120,7 +120,7 @@ class Strings {
     return str.charCodeAt(i);
   }
 
-  public static function chunk(str: String, len: Int): Array<String> {
+  static public function chunk(str: String, len: Int): Array<String> {
     var start = 0;
     var end   = (start + len).min(str.length);
     
@@ -132,7 +132,7 @@ class Strings {
        [prefix].concat(chunk(rest, len));
      }
   }
-  public static function chars(str: String): Array<String> {
+  static public function chars(str: String): Array<String> {
     var a = [];
     
     for (i in 0...str.length) {
@@ -141,7 +141,7 @@ class Strings {
     
     return a;
   }
-  public static function string(l: Iterable<String>): String {
+  static public function string(l: Iterable<String>): String {
     var o = '';
     for ( val in l) {
       o += val;
@@ -149,11 +149,14 @@ class Strings {
     return o;
   }
   
-  public static function toCamelCase(str: String): String {
+  static public function toCamelCase(str: String): String {
     return SepAlphaPattern.customReplace(str, function(e) { return e.matched(2).toUpperCase(); });
   }
   
-  public static function fromCamelCase(str: String, sep: String): String {
+  static public function fromCamelCase(str: String, sep: String): String {
     return AlphaUpperAlphaPattern.customReplace(str, function(e) { return e.matched(1) + sep + e.matched(2).toLowerCase(); });
+  }
+  static public function split(st:String,sep:String):Array<String>{
+    return st.split(sep);
   }
 }

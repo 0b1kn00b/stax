@@ -15,7 +15,7 @@
 */
 package stx.test.ui.common;
 
-import stx.test.Dispatcher;
+import hx.Dispatcher;
 import stx.test.Runner;
 import stx.test.TestResult;
 

@@ -13,7 +13,7 @@ class CodeBlocks {
 	  @param	c
     @return
 	 */
-  public static function returningC(c:CodeBlock,?val):Thunk<Dynamic>{
+  public static function returningC<A>(c:Void->Void,?val:A):Thunk<A>{
     return function(){
       c();
       return val;
@@ -44,9 +44,9 @@ class CodeBlocks {
   }
 }	
 class Functions0 {
-  static public function apply<A>(f:Void->A){
+  /*static public function apply<A>(f:Void->A){
     return f();
-  }
+  }*/
 	/**
 	 Takes a function that returns a result, and produces one that ignores that result.
 	 */
@@ -163,9 +163,9 @@ class Functions0 {
   }
 } 
 class Functions1 {
-  static public function apply<P,R>(f:P->R,p1:P){
+/*  static public function apply<P,R>(f:P->R,p1:P){
     return (p1);   
-  }   
+  }   */
   /**     
     Produces a function that produces a function for each
     parameter in the originating function. When these
@@ -279,9 +279,9 @@ class Functions1 {
   }
 }
 class Functions2 {  
-  static public function apply<P1,P2,R>(f:P1->P2->R,p1:P1,p2:P2){
+/*  static public function apply<P1,P2,R>(f:P1->P2->R,p1:P1,p2:P2){
     return f(p1,p2);
-  }
+  }*/
   /**
     Places parameter 1 at the back.
   */
@@ -434,9 +434,9 @@ class Functions2 {
   }
 }
 class Functions3 {
-  static public function apply<P1,P2,P3,R>(f:P1->P2->P3->R,p1:P1,p2:P2,p3:P3){
+/*  static public function apply<P1,P2,P3,R>(f:P1->P2->P3->R,p1:P1,p2:P2,p3:P3){
     return f(p1,p2,p3);
-  }
+  }*/
   /**
     Places first parameter at the back.
   */
@@ -594,9 +594,9 @@ class Functions3 {
   }
 }
 class Functions4 {  
-  static public function apply<P1,P2,P3,P4,R>(f:P1->P2->P3->P4->R,p1:P1,p2:P2,p3:P3,p4:P4){
+/*  static public function apply<P1,P2,P3,P4,R>(f:P1->P2->P3->P4->R,p1:P1,p2:P2,p3:P3,p4:P4){
    return f(p1,p2,p3,p4);
-  }
+  }*/
   /**
     Pushes first parameter to the last
   */
@@ -767,9 +767,9 @@ class Functions4 {
   }
 }
 class Functions5 {  
-  static public function apply<P1,P2,P3,P4,P5,R>(f:P1->P2->P3->P4->P5->R,p1:P1,p2:P2,p3:P3,p4:P4,p5:P5){
+/*  static public function apply<P1,P2,P3,P4,P5,R>(f:P1->P2->P3->P4->P5->R,p1:P1,p2:P2,p3:P3,p4:P4,p5:P5){
     return f(p1,p2,p3,p4,p5);
-  }
+  }*/
   static public function ccw<P1,P2,P3,P4,P5,R>(f:Function5<P1,P2,P3,P4,P5,R>):P2->P3->P4->P5->P1->R{
     return 
       function(p2:P2,p3:P3,p4:P4,p5:P5,p1:P1){
