@@ -1,5 +1,6 @@
 package stx.ifs;
 using stx.Functions;
+using stx.Compose;
 
 interface IApply<I,O>{
 	dynamic public function apply(v:I):O;
@@ -7,7 +8,7 @@ interface IApply<I,O>{
 class Apply<E,A> implements IApply<E,A>{
 	@:noUsing
 	static public function pure(){
-		return unit(Prelude.identity());
+		return unit(Compose.pure());
 	}
 	@:noUsing
 	static public function unit<A,B>(fn:A->B){
