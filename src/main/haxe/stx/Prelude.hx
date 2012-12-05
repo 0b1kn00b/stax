@@ -71,6 +71,10 @@ enum Either<A, B> {
   Left(v: A);
   Right(v: B);
 }
+enum FreeM<A, B>{
+  Cont(v:A);
+  Done(v:B);
+}
 typedef FailureOrSuccess<A, B> 	= Either<A, B>
 typedef Outcome<A>              = Either<Error,A>
 
