@@ -10,6 +10,7 @@ using stx.Promises;
 using stx.Eithers;
 using stx.Arrays;
 using stx.Functions;
+using stx.Compose;
 
 class Promises{
   static public function onSuccess<A,B>(ft:Future<Either<A,B>>,fn:B->Void){
@@ -167,7 +168,7 @@ class Promises{
   static public function foreachR<A,B>(v:Future<Either<A,B>>,f:B->Void){
     return 
       v.foreach(
-        Eithers.right.andThen( Options.foreach.p2( f ) ).toEffect()
+        Eithers.right.then( Options.foreach.p2( f ) ).effectOf()
       );
   }
   /**
@@ -176,7 +177,7 @@ class Promises{
   static public function foreachL<A,B>(v:Future<Either<A,B>>,f:A->Void){
     return 
       v.foreach(
-        Eithers.left.andThen( Options.foreach.p2( f ) ).toEffect()
+        Eithers.left.then( Options.foreach.p2( f ) ).effectOf()
       );
   }
   /**

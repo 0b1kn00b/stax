@@ -320,7 +320,7 @@ class Quirks {
        else style;
      }
    }
-   else '').into(function(computedStyle) {
+   else '').with(function(computedStyle) {
      return if (computedStyle == '') None; else computedStyle.toOption();
    });
   }
@@ -329,7 +329,7 @@ class Quirks {
    */
   public static function getCssProperty(elem: HTMLElement, name: String): Option<String> {
     return elem.style.toOption().flatMap(function(style) {
-      return style.getAny(getActualCssPropertyName(name));
+      return style.getAnyO(getActualCssPropertyName(name));
     }).orElse(function() {
       return getComputedCssProperty(elem, name);
     });

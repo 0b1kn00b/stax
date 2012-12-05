@@ -1,12 +1,10 @@
 package stx;
 
 
-import stx.Tuples;            using stx.Tuples;
+using stx.Tuples;
 using stx.Functions;
-
+using stx.Compose;
 using stx.Prelude;
-
-
 using stx.Arrays;
 
 import Type;
@@ -170,7 +168,7 @@ class Objects {
     return 
       extractAll(d)
         .filter(
-          Tuple2.first.andThen( Predicates.isOneOf(fieldnames) )
+          Predicates.isOneOf(fieldnames).first().fstOf()
         );
   }
   static public function extractAllAny(d: Object): Array < Tuple2 < String, Dynamic >> {

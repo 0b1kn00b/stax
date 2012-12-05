@@ -7,7 +7,7 @@ import hx.Prelude;
 import hx.Sys;
 import stx.Accessors;
 import stx.Arrays;
-import stx.ArrowFn;
+import stx.Compose;
 import stx.Assertion;
 import stx.Bools;
 import stx.Combinators;

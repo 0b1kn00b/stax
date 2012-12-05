@@ -25,6 +25,6 @@ class Apply<E,A> implements IApply<E,A>{
 	}
 	public function map<B>(f:A->B):Apply<E,B>{
 		return 
-			unit( apply.andThen(f) );
+			unit( apply.then(f) );
 	}
 }

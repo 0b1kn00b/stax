@@ -1127,7 +1127,7 @@ class BrowserSupport {
   public static function offsetDoesNotIncludeMarginInBodyOffset(): Bool {
     return testFeatureAndMemorize("offsetDoesNotIncludeMarginInBodyOffset", function(v) {
       if (Env.document != null && Env.document.body != null) {
-        return Env.document.body.into(function(body) {
+        return Env.document.body.with(function(body) {
           var bodyMarginTop = Quirks.getComputedCssProperty(body, "margin-top").map(function(s) return s.int(0)).getOrElseC(0);
 
           return Some(body.offsetTop != bodyMarginTop);
@@ -1187,7 +1187,7 @@ class BrowserSupport {
           container.innerHTML = "<div style='position:absolute;top:0;left:0;margin:0;border:5px solid #000;padding:0;width:1px;height:1px;'><div></div></div>";
         });
 
-        return Some(Env.document.body.into(function(body) {
+        return Some(Env.document.body.with(function(body) {
           body.insertBefore(container, body.firstChild);
 
           var checkDiv: HTMLElement = cast container.firstChild.firstChild;
@@ -1216,7 +1216,7 @@ class BrowserSupport {
           container.innerHTML = "<table style='position:absolute;top:0;left:0;margin:0;border:5px solid #000;padding:0;width:1px;height:1px;' cellpadding='0' cellspacing='0'><tr><td></td></tr></table>";
         });
 
-        return Some(Env.document.body.into(function(body) {
+        return Some(Env.document.body.with(function(body) {
           body.insertBefore(container, body.firstChild);
 
           var td: HTMLElement = cast container.getElementsByTagName('td')[0];
@@ -1244,7 +1244,7 @@ class BrowserSupport {
           container.innerHTML = "<div style='position:absolute;top:0;left:0;margin:0;border:5px solid #000;padding:0;width:1px;height:1px;'><div></div></div>";
         });
 
-        return Some(Env.document.body.into(function(body) {
+        return Some(Env.document.body.with(function(body) {
           body.insertBefore(container, body.firstChild);
 
           var innerDiv: HTMLElement = cast container.firstChild;

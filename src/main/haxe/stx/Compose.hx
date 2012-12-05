@@ -1,6 +1,6 @@
 package stx;
 
-using stx.ArrowFn;
+using stx.Compose;
 using stx.Tuples;
 using stx.Prelude;
 using stx.Functions;
@@ -17,6 +17,12 @@ class Compose0{
   Arrow class for Functions.
 */
 class Compose{
+  static public function fstOf<A,B,C,D>(a:Tuple2<A,B>->Tuple2<C,D>):Tuple2<A,B>->C{
+    return a.then( Tuple2.fst );
+  }
+  static public function sndOf<A,B,C,D>(a:Tuple2<A,B>->Tuple2<C,D>):Tuple2<A,B>->D{
+    return a.then( Tuple2.snd );
+  }
   /**
     Returns a function that applies fn1 then fn2 on the input
   */
@@ -47,15 +53,6 @@ class Compose{
   static public function pair<A,B,C,D>(fn1:A->C,fn2:B->D):Tuple2<A,B>->Tuple2<C,D>{
     return 
       function(t){
-        return Tuples.t2(fn1(t._1),fn2(t._2));
-      }
-  }
-  /**
-    Returns a function that applies fn1 to the left hand side of a Tuple and fn2 to the right.
-  */
-  static public function compose<A,B,C,D>(fn1:A->B,fn2:C->D):Tuple2<A,C>->Tuple2<B,D>{
-    return 
-      function(t:Tuple2<A,C>):Tuple2<B,D>{
         return Tuples.t2(fn1(t._1),fn2(t._2));
       }
   }
@@ -98,7 +95,6 @@ class Compose{
   /**
     Pure function.
     [[1,2],[3,4]].flatMap( Compose.pure() );//[1,2,3,4]
-  */
   */
   @:noUsing
   static public function pure<A,B>():A->A{

@@ -10,7 +10,7 @@ class MetaData{
 		return 
 			Options.create(haxe.rtti.Meta.getType(n))
 			.flatMap(
-				Reflect.field.p2(s).andThen( Options.create )
+				Reflect.field.p2(s).then( Options.create )
 			);
 	}
 }

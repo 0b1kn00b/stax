@@ -19,6 +19,7 @@ package stx.io.json;
 using stx.Prelude;
 using stx.io.json.JValue;
 using stx.Functions;
+using stx.Compose;
 
 class Json {
   public static var encodeObject = encode.compose(fromObject);

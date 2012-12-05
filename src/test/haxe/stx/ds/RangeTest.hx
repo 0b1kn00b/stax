@@ -42,14 +42,14 @@ class RangeTest extends stx.test.TestCase{
 
 		assertTrue(range.inside(a));
 		range = 
-			range.into(
+			range.with(
 				function(x){
 					return Range.create(-110,x.max);
 				}
 			);
 		assertFalse(range.inside(a));
 		range = 
-			range.into( Range.create.lazy(-90,0).promote() );
+			range.with( Range.create.lazy(-90,0).promote() );
 
 		assertFalse(range.inside(a));
 	}

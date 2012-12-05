@@ -7,8 +7,9 @@ import stx.Prelude;
 import stx.macro.F;
 import stx.plus.Equal;
 
-using stx.ArrowFn;
+using stx.Compose;
 using stx.Functions;
+using stx.Compose;
 using stx.Bools;
 using stx.Dynamics;
 using stx.Options;
@@ -33,19 +34,19 @@ class Assert{
 		return eq(a,b);
 	}
 	static private function optionOf<A>(fn:A->Bool,msg:String = 'ERROR'):A->Option<String>{
-		return fn.andThen( function(b) return b ? None : Some(msg) );
+		return fn.then( function(b) return b ? None : Some(msg) );
 	}
 	static private function unop<A>(pos, val:A, ?msg, ?eq){
-		return optionOf(equalsWith.p1(val).p2(eq),msg).andThen(Options.map.p2(error.p1(pos)));
+		return optionOf(equalsWith.p1(val).p2(eq),msg).then(Options.map.p2(error.p1(pos)));
 	}
 	static public function areEqualToWith<A>(eq, ?pos):(Tuple2<A,A> -> Option<Error> ){
-		return optionOf(Tuple2.into.p2(equalsWith.p3(eq))).andThen(Options.map.p2(error.p1(pos)));
+		return optionOf(Tuple2.into.p2(equalsWith.p3(eq))).then(Options.map.p2(error.p1(pos)));
 	}
 	static public function areEqualTo<A>(?pos){
 		return areEqualToWith(null,pos);
 	}
 	static public function isEqualToWith<A>(eq, ?pos){ 
-		return Tuple2.create.curry().andThen(Functions1.andThen.p2(areEqualToWith(eq,pos)));
+		return Tuple2.create.curry().then(Compose.then.p2(areEqualToWith(eq,pos)));
 	}
 	static public function isEqualTo(?pos){
 		return isEqualToWith(null,pos);

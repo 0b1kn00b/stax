@@ -6,7 +6,7 @@ class OptionArrow<I,O> implements Arrow<Option<I>,Option<O>>{
 	}
 	inline public function withInput(?i:Option<I>,cont:Function1<Option<O>,Void>){
 		switch (i) {
-			case Some(v) : Viaz.applyA().withInput( a.entuple(v) , Option.Some.andThen(cont));
+			case Some(v) : Viaz.applyA().withInput( a.entuple(v) , Option.Some.then(cont));
 			case None 	 : cont(None);
 		}
 	}

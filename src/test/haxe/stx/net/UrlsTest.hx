@@ -26,7 +26,7 @@ using stx.ds.Map;
 using stx.Options;
 using stx.Strings;
 using stx.Functions;
-
+using stx.Compose;
 
 class UrlsTest extends TestCase {
   public function testParseUrl1() {

@@ -13,7 +13,6 @@ import stx.Future;                 using stx.Future;
 using stx.Promises;
 import stx.Maths;                   using stx.Maths;
 import stx.Iterables;               using stx.Iterables;
-import stx.reactive.Arrows;         using stx.reactive.Arrows;
 
 class PromiseTest extends TestCase{
   public function new() {

@@ -9,7 +9,7 @@ import stx.Prelude;
 using stx.Options;
 using stx.Functions;
 using stx.Error;
-using stx.ArrowFn;
+using stx.Compose;
 using stx.Types;
 
 class Types{

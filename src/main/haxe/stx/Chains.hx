@@ -1,6 +1,6 @@
 package stx;
 
-using stx.ArrowFn;
+using stx.Compose;
 
 class Chains{
 	@:noUsing

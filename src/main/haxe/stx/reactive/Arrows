@@ -68,7 +68,7 @@ class Viaz<I,O> implements Arrow<I,O>{
 	}
 	static public function appFt<I,O>(a:Arrow<I,O>,i:I):Future<O>{
 		var f = Future.create();
-		a.appCps(i)(f.deliver.toEffect());
+		a.appCps(i)(f.deliver.effectOf()()());
 		return f;
 	}
 	@:noUsing
@@ -132,7 +132,6 @@ class FunctionArrow<I,O> implements Arrow<I,O> {
 
 	inline public function withInput(?i : I, cont : Function1<O,Void>) : Void { cont(f(i)); }
 }
-
 class RepeatArrow <I, O > implements Arrow < I , O > {
 	var a : Arrow < I, Either < I, O > > ;
 	public function new < A > (a : Arrow < I, Either < I, O > > ) {
@@ -193,7 +192,7 @@ class OptionArrow<I,O> implements Arrow<Option<I>,Option<O>>{
 	}
 	inline public function withInput(?i:Option<I>,cont:Function1<Option<O>,Void>){
 		switch (i) {
-			case Some(v) : Viaz.applyA().withInput( a.entuple(v) , Option.Some.andThen(cont));
+			case Some(v) : Viaz.applyA().withInput( a.entuple(v) , Option.Some.then(cont));
 			case None 	 : cont(None);
 		}
 	}

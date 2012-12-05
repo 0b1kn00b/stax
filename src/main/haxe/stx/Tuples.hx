@@ -89,7 +89,7 @@ class AbstractProduct implements Product {
             p.elements().flatMap(
               function(v){
                 return if( Std.is(v,Product) ){
-                   flatn(v).flatMap(  Prelude.identity() );
+                   flatn(v).flatMap(  Compose.pure() );
                 }else{
                   [v];
                 }

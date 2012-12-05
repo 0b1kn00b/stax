@@ -246,7 +246,7 @@ class Iteratees{
 						case Done(y,_) 	: Done(y,e);
 						case Cont(k) 		: k(e);
 					}
-		 		case Cont(k) 				: Cont( k.andThen( flatMap.p2(f2) ) );
+		 		case Cont(k) 				: Cont( k.then( flatMap.p2(f2) ) );
 			}
 	}
 }

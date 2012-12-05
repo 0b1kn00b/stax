@@ -23,7 +23,7 @@ class StateTest extends TestCase{
 		var fn3 = function(x:String):String { return '$x rooga'.format(); }.modifier;
 
 		//$type( fn2 );
-		//sr.apply(null).andThen( fn2 );
+		//sr.apply(null).then( fn2 );
 		//trace( untyped sr(null)._1 );	}
 		var sr3 = new stx.States.StateRef('pooty');
 		var val = sr.flatMap( fn2 ).flatMap( fn3 );

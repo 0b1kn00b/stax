@@ -308,7 +308,7 @@ class StreamFutures{
         stream.flatMap(
           function(a:A){
             var o = Streams.pure();
-            fn(a).foreach( o.sendEvent.toEffect() );
+            fn(a).foreach( o.sendEvent.effectOf() );
             return o;
           }
         );

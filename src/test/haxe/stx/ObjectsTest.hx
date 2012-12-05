@@ -19,9 +19,9 @@ class ObjectsTest extends TestCase {
   }
   
   public function testSet() {
-    var o = { foo: "bar" };
+    var o : Object = { foo: "bar" };
     
-    assertEquals("baz", o.setAnyO("foo", "baz").getAnyO("foo").get());
+    assertEquals("baz", o.setAny("foo", "baz").getAnyO("foo").get());
   }
   
   public function testReplaceAll() {

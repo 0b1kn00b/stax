@@ -24,7 +24,7 @@ class States{
     return state(s).first();
   }
   static public function map<S,R,R1>(state:State<S,R>,fn:R->R1):State<S,R1>{
-    return apply.p1(state).andThen( Tuple2.translate.p3( Prelude.identity() ).p2( fn ) );
+    return apply.p1(state).then( Tuple2.translate.p3( Prelude.identity() ).p2( fn ) );
   }
   static public function mapS<S,R>(state:State<S,R>,fn:S->S):State<S,R>{
     return
@@ -35,8 +35,8 @@ class States{
   }
   static public function flatMap<S,R,R1>(state:State<S,R>,fn:R->State<S,R1>):State<S,R1>{
     return apply.p1(state)
-      .andThen( Tuple2.translate.p3( Prelude.identity() ).p2( fn ) )
-      .andThen(
+      .then( Tuple2.translate.p3( Prelude.identity() ).p2( fn ) )
+      .then(
         function(t:Tuple2<State<S,R1>,S>) {
           return t._1(t._2);
         }
@@ -94,7 +94,7 @@ class StateRef<S,A>{
   }
   public function modify(f:A->A):State<S,StateRef<S,A>> {
     var a = read();
-    var v = a.flatMap(f.andThen(write));
+    var v = a.flatMap(f.then(write));
     return v;
   }
   

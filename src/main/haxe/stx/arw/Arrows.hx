@@ -67,7 +67,7 @@ class Arrows{
 	}
 	static public function appFt<I,O>(a:Arrow<I,O>,i:I):Future<O>{
 		var f = Future.create();
-		a.appCps(i)(f.deliver.toEffect());
+		a.appCps(i)(f.deliver.effectOf()()());
 		return f;
 	}
 	public static function applyA<I,O>():Arrow<Pair<Arrow<I,O>,I>,O>{
