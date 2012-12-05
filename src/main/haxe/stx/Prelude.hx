@@ -79,7 +79,7 @@ typedef EqualFunction<T>  			= Function2<T, T, Bool>;
 typedef ShowFunction<T>   			= Function1<T, String>;
 typedef HashFunction<T> 				= Function1<T, Int>;   
 
-typedef Lense < A, B > = {
+typedef Lense<A, B> = {
   get : A -> B,
   set : B -> A -> A
 }
