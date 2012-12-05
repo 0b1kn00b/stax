@@ -1,13 +1,14 @@
--main StaxTestSuite
+builds/build-classes.hxml
+#-main StaxTestSuite
 
--cp src/main/haxe
--cp src/test/haxe
+#-cp src/main/haxe
+#-cp src/test/haxe
 
--js bin/test.js
+#-js bin/test.js
 
--lib singleton
--lib hxevents
+#-lib singleton
+#-lib hxevents
 
--D haxe3
+#-D haxe3
 
 #-D dev
