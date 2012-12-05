@@ -65,7 +65,7 @@ class Enumerators{
         }
       );
   }
-  static public function interleave<E,A>(es:Iterable<Enumerator<E>>){
+  /*static public function interleave<E,A>(es:Iterable<Enumerator<E>>){
     return 
       Enumerator.create(
         function(it0:Iteratee<E,A>){
@@ -132,5 +132,5 @@ class Enumerators{
 
         }
       );
-  }
+  }*/
 }
