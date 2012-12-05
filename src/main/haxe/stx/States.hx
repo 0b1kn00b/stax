@@ -2,6 +2,7 @@ package stx;
 import stx.Prelude;
 import stx.Tuples;    using stx.Tuples;
                       using stx.Functions;
+                      using stx.Compose;
                       using stx.Dynamics;
                       using stx.States;
 
@@ -24,7 +25,7 @@ class States{
     return state(s).first();
   }
   static public function map<S,R,R1>(state:State<S,R>,fn:R->R1):State<S,R1>{
-    return apply.p1(state).then( Tuple2.translate.p3( Prelude.identity() ).p2( fn ) );
+    return apply.p1(state).then( Tuple2.translate.p3( Compose.pure() ).p2( fn ) );
   }
   static public function mapS<S,R>(state:State<S,R>,fn:S->S):State<S,R>{
     return
@@ -35,7 +36,7 @@ class States{
   }
   static public function flatMap<S,R,R1>(state:State<S,R>,fn:R->State<S,R1>):State<S,R1>{
     return apply.p1(state)
-      .then( Tuple2.translate.p3( Prelude.identity() ).p2( fn ) )
+      .then( Tuple2.translate.p3( Compose.pure() ).p2( fn ) )
       .then(
         function(t:Tuple2<State<S,R1>,S>) {
           return t._1(t._2);
