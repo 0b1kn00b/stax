@@ -263,7 +263,7 @@ class ReceivesE{
         function(memo:Either<Err,B>,next:A){
           return 
               switch (memo) {
-                case Left(e)    : Promises.failure(e);
+                case Left(e)    : Receives.pure(Left(e));
                 case Right(v1)  : fm(v1,next);
               }
         }
@@ -274,10 +274,10 @@ class ReceivesEActions {
   public static function chain(a:Array<Void->Receive<Either<Error,Dynamic>>>):Receive<Outcome<Array<Dynamic>>>{
     return 
       a.foldl(
-        Promises.success([])
+        Receives.pure(Right([]))
       , function(init,fn){
           return 
-            init.flatMapR(function(x) return Promises.mapR(fn(),function(y) return x.append(y)));
+            init.flatMapR(function(x) return ReceivesE.mapR(fn(),function(y) return x.append(y)));
         }
     );
   }
