@@ -106,18 +106,7 @@ class Prelude{
   inline static public  function tool<A>(?order:OrderFunction<A>,?equal:EqualFunction<A>,?hash:HashFunction<A>,?show:ShowFunction<A>):CollectionTools<A>{
     return { order : order , equal : equal , show : show , hash : hash };
   }
-  /**
-    Function identity.
-    [[1,2],[3,4]].flatMap( Prelude.identity() );//[1,2,3,4]
-  */
-  @:noUsing
-  static public function identity<A>(): Function1<A, A> {
-    return function(a: A) { return a; }
-  }
-  @:noUsing
-  static public function pure<A>(): Function1<A, A> {
-    return function(a: A) { return a; }
-  }
+  
   static public function unfold<T, R>(initial: T, unfolder: T -> Option<Tuple2<T, R>>): Iterable<R> {
     return {
       iterator: function(): Iterator<R> {

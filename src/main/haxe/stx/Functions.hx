@@ -141,7 +141,7 @@ class Functions0 {
     @param f     
     @return     
   */   
-  public static function toEffect<T>(f: Function0<T>): Void -> Void {     
+  public static function effectOf<T>(f: Function0<T>): Void -> Void {     
     return function() {
       f();     
     }   
@@ -151,16 +151,7 @@ class Functions0 {
   */   
   public static function equals<A>(a:Thunk<A>,b:Thunk<A>){     
     return Reflect.compareMethods(a,b);   
-  }   
-  /**     
-    Apply Thunk followed by f1.   
-  */
-  static public function andThen<A,B>(a:Thunk<A>,b:Function1<A,B>):Thunk<B>{
-    return        
-      function(){
-        return b(a());       
-      }   
-  }
+  } 
 } 
 class Functions1 {
 /*  static public function apply<P,R>(f:P->R,p1:P){
@@ -233,24 +224,7 @@ class Functions1 {
   public static function returningC<P1, R1, R2>(f: Function1<P1, R2>, value: R2): Function1<P1, R2> {
     return returning(f, value.toThunk());
   }
-	/**
-	  Returns a function that calls 'f1' with the output of 'f2'.
-	  @param f1
-	  @param f2
-	 */
-  public static function compose<U, V, W>(f1: Function1<V, W>, f2: Function1<U, V>): Function1<U, W> {
-    return function(u: U): W {
-      return f1(f2(u));
-    }
-  }
-	/**
-	  Returns a function that calls 'f2' with the output of 'f1'.
-	  @param f1
-	  @param f2
-	 */
-  public static function andThen<U, V, W>(f1: Function1<U, V>, f2: Function1<V, W>): Function1<U, W> {
-    return compose(f2, f1);
-  }
+
 	/**
 	  Produdes a function that calls 'f' with the given parameters p1....pn.
 	 */
@@ -349,17 +323,7 @@ class Functions2 {
       return thunk();
     }
   }
-  /**
-    Returns a function that calls 'f2' with the output of 'f1'.
-    @param f1
-    @param f2
-   */
-  public static function andThen<U, V, W, X>(f1: Function2<U, V, W>, f2: Function1<W, X>): Function2<U, V, X> {
-    return 
-      function(u:U,v:V):X{
-        return f2(f1(u,v));
-      }
-  }
+
 	/**
 	  Produces a function that calls 'f', ignores it's result, and returns 'value'
 	  @param f

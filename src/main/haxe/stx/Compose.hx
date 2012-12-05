@@ -5,7 +5,7 @@ using stx.Tuples;
 using stx.Prelude;
 using stx.Functions;
 
-class ArrowFn0{
+class Compose0{
   static public function then<A, B>(fn0:Thunk<A>,fn1:A->B):Thunk<B>{
     return 
       function():B{
@@ -16,7 +16,7 @@ class ArrowFn0{
 /**
   Arrow class for Functions.
 */
-class ArrowFn{
+class Compose{
   /**
     Returns a function that applies fn1 then fn2 on the input
   */
@@ -95,8 +95,13 @@ class ArrowFn{
           }
       }
   }
+  /**
+    Pure function.
+    [[1,2],[3,4]].flatMap( Compose.pure() );//[1,2,3,4]
+  */
+  */
   @:noUsing
-  static public function pure<A,B>():A->B{
+  static public function pure<A,B>():A->A{
     return cast function(x) return x;
   }
   /**
@@ -110,6 +115,9 @@ class ArrowFn{
         }
       );
   }
+  /**
+    Returns a function that produces `v`.
+  */
   static public function constant<A,B>(v:B):A->B{
     return function(x:A){ return v; }
   }
@@ -121,5 +129,28 @@ class ArrowFn{
   }
   static public function bind<A,B,C>(bindl:A->C,bindr:Pair<A,C>->B):A->B{
     return pure().split(bindl).then( bindr );
+  }
+  /**
+    Returns a function that calls 'f1' with the output of 'f2'.
+    @param f1
+    @param f2
+  */
+  public static function compose<U, V, W>(f1: Function1<V, W>, f2: Function1<U, V>): Function1<U, W> {
+    return function(u: U): W {
+      return f1(f2(u));
+    }
+  }
+}
+class Compose2{
+  /**
+    Returns a function that calls 'f2' with the output of 'f1'.
+    @param f1
+    @param f2
+  */
+  public static function then<U, V, W, X>(f1: Function2<U, V, W>, f2: Function1<W, X>): Function2<U, V, X> {
+    return 
+      function(u:U,v:V):X{
+        return f2(f1(u,v));
+      }
   }
 }
