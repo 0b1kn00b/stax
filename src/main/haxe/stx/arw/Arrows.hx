@@ -63,12 +63,12 @@ class Arrows{
 		return a.pair(a);
 	}
 	static public function as<A,B,C>(a:Arrow<A,B>,type:Class<C>):Arrow<A,C>{
-		return a.then( function(x:O):NO { return cast x; }.lift() ); 
+		return a.then( function(x:B):C { return cast x; }.lift() ); 
 	}
 	/**
 		(a-----f0-----b,b-----f1-----c) =====> a-----(f1(f0(a)))-----c
 	*/
-	static public function then<A,B,C>(before:Arrow<A,B>, after:Arrow<C,D>):Arrow<A,C> { 
+	static public function then<A,B,C>(before:Arrow<A,B>, after:Arrow<B,C>):Arrow<A,C> { 
 		return new ThenArrow(before, after); 
 	}
 	/**         
@@ -110,7 +110,7 @@ class Arrows{
 		                                             \___________________________/
 
 	*/
-	static public function bind<A,B,C>(bindl:Arrow<A,B>,bindr:Arrow<Pair<A,B>,B>):Arrow<A,C>{
+	static public function bind<A,B,C>(bindl:Arrow<A,B>,bindr:Arrow<Pair<A,B>,C>):Arrow<A,C>{
 		return new ThenArrow( Arrows.pure().split(bindl) , bindr );
 	}
 	/**

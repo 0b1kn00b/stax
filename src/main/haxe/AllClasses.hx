@@ -4,7 +4,6 @@ import hx.Dispatcher;
 import stx.Accessors;
 import stx.Arrays;
 import stx.arw.ApplyArrow;
-import stx.arw.Arrow;
 import stx.arw.Arrows;
 import stx.arw.CPSArrow;
 import stx.arw.FunctionArrow;
