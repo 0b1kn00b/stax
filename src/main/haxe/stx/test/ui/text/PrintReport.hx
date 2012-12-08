@@ -21,7 +21,7 @@ import stx.test.Runner;
 import stx.test.TestResult;
 import stx.test.ui.common.ResultAggregator;
 import stx.test.ui.common.PackageResult;
-import haxe.Stack;
+import haxe.CallStack;
 
 #if php
 import php.Lib;

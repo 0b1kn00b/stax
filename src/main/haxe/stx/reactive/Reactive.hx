@@ -164,7 +164,7 @@ class Stream<T> {
     
     private var _weak: Bool;
     
-    public var weaklyHeld (getWeaklyHeld, setWeaklyHeld): Bool;
+    public var weaklyHeld (get_weaklyHeld, set_weaklyHeld): Bool;
     
     private var _cleanups: Array<Void -> Void>;
     
@@ -1185,7 +1185,7 @@ class Stream<T> {
         }
     }
     
-    private function setWeaklyHeld(held: Bool): Bool {
+    private function set_weaklyHeld(held: Bool): Bool {
         if (_weak != held) {
             _weak = held;
         
@@ -1199,7 +1199,7 @@ class Stream<T> {
         return _weak;
     }
     
-    private function getWeaklyHeld(): Bool {
+    private function get_weaklyHeld(): Bool {
         return _weak;
     }
 }

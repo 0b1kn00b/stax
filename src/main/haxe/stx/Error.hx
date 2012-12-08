@@ -1,6 +1,6 @@
 package stx;
 
-import haxe.Stack;
+import haxe.CallStack;
 import haxe.PosInfos;
 
 using stx.Functions;

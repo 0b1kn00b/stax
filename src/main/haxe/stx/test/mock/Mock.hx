@@ -27,7 +27,7 @@ class Mock<T> {
   var _expects: Map<String, Array<Dynamic>>;
   var _target: T;
   
-  public var target (getTarget, null): T;
+  public var target (get_target, null): T;
   
   private function new(c: Class<T>) {  
     _expects = Map.create();
@@ -124,7 +124,7 @@ class Mock<T> {
     }
   }
   
-  private function getTarget(): T {
+  private function get_target(): T {
     return cast _target;
   }
   

@@ -1,6 +1,6 @@
   package stx.io.json;
 
-import haxe.Stack;
+import haxe.CallStack;
 import stx.Prelude;
 
 import stx.plus.Equal;

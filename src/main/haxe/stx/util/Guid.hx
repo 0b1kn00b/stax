@@ -39,6 +39,6 @@ class ShortCode{
     var b = StringTools.hex(fn());
     var c = StringTools.hex(fn());
     var d = StringTools.hex(fn());
-    return Std.format('$a$b$c$d');
+    return '$a$b$c$d';
   }
 }

@@ -81,10 +81,10 @@ class Method0 <O> extends Method<Void,O,Void->O >{
 	public function new(fn,name,?pos){
 		super(fn,name,pos);
 	}
-	override public function execute(?v,?pos:PosInfos):O {
+/*	override public function execute(?pos:PosInfos):O {
 		super.execute();
 		return fn();
-	}
+	}*/
 	public static function toMethod<O>(fn:Void->O,name){
 		return new Method0(fn,name);
 	}
@@ -108,7 +108,7 @@ class Method1 < I, O > extends Method < I, O, I->O > {
 					fn(args);
 			}
 		}catch (e:Dynamic) {
-			trace( 'Declared $this \n called $e'.format() );
+			trace( 'Declared $this \n called $e' );
 		}
 		//Debug(type(o)).log();
 		return o;

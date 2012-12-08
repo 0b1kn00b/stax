@@ -19,7 +19,7 @@ class HTMLParser {
 							new_script_node = d.createElement ("script");
 							
 							if (r.match (node_as_text)) {
-								~/(\w+)=(["'])([^\1]*)\1/.customReplace (r.matched (1), 
+								~/(\w+)=(["'])([^\1]*)\1/.map (r.matched (1), 
 										function (matches) {
 											new_script_node.setAttribute (matches.matched (1), matches.matched (3)); return "";
 										}
@@ -39,7 +39,7 @@ class HTMLParser {
         parsed                 = parse (s);
 
     container.innerHTML = parsed[0];
-    return Lambda.map ({iterator: function (): Iterator<Int> {return new IntIter (0, container.childNodes.length);}}, function (i) {return container.childNodes[i];}).array().concat (
+    return Lambda.map ({iterator: function (): Iterator<Int> {return new IntIterator (0, container.childNodes.length);}}, function (i) {return container.childNodes[i];}).array().concat (
            parsed.slice (1).map (convert_script).array());
   }
   #end

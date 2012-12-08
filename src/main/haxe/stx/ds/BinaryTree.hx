@@ -3,7 +3,6 @@ package stx.ds;
 using Std;
 using stx.Prelude;
 using stx.Arrays;
-using stx.Iterables;
 using stx.Functions;
 using stx.Options;
 using stx.Prelude;

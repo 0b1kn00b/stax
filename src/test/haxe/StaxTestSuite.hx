@@ -80,7 +80,7 @@ class StaxTestSuite {
           //, new stx.reactive.StreamTest()
           //, new stx.io.log.LogTest()
           //, new stx.io.FileSystemTest()
-          //, new stx.IntIterTest()
+          //, new stx.IntIteratorTest()
           //, new OptimiseTest()
           //, new stx.ds.ZipperTest()
           //, new stx.ds.IterateeTest()

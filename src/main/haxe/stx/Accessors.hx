@@ -1,6 +1,8 @@
 package stx;
 
+import stx.Prelude;
 using stx.Functions;
+using stx.Compose;
 
 typedef Accessor<A> = {
 	get : Void -> A,
@@ -23,6 +25,7 @@ class Accessors{
 		return Reflect.field.p2(s);
 	}
 	static public function setter(s:String):Dynamic->Dynamic->Dynamic{
-		return Reflect.setField.p2(s);
+		return null;
+		//return Compose.pure().fan().then( Reflect.setField.p2(s).returningC(Unit).first() ).then( Pair.snd);
 	}
 }

@@ -130,7 +130,6 @@ class Time {
 		return new Time().setRaw( 1. * m);
 	}
 	public function toString() {
-		return [days, ":" , hours, ":" , minutes, ":", seconds, ":", milliseconds].join("");
+		return '$days:$hours:$minutes:$seconds:$milliseconds';
 	}
-	
 }

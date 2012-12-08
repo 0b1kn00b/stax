@@ -27,7 +27,7 @@ import stx.test.TestResult;
 import stx.test.ui.common.ResultAggregator;
 import stx.test.ui.common.PackageResult;
 import stx.test.ui.common.ResultStats;
-import haxe.Stack;
+import haxe.CallStack;
 
 using stx.test.ui.common.ReportTools;
 
@@ -98,7 +98,7 @@ class HtmlReport implements IReport < HtmlReport > {
       infos : infos,
       time : time - startTime,
       delta : delta,
-      stack : Stack.callStack()
+      stack : CallStack.callStack()
     } );
     _traceTime = Timer.stamp();
   }
@@ -160,7 +160,7 @@ class HtmlReport implements IReport < HtmlReport > {
   function formatStack(stack : Array<StackItem>, addNL = true) {
     var parts = [];
     var nl = addNL ? '\n' : '';
-    for (part in Stack.toString(stack).split('\n'))
+    for (part in CallStack.toString(stack).split('\n'))
     {
       if (StringTools.trim(part) == '')
         continue;

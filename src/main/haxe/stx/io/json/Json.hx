@@ -64,7 +64,7 @@ class Json {
   public static function encode (v: JValue): String {
     switch (v) {
       case JNull:        return "null";
-      case JString (v):  return "\"" + ~/./.customReplace (~/(\n)/g.replace (~/("|\\)/g.replace (v, "\\$1"), "\\n"), function (r) {
+      case JString (v):  return "\"" + ~/./.map (~/(\n)/g.replace (~/("|\\)/g.replace (v, "\\$1"), "\\n"), function (r) {
                                                              var c = r.matched (0).charCodeAt (0);
                                                              return c >= 32 && c <= 127 ? String.fromCharCode (c) : "\\u" + StringTools.hex (c, 4);
                                                            }) + "\"";
@@ -192,7 +192,7 @@ class Json {
         case 0: value = JNull;                                                                                          // null
         case 1: value = JBool (true);                                                                                   // true
         case 2: value = JBool (false);                                                                                  // false
-        case 4: value = JString (~/\\([bfnrt\\\/"]|u[0-9a-fA-F]{4})/.customReplace (temp, function (r) {                // string
+        case 4: value = JString (~/\\([bfnrt\\\/"]|u[0-9a-fA-F]{4})/.map (temp, function (r) {                // string
                                    var s = r.matched (1);
                                    if      (s ==  "n") return "\n";                    else if (s ==  "r") return "\r";
                                    else if (s ==  "b") return String.fromCharCode (8); else if (s ==  "f") return String.fromCharCode (12);

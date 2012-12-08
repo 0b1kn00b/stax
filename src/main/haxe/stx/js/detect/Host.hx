@@ -62,7 +62,7 @@ class Host {
     else if (SafariPattern.match(userAgent)) Safari(SafariPattern.matched(1));
     else if (FirefoxPattern.match(userAgent)) Firefox(FirefoxPattern.matched(1));
     else if (IEPattern.match(userAgent)) IE(IEPattern.matched(1));
-    else Unknown(userAgent);
+    else EnvironmentType.Unknown(userAgent);
   }
   
   private static function detectOS(): OSType {

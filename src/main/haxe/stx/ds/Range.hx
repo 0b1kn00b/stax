@@ -46,7 +46,7 @@ class Range<T:Float> {
 	}
 	public function toString(){
 		var tname = this.getClass().getClassName();
-		return '$tname(min:$min,max:$max)'.format();
+		return '$tname(min:$min,max:$max)';
 	}
 	//public static function apply<A,B>(r:Range<A>,f0 : Range<A> -> B,):B{
 		//return f0(r);

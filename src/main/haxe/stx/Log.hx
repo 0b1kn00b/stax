@@ -96,9 +96,9 @@ class Log {
 	public static function blacklist(s:String) {
 		return LogListing.Exclude(s);
 	}
-	public static function pack(s:String):String { return '.*\\($s.*:.*\\)'.format(); }
-	public static function func(s:String):String { return '.*\\(.*:$s\\)'.format(); }
-	public static function file(s:String):String { return '$s.*\\(.*:'.format(); }
+	public static function pack(s:String):String { return '.*\\($s.*:.*\\)'; }
+	public static function func(s:String):String { return '.*\\(.*:$s\\)'; }
+	public static function file(s:String):String { return '$s.*\\(.*:'; }
 }
 @DefaultImplementation('stx.DefaultLogger')
 interface Logger {

@@ -182,13 +182,13 @@ private class InjectorImpl {
 
   /** Globally binds the interface to the specified implementation.
    */
-  public static function bindTo<T, S>(interf: Class<T>, impl: Class<S>, ?bindingType: BindingType):Dynamic {
+  public static function bindTo<T, S>(interf: Class<T>, impl: Class<S>, ?bindingType: BindingType):Void {
     return globally().bindTo(interf, impl, bindingType);
   }
 
   /** Globally binds the interface to the specified factory.
    */
-  public static function bindToF<T>(interf: Class<T>, f: Void -> T, bindingType: BindingType):Dynamic {
+  public static function bindToF<T>(interf: Class<T>, f: Void -> T, bindingType: BindingType):Void {
     return globally().bindToF(interf, f, bindingType);
   }
 

@@ -41,7 +41,7 @@ class BrowserSupport {
 	 * @return 
    */
   public static function cssTransformationSupported(): Bool {
-    return testFeatureAndMemorize("cssTransformationSupported", function(v){
+    return testFeatureAndMemorize("cssTransformationSupported", function(){
       var isSupported = None;
       var docEl = Env.document.documentElement;
       if (docEl != null ) {
@@ -56,7 +56,7 @@ class BrowserSupport {
    * have a body for the detection to be accurate.
    */
   public static function elementTagnameUppercased(): Bool {
-    return testFeatureAndMemorize("elementTagnameUppercased", function(v) {
+    return testFeatureAndMemorize("elementTagnameUppercased", function() {
       var isUppercased = None;
       var docEl = Env.document.documentElement;
       if (docEl != null) {
@@ -71,7 +71,7 @@ class BrowserSupport {
    * have a body for the detection to be accurate.
    */
   public static function querySelectorIgnoresCapitalizedValuesBug(): Bool {
-    return testBugAndMemorize("querySelectorIgnoresCapitalizedValuesBug", function(v){
+    return testBugAndMemorize("querySelectorIgnoresCapitalizedValuesBug", function(){
       var result = None;
       if (Env.document.createElement != null && (Env.document.compatMode == 'BackCompat')) {
         var el  = Env.document.createElement('div');
@@ -91,7 +91,7 @@ class BrowserSupport {
    * have a body for the detection to be accurate.
    */
   public static function isEventSrcelementPresent(): Bool {
-    return testFeatureAndMemorize("isEventSrcelementPresent", function(v) {
+    return testFeatureAndMemorize("isEventSrcelementPresent", function() {
         var isSupported = None;
         if (Env.document.createElement != null) {
         var i    = Env.document.createElement('input');
@@ -122,7 +122,7 @@ class BrowserSupport {
    * have a body for the detection to be accurate.
    */
   public static function isNativeHasAttributePresent(): Bool {
-    return testFeatureAndMemorize("isNativeHasAttributePresent", function(v) {
+    return testFeatureAndMemorize("isNativeHasAttributePresent", function() {
       var isSupported = None;
       if (Env.document.createElement != null) {
         var i       = Env.document.createElement('iframe');
@@ -161,7 +161,7 @@ class BrowserSupport {
    * have a body for the detection to be accurate.
    */
   public static function isContextMenuEventSupported(): Bool {
-    return testFeatureAndMemorize("isContextMenuEventSupported", function(v) {
+    return testFeatureAndMemorize("isContextMenuEventSupported", function() {
       var isPresent = None;
       if (Env.document.createElement != null) {
         var el = Env.document.createElement('p');
@@ -179,7 +179,7 @@ class BrowserSupport {
    * have a body for the detection to be accurate.
    */
   public static function computedStyleReturnsValuesForStaticlyPositionedElements(): Bool {
-    return testFeatureAndMemorize("computedStyleReturnsValuesForStaticlyPositionedElements", function(v) {
+    return testFeatureAndMemorize("computedStyleReturnsValuesForStaticlyPositionedElements", function() {
       var result = None;
       var view = Env.document.defaultView;
       if (view != null && view.getComputedStyle != null) {
@@ -206,7 +206,7 @@ class BrowserSupport {
   }
 
   public static function isRgbaSupported(): Bool {
-    return testFeatureAndMemorize("isRgbaSupported", function(v) {
+    return testFeatureAndMemorize("isRgbaSupported", function() {
       var result = None;
       if (Env.document.createElement != null) {
         var value = 'rgba(1,1,1,0.5)';
@@ -226,7 +226,7 @@ class BrowserSupport {
     });
   }
   public static function isCssBorderRadiusSupported(): Bool {
-    return testFeatureAndMemorize("isCssBorderRadiusSupported", function(v) {
+    return testFeatureAndMemorize("isCssBorderRadiusSupported", function() {
       var result = None;
       var docEl = Env.document.documentElement;
       if (docEl != null ) {
@@ -241,7 +241,7 @@ class BrowserSupport {
   }
 
   public static function elemenChildrenReturnsElementNodes(): Bool {
-    return testFeatureAndMemorize("elemenChildrenReturnsElementNodes", function(v) {
+    return testFeatureAndMemorize("elemenChildrenReturnsElementNodes", function() {
       var isSupported = None;
       var docEl = Env.document.documentElement;
       if (Env.document.createElement != null && Env.isDefined(untyped docEl.children)) {
@@ -260,7 +260,7 @@ class BrowserSupport {
   }
 
   public static function isCanvasSupported(): Bool {
-    return testFeatureAndMemorize("isCanvasSupported", function(v) {
+    return testFeatureAndMemorize("isCanvasSupported", function() {
       var result = None;
       if (Env.document.createElement != null) {
         var elCanvas = Env.document.createElement('canvas');
@@ -275,7 +275,7 @@ class BrowserSupport {
    * have a body for the detection to be accurate.
    */
   public static function positionFixed(): Bool {
-    return testFeatureAndMemorize("positionFixed", function(v) {
+    return testFeatureAndMemorize("positionFixed", function() {
         var isSupported = None;
 
         if (Env.document.createElement != null) {
@@ -302,7 +302,7 @@ class BrowserSupport {
   }
 
   public static function isCssEnabled(): Bool {
-    return testFeatureAndMemorize("isCssEnabled", function(v) {
+    return testFeatureAndMemorize("isCssEnabled", function() {
       var isSupported = None;
       var body = Env.document.body;
       if (Env.document.createElement != null &&
@@ -322,7 +322,7 @@ class BrowserSupport {
   }
 
   public static function isQuirksMode(): Bool {
-    return testFeatureAndMemorize("isQuirksMode", function(v) {
+    return testFeatureAndMemorize("isQuirksMode", function() {
       var result = None;
       if (Env.document.createElement != null) {
         var el = Env.document.createElement('div');
@@ -338,7 +338,7 @@ class BrowserSupport {
   }
 
   public static function isContainsBuggy(): Bool {
-    return testBugAndMemorize("isContainsBuggy", function(v) {
+    return testBugAndMemorize("isContainsBuggy", function() {
       var result = None;
       if (Env.document.createElement != null) {
         var el1 = Env.document.createElement('div'),
@@ -352,7 +352,7 @@ class BrowserSupport {
   }
 
   public static function isActivexEnabled(): Bool {
-    return testFeatureAndMemorize("isActivexEnabled", function(v) {
+    return testFeatureAndMemorize("isActivexEnabled", function() {
       var result = Some(false);
       untyped if (window.ActiveXObject){
         var xmlVersions = [
@@ -377,7 +377,7 @@ class BrowserSupport {
   }
 
   public static function typeofNodelistIsFunctionBug(): Bool {
-    return testBugAndMemorize("typeofNodelistIsFunctionBug", function(v) {
+    return testBugAndMemorize("typeofNodelistIsFunctionBug", function() {
       var result = None;
       if (Env.document.forms != null) {
         result = Some(Env.typeOf(Env.document.forms) == 'function');
@@ -386,7 +386,7 @@ class BrowserSupport {
     });
   }
   public static function getElementsByTagNameReturnsCommentNodesBug(): Bool {
-    return testBugAndMemorize("getElementsByTagNameReturnsCommentNodesBug", function(v) {
+    return testBugAndMemorize("getElementsByTagNameReturnsCommentNodesBug", function() {
       var result = None;
       if (Env.document.createElement != null) {
         var el = Env.document.createElement('div');
@@ -404,7 +404,7 @@ class BrowserSupport {
     });
   }
   public static function setAttributeIgnoresNameAttributeBug(): Bool {
-    return testBugAndMemorize("setAttributeIgnoresNameAttributeBug", function(v) {
+    return testBugAndMemorize("setAttributeIgnoresNameAttributeBug", function() {
       var result = None;
       if (Env.document.createElement != null) {
             var elForm = Env.document.createElement('form');
@@ -433,7 +433,7 @@ class BrowserSupport {
   }
 
   public static function elementPropertiesAreAttributesBug(): Bool {
-    return testBugAndMemorize("elementPropertiesAreAttributesBug", function(v) {
+    return testBugAndMemorize("elementPropertiesAreAttributesBug", function() {
       var result = None;
       if (Env.document.createElement != null) {
         var el = Env.document.createElement('div');
@@ -448,7 +448,7 @@ class BrowserSupport {
   }
 
   public static function isRegexpWhitespaceCharacterClassBug(): Bool {
-    return testBugAndMemorize("isRegexpWhitespaceCharacterClassBug", function(v) {
+    return testBugAndMemorize("isRegexpWhitespaceCharacterClassBug", function() {
       var result = None;
       untyped __js__("var str = '\\u0009\\u000A\\u000B\\u000C\\u000D\\u0020\\u00A0\\u1680\\u180E\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200A\\u202F\\u205F\\u3000\\u2028\\u2029'");
       result = untyped Some(__js__("!/^\\s+$/.test(str)"));
@@ -457,14 +457,14 @@ class BrowserSupport {
   }
 
   public static function isStringPrototypeSplitRegexpBug(): Bool {
-    return testBugAndMemorize("isStringPrototypeSplitRegexpBug", function(v) {
+    return testBugAndMemorize("isStringPrototypeSplitRegexpBug", function() {
       var s = 'a_b';
       return untyped Some(__js__("s.split(/(_)/).length != 3"));
     });
   }
 
   public static function preElementsIgnoreNewLinesBug(): Bool {
-    return testBugAndMemorize("preElementsIgnoreNewLinesBug", function(v) {
+    return testBugAndMemorize("preElementsIgnoreNewLinesBug", function() {
       var result = None;
       if (Env.document.createElement != null && Env.document.createTextNode != null) {
         var el = Env.document.createElement('pre');
@@ -492,7 +492,7 @@ class BrowserSupport {
   }
 
   public static function selectElementInnerHtmlBug(): Bool {
-    return testBugAndMemorize("selectElementInnerHtmlBug", function(v) {
+    return testBugAndMemorize("selectElementInnerHtmlBug", function() {
       var result = None;
       if (Env.document.createElement != null) {
         var el = Env.document.createElement('select');
@@ -509,7 +509,7 @@ class BrowserSupport {
   }
 
   public static function tableElementInnerHtmlBug(): Bool {
-    return testBugAndMemorize("tableElementInnerHtmlBug", function(v) {
+    return testBugAndMemorize("tableElementInnerHtmlBug", function() {
       var result = None;
       if (Env.document.createElement != null) {
         try {
@@ -528,7 +528,7 @@ class BrowserSupport {
   }
 
   public static function scriptElementRejectsTextNodeAppendingBug(): Bool {
-    return testBugAndMemorize("scriptElementRejectsTextNodeAppendingBug", function(v) {
+    return testBugAndMemorize("scriptElementRejectsTextNodeAppendingBug", function() {
       var result = None;
       if (Env.document.createElement != null && Env.document.createTextNode != null) {
         var s = Env.document.createElement('script');
@@ -547,7 +547,7 @@ class BrowserSupport {
   }
 
   public static function documentGetElementByIdConfusesIdsWithNamesBug(): Bool {
-    return testBugAndMemorize("documentGetElementByIdConfusesIdsWithNamesBug", function(v) {
+    return testBugAndMemorize("documentGetElementByIdConfusesIdsWithNamesBug", function() {
       var result = Some(false);
       if (Env.document.getElementsByTagName != null && Env.document.createElement != null) {
         // need to feature test all these DOM methods before calling them
@@ -574,7 +574,7 @@ class BrowserSupport {
   }
 
   public static function documentGetElementByIdIgnoresCaseBug(): Bool {
-    return testBugAndMemorize("documentGetElementByIdIgnoresCaseBug", function(v) {
+    return testBugAndMemorize("documentGetElementByIdIgnoresCaseBug", function() {
       var result = None;
       if (Env.document.createElement != null && Env.document.getElementsByTagName != null && Env.document.getElementById != null) {
         var el = Env.document.createElement('script');
@@ -593,7 +593,7 @@ class BrowserSupport {
   }
 
   public static function offsetValuesForStaticElementsInsidePositionedOnesBug(): Bool {
-    return testBugAndMemorize("offsetValuesForStaticElementsInsidePositionedOnesBug", function(v) {
+    return testBugAndMemorize("offsetValuesForStaticElementsInsidePositionedOnesBug", function() {
       var result = None;
       var body = Env.document.body;
       if (body != null &&
@@ -634,7 +634,7 @@ class BrowserSupport {
   }
 
   public static function isDocumentGetElementsByNameBug(): Bool {
-    return testBugAndMemorize("isDocumentGetElementsByNameBug", function(v) {
+    return testBugAndMemorize("isDocumentGetElementsByNameBug", function() {
       var result = None;
       var docEl = Env.document.documentElement;
       if (docEl != null &&
@@ -656,7 +656,7 @@ class BrowserSupport {
   }
 
   public static function isOverflowStyleBug(): Bool {
-    return testBugAndMemorize("isOverflowStyleBug", function(v) {
+    return testBugAndMemorize("isOverflowStyleBug", function() {
       var result = None;
       if (Env.document.createElement != null) {
         var el = Env.document.createElement('div');
@@ -675,7 +675,7 @@ class BrowserSupport {
   }
 
   public static function isQuerySelectorAllBug(): Bool {
-    return testBugAndMemorize("isQuerySelectorAllBug", function(v) {
+    return testBugAndMemorize("isQuerySelectorAllBug", function() {
       var result = None;
       if (Env.document.createElement != null) {
         var el = Env.document.createElement('div');
@@ -689,7 +689,7 @@ class BrowserSupport {
     });
   }
   public static function html5Audio(): Bool {
-    return testFeatureAndMemorize("html5Audio", function(v) {
+    return testFeatureAndMemorize("html5Audio", function() {
       var result = None;
       if (Env.document.createElement != null) {
         var el = Env.document.createElement('audio');
@@ -701,22 +701,22 @@ class BrowserSupport {
   }
 
   public static function html5AudioInMP3Format(): Bool {
-    return testFeatureAndMemorize("html5AudioInMP3Format", function(v) {
+    return testFeatureAndMemorize("html5AudioInMP3Format", function() {
       return canPlayType('audio', 'audio/mpeg;');
     });
   }
   public static function html5AudioInVorbisFormat(): Bool {
-    return testFeatureAndMemorize("html5AudioInVorbisFormat", function(v) {
+    return testFeatureAndMemorize("html5AudioInVorbisFormat", function() {
       return canPlayType('audio', 'audio/ogg; codecs="vorbis"');
     });
   }
   public static function html5AudioInWavFormat(): Bool {
-    return testFeatureAndMemorize("html5AudioInWavFormat", function(v) {
+    return testFeatureAndMemorize("html5AudioInWavFormat", function() {
       return  canPlayType('audio', 'audio/wav; codecs="1"');
     });
   }
   public static function html5AudioInAACFormat(): Bool {
-    return testFeatureAndMemorize("html5AudioInAACFormat", function(v) {
+    return testFeatureAndMemorize("html5AudioInAACFormat", function() {
       return canPlayType('audio', 'audio/mp4; codecs="mp4a.40.2"');
     });
   }
@@ -730,7 +730,7 @@ class BrowserSupport {
     return result;
   }
   public static function html5Canvas(): Bool {
-    return testFeatureAndMemorize("html5Canvas", function(v) {
+    return testFeatureAndMemorize("html5Canvas", function() {
       var result = None;
       if (Env.document.createElement != null) {
         var a = Env.document.createElement('canvas');
@@ -741,7 +741,7 @@ class BrowserSupport {
     });
   }
   public static function html5CanvasTextAPI(): Bool {
-    return testFeatureAndMemorize("html5CanvasTextAPI", function(v) {
+    return testFeatureAndMemorize("html5CanvasTextAPI", function() {
       var result = None;
       if (Env.document.createElement != null) {
         var c = Env.document.createElement('canvas');
@@ -752,139 +752,139 @@ class BrowserSupport {
     });
   }
   public static function html5Command(): Bool {
-    return testFeatureAndMemorize("html5Command", function(v) {
+    return testFeatureAndMemorize("html5Command", function() {
       return checIfExist('command', 'type');
     });
   }
   public static function html5Datalist(): Bool {
-    return testFeatureAndMemorize("html5Datalist", function(v) {
+    return testFeatureAndMemorize("html5Datalist", function() {
       return checIfExist('datalist', 'options');
     });
   }
   public static function html5Details(): Bool {
-    return testFeatureAndMemorize("html5Details", function(v) {
+    return testFeatureAndMemorize("html5Details", function() {
       return checIfExist('details', 'open');
     });
   }
   public static function html5Device(): Bool {
-    return testFeatureAndMemorize("html5Device", function(v) {
+    return testFeatureAndMemorize("html5Device", function() {
       return checIfExist('device', 'type');
     });
   }
   public static function html5FormConstraintValidation(): Bool {
-    return testFeatureAndMemorize("html5FormConstraintValidation", function(v) {
+    return testFeatureAndMemorize("html5FormConstraintValidation", function() {
       return checIfExist('form', 'noValidate');
     });
   }
   public static function html5IframeSandbox(): Bool {
-    return testFeatureAndMemorize("html5IframeSandbox", function(v) {
+    return testFeatureAndMemorize("html5IframeSandbox", function() {
       return checIfExist('iframe', 'sandbox');
     });
   }
   public static function html5IframeSrcdoc(): Bool {
-    return testFeatureAndMemorize("html5IframeSrcdoc", function(v) {
+    return testFeatureAndMemorize("html5IframeSrcdoc", function() {
       return checIfExist('iframe', 'srcdoc');
     });
   }
   public static function html5InputAutofocus(): Bool {
-    return testFeatureAndMemorize("html5InputAutofocus", function(v) {
+    return testFeatureAndMemorize("html5InputAutofocus", function() {
       return checIfExist('input', 'autofocus');
     });
   }
   public static function html5InputPlaceholder(): Bool {
-    return testFeatureAndMemorize("html5InputPlaceholder", function(v) {
+    return testFeatureAndMemorize("html5InputPlaceholder", function() {
       return checIfExist('input', 'placeholder');
     });
   }
   public static function html5InputTypeColor(): Bool {
-    return testFeatureAndMemorize("html5InputTypeColor", function(v) {
+    return testFeatureAndMemorize("html5InputTypeColor", function() {
       return checIputTypeProperty('color');
     });
   }
   public static function html5InputTypeEmail(): Bool {
-    return testFeatureAndMemorize("html5InputTypeEmail", function(v) {
+    return testFeatureAndMemorize("html5InputTypeEmail", function() {
       return checIputTypeProperty('email');
     });
   }
   public static function html5InputTypeNumber(): Bool {
-    return testFeatureAndMemorize("html5InputTypeNumber", function(v) {
+    return testFeatureAndMemorize("html5InputTypeNumber", function() {
       return checIputTypeProperty('range');
     });
   }
   public static function html5InputTypeRange(): Bool {
-    return testFeatureAndMemorize("html5InputTypeRange", function(v) {
+    return testFeatureAndMemorize("html5InputTypeRange", function() {
       return checIputTypeProperty('color');
     });
   }
   public static function html5InputTypeSearch(): Bool {
-    return testFeatureAndMemorize("html5InputTypeSearch", function(v) {
+    return testFeatureAndMemorize("html5InputTypeSearch", function() {
       return checIputTypeProperty('search');
     });
   }
   public static function html5InputTypeTel(): Bool {
-    return testFeatureAndMemorize("html5InputTypeTel", function(v) {
+    return testFeatureAndMemorize("html5InputTypeTel", function() {
       return checIputTypeProperty('tel');
     });
   }
   public static function html5InputTypeUrl(): Bool {
-    return testFeatureAndMemorize("html5InputTypeUrl", function(v) {
+    return testFeatureAndMemorize("html5InputTypeUrl", function() {
       return checIputTypeProperty('url');
     });
   }
   public static function html5InputTypeDate(): Bool {
-    return testFeatureAndMemorize("html5InputTypeDate", function(v) {
+    return testFeatureAndMemorize("html5InputTypeDate", function() {
       return checIputTypeProperty('date');
     });
   }
   public static function html5InputTypeTime(): Bool {
-    return testFeatureAndMemorize("html5InputTypeTime", function(v) {
+    return testFeatureAndMemorize("html5InputTypeTime", function() {
       return checIputTypeProperty('time');
     });
   }
   public static function html5InputTypeDatetime(): Bool {
-    return testFeatureAndMemorize("html5InputTypeDatetime", function(v) {
+    return testFeatureAndMemorize("html5InputTypeDatetime", function() {
       return checIputTypeProperty('datetime');
     });
   }
   public static function html5InputTypeDatetimeLocal(): Bool {
-    return testFeatureAndMemorize("html5InputTypeDatetimeLocal", function(v) {
+    return testFeatureAndMemorize("html5InputTypeDatetimeLocal", function() {
       return checIputTypeProperty('datetime-local');
     });
   }
   public static function html5InputTypeWeek(): Bool {
-    return testFeatureAndMemorize("html5InputTypeWeek", function(v) {
+    return testFeatureAndMemorize("html5InputTypeWeek", function() {
       return checIputTypeProperty('week');
     });
   }
   public static function html5InputTypeMonth(): Bool {
-    return testFeatureAndMemorize("html5InputTypeMonth", function(v) {
+    return testFeatureAndMemorize("html5InputTypeMonth", function() {
       return checIputTypeProperty('month');
     });
   }
 
   public static function html5Meter(): Bool {
-    return testFeatureAndMemorize("html5Meter", function(v) {
+    return testFeatureAndMemorize("html5Meter", function() {
       return checIfExist('meter', 'value');
     });
   }
   public static function html5Output(): Bool {
-    return testFeatureAndMemorize("html5Output", function(v) {
+    return testFeatureAndMemorize("html5Output", function() {
       return checIfExist('output', 'value');
     });
   }
   public static function html5Progress(): Bool {
-    return testFeatureAndMemorize("html5Progress", function(v) {
+    return testFeatureAndMemorize("html5Progress", function() {
       return checIfExist('value', 'progress');
     });
   }
   public static function html5Time(): Bool {
-    return testFeatureAndMemorize("html5Time", function(v) {
+    return testFeatureAndMemorize("html5Time", function() {
       return checIfExist('time', 'valueAsDate');
     });
   }
 
   public static function html5Video(): Bool {
-    return testFeatureAndMemorize("html5Video", function(v) {
+    return testFeatureAndMemorize("html5Video", function() {
       var result = None;
       if (Env.document.createElement != null) {
         var el = Env.document.createElement('video');
@@ -896,13 +896,13 @@ class BrowserSupport {
   }
 
   public static function html5VideoCaptions(): Bool {
-    return testFeatureAndMemorize("html5VideoCaptions", function(v) {
+    return testFeatureAndMemorize("html5VideoCaptions", function() {
       return checIfExist('track', 'track');
     });
   }
 
   public static function html5VideoPoster(): Bool {
-    return testFeatureAndMemorize("html5VideoPoster", function(v) {
+    return testFeatureAndMemorize("html5VideoPoster", function() {
       return checIfExist('track', 'poster');
     });
   }
@@ -927,22 +927,22 @@ class BrowserSupport {
     return result;
   }
   public static function html5VidouInWebMFormat(): Bool {
-    return testFeatureAndMemorize("html5VidouInWebMFormat", function(v) {
+    return testFeatureAndMemorize("html5VidouInWebMFormat", function() {
       return canPlayType('video', 'video/webm; codecs="vp8, vorbis"');
     });
   }
   public static function html5VidouInH264Format(): Bool {
-    return testFeatureAndMemorize("html5VidouInH264Format", function(v) {
+    return testFeatureAndMemorize("html5VidouInH264Format", function() {
       return canPlayType('video', 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
     });
   }
   public static function html5VidouInTheoraFormat(): Bool {
-    return testFeatureAndMemorize("html5VidouInTheoraFormat", function(v) {
+    return testFeatureAndMemorize("html5VidouInTheoraFormat", function() {
       return canPlayType('video', 'video/ogg; codecs="theora, vorbis"');
     });
   }
   public static function html5ContentEditable(): Bool {
-    return testFeatureAndMemorize("html5ContentEditable", function(v) {
+    return testFeatureAndMemorize("html5ContentEditable", function() {
       return checIfExist('span', 'isContentEditable');
     });
   }
@@ -950,7 +950,7 @@ class BrowserSupport {
     return Env.isDefined(Env.window.postMessage);
   }
   public static function html5DragAndDrop(): Bool {
-    return testFeatureAndMemorize("html5DragAndDrop", function(v) {
+    return testFeatureAndMemorize("html5DragAndDrop", function() {
       return checIfExist('span', 'draggable');
     });
   }
@@ -997,7 +997,7 @@ class BrowserSupport {
     return (Env.document.createElementNS != null) && (untyped Env.document.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGRect != null);
   }
   public static function html5SVGInTextHtml(): Bool {
-      return testFeatureAndMemorize("html5SVGInTextHtml", function(v) {
+      return testFeatureAndMemorize("html5SVGInTextHtml", function() {
       var result = None;
       if (Env.document.createElement != null) {
         var e = Env.document.createElement("div");
@@ -1125,7 +1125,7 @@ class BrowserSupport {
    * It's not clear from W3 if this is a bug or not.
    */
   public static function offsetDoesNotIncludeMarginInBodyOffset(): Bool {
-    return testFeatureAndMemorize("offsetDoesNotIncludeMarginInBodyOffset", function(v) {
+    return testFeatureAndMemorize("offsetDoesNotIncludeMarginInBodyOffset", function() {
       if (Env.document != null && Env.document.body != null) {
         return Env.document.body.with(function(body) {
           var bodyMarginTop = Quirks.getComputedCssProperty(body, "margin-top").map(function(s) return s.int(0)).getOrElseC(0);
@@ -1177,7 +1177,7 @@ class BrowserSupport {
    * from W3 if this is a bug or not.
    */
   public static function offsetDoesNotAddBorder(): Bool {
-    return testFeatureAndMemorize("offsetDoesNotAddBorder", function(v) {
+    return testFeatureAndMemorize("offsetDoesNotAddBorder", function() {
       if (Env.document != null && Env.document.body != null) {
         var container = Env.document.createElement("div").withEffect(function(container) {
           container.style.extendWith({
@@ -1206,7 +1206,7 @@ class BrowserSupport {
    * It's not clear from W3 if this is a bug or not.
    */
   public static function offsetAddsBorderForTableAndCells(): Bool {
-    return testFeatureAndMemorize("offsetAddsBorderForTableAndCells", function(v) {
+    return testFeatureAndMemorize("offsetAddsBorderForTableAndCells", function() {
       if (Env.document != null && Env.document.body != null) {
         var container = Env.document.createElement("div").withEffect(function(container) {
           container.style.extendWith({
@@ -1234,7 +1234,7 @@ class BrowserSupport {
    * set to some other value than 'visible'.
    */
   public static function offsetSubtractsBorderForOverflowNotVisible(): Bool {
-    return testFeatureAndMemorize("offsetSubtractsBorderForOverflowNotVisible", function(v) {
+    return testFeatureAndMemorize("offsetSubtractsBorderForOverflowNotVisible", function() {
       if (Env.document != null && Env.document.body != null) {
         var container = Env.document.createElement("div").withEffect(function(container) {
           container.style.extendWith({
@@ -1283,7 +1283,7 @@ class BrowserSupport {
   }
 
   private static function test(contents: String, tagName: String, f: HTMLElement -> Bool, def1: Bool, def2: Bool): Bool {
-  return testAndMemorize("testInBody" + contents + tagName, def1, function(v) {
+  return testAndMemorize("testInBody" + contents + tagName, def1, function() {
       return if (Env.document == null) None;
       else {
         var div = Env.document.createElement('div');
@@ -1297,7 +1297,7 @@ class BrowserSupport {
   }
 
   private static function testInBody(contents: String, tagName: String, f: HTMLElement -> Bool, def1: Bool, def2: Bool): Bool {
-    return testAndMemorize("testInBody" + contents + tagName, def1, function(v) {
+    return testAndMemorize("testInBody" + contents + tagName, def1, function() {
       return if (Env.document == null || Env.document.body == null) None;
       else {
         var div = Env.document.createElement('div');
@@ -1315,13 +1315,13 @@ class BrowserSupport {
       }
     });
   }
-  private static function testFeatureAndMemorize(key: String, testFunction: Function<Void, Option<Bool>>): Bool{
+  private static function testFeatureAndMemorize(key: String, testFunction: Thunk<Option<Bool>>): Bool{
     return testAndMemorize(key, true, testFunction);
   }
-  private static function testBugAndMemorize(key: String, testFunction: Function<Void, Option<Bool>>): Bool{
+  private static function testBugAndMemorize(key: String, testFunction: Thunk<Option<Bool>>): Bool{
     return testAndMemorize(key, false, testFunction);
   }
-  private static function testAndMemorize(key: String, defaultValue: Bool, testFunction: Function<Void, Option<Bool>>): Bool{
+  private static function testAndMemorize(key: String, defaultValue: Bool, testFunction: Thunk<Option<Bool>>): Bool{
     return memorized.get(key).getOrElse(function(){
       var result: Option<Bool> = untyped testFunction.call();
       result.foreach(function(v){

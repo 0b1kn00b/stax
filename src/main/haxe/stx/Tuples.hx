@@ -1,8 +1,7 @@
 package stx;
 
 using stx.Prelude;
-
-                    using stx.Tuples;  
+using stx.Tuples;
 
 class Tuples {
 	
@@ -18,7 +17,7 @@ class Tuples {
 	static public inline function t5<A,B,C,D,E>(_1:A,_2:B,_3:C,_4:D,_5:E):stx.Tuple5<A,B,C,D,E>{
 		return new Tuple5(_1, _2, _3, _4, _5);
 	}
-  static public inline function elements(p:Product){
+  static public inline function elements(p:Product):Array<Dynamic>{
     return p.elements();
   }
 }

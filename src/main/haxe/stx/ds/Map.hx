@@ -50,8 +50,8 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   public static var MinLoad = 1;
 
   
-  public var keyOrder(getKeyOrder,null)      : OrderFunction<K>;
-  private function getKeyOrder(){
+  public var keyOrder(get_keyOrder,null)      : OrderFunction<K>;
+  private function get_keyOrder(){
     return 
       if (keyOrder == null || keyOrder == Order.nil ){
           keys().headOption().map( Order.getOrderFor )
@@ -62,8 +62,8 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
       }
   }
 
-  public var valueOrder    : OrderFunction<V>;
-  private function getValueOrder(){
+  public var valueOrder(get_valueOrder,null)   : OrderFunction<V>;
+  private function get_valueOrder(){
     return 
       if (valueOrder == null || valueOrder == Order.nil){
           values().headOption().map( Order.getOrderFor )
@@ -74,8 +74,8 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
       }
   }
 
-  public var keyHash(getKeyHash,null)       : HashFunction<K>;
-  private function getKeyHash(){
+  public var keyHash(get_keyHash,null)       : HashFunction<K>;
+  private function get_keyHash(){
     return 
       if (keyHash == null || keyHash == Hasher.nil){
         keys().headOption()
@@ -86,8 +86,8 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
         keyHash;
       }
   }
-  public var valueHash(getValueHash,null)     : HashFunction<V>;
-  private function getValueHash(){
+  public var valueHash(get_valueHash,null)     : HashFunction<V>;
+  private function get_valueHash(){
     return 
       if (valueHash == null || valueHash == Hasher.nil){
         values().headOption()
@@ -99,8 +99,8 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
       }
   }
 
-  public var keyShow(getKeyShow,null)       : ShowFunction<K>;
-  private function getKeyShow(){
+  public var keyShow(get_keyShow,null)       : ShowFunction<K>;
+  private function get_keyShow(){
     return 
       if (keyShow == null || keyShow == Show.nil){
         keys().headOption()
@@ -111,8 +111,8 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
         keyShow;
       }
   }
-  public var valueShow(getValueShow,null)   : ShowFunction<V>;
-  private function getValueShow(){
+  public var valueShow(get_valueShow,null)   : ShowFunction<V>;
+  private function get_valueShow(){
     return 
       if (valueShow == null || valueShow == Show.nil){
         values().headOption()
@@ -123,8 +123,8 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
         valueShow;
       }
   }
-  public var keyEqual(getKeyEqual,null)     : EqualFunction<K>;
-  private function getKeyEqual(){
+  public var keyEqual(get_keyEqual,null)     : EqualFunction<K>;
+  private function get_keyEqual(){
     return 
       if (keyEqual == null || keyEqual == Equal.nil){
           keys().headOption().map( Equal.getEqualFor )
@@ -134,8 +134,8 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
         keyEqual;
       }
   }
-  public var valueEqual(getValueEqual,null)    : EqualFunction<V>;
-  private function getValueEqual(){
+  public var valueEqual(get_valueEqual,null)    : EqualFunction<V>;
+  private function get_valueEqual(){
     return 
       if (valueEqual == null || valueEqual == Equal.nil ){
           values().headOption().map( Equal.getEqualFor )

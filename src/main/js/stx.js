@@ -235,12 +235,12 @@ IntHash.prototype = {
 	,h: null
 	,__class__: IntHash
 }
-var IntIter = $hxClasses["IntIter"] = function(min,max) {
+var IntIterator = $hxClasses["IntIterator"] = function(min,max) {
 	this.min = min;
 	this.max = max;
 };
-IntIter.__name__ = ["IntIter"];
-IntIter.prototype = {
+IntIterator.__name__ = ["IntIterator"];
+IntIterator.prototype = {
 	next: function() {
 		return this.min++;
 	}
@@ -249,7 +249,7 @@ IntIter.prototype = {
 	}
 	,max: null
 	,min: null
-	,__class__: IntIter
+	,__class__: IntIterator
 }
 var Lambda = $hxClasses["Lambda"] = function() { }
 Lambda.__name__ = ["Lambda"];
@@ -768,9 +768,9 @@ IterableLambda.foreach = function(iter,f) {
 		f(e);
 	}
 }
-var IntIters = $hxClasses["IntIters"] = function() { }
-IntIters.__name__ = ["IntIters"];
-IntIters.to = function(start,end) {
+var IntIterators = $hxClasses["IntIterators"] = function() { }
+IntIterators.__name__ = ["IntIterators"];
+IntIterators.to = function(start,end) {
 	return { iterator : function() {
 		var cur = start;
 		return { hasNext : function() {
@@ -782,8 +782,8 @@ IntIters.to = function(start,end) {
 		}};
 	}};
 }
-IntIters.until = function(start,end) {
-	return IntIters.to(start,end - 1);
+IntIterators.until = function(start,end) {
+	return IntIterators.to(start,end - 1);
 }
 var Std = $hxClasses["Std"] = function() { }
 Std.__name__ = ["Std"];
@@ -5237,7 +5237,7 @@ stx.Ints.isPrime = function(n) {
 	if(n == 1) return false;
 	if(n == 2) return false;
 	if(n % 2 == 0) return false;
-	var iter = new IntIter(3,Math.ceil(Math.sqrt(n)) + 1);
+	var iter = new IntIterator(3,Math.ceil(Math.sqrt(n)) + 1);
 	while( iter.hasNext() ) {
 		var i = iter.next();
 		if(n % 1 == 0) return false;
@@ -5257,7 +5257,7 @@ stx.Ints.factorial = function(n) {
 }
 stx.Ints.divisors = function(n) {
 	var r = new Array();
-	var iter = new IntIter(1,Math.ceil(n / 2 + 1));
+	var iter = new IntIterator(1,Math.ceil(n / 2 + 1));
 	while( iter.hasNext() ) {
 		var i = iter.next();
 		if(n % i == 0) r.push(i);
@@ -8638,7 +8638,7 @@ stx.ds.ArrayZipper.index = function(z,index) {
 }
 stx.ds.ArrayZipper.spawn = function(z) {
 	var obj = z.get();
-	return ArrayLambda.map(IterableLambda.toArray(IntIters.until(0,obj.length)),(function(_e) {
+	return ArrayLambda.map(IterableLambda.toArray(IntIterators.until(0,obj.length)),(function(_e) {
 		return function(index) {
 			return stx.ds.ArrayZipper.index(_e,index);
 		};
@@ -14135,7 +14135,7 @@ stx.js.io.IFrameIOPollingHashtag.prototype = $extend(stx.js.io.AbstractIFrameIO.
 			return stx.ds.ArrayToList.toList(fragments).gaps(function(a,b) {
 				var lastId = stx.Strings["int"](a.fragmentId);
 				var curId = stx.Strings["int"](b.fragmentId);
-				return stx.ds.List.toList(IterableLambda.map(IntIters.until(lastId + 1,curId),function(missingId) {
+				return stx.ds.List.toList(IterableLambda.map(IntIterators.until(lastId + 1,curId),function(missingId) {
 					var request = { type : "request", from : firstFrag.to, to : firstFrag.from, messageId : firstFrag.messageId, fragmentCount : firstFrag.fragmentCount, fragmentId : stx.Floats.toString(missingId)};
 					return request;
 				}));
@@ -14315,7 +14315,7 @@ stx.js.text.html.HTMLParser.parseIntoElements = function(s) {
 	}, parsed = stx.js.text.html.HTMLParser.parse(s);
 	container.innerHTML = parsed[0];
 	return Lambda.array(Lambda.map({ iterator : function() {
-		return new IntIter(0,container.childNodes.length);
+		return new IntIterator(0,container.childNodes.length);
 	}},function(i) {
 		return container.childNodes[i];
 	})).concat(Lambda.array(Lambda.map(parsed.slice(1),convert_script)));

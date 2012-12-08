@@ -148,76 +148,10 @@ class Prelude{
     }
   }
   
-  static public function error<T>(msg: String, ?pos:haxe.PosInfos): T { throw '$msg at $pos'.format();  return null; }
+  static public function error<T>(msg: String, ?pos:haxe.PosInfos): T { throw '$msg at $pos';  return null; }
 }
 
-class SArrays {
-  /**
-    Applies function f to each element in a, returning the results
-  */
-  inline static public function map<T, S>(a: Array<T>, f: T -> S): Array<S> {
-    var n: Array<S> = [];
-    
-    for (e in a) n.push(f(e));
-    
-    return n;
-  }
-  /**
-    Applies function f to each element in a, appending and returning the results.
-  */
-  static public function flatMap<T, S>(a: Array<T>, f: T -> Iterable<S>): Array<S> {
-    var n: Array<S> = [];
-    
-    for (e1 in a) {
-      for (e2 in f(e1)) n.push(e2);
-    }
-    
-    return n;
-  }
-  /**
-    Using starting var z, run f on each element, storing the result, and passing that result 
-    into the next call.
-      [1,2,3,4,5].foldl( 100, function(init,v) return init + v ));//(((((100 + 1) + 2) + 3) + 4) + 5)
-  */
-  static public function foldl<T, Z>(a: Array<T>, z: Z, f: Z -> T -> Z): Z {
-    var r = z;
-    
-    for (e in a) { r = f(r, e); }
-    
-    return r;
-  }
-  /**
-    Call f on each element in a, returning a collection where f(e) = true
-  */
-  static public function filter<T>(a: Array<T>, f: T -> Bool): Array<T> {
-    var n: Array<T> = [];
-    
-    for (e in a)
-      if (f(e)) n.push(e);
-    
-    return n;
-  }
-  /**
-    Returns the size of a
-  */
-  static public function size<T>(a: Array<T>): Int {
-    return a.length;
-  }
-  /**
-    Returns a copt of a.
-  */
-  static public function snapshot<T>(a: Array<T>): Array<T> {
-    return [].concat(a);
-  }
-  /**
-    Apply f to each element in a.
-  */
-  static public function foreach<T>(a: Array<T>, f: T -> Void): Array<T> {
-    for (e in a) f(e);
-    
-    return a;
-  }
-}
+
 class SIterables{
   /**
     Creates an Array from an Iterable
@@ -291,7 +225,74 @@ class SIterables{
     for (e in iter) f(e);
   }
 }
-class IntIters {
+class SArrays {
+  /**
+    Applies function f to each element in a, returning the results
+  */
+  inline static public function map<T, S>(a: Array<T>, f: T -> S): Array<S> {
+    var n: Array<S> = [];
+    
+    for (e in a) n.push(f(e));
+    
+    return n;
+  }
+  /**
+    Applies function f to each element in a, appending and returning the results.
+  */
+  static public function flatMap<T, S>(a: Array<T>, f: T -> Iterable<S>): Array<S> {
+    var n: Array<S> = [];
+    
+    for (e1 in a) {
+      for (e2 in f(e1)) n.push(e2);
+    }
+    
+    return n;
+  }
+  /**
+    Using starting var z, run f on each element, storing the result, and passing that result 
+    into the next call.
+      [1,2,3,4,5].foldl( 100, function(init,v) return init + v ));//(((((100 + 1) + 2) + 3) + 4) + 5)
+  */
+  static public function foldl<T, Z>(a: Array<T>, z: Z, f: Z -> T -> Z): Z {
+    var r = z;
+    
+    for (e in a) { r = f(r, e); }
+    
+    return r;
+  }
+  /**
+    Call f on each element in a, returning a collection where f(e) = true
+  */
+  static public function filter<T>(a: Array<T>, f: T -> Bool): Array<T> {
+    var n: Array<T> = [];
+    
+    for (e in a)
+      if (f(e)) n.push(e);
+    
+    return n;
+  }
+  /**
+    Returns the size of a
+  */
+  static public function size<T>(a: Array<T>): Int {
+    return a.length;
+  }
+  /**
+    Returns a copt of a.
+  */
+  static public function snapshot<T>(a: Array<T>): Array<T> {
+    return [].concat(a);
+  }
+  /**
+    Apply f to each element in a.
+  */
+  static public function foreach<T>(a: Array<T>, f: T -> Void): Array<T> {
+    for (e in a) f(e);
+    
+    return a;
+  }
+}
+class IntIterators {
   /**
     Creates an Iterable 0...n
   */

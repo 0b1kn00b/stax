@@ -23,7 +23,7 @@ import stx.test.Runner;
 import stx.test.TestResult;
 import stx.test.ui.common.ResultAggregator;
 import stx.test.ui.common.PackageResult;
-import haxe.Stack;
+import haxe.CallStack;
 
 using stx.test.ui.common.ReportTools;
 
@@ -69,7 +69,7 @@ class PlainTextReport implements IReport<PlainTextReport> {
     if (stack.length == 0)
       return "";
     
-    var parts = Stack.toString(stack).split("\n");
+    var parts = CallStack.toString(stack).split("\n");
     var r = [];
     for (part in parts) {
       if (part.indexOf(" utest.") >= 0) continue;

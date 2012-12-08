@@ -45,10 +45,10 @@ class ArrayToSet {
 }
 /** A cross-platform, immutable Set built on Map. */
 class Set<T> implements Collection<Set<T>, T> {
-  public var equal (getEqual, null): EqualFunction<T>;
-  public var order (getOrder, null) : OrderFunction<T>;
-  public var hash (getHash, null) : HashFunction<T>;
-  public var show (getShow, null) : ShowFunction<T>;
+  public var equal (get_equal, null): EqualFunction<T>;
+  public var order (get_order, null) : OrderFunction<T>;
+  public var hash (get_hash, null) : HashFunction<T>;
+  public var show (get_show, null) : ShowFunction<T>;
   
   var _map: Map<T,T>;
   
@@ -168,19 +168,19 @@ class Set<T> implements Collection<Set<T>, T> {
     return _map.size();
   } 
 
-  function getOrder() {
+  function get_order() {
     return _map.keyOrder;     
   }
   
-  function getEqual() { 
+  function get_equal() { 
     return _map.keyEqual;
   } 
   
-  function getHash() {
+  function get_hash() {
     return _map.keyHash;
   }
   
-  function getShow() {    
+  function get_show() {    
     return _map.keyShow;
   }
 }     

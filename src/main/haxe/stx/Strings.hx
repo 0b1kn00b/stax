@@ -150,11 +150,11 @@ class Strings {
   }
   
   static public function toCamelCase(str: String): String {
-    return SepAlphaPattern.customReplace(str, function(e) { return e.matched(2).toUpperCase(); });
+    return SepAlphaPattern.map(str, function(e) { return e.matched(2).toUpperCase(); });
   }
   
   static public function fromCamelCase(str: String, sep: String): String {
-    return AlphaUpperAlphaPattern.customReplace(str, function(e) { return e.matched(1) + sep + e.matched(2).toLowerCase(); });
+    return AlphaUpperAlphaPattern.map(str, function(e) { return e.matched(1) + sep + e.matched(2).toLowerCase(); });
   }
   static public function split(st:String,sep:String):Array<String>{
     return st.split(sep);

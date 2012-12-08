@@ -35,18 +35,18 @@ class FoldableToList {
 }
 /** A classic immutable list built from cons and nil elements. */
 class List<T> implements Collection<List<T>, T> {
-  public var head (getHead, null): T;
-  public var tail (getTail, null): List<T>;
+  public var head (get_head, null): T;
+  public var tail (get_tail, null): List<T>;
 
-  public var first (getHead, null): T;
-  public var last  (getLast, null): T;
+  public var first (get_first, null): T;
+  public var last  (get_last, null): T;
 
-  public var headOption  (getHeadOption, null): Option<T>;
-  public var firstOption (getHeadOption, null): Option<T>;
-  public var lastOption  (getLastOption, null): Option<T>;
+  public var headOption  (get_headOption, null): Option<T>;
+  public var firstOption (get_firstOption, null): Option<T>;
+  public var lastOption  (get_lastOption, null): Option<T>;
   
-  public var equal (getEqual, null) : EqualFunction<T>;
-  function getEqual() {
+  public var equal (get_equal, null) : EqualFunction<T>;
+  function get_equal() {
     return 
       if (equal == null || equal == Equal.nil ){
         headOption.map( Equal.getEqualFor )
@@ -56,8 +56,8 @@ class List<T> implements Collection<List<T>, T> {
         equal;
       }
   }  
-  public var order (getOrder, null) : OrderFunction<T>;
-  function getOrder() {
+  public var order (get_order, null) : OrderFunction<T>;
+  function get_order() {
     return 
       if (order == null || order == Order.nil ){
         headOption.map( Order.getOrderFor )
@@ -68,8 +68,8 @@ class List<T> implements Collection<List<T>, T> {
       }
   }  
 
-  public var hash(getHash, null) : HashFunction<T>;
-  function getHash(){
+  public var hash(get_hash, null) : HashFunction<T>;
+  function get_hash(){
     return 
       if (hash == null || hash == Hasher.nil ){
         headOption.map( Hasher.getHashFor )
@@ -79,8 +79,8 @@ class List<T> implements Collection<List<T>, T> {
         hash;
       }
   }
-  public var show  (getShow, null) : ShowFunction<T>;
-  function getShow(){
+  public var show  (get_show, null) : ShowFunction<T>;
+  function get_show(){
     return 
       if (show == null || show == Show.nil ){
         headOption.map( Show.getShowFor )
@@ -398,23 +398,28 @@ class List<T> implements Collection<List<T>, T> {
     return 0;
   }
 
-  private function getHead(): T {
+  private function get_head(): T {
     return Prelude.error("List has no head element");
   }
-
-  private function getLast(): T {
+  private function get_first(): T {
+    return Prelude.error("List has no head element");
+  }
+  private function get_last(): T {
     return Prelude.error("List has no last element");
   }
 
-  private function getHeadOption(): Option<T> {
+  private function get_headOption(): Option<T> {
+    return None;
+  }
+  private function get_firstOption(): Option<T> {
     return None;
   }
 
-  private function getLastOption(): Option<T> {
+  private function get_lastOption(): Option<T> {
     return None;
   }
 
-  private function getTail(): List<T> {
+  private function get_tail(): List<T> {
     return Prelude.error("List has no head");
   }
 }
@@ -431,11 +436,11 @@ private class Cons<T> extends List<T> {
     _size = tail.size() + 1;
   }
 
-  override private function getHead(): T {
+  override private function get_head(): T {
     return _head;
   }
 
-  override private function getLast(): T {
+  override private function get_last(): T {
     var cur: List<T> = this;
 
     for (i in 0...(size() - 1)) {
@@ -445,15 +450,15 @@ private class Cons<T> extends List<T> {
     return cur.head;
   }
 
-  override private function getTail(): List<T> {
+  override private function get_tail(): List<T> {
     return _tail;
   }
 
-  override private function getHeadOption(): Option<T> {
+  override private function get_headOption(): Option<T> {
     return Some(head);
   }
 
-  override private function getLastOption(): Option<T> {
+  override private function get_lastOption(): Option<T> {
     return Some(last);
   }
 

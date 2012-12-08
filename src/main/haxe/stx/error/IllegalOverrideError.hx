@@ -10,7 +10,7 @@ using stx.Error;
 class IllegalOverrideError extends Error{
 
 	public function new(of:String,?pos) {
-		super( "Attempting illegal override of '$of'.".format(), pos);
+		super( "Attempting illegal override of '$of'.", pos);
 	}
 	
 }

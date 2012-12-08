@@ -6,7 +6,7 @@ import stx.test.Assert;
 using stx.Prelude;
 using stx.Log;
 
-class IntIterTest extends TestCase{
+class IntIteratorTest extends TestCase{
 	public function testNone(){
 		var a = 0.until(0);
 		Assert.isTrue(true);

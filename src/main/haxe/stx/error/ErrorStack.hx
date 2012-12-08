@@ -17,6 +17,6 @@ class ErrorStack<T> extends DataError<Iterable<T>>{
 			}
 	}
 	public function new(data:Iterable<T>,msg:String = 'Stack of Errors: ',?pos:PosInfos){
-		super(data,'$msg: $data'.format(),pos);
+		super(data,'$msg: $data',pos);
 	}
 }

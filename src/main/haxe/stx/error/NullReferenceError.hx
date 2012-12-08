@@ -11,6 +11,6 @@ using Std;
 class NullReferenceError extends Error {
 
 	public function new(fieldname: String, ?pos) {
-		super( "'$fieldname' is null.".format() , pos );
+		super( "'$fieldname' is null.", pos );
 	}
 }

@@ -109,7 +109,7 @@ class ArrayZipper {
 	}
 	static public function arrayZ<T,C>(z:Zipper<T,Array<C>>):Array<Zipper<T,Tuple2<Int,C>>>{
 		trace('b4');
-		trace(IntIters.until(0,2).toArray());
+		trace(IntIterators.until(0,2).toArray());
 		trace(0.to(1).toArray());
 		trace('ar');
 		return 

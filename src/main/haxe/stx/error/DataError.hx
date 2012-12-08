@@ -11,6 +11,6 @@ class DataError<T> extends stx.Error{
 	public var data(default,null):T;
 	public function new(data:T,?msg:String,?pos:PosInfos){
 		this.data = data;
-		super('DataError: $msg'.format(),pos);
+		super('DataError: $msg',pos);
 	}
 }
