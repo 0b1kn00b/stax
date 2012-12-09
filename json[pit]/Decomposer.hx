@@ -34,7 +34,7 @@ class Decomposer{
       case TBool , TInt , TFloat, TObject :
         _createDecomposeImpl(data.get(f).decompose);
       case TUnknown   :
-        _createDecomposeImpl(function(v) return Prelude.error("Can't decompose TUnknown: " + v));
+        _createDecomposeImpl(function(v) return Prelude.error()("Can't decompose TUnknown: " + v));
       case TClass(c)  :
       	var cname : String = Type.getClassName(c);
       	return 
@@ -51,7 +51,7 @@ class Decomposer{
         			}
         		}
         		if( None.alike(fst) ){
-        			Prelude.error("Decompose function cannot be created. " + v);
+        			Prelude.error()("Decompose function cannot be created. " + v);
         		}else{
         			fst.map(
                 function(x):Transcode<Dynamic,Dynamic>{
@@ -80,11 +80,11 @@ class Decomposer{
            );
         }
       case TFunction:
-        _createDecomposeImpl(function(v) {Prelude.error("Can't decompose function."); return JNull;});
+        _createDecomposeImpl(function(v) {Prelude.error()("Can't decompose function."); return JNull;});
       case TNull:
         cast function(v) return JNull;
       default:
-        _createDecomposeImpl(function(v) {Prelude.error("Can't decompose unknown type."); return JNull;});
+        _createDecomposeImpl(function(v) {Prelude.error()("Can't decompose unknown type."); return JNull;});
     }
   }
 }

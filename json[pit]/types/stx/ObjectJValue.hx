@@ -38,7 +38,7 @@ class ObjectJValue implements Transcode<Object> {
         
         return o;
       });
-      case JField(k, v): return Prelude.error("Cannot convert JField to object");
+      case JField(k, v): return Prelude.error()("Cannot convert JField to object");
 		}
 	}
 }

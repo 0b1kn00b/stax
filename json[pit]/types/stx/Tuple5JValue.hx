@@ -13,7 +13,7 @@ class Tuple5JValue<A,B,C,D,E> extends AbstractTranscode<Tuple5<A,B,C,D,E>,JExtra
     return switch(v) {
       case JArray(v): Tuples.t5(exs._1(v[0]), exs._2(v[1]), exs._3(v[2]), exs._4(v[3]), exs._5(v[4]));
 
-      default: Prelude.error("Expected Array but was: " + v);
+      default: Prelude.error()("Expected Array but was: " + v);
     }
   }
   static public function extractor(){

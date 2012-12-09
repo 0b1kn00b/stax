@@ -148,7 +148,12 @@ class Prelude{
     }
   }
   
-  static public function error<T>(msg: String, ?pos:haxe.PosInfos): T { throw '$msg at $pos';  return null; }
+  static public function error<T>(?pos:haxe.PosInfos): String -> T { 
+    return 
+      function(msg: String):T{
+        throw '$msg at $pos';  return null;
+      }
+  }
 }
 
 

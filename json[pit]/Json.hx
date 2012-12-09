@@ -43,7 +43,7 @@ class Json {
         
         return o;
       });
-      case JField(k, v): return Prelude.error("Cannot convert JField to object");
+      case JField(k, v): return Prelude.error()("Cannot convert JField to object");
     }
   }
 
@@ -53,10 +53,10 @@ class Json {
       case TClass(c):      if (Std.is (d, String)) return JString (d);
                       else if (Std.is (d, Hash))   return JObject (d.keys.toArray().map (function (k: String): JValue {return JField (k, d.get (k));}));
                       else if (Std.is (d, Array)) return JArray  (cast(d, Array<Dynamic>).map (fromObject));
-                      else return Prelude.error("Unknown object type: " + d);
+                      else return Prelude.error()("Unknown object type: " + d);
                       
-      case TEnum (e): return Prelude.error("Json.fromObject does not support enum conversions.");
-      case TFunction: return Prelude.error("Json.fromObject does not support function conversions.");
+      case TEnum (e): return Prelude.error()("Json.fromObject does not support enum conversions.");
+      case TFunction: return Prelude.error()("Json.fromObject does not support function conversions.");
       case TNull:     return JNull;
       case TBool:     return JBool(d);
       case TInt:      return JNumber(d);
@@ -80,7 +80,7 @@ class Json {
         
         return encode(JString(field._1)) + ":" + encode (field._2);
       }).join (",") + "}";
-      case JField(k, v): return Prelude.error("Cannot encode JField");
+      case JField(k, v): return Prelude.error()("Cannot encode JField");
     }
   }
 

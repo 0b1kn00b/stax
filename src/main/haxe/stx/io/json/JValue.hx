@@ -67,7 +67,7 @@ class JValues{
   static public function get(v: JValue, k: String): JValue {
     return switch (getOption(v, k)) {
       case Some(v): v;      
-      case None:    Prelude.error("Expected to find field " + k + " in " + v);
+      case None:    Prelude.error()("Expected to find field " + k + " in " + v);
     }
   }
   static public function getOrElse(v: JValue, k: String, def: Thunk<JValue>) {
@@ -80,21 +80,21 @@ class JValues{
     return switch (v) {
       case JString(s): s;
 
-      default: Prelude.error("Expected JString but found: " + v);
+      default: Prelude.error()("Expected JString but found: " + v);
     }
   }
   static public function extractNumber(v: JValue): Float {
     return switch (v) {
       case JNumber(n): n;
       
-      default: Prelude.error("Expected JNumber but found: " + v);
+      default: Prelude.error()("Expected JNumber but found: " + v);
     }
   }
   static public function extractBool(v: JValue): Bool {
     return switch (v) {
       case JBool (b): b;
       
-      default: Prelude.error("Expected JBool but found: " + v);
+      default: Prelude.error()("Expected JBool but found: " + v);
     }
   }
   static public function extractKey(v: JValue): String {
@@ -106,7 +106,7 @@ class JValues{
   static public function extractField(v: JValue): Tuple2<String, JValue> {
     return switch (v) {
       case JField (k, v): Tuples.t2(k, v);
-      default						: Prelude.error("Expected JField but found: " + v);
+      default						: Prelude.error()("Expected JField but found: " + v);
     }
   }  
   static public function extractHash(v: JValue): Hash<JValue> {
@@ -122,7 +122,7 @@ class JValues{
         
         hash;
       
-      default: Prelude.error("Expected JObject but found: " + v);
+      default: Prelude.error()("Expected JObject but found: " + v);
     }
   }
   static public function extractFields(v: JValue): Array<Tuple2<String, JValue>> {
@@ -140,7 +140,7 @@ class JValues{
       
       case JObject (xs): xs;
       
-      default: Prelude.error("Expected JArray or JObject but found: " + v);
+      default: Prelude.error()("Expected JArray or JObject but found: " + v);
     }
   }
 }

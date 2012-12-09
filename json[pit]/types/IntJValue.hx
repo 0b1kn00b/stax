@@ -13,7 +13,7 @@ class IntJValue extends AbstractTranscode<Int,Void>{
       case JNumber(v): Std.int(v);
       case JString(v): Std.parseInt(v);
 
-      default: Prelude.error("Expected Int but found: " + v);
+      default: Prelude.error()("Expected Int but found: " + v);
     }
   }
   static public function extractor(){

@@ -112,19 +112,19 @@ class HttpJValueJsonp implements HttpJValue {
   }
   
   public function post(url: Url, data: JValue, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<JValue>> {
-    return Prelude.error('JSONP does not support POST');
+    return Prelude.error()('JSONP does not support POST');
   }
   
   public function put(url: Url, data: JValue, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<JValue>> {
-    return Prelude.error('JSONP does not support PUT');
+    return Prelude.error()('JSONP does not support PUT');
   }
   
   public function delete(url: Url, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<JValue>> {
-    return Prelude.error('JSONP does not support DELETE');
+    return Prelude.error()('JSONP does not support DELETE');
   }
   
   public function custom(request: String, url: Url, data: JValue, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<JValue>> {
-    return Prelude.error('JSONP does not support custom request: ' + request);
+    return Prelude.error()('JSONP does not support custom request: ' + request);
   }
 }
 

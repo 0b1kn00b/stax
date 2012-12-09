@@ -15,7 +15,7 @@ class Equal {
   @:noUsing
   static public function nil<A>(a:A,b:A){
     return 
-      _createEqualImpl(function(a:A, b:A) { return stx.Prelude.error("at least one of the arguments should be null"); })(a,b);
+      _createEqualImpl(function(a:A, b:A) { return stx.Prelude.error()("at least one of the arguments should be null"); })(a,b);
   } 
 	/** 
     Returns an EqualFunction (T -> T -> Bool). It works for any type. Custom Classes can provide
@@ -73,7 +73,7 @@ class Equal {
             _createEqualImpl( function(a,b) return a == b );
           }*/
           else {
-            Prelude.error("class "+Type.getClassName(c)+" has no equals method");
+            Prelude.error()("class "+Type.getClassName(c)+" has no equals method");
           }
       }
     case TEnum(e):

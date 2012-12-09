@@ -46,7 +46,7 @@ class Options {
   */
   static public function get<T>(o: Option<T>): T {
     return switch (o) {
-      case None: Prelude.error("Error: Option is empty"); null;
+      case None: Prelude.error()("Error: Option is empty"); null;
       case Some(v): v;
     }
   }

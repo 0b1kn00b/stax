@@ -15,7 +15,7 @@ class Tuple4JValue<A,B,C,D> extends  AbstractTranscode<Tuple4<A,B,C,D>,JExtracto
     return switch(v) {
       case JArray(v): ex(Tuples.t4(v[0],v[1],v[2],v[3]));
 
-      default: Prelude.error("Expected Array but was: " + v);
+      default: Prelude.error()("Expected Array but was: " + v);
     }
   }
 }

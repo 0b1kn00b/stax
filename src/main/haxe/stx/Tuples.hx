@@ -57,11 +57,11 @@ class AbstractProduct implements Product {
     return s + ")";
   }
   private function get_prefix(): String {
-    return Prelude.error("Not implemented");
+    return Prelude.error()("Not implemented");
   }
 
   private function get_length(): Int {
-    return Prelude.error("Not implemented");
+    return Prelude.error()("Not implemented");
   }
   
   public function elements():Array<Dynamic> {

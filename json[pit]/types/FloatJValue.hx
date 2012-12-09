@@ -15,7 +15,7 @@ class FloatJValue extends AbstractTranscode<Float,Void>{
       case JNumber(v): v;
       case JString(v): Std.parseFloat(v);
 
-      default: Prelude.error("Expected Float but found: " + v);
+      default: Prelude.error()("Expected Float but found: " + v);
     }
   }
   static public function extractor(){

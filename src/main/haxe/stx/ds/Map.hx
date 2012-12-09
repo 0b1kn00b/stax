@@ -182,7 +182,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
       function(k) {
         return switch(self.get(k)) {
           case Some(v): v;
-          case None:    Prelude.error("No value for this key");
+          case None:    Prelude.error()("No value for this key");
         }
       }
     )].toPartialFunction();

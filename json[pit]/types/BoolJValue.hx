@@ -15,7 +15,7 @@ class BoolJValue extends AbstractTranscode<Bool,Void>{
       case JNumber(v): if (v == 0.0) false; else true;
       case JString(v): stx.Strings.toBool(v);
 
-      default: Prelude.error("Expected Bool but found: " + v);
+      default: Prelude.error()("Expected Bool but found: " + v);
     }
   }
   static public function extractor(){

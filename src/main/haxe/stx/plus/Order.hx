@@ -24,7 +24,7 @@ class Order {
   @:noUsing
   static public function nil<A>(a:A,b:A){
     return 
-      _createOrderImpl(function(a:A, b:A) { return Prelude.error("at least one of the arguments should be null"); })(a,b);
+      _createOrderImpl(function(a:A, b:A) { return Prelude.error()("at least one of the arguments should be null"); })(a,b);
   } 
   /** Returns a OrderFunction (T -> T -> Int). It works for any type expect TFunction.
    *  Custom Classes must provide a compare(other : T) : Int method or an exception will be thrown.
@@ -91,7 +91,7 @@ class Order {
 		    } else if(Type.getInstanceFields(c).remove("compare")) {
           _createOrderImpl(function(a, b) return (cast a).compare(b));
    		  } else {
-          Prelude.error("class "+Type.getClassName(c)+" is not comparable");
+          Prelude.error()("class "+Type.getClassName(c)+" is not comparable");
         }
       }
     case TEnum(e):
@@ -111,7 +111,7 @@ class Order {
     case TNull:
       nil;
     case TFunction:
-				Prelude.error("unable to compare on a function");
+				Prelude.error()("unable to compare on a function");
     }
   }
 }

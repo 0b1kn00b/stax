@@ -399,13 +399,13 @@ class List<T> implements Collection<List<T>, T> {
   }
 
   private function get_head(): T {
-    return Prelude.error("List has no head element");
+    return Prelude.error()("List has no head element");
   }
   private function get_first(): T {
-    return Prelude.error("List has no head element");
+    return Prelude.error()("List has no head element");
   }
   private function get_last(): T {
-    return Prelude.error("List has no last element");
+    return Prelude.error()("List has no last element");
   }
 
   private function get_headOption(): Option<T> {
@@ -420,7 +420,7 @@ class List<T> implements Collection<List<T>, T> {
   }
 
   private function get_tail(): List<T> {
-    return Prelude.error("List has no head");
+    return Prelude.error()("List has no head");
   }
 }
 

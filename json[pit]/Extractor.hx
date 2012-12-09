@@ -39,7 +39,7 @@ class Extractor{
       case TBool , TInt , TFloat, TObject :
         _createExtractorImpl(data.get(f).extract);
       case TUnknown:
-        _createExtractorImpl(function(v) return Prelude.error("Can't extract TUnknown: " + v));
+        _createExtractorImpl(function(v) return Prelude.error()("Can't extract TUnknown: " + v));
       case TClass(c):
         var cname = Type.getClassName(c);
         var fst = stx.Types.resolveClass('stx.io.json.types.' + cname);
@@ -52,7 +52,7 @@ class Extractor{
             }
           }
           if( None.alike(fst) ){
-            Prelude.error("Extract function cannot be created. " + valueType);
+            Prelude.error()("Extract function cannot be created. " + valueType);
           }else{
             fst
               .map(
@@ -80,20 +80,20 @@ class Extractor{
                         if (args == null)
                           args = [];
                         Arrays.zip(a, args).map(function(t){return t._2(t._1);});
-                      default: Prelude.error("Expected JArray but was: " + v);
+                      default: Prelude.error()("Expected JArray but was: " + v);
                     }
                   return Type.createEnum(Type.resolveEnum(name), constructor, parameters);
                 };
-                default: Prelude.error("Expected JArray but was: " + v); return null;
+                default: Prelude.error()("Expected JArray but was: " + v); return null;
               }
            });
         }
       case TFunction:
-        _createExtractorImpl(function(v) {Prelude.error("Can't extract function."); return JNull;});
+        _createExtractorImpl(function(v) {Prelude.error()("Can't extract function."); return JNull;});
       case TNull:
         function(v) return null;
       default:
-        _createExtractorImpl(function(v) {Prelude.error("Can't extract unknown type."); return JNull;});
+        _createExtractorImpl(function(v) {Prelude.error()("Can't extract unknown type."); return JNull;});
     }
   }
 }

@@ -265,7 +265,7 @@ class Quirks {
       }
     }
 
-    return Prelude.error('Invalid rule: ' + rule);
+    return Prelude.error()('Invalid rule: ' + rule);
   }
 
   /** Retrieves the actual property name for the specified css property.

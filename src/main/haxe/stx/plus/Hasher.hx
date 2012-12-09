@@ -31,7 +31,7 @@ class Hasher {
       case TFloat:
         _createHashImpl(FloatHasher.hashCode);
       case TUnknown:
-      _createHashImpl(function(v : T) return Prelude.error("can't retrieve hascode for TUnknown: " + v));
+      _createHashImpl(function(v : T) return Prelude.error()("can't retrieve hascode for TUnknown: " + v));
       case TObject:
         _createHashImpl(function(v){
         var s = Show.getShowFor(v)(v);
@@ -59,7 +59,7 @@ class Hasher {
           } else if(Type.getInstanceFields(c).remove("hashCode")) {
             _createHashImpl(function(v) return Reflect.callMethod(v, Reflect.field(v, "hashCode"), []));
           } else {
-            Prelude.error("class does not have a hashCode method");
+            Prelude.error()("class does not have a hashCode method");
           }
         }
       case TEnum(e):
@@ -70,7 +70,7 @@ class Hasher {
         return hash;
       });
       case TFunction:
-        _createHashImpl(function(v : T) return Prelude.error("function can't provide a hash code"));
+        _createHashImpl(function(v : T) return Prelude.error()("function can't provide a hash code"));
       case TNull:
         nil;
       default:

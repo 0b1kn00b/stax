@@ -129,11 +129,11 @@ class AbstractIFrameIO implements IFrameIO {
   }
   
   public function receive(f: Dynamic -> Void, originUrl: String, ?originWindow: Window): IFrameIO {
-    return Prelude.error('Not implemented');
+    return Prelude.error()('Not implemented');
   }
 
   public function receiveWhile(f: Dynamic -> Bool, originUrl: String, ?originWindow: Window): IFrameIO {
-    return Prelude.error('Not implemented');
+    return Prelude.error()('Not implemented');
   }
   
   public function receiveRequests(f: Dynamic -> Future<Dynamic>, url, window: Window): IFrameIO {
@@ -152,7 +152,7 @@ class AbstractIFrameIO implements IFrameIO {
   }
 
   public function send(data: Dynamic, targetUrl: String, targetWindow: Window): IFrameIO {
-    return Prelude.error('Not implemented');
+    return Prelude.error()('Not implemented');
   }
   
   public function request(requestData: Dynamic, targetUrl: String, targetWindow: Window): Future<Dynamic> {

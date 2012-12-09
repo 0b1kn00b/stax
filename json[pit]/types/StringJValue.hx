@@ -13,7 +13,7 @@ class StringJValue extends AbstractTranscode<String,Void>{
       case JBool(v)     : '$v'.format();
       case JString(v)   : v;
 
-      default: Prelude.error("Expected String but found: " + val);
+      default: Prelude.error()("Expected String but found: " + val);
     }
   }
   static public function extractor(){

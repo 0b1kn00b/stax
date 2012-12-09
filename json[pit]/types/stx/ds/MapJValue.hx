@@ -29,7 +29,7 @@ class MapJValue<K,V> extends AbstractTranscode<Map<K,V>,JExtractorFunction2<K,V>
                 xs.map( Tuple2JValue.extractWith.p2(e) )
               );
           }
-        default: Prelude.error("Expected Array but was: " + v);
+        default: Prelude.error()("Expected Array but was: " + v);
       }
   }
   static public function stringKeyDecompose<V>(v: Map<String, V>): JValue {
@@ -49,7 +49,7 @@ class MapJValue<K,V> extends AbstractTranscode<Map<K,V>,JExtractorFunction2<K,V>
         return switch(j) {
           case JField(k, v): Tuples.t2(k, ve(v));
 
-          default: Prelude.error("Expected field but was: " + v);
+          default: Prelude.error()("Expected field but was: " + v);
         }
       }));
     }
@@ -58,7 +58,7 @@ class MapJValue<K,V> extends AbstractTranscode<Map<K,V>,JExtractorFunction2<K,V>
       case JObject(v): extract0(v);
       case JArray(v) : extract0(v);
 
-      default: Prelude.error("Expected either Array or Object but was: " + v);
+      default: Prelude.error()("Expected either Array or Object but was: " + v);
     }
   }
 }

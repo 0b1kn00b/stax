@@ -46,7 +46,7 @@ class Iterables {
   */
   public static function head<T>(iter: Iterable<T>): T {
     return switch(headOption(iter)) {
-      case None: Prelude.error('Iterable has no head');
+      case None: Prelude.error()('Iterable has no head');
       case Some(h): h;
     }
   }
@@ -66,7 +66,7 @@ class Iterables {
    */
   public static function tail<T>(iter: Iterable<T>): Iterable<T> {
     return switch (tailOption(iter)) {
-      case None: Prelude.error('Iterable has no tail');
+      case None: Prelude.error()('Iterable has no tail');
       
       case Some(t): t;
     }
@@ -192,7 +192,7 @@ class Iterables {
       }
       else ++curIndex;
     }
-    return Prelude.error('Index not found');
+    return Prelude.error()('Index not found');
   }
   /**
     flatten an iterable of iterables to an iterable

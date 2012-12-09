@@ -53,7 +53,7 @@ class Future<T> {
    */
   public function deliver(t: T): Future<T> {
     return if (_isCanceled) this;
-    else if (_isSet) Prelude.error("Future :" + this.value() + " already delivered");
+    else if (_isSet) Prelude.error()("Future :" + this.value() + " already delivered");
     else {
       _result = t;
       _isSet  = true;

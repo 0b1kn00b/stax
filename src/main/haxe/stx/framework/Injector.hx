@@ -138,7 +138,7 @@ private class InjectorImpl {
   public static function inject<T>(interf: Class<T>, ?pos: PosInfos): T {
     var binding = getMostSpecificBinding(interf, pos);
   
-    var factory = binding.getOrElse(Prelude.error.lazy('No binding defined for ' + Type.getClassName(interf),Prelude.here()));
+    var factory = binding.getOrElse(Prelude.error().lazy('No binding defined for ' + Type.getClassName(interf)));
   
     return factory();
   }
