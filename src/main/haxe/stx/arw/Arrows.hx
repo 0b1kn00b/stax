@@ -166,6 +166,9 @@ class Arrows{
 	static public function future<A>():Arrow<Future<A>,A>{
 		return new FutureArrow();
 	}
+	static public function arrowOf<I,O>(fn:I->Future<O>):Arrow<I,O>{
+		return fn.lift().then( Arrows.future() );
+	}
 }
 class F0A{
 	static public function lift<A>(t:Thunk<A>):Arrow<Dynamic,A>{
