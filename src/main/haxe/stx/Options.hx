@@ -5,6 +5,8 @@ using stx.Options;
 using stx.Eithers;
 using stx.Dynamics;
 
+typedef Opt = Options;
+
 class Options {
   /**
     Produces Option.Some(t) if 't' is not null, Option.None otherwise. 
@@ -13,6 +15,9 @@ class Options {
   @:noUsing
   static public function create<T>(t: T): Option<T> {
     return if (t == null) None; else Some(t);
+  }
+  static public function n<T>(t:T):Option<T>{
+    return create(t);
   }
   static public function toOption<A>(v:A):Option<A>{
     return create(v);
