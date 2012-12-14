@@ -439,7 +439,9 @@ private class Cons<T> extends List<T> {
   override private function get_head(): T {
     return _head;
   }
-
+  override private function get_first(): T{
+    return _head;
+  }
   override private function get_last(): T {
     var cur: List<T> = this;
 
@@ -457,7 +459,9 @@ private class Cons<T> extends List<T> {
   override private function get_headOption(): Option<T> {
     return Some(head);
   }
-
+  override private function get_firstOption(): Option<T> {
+    return Some(head);
+  }
   override private function get_lastOption(): Option<T> {
     return Some(last);
   }
@@ -470,5 +474,13 @@ private class Cons<T> extends List<T> {
 private class Nil<T> extends List<T> {
   public function new(tools:CollectionTools<T>) {
     super(tools);
+  }
+}
+class Lists{
+  static public function add<A>(l:List<A>,v:A){
+    return l.add(v);
+  }
+  static public function remove<A>(l:List<A>,v:A){
+    return l.remove(v);
   }
 }
