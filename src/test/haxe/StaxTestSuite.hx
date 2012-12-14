@@ -30,6 +30,31 @@ class StaxTestSuite {
             );
           }
         );
+/*        var pit   = 
+        [
+          , new stx.io.json.TranscodeJValuesTest()          
+          , new stx.io.json.JValueTest()
+          , new stx.io.json.JsonTest()
+          , new stx.io.http.HttpStringTest() // This one should be cross-platform, eventually
+          , new stx.io.http.HttpJValueJsonpTest()
+        ];*/
+        var dev   = 
+        [
+            new StaxTest()
+          , new stx.ErrorTest()
+          , new stx.reactive.ArrowsTest()
+          , new stx.StateTest()
+         // , new stx.ReaderTest()
+          , new stx.reactive.StreamTest()
+          , new stx.io.log.LogTest()
+          //, new stx.IntIteratorTest()
+          , new OptimiseTest()
+          , new stx.ds.ZipperTest()
+          , new stx.ds.IterateeTest()
+        ];
+        var b = [
+          new stx.plus.ShowTest()
+        ];
         var tests =
         [
           new stx.plus.OrderTest(),
@@ -62,34 +87,18 @@ class StaxTestSuite {
           , new stx.PromiseTest()//#0b1kn00b how to test delayed easily without timer.
 #end
           , new stx.ObjectsTest()
-          //, new stx.io.json.TranscodeJValuesTest()          
-          //, new stx.io.json.JValueTest()
-          //, new stx.io.json.JsonTest()
-          //, new stx.io.http.HttpStringTest() // This one should be cross-platform, eventually
-          //, new stx.io.http.HttpJValueJsonpTest()
           , new stx.TupleTest()
           , new stx.ds.RangeTest()
           , new stx.MathsTest()
           , new stx.BoolsTest()
 #if dev
-          //, new StaxTest()
-          //, new stx.ErrorTest()
-          //, new stx.reactive.ArrowsTest()
-          //, new stx.StateTest()
-          //, new stx.ReaderTest()
-          //, new stx.reactive.StreamTest()
-          //, new stx.io.log.LogTest()
-          //, new stx.io.FileSystemTest()
-          //, new stx.IntIteratorTest()
-          //, new OptimiseTest()
-          //, new stx.ds.ZipperTest()
-          //, new stx.ds.IterateeTest()
 #end
-        ]#if dev.filter( function(x) return Std.is(x,stx.BoolsTest) )#end;
+        ];
         haxe.Log.trace = stx.Log.trace;
 
         var runner = new Runner();
-            runner.addAll(tests #if dev,'test'#end);
+          //  runner.addAll(#if dev dev #else tests #end);
+          runner.add(b);
 
         Report.create(runner);
 
