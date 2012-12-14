@@ -79,7 +79,7 @@ class Log {
 	}
 	public static function printer<A>(?p:PosInfos):Dynamic->A{
 		return 
-			function(x){
+			function(x:A){
 				haxe.Log.trace(x,p);
 				return x;
 			}
