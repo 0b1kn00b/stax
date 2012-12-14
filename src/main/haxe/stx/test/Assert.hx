@@ -709,7 +709,7 @@ class Assert {
         fail('expected delivery of future ' + q(future) + ', but it was canceled');
       }
       else {
-        assertions(future.value().get());
+        assertions(future.valueO().get());
       }
     }, timeout);
     
@@ -730,7 +730,7 @@ class Assert {
   public static function notDelivered<T>(future: Future<T>, ?timeout: Int, ?pos: PosInfos) {
     var f = createAsync(function() {
       if (future.isDelivered()) {
-        Assert.fail('Did not expect delivery of: ' + future.value().get(), pos);
+        Assert.fail('Did not expect delivery of: ' + future.valueO().get(), pos);
       }
       else {
         Assert.isTrue(true);
