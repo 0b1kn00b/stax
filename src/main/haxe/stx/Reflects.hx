@@ -21,6 +21,10 @@ class Reflects{
 	static public function getField<A,B>(v:A,key:String):Null<B>{
 		return Reflect.field(v,key);
 	}
+	static public function setField<A,B>(o:A,key:String,v:B):A{
+		Reflect.setField(o,key,v);
+		return o;
+	}
 	static public function setFieldMaybe<A,B>(v:A,fld:String,val:B):A{ 
 			getField(v.copy(),fld)
 				.foreach(
@@ -39,5 +43,12 @@ class Reflects{
 	static public function set<A,B>(object:A,field:String,value:B){
 		Reflect.setField(object,field,value);
 		return object;
+	}
+	static public function extractObjectFromAny<A>(v:A):Object{
+		return 
+			switch(Type.typeof(v)){
+				case TClass(v) 	: Types.extractObjectFromType(v);
+				default 				:	Objects.extractObject(v);
+			}
 	}
 }
