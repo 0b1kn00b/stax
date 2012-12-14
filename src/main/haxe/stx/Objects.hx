@@ -90,7 +90,7 @@ class Objects {
     }));
   }
   
-  static public function set<T>(d: Dynamic<T>, k: String, v: T): Dynamic<T> {
+  static public function setField<T>(d: Dynamic<T>, k: String, v: T): Dynamic<T> {
     Reflect.setField(d, k, v);
     
     return d;

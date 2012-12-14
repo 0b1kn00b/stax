@@ -40,10 +40,6 @@ class Reflects{
 	static public function getter<A,B>(fieldname:String):A->B{
 		return Reflect.field.p2(fieldname);
 	}
-	static public function set<A,B>(object:A,field:String,value:B){
-		Reflect.setField(object,field,value);
-		return object;
-	}
 	static public function extractObjectFromAny<A>(v:A):Object{
 		return 
 			switch(Type.typeof(v)){
