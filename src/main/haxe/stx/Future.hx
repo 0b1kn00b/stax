@@ -244,7 +244,7 @@ class Future<T> {
     var deliverZip = function() {
       if (f1.isDelivered() && f2.isDelivered()) {
         zipped.deliver(
-          fn(f1.value().get(), f2.value().get())
+          fn(f1.valueO().get(), f2.valueO().get())
         );
       }
     }
@@ -262,16 +262,18 @@ class Future<T> {
   /** 
     Retrieves the value of the future, as an option.
    */
-  public function value(): Option<T> {
+  public function valueO(): Option<T> {
     return if (_isSet) Some(_result) else None;
   }
-
+  public function value(): T{
+    return _result;
+  } 
   public function toOption(): Option<T> {
-    return value();
+    return valueO();
   }
 
   public function toArray(): Array<T> {
-    return value().toArray();
+    return valueO().toArray();
   }
 
   private function forceCancel(): Future<T> {
