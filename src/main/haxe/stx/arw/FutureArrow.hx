@@ -4,11 +4,11 @@ import stx.Prelude;
 
 using stx.arw.Arrows;
 
-class FutureArrow<O> implements Arrow<Future<O>,O>{
+class FutureArrow<O> extends Arrow<Future<O>,O>{
 	public function new(){
-
+		super();
 	}
-	inline public function withInput(?i:Future<O>,cont:Function<O,Void>){
+	override inline public function withInput(?i:Future<O>,cont:Function<O,Void>):Void{
 		i.foreach( cont );
 	}
 }

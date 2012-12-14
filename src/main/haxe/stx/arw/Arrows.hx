@@ -159,7 +159,7 @@ class Arrows{
 		return f;
 	}
 	@:noUsing
-	public static function apply<I,O>():Arrow<Pair<Arrow<I,O>,I>,O>{
+	static public function apply<I,O>():Arrow<Pair<Arrow<I,O>,I>,O>{
 		return new ApplyArrow();
 	}
 	@:noUsing
