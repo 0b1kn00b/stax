@@ -82,8 +82,9 @@ class Env {
       /*
         Developed by Robert Nyman, http://www.robertnyman.com
         Code/licensing: http://code.google.com/p/getelementsbyclassname/
-      */  
+      */
       function (className, tag, elm){
+        var getElementsByClassName;
         if (document.getElementsByClassName) {
           getElementsByClassName = function (className, tag, elm) {
             elm = elm || document;
