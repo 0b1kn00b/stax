@@ -34,6 +34,7 @@ class Helper {
       case TAnonymous(a)    : "{" + a.get().fields.map(nameForClassField).join(",") + "}";
       case TFun(args, ret)  : args.map(function (x) return x.t).concat([ret]).map(nameForType).join(" -> ");
       case TEnum(t, params) : typeName(t.get().name, params.map(nameForType));
+      case TAbstract(a,b)   : throw "not allowed " + Std.string(x);
       default               : throw "not allowed " + Std.string(x);
     }
   public static function classFieldsForSnd(t : Type) : Array<ClassField> {
@@ -49,6 +50,7 @@ class Helper {
 	    case TAnonymous( a )       : a.get().fields;
 	    case TDynamic( t )         : throw "lenses for Dynamic do not make sense"; // or a dynamic way to support it
 	    case TLazy( f )            : throw "lenses for lazy not supported";
+      case TAbstract(a,b)        : throw "lenses for abstract not supported " + Std.string(t);
     }
 
   public static function lenseForClassField(extensionType : Type, c : ClassField, pos : Position) : Field {
@@ -61,7 +63,7 @@ class Helper {
     if (cTypeName == null)
       return null;
     
-    var exprString = Std.format("
+    var exprString = '
       { 
         get : function (___obj : $typeName) return ___obj.$cname,
         set : function ($cname : $cTypeName, ___obj : $typeName) {
@@ -70,7 +72,7 @@ class Helper {
           return ___cp;
         }
       }
-    ");
+    ';
     
     var expr = Context.parse(exprString, pos);
 
