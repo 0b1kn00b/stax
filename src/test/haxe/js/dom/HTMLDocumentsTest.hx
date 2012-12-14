@@ -81,15 +81,9 @@ class HTMLDocumentsTest extends TestCase {
       assertEquals(_doc.getClasses("test-elem").length, 3);
       assertEquals(_doc.getClasses("foo").length, 2);
       assertEquals(_doc.getClasses("blat").length, 0);
-      
+     
       clearTestElements();
     }
-    
-    
-    
-    
-    
-    
     
     private function asTestElement(e: HTMLElement): HTMLElement {
       _testElements.appendChild(e);
