@@ -3,6 +3,11 @@ package stx;
 using stx.Prelude;
 using stx.Tuples;
 
+class Entuple{
+  static public function entuple<A,B>(a:A,b:B){
+    return Tuples.t2(a,b);
+  }
+}
 class Tuples {
 	
 	static public inline function t2<A,B>(_1:A,_2:B):stx.Tuple2<A,B>{
@@ -337,9 +342,4 @@ class Tuple5< A, B, C, D, E> extends AbstractProduct {
 		var _5 = t1._5 == null ? t0._5 : t1._5;
 		return Tuples.t5(_1, _2, _3, _4, _5);
 	}
-}
-class Entuple{
-  static public function entuple<A,B>(a:A,b:B){
-    return Tuples.t2(a,b);
-  }
 }
