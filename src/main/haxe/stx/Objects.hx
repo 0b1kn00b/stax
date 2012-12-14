@@ -1,6 +1,7 @@
 package stx;
 
 
+using stx.Options;
 using stx.Tuples;
 using stx.Functions;
 using stx.Compose;
@@ -16,7 +17,10 @@ typedef Object = {};
 */
 @note('0b1kn00b','Does this handle reference loops, should it, could it?')
 class Objects {
-  
+  @:noUsing
+  static public function create():Object{
+    return {};
+  }  
   inline static public function copyDeep(d: Object): Object return 
     copy(d, false)
   
@@ -164,12 +168,16 @@ class Objects {
   static public function extractAll<T>(d: Dynamic<T>): Array<Tuple2<String, T>> {
     return Reflect.fields(d).map(function(name) return Tuples.t2(name,Reflect.field(d, name)));
   }
-  static public function extractObject<A>(d:Dynamic<A>,fieldnames:Array<String>):Array<Tuple2<String, Dynamic>>{
+  static public function extractFields<A>(d:Dynamic<A>,fieldnames:Array<String>):Array<Tuple2<String, Dynamic>>{
     return 
       extractAll(d)
         .filter(
           Predicates.isOneOf(fieldnames).first().fstOf()
         );
+  }
+  static public function extractObject<A>(d:Dynamic,?fieldnames:Array<String>):Object{
+    return 
+      toObject( Opt.n(fieldnames).map(extractFields.p1(d)).getOrElse(extractAllAny.lazy(d)) );
   }
   static public function extractAllAny(d: Object): Array < Tuple2 < String, Dynamic >> {
     return extractAll(d);
