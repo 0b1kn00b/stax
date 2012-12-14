@@ -125,12 +125,14 @@ class Promises{
   /**
     Creates a pure Future and delivers to the right hand side.
   */
+  @:noUsing
   static public function success<A,B>(v:B):Future<Either<A,B>>{
     return pure(Right(v));
   }
   /**
     Creates a pure future and delivers to the left hand side.
   */
+  @:noUsing
   static public function failure<A,B>(v:A):Future<Either<A,B>>{
     return pure(Left(v));
   }
