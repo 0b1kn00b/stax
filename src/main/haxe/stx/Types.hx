@@ -3,6 +3,7 @@ package stx;
 using stx.Prelude;
 using stx.Arrays;
 
+import stx.Objects;
 import stx.Tuples;
 import stx.Prelude;
 
@@ -69,6 +70,11 @@ class Types{
           }
         );
    }
+   static public function extractObjectFromType<A>(v:A):Object{
+      return extractAllAnyFromType(v).map(Objects.toObject).getOrElse(Objects.create);
+   }
+
+   //static public function extractFieldsFromType<A>(v:A)
   /**
    Returns the local Class name of an object.
    @param o       A typed object.
