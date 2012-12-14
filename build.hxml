@@ -1,4 +1,4 @@
-builds/build-classes.hxml
+builds/build-test-js-haxe3.hxml
 #-main StaxTestSuite
 
 #-cp src/main/haxe
