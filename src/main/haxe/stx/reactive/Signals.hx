@@ -25,6 +25,7 @@ using stx.Iterables;
 class Signals {
     private function new() { }
     
+    @:noUsing
     public static function constant<T>(value: T): Signal<T> {
         return Streams.pure().startsWith(value);
     }
