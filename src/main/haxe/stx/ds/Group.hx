@@ -19,8 +19,13 @@ class Group {
 	}
 	
 }
+class IterableGroup {
+	public static function groupBy<T, K>(iter: Iterable<T>, grouper: T -> K) : Map<K, Iterable<T>> { 
+    return cast iter.toArray().groupBy(grouper);
+  }
+}
 class ArrayGroup {
-	public static function groupBy<T, K>(arr: Array<T>, grouper: T -> K) : Map<K, Array<T>> { 
+  public static function groupBy<T, K>(arr: Array<T>, grouper: T -> K) : Map<K, Array<T>> { 
     return arr.foldl(Map.create(), function(map, e) {
       var key = grouper(e);
       var result = map.getOrElse(key, function() return []);
@@ -29,14 +34,8 @@ class ArrayGroup {
     });
   }
 }
-class IterableGroup {
-	public static function groupBy<T, K>(iter: Iterable<T>, grouper: T -> K) : Map<K, Iterable<T>> { 
-    return cast iter.toArray().groupBy(grouper);
-  }
-}
-
 class FoldableGroup {
-	public static function groupBy<C, T, K>(foldable: Foldable<C, T>, grouper: T -> K) : Map<K, C> { 
+  public static function groupBy<C, T, K>(foldable: Foldable<C, T>, grouper: T -> K) : Map<K, C> { 
     var def = foldable.empty();
     return cast foldable.foldl(Map.create(), function(map, e) {
       var key = grouper(e);
