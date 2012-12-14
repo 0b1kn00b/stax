@@ -1,5 +1,12 @@
 package stx;
+
+using stx.Options;
 import stx.Tuples;
+
+typedef Tfs 	= Transformers;
+typedef Tfs2 	= Transformers2;
+typedef Tfs3 	= Transformers3;
+typedef Tfs4 	= Transformers4;
 
 class Transformers{
 	static public function adjoin<A,B,C,D>(f0:A->B,f1:C->D):Tuple2<A,C>->Tuple2<B,D>{
@@ -27,7 +34,10 @@ class Transformers2{
 }
 class Transformers3{
 	@:noUsing
-	static public function create<A,B,C,D,E,F>(f0:A->B,f1:C->D,f2:E->F):Tuple3<A,C,E>->Tuple3<B,D,F>{
+	static public function create<A,B,C,D,E,F>(?f0:A->B,?f1:C->D,?f2:E->F):Tuple3<A,C,E>->Tuple3<B,D,F>{
+		f0 = Options.create(f0).getOrElse(cast Compose.pure);
+		f1 = Options.create(f1).getOrElse(cast Compose.pure);
+		f2 = Options.create(f2).getOrElse(cast Compose.pure);
 		return 
 			function(t:Tuple3<A,C,E>){
 				return 
