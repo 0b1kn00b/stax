@@ -1,4 +1,7 @@
 package stx.plus;
+
+import stx.test.TestCase;
+import stx.test.Assert;
 class ShowTest extends TestCase{
 	public function testShowFor() {         
     assertEquals("null",  getShow(null));

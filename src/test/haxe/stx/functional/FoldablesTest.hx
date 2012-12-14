@@ -119,19 +119,19 @@ class FoldablesTest extends TestCase {
   public function testSetGroupBy() {
     var set = Set.create().appendAll([1,2,3,4,5,6,7,8,9,10]);
     var primes = [7, 5, 3, 2];
-    var r :Map<Int,Iterable<Null<Int>>>=  set.groupBy(function(v) {
+    var r :Map<Int,Set<Int>>=  set.groupBy(function(v) {
       for(p in primes)
         if(v % p == 0)
           return p;
       return 1;
     });
-		var m : Map < Int, Iterable<Null<Int>> > = 
+		var m : Map < Int, Set<Int> > = 
 		Map.create()
-      .set(1, [1].toSet().elements() )
-      .set(2, [2,4,8].toSet().elements() )
-      .set(3, [3,6,9].toSet().elements() )
-      .set(5, [5, 10].toSet().elements())
-      .set(7, [7].toSet().elements() );
+      .set(1, [1].toSet() )
+      .set(2, [2,4,8].toSet() )
+      .set(3, [3,6,9].toSet() )
+      .set(5, [5, 10].toSet() )
+      .set(7, [7].toSet() );
     assertEquals(
       m
       ,

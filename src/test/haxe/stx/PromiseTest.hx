@@ -34,7 +34,7 @@ class PromiseTest extends TestCase{
   * Map success to value.
   */
   public function testMap() {
-    var a = 'ok'.success();
+    var a = Promises.success('ok');
         a.mapR(
             function(x:String) {
               return 3;
@@ -49,11 +49,11 @@ class PromiseTest extends TestCase{
   * Flatmap chain
   */
   public function testFlatMap() {
-    var a = 'ok'.success();
+    var a = Promises.success('ok');
         a.flatMapR(
             function(x) {
               'ok'.equals(x);
-              return 'yup'.success();
+              return  Promises.success('yup');
             }
         ).foreachR(
             function(x) {
@@ -68,7 +68,7 @@ class PromiseTest extends TestCase{
     0.until(10)
         .map(
             function(int:Int) {
-              return int.success();
+              return Promises.success(int);
             }
         ).toArray().wait()
          .mapR(
@@ -165,7 +165,7 @@ class PromiseTest extends TestCase{
     outcome
         .flatMap(
             function (x) {
-              return 'false'.failure();
+              return  Promises.failure('false');
             }
         ).foreachL(
             function(x:Dynamic) {
@@ -186,7 +186,7 @@ class PromiseTest extends TestCase{
     outcome
         .flatMap(
             function (x) {
-              return 'false'.failure();
+              return  Promises.failure('false');
             }
         ).map(
             function(x) {
@@ -204,7 +204,7 @@ class PromiseTest extends TestCase{
   * Test error from parallel execution
   */
   public function testWaitFailer10() {
-    var outcome1 = 'ok1'.success();
+    var outcome1 = Promises.success('ok1');
     var outcome2 = new Future().left('notok');
     
 
@@ -228,7 +228,7 @@ class PromiseTest extends TestCase{
   */
     public function testWaitFailer11() {
     var async   = Assert.createAsync( function() { } ,200);
-    var outcome1 = 'ok1'.success();
+    var outcome1 = Promises.failure('ok1');
     var outcome2 = new Future();
     haxe.Timer.delay(
         function() {
@@ -251,8 +251,8 @@ class PromiseTest extends TestCase{
   */
   public function testFuturesFailure7() {
     var async   = Assert.createAsync( function() { } ,200);
-    var outcome0 = 'ok0'.success();
-    var outcome1 = 'ok1'.success();
+    var outcome0 = Promises.success('ok0');
+    var outcome1 = Promises.success('ok1');
     var outcome2 = new Future().left('notok0');
     var outcome3 = new Future().left('notok again');
     var outcome4 = new Future();
@@ -292,8 +292,8 @@ class PromiseTest extends TestCase{
     var outcome0 : Future<Either<Dynamic,Dynamic>> 
                   = new stx.Future();
 
-    var outcome1  = 'ok1'.success();
-    var outcome2  = new Future();
+    var outcome1  = Promises.success('ok1');
+    var outcome2 : Future<Either<Dynamic,Dynamic>> = new Future();
     var outcome3  = new Future().left('notok again');
     var outcome4  = new Future();
     var outcome5  = new Future().right('ok');
@@ -324,10 +324,6 @@ class PromiseTest extends TestCase{
             function (x){
               return outcome2;
             }
-        ).foreachR(
-            function(x) {
-              return x;
-            }
         ).mapR(
             function(x) {
               return true;
@@ -350,7 +346,7 @@ class PromiseTest extends TestCase{
   */
   public function testFuturesFailure6() {
     var async   = Assert.createAsync( function() { } ,200);
-    var outcome1 = 'ok1'.success();
+    var outcome1 = Promises.success('ok1');
     var outcome2 = new Future().left('notok');
     var outcome3 = new Future().left('notok again');
     var outcome4 = new Future();
@@ -386,7 +382,7 @@ class PromiseTest extends TestCase{
   */
   public function testFuturesFailure9() {
     var async   = Assert.createAsync( function() { } , 200);
-    var outcome1 = 'ok1'.success();
+    var outcome1 = Promises.success('ok1');
     var outcome2 = new Future().left('notok');
     var outcome3 = new Future().left('notok again');
     var outcome4 = new Future();
@@ -423,7 +419,7 @@ class PromiseTest extends TestCase{
             }
         ).flatMapR(
             function(succ) {
-              return ''.failure();
+              return Promises.failure('');
             }
         ).foreachL(
             function(x:Dynamic) {
@@ -449,7 +445,7 @@ class PromiseTest extends TestCase{
   */
   public function testFuturesFailure10() {
     var async   = Assert.createAsync( function() { } , 200);
-    var outcome1 = 'ok1'.success();
+    var outcome1 = Promises.success('ok1');
     var outcome4 = new Future();
     var errors   = 2;
     var count    = 0;
@@ -481,7 +477,7 @@ class PromiseTest extends TestCase{
             }
         ).flatMapR(
             function(succ) {
-              return ''.failure();
+              return Promises.failure('');
             }
         ).foreachL(
             function(x:Dynamic) {

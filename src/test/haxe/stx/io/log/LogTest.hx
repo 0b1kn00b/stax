@@ -21,14 +21,14 @@ class LogTest extends TestCase{
 						LogListing.Include('sas')
 					, LogListing.Exclude('tds')
 				]);
-				dl.check('boop',Stax.here()).isFalse();
+				dl.check('boop',Prelude.here()).isFalse();
 	}
 	public function testTrueBecauseNotExcluded():Void {
 		var dl = new DefaultLogger( 
 				[
 					LogListing.Exclude('tsd')
 				]);
-				dl.check('boop',Stax.here()).isTrue();
+				dl.check('boop',Prelude.here()).isTrue();
 	}
 	public function testFalseBecauseExcludedPack() {
 		var dl = new DefaultLogger( 
@@ -37,7 +37,7 @@ class LogTest extends TestCase{
 						Log.pack('stx.io.log')
 						)
 				]);
-				dl.check('boop', Stax.here()).isFalse();
+				dl.check('boop', Prelude.here()).isFalse();
 	}
 	public function testTrueBecauseIncludedPack() {
 		var dl = new DefaultLogger( 
@@ -46,7 +46,7 @@ class LogTest extends TestCase{
 						Log.pack('stx.io.log')
 						)
 				]);
-				dl.check('boop', Stax.here()).isTrue();
+				dl.check('boop', Prelude.here()).isTrue();
 	}
 	public function testTrueBecauseIncludedFunction() {
 		var dl = new DefaultLogger( 
@@ -55,7 +55,7 @@ class LogTest extends TestCase{
 						Log.func('testTrueBecauseIncludedFunction')
 						)
 				]);
-				dl.check('boop', Stax.here()).isTrue();
+				dl.check('boop', Prelude.here()).isTrue();
 	}
 	public function testFalseBecauseExcludedFunction() {
 		var dl = new DefaultLogger( 
@@ -63,14 +63,14 @@ class LogTest extends TestCase{
 					'stx.io.log'.pack().whitelist(),
 					'testFalseBecauseExcludedFunction'.func().blacklist()
 				]);
-				dl.check('boop', Stax.here()).isFalse();
+				dl.check('boop', Prelude.here()).isFalse();
 	}
 	public function testTrueBecauseOtherExcludedFunction() {
 		var dl = new DefaultLogger( 
 				[
 						'testTrueBecauseIncludedFunction'.func().blacklist()
 				]);
-				dl.check('boop', Stax.here()).isTrue();
+				dl.check('boop', Prelude.here()).isTrue();
 	}
 	public function testTrueBecauseIncludedFile() {
 		var dl = new DefaultLogger( 
@@ -79,11 +79,11 @@ class LogTest extends TestCase{
 						'LogTest'.file()
 						)
 				]);
-				dl.check('boop', Stax.here()).isTrue();
+				dl.check('boop', Prelude.here()).isTrue();
 	}
 	public function testTrueBecauseNoListings() {
 		var dl = new DefaultLogger();
-		dl.check('boop', Stax.here()).isTrue();
+		dl.check('boop', Prelude.here()).isTrue();
 	}
 	/*public function testLogLevel() {
 		Injector.enter(
@@ -104,7 +104,7 @@ class LogTest extends TestCase{
 								trace( 'dooby'.error() );
 								trace( 'woozan' );
 				}
-		);*/
+		);
 		
-	}
+	}*/
 }

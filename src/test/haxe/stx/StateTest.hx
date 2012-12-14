@@ -19,8 +19,8 @@ class StateTest extends TestCase{
 		var sr2 = sr.map( fn );
 		//$type(fn);
 
-		var fn2 = function(x:String):String { return '$x hmm'.format(); }.modifier;
-		var fn3 = function(x:String):String { return '$x rooga'.format(); }.modifier;
+		var fn2 = function(x:String):String { return '$x hmm'; }.modifier;
+		var fn3 = function(x:String):String { return '$x rooga'; }.modifier;
 
 		//$type( fn2 );
 		//sr.apply(null).then( fn2 );

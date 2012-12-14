@@ -18,7 +18,7 @@ class StaxTest extends TestCase{
 		
 		//def( var a : {thing : A});
 		//def({ value : String });
-		F.n(a,return a);
+		var a = F.n(a,return a);
 //		trace(tup(fnc,2));
 		/*var mapper = fn({x+3;});
 		var c = [1,2,3].map(mapper);*/
