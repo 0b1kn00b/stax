@@ -28,9 +28,9 @@ class StateTest extends TestCase{
 		var sr3 = new stx.States.StateRef('pooty');
 		var val = sr.flatMap( fn2 ).flatMap( fn3 );
 		//$type (val.map) ;
-		trace(val(null)._1);
+		trace(val.apply(null)._1);
 		var val2 = sr.flatMap( StateRefs.reader );
-		trace(val2(null));
+		trace(val2.apply(null));
 		trace('___________');
 	}
 }

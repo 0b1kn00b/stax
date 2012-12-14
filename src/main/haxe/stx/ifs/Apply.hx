@@ -27,8 +27,4 @@ class Apply<E,A> implements IApply<E,A>{
 	public dynamic function apply(v:E):A{
 		return Prelude.error()('apply not implemented');
 	}
-	public function map<B>(f:A->B):Apply<E,B>{
-		return 
-			unit( apply.then(f) );
-	}
 }

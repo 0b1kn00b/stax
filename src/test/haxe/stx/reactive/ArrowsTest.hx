@@ -11,7 +11,7 @@ import stx.test.Assert;							using stx.test.Assert;
 import stx.arw.Arrows;					using stx.arw.Arrows;
 import stx.Future;										using stx.Future;
 
-typedef State = { };
+typedef ArrowTestState = { };
 typedef Transformer<S,A,B> 	= Arrow<Tuple2<S,A>,Tuple2<S,B>>;
 typedef StateResult<S,A,B>	= Either<Tuple2<Tuple2<S,A>,Transformer<S,A,B>>,Tuple2<S,B>>;
 
