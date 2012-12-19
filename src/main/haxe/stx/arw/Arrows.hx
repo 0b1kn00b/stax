@@ -58,6 +58,10 @@ class Arrows{
 				}.lift()
 			);
 	}
+	static public function pinch<I,O1,O2>(a:Arrow<Tuple2<I,I>,Tuple2<O1,O2>>):Arrow<I,Tuple2<O1,O2>>{
+		return 
+			fan(pure()).then(a);
+	}
 	/**
 			                         _____f(a)_____
 		a-----f-----b =====>(a,a) /           	 \(b,b)
@@ -134,6 +138,9 @@ class Arrows{
 	}
 	public static function left<B,C,D>(arr:Arrow<B,C>):Arrow<Either<B,D>,Either<C,D>>{
 		return new LeftChoiceArrow(arr);
+	}
+	public static function either<A,B>(a:Arrow<A,B>,b:Arrow<A,B>):Arrow<A,B>{
+		return new EitherArrow(a,b);
 	}
 	public static function right<B,C,D>(arr:Arrow<B,C>):Arrow<Either<D,B>,Either<D,C>>{
 		return new RightChoiceArrow(arr);
