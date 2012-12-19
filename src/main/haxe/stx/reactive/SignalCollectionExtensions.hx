@@ -45,7 +45,7 @@ class SignalCollectionExtensions {
         return b1.zip(b2).map(function(c) { return c._1.zip(c._2); });
     }
     
-    public static function append<C, T>(b: Signal<Collection<C, T>>, element: T): Signal<Collection<C, T>> {
+    public static function add<C, T>(b: Signal<Collection<C, T>>, element: T): Signal<Collection<C, T>> {
         return b.map(function(c) { return cast c.add(element); });
     }
     

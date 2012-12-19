@@ -2453,7 +2453,7 @@ class ReactiveTester extends TestCase {
     public function testSignalCollectionAppend(): Void {
         var signal: Signal<Collection<Int>> = Signals.constant(toCollection([3, 4, 5]));
         
-        var append = SignalCollection.append(signal, 4).valueNow();
+        var append = SignalCollection.add(signal, 4).valueNow();
         
         assertIterableEquals([3, 4, 5, 4], append);
     }
@@ -2734,7 +2734,7 @@ class ReactiveTester extends TestCase {
         var signal4: Signal<Collection<Int>> = Signals.constant(toCollection([2, 2]));
         
         var self = this;
-        var mapper = function(v1, v2, v3, v4) { return self.singleton(v2).cons(v1 + v3).append(v4); };
+        var mapper = function(v1, v2, v3, v4) { return self.singleton(v2).cons(v1 + v3).add(v4); };
         var flatMapped = SignalCollection.flatMap4B(signal1, signal2, signal3, signal4, mapper).valueNow();
         
         assertIterableEquals([13, 9, 2, 10, 14, 2], flatMapped);
@@ -2748,7 +2748,7 @@ class ReactiveTester extends TestCase {
         var signal5: Signal<Collection<Int>> = Signals.constant(toCollection([12, 24]));
         
         var self = this;
-        var mapper = function(v1, v2, v3, v4, v5) { return self.singleton(v2).cons(v1 + v3).append(v4 * v5); };
+        var mapper = function(v1, v2, v3, v4, v5) { return self.singleton(v2).cons(v1 + v3).add(v4 * v5); };
         var flatMapped = SignalCollection.flatMap5B(signal1, signal2, signal3, signal4, signal5, mapper).valueNow();
         
         assertIterableEquals([13, 9, 24, 10, 15, 48], flatMapped);

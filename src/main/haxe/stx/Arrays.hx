@@ -200,7 +200,7 @@ class Arrays {
   /**
     Appends the elements of `i` to `arr`
    */
-  static public function appendAll<T>(arr: Array<T>, i: Iterable<T>): Array<T> {
+  static public function append<T>(arr: Array<T>, i: Iterable<T>): Array<T> {
     var acc = arr.snapshot();
     
     for (e in i) 
@@ -299,7 +299,7 @@ class Arrays {
         a;
       }
       else {
-        a.append(b);
+        a.add(b);
       }
     });
   }
@@ -314,7 +314,7 @@ class Arrays {
    */  
   static public function intersectBy<T>(arr1: Array<T>, arr2: Array<T>, f: T -> T -> Bool): Array<T> {
     return arr1.foldl([], function(a: Array<T>, b: T): Array<T> {
-      return if (existsP(arr2, b, f)) a.append(b); else a;
+      return if (existsP(arr2, b, f)) a.add(b); else a;
     });
   }
   /**
@@ -410,7 +410,7 @@ class Arrays {
 	/**
     Adds a single element to the end of the Array.
    */
-  static public function append<T>(a: Array<T>, t: T): Array<T> {
+  static public function add<T>(a: Array<T>, t: T): Array<T> {
     var copy = Prelude.SArrays.snapshot(a);
     
     copy.push(t);

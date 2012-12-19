@@ -171,7 +171,7 @@ class MapTest extends TestCase {
   function map(?defaults : Array<Tuple2<Int, String>>): Map<Int, String> {
     var m = Map.create();      
   if(null != defaults)
-    m = m.addAll(defaults);
+    m = m.append(defaults);
     return m;
   }
 }

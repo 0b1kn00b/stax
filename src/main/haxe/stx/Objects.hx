@@ -158,7 +158,7 @@ class Objects {
     return Reflect.fields(obj).foldl([], function(a, fieldName): Array<Dynamic> {
       var value = Reflect.field(obj, fieldName);
       return if (fieldName == field) {
-        a.append(value);
+        a.add(value);
       } else if (Type.typeof(value) == TObject) {
         a.concat(Objects.extractFieldValues(value, field));
       } else a;

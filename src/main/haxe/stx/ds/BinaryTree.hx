@@ -23,21 +23,21 @@ class BinaryTrees{
 		return
 			switch (t) {
 				case Empty 				: [];
-				case Node(el,l,r) : inOrder(l).append(el).appendAll( inOrder(r) );
+				case Node(el,l,r) : inOrder(l).add(el).append( inOrder(r) );
 			}
 	}
 	static public function preOrder<A>(t:BinaryTree<A>):Array<A>{
 		return
 			switch (t) {
 				case Empty 				: [];
-				case Node(el,l,r)	: [el].appendAll(preOrder(l)).appendAll(preOrder(r));
+				case Node(el,l,r)	: [el].append(preOrder(l)).append(preOrder(r));
 			}
 	}
 	static public function postOrder<A>(t:BinaryTree<A>):Array<A>{
 		return
 			switch (t) {
 				case Empty 				: [];
-				case Node(el,l,r) : postOrder(l).appendAll(postOrder(r)).append(el);
+				case Node(el,l,r) : postOrder(l).append(postOrder(r)).add(el);
 			}
 	}
 	static public function size<A>(t:BinaryTree<A>):Int{
@@ -67,7 +67,7 @@ class BinaryTrees{
 					if(l == Empty && r == Empty){
 						[el];
 					}else{
-						leaves(l).appendAll(leaves(r));
+						leaves(l).append(leaves(r));
 					}
 			}	
 	}

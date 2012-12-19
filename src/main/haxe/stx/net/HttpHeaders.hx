@@ -39,7 +39,7 @@ class Headers {
   }
   
   public static function toHttpHeaders(str: String): HttpHeaders {
-    return Map.create().addAll(HeaderLinesPattern.split(str).flatMap(function(line) {
+    return Map.create().append(HeaderLinesPattern.split(str).flatMap(function(line) {
       return toHttpHeader(line.trim()).toArray();
     }));
   }

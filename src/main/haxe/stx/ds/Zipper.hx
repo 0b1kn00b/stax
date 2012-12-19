@@ -35,7 +35,7 @@ class Zipper<T,C> {
 	public function down<N>(f:Function1<C,N>):Zipper<T,N>{
 		var o : Option<N> = current.map(f);
 		//if (o == null) { throw "Transform function failed"; }
-		return new Zipper( data , o.get() , path.append(f) );
+		return new Zipper( data , o.get() , path.add(f) );
 	}
 	public function up<P>():Zipper < T, P > {
 		var s 		= path.take( path.length - 2 );

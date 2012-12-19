@@ -42,7 +42,7 @@ class HTMLElementExtensions {
     return e.getElementsByTagName(tagName).toArray();
   }
   
-  public static function append(e: HTMLElement, child: HTMLElement): HTMLElement {
+  public static function add(e: HTMLElement, child: HTMLElement): HTMLElement {
     e.appendChild(child);
     return e;
   }

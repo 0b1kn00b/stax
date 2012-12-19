@@ -22,14 +22,14 @@ using stx.functional.Foldables;
 
 class ArrayToList {
   public static function toList<T>(arr : Array<T>) {
-    return stx.ds.List.create().addAll(arr);
+    return stx.ds.List.create().append(arr);
   }	
 }
 class FoldableToList {
   public static function toList<A, B>(foldable : Foldable<A, B>) : List<B> {  
     var dest = List.create();
     return foldable.foldl(dest, function(a, b) {
-      return a.append(b);
+      return a.add(b);
     });
   }	
 }
@@ -92,7 +92,7 @@ class List<T> implements Collection<List<T>, T> {
   }
 
 	public static function toList<T>(i: Iterable<T>) {
-    return stx.ds.List.create().addAll(i);
+    return stx.ds.List.create().append(i);
   }
   public static function nil<T>(?order : OrderFunction<T>, ?tools : CollectionTools<T>): List<T> {
     return new Nil(tools);
@@ -156,10 +156,6 @@ class List<T> implements Collection<List<T>, T> {
     return result;
   }
 
-  public function append(b: T): List<T> {
-    return add(b);
-  }
-
   public function foldl<Z>(z: Z, f: Z -> T -> Z): Z {
     var acc = z;
     var cur = this;
@@ -210,7 +206,7 @@ class List<T> implements Collection<List<T>, T> {
     });
   }
 
-   public function addAll(i: Iterable<T>): List<T> {
+   public function append(i: Iterable<T>): List<T> {
     var a = [];
 
     for (e in i) a.push(e);
@@ -265,7 +261,7 @@ class List<T> implements Collection<List<T>, T> {
 
   /** Override Foldable to provide higher performance: */
   public function concat(l: List<T>): List<T> {
-    return this.addAll(l);
+    return this.append(l);
   }
 
   /** Override Foldable to provide higher performance: */
@@ -362,19 +358,19 @@ class List<T> implements Collection<List<T>, T> {
   }
   
   public function withOrderFunction(order : OrderFunction<T>) {
-    return create(Prelude.tool(order,equal,hash,show)).addAll(this);
+    return create(Prelude.tool(order,equal,hash,show)).append(this);
   }
   
   public function withEqualFunction(equal : EqualFunction<T>) {
-    return create(Prelude.tool(order, equal, hash, show)).addAll(this);
+    return create(Prelude.tool(order, equal, hash, show)).append(this);
   }
   
   public function withHashFunction(hash : HashFunction<T>) {
-    return create(Prelude.tool(order, equal, hash, show)).addAll(this);
+    return create(Prelude.tool(order, equal, hash, show)).append(this);
   }
   
   public function withShowFunction(show : ShowFunction<T>) {
-    return create(Prelude.tool(order, equal, hash, show)).addAll(this);
+    return create(Prelude.tool(order, equal, hash, show)).append(this);
   }
 
   public function equals(other : List<T>) {     

@@ -29,7 +29,7 @@ interface Collection<C, T> implements Foldable<C, T> {
   
   public function add(t: T): C;
   
-  public function addAll(t: Iterable<T>): C;
+  public function append(t: Iterable<T>): C;
   
   public function remove(t: T): C;
   

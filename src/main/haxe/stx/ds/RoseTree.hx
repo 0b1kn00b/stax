@@ -10,13 +10,13 @@ class TreeNode<T>{
 	public function clone(){
 
 	}
-	public function append(v:T){
+	public function add(v:T){
 
 	}
 	public function appendNode(t:TreeNode<T>){
 
 	}
-	public function appendAll(v:Iterable<T>){
+	public function append(v:Iterable<T>){
 
 	}
 	public function appendAllNodes(v:Iterable<TreeNode<T>>){

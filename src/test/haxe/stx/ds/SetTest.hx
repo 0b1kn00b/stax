@@ -142,7 +142,7 @@ class SetTest extends TestCase {
   function set<T>(?values : Array<T>): Set<T> {
     var s = Set.create();
     if(null != values)
-      s = s.addAll(values);
+      s = s.append(values);
     return s;
   }
 }

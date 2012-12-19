@@ -45,13 +45,13 @@ class Foldables {
   
   public static function filter<A, B>(foldable: Foldable<A, B>, f: B -> Bool): A {
     return cast foldable.foldl(foldable.empty(), function(a, b) {
-      return if (f(b)) cast a.append(b); else a;
+      return if (f(b)) cast a.add(b); else a;
     });
   }
   
   public static function partition<A, B>(foldable: Foldable<A, B>, f: B -> Bool): Tuple2<A, A> {
     return cast foldable.foldl(Tuples.t2(foldable.empty(), foldable.empty()), function(a, b) {
-      return if (f(b)) Tuples.t2(cast a._1.append(b), a._2); else Tuples.t2(a._1, cast a._2.append(b));
+      return if (f(b)) Tuples.t2(cast a._1.add(b), a._2); else Tuples.t2(a._1, cast a._2.add(b));
     });
   }
   
@@ -61,16 +61,16 @@ class Foldables {
     return cast foldable.foldl(Tuples.t2(foldable.empty(), foldable.empty()), function(a, b) {
       return if (partitioning) {
         if (f(b)) {
-          Tuples.t2(cast a._1.append(b), a._2);
+          Tuples.t2(cast a._1.add(b), a._2);
         }
         else {
           partitioning = false;
           
-          Tuples.t2(a._1, cast a._2.append(b));
+          Tuples.t2(a._1, cast a._2.add(b));
         }
       }
       else {
-        Tuples.t2(a._1, cast a._2.append(b));
+        Tuples.t2(a._1, cast a._2.add(b));
       }
     });
   }
@@ -81,7 +81,7 @@ class Foldables {
   
   public static function mapTo<A, B, C, D>(src: Foldable<A, B>, dest: Foldable<C, D>, f: B -> D): C {
     return cast src.foldl(dest, function(a, b) {
-      return cast a.append(f(b));
+      return cast a.add(f(b));
     });
   }
   
@@ -92,14 +92,14 @@ class Foldables {
   public static function flatMapTo<A, B, C, D>(src: Foldable<A, B>, dest: Foldable<C, D>, f: B -> Foldable<C, D>): C {
     return cast src.foldl(dest, function(a, b) {
       return f(b).foldl(a, function(a, b) {
-        return cast a.append(b);
+        return cast a.add(b);
       });
     });
   }
   
   public static function take<A, B>(foldable: Foldable<A, B>, n: Int): A {
     return cast foldable.foldl(foldable.empty(), function(a, b) {
-      return if (n-- > 0) cast a.append(b); else a;
+      return if (n-- > 0) cast a.add(b); else a;
     });
   }
   
@@ -107,13 +107,13 @@ class Foldables {
     var taking = true;
     
     return cast foldable.foldl(foldable.empty(), function(a, b) {
-      return if (taking) { if (f(b)) cast a.append(b); else { taking = false; a; } } else a;
+      return if (taking) { if (f(b)) cast a.add(b); else { taking = false; a; } } else a;
     });
   }
   
   public static function drop<A, B>(foldable: Foldable<A, B>, n: Int): A {
     return cast foldable.foldl(foldable.empty(), function(a, b) {
-      return if (n-- > 0) a; else cast a.append(b);
+      return if (n-- > 0) a; else cast a.add(b);
     });
   }
   
@@ -121,7 +121,7 @@ class Foldables {
     var dropping = true;
     
     return cast foldable.foldl(foldable.empty(), function(a, b) {
-      return if (dropping) { if (f(b)) a; else { dropping = false; cast a.append(b); } } else cast a.append(b);
+      return if (dropping) { if (f(b)) a; else { dropping = false; cast a.add(b); } } else cast a.add(b);
     });
   }
   
@@ -150,10 +150,10 @@ class Foldables {
   public static function scanl<A, B>(foldable:Foldable<A, B>, init: B, f: B -> B -> B): A {
     var a = toArray(foldable);
     
-    var result = foldable.empty().append(init);
+    var result = foldable.empty().add(init);
     
     for (e in a)
-      result = cast result.append(f(e, init));
+      result = cast result.add(f(e, init));
     
     return cast result;
   }
@@ -163,10 +163,10 @@ class Foldables {
     
     a.reverse();
     
-    var result = foldable.empty().append(init);
+    var result = foldable.empty().add(init);
     
     for (e in a)
-      result = cast result.append(f(e, init));
+      result = cast result.add(f(e, init));
 
     return cast result;
   }
@@ -179,10 +179,10 @@ class Foldables {
       return cast result;
     
     var accum = iterator.next();
-    result = cast result.append(accum);
+    result = cast result.add(accum);
     
     while (iterator.hasNext())
-      result = cast result.append(f(iterator.next(), accum));
+      result = cast result.add(f(iterator.next(), accum));
     
     return cast result;
   }
@@ -197,10 +197,10 @@ class Foldables {
       return cast result;
     
     var accum = iterator.next();
-    result = cast result.append(accum);
+    result = cast result.add(accum);
     
     while (iterator.hasNext())
-      result = cast result.append(f(iterator.next(), accum));
+      result = cast result.add(f(iterator.next(), accum));
     
     return cast result;
   }
@@ -211,18 +211,18 @@ class Foldables {
   
   public static function concat<A, B>(foldable: Foldable<A, B>, rest: Foldable<A, B>): A {
     return cast rest.foldl(foldable, function(a, b) {
-      return cast a.append(b);
+      return cast a.add(b);
     });
   }
   
   public static function append<A, B>(foldable: Foldable<A, B>, e: B): A {
-    return foldable.append(e);
+    return foldable.add(e);
   }
   
   public static function appendAll<A, B>(foldable: Foldable<A, B>, i: Iterable<B>): A {
     var acc = foldable;
     
-    for (e in i) { acc = cast acc.append(e); }
+    for (e in i) { acc = cast acc.add(e); }
     
     return cast acc;
   }
@@ -298,7 +298,7 @@ class Foldables {
         a;
       }
       else {
-        cast a.append(b);
+        cast a.add(b);
       }
     });
   }
@@ -311,7 +311,7 @@ class Foldables {
   
   public static function intersectBy<A, B>(foldable1: Foldable<A, B>, foldable2: Foldable<A, B>, f: B -> B -> Bool): A {
     return cast foldable1.foldl(foldable1.empty(), function(a, b) {
-      return if (existsP(foldable2, b, f)) cast a.append(b); else a;
+      return if (existsP(foldable2, b, f)) cast a.add(b); else a;
     });
   }
   

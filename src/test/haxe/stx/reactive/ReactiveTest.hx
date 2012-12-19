@@ -2436,7 +2436,7 @@ class ReactiveTest extends TestCase {
   public function testSignalCollectionAppend(): Void {
     var signal = Signals.constant(toCollection([3, 4, 5]));
     
-    var append = SignalCollectionExtensions.append(signal, 4).valueNow();
+    var append = SignalCollectionExtensions.add(signal, 4).valueNow();
     
     assertEquals([3, 4, 5, 4], append.toArray());
   }
@@ -2717,7 +2717,7 @@ class ReactiveTest extends TestCase {
     var signal4 = Signals.constant(toCollection([2, 2]));
     
     var self = this;
-    var mapper = function(v1, v2, v3, v4) { return self.singleton(v2).cons(v1 + v3).append(v4); };
+    var mapper = function(v1, v2, v3, v4) { return self.singleton(v2).cons(v1 + v3).add(v4); };
     var flatMapped = SignalCollectionExtensions.flatMap4B(signal1, signal2, signal3, signal4, mapper).valueNow();
     
     assertEquals([13, 9, 2, 10, 14, 2], flatMapped.toArray();
@@ -2731,7 +2731,7 @@ class ReactiveTest extends TestCase {
     var signal5 = Signals.constant(toCollection([12, 24]));
     
     var self = this;
-    var mapper = function(v1, v2, v3, v4, v5) { return self.singleton(v2).cons(v1 + v3).append(v4 * v5); };
+    var mapper = function(v1, v2, v3, v4, v5) { return self.singleton(v2).cons(v1 + v3).add(v4 * v5); };
     var flatMapped = SignalCollectionExtensions.flatMap5B(signal1, signal2, signal3, signal4, signal5, mapper).valueNow();
     
     assertEquals([13, 9, 24, 10, 15, 48], flatMapped.toArray();

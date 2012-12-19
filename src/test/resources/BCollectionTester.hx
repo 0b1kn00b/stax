@@ -62,7 +62,7 @@ class CollectionTester extends TestCase {
   public function testThatItXAppendWorks(): Void {
     var i: Iterable<Int> = [1, 2, 3, 4, 5];
     
-    assertIterableEquals(i.append(2), [1,2,3,4,5,2]);
+    assertIterableEquals(i.add(2), [1,2,3,4,5,2]);
   }
   
   public function testThatItXTailWorks(): Void {

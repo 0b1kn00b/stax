@@ -21,7 +21,7 @@ using stx.functional.Foldables;
 
 class FoldablesTest extends TestCase {
   public function testIntSetMapToString() {
-    var seta = Set.create().addAll([1,2,3]);
+    var seta = Set.create().append([1,2,3]);
     var setb = seta.map(function(i) return i.toString());
     assertEquals(["1", "2", "3"], setb.toArray()); 
   }
@@ -33,13 +33,13 @@ class FoldablesTest extends TestCase {
   }
   
   public function testListToSet() {
-    var set = List.create().addAll([1, 2, 2, 3]).toSet();
+    var set = List.create().append([1, 2, 2, 3]).toSet();
     assertIs(set, Set);
     assertEquals(3, set.size());
   }
   
   public function testSetToList() {
-    var list = Set.create().addAll([1, 2, 3]).toList();
+    var list = Set.create().append([1, 2, 3]).toList();
     assertIs(list, List);
     assertEquals(3, list.size());
   }
@@ -96,7 +96,7 @@ class FoldablesTest extends TestCase {
   } 
    
   public function testListGroupBy() {
-    var list = List.create().appendAll([1,2,3,4,5,6,7,8,9,10]);
+    var list = List.create().append([1,2,3,4,5,6,7,8,9,10]);
     var primes = [7, 5, 3, 2];
     var r = list.groupBy(function(v) {
       for(p in primes)
@@ -117,7 +117,7 @@ class FoldablesTest extends TestCase {
   } 
   
   public function testSetGroupBy() {
-    var set = Set.create().appendAll([1,2,3,4,5,6,7,8,9,10]);
+    var set = Set.create().append([1,2,3,4,5,6,7,8,9,10]);
     var primes = [7, 5, 3, 2];
     var r :Map<Int,Set<Int>>=  set.groupBy(function(v) {
       for(p in primes)

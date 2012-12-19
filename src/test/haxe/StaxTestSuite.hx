@@ -84,21 +84,19 @@ class StaxTestSuite {
           , new js.dom.HTMLElementsTest()
           , new js.dom.HTMLDocumentsTest()
           , new js.dom.QuirksTestCase()
-          , new stx.PromiseTest()//#0b1kn00b how to test delayed easily without timer.
+          
 #end
           , new stx.ObjectsTest()
           , new stx.TupleTest()
           , new stx.ds.RangeTest()
           , new stx.MathsTest()
           , new stx.BoolsTest()
-#if dev
-#end
         ];
         haxe.Log.trace = stx.Log.trace;
 
         var runner = new Runner();
           //  runner.addAll(#if dev dev #else tests #end);
-          runner.add(b);
+          runner.addAll(tests);
 
         Report.create(runner);
 

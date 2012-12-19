@@ -113,7 +113,7 @@ class Strings {
   static public function prepend(str:String,before:String){
     return before + str;
   }
-  static public function append(str:String,after:String){
+  static public function add(str:String,after:String){
     return str + after;
   }
   static public function cca(str:String,i:Int){

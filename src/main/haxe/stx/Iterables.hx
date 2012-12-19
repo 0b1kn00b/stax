@@ -95,7 +95,7 @@ class Iterables {
     Drop values from iter while p(e) = true.
   */
   public static function dropWhile<T>(iter: Iterable<T>, p: T -> Bool): Iterable<T> {
-    var r = [].appendAll(iter);
+    var r = [].append(iter);
     
     for (e in iter) {
       if (p(e)) {
@@ -250,7 +250,7 @@ class Iterables {
   /**
     Append `e` to the end of `iter`.
   */
-  public static function append<T>(iter: Iterable<T>, e: T): Iterable<T> {
+  public static function add<T>(iter: Iterable<T>, e: T): Iterable<T> {
     return foldr(iter, [e], function(a, b) {
       b.unshift(a);
       
@@ -360,7 +360,7 @@ class Iterables {
   */ 
   public static function intersectBy<T>(iter1: Iterable<T>, iter2: Iterable<T>, f: T -> T -> Bool): Iterable<T> {
     return Prelude.SIterables.foldl(iter1, cast [], function(a: Iterable<T>, b: T): Iterable<T> {
-      return if (existsP(iter2, b, f)) append(a, b); else a;
+      return if (existsP(iter2, b, f)) add(a, b); else a;
     });
   }
   /**
@@ -368,7 +368,7 @@ class Iterables {
   */
   public static function intersect<T>(iter1: Iterable<T>, iter2: Iterable<T>): Iterable<T> {
     return Prelude.SIterables.foldl(iter1, cast [], function(a: Iterable<T>, b: T): Iterable<T> {
-      return if (existsP(iter2, b, stx.plus.Equal.getEqualFor(iter1.head()))) append(a, b); else a;
+      return if (existsP(iter2, b, stx.plus.Equal.getEqualFor(iter1.head()))) add(a, b); else a;
     });
   }
   /**
@@ -386,7 +386,7 @@ class Iterables {
         }
       }
       if (!exists) {
-        result = append(result, e);
+        result = add(result, e);
       }
     }
     
@@ -436,8 +436,8 @@ class Iterables {
   /**
     Appends the elements of ´i´ to ´arr´
    */
-  public static function appendAll<T>(iter: Iterable<T>, i: Iterable<T>): Iterable<T> {
-    return Arrays.appendAll(iter.toArray(),i);
+  public static function append<T>(iter: Iterable<T>, i: Iterable<T>): Iterable<T> {
+    return Arrays.append(iter.toArray(),i);
   }
   /**
     Produces true if the Iterable is empty, false otherwise

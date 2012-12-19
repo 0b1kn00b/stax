@@ -3355,7 +3355,7 @@ stx.Arrays.existsP = function(arr,ref,f) {
 }
 stx.Arrays.nubBy = function(arr,f) {
 	return ArrayLambda.foldl(arr,[],function(a,b) {
-		return stx.Arrays.existsP(a,b,f)?a:stx.Arrays.append(a,b);
+		return stx.Arrays.existsP(a,b,f)?a:stx.Arrays.add(a,b);
 	});
 }
 stx.Arrays.nub = function(arr) {
@@ -3363,7 +3363,7 @@ stx.Arrays.nub = function(arr) {
 }
 stx.Arrays.intersectBy = function(arr1,arr2,f) {
 	return ArrayLambda.foldl(arr1,[],function(a,b) {
-		return stx.Arrays.existsP(arr2,b,f)?stx.Arrays.append(a,b):a;
+		return stx.Arrays.existsP(arr2,b,f)?stx.Arrays.add(a,b):a;
 	});
 }
 stx.Arrays.intersect = function(arr1,arr2) {
@@ -4705,7 +4705,7 @@ stx.Iterables.drop = function(iter,n) {
 	return result;
 }
 stx.Iterables.dropWhile = function(a,p) {
-	var r = stx.Iterables.appendAll([],a);
+	var r = stx.Iterables.append([],a);
 	var $it0 = $iterator(a)();
 	while( $it0.hasNext() ) {
 		var e = $it0.next();
@@ -4894,14 +4894,14 @@ stx.Iterables.nubBy = function(iter,f) {
 }
 stx.Iterables.intersectBy = function(iter1,iter2,f) {
 	return IterableLambda.foldl(iter1,[],function(a,b) {
-		return stx.Iterables.existsP(iter2,b,f)?stx.Iterables.append(a,b):a;
+		return stx.Iterables.existsP(iter2,b,f)?stx.Iterables.add(a,b):a;
 	});
 }
 stx.Iterables.intersect = function(iter1,iter2) {
 	return IterableLambda.foldl(iter1,[],function(a,b) {
 		return stx.Iterables.existsP(iter2,b,function(a1,b1) {
 			return a1 == b1;
-		})?stx.Iterables.append(a,b):a;
+		})?stx.Iterables.add(a,b):a;
 	});
 }
 stx.Iterables.unionBy = function(iter1,iter2,f) {
@@ -4915,7 +4915,7 @@ stx.Iterables.unionBy = function(iter1,iter2,f) {
 			var i = $it1.next();
 			if(f(i,e)) exists = true;
 		}
-		if(!exists) result = stx.Iterables.append(result,e);
+		if(!exists) result = stx.Iterables.add(result,e);
 	}
 	return result;
 }
@@ -4940,7 +4940,7 @@ stx.Iterables.elements = function(iter) {
 	return IterableLambda.toArray(iter);
 }
 stx.Iterables.appendAll = function(iter,i) {
-	return stx.Arrays.appendAll(IterableLambda.toArray(iter),i);
+	return stx.Arrays.append(IterableLambda.toArray(iter),i);
 }
 stx.Iterables.isEmpty = function(iter) {
 	return !$iterator(iter)().hasNext();
@@ -5833,7 +5833,7 @@ stx.Objects.getAny = function(d,k) {
 stx.Objects.extractFieldValues = function(obj,field) {
 	return ArrayLambda.foldl(Reflect.fields(obj),[],function(a,fieldName) {
 		var value = Reflect.field(obj,fieldName);
-		return fieldName == field?stx.Arrays.append(a,value):Type["typeof"](value) == ValueType.TObject?a.concat(stx.Objects.extractFieldValues(value,field)):a;
+		return fieldName == field?stx.Arrays.add(a,value):Type["typeof"](value) == ValueType.TObject?a.concat(stx.Objects.extractFieldValues(value,field)):a;
 	});
 }
 stx.Objects.extractAll = function(d) {
@@ -7172,7 +7172,7 @@ stx.ds.BinaryTrees.inOrder = function(t) {
 			break;
 		case 1:
 			var r = $e[4], l = $e[3], el = $e[2];
-			$r = stx.Arrays.appendAll(stx.Arrays.append(stx.ds.BinaryTrees.inOrder(l),el),stx.ds.BinaryTrees.inOrder(r));
+			$r = stx.Arrays.append(stx.Arrays.add(stx.ds.BinaryTrees.inOrder(l),el),stx.ds.BinaryTrees.inOrder(r));
 			break;
 		}
 		return $r;
@@ -7188,7 +7188,7 @@ stx.ds.BinaryTrees.preOrder = function(t) {
 			break;
 		case 1:
 			var r = $e[4], l = $e[3], el = $e[2];
-			$r = stx.Arrays.appendAll(stx.Arrays.appendAll([el],stx.ds.BinaryTrees.preOrder(l)),stx.ds.BinaryTrees.preOrder(r));
+			$r = stx.Arrays.append(stx.Arrays.append([el],stx.ds.BinaryTrees.preOrder(l)),stx.ds.BinaryTrees.preOrder(r));
 			break;
 		}
 		return $r;
@@ -7204,7 +7204,7 @@ stx.ds.BinaryTrees.postOrder = function(t) {
 			break;
 		case 1:
 			var r = $e[4], l = $e[3], el = $e[2];
-			$r = stx.Arrays.append(stx.Arrays.appendAll(stx.ds.BinaryTrees.postOrder(l),stx.ds.BinaryTrees.postOrder(r)),el);
+			$r = stx.Arrays.add(stx.Arrays.append(stx.ds.BinaryTrees.postOrder(l),stx.ds.BinaryTrees.postOrder(r)),el);
 			break;
 		}
 		return $r;
@@ -7252,7 +7252,7 @@ stx.ds.BinaryTrees.leaves = function(t) {
 			break;
 		case 1:
 			var r = $e[4], l = $e[3], el = $e[2];
-			$r = l == stx.ds.BinaryTree.Empty && r == stx.ds.BinaryTree.Empty?[el]:stx.Arrays.appendAll(stx.ds.BinaryTrees.leaves(l),stx.ds.BinaryTrees.leaves(r));
+			$r = l == stx.ds.BinaryTree.Empty && r == stx.ds.BinaryTree.Empty?[el]:stx.Arrays.append(stx.ds.BinaryTrees.leaves(l),stx.ds.BinaryTrees.leaves(r));
 			break;
 		}
 		return $r;
@@ -7325,7 +7325,7 @@ stx.ds.FoldableGroup.groupBy = function(foldable,grouper) {
 	return foldable.foldl(stx.ds.Map.create(),function(map,e) {
 		var key = grouper(e);
 		var result = map.getOrElseC(key,def);
-		return map.set(key,result.append(e));
+		return map.set(key,result.add(e));
 	});
 }
 stx.ds.Input = $hxClasses["stx.ds.Input"] = { __ename__ : ["stx","ds","Input"], __constructs__ : ["El","Empty","EOF"] }
@@ -7511,7 +7511,7 @@ stx.ds.FoldableToList.__name__ = ["stx","ds","FoldableToList"];
 stx.ds.FoldableToList.toList = function(foldable) {
 	var dest = stx.ds.List.create();
 	return foldable.foldl(dest,function(a,b) {
-		return a.append(b);
+		return a.add(b);
 	});
 }
 stx.ds.List = $hxClasses["stx.ds.List"] = function(tools) {
@@ -8348,7 +8348,7 @@ stx.ds.FoldableToMap.__name__ = ["stx","ds","FoldableToMap"];
 stx.ds.FoldableToMap.toMap = function(foldable) {
 	var dest = stx.ds.Map.create();
 	return foldable.foldl(dest,function(a,b) {
-		return a.append(b);
+		return a.add(b);
 	});
 }
 stx.ds.ArrayToMap = $hxClasses["stx.ds.ArrayToMap"] = function() { }
@@ -8419,7 +8419,7 @@ stx.ds.FoldableToSet.__name__ = ["stx","ds","FoldableToSet"];
 stx.ds.FoldableToSet.toSet = function(foldable) {
 	var dest = stx.ds.Set.create();
 	return foldable.foldl(dest,function(a,b) {
-		return a.append(b);
+		return a.add(b);
 	});
 }
 stx.ds.ArrayToSet = $hxClasses["stx.ds.ArrayToSet"] = function() { }
@@ -8572,7 +8572,7 @@ stx.ds.Zipper.prototype = {
 	}
 	,map: function(f) {
 		var o = f(this.current);
-		return new stx.ds.Zipper(this.data,o,stx.Arrays.append(this.path,f));
+		return new stx.ds.Zipper(this.data,o,stx.Arrays.add(this.path,f));
 	}
 	,root: function() {
 		return new stx.ds.Zipper(this.data);
@@ -9706,23 +9706,23 @@ stx.functional.FoldableExtensions.foldr = function(foldable,z,f) {
 }
 stx.functional.FoldableExtensions.filter = function(foldable,f) {
 	return foldable.foldl(foldable.empty(),function(a,b) {
-		return f(b)?a.append(b):a;
+		return f(b)?a.add(b):a;
 	});
 }
 stx.functional.FoldableExtensions.partition = function(foldable,f) {
 	return foldable.foldl(new stx.Tuple2(foldable.empty(),foldable.empty()),function(a,b) {
-		return f(b)?new stx.Tuple2(a._1.append(b),a._2):new stx.Tuple2(a._1,a._2.append(b));
+		return f(b)?new stx.Tuple2(a._1.add(b),a._2):new stx.Tuple2(a._1,a._2.add(b));
 	});
 }
 stx.functional.FoldableExtensions.partitionWhile = function(foldable,f) {
 	var partitioning = true;
 	return foldable.foldl(new stx.Tuple2(foldable.empty(),foldable.empty()),function(a,b) {
-		return partitioning?f(b)?new stx.Tuple2(a._1.append(b),a._2):(function($this) {
+		return partitioning?f(b)?new stx.Tuple2(a._1.add(b),a._2):(function($this) {
 			var $r;
 			partitioning = false;
-			$r = new stx.Tuple2(a._1,a._2.append(b));
+			$r = new stx.Tuple2(a._1,a._2.add(b));
 			return $r;
-		}(this)):new stx.Tuple2(a._1,a._2.append(b));
+		}(this)):new stx.Tuple2(a._1,a._2.add(b));
 	});
 }
 stx.functional.FoldableExtensions.map = function(src,f) {
@@ -9730,7 +9730,7 @@ stx.functional.FoldableExtensions.map = function(src,f) {
 }
 stx.functional.FoldableExtensions.mapTo = function(src,dest,f) {
 	return src.foldl(dest,function(a,b) {
-		return a.append(f(b));
+		return a.add(f(b));
 	});
 }
 stx.functional.FoldableExtensions.flatMap = function(src,f) {
@@ -9739,19 +9739,19 @@ stx.functional.FoldableExtensions.flatMap = function(src,f) {
 stx.functional.FoldableExtensions.flatMapTo = function(src,dest,f) {
 	return src.foldl(dest,function(a,b) {
 		return f(b).foldl(a,function(a1,b1) {
-			return a1.append(b1);
+			return a1.add(b1);
 		});
 	});
 }
 stx.functional.FoldableExtensions.take = function(foldable,n) {
 	return foldable.foldl(foldable.empty(),function(a,b) {
-		return n-- > 0?a.append(b):a;
+		return n-- > 0?a.add(b):a;
 	});
 }
 stx.functional.FoldableExtensions.takeWhile = function(foldable,f) {
 	var taking = true;
 	return foldable.foldl(foldable.empty(),function(a,b) {
-		return taking?f(b)?a.append(b):(function($this) {
+		return taking?f(b)?a.add(b):(function($this) {
 			var $r;
 			taking = false;
 			$r = a;
@@ -9761,7 +9761,7 @@ stx.functional.FoldableExtensions.takeWhile = function(foldable,f) {
 }
 stx.functional.FoldableExtensions.drop = function(foldable,n) {
 	return foldable.foldl(foldable.empty(),function(a,b) {
-		return n-- > 0?a:a.append(b);
+		return n-- > 0?a:a.add(b);
 	});
 }
 stx.functional.FoldableExtensions.dropWhile = function(foldable,f) {
@@ -9770,9 +9770,9 @@ stx.functional.FoldableExtensions.dropWhile = function(foldable,f) {
 		return dropping?f(b)?a:(function($this) {
 			var $r;
 			dropping = false;
-			$r = a.append(b);
+			$r = a.add(b);
 			return $r;
-		}(this)):a.append(b);
+		}(this)):a.add(b);
 	});
 }
 stx.functional.FoldableExtensions.count = function(foldable,f) {
@@ -9793,24 +9793,24 @@ stx.functional.FoldableExtensions.countWhile = function(foldable,f) {
 }
 stx.functional.FoldableExtensions.scanl = function(foldable,init,f) {
 	var a = stx.functional.FoldableExtensions.toArray(foldable);
-	var result = foldable.empty().append(init);
+	var result = foldable.empty().add(init);
 	var _g = 0;
 	while(_g < a.length) {
 		var e = a[_g];
 		++_g;
-		result = result.append(f(e,init));
+		result = result.add(f(e,init));
 	}
 	return result;
 }
 stx.functional.FoldableExtensions.scanr = function(foldable,init,f) {
 	var a = stx.functional.FoldableExtensions.toArray(foldable);
 	a.reverse();
-	var result = foldable.empty().append(init);
+	var result = foldable.empty().add(init);
 	var _g = 0;
 	while(_g < a.length) {
 		var e = a[_g];
 		++_g;
-		result = result.append(f(e,init));
+		result = result.add(f(e,init));
 	}
 	return result;
 }
@@ -9819,8 +9819,8 @@ stx.functional.FoldableExtensions.scanl1 = function(foldable,f) {
 	var result = foldable.empty();
 	if(!iterator.hasNext()) return result;
 	var accum = iterator.next();
-	result = result.append(accum);
-	while(iterator.hasNext()) result = result.append(f(iterator.next(),accum));
+	result = result.add(accum);
+	while(iterator.hasNext()) result = result.add(f(iterator.next(),accum));
 	return result;
 }
 stx.functional.FoldableExtensions.scanr1 = function(foldable,f) {
@@ -9830,8 +9830,8 @@ stx.functional.FoldableExtensions.scanr1 = function(foldable,f) {
 	var result = foldable.empty();
 	if(!iterator.hasNext()) return result;
 	var accum = iterator.next();
-	result = result.append(accum);
-	while(iterator.hasNext()) result = result.append(f(iterator.next(),accum));
+	result = result.add(accum);
+	while(iterator.hasNext()) result = result.add(f(iterator.next(),accum));
 	return result;
 }
 stx.functional.FoldableExtensions.elements = function(foldable) {
@@ -9839,18 +9839,18 @@ stx.functional.FoldableExtensions.elements = function(foldable) {
 }
 stx.functional.FoldableExtensions.concat = function(foldable,rest) {
 	return rest.foldl(foldable,function(a,b) {
-		return a.append(b);
+		return a.add(b);
 	});
 }
 stx.functional.FoldableExtensions.append = function(foldable,e) {
-	return foldable.append(e);
+	return foldable.add(e);
 }
 stx.functional.FoldableExtensions.appendAll = function(foldable,i) {
 	var acc = foldable;
 	var $it0 = $iterator(i)();
 	while( $it0.hasNext() ) {
 		var e = $it0.next();
-		acc = acc.append(e);
+		acc = acc.add(e);
 	}
 	return acc;
 }
@@ -9948,7 +9948,7 @@ stx.functional.FoldableExtensions.contains = function(foldable,member) {
 }
 stx.functional.FoldableExtensions.nubBy = function(foldable,f) {
 	return foldable.foldl(foldable.empty(),function(a,b) {
-		return stx.functional.FoldableExtensions.existsP(a,b,f)?a:a.append(b);
+		return stx.functional.FoldableExtensions.existsP(a,b,f)?a:a.add(b);
 	});
 }
 stx.functional.FoldableExtensions.nub = function(foldable) {
@@ -9958,7 +9958,7 @@ stx.functional.FoldableExtensions.nub = function(foldable) {
 }
 stx.functional.FoldableExtensions.intersectBy = function(foldable1,foldable2,f) {
 	return foldable1.foldl(foldable1.empty(),function(a,b) {
-		return stx.functional.FoldableExtensions.existsP(foldable2,b,f)?a.append(b):a;
+		return stx.functional.FoldableExtensions.existsP(foldable2,b,f)?a.add(b):a;
 	});
 }
 stx.functional.FoldableExtensions.intersect = function(foldable1,foldable2) {
@@ -18797,7 +18797,7 @@ stx.test.resources.CollectionTester.prototype = $extend(stx.test.TestCase.protot
 	}
 	,testThatItXAppendWorks: function() {
 		var i = [1,2,3,4,5];
-		this.assertEquals(Std.string(stx.Iterables.append(i,2)),"[1,2,3,4,5,2]",null,null,{ fileName : "BCollectionTester.hx", lineNumber : 51, className : "stx.test.resources.CollectionTester", methodName : "testThatItXAppendWorks"});
+		this.assertEquals(Std.string(stx.Iterables.add(i,2)),"[1,2,3,4,5,2]",null,null,{ fileName : "BCollectionTester.hx", lineNumber : 51, className : "stx.test.resources.CollectionTester", methodName : "testThatItXAppendWorks"});
 	}
 	,testThatItXHeadWorks: function() {
 		var i = [1,2,3,4,5];

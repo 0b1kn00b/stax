@@ -40,7 +40,7 @@ class FoldableGroup {
     return cast foldable.foldl(Map.create(), function(map, e) {
       var key = grouper(e);
       var result = map.getOrElseC(key, def);
-      return map.set(key, cast result.append(e));
+      return map.set(key, cast result.add(e));
     });
   }
 }

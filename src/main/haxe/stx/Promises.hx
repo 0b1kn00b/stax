@@ -148,7 +148,7 @@ class Promises{
           return 
             ft.mapR(
               function(v:B):Array<B>{
-                return arr.append(v);
+                return arr.add(v);
               }
             );
         }
@@ -220,7 +220,7 @@ class PromiseActions {
         Promises.success([])
       , function(init,fn){
           return 
-            init.flatMapR(function(x) return Promises.mapR(fn(),function(y) return x.append(y)));
+            init.flatMapR(function(x) return Promises.mapR(fn(),function(y) return x.add(y)));
         }
     );
   }

@@ -30,7 +30,7 @@ typedef Tweener = Float -> Dynamic<Float>
 
 class Tween {
   public static function linear(state1: Dynamic<Float>, state2: Dynamic<Float>, ?def = 0.0): Tweener {
-    var combinedFields = Reflect.fields(state1).toSet().addAll(Reflect.fields(state2));
+    var combinedFields = Reflect.fields(state1).toSet().append(Reflect.fields(state2));
     
     var data = combinedFields.map(function(name: String): Tuple2<String, {start: Float, delta: Float}> {
       var start: Float = Options.create(Reflect.field(state1, name)).getOrElseC(def);

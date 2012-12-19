@@ -15,9 +15,9 @@ import stx.Prelude;
 class Core {
 	static function main(){
 		var here 		= FileSystem.fullPath( neko.vm.Module.local().name );
-		var src 		= here.split(FS.sep()).reversed().drop(2).reversed().toArray().appendAll(['src','main','haxe']).toArray().pathify().bookend();
+		var src 		= here.split(FS.sep()).reversed().drop(2).reversed().toArray().append(['src','main','haxe']).toArray().pathify().bookend();
 		var folder 	= here.split(FS.sep()).reversed().drop(1).reversed().toArray().join(FS.sep());
-		var tmp 		= folder.append(FS.sep().append('.tmp'));
+		var tmp 		= folder.add(FS.sep().add('.tmp'));
 
 		(tmp.exists())
 			.ifElse(
@@ -37,7 +37,7 @@ class Core {
 					 				var strs 	= [str];
 					 						a.shift();
 					 						a.foreach(
-					 							F.n(x,strs.push(str = str.append(FS.sep()).append(x)))
+					 							F.n(x,strs.push(str = str.add(FS.sep()).add(x)))
 					 						);
 					 				return strs;
 					 			}

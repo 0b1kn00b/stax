@@ -34,13 +34,13 @@ class FoldableToSet {
 	public static function toSet<A, B>(foldable : Foldable<A, B>) : Set<B> {  
     var dest = Set.create();
     return foldable.foldl(dest, function(a, b) {
-      return a.append(b);
+      return a.add(b);
     });
   }	
 }
 class ArrayToSet {
 	public static function toSet<T>(arr : Array<T>) {
-    return stx.ds.Set.create().addAll(arr);
+    return stx.ds.Set.create().append(arr);
   }	
 }
 /** A cross-platform, immutable Set built on Map. */
@@ -53,7 +53,7 @@ class Set<T> implements Collection<Set<T>, T> {
   var _map: Map<T,T>;
   
 	public static function toSet<T>(i: Iterable<T>) {
-    return stx.ds.Set.create().addAll(i);
+    return stx.ds.Set.create().append(i);
   }
   public static function create<T>(?order: OrderFunction<T>, ?equal: EqualFunction<T>, ?hash: HashFunction<T>, ?show: ShowFunction<T>): Set<T> {  
     return new Set<T>(Map.create(order, equal, hash, show));
@@ -78,10 +78,6 @@ class Set<T> implements Collection<Set<T>, T> {
     return cast create();
   }
   
-  public function append(t: T): Set<T> {
-    return copyWithMod(_map.set(t, t));
-  }
-  
   public function foldl<Z>(z: Z, f: Z -> T -> Z): Z {
     var acc = z;
     
@@ -96,7 +92,7 @@ class Set<T> implements Collection<Set<T>, T> {
     return if (contains(t)) this; else copyWithMod(_map.set(t, t));
   }
   
-  public function addAll(it: Iterable<T>): Set<T> {
+  public function append(it: Iterable<T>): Set<T> {
     var set = this;
     
     for (e in it) set = set.add(e);
@@ -139,22 +135,22 @@ class Set<T> implements Collection<Set<T>, T> {
   
   public function withOrderFunction(order : OrderFunction<T>) {
     var m : FriendMap<T> = cast _map;
-    return create(order, m.keyEqual, m.keyHash, m.keyShow).addAll(this);
+    return create(order, m.keyEqual, m.keyHash, m.keyShow).append(this);
   }
   
   public function withEqualFunction(equal : EqualFunction<T>) {
     var m : FriendMap<T> = cast _map;
-    return create(m.keyOrder, equal, m.keyHash, m.keyShow).addAll(this);
+    return create(m.keyOrder, equal, m.keyHash, m.keyShow).append(this);
   }
   
   public function withHashFunction(hash : HashFunction<T>) {
     var m : FriendMap<T> = cast _map;
-    return create(m.keyOrder, m.keyEqual, hash, m.keyShow).addAll(this);
+    return create(m.keyOrder, m.keyEqual, hash, m.keyShow).append(this);
   }
   
   public function withShowFunction(show : ShowFunction<T>) { 
     var m : FriendMap<T> = cast _map;
-    return create(m.keyOrder, m.keyEqual, m.keyHash, show).addAll(this);
+    return create(m.keyOrder, m.keyEqual, m.keyHash, show).append(this);
   }
   
   /**

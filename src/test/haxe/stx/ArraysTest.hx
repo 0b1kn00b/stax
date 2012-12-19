@@ -65,7 +65,7 @@ class ArraysTest extends TestCase {
   }
   
   public function testAppendAll() {
-    assertEquals([1,2,3], [1].appendAll([2,3]));
+    assertEquals([1,2,3], [1].append([2,3]));
   }
   
   public function testIsEmpty() {

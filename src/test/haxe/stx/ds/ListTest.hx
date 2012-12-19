@@ -99,15 +99,15 @@ class ListTest extends TestCase {
   }
   
   public function testSort(): Void {
-    var ul = newList().addAll([9, 2, 1, 100]);
-    var ol = newList().addAll([1, 2, 9, 100]);
+    var ul = newList().append([9, 2, 1, 100]);
+    var ol = newList().append([1, 2, 9, 100]);
     
     assertListEquals(ol, ul.sort());
   }  
   
   public function testSortWith(): Void {
-     var ul = newList().addAll([9, 2, 1, 100]);
-     var ol = newList().addAll([1, 9, 2, 100]);
+     var ul = newList().append([9, 2, 1, 100]);
+     var ol = newList().append([1, 9, 2, 100]);
      
      var oddsfirst = function(a, b) {
        if(a == b)
@@ -125,8 +125,8 @@ class ListTest extends TestCase {
   }
   
   public function testReverse(): Void {
-    var l = newList().addAll([9, 2, 1, 100]);
-    var rl = newList().addAll([100, 1, 2, 9]);
+    var l = newList().append([9, 2, 1, 100]);
+    var rl = newList().append([100, 1, 2, 9]);
     
     assertListEquals(rl, l.reverse());
   }
@@ -185,7 +185,7 @@ class ListTest extends TestCase {
 			Prelude.tool(
 				function(a : Float, b : Float) return Math.abs(a - b) < 0.25
 			)
-		).addAll([1.0, 2.1]);
+		).append([1.0, 2.1]);
 
     assertTrue (list.equals(newList([0.9, 2.0])));
   assertFalse(list.equals(newList([0.9, 2.4]))); 
@@ -199,7 +199,7 @@ class ListTest extends TestCase {
     assertTrue(newList([1,2,3]).compare(newList([2,2,3])) < 0);
     assertTrue(newList([1,2,3]).compare(newList([1])) > 0);  
     
-    var list = List.create(Prelude.tool(function(a : Float, b : Float) return Math.abs(a-b) < 0.25 ? 0 : (a > b ? 1 : -1))).addAll([1.0, 2.1]);
+    var list = List.create(Prelude.tool(function(a : Float, b : Float) return Math.abs(a-b) < 0.25 ? 0 : (a > b ? 1 : -1))).append([1.0, 2.1]);
 
     assertTrue(list.compare(newList([0.9, 2.0])) == 0);
   assertTrue(list.compare(newList([0.9, 2.4])) < 0); 
@@ -210,7 +210,7 @@ class ListTest extends TestCase {
   assertEquals("List []", newList().toString()); 
     assertEquals("List [a, b]", newList(["a", "b"]).toString());
 
-    var list = List.create(Prelude.tool(function(a : String) return '"' + a +'"')).addAll(["a", "b"]);
+    var list = List.create(Prelude.tool(function(a : String) return '"' + a +'"')).append(["a", "b"]);
 
     assertEquals('List ["a", "b"]', list.toString());
   }     
@@ -221,7 +221,7 @@ class ListTest extends TestCase {
   }
   
   public function testIntListMapToString() {
-    var list = List.create().addAll([1,2,3]);
+    var list = List.create().append([1,2,3]);
     var slist : Foldable<List<String>, String> = list.map(function(i) return i.toString());
     assertEquals(["1", "2", "3"], slist.toArray()); 
   }
@@ -230,7 +230,7 @@ class ListTest extends TestCase {
   function newList<T>(?values : Array<T>) : List<T> {
     var list = List.create();
     if(null != values)
-      return list.addAll(values);  
+      return list.append(values);  
     else
       return list;
   }

@@ -10,7 +10,7 @@ class Run{
 		ProcessArrow.process.trace()
 			.then(
 				function(x:Input){
-					return x.readLine().toString().append('stax/git/src/main/haxe');
+					return x.readLine().toString().add('stax/git/src/main/haxe');
 				}.lift()
 				.then(
 					function(x:String):Array<String>{

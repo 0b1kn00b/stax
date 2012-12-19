@@ -216,10 +216,6 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
     return cast create();
   }
   
-  public function append(t: Tuple2<K, V>): Map<K, V> {
-    return add(t);
-  }
-  
   public function foldl<Z>(z: Z, f: Z -> Tuple2<K, V> -> Z): Z {
     var acc = z;
     
@@ -235,13 +231,12 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   }
   
   public function add(t: Tuple2<K, V>): Map<K, V> {
-    
+    trace('add $t');
     var key   : K   = t._1;
     var value : V   = t._2;
     var bucket  = bucketFor(key);
     
     var list = _buckets[bucket];  
-    
 
     for (i in 0...list.length) {
       var entry = list[i];
@@ -272,9 +267,9 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
     return newMap;
   }
   
-  public function addAll(i: Iterable<Tuple2<K, V>>): Map<K, V> {
+  public function append(i: Iterable<Tuple2<K, V>>): Map<K, V> {
     var map = this;
-    
+
     for (t in i) map = map.add(t);
     
     return map;
@@ -362,7 +357,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   }
   
   public function keySet(): Set<K> {
-    return Set.create(keyOrder, keyEqual, keyHash, keyShow).addAll(keys());
+    return Set.create(keyOrder, keyEqual, keyHash, keyShow).append(keys());
   }
   
   public function values(): Iterable<V> {
@@ -388,6 +383,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   }
 
   public function compare(other : Map<K, V>) {
+    trace('compare');
     var a1 = this.toArray();
     var a2 = other.toArray(); 
     
@@ -438,35 +434,35 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   }
 
   public function withKeyOrderFunction(order : OrderFunction<K>) {
-    return create(order, keyEqual, keyHash, keyShow, valueOrder, valueEqual, valueHash, valueShow).addAll(this);
+    return create(order, keyEqual, keyHash, keyShow, valueOrder, valueEqual, valueHash, valueShow).append(this);
   }
 
   public function withKeyEqualFunction(equal : EqualFunction<K>) {
-    return create(keyOrder, equal, keyHash, keyShow, valueOrder, valueEqual, valueHash, valueShow).addAll(this);
+    return create(keyOrder, equal, keyHash, keyShow, valueOrder, valueEqual, valueHash, valueShow).append(this);
   }
 
   public function withKeyHashFunction(hash : HashFunction<K>) {
-    return create(keyOrder, keyEqual, hash, keyShow, valueOrder, valueEqual, valueHash, valueShow).addAll(this);
+    return create(keyOrder, keyEqual, hash, keyShow, valueOrder, valueEqual, valueHash, valueShow).append(this);
   }
 
   public function withKeyShowFunction(show : ShowFunction<K>) { 
-    return create(keyOrder, keyEqual, keyHash, show, valueOrder, valueEqual, valueHash, valueShow).addAll(this);
+    return create(keyOrder, keyEqual, keyHash, show, valueOrder, valueEqual, valueHash, valueShow).append(this);
   }
 
   public function withValueOrderFunction(order : OrderFunction<V>) {
-    return create(keyOrder, keyEqual, keyHash, keyShow, order, valueEqual, valueHash, valueShow).addAll(this);
+    return create(keyOrder, keyEqual, keyHash, keyShow, order, valueEqual, valueHash, valueShow).append(this);
   }
 
   public function withValueEqualFunction(equal : EqualFunction<V>) {
-    return create(keyOrder, keyEqual, keyHash, keyShow, valueOrder, equal, valueHash, valueShow).addAll(this);
+    return create(keyOrder, keyEqual, keyHash, keyShow, valueOrder, equal, valueHash, valueShow).append(this);
   }
 
   public function withValueHashFunction(hash : HashFunction<V>) {
-    return create(keyOrder, keyEqual, keyHash, keyShow, valueOrder, valueEqual, hash, valueShow).addAll(this);
+    return create(keyOrder, keyEqual, keyHash, keyShow, valueOrder, valueEqual, hash, valueShow).append(this);
   }
 
   public function withValueShowFunction(show : ShowFunction<V>) { 
-    return create(keyOrder, keyEqual, keyHash, keyShow, valueOrder, valueEqual, valueHash, show).addAll(this);
+    return create(keyOrder, keyEqual, keyHash, keyShow, valueOrder, valueEqual, valueHash, show).append(this);
   }
 
   private function entries(): Iterable<Tuple2<K, V>> {
@@ -555,8 +551,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
     for (i in (index + 1)..._buckets.length) {
       newTable.push(_buckets[i]);
     }
-    
-    return new Map<K, V>(keyOrder, keyEqual, keyHash, keyShow, valueOrder, valueEqual, valueHash, valueShow, newTable, size());      
+    return new Map<K, V>(keyOrder, keyEqual, keyHash, keyShow, valueOrder, valueEqual, valueHash, valueShow, newTable, size());
   }
 
   private function rebalance(): Void {
@@ -594,20 +589,20 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
 }
 class IterableToMap {
   public static function toMap<K, V>(i: Iterable<Tuple2<K, V>>):Map<K,V> {
-    return stx.ds.Map.create().addAll(i);
+    return stx.ds.Map.create().append(i);
   }	
 }
 class FoldableToMap {
 	public static function toMap<A, K, V>(foldable : Foldable<A, Tuple2<K, V>>) : Map<K, V> {  
     var dest = Map.create();
     return foldable.foldl(dest, function(a, b) {
-      return a.append(b);
+      return a.add(b);
     });
   }	
 }
 class ArrayToMap {
   public static function toMap<K, V>(arr : Array<Tuple2<K, V>>) {
-    return stx.ds.Map.create().addAll(arr);
+    return stx.ds.Map.create().append(arr);
   }	
 }
 class MapExtensions {
