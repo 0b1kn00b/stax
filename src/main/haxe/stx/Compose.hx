@@ -200,13 +200,13 @@ class Compose{
   static public function constant<A,B>(v:B):A->B{
     return function(x:A){ return v; }
   }
-  static public function split<A,B,C>(split_:A->B,_split:A->C):A->Pair<B,C>{ 
+  static public function split<A,B,C>(split_:A->B,_split:A->C):A->Tuple2<B,C>{ 
     return 
       function(x){
         return Tuples.t2( split_(x), _split(x) );
       }
   }
-  static public function bind<A,B,C>(bindl:A->C,bindr:Pair<A,C>->B):A->B{
+  static public function bind<A,B,C>(bindl:A->C,bindr:Tuple2<A,C>->B):A->B{
     return pure().split(bindl).then( bindr );
   }
   /**

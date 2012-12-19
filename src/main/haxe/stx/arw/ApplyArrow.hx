@@ -4,12 +4,14 @@ using stx.Tuples;
 import stx.Prelude;
 using stx.arw.Arrows;
 
-typedef ArrowApplyT<I,O> = Arrow<Pair<Arrow<I,O>,I>,O>;
-class ApplyArrow<I,O> extends Arrow<Pair<Arrow<I,O>,I>,O>{
+typedef AAIn<I,O> 			= Tuple2<Arrow<I,O>,I>
+typedef ArrowApply<I,O> = Arrow<AAIn<I,O>,O>;
+
+class ApplyArrow<I,O> extends Arrow<Tuple2<Arrow<I,O>,I>,O>{
 	public function new(){
 		super();
 	}
-	override inline public function withInput(?i:Pair<Arrow<I,O>,I>,cont : Function1<O,Void>){
+	override inline public function withInput(?i:Tuple2<Arrow<I,O>,I>,cont : Function1<O,Void>){
 		i._1.withInput(
 			i._2,
 				function(x){
@@ -17,7 +19,7 @@ class ApplyArrow<I,O> extends Arrow<Pair<Arrow<I,O>,I>,O>{
 				}
 		);
 	}
-	static public function app<I,O>(a:Pair<Arrow<I,O>,I>):Future<O>{
+	static public function app<I,O>(a:Tuple2<Arrow<I,O>,I>):Future<O>{
 		return new ApplyArrow().appFt(a);
 	}
 	static public function over<I,O>(i:I):Arrow<Arrow<I,O>,O>{

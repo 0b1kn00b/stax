@@ -4,7 +4,7 @@ import stx.Tuples;
 import stx.Prelude;
 import stx.arw.Arrows;
 
-class PairArrow<A,B,C,D> implements Arrow<Pair<A,C>,Pair<B,D>>{
+class PairArrow<A,B,C,D> implements Arrow<Tuple2<A,C>,Tuple2<B,D>>{
 	public var l 		: Arrow<A,B>;
 	public var r 		: Arrow<C,D>;
 
@@ -12,7 +12,7 @@ class PairArrow<A,B,C,D> implements Arrow<Pair<A,C>,Pair<B,D>>{
 		this.l = l;
 		this.r = r;
 	}
-	inline public function withInput(?i : Pair<A,C>, cont : Function1<Pair<B,D>,Void> ) : Void{
+	inline public function withInput(?i : Tuple2<A,C>, cont : Function1<Tuple2<B,D>,Void> ) : Void{
 
 		var ol : Option<B> 	= null;
 		var or : Option<D> 	= null;

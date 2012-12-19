@@ -103,8 +103,14 @@ class AbstractProduct implements Product {
     return flatn(this);
   }
 }
-typedef Pair<A,B> = Tuple2<A,B>;
+typedef Pair<A> = Tuple2<A,A>;
 
+class Pairs{
+  static public function bothOrOtherWith<A,B>(tp:Pair<A>,red:Reducer<A>){
+    return 
+      tp._1 == null ? tp._2 : red(tp._1,tp._2);
+  }
+}
 class Tuple2<A, B> extends AbstractProduct {
   public var _1 (default, null): A;
   public var _2 (default, null): B;
