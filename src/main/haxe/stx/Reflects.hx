@@ -47,4 +47,11 @@ class Reflects{
 				default 				:	Objects.extractObject(v);
 			}
 	}
+	static public function extractFieldsFromAny<A>(v:A):Array<Tuple2<String,Dynamic>>{
+		return 
+			Types.extractAllAnyFromType(v)
+				.getOrElse(
+					Objects.extractAllAny.lazy(v)
+				);	
+	}
 }
