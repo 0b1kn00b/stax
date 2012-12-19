@@ -77,10 +77,16 @@ class Predicates {
   static public function isEqualTo<T>(ref: T, ?equal: EqualFunction<T>): Predicate<T> {
     if (equal == null) equal = stx.plus.Equal.getEqualFor(ref);
     
-    return function(value) {
+    return function(value:T):Bool {
       return equal(ref, value);
     }
   }
+  /*static public function areEqualTo<T>(ref:Iterable<T>, ?equal : EqualFunction<T>):Predicate<Iterable<T>>{
+    if (equal == null) equal = stx.plus.Equal.getEqualFor(ref);
+    return function(value){
+      return 
+    }
+  }*/
   /**
     Produces a predicate that succeeds if the input is contained in `vals`.
   */
@@ -92,6 +98,12 @@ class Predicates {
   }
   static public function isAlike(e:EnumValue):Predicate<EnumValue>{
     return Enums.alike.p1(e);
+  }
+  static public function matches(reg:EReg):Predicate<String>{
+    return 
+      function(str:String){
+        return reg.match(str);
+      }
   }
   /**
     Produces a predicate that succeeds if both input predicates succeed.
