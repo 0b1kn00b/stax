@@ -32,6 +32,14 @@ class ApplyArrow<I,O> extends Arrow<Tuple2<Arrow<I,O>,I>,O>{
 		return 
 			a.split(b).then(fn.spread().lift());
 	}
+	static public function mod<A,B,C,D>(a:Arrow<A,Tuple2<Arrow<B,C>,B>>,fn:C->D):Arrow<A,Tuple2<Arrow<B,D>,B>>{
+		return 
+			a.then(
+				function(t:Tuple2<Arrow<B,C>,B>):Tuple2<Arrow<B,D>,B>{
+					return t._1.then(fn.lift()).entuple(t._2);
+				}.lift()
+			);
+	}
 	/**
 		wat?
 	*/

@@ -29,7 +29,7 @@ class Arrows{
 
 	*/
 	@:noUsing
-	static public function pure<I>():Arrow<I,I>{
+	static public function unit<I>():Arrow<I,I>{
 		return function (x:I):I {
 			return x;
 		}.lift();
@@ -38,12 +38,8 @@ class Arrows{
 	 	x =====> ? -----*-----x
 	*/
 	@:noUsing
-	static public function constant<I,O>(v:O):Arrow<I,O>{
+	static public function pure<I,O>(v:O):Arrow<I,O>{
 		return new FunctionArrow( function(x:I):O {return v;});
-	}
-	@:noUsing
-	static public function unit<O>(v:O):Arrow<Unit,O>{
-		return new FunctionArrow( function(x:Unit):O {return v;});
 	}
 	/**
 
@@ -60,7 +56,7 @@ class Arrows{
 	}
 	static public function pinch<I,O1,O2>(a:Arrow<Tuple2<I,I>,Tuple2<O1,O2>>):Arrow<I,Tuple2<O1,O2>>{
 		return 
-			fan(pure()).then(a);
+			fan(unit()).then(a);
 	}
 	/**
 			                         _____f(a)_____
@@ -93,7 +89,7 @@ class Arrows{
 		                           \______________/
 	*/
 	static public function first<A,B,C>(first:Arrow<A,B>):Arrow<Tuple2<A,C>,Tuple2<B,C>>{
-		return new PairArrow(  first , Arrows.pure() );
+		return new PairArrow(  first , Arrows.unit() );
 	}
 	/**
                                  ______________
@@ -101,7 +97,7 @@ class Arrows{
                                 \_____f(a)_____/
 	*/
 	static public function second<A,B,C>(second:Arrow<A,B>):Arrow<Tuple2<C,A>,Tuple2<C,B>>{
-		return new PairArrow( Arrows.pure() , second );
+		return new PairArrow( Arrows.unit() , second );
 	}
 	/**
                                               ______f0(a)____
@@ -109,7 +105,7 @@ class Arrows{
                                              \_____f1(f0(a))_/
 	*/
 	static public function join<A,B,C>(joinl:Arrow<A,B>,joinr:Arrow<B,C>):Arrow<A,Tuple2<B,C>>{
-		return new ThenArrow( joinl , Arrows.pure().split(joinr) );
+		return new ThenArrow( joinl , Arrows.unit().split(joinr) );
 	}
 	/**
 	                                                      _____f0(a)_____
@@ -119,7 +115,7 @@ class Arrows{
 
 	*/
 	static public function bind<A,B,C>(bindl:Arrow<A,B>,bindr:Arrow<Tuple2<A,B>,C>):Arrow<A,C>{
-		return new ThenArrow( Arrows.pure().split(bindl) , bindr );
+		return new ThenArrow( Arrows.unit().split(bindl) , bindr );
 	}
 	/**
 
