@@ -11,6 +11,9 @@ using stx.plus.Show;
 typedef ShowFunction<T>         = Function1<T, String>;
 
 class Show {
+  static public function show<A>(v:A):String{
+    return getShowFor(v)(v);
+  }
   static function _createShowImpl<T>(impl : ShowFunction<Dynamic>) : ShowFunction<T> {
     return function(v) return null == v ? 'null' : impl(v);
   }
