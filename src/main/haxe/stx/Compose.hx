@@ -175,12 +175,20 @@ class Compose{
           }
       }
   }
+  static public function rout<A,B,C>(fn:B->Either<A,C>):Either<A,B>->Either<A,C>{
+    return function(e:Either<A,B>){
+      return switch (e){
+        case    Left(l)      : Left(l);
+        case    Right(r)     : fn(r);
+      }
+    }
+  }
   /**
     Pure function.
     [[1,2],[3,4]].flatMap( Compose.pure() );//[1,2,3,4]
   */
   @:noUsing
-  static public function pure<A,B>():A->A{
+  static public function unit<A,B>():A->A{
     return cast function(x) return x;
   }
   /**
@@ -197,7 +205,7 @@ class Compose{
   /**
     Returns a function that produces `v`.
   */
-  static public function constant<A,B>(v:B):A->B{
+  static public function pure<A,B>(v:B):A->B{
     return function(x:A){ return v; }
   }
   static public function split<A,B,C>(split_:A->B,_split:A->C):A->Tuple2<B,C>{ 
@@ -207,7 +215,13 @@ class Compose{
       }
   }
   static public function bind<A,B,C>(bindl:A->C,bindr:Tuple2<A,C>->B):A->B{
-    return pure().split(bindl).then( bindr );
+    return unit().split(bindl).then( bindr );
+  }
+  static public function pinch<A,B,C>(fn0:Tup2<A,A>->Tup2<B,C>):A->Tup2<B,C>{
+    return 
+      function(x:A){
+        return fn0(Tups.t2(x,x));
+      }
   }
   /**
     Returns a function that calls 'f1' with the output of 'f2'.

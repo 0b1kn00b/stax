@@ -193,4 +193,11 @@ class Eithers {
       case Right(v) : v;
     }
   }
+  static public function foreachR<A,B>(e:Either<A,B>,fn:B->Void):Either<A,B>{
+    switch (e){
+      case Right(v)       : fn(v);
+      default             :
+    }
+    return e;
+  }
 }
