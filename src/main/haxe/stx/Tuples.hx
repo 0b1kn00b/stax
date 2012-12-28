@@ -3,6 +3,12 @@ package stx;
 using stx.Prelude;
 using stx.Tuples;
 
+typedef Tups            = Tuples;
+typedef Tup2<A,B>       = Tuple2<A,B>;
+typedef Tup3<A,B,C>     = Tuple3<A,B,C>;
+typedef Tup4<A,B,C,D>   = Tuple4<A,B,C,D>;
+typedef Tup5<A,B,C,D,E> = Tuple5<A,B,C,D,E>;
+
 class Entuple{
   static public function entuple<A,B>(a:A,b:B){
     return Tuples.t2(a,b);
@@ -93,7 +99,7 @@ class AbstractProduct implements Product {
             p.elements().flatMap(
               function(v){
                 return if( Std.is(v,Product) ){
-                   flatn(v).flatMap(  Compose.pure() );
+                   flatn(v).flatMap(  Compose.unit() );
                 }else{
                   [v];
                 }
@@ -106,7 +112,7 @@ class AbstractProduct implements Product {
 typedef Pair<A> = Tuple2<A,A>;
 
 class Pairs{
-  static public function bothOrOtherWith<A,B>(tp:Pair<A>,red:Reducer<A>){
+  static public function bothOrOtherWith<A,B>(tp:Pair<A>,red:Reducer<A>):A{
     return 
       tp._1 == null ? tp._2 : red(tp._1,tp._2);
   }
