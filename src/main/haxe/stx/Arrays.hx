@@ -19,6 +19,14 @@ class Arrays {
   static public function one<A>(v:A):Array<A>{
     return [v];
   }
+  static public function put<A>(arr:Array<A>,i:Int,v:A):Array<A>{
+    arr     = arr.copy();
+    arr[i]  = v;
+    return arr;
+  }
+  static public function get<A>(arr:Array<A>,i:Int):A{
+    return arr[i];
+  }
   /**
     Preforms a `foldl`, using the first value as the `memo` value
   */
