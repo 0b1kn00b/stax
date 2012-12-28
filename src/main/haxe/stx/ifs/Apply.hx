@@ -1,4 +1,6 @@
 package stx.ifs;
+
+using stx.Options;
 using stx.Functions;
 using stx.Compose;
 
@@ -10,11 +12,11 @@ interface IApply<I,O>{
 }
 class Apply<E,A> implements IApply<E,A>{
 	@:noUsing
-	static public function pure(){
-		return unit(Compose.pure());
+	static public function unit(){
+		return pure(Compose.unit());
 	}
 	@:noUsing
-	static public function unit<A,B>(fn:A->B){
+	static public function pure<A,B>(fn:A->B){
 		return create( { apply :  fn } );
 	}
 	@:noUsing
@@ -22,7 +24,9 @@ class Apply<E,A> implements IApply<E,A>{
 		return new Apply( opts );
 	}
 	public function new( ?opts :  TApply<E,A> ){
-		if (opts!=null && opts.apply != null) this.apply = opts.apply;
+		Opt.n(opts)
+			.flatMap(function(x) {return Opt.n(x.apply);})
+			.foreach(function(x) {this.apply = x;});
 	}
 	public dynamic function apply(v:E):A{
 		return Prelude.error()('apply not implemented');
