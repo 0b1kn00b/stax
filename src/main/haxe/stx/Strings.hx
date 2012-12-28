@@ -113,7 +113,7 @@ class Strings {
   static public function prepend(str:String,before:String){
     return before + str;
   }
-  static public function add(str:String,after:String){
+  static public function append(str:String,after:String){
     return str + after;
   }
   static public function cca(str:String,i:Int){
@@ -158,5 +158,10 @@ class Strings {
   }
   static public function split(st:String,sep:String):Array<String>{
     return st.split(sep);
+  }
+}
+class ERegs{
+  static public function replace(s:String,reg:EReg,with:String):String {
+    return reg.replace(s,with);
   }
 }
