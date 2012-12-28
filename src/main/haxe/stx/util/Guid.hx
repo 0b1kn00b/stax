@@ -32,7 +32,7 @@ class Guid {
     return result.toUpperCase();
   }
 }
-class ShortCode{
+class Shortcode{
   public static function create():String{
     var fn = function() return Math.round(Math.random() * 255);
     var a = StringTools.hex(fn());
