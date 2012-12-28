@@ -100,6 +100,7 @@ class Compose0{
   Arrow class for Functions.
 */
 class Compose{
+  
   static public function fstOf<A,B,C,D>(a:Tuple2<A,B>->Tuple2<C,D>):Tuple2<A,B>->C{
     return a.then( Tuple2.fst );
   }

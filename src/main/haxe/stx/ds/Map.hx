@@ -64,6 +64,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
 
   public var valueOrder(get_valueOrder,null)   : OrderFunction<V>;
   private function get_valueOrder(){
+    //trace('value_order');
     return 
       if (valueOrder == null || valueOrder == Order.nil){
           values().headOption().map( Order.getOrderFor )
@@ -231,7 +232,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   }
   
   public function add(t: Tuple2<K, V>): Map<K, V> {
-    trace('add $t');
+    //trace('add $t');
     var key   : K   = t._1;
     var value : V   = t._2;
     var bucket  = bucketFor(key);
@@ -383,7 +384,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   }
 
   public function compare(other : Map<K, V>) {
-    trace('compare');
+    //trace('compare');
     var a1 = this.toArray();
     var a2 = other.toArray(); 
     

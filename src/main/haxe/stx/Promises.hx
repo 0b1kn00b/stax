@@ -209,6 +209,7 @@ class Promises{
         iter,
         start,
         function(memo:Either<Err,B>,next:A){
+          //trace('$memo $next');
           return 
               switch (memo) {
                 case Left(e)    : Promises.failure(e);

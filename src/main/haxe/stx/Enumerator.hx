@@ -15,7 +15,7 @@ class Enumerator<E>{
   @:noUsing static public function create<E,A>( opts : { apply : EnumeratorApply<E,A> } ){
     return new Enumerator(opts);
   }
-  @:noUsing static public function unit<E,A>(apply:EnumeratorApply<E,A>){
+  @:noUsing static public function pure<E,A>(apply:EnumeratorApply<E,A>){
     return create( { apply : apply } );
   }
 
@@ -35,7 +35,7 @@ class Enumerators{
   }
   static public function flatten<A,E>(eventual:Future<Enumerator<E>>):Enumerator<E>{
     return 
-      Enumerator.unit(
+      Enumerator.pure(
         function(it:Iteratee<E,A>){
           return eventual.flatMap(applyer.p2(it));
         }
@@ -43,7 +43,7 @@ class Enumerators{
   }
   static public function enumInput<E,A>(e:Input<E>):Enumerator<E>{
     return 
-      Enumerator.unit(
+      Enumerator.pure(
         function(it){
           return
             it.fold(

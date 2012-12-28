@@ -51,9 +51,10 @@ class StaxTestSuite {
           , new OptimiseTest()
           , new stx.ds.ZipperTest()
           , new stx.ds.IterateeTest()
+          , new stx.PromiseTest()//#0b1kn00b how to test delayed easily without timer.
         ];
         var b = [
-          new stx.plus.ShowTest()
+          new StaxTest()
         ];
         var tests =
         [

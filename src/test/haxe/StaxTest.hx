@@ -45,3 +45,18 @@ class StaxTest extends TestCase{
 		//trace('a'.ergo());
 	}
 }
+/*abstract Opaque {
+
+    public inline function new(x) {
+        this = x;
+    }
+
+    public function incr() {
+        return ++this;
+    }
+   
+    public inline function toInt() : Int {
+        return this;
+    }
+
+}*/
