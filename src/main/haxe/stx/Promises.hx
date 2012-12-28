@@ -12,6 +12,7 @@ using stx.Arrays;
 using stx.Functions;
 using stx.Compose;
 
+typedef Promise<A> = Future<Outcome<A>>;
 class Promises{
   static public function onSuccess<A,B>(ft:Future<Either<A,B>>,fn:B->Void){
     return ft.foreachR(fn);
@@ -125,15 +126,19 @@ class Promises{
   /**
     Creates a pure Future and delivers to the right hand side.
   */
-  @:noUsing
   static public function success<A,B>(v:B):Future<Either<A,B>>{
     return pure(Right(v));
+  }
+  static public function intact<A,B>(v:B):Future<Either<A,B>>{
+    return pure(Right(v)); 
   }
   /**
     Creates a pure future and delivers to the left hand side.
   */
-  @:noUsing
   static public function failure<A,B>(v:A):Future<Either<A,B>>{
+    return pure(Left(v));
+  }
+  static public function breach<A,B>(v:A):Future<Either<A,B>>{
     return pure(Left(v));
   }
   /**
