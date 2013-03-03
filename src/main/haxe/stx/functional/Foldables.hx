@@ -22,7 +22,7 @@ import stx.Prelude;
 import stx.plus.Show;
 import stx.plus.Equal;
 
-using stx.Options;
+using stx.Maybes;
 
 import stx.functional.Foldable; 
 
@@ -44,13 +44,13 @@ class Foldables {
   }
   
   public static function filter<A, B>(foldable: Foldable<A, B>, f: B -> Bool): A {
-    return cast foldable.foldl(foldable.empty(), function(a, b) {
+    return cast foldable.foldl(foldable.unit(), function(a, b) {
       return if (f(b)) cast a.add(b); else a;
     });
   }
   
   public static function partition<A, B>(foldable: Foldable<A, B>, f: B -> Bool): Tuple2<A, A> {
-    return cast foldable.foldl(Tuples.t2(foldable.empty(), foldable.empty()), function(a, b) {
+    return cast foldable.foldl(Tuples.t2(foldable.unit(), foldable.unit()), function(a, b) {
       return if (f(b)) Tuples.t2(cast a._1.add(b), a._2); else Tuples.t2(a._1, cast a._2.add(b));
     });
   }
@@ -58,7 +58,7 @@ class Foldables {
   public static function partitionWhile<A, B>(foldable: Foldable<A, B>, f: B -> Bool): Tuple2<A, A> {
     var partitioning = true;
     
-    return cast foldable.foldl(Tuples.t2(foldable.empty(), foldable.empty()), function(a, b) {
+    return cast foldable.foldl(Tuples.t2(foldable.unit(), foldable.unit()), function(a, b) {
       return if (partitioning) {
         if (f(b)) {
           Tuples.t2(cast a._1.add(b), a._2);
@@ -76,7 +76,7 @@ class Foldables {
   }
   
   public static function map<A, B, C, D>(src: Foldable<A, B>, f: B -> D) : Foldable<C, D> {
-    return mapTo(src, src.empty(), f);
+    return mapTo(src, src.unit(), f);
   }
   
   public static function mapTo<A, B, C, D>(src: Foldable<A, B>, dest: Foldable<C, D>, f: B -> D): C {
@@ -86,7 +86,7 @@ class Foldables {
   }
   
   public static function flatMap<A, B, C, D>(src: Foldable<A, B>, f: B -> Foldable<C, D>): C {
-    return flatMapTo(src, src.empty(), f);
+    return flatMapTo(src, src.unit(), f);
   }
   
   public static function flatMapTo<A, B, C, D>(src: Foldable<A, B>, dest: Foldable<C, D>, f: B -> Foldable<C, D>): C {
@@ -98,7 +98,7 @@ class Foldables {
   }
   
   public static function take<A, B>(foldable: Foldable<A, B>, n: Int): A {
-    return cast foldable.foldl(foldable.empty(), function(a, b) {
+    return cast foldable.foldl(foldable.unit(), function(a, b) {
       return if (n-- > 0) cast a.add(b); else a;
     });
   }
@@ -106,13 +106,13 @@ class Foldables {
   public static function takeWhile<A, B>(foldable: Foldable<A, B>, f: B -> Bool): A {
     var taking = true;
     
-    return cast foldable.foldl(foldable.empty(), function(a, b) {
+    return cast foldable.foldl(foldable.unit(), function(a, b) {
       return if (taking) { if (f(b)) cast a.add(b); else { taking = false; a; } } else a;
     });
   }
   
   public static function drop<A, B>(foldable: Foldable<A, B>, n: Int): A {
-    return cast foldable.foldl(foldable.empty(), function(a, b) {
+    return cast foldable.foldl(foldable.unit(), function(a, b) {
       return if (n-- > 0) a; else cast a.add(b);
     });
   }
@@ -120,7 +120,7 @@ class Foldables {
   public static function dropWhile<A, B>(foldable: Foldable<A, B>, f: B -> Bool): A {
     var dropping = true;
     
-    return cast foldable.foldl(foldable.empty(), function(a, b) {
+    return cast foldable.foldl(foldable.unit(), function(a, b) {
       return if (dropping) { if (f(b)) a; else { dropping = false; cast a.add(b); } } else cast a.add(b);
     });
   }
@@ -150,7 +150,7 @@ class Foldables {
   public static function scanl<A, B>(foldable:Foldable<A, B>, init: B, f: B -> B -> B): A {
     var a = toArray(foldable);
     
-    var result = foldable.empty().add(init);
+    var result = foldable.unit().add(init);
     
     for (e in a)
       result = cast result.add(f(e, init));
@@ -163,7 +163,7 @@ class Foldables {
     
     a.reverse();
     
-    var result = foldable.empty().add(init);
+    var result = foldable.unit().add(init);
     
     for (e in a)
       result = cast result.add(f(e, init));
@@ -173,7 +173,7 @@ class Foldables {
   
   public static function scanl1<A, B>(foldable:Foldable<A, B>, f: B -> B -> B): A {
     var iterator = toArray(foldable).iterator();
-    var result = foldable.empty();
+    var result = foldable.unit();
     
     if(!iterator.hasNext())
       return cast result;
@@ -191,7 +191,7 @@ class Foldables {
     var a = toArray(foldable);
     a.reverse();
     var iterator = a.iterator();
-    var result = foldable.empty();
+    var result = foldable.unit();
     
     if(!iterator.hasNext())
       return cast result;
@@ -241,10 +241,10 @@ class Foldables {
     return foldable;
   }
   
-  public static function find<A, B>(foldable: Foldable<A, B>, f: B -> Bool): Option<B> {
+  public static function find<A, B>(foldable: Foldable<A, B>, f: B -> Bool): Maybe<B> {
     return foldable.foldl(None, function(a, b) {
       return switch (a) {
-        case None: b.toOption().filter(f);
+        case None: b.toMaybe().filter(f);
         
         default: a;
       }
@@ -271,7 +271,7 @@ class Foldables {
   
   public static function exists<A, B>(foldable: Foldable<A, B>, f: B -> Bool): Bool {
     return switch (find(foldable, f)) {
-      case Some(v): true;
+      case Some(_): true;
       case None:    false;
     }
   }
@@ -293,7 +293,7 @@ class Foldables {
   }
   
   public static function nubBy<A, B>(foldable:Foldable<A, B>, f: B -> B -> Bool): A {
-    return cast foldable.foldl(foldable.empty(), function(a, b) {
+    return cast foldable.foldl(foldable.unit(), function(a, b) {
       return if (existsP(a, b, f)) {
         a;
       }
@@ -310,7 +310,7 @@ class Foldables {
   }
   
   public static function intersectBy<A, B>(foldable1: Foldable<A, B>, foldable2: Foldable<A, B>, f: B -> B -> Bool): A {
-    return cast foldable1.foldl(foldable1.empty(), function(a, b) {
+    return cast foldable1.foldl(foldable1.unit(), function(a, b) {
       return if (existsP(foldable2, b, f)) cast a.add(b); else a;
     });
   }
@@ -335,7 +335,7 @@ class Foldables {
   public static function toArray<A, B>(foldable: Foldable<A, B>): Array<B> {
     var es: Array<B> = [];
     
-    foldable.foldl(foldable.empty(), function(a, b) { es.push(b); return a; });
+    foldable.foldl(foldable.unit(), function(a, b) { es.push(b); return a; });
 
     return es;
   }

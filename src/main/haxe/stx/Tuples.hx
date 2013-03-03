@@ -89,6 +89,7 @@ class AbstractProduct implements Product {
       case 2  :
           var p : Tuple2<Dynamic,Dynamic> = cast(this);
           [ p._1 , p._2 ];
+      default : [];
     }
   }
   public function flatten():Array<Dynamic>{
@@ -116,6 +117,9 @@ class Pairs{
     return 
       tp._1 == null ? tp._2 : red(tp._1,tp._2);
   }
+  static public function map<A,B>(tpl:Tuple2<A,A>,fn:A->B):Tuple2<B,B>{
+    return Tuple2.fromArray( tpl.elements().map(fn) );
+  }
 }
 class Tuple2<A, B> extends AbstractProduct {
   public var _1 (default, null): A;
@@ -130,26 +134,26 @@ class Tuple2<A, B> extends AbstractProduct {
   static public function fromArray(a:Array<Dynamic>){
     return new Tuple2(a[0],a[1]);
   }
+  @:noUsing
+  static public function unit(){
+    return new Tuple2(null,null);
+  }
 	static public function entuple<A, B, C>(t:stx.Tuple2<A,B>,c:C): stx.Tuple3<A, B, C> {
     return new Tuple3(t._1, t._2, c);
   }
-  static public function spread<A,B,C>(f : A -> B -> C){
-    return 
-      function(t:Tuple2<A,B>){
+  static inline public function spread<A,B,C>(f : A -> B -> C){
+    return function(t:Tuple2<A,B>){
         return into(t,f);
-      }
+    }
   }
-  static public function map<A,B>(tpl:Tuple2<A,A>,fn:A->B):Tuple2<B,B>{
-    return fromArray( tpl.elements().map(fn) );
-  }
-	static public function into<A,B,C>(t:Tuple2<A,B>, f : A -> B -> C ) : C{
+	static inline public function into<A,B,C>(t:Tuple2<A,B>, f : A -> B -> C ) : C{
     return f(t._1, t._2);
   }
-	static public function first<A, B>(t : Tuple2<A, B>):A return t._1
-	static public function second<A, B>(t : Tuple2<A, B>):B return t._2
+	static public function first<A, B>(t : Tuple2<A, B>):A return t._1;
+	static public function second<A, B>(t : Tuple2<A, B>):B return t._2;
 	
-  static public function fst<A, B>(t : Tuple2<A, B>):A return t._1
-  static public function snd<A, B>(t : Tuple2<A, B>):B return t._2
+  static public function fst<A, B>(t : Tuple2<A, B>):A return t._1;
+  static public function snd<A, B>(t : Tuple2<A, B>):B return t._2;
 
   static public function translate<A,B,C,D>(t:Tuple2<A,B>,f1: A -> C, f2: B -> D):Tuple2<C,D>{
     return f1(t._1).entuple(f2(t._2));
@@ -188,15 +192,15 @@ class Tuple3<A, B, C> extends AbstractProduct {
 	static public function into<A,B,C,D>(t:Tuple3<A,B,C>,f : A -> B -> C -> D) : D {
 		return f(t._1, t._2, t._3);
 	}
-  static public function spread<A,B,C,D>(f : A -> B -> C -> D){
+  static public inline function spread<A,B,C,D>(f : A -> B -> C -> D){
     return 
       function(t:Tuple3<A,B,C>){
         return into(t,f);
       }
   }
-  static public function fst<A, B, C>(t : Tuple3<A, B, C>) return t._1
-  static public function snd<A, B, C>(t : Tuple3<A, B, C>) return t._2
-  static public function thd<A, B, C>(t : Tuple3<A, B, C>) return t._3
+  static public function fst<A, B, C>(t : Tuple3<A, B, C>) return t._1;
+  static public function snd<A, B, C>(t : Tuple3<A, B, C>) return t._2;
+  static public function thd<A, B, C>(t : Tuple3<A, B, C>) return t._3;
 
   @:noUsing
   static public function fromArray<A>(a:Array<A>):Tuple3<A,A,A>{
@@ -211,9 +215,9 @@ class Tuple3<A, B, C> extends AbstractProduct {
 	static public function entuple<A, B, C, D>(t:stx.Tuple3<A,B,C>,d:D): stx.Tuple4<A, B, C, D> {
     return new Tuple4(t._1, t._2, t._3, d);
   }
-	static public function first<A, B>(t : Tuple2<A, B>):A return t._1
-	static public function second<A, B>(t : Tuple2<A, B>):B return t._2
-	static public function third<A, B, C>(t : stx.Tuple3<A, B, C>):C return t._3
+	static public function first<A, B>(t : Tuple2<A, B>):A return t._1;
+	static public function second<A, B>(t : Tuple2<A, B>):B return t._2;
+	static public function third<A, B, C>(t : stx.Tuple3<A, B, C>):C return t._3;
 	
   override private function get_prefix(): String {
     return "stx.Tuple3";
@@ -244,19 +248,19 @@ class Tuple4< A, B, C, D> extends AbstractProduct {
 
     this._1 = first; this._2 = second; this._3 = third; this._4 = fourth;
   }
-  static public function fst<A, B, C, D>(t : Tuple4<A, B, C, D>):A return t._1
-  static public function snd<A, B, C, D>(t : Tuple4<A, B, C, D>):B return t._2
-  static public function thd<A, B, C, D>(t : Tuple4<A, B, C, D>):C return t._3
-  static public function frt<A, B, C, D>(t : Tuple4<A, B, C, D>):D return t._4
+  static public function fst<A, B, C, D>(t : Tuple4<A, B, C, D>):A return t._1;
+  static public function snd<A, B, C, D>(t : Tuple4<A, B, C, D>):B return t._2;
+  static public function thd<A, B, C, D>(t : Tuple4<A, B, C, D>):C return t._3;
+  static public function frt<A, B, C, D>(t : Tuple4<A, B, C, D>):D return t._4;
 
 	@:noUsing
   static public function fromArray<A>(a:Array<A>):Tuple4<A,A,A,A>{
     return new Tuple4(a[0],a[1],a[2],a[3]);
   }
 	static public function into<A,B,C,D,E>(t:Tuple4<A,B,C,D>,f : A -> B -> C -> D -> E) : E
-		return f(t._1, t._2, t._3, t._4)
+		return f(t._1, t._2, t._3, t._4);
 
-  static public function spread<A,B,C,D,E>(f : A -> B -> C -> D -> E){
+  inline static public function spread<A,B,C,D,E>(f : A -> B -> C -> D -> E){
     return 
       function(t:Tuple4<A,B,C,D>){
         return into(t,f);
@@ -265,10 +269,10 @@ class Tuple4< A, B, C, D> extends AbstractProduct {
   static public function map<A,B>(tpl:Tuple4<A,A,A,A>,fn:A->B):Tuple4<B,B,B,B>{
     return fromArray( tpl.elements().map(fn) );
   }
-	static public function first<A, B, C, D>(t : stx.Tuple4<A, B, C, D>):A return t._1
-	static public function second<A, B, C, D>(t : stx.Tuple4<A, B, C, D>):B return t._2
-	static public function third<A, B, C, D>(t : stx.Tuple4<A, B, C, D>):C return t._3
-	static public function fourth<A, B, C, D>(t : stx.Tuple4<A, B, C, D>):D return t._4
+	static public function first<A, B, C, D>(t : stx.Tuple4<A, B, C, D>):A return t._1;
+	static public function second<A, B, C, D>(t : stx.Tuple4<A, B, C, D>):B return t._2;
+	static public function third<A, B, C, D>(t : stx.Tuple4<A, B, C, D>):C return t._3;
+	static public function fourth<A, B, C, D>(t : stx.Tuple4<A, B, C, D>):D return t._4;
 	
   override private function get_prefix(): String {
     return "stx.Tuple4";
@@ -307,11 +311,11 @@ class Tuple5< A, B, C, D, E> extends AbstractProduct {
 
     this._1 = first; this._2 = second; this._3 = third; this._4 = fourth; this._5 = fifth;
   }
-  static public function fst<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>):A return t._1
-  static public function snd<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>):B return t._2
-  static public function thd<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>):C return t._3
-  static public function frt<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>):D return t._4
-  static public function fth<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>):E return t._5
+  static public function fst<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>):A return t._1;
+  static public function snd<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>):B return t._2;
+  static public function thd<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>):C return t._3;
+  static public function frt<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>):D return t._4;
+  static public function fth<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>):E return t._5;
 
   @:noUsing
   static public function fromArray(a:Array<Dynamic>){
@@ -320,20 +324,20 @@ class Tuple5< A, B, C, D, E> extends AbstractProduct {
   static public function map<A,B>(tpl:Tuple5<A,A,A,A,A>,fn:A->B):Tuple5<B,B,B,B,B>{
     return fromArray( tpl.elements().map(fn) );
   }
-  static public function spread<A,B,C,D,E,F>(f : A -> B -> C -> D -> E -> F){
+  inline static public function spread<A,B,C,D,E,F>(f : A -> B -> C -> D -> E -> F){
     return 
       function(t:Tuple5<A,B,C,D,E>){
         return into(t,f);
       }
   }
 	static public function into<A,B,C,D,E,F>(t:Tuple5<A,B,C,D,E>,f : A -> B -> C -> D -> E -> F) : F
-		return f(t._1, t._2, t._3, t._4, t._5)
+		return f(t._1, t._2, t._3, t._4, t._5);
 	
-	static public function first<A, B, C, D, E>(t : stx.Tuple5<A, B, C, D, E>) return t._1
-	static public function second<A, B, C, D, E>(t : stx.Tuple5<A, B, C, D, E>) return t._2
-	static public function third<A, B, C, D, E>(t : stx.Tuple5<A, B, C, D, E>) return t._3
-	static public function fourth<A, B, C, D, E>(t : stx.Tuple5<A, B, C, D, E>) return t._4
-	static public function fifth<A, B, C, D, E>(t : stx.Tuple5<A, B, C, D, E>) return t._5
+	static public function first<A, B, C, D, E>(t : stx.Tuple5<A, B, C, D, E>) return t._1;
+	static public function second<A, B, C, D, E>(t : stx.Tuple5<A, B, C, D, E>) return t._2;
+	static public function third<A, B, C, D, E>(t : stx.Tuple5<A, B, C, D, E>) return t._3;
+	static public function fourth<A, B, C, D, E>(t : stx.Tuple5<A, B, C, D, E>) return t._4;
+	static public function fifth<A, B, C, D, E>(t : stx.Tuple5<A, B, C, D, E>) return t._5;
 	
   override public function get_prefix(): String {
     return "stx.Tuple5";

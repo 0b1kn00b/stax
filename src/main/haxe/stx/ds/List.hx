@@ -11,7 +11,7 @@ import stx.ds.Collection;
 import stx.functional.Foldables;
 
 using stx.Maths;
-using stx.Options;
+using stx.Maybes;
 
 import stx.plus.Order; using stx.plus.Order;
 import stx.plus.Hasher; using stx.plus.Hasher;
@@ -41,15 +41,15 @@ class List<T> implements Collection<List<T>, T> {
   public var first (get_first, null): T;
   public var last  (get_last, null): T;
 
-  public var headOption  (get_headOption, null): Option<T>;
-  public var firstOption (get_firstOption, null): Option<T>;
-  public var lastOption  (get_lastOption, null): Option<T>;
+  public var headMaybe  (get_headMaybe, null): Maybe<T>;
+  public var firstMaybe (get_firstMaybe, null): Maybe<T>;
+  public var lastMaybe  (get_lastMaybe, null): Maybe<T>;
   
   public var equal (get_equal, null) : EqualFunction<T>;
   function get_equal() {
     return 
       if (equal == null || equal == Equal.nil ){
-        headOption.map( Equal.getEqualFor )
+        headMaybe.map( Equal.getEqualFor )
         .foreach(function(x) equal = x)
         .getOrElseC( Equal.nil );
       }else{
@@ -60,7 +60,7 @@ class List<T> implements Collection<List<T>, T> {
   function get_order() {
     return 
       if (order == null || order == Order.nil ){
-        headOption.map( Order.getOrderFor )
+        headMaybe.map( Order.getOrderFor )
         .foreach( function(x) order = x)
         .getOrElseC( Order.getOrderFor(null) );
       }else{
@@ -68,11 +68,11 @@ class List<T> implements Collection<List<T>, T> {
       }
   }  
 
-  public var hash(get_hash, null) : HashFunction<T>;
+  public var hash(get_hash, null) : MapFunction<T>;
   function get_hash(){
     return 
       if (hash == null || hash == Hasher.nil ){
-        headOption.map( Hasher.getHashFor )
+        headMaybe.map( Hasher.getMapFor )
         .foreach(function(x) hash = x)
         .getOrElseC( Hasher.nil );
       }else{
@@ -83,7 +83,7 @@ class List<T> implements Collection<List<T>, T> {
   function get_show(){
     return 
       if (show == null || show == Show.nil ){
-        headOption.map( Show.getShowFor )
+        headMaybe.map( Show.getShowFor )
         .foreach(function(x) show = x)
         .getOrElseC( Show.nil );
       }else{
@@ -119,7 +119,7 @@ class List<T> implements Collection<List<T>, T> {
 		}
   }
 
-  public function empty<C, D>(): Foldable<C, D> {
+  public function unit<C, D>(): Foldable<C, D> {
     return cast nil();
   }
 
@@ -365,7 +365,7 @@ class List<T> implements Collection<List<T>, T> {
     return create(Prelude.tool(order, equal, hash, show)).append(this);
   }
   
-  public function withHashFunction(hash : HashFunction<T>) {
+  public function withMapFunction(hash : MapFunction<T>) {
     return create(Prelude.tool(order, equal, hash, show)).append(this);
   }
   
@@ -404,14 +404,14 @@ class List<T> implements Collection<List<T>, T> {
     return Prelude.error()("List has no last element");
   }
 
-  private function get_headOption(): Option<T> {
+  private function get_headMaybe(): Maybe<T> {
     return None;
   }
-  private function get_firstOption(): Option<T> {
+  private function get_firstMaybe(): Maybe<T> {
     return None;
   }
 
-  private function get_lastOption(): Option<T> {
+  private function get_lastMaybe(): Maybe<T> {
     return None;
   }
 
@@ -452,13 +452,13 @@ private class Cons<T> extends List<T> {
     return _tail;
   }
 
-  override private function get_headOption(): Option<T> {
+  override private function get_headMaybe(): Maybe<T> {
     return Some(head);
   }
-  override private function get_firstOption(): Option<T> {
+  override private function get_firstMaybe(): Maybe<T> {
     return Some(head);
   }
-  override private function get_lastOption(): Option<T> {
+  override private function get_lastMaybe(): Maybe<T> {
     return Some(last);
   }
 

@@ -14,7 +14,7 @@ class EitherCombinators{
 			function(x:A){
 				return 
 					switch (a(x)) {
-						case Left(v) 	:
+						case Left(_) 	:
 							b(x);
 						case Right(v) : Right(v);
 					}
@@ -43,7 +43,7 @@ class FutureCombinators{
 				a(x).flatMap(
 					function(y){
 						return switch (y) {
-							case Left(v) 	: b(x);
+							case Left(_) 	: b(x);
 							case Right(v) : Future.pure(Right(v));
 						}
 					}

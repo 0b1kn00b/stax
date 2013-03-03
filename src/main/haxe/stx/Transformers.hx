@@ -1,6 +1,6 @@
 package stx;
 
-using stx.Options;
+using stx.Maybes;
 import stx.Tuples;
 
 typedef Tfs 	= Transformers;
@@ -35,9 +35,9 @@ class Transformers2{
 class Transformers3{
 	@:noUsing
 	static public function create<A,B,C,D,E,F>(?f0:A->B,?f1:C->D,?f2:E->F):Tuple3<A,C,E>->Tuple3<B,D,F>{
-		f0 = Options.create(f0).getOrElse(cast Compose.pure);
-		f1 = Options.create(f1).getOrElse(cast Compose.pure);
-		f2 = Options.create(f2).getOrElse(cast Compose.pure);
+		f0 = Maybes.create(f0).getOrElse(cast Compose.pure);
+		f1 = Maybes.create(f1).getOrElse(cast Compose.pure);
+		f2 = Maybes.create(f2).getOrElse(cast Compose.pure);
 		return 
 			function(t:Tuple3<A,C,E>){
 				return 

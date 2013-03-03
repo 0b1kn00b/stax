@@ -16,8 +16,6 @@
 ****/
 package stx.js.io;
 
-import stx.macro.Tp;
-
 import stx.js.Dom;
 import stx.Prelude;
 
@@ -38,7 +36,7 @@ using stx.Tuples;
 using stx.Arrays;
 using stx.Strings;
 using stx.Maths;
-using stx.Options;
+using stx.Maybes;
 using stx.Dynamics;
 using stx.Iterables;
 
@@ -183,9 +181,9 @@ class IFrameIOAutoDetect implements IFrameIO {
   var underlying: IFrameIO;
   
   public function new(?w: Window) {
-    this.bindTarget = w.toOption().getOrElseC(Env.window);    
+    this.bindTarget = w.toMaybe().getOrElseC(Env.window);    
     this.underlying = if (bindTarget.postMessage != null) cast(new IFrameIOPostMessage(bindTarget), IFrameIO); 
-                      else cast(new IFrameIOPollingHashtag(bindTarget), IFrameIO);
+                      else cast(new IFrameIOPollingMaptag(bindTarget), IFrameIO);
   }
   
   public function receive(f: Dynamic -> Void, originUrl: String, ?originWindow: Window): IFrameIO {
@@ -217,7 +215,7 @@ class IFrameIOAutoDetect implements IFrameIO {
   }
 }
 
-class IFrameIOPostMessage extends AbstractIFrameIO, implements IFrameIO {
+class IFrameIOPostMessage extends AbstractIFrameIO implements IFrameIO {
   var bindTarget: Window;
   
   public function new(w: Window) {
@@ -270,8 +268,8 @@ class IFrameIOPostMessage extends AbstractIFrameIO, implements IFrameIO {
     return this;
   }
   
-  private static function normalizeOpt(url: Url): Option<Url> {
-    return url.toParsedUrl().map(function(p) return p.withoutHash().withoutPathname().withoutSearch().toUrl());
+  private static function normalizeOpt(url: Url): Maybe<Url> {
+    return url.toParsedUrl().map(function(p) return p.withoutMap().withoutPathname().withoutSearch().toUrl());
   }
   
   private static function normalize(url: Url): Url {
@@ -284,7 +282,7 @@ class IFrameIOPostMessage extends AbstractIFrameIO, implements IFrameIO {
         var parentWindow = w.parent;
         
         return if (w == parentWindow) None;
-               else Some(Tp.l(parentWindow,parentWindow));
+               else Some(Tups.t2(parentWindow,parentWindow));
       }).toArray());
       
       allWindows.flatMap(function(w) {
@@ -301,18 +299,18 @@ class IFrameIOPostMessage extends AbstractIFrameIO, implements IFrameIO {
 }
 
 
-class IFrameIOPollingHashtag extends AbstractIFrameIO, implements IFrameIO {
+class IFrameIOPollingMaptag extends AbstractIFrameIO implements IFrameIO {
   static var lastMessageId = 1;
   static var newFragmentsList = List.factory();
   
   var executor:           ScheduledExecutor;
   var fragmentsToSend:    List<Tuple2<Window, AddressableFragment>>;
   var fragmentsReceived:  Map<MessageKey, Array<FragmentDelivery>>;
-  var receivers:          Hash<Array<Dynamic -> Void>>;
-  var originUrlToWindow:  Hash<Window>;
+  var receivers:          std.Map<String,Array<Dynamic -> Void>>;
+  var originUrlToWindow:  std.Map<String,Window>;
   var bindTarget:         Window;
-  var senderFuture:       Option<Future<Void>>;
-  var receiverFuture:     Option<Future<Void>>;
+  var senderFuture:       Maybe<Future<Void>>;
+  var receiverFuture:     Maybe<Future<Void>>;
   
   
   public function new(w: Window) {
@@ -322,8 +320,8 @@ class IFrameIOPollingHashtag extends AbstractIFrameIO, implements IFrameIO {
     this.executor           = ScheduledExecutor.inject();
     this.fragmentsToSend    = newFragmentsList();
     this.fragmentsReceived  = Map.create();
-    this.receivers          = new Hash();
-    this.originUrlToWindow  = new Hash();
+    this.receivers          = new std.Map();
+    this.originUrlToWindow  = new std.Map();
     
     senderFuture   = None;
     receiverFuture = None;
@@ -391,8 +389,8 @@ class IFrameIOPollingHashtag extends AbstractIFrameIO, implements IFrameIO {
     return this;
   }
   
-  private static function normalizeOpt(url: Url): Option<Url> {
-    return url.toParsedUrl().map(function(p) return p.withoutHash().toUrl());
+  private static function normalizeOpt(url: Url): Maybe<Url> {
+    return url.toParsedUrl().map(function(p) return p.withoutMap().toUrl());
   }
   
   private static function normalize(url: Url): Url {
@@ -400,7 +398,7 @@ class IFrameIOPollingHashtag extends AbstractIFrameIO, implements IFrameIO {
   }
   
   private function sender(): Void {
-    switch (fragmentsToSend.headOption) {
+    switch (fragmentsToSend.headMaybe) {
       case None:
         stopSender();
       

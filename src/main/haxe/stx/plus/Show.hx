@@ -1,5 +1,6 @@
 package stx.plus;
 
+import haxe.CallStack;
 import Type;
 import stx.Maths;
 
@@ -66,7 +67,7 @@ class Show {
             else
               _createShowImpl(function(v) return Type.getClassName(Type.getClass(v)));
         }
-      case TEnum(e):
+      case TEnum(_):
         _createShowImpl(function(v) {
           var buf = Type.enumConstructor(v);
           var params = Type.enumParameters(v);
@@ -155,5 +156,17 @@ class ProductShow {
     for(i in 2...p.length+1)
       s += ", " + getProductShow(p,i)(p.element(i));
     return s + ")";
+  }
+}
+class StackItemShow{
+  static public function toString(s:StackItem){
+    return 
+      switch (s){
+        case CFunction                      : 'function';
+        case Module( m )                    : m;
+        case FilePos( si , _ , line )     : toString(si) + ':$line';
+        case Method( classname , method )   : '$classname.$method';
+        case Lambda( v )                    : '@$v';
+      }
   }
 }

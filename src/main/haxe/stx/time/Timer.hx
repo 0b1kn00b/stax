@@ -12,7 +12,7 @@ class Timer{
 	public static function __init__(){
 		time_stream  	= stx.reactive.Streams.pure();
 		time_id 		 	= 0;
-		var intervals = new IntHash();
+		var intervals = new IntMap();
 		var last : Float;
 		time_thread = Thread.create(
 			function(){

@@ -3,7 +3,7 @@ package stx.test;
 import hx.Dispatcher;
 
 using stx.Strings;
-using stx.Options;
+using stx.Maybes;
 
 using stx.Functions;
 
@@ -75,8 +75,8 @@ class Runner {
   public function add(test : Dynamic, prefix = "test", ?pattern : EReg): Runner {
     if(!Reflect.isObject(test)) throw "can't add a null object as a test case";
     
-    var patternMatches = function(field: String): Option<Bool> return pattern.toOption().map(function(p) return p.match(field));
-    var prefixMatches  = function(field: String): Option<Bool> return Some(field.startsWith(prefix));
+    var patternMatches = function(field: String): Maybe<Bool> return pattern.toMaybe().map(function(p) return p.match(field));
+    var prefixMatches  = function(field: String): Maybe<Bool> return Some(field.startsWith(prefix));
 
     var fieldIsTest   = function(field: String) return patternMatches(field).orElseC(prefixMatches(field)).getOrElseC(false);
     var fieldIsMethod = isMethod.curry()(test);

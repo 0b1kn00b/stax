@@ -1,10 +1,11 @@
 package stx;
 
+import stx.Predicates;
 import stx.Prelude;
 import stx.Tuples;
-import stx.Options;
+import stx.Maybes;
 
-using stx.Options;
+using stx.Maybes;
 using stx.Objects;
 using stx.Arrays;
 using stx.Prelude;
@@ -15,8 +16,8 @@ class Reflects{
 		Reflect.setField(v,t._1,t._2);
 		return v;
 	}
-	static public function getFieldO<A,B>(v:A,key:String):Option<B>{
-		return Options.create( Reflect.field(v,key) );
+	static public function getFieldO<A,B>(v:A,key:String):Maybe<B>{
+		return Maybes.create( Reflect.field(v,key) );
 	}
 	static public function getField<A,B>(v:A,key:String):Null<B>{
 		return Reflect.field(v,key);
@@ -25,16 +26,7 @@ class Reflects{
 		Reflect.setField(o,key,v);
 		return o;
 	}
-	static public function setFieldMaybe<A,B>(v:A,fld:String,val:B):A{ 
-			getField(v.copy(),fld)
-				.foreach(
-					function(x){
-						Reflect.setField(v,fld,val);
-					}
-				);
-		return v;
-	}
-	static public function getterO<A,B>(fieldname:String):A->Option<B>{
+	static public function getterO<A,B>(fieldname:String):A->Maybe<B>{
 		return getField.p2(fieldname);
 	}
 	static public function getter<A,B>(fieldname:String):A->B{
@@ -44,14 +36,14 @@ class Reflects{
 		return 
 			switch(Type.typeof(v)){
 				case TClass(v) 	: Types.extractObjectFromType(v);
-				default 				:	Objects.extractObject(v);
+				default 				:	Objects.extractAll(cast v);
 			}
 	}
-	static public function extractFieldsFromAny<A>(v:A):Array<Tuple2<String,Dynamic>>{
+	static public function extractFieldsFromAny<A>(v:A):Array<Tup2<String,Dynamic>>{
 		return 
 			Types.extractAllAnyFromType(v)
 				.getOrElse(
-					Objects.extractAllAny.lazy(v)
+					Objects.extractAllAny.lazy(cast v)
 				);	
 	}
 }

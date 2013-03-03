@@ -1,14 +1,17 @@
 package stx;
 
+import stx.ifs.Value;
+
 import stx.Tuples;
-import stx.Error;           using stx.Error;            
-import stx.Prelude;               using stx.Prelude;
-                                  using stx.Arrays;
-                                  using stx.Options;
-                                  using stx.Dynamics;
-                                  using stx.Iterables;
-                                  using stx.Future;
-                                  using stx.Eithers;
+
+using stx.Error;            
+using stx.Prelude;
+using stx.Arrays;
+using stx.Maybes;
+using stx.Dynamics;
+using stx.Iterables;
+using stx.Future;
+using stx.Eithers;
 
 /**
   An asynchronous operation that may complete in the future unless
@@ -19,9 +22,16 @@ import stx.Prelude;               using stx.Prelude;
   flatMap().
   <p>
  */
-class Future<T> {
+class Future<T> implements IValue<T>{
+  @:isVar public var value(get_value, set_value):T;
+  
+  function get_value():T { 
+    return this.value; 
+  }
+  function set_value(value:T):T {
+    return this.value = value;
+  }
   var _listeners: Array<T -> Void>;
-  var _result: T;
   var _isSet: Bool;
   var _isCanceled: Bool;
   var _cancelers: Array<Void -> Bool>;
@@ -29,7 +39,7 @@ class Future<T> {
 
   public function new() {
     _listeners  = [];
-    _result     = null;
+    value       = null;
     _isSet      = false;
     _isCanceled = false;
     _cancelers  = [];
@@ -53,12 +63,13 @@ class Future<T> {
    */
   public function deliver(t: T): Future<T> {
     return if (_isCanceled) this;
-    else if (_isSet) Prelude.error()("Future :" + this.value() + " already delivered");
+    else if (_isSet) { Prelude.error()('Future already delivered'); }
+    //else if (_isSet) Prelude.error()("Future :" + this.value + " already delivered");
     else {
-      _result = t;
+      value = t;
       _isSet  = true;
 
-      for (l in _listeners) l(_result);
+      for (l in _listeners) l(value);
 
       _listeners = [];
 
@@ -149,7 +160,7 @@ class Future<T> {
    */
   public function deliverTo(f: T -> Void): Future<T> {
     if (isCanceled()) return this;
-    else if (isDelivered()) f(_result);
+    else if (isDelivered()) f(value);
     else _listeners.push(f);
 
     return this;
@@ -174,17 +185,11 @@ class Future<T> {
 
     return fut;
   }
-  /**
-    Drop this future, returning f.
-  */
-  public function then<S>(f: Future<S>): Future<S> {
-    return f;
-  }
-
-  /** 
+   /** 
     Maps the result of this future to another future, and returns a future
     of the result of that future. Useful when chaining together multiple
-    asynchronous operations that must be completed sequentially.
+    asynchronous operations that must be completed sequentia
+    lly.
     <p>
     <pre>
     <code>
@@ -196,21 +201,29 @@ class Future<T> {
     </code>
     </pre>
    */
-  public function flatMap<S>(f: T -> Future<S>): Future<S> {
-    var fut: Future<S> = new Future();
-
-    deliverTo(function(t: T) {
-      f(t).deliverTo(function(s: S) {
+  public function flatMap<B>(fn:T->Future<B>):Future<B>{
+    var fut: Future<B> = new Future();
+    var f = this;
+    f.deliverTo(function(t: T) {
+      fn(t).deliverTo(function(s: B) {
         fut.deliver(s);
       }).ifCanceled(function() {
-        fut.forceCancel();
+        untyped fut.forceCancel();
       });
     });
 
-    ifCanceled(function() { fut.forceCancel(); });
+    f.ifCanceled(function() { untyped fut.forceCancel(); });
 
     return fut;
   }
+
+  /**
+    Drop this future, returning f.
+  */
+  public function then<S>(f: Future<S>): Future<S> {
+    return f;
+  }
+
 
   /** 
     Returns a new future that will be delivered only if the result of this
@@ -237,18 +250,19 @@ class Future<T> {
     return zipWith( f2, Tuples.t2 );
   }
   public function zipWith<A,B>(f2:Future<A>,fn : T -> A -> B):Future<B>{
+    //trace('zip');
     var zipped: Future<B> = new Future();
+    var sent : Bool       = false;
 
     var f1 = this;
-
     var deliverZip = function() {
-      if (f1.isDelivered() && f2.isDelivered()) {
+      if (f1.isDelivered() && f2.isDelivered() && !sent ) {
+        sent = true;
         zipped.deliver(
           fn(f1.valueO().get(), f2.valueO().get())
         );
       }
     }
-
     f1.deliverTo(function(v) deliverZip());
     f2.deliverTo(function(v) deliverZip());
 
@@ -262,13 +276,10 @@ class Future<T> {
   /** 
     Retrieves the value of the future, as an option.
    */
-  public function valueO(): Option<T> {
-    return if (_isSet) Some(_result) else None;
+  public function valueO(): Maybe<T> {
+    return if (_isSet) Some(value) else None;
   }
-  public function value(): T{
-    return _result;
-  } 
-  public function toOption(): Option<T> {
+  public function toMaybe(): Maybe<T> {
     return valueO();
   }
 
@@ -296,6 +307,10 @@ class Future<T> {
   static public function pure<A>(v:A):Future<A>{
     return toFuture(v);
   }
+  @:noUsing
+  static public function unit<A>():Future<A>{
+    return new Future();
+  }
   public function deliverMe(f:Future<T>-> Void): Future<T> {
     if (isCanceled()) return this;
     else if (isDelivered()) f(this);
@@ -309,16 +324,57 @@ class Futures{
   static public function foreach<A>(f:Future<A>,fn:A->Void):Future<A>{
     return f.foreach(fn);
   }
+  static public function mapL<A,B,C>(f:Future<Either<A,B>>,fn:A->C):Future<Either<C,B>>{
+    return f.map(
+      function(x){
+        return switch (x){
+          case      Left(l)      : Left(fn(l));
+          case      Right(r)     : Right(r);
+        };
+      }
+    );
+  }
+  static public function mapR<A,B,C>(f:Future<Either<A,B>>,fn:B->C):Future<Either<A,C>>{
+    return f.map(
+      function(x){
+        return switch (x){
+          case      Left(l)      : Left(l);
+          case      Right(r)     : Right(fn(r));
+        }
+      }
+    );
+  }
   static public function map<A,B>(f:Future<A>,fn:A->B):Future<B>{
     return f.map(fn);
   }
   static public function flatMap<A,B>(f:Future<A>,fn:A->Future<B>):Future<B>{
-    return f.flatMap(fn);
+    var fut: Future<B> = new Future();
+    f.deliverTo(function(t: A) {
+      fn(t).deliverTo(function(s: B) {
+        fut.deliver(s);
+      }).ifCanceled(function() {
+        untyped fut.forceCancel();
+      });
+    });
+
+    f.ifCanceled(function() { untyped fut.forceCancel(); });
+
+    return fut;
+  }
+  static public function flatMapR<A,B>(f:Future<Outcome<A>>,fn:A->Future<Outcome<B>>):Future<Outcome<B>>{
+    return flatMap(f,
+      function(x){
+        return switch (x){
+          case Left(l)      : Future.pure(Left(l));
+          case Right(r)     : fn(r);
+        }
+      }
+    );
   }
   static public function zip<A,B>(f:Future<A>,f2:Future<B>):Future<Tuple2<A,B>>{
     return f.zip(f2);
   }
-  static public function waitFor(toJoin:Array<Future<Dynamic>>):Future<Array<Dynamic>> {
+  static public function waitFor<A>(toJoin:Array<Future<A>>):Future<Array<A>> {
     var
       joinLen = toJoin.size(),
       myprm = Future.create(),
@@ -327,12 +383,12 @@ class Futures{
         
     toJoin.foreach(function(xprm:Dynamic) {
         if(!Std.is(xprm,Future)) {
-          throw "not a promise:"+xprm;
+          throw "not a Future:"+xprm;
         }
 
         xprm.sequence = sequence++; 
         xprm.deliverMe(function(r:Dynamic) {
-            combined.push({ seq:r.sequence,val:r._result});
+            combined.push({ seq:r.sequence,val:r.value});
             if (combined.length == joinLen) {
               combined.sort(function(x,y) { return x.seq - y.seq; });
 

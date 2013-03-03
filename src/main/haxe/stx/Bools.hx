@@ -8,13 +8,13 @@ class Bools {
 	/**
 	  Produces the result of 'f' if 'v' is true.
 	 */
-  static public function ifTrue<T>(v: Bool, f: Thunk<T>): Option<T> {
+  static public function ifTrue<T>(v: Bool, f: Thunk<T>): Maybe<T> {
     return if (v) Some(f()) else None;
   }
 	/**
 	  Produces the result of 'f' if 'v' is false.
 	 */  
-  static public function ifFalse<T>(v: Bool, f: Thunk<T>): Option<T> {
+  static public function ifFalse<T>(v: Bool, f: Thunk<T>): Maybe<T> {
     return if (!v) Some(f()) else None;
   }
   /**

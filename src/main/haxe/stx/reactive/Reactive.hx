@@ -14,6 +14,8 @@
  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package stx.reactive;
+
+import stx.Maybes;
 import stx.Prelude;
 import stx.Tuples;
 import stx.plus.Equal;
@@ -655,7 +657,7 @@ class Stream<T> {
         return Streams.create(
             function(pulse: Pulse<Dynamic>): Propagation<T> {
                 return if (count > 0) { 
-                    --count; propagate(pulse); 
+                    --count; propagate(cast pulse); 
                 }
                 else {
                     
@@ -683,7 +685,7 @@ class Stream<T> {
             function(pulse: Pulse<Dynamic>): Propagation<T> {
                 return if (stillChecking) {
                     if (filter(pulse.value)) {
-                        propagate(pulse);
+                        propagate(cast  pulse);
                     }
                     else {
                         stillChecking = false;
@@ -855,7 +857,7 @@ class Stream<T> {
     public function filter(pred: T -> Bool): Stream<T> {
         return Streams.create(
             function(pulse: Pulse<Dynamic>): Propagation<T> {
-                return if (pred(pulse.value)) propagate(pulse); else doNotPropagate;
+                return if (pred(pulse.value)) cast propagate(pulse); else doNotPropagate;
             },
             [this]
         );
@@ -875,7 +877,7 @@ class Stream<T> {
             function(pulse: Pulse<Dynamic>): Propagation<T> {
                 return if (checking) {
                     if (pred(pulse.value)) {
-                        propagate(pulse);
+                        propagate(cast pulse);
                     }
                     else {
                         checking = false;
@@ -1211,10 +1213,10 @@ class Signal<T> {
     
     private var _last: T;
     
-    public function new(stream: Stream<Dynamic>, ?init: T, updater: Pulse<Dynamic> -> Propagation<T>) {
+    public function new(stream: Stream<Dynamic>, ?init: T,? updater: Pulse<Dynamic> -> Propagation<T>) {
         this._last          = init;        
         this._underlyingRaw = stream;
-        this._updater       = updater;
+        this._updater       = Opt.orDefault( updater, function(x) return propagate(x) );
         
         var self = this;
         

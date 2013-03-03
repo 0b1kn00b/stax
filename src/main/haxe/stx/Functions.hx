@@ -1,8 +1,8 @@
 package stx;
 
-import stx.macro.F;
 import stx.Prelude;
 import stx.Error;
+using stx.Eithers;
 
 using stx.Functions;
 using stx.Dynamics;

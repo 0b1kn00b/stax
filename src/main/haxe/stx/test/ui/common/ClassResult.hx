@@ -21,7 +21,7 @@ import stx.test.TestResult;
 * @:todo add documentation
 */
 class ClassResult {
-  var fixtures : Hash<FixtureResult>;
+  var fixtures : Map<String,FixtureResult>;
   public var className(default, null) : String;
   public var setupName(default, null) : String;
   public var teardownName(default, null) : String;
@@ -32,7 +32,7 @@ class ClassResult {
   public var stats(default, null) : ResultStats;
 
   public function new(className : String, setupName : String, teardownName : String) {
-    fixtures = new Hash();
+    fixtures = new Map();
     this.className = className;
     this.setupName = setupName;
     hasSetup = setupName != null;

@@ -6,11 +6,21 @@ using stx.Prelude;
 import stx.plus.Equal;
 
                                   using stx.Maths;
-                                  using stx.Options;
+                                  using stx.Maybes;
                                   using stx.Functions;
                                   using stx.Arrays;
 
 class Arrays {
+  /**
+    Applies function f to each element in a, returning the results
+  */
+  inline static public function map<T, S>(a: Array<T>, f: T -> S): Array<S> {
+    var n: Array<S> = [];
+    
+    for (e in a) n.push(f(e));
+    
+    return n;
+  }
   @:noUsing
   static public function create<A>():Array<A>{
     return [];
@@ -32,7 +42,7 @@ class Arrays {
   */
    static public function foldl1<T, T>(a: Array<T>, mapper: T -> T -> T): T {
     var folded = a.first();
-    switch (Iterables.tailOption(a)) {
+    switch (Iterables.tailMaybe(a)) {
       case Some(v)  :
         for (e in v) { folded = mapper(folded, e); }
       default       :
@@ -229,26 +239,26 @@ class Arrays {
     return arr.length > 0;
   }
   /**
-    Produces an `Option.Some(element)` the first time the predicate returns `true`,
+    Produces an `Maybe.Some(element)` the first time the predicate returns `true`,
     `None` otherwise.
    */
-  static public function find<T>(arr: Array<T>, f: T -> Bool): Option<T>{
+  static public function find<T>(arr: Array<T>, f: T -> Bool): Maybe<T>{
     return arr.foldl(
 		None,
 		function(a, b) {
       return
 		  	switch (a) {
-		  		case None: Options.create(b).filter(f);
+		  		case None: Maybes.create(b).filter(f);
 			 	default: a;
 		    }
       }
     );
   }
   /**
-    Returns an `Option.Some(index)` if an object reference is contain in `arr`
+    Returns an `Maybe.Some(index)` if an object reference is contain in `arr`
     `None` otherwise
    */
-  static public function findIndexOf<T>(arr: Array<T>, obj: T): Option<Int> {
+  static public function findIndexOf<T>(arr: Array<T>, obj: T): Maybe<Int> {
 	 var index = arr.indexOf(obj);
 	 return if (index == -1) None else Some(index);
   }
@@ -280,7 +290,7 @@ class Arrays {
    */
   static public function exists<T>(arr: Array<T>, f: T -> Bool): Bool {
     return switch (find(arr, f)) {
-      case Some(v): true;
+      case Some(_): true;
       case None:    false;
     }
   }
@@ -335,10 +345,10 @@ class Arrays {
     Produces a `Tuple2`, on the left those elements before `index`, on the right those elements on or after.
    */
 	static public function splitAt<T>(srcArr : Array<T>, index : Int) : Tuple2 < Array<T>, Array<T> > return
-	stx.Tuples.t2(srcArr.slice(0, index),srcArr.slice(index))  
+	stx.Tuples.t2(srcArr.slice(0, index),srcArr.slice(index));
   
   /**
-    Produces the index of element `t`, for a function prodcing an `Option` , see `findIndexOf`
+    Produces the index of element `t`, for a function prodcing an `Maybe` , see `findIndexOf`
    */
   static public function indexOf<T>(a: Array<T>, t: T): Int {
     var index = 0;
@@ -351,6 +361,13 @@ class Arrays {
     
     return -1;
   } 
+  static public function withIndex<A>(a:Array<A>):Array<Tup2<A,Int>>{
+    var o = [];
+    for(i in 0...a.length){
+      o.push( Tups.t2( a[i] , i ) );
+    }
+    return o;
+  }
   /**
     Performs a `map`, taking element index as a second parameter of `f`
    */
@@ -419,7 +436,7 @@ class Arrays {
     Adds a single element to the end of the Array.
    */
   static public function add<T>(a: Array<T>, t: T): Array<T> {
-    var copy = Prelude.SArrays.snapshot(a);
+    var copy = SArrays.snapshot(a);
     
     copy.push(t);
     
@@ -429,7 +446,7 @@ class Arrays {
     Adds a single elements to the beginning if the Array.
    */
   static public function prepend<T>(a: Array<T>, t: T): Array<T> {
-    var copy = Prelude.SArrays.snapshot(a);
+    var copy = SArrays.snapshot(a);
     
     copy.unshift(t);
     
@@ -442,9 +459,9 @@ class Arrays {
     return a[0];
   }
   /**
-    Produces the first element of `a` as an `Option`, `Option.None` if the `Array` is empty.
+    Produces the first element of `a` as an `Maybe`, `Maybe.None` if the `Array` is empty.
    */
-  static public function firstOption<T>(a: Array<T>): Option<T> {
+  static public function firstMaybe<T>(a: Array<T>): Maybe<T> {
     return if (a.length == 0) None; else Some(a[0]);
   }
   /**
@@ -454,9 +471,9 @@ class Arrays {
     return a[a.length - 1];
   }
   /**
-    Produces the last element of `a` as an `Option`, `Option.None` if the `Array` is empty.
+    Produces the last element of `a` as an `Maybe`, `Maybe.None` if the `Array` is empty.
    */
-  static public function lastOption<T>(a: Array<T>): Option<T> {
+  static public function lastMaybe<T>(a: Array<T>): Maybe<T> {
     return if (a.length == 0) None; else Some(a[a.length - 1]);
   }
   
@@ -519,7 +536,7 @@ class Arrays {
     Produces an Array with the elements in reversed order
    */
   static public function reversed<T>(arr: Array<T>): Array<T> {
-    return Prelude.SIterables.foldl(arr, [], function(a, b) {
+    return SIterables.foldl(arr, [], function(a, b) {
       a.unshift(b);
       
       return a;
@@ -540,7 +557,7 @@ class Arrays {
 		slices;
 	}
   @:todo('#0b1kn00b: optimise')
-  static public function fromHash<T>(hash:Hash<T>):Array<Tuple2<String,T>>{
+  static public function fromMap<T>(hash:Map<String,T>):Array<Tuple2<String,T>>{
     return
       hash.keys()
         .toIterable()

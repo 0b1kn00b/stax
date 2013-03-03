@@ -25,11 +25,11 @@ import stx.Prelude;
 using stx.Bools;
 
 import stx.functional.Foldable;
-import stx.functional.PartialFunction;
+using stx.PartialFunctions;
 import stx.ds.Collection;
 import stx.functional.Foldables;
 
-using stx.Options;
+using stx.Maybes;
 using stx.Functions;
 
 import stx.plus.Order; 
@@ -40,12 +40,12 @@ import stx.plus.Equal;
 using stx.Iterables;
 
 using stx.functional.Foldables;
-using stx.functional.PartialFunctions;
 
 /** A cross-platform, immutable map with support for arbitrary keys.
  * TODO: Use an array of lists to avoid unnecessary copying when adding/removing elements.
  */
-class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements PartialFunction<K, V> {
+ //, implements PartialFunction1<K, V>
+class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
   public static var MaxLoad = 10;
   public static var MinLoad = 1;
 
@@ -54,7 +54,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   private function get_keyOrder(){
     return 
       if (keyOrder == null || keyOrder == Order.nil ){
-          keys().headOption().map( Order.getOrderFor )
+          keys().headMaybe().map( Order.getOrderFor )
           .foreach( function(x) keyOrder = x)
           .getOrElseC( Order.getOrderFor(null) );
       }else{
@@ -67,7 +67,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
     //trace('value_order');
     return 
       if (valueOrder == null || valueOrder == Order.nil){
-          values().headOption().map( Order.getOrderFor )
+          values().headMaybe().map( Order.getOrderFor )
           .foreach( function(x) valueOrder = x)
           .getOrElseC( Order.getOrderFor(null) );
       }else{
@@ -75,28 +75,28 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
       }
   }
 
-  public var keyHash(get_keyHash,null)       : HashFunction<K>;
-  private function get_keyHash(){
+  public var keyMap(get_keyMap,null)       : MapFunction<K>;
+  private function get_keyMap(){
     return 
-      if (keyHash == null || keyHash == Hasher.nil){
-        keys().headOption()
-          .map( Hasher.getHashFor )
-          .foreach( function(x) keyHash = x)
-          .getOrElseC( Hasher.getHashFor(null) );
+      if (keyMap == null || keyMap == Hasher.nil){
+        keys().headMaybe()
+          .map( Hasher.getMapFor )
+          .foreach( function(x) keyMap = x)
+          .getOrElseC( Hasher.getMapFor(null) );
       }else{
-        keyHash;
+        keyMap;
       }
   }
-  public var valueHash(get_valueHash,null)     : HashFunction<V>;
-  private function get_valueHash(){
+  public var valueMap(get_valueMap,null)     : MapFunction<V>;
+  private function get_valueMap(){
     return 
-      if (valueHash == null || valueHash == Hasher.nil){
-        values().headOption()
-          .map( Hasher.getHashFor )
-          .foreach( function(x) valueHash = x)
-          .getOrElseC( Hasher.getHashFor(null) );
+      if (valueMap == null || valueMap == Hasher.nil){
+        values().headMaybe()
+          .map( Hasher.getMapFor )
+          .foreach( function(x) valueMap = x)
+          .getOrElseC( Hasher.getMapFor(null) );
       }else{
-        valueHash;
+        valueMap;
       }
   }
 
@@ -104,7 +104,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   private function get_keyShow(){
     return 
       if (keyShow == null || keyShow == Show.nil){
-        keys().headOption()
+        keys().headMaybe()
           .map( Show.getShowFor )
           .foreach( function(x) keyShow = x)
           .getOrElseC( Show.getShowFor(null) );
@@ -116,7 +116,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   private function get_valueShow(){
     return 
       if (valueShow == null || valueShow == Show.nil){
-        values().headOption()
+        values().headMaybe()
           .map( Show.getShowFor )
           .foreach( function(x) valueShow = x)
           .getOrElseC( Show.getShowFor(null) );
@@ -128,7 +128,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   private function get_keyEqual(){
     return 
       if (keyEqual == null || keyEqual == Equal.nil){
-          keys().headOption().map( Equal.getEqualFor )
+          keys().headMaybe().map( Equal.getEqualFor )
           .foreach( function(x){ keyEqual = x;})
           .getOrElseC( Equal.getEqualFor(null) );
       }else{
@@ -139,7 +139,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   private function get_valueEqual(){
     return 
       if (valueEqual == null || valueEqual == Equal.nil ){
-          values().headOption().map( Equal.getEqualFor )
+          values().headMaybe().map( Equal.getEqualFor )
           .foreach( function(x) valueEqual = x)
           .getOrElseC( Equal.getEqualFor(null) );
       }else{
@@ -152,27 +152,27 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   var _size: Int;
   var _pf: PartialFunction1<K, V>;
     
-  public static function create<K, V>(?korder : OrderFunction<K>, ?kequal: EqualFunction<K>, ?khash: HashFunction<K>, ?kshow : ShowFunction<K>, ?vorder : OrderFunction<V>, ?vequal: EqualFunction<V>, ?vhash: HashFunction<V>, ?vshow : ShowFunction<V>) {
+  public static function create<K, V>(?korder : OrderFunction<K>, ?kequal: EqualFunction<K>, ?khash: MapFunction<K>, ?kshow : ShowFunction<K>, ?vorder : OrderFunction<V>, ?vequal: EqualFunction<V>, ?vhash: MapFunction<V>, ?vshow : ShowFunction<V>) {
     return new Map<K, V>(korder, kequal, khash, kshow, vorder, vequal, vhash, vshow, [[]], 0);
   }
   
   /** Creates a factory for maps of the specified types. */
-  public static function factory<K, V>(?korder : OrderFunction<K>, ?kequal: EqualFunction<K>, ?khash: HashFunction<K>, ?kshow : ShowFunction<K>, ?vorder : OrderFunction<V>, ?vequal: EqualFunction<V>, ?vhash: HashFunction<V>, ?vshow : ShowFunction<V>): Factory<Map<K, V>> {
+  public static function factory<K, V>(?korder : OrderFunction<K>, ?kequal: EqualFunction<K>, ?khash: MapFunction<K>, ?kshow : ShowFunction<K>, ?vorder : OrderFunction<V>, ?vequal: EqualFunction<V>, ?vhash: MapFunction<V>, ?vshow : ShowFunction<V>): Factory<Map<K, V>> {
     return function() {
       return Map.create(korder, kequal, khash, kshow, vorder, vequal, vhash, vshow);
     }
   }
   
-  private function new(korder : OrderFunction<K>, kequal: EqualFunction<K>, khash: HashFunction<K>, kshow : ShowFunction<K>, vorder : OrderFunction<V>, vequal: EqualFunction<V>, vhash: HashFunction<V>, vshow : ShowFunction<V>, buckets: Array<Array<Tuple2<K, V>>>, size: Int) {
+  private function new(korder : OrderFunction<K>, kequal: EqualFunction<K>, khash: MapFunction<K>, kshow : ShowFunction<K>, vorder : OrderFunction<V>, vequal: EqualFunction<V>, vhash: MapFunction<V>, vshow : ShowFunction<V>, buckets: Array<Array<Tuple2<K, V>>>, size: Int) {
     var self = this;
     
     this.keyOrder    = korder;
     this.keyEqual    = kequal; 
-    this.keyHash     = khash; 
+    this.keyMap     = khash; 
     this.keyShow     = kshow; 
     this.valueOrder  = vorder;  
     this.valueEqual  = vequal; 
-    this.valueHash   = vhash; 
+    this.valueMap   = vhash; 
     this.valueShow   = vshow;
     
 
@@ -205,15 +205,15 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
     return _pf.orAlwaysC(v);
   }
   
-  public function call(k: K): V {
-    return _pf.call(k);
+  public function apply(k: K): V {
+    return _pf.apply(k);
   }
     
-  public function toFunction(): K -> Option<V> {
+  public function toFunction(): K -> Maybe<V> {
     return get;
   }
   
-  public function empty<C, D>(): Foldable<C, D> {
+  public function unit<C, D>(): Foldable<C, D> {
     return cast create();
   }
   
@@ -300,7 +300,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
     return map;
   }
 
-  public function get(k: K): Option<V> {  
+  public function get(k: K): Maybe<V> {  
 
     for (e in listFor(k)) {
       if (keyEqual(e._1, k)) {
@@ -334,8 +334,8 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   
   public function containsKey(k: K): Bool {
     return switch(get(k)) {
-      case None:    false;
-      case Some(v): true;
+      case None     : false;
+      case Some(_)  : true;
     }
   }
   
@@ -358,7 +358,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   }
   
   public function keySet(): Set<K> {
-    return Set.create(keyOrder, keyEqual, keyHash, keyShow).append(keys());
+    return Set.create(keyOrder, keyEqual, keyMap, keyShow).append(keys());
   }
   
   public function values(): Iterable<V> {
@@ -426,7 +426,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   }
 
   public function hashCode() {
-    return foldl(786433, function(a, b) return a + (keyHash(b._1) * 49157 + 6151) * valueHash(b._2));
+    return foldl(786433, function(a, b) return a + (keyMap(b._1) * 49157 + 6151) * valueMap(b._2));
   }
 
   public function load(): Int {
@@ -435,35 +435,35 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   }
 
   public function withKeyOrderFunction(order : OrderFunction<K>) {
-    return create(order, keyEqual, keyHash, keyShow, valueOrder, valueEqual, valueHash, valueShow).append(this);
+    return create(order, keyEqual, keyMap, keyShow, valueOrder, valueEqual, valueMap, valueShow).append(this);
   }
 
   public function withKeyEqualFunction(equal : EqualFunction<K>) {
-    return create(keyOrder, equal, keyHash, keyShow, valueOrder, valueEqual, valueHash, valueShow).append(this);
+    return create(keyOrder, equal, keyMap, keyShow, valueOrder, valueEqual, valueMap, valueShow).append(this);
   }
 
-  public function withKeyHashFunction(hash : HashFunction<K>) {
-    return create(keyOrder, keyEqual, hash, keyShow, valueOrder, valueEqual, valueHash, valueShow).append(this);
+  public function withKeyMapFunction(hash : MapFunction<K>) {
+    return create(keyOrder, keyEqual, hash, keyShow, valueOrder, valueEqual, valueMap, valueShow).append(this);
   }
 
   public function withKeyShowFunction(show : ShowFunction<K>) { 
-    return create(keyOrder, keyEqual, keyHash, show, valueOrder, valueEqual, valueHash, valueShow).append(this);
+    return create(keyOrder, keyEqual, keyMap, show, valueOrder, valueEqual, valueMap, valueShow).append(this);
   }
 
   public function withValueOrderFunction(order : OrderFunction<V>) {
-    return create(keyOrder, keyEqual, keyHash, keyShow, order, valueEqual, valueHash, valueShow).append(this);
+    return create(keyOrder, keyEqual, keyMap, keyShow, order, valueEqual, valueMap, valueShow).append(this);
   }
 
   public function withValueEqualFunction(equal : EqualFunction<V>) {
-    return create(keyOrder, keyEqual, keyHash, keyShow, valueOrder, equal, valueHash, valueShow).append(this);
+    return create(keyOrder, keyEqual, keyMap, keyShow, valueOrder, equal, valueMap, valueShow).append(this);
   }
 
-  public function withValueHashFunction(hash : HashFunction<V>) {
-    return create(keyOrder, keyEqual, keyHash, keyShow, valueOrder, valueEqual, hash, valueShow).append(this);
+  public function withValueMapFunction(hash : MapFunction<V>) {
+    return create(keyOrder, keyEqual, keyMap, keyShow, valueOrder, valueEqual, hash, valueShow).append(this);
   }
 
   public function withValueShowFunction(show : ShowFunction<V>) { 
-    return create(keyOrder, keyEqual, keyHash, keyShow, valueOrder, valueEqual, valueHash, show).append(this);
+    return create(keyOrder, keyEqual, keyMap, keyShow, valueOrder, valueEqual, valueMap, show).append(this);
   }
 
   private function entries(): Iterable<Tuple2<K, V>> {
@@ -473,7 +473,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
       iterator: function(): Iterator<Tuple2<K, V>> {
         var bucket = 0, element = 0;
         
-        var computeNextValue = function(): Option<Tuple2<K, V>> {
+        var computeNextValue = function(): Maybe<Tuple2<K, V>> {
           while (bucket < buckets.length) {
             if (element >= buckets[bucket].length) {
               element = 0;
@@ -552,7 +552,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
     for (i in (index + 1)..._buckets.length) {
       newTable.push(_buckets[i]);
     }
-    return new Map<K, V>(keyOrder, keyEqual, keyHash, keyShow, valueOrder, valueEqual, valueHash, valueShow, newTable, size());
+    return new Map<K, V>(keyOrder, keyEqual, keyMap, keyShow, valueOrder, valueEqual, valueMap, valueShow, newTable, size());
   }
 
   private function rebalance(): Void {
@@ -576,7 +576,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>>, implements Parti
   }
 
   private function bucketFor(k: K): Int {
-    return keyHash(k) % _buckets.length;
+    return keyMap(k) % _buckets.length;
   }
 
   private function listFor(k: K): Array<Tuple2<K, V>> {

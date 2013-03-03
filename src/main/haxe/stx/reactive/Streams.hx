@@ -35,7 +35,7 @@ class Streams {
      * Creates a new stream with the specified updater and optional sources.
      *
      * @param updater   The updater.
-     * @param sources   (Optional) The sources.
+     * @param sources   (Maybeal) The sources.
      *
      */
     @:noUsing
@@ -114,7 +114,7 @@ class Streams {
      * sources will be mapped to the constant.
      *
      * @param value     The constant.
-     * @param sources   (Optional) Source streams.
+     * @param sources   (Maybeal) Source streams.
      */
     static public function constant<I, O>(value: O, sources: Iterable<Stream<I>> = null): Stream<O> {
         return Streams.create(
@@ -148,7 +148,7 @@ class Streams {
      *                      zero Stream.
      */
     static public function cond<T>(conditions: Iterable<Tuple2<Stream<Bool>, Stream<T>>>): Stream<T> {
-        return switch (conditions.headOption()) {
+        return switch (conditions.headMaybe()) {
             case None:    Streams.zero();
             case Some(h): StreamBool.ifTrue(h._1, h._2, cond(conditions.tail()));
         }
@@ -263,7 +263,7 @@ class Streams {
               switch (e) {
                 case Left(v)    : Streams.pure().sendEvent(Left(v));
                 case Right(v)   : fn(v);
-                default         : throw 'result is neither left nor right';
+                //default         : throw 'result is neither left nor right';
               }
           }
         );
@@ -278,7 +278,7 @@ class Streams {
             return switch (e) {
               case Left(v)  : Left(fn(v));
               case Right(v) : Right(v);
-              default       : throw 'result is neither left nor right';
+              //default       : throw 'result is neither left nor right';
             }
           }
         );
@@ -290,7 +290,7 @@ class Streams {
             return switch (e) {
               case Right(v)   : Right(fn(v));
               case Left(v)    : Left(v);
-              default         : throw 'result is neither left nor right';
+              //default         : throw 'result is neither left nor right';
             }
           }
         );

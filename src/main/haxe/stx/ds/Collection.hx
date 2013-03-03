@@ -22,7 +22,7 @@ import stx.functional.Foldable;
  * and remove elements, determine the size of the collection, and evaluate 
  * equality predicates on elements in the collection.
  */
-interface Collection<C, T> implements Foldable<C, T> {
+interface Collection<C, T> extends Foldable<C, T> {
   public function size(): Int;
   
   public function contains(t: T): Bool;

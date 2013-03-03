@@ -9,7 +9,7 @@ import Type;
 														using stx.Arrays;
 														using stx.Enums;
 														using stx.Bools;
-														using stx.Options;
+														using stx.Maybes;
 														using stx.Functions;
 														
 														using stx.Log;
@@ -138,7 +138,7 @@ class DefaultLogger implements Logger{
 						includes
 							.map( Enums.params )
 							.map( Arrays.first )
-							.forAny( callback(checker, pos) );
+							.forAny( checker.p1(pos) );
 				}
 		var black =
 				function(excludes:Array<LogListing>) {
@@ -147,12 +147,12 @@ class DefaultLogger implements Logger{
 						!(excludes
 								.map( Enums.params )
 								.map( Arrays.first )
-								.forAll( callback(checker, pos) ));
+								.forAll( checker.p1(pos) ));
 				}
 		//trace('________________'.debug());
 		//trace(listings.debug());
 		var o = (listings
-						.partition(function(x:EnumValue):Bool { return (x.constructorOf() == 'Include'); })
+						.partition(function(x:EnumValue):Bool { return (x.name() == 'Include'); })
 						.into( 
 								function(includes, excludes){
 									return

@@ -1,14 +1,17 @@
 package stx.ds;
 
-enum LList<E> {
+/*enum ELList<E> {
 	Cons(e : E, t : LList<E>);
 	Nil;
 }
-class LLists{
-	static public function create<A>():LList<A>{
-		return LList.Nil;
+abstract LList<T>(ELList<T>){
+  public function new(?v){
+    this = v == null ? Nil : v;
+  }
+	public function cons(v:T):LList<T>{
+		return LList.Cons(v,this);
 	}
-	static public function cons<A>(l:LList<A>,v:A):LList<A>{
-		return LList.Cons(v,l);
-	}
-}
+  public function iterator(){
+    return 
+  }
+}*/

@@ -1,7 +1,17 @@
 package stx;
+import haxe.CallStack;
 class Util{
-	public static function printer<A>(value:A,?pos:haxe.PosInfos):A{
-		trace(value,pos);
-		return value;
+
+}
+class StackItems{
+	static public function show(s:StackItem){
+		return 
+			switch (s){
+				case CFunction 											: 'function';
+				case Module( m ) 										: m;
+				case FilePos( si , file, line ) 		: show(si) + ':$file#$line';
+				case Method( classname , method ) 	: '$classname.$method';
+				case Lambda( v ) 										: '@$v';
+			}
 	}
 }

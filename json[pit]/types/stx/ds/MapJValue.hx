@@ -10,7 +10,7 @@ import stx.Transformers;
 
 using stx.Prelude;
 using stx.Arrays;
-using stx.Options;
+using stx.Maybes;
 using stx.Functions;
 
 class MapJValue<K,V> extends AbstractTranscode<Map<K,V>,JExtractorFunction2<K,V>>{
@@ -43,7 +43,7 @@ class MapJValue<K,V> extends AbstractTranscode<Map<K,V>,JExtractorFunction2<K,V>
     }
   }
 
-  static public function stringKeyExtract<V>(v: JValue, ve: JExtractorFunction<V>, ?vorder : OrderFunction<V>, ?vequal: EqualFunction<V>, ?vhash: HashFunction<V>, ?vshow : ShowFunction<V>): Map<String, V> {
+  static public function stringKeyExtract<V>(v: JValue, ve: JExtractorFunction<V>, ?vorder : OrderFunction<V>, ?vequal: EqualFunction<V>, ?vhash: MapFunction<V>, ?vshow : ShowFunction<V>): Map<String, V> {
     var extract0 = function(v: Array<JValue>){
       return Map.create(Strings.compare, Strings.equals, StringHasher.hashCode, Strings.toString, vorder, vequal, vhash, vshow).addAll(v.map(function(j) {
         return switch(j) {

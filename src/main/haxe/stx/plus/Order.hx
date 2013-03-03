@@ -94,7 +94,7 @@ class Order {
           Prelude.error()("class "+Type.getClassName(c)+" is not comparable");
         }
       }
-    case TEnum(e):
+    case TEnum(_):
         _createOrderImpl(function(a, b) {
       var v = Type.enumIndex(a) - Type.enumIndex(b);
       if(0 != v)

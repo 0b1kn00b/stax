@@ -67,11 +67,11 @@ EReg.prototype = {
 	,r: null
 	,__class__: EReg
 }
-var Hash = $hxClasses["Hash"] = function() {
+var Map = $hxClasses["Map"] = function() {
 	this.h = { };
 };
-Hash.__name__ = ["Hash"];
-Hash.prototype = {
+Map.__name__ = ["Map"];
+Map.prototype = {
 	toString: function() {
 		var s = new StringBuf();
 		s.b += Std.string("{");
@@ -117,7 +117,7 @@ Hash.prototype = {
 		this.h["$" + key] = value;
 	}
 	,h: null
-	,__class__: Hash
+	,__class__: Map
 }
 var HxOverrides = $hxClasses["HxOverrides"] = function() { }
 HxOverrides.__name__ = ["HxOverrides"];
@@ -184,11 +184,11 @@ HxOverrides.iter = function(a) {
 		return this.arr[this.cur++];
 	}};
 }
-var IntHash = $hxClasses["IntHash"] = function() {
+var IntMap = $hxClasses["IntMap"] = function() {
 	this.h = { };
 };
-IntHash.__name__ = ["IntHash"];
-IntHash.prototype = {
+IntMap.__name__ = ["IntMap"];
+IntMap.prototype = {
 	toString: function() {
 		var s = new StringBuf();
 		s.b += Std.string("{");
@@ -233,7 +233,7 @@ IntHash.prototype = {
 		this.h[key] = value;
 	}
 	,h: null
-	,__class__: IntHash
+	,__class__: IntMap
 }
 var IntIterator = $hxClasses["IntIterator"] = function(min,max) {
 	this.min = min;
@@ -617,27 +617,27 @@ SCore.unfold = function() {
 }
 SCore.unfold = function(initial,unfolder) {
 	return { iterator : function() {
-		var _next = stx.Option.None;
+		var _next = stx.Maybe.None;
 		var _progress = initial;
 		var precomputeNext = function() {
 			var $e = (unfolder(_progress));
 			switch( $e[1] ) {
 			case 0:
 				_progress = null;
-				_next = stx.Option.None;
+				_next = stx.Maybe.None;
 				break;
 			case 1:
 				var tuple = $e[2];
 				_progress = tuple._1;
-				_next = stx.Option.Some(tuple._2);
+				_next = stx.Maybe.Some(tuple._2);
 				break;
 			}
 		};
 		precomputeNext();
 		return { hasNext : function() {
-			return !stx.Options.isEmpty(_next);
+			return !stx.Maybes.isEmpty(_next);
 		}, next : function() {
-			var n = stx.Options.get(_next);
+			var n = stx.Maybes.get(_next);
 			precomputeNext();
 			return n;
 		}};
@@ -1112,7 +1112,7 @@ Xml.createElement = function(name) {
 	var r = new Xml();
 	r.nodeType = Xml.Element;
 	r._children = new Array();
-	r._attributes = new Hash();
+	r._attributes = new Map();
 	r.setNodeName(name);
 	return r;
 }
@@ -1744,13 +1744,13 @@ haxe.macro.ExprDef.EDisplayNew = function(t) { var $x = ["EDisplayNew",26,t]; $x
 haxe.macro.ExprDef.ETernary = function(econd,eif,eelse) { var $x = ["ETernary",27,econd,eif,eelse]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
 haxe.macro.ExprDef.ECheckType = function(e,t) { var $x = ["ECheckType",28,e,t]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
 haxe.macro.ExprDef.EType = function(e,field) { var $x = ["EType",29,e,field]; $x.__enum__ = haxe.macro.ExprDef; $x.toString = $estr; return $x; }
-haxe.macro.ComplexType = $hxClasses["haxe.macro.ComplexType"] = { __ename__ : ["haxe","macro","ComplexType"], __constructs__ : ["TPath","TFunction","TAnonymous","TParent","TExtend","TOptional"] }
+haxe.macro.ComplexType = $hxClasses["haxe.macro.ComplexType"] = { __ename__ : ["haxe","macro","ComplexType"], __constructs__ : ["TPath","TFunction","TAnonymous","TParent","TExtend","TMaybeal"] }
 haxe.macro.ComplexType.TPath = function(p) { var $x = ["TPath",0,p]; $x.__enum__ = haxe.macro.ComplexType; $x.toString = $estr; return $x; }
 haxe.macro.ComplexType.TFunction = function(args,ret) { var $x = ["TFunction",1,args,ret]; $x.__enum__ = haxe.macro.ComplexType; $x.toString = $estr; return $x; }
 haxe.macro.ComplexType.TAnonymous = function(fields) { var $x = ["TAnonymous",2,fields]; $x.__enum__ = haxe.macro.ComplexType; $x.toString = $estr; return $x; }
 haxe.macro.ComplexType.TParent = function(t) { var $x = ["TParent",3,t]; $x.__enum__ = haxe.macro.ComplexType; $x.toString = $estr; return $x; }
 haxe.macro.ComplexType.TExtend = function(p,fields) { var $x = ["TExtend",4,p,fields]; $x.__enum__ = haxe.macro.ComplexType; $x.toString = $estr; return $x; }
-haxe.macro.ComplexType.TOptional = function(t) { var $x = ["TOptional",5,t]; $x.__enum__ = haxe.macro.ComplexType; $x.toString = $estr; return $x; }
+haxe.macro.ComplexType.TMaybeal = function(t) { var $x = ["TMaybeal",5,t]; $x.__enum__ = haxe.macro.ComplexType; $x.toString = $estr; return $x; }
 haxe.macro.TypeParam = $hxClasses["haxe.macro.TypeParam"] = { __ename__ : ["haxe","macro","TypeParam"], __constructs__ : ["TPType","TPExpr"] }
 haxe.macro.TypeParam.TPType = function(t) { var $x = ["TPType",0,t]; $x.__enum__ = haxe.macro.TypeParam; $x.toString = $estr; return $x; }
 haxe.macro.TypeParam.TPExpr = function(e) { var $x = ["TPExpr",1,e]; $x.__enum__ = haxe.macro.TypeParam; $x.toString = $estr; return $x; }
@@ -2160,7 +2160,7 @@ haxe.rtti.XmlParser.prototype = {
 			if(c.getName() == "haxe_doc") doc = c.getInnerData(); else if(c.getName() == "meta") {
 			} else t = this.xtype(c);
 		}
-		var types = new Hash();
+		var types = new Map();
 		if(this.curplatform != null) types.set(this.curplatform,t);
 		return { path : this.mkPath(x.att.resolve("path")), module : x.has.resolve("module")?this.mkPath(x.att.resolve("module")):null, doc : doc, isPrivate : x.x.exists("private"), params : this.mkTypeParams(x.att.resolve("params")), type : t, types : types, platforms : this.defplat()};
 	}
@@ -3271,12 +3271,12 @@ stx.Arrays.isEmpty = function(arr) {
 	return arr.length == 0;
 }
 stx.Arrays.find = function(arr,f) {
-	return ArrayLambda.foldl(arr,stx.Option.None,function(a,b) {
+	return ArrayLambda.foldl(arr,stx.Maybe.None,function(a,b) {
 		return (function($this) {
 			var $r;
 			switch( (a)[1] ) {
 			case 0:
-				$r = stx.Options.filter(stx.Options.toOption(b),f);
+				$r = stx.Maybes.filter(stx.Maybes.toMaybe(b),f);
 				break;
 			default:
 				$r = a;
@@ -3287,7 +3287,7 @@ stx.Arrays.find = function(arr,f) {
 }
 stx.Arrays.findIndexOf = function(arr,obj) {
 	var index = stx.Arrays.indexOf(arr,obj);
-	return index == -1?stx.Option.None:stx.Option.Some(index);
+	return index == -1?stx.Maybe.None:stx.Maybe.Some(index);
 }
 stx.Arrays.forAll = function(arr,f) {
 	return ArrayLambda.foldl(arr,true,function(a,b) {
@@ -3446,14 +3446,14 @@ stx.Arrays.prepend = function(a,t) {
 stx.Arrays.first = function(a) {
 	return a[0];
 }
-stx.Arrays.firstOption = function(a) {
-	return a.length == 0?stx.Option.None:stx.Option.Some(a[0]);
+stx.Arrays.firstMaybe = function(a) {
+	return a.length == 0?stx.Maybe.None:stx.Maybe.Some(a[0]);
 }
 stx.Arrays.last = function(a) {
 	return a[a.length - 1];
 }
-stx.Arrays.lastOption = function(a) {
-	return a.length == 0?stx.Option.None:stx.Option.Some(a[a.length - 1]);
+stx.Arrays.lastMaybe = function(a) {
+	return a.length == 0?stx.Maybe.None:stx.Maybe.Some(a[a.length - 1]);
 }
 stx.Arrays.contains = function(a,t) {
 	var _g = 0;
@@ -3520,7 +3520,7 @@ stx.Arrays.sliceBy = function(srcArr,sizeSrc) {
 		return $r;
 	}(this));
 }
-stx.Arrays.fromHash = function(hash) {
+stx.Arrays.fromMap = function(hash) {
 	return IterableLambda.toArray(IterableLambda.map(IterableLambda.toIterable(hash.keys()),function(x) {
 		return stx.Entuple.entuple(x,hash.get(x));
 	}));
@@ -3539,10 +3539,10 @@ stx.Bools.toInt = function(v) {
 	return v?1:0;
 }
 stx.Bools.ifTrue = function(v,f) {
-	return v?stx.Option.Some(f()):stx.Option.None;
+	return v?stx.Maybe.Some(f()):stx.Maybe.None;
 }
 stx.Bools.ifFalse = function(v,f) {
-	return !v?stx.Option.Some(f()):stx.Option.None;
+	return !v?stx.Maybe.Some(f()):stx.Maybe.None;
 }
 stx.Bools.ifElse = function(v,f1,f2) {
 	return v?f1():f2();
@@ -3641,11 +3641,11 @@ stx.Eithers.toTupleO = function(e) {
 		switch( $e[1] ) {
 		case 0:
 			var v = $e[2];
-			$r = new stx.Tuple2(stx.Option.Some(v),stx.Option.None);
+			$r = new stx.Tuple2(stx.Maybe.Some(v),stx.Maybe.None);
 			break;
 		case 1:
 			var v = $e[2];
-			$r = new stx.Tuple2(stx.Option.None,stx.Option.Some(v));
+			$r = new stx.Tuple2(stx.Maybe.None,stx.Maybe.Some(v));
 			break;
 		default:
 			$r = (function($this) {
@@ -3687,10 +3687,10 @@ stx.Eithers.left = function(e) {
 		switch( $e[1] ) {
 		case 0:
 			var v = $e[2];
-			$r = stx.Option.Some(v);
+			$r = stx.Maybe.Some(v);
 			break;
 		default:
-			$r = stx.Option.None;
+			$r = stx.Maybe.None;
 		}
 		return $r;
 	}(this));
@@ -3730,10 +3730,10 @@ stx.Eithers.right = function(e) {
 		switch( $e[1] ) {
 		case 1:
 			var v = $e[2];
-			$r = stx.Option.Some(v);
+			$r = stx.Maybe.Some(v);
 			break;
 		default:
-			$r = stx.Option.None;
+			$r = stx.Maybe.None;
 		}
 		return $r;
 	}(this));
@@ -4452,19 +4452,19 @@ stx.Future.prototype = {
 		return this;
 	}
 	,toArray: function() {
-		return stx.Options.toArray(this.value());
+		return stx.Maybes.toArray(this.value());
 	}
-	,toOption: function() {
+	,toMaybe: function() {
 		return this.value();
 	}
 	,value: function() {
-		return this._isSet?stx.Option.Some(this._result):stx.Option.None;
+		return this._isSet?stx.Maybe.Some(this._result):stx.Maybe.None;
 	}
 	,zip: function(f2) {
 		var zipped = new stx.Future();
 		var f1 = this;
 		var deliverZip = function() {
-			if(f1.isDelivered() && f2.isDelivered()) zipped.deliver(new stx.Tuple2(stx.Options.get(f1.value()),stx.Options.get(f2.value())),{ fileName : "Future.hx", lineNumber : 228, className : "stx.Future", methodName : "zip"});
+			if(f1.isDelivered() && f2.isDelivered()) zipped.deliver(new stx.Tuple2(stx.Maybes.get(f1.value()),stx.Maybes.get(f2.value())),{ fileName : "Future.hx", lineNumber : 228, className : "stx.Future", methodName : "zip"});
 		};
 		f1.deliverTo(function(v) {
 			deliverZip();
@@ -4590,15 +4590,15 @@ stx.Future.prototype = {
 	,_listeners: null
 	,__class__: stx.Future
 }
-stx.Hashes = $hxClasses["stx.Hashes"] = function() { }
-stx.Hashes.__name__ = ["stx","Hashes"];
-stx.Hashes.fromHash = function(h) {
+stx.Mapes = $hxClasses["stx.Mapes"] = function() { }
+stx.Mapes.__name__ = ["stx","Mapes"];
+stx.Mapes.fromMap = function(h) {
 	return IterableLambda.map(IterableLambda.toIterable(h.keys()),function(x) {
 		var val = h.get(x);
 		return stx.Entuple.entuple(x,val);
 	});
 }
-stx.Hashes.hasAll = function(h,entries) {
+stx.Mapes.hasAll = function(h,entries) {
 	var ok = true;
 	var _g = 0;
 	while(_g < entries.length) {
@@ -4611,7 +4611,7 @@ stx.Hashes.hasAll = function(h,entries) {
 	}
 	return ok;
 }
-stx.Hashes.hasAny = function(h,entries) {
+stx.Mapes.hasAny = function(h,entries) {
 	var _g = 0;
 	while(_g < entries.length) {
 		var val = entries[_g];
@@ -4620,16 +4620,16 @@ stx.Hashes.hasAny = function(h,entries) {
 	}
 	return false;
 }
-stx.HashType = $hxClasses["stx.HashType"] = function() { }
-stx.HashType.__name__ = ["stx","HashType"];
-stx.HashType.exists = function(h,str) {
+stx.MapType = $hxClasses["stx.MapType"] = function() { }
+stx.MapType.__name__ = ["stx","MapType"];
+stx.MapType.exists = function(h,str) {
 	return h.exists(str);
 }
 stx.Iterables = $hxClasses["stx.Iterables"] = function() { }
 stx.Iterables.__name__ = ["stx","Iterables"];
 stx.Iterables.foldl1 = function(iter,mapper) {
 	var folded = stx.Iterables.head(iter);
-	var $e = (stx.Iterables.tailOption(iter));
+	var $e = (stx.Iterables.tailMaybe(iter));
 	switch( $e[1] ) {
 	case 1:
 		var v = $e[2];
@@ -4649,19 +4649,19 @@ stx.Iterables.concat = function(iter1,iter2) {
 stx.Iterables.foldr = function(iterable,z,f) {
 	return stx.Arrays.foldr(IterableLambda.toArray(iterable),z,f);
 }
-stx.Iterables.headOption = function(iter) {
+stx.Iterables.headMaybe = function(iter) {
 	var iterator = $iterator(iter)();
 	return iterator.hasNext()?(function($this) {
 		var $r;
 		var o = iterator.next();
-		$r = stx.Option.Some(o);
+		$r = stx.Maybe.Some(o);
 		return $r;
-	}(this)):stx.Option.None;
+	}(this)):stx.Maybe.None;
 }
 stx.Iterables.head = function(iter) {
 	return (function($this) {
 		var $r;
-		var $e = (stx.Iterables.headOption(iter));
+		var $e = (stx.Iterables.headMaybe(iter));
 		switch( $e[1] ) {
 		case 0:
 			$r = SCore.error("Iterable has no head",{ fileName : "Iterables.hx", lineNumber : 57, className : "stx.Iterables", methodName : "head"});
@@ -4674,14 +4674,14 @@ stx.Iterables.head = function(iter) {
 		return $r;
 	}(this));
 }
-stx.Iterables.tailOption = function(iter) {
+stx.Iterables.tailMaybe = function(iter) {
 	var iterator = $iterator(iter)();
-	return !iterator.hasNext()?stx.Option.None:stx.Option.Some(stx.Iterables.drop(iter,1));
+	return !iterator.hasNext()?stx.Maybe.None:stx.Maybe.Some(stx.Iterables.drop(iter,1));
 }
 stx.Iterables.tail = function(iter) {
 	return (function($this) {
 		var $r;
-		var $e = (stx.Iterables.tailOption(iter));
+		var $e = (stx.Iterables.tailMaybe(iter));
 		switch( $e[1] ) {
 		case 0:
 			$r = SCore.error("Iterable has no tail",{ fileName : "Iterables.hx", lineNumber : 74, className : "stx.Iterables", methodName : "tail"});
@@ -4710,7 +4710,7 @@ stx.Iterables.dropWhile = function(a,p) {
 	while( $it0.hasNext() ) {
 		var e = $it0.next();
 		if(p(e)) {
-			var $e = (stx.Iterables.tailOption(r));
+			var $e = (stx.Iterables.tailMaybe(r));
 			switch( $e[1] ) {
 			case 1:
 				var v = $e[2];
@@ -4975,7 +4975,7 @@ stx.Iterables.unwind = function(root,children,depth) {
 	return stx.Iterables.yield(function() {
 		var val = stack[index];
 		index++;
-		return stx.Options.toOption(val);
+		return stx.Maybes.toMaybe(val);
 	});
 }
 stx.Iterables.yield = function(fn) {
@@ -5032,7 +5032,7 @@ stx.LazyIterator.prototype = {
 		return o;
 	}
 	,next: function() {
-		var o = stx.Options.get(this.fn(this.index));
+		var o = stx.Maybes.get(this.fn(this.index));
 		this.index++;
 		return o;
 	}
@@ -5177,9 +5177,9 @@ stx.DefaultLogger.prototype = {
 			return stx.Enums.constructorOf(x) == "Include";
 		}),function(includes,excludes) {
 			return stx.Bools.ifElse(includes.length > 0,function() {
-				return white(includes)?stx.Options.get(stx.Options.orElseC(stx.Bools.ifTrue(excludes.length > 0,stx.Functions1.lazy(black,excludes)),stx.Option.Some(_g.permissive))):false;
+				return white(includes)?stx.Maybes.get(stx.Maybes.orElseC(stx.Bools.ifTrue(excludes.length > 0,stx.Functions1.lazy(black,excludes)),stx.Maybe.Some(_g.permissive))):false;
 			},function() {
-				return stx.Options.get(stx.Options.orElseC(stx.Bools.ifTrue(excludes.length > 0,stx.Functions1.lazy(black,excludes)),stx.Option.Some(_g.permissive)));
+				return stx.Maybes.get(stx.Maybes.orElseC(stx.Bools.ifTrue(excludes.length > 0,stx.Functions1.lazy(black,excludes)),stx.Maybe.Some(_g.permissive)));
 			});
 		});
 		return o;
@@ -5693,13 +5693,13 @@ stx.Methods.applyOr = function(o,x,f0,pos) {
 		switch( $e[1] ) {
 		case 1:
 			var f = $e[2];
-			$r = stx.Options.toOption(f.execute(x,pos));
+			$r = stx.Maybes.toMaybe(f.execute(x,pos));
 			break;
 		case 0:
 			$r = (function($this) {
 				var $r;
 				f0();
-				$r = stx.Option.None;
+				$r = stx.Maybe.None;
 				return $r;
 			}($this));
 			break;
@@ -5825,10 +5825,10 @@ stx.Objects.replaceAllAny = function(d1,d2,def) {
 	});
 }
 stx.Objects.get = function(d,k) {
-	return Reflect.hasField(d,k)?stx.Option.Some(Reflect.field(d,k)):stx.Option.None;
+	return Reflect.hasField(d,k)?stx.Maybe.Some(Reflect.field(d,k)):stx.Maybe.None;
 }
 stx.Objects.getAny = function(d,k) {
-	return Reflect.hasField(d,k)?stx.Option.Some(Reflect.field(d,k)):stx.Option.None;
+	return Reflect.hasField(d,k)?stx.Maybe.Some(Reflect.field(d,k)):stx.Maybe.None;
 }
 stx.Objects.extractFieldValues = function(obj,field) {
 	return ArrayLambda.foldl(Reflect.fields(obj),[],function(a,fieldName) {
@@ -5866,12 +5866,12 @@ stx.Objects.toObject = function(a) {
 		return init;
 	});
 }
-stx.Options = $hxClasses["stx.Options"] = function() { }
-stx.Options.__name__ = ["stx","Options"];
-stx.Options.toOption = function(t) {
-	return t == null?stx.Option.None:stx.Option.Some(t);
+stx.Maybes = $hxClasses["stx.Maybes"] = function() { }
+stx.Maybes.__name__ = ["stx","Maybes"];
+stx.Maybes.toMaybe = function(t) {
+	return t == null?stx.Maybe.None:stx.Maybe.Some(t);
 }
-stx.Options.toArray = function(o) {
+stx.Maybes.toArray = function(o) {
 	return (function($this) {
 		var $r;
 		var $e = (o);
@@ -5887,26 +5887,26 @@ stx.Options.toArray = function(o) {
 		return $r;
 	}(this));
 }
-stx.Options.map = function(o,f) {
+stx.Maybes.map = function(o,f) {
 	return (function($this) {
 		var $r;
 		var $e = (o);
 		switch( $e[1] ) {
 		case 0:
-			$r = stx.Option.None;
+			$r = stx.Maybe.None;
 			break;
 		case 1:
 			var v = $e[2];
-			$r = stx.Option.Some(f(v));
+			$r = stx.Maybe.Some(f(v));
 			break;
 		}
 		return $r;
 	}(this));
 }
-stx.Options.then = function(o1,o2) {
+stx.Maybes.then = function(o1,o2) {
 	return o2;
 }
-stx.Options.foreach = function(o,f) {
+stx.Maybes.foreach = function(o,f) {
 	return (function($this) {
 		var $r;
 		var $e = (o);
@@ -5927,32 +5927,32 @@ stx.Options.foreach = function(o,f) {
 		return $r;
 	}(this));
 }
-stx.Options.filter = function(o,f) {
+stx.Maybes.filter = function(o,f) {
 	return (function($this) {
 		var $r;
 		var $e = (o);
 		switch( $e[1] ) {
 		case 0:
-			$r = stx.Option.None;
+			$r = stx.Maybe.None;
 			break;
 		case 1:
 			var v = $e[2];
-			$r = f(v)?o:stx.Option.None;
+			$r = f(v)?o:stx.Maybe.None;
 			break;
 		}
 		return $r;
 	}(this));
 }
-stx.Options.flatMap = function(o,f) {
-	return stx.Options.flatten(stx.Options.map(o,f));
+stx.Maybes.flatMap = function(o,f) {
+	return stx.Maybes.flatten(stx.Maybes.map(o,f));
 }
-stx.Options.flatten = function(o1) {
+stx.Maybes.flatten = function(o1) {
 	return (function($this) {
 		var $r;
 		var $e = (o1);
 		switch( $e[1] ) {
 		case 0:
-			$r = stx.Option.None;
+			$r = stx.Maybe.None;
 			break;
 		case 1:
 			var o2 = $e[2];
@@ -5962,17 +5962,17 @@ stx.Options.flatten = function(o1) {
 		return $r;
 	}(this));
 }
-stx.Options.zip = function(o1,o2) {
+stx.Maybes.zip = function(o1,o2) {
 	return (function($this) {
 		var $r;
 		var $e = (o1);
 		switch( $e[1] ) {
 		case 0:
-			$r = stx.Option.None;
+			$r = stx.Maybe.None;
 			break;
 		case 1:
 			var v1 = $e[2];
-			$r = stx.Options.map(o2,(function(f,_1) {
+			$r = stx.Maybes.map(o2,(function(f,_1) {
 				return function(_2) {
 					return f(_1,_2);
 				};
@@ -5982,13 +5982,13 @@ stx.Options.zip = function(o1,o2) {
 		return $r;
 	}(this));
 }
-stx.Options.zipWith = function(o1,o2,f) {
+stx.Maybes.zipWith = function(o1,o2,f) {
 	return (function($this) {
 		var $r;
 		var $e = (o1);
 		switch( $e[1] ) {
 		case 0:
-			$r = stx.Option.None;
+			$r = stx.Maybe.None;
 			break;
 		case 1:
 			var v1 = $e[2];
@@ -5997,11 +5997,11 @@ stx.Options.zipWith = function(o1,o2,f) {
 				var $e = (o2);
 				switch( $e[1] ) {
 				case 0:
-					$r = stx.Option.None;
+					$r = stx.Maybe.None;
 					break;
 				case 1:
 					var v2 = $e[2];
-					$r = stx.Option.Some(f(v1,v2));
+					$r = stx.Maybe.Some(f(v1,v2));
 					break;
 				}
 				return $r;
@@ -6011,7 +6011,7 @@ stx.Options.zipWith = function(o1,o2,f) {
 		return $r;
 	}(this));
 }
-stx.Options.get = function(o) {
+stx.Maybes.get = function(o) {
 	return (function($this) {
 		var $r;
 		var $e = (o);
@@ -6019,7 +6019,7 @@ stx.Options.get = function(o) {
 		case 0:
 			$r = (function($this) {
 				var $r;
-				SCore.error("Error: Option is empty",{ fileName : "Options.hx", lineNumber : 104, className : "stx.Options", methodName : "get"});
+				SCore.error("Error: Maybe is empty",{ fileName : "Maybes.hx", lineNumber : 104, className : "stx.Maybes", methodName : "get"});
 				$r = null;
 				return $r;
 			}($this));
@@ -6032,7 +6032,7 @@ stx.Options.get = function(o) {
 		return $r;
 	}(this));
 }
-stx.Options.orElse = function(o1,thunk) {
+stx.Maybes.orElse = function(o1,thunk) {
 	return (function($this) {
 		var $r;
 		var $e = (o1);
@@ -6048,10 +6048,10 @@ stx.Options.orElse = function(o1,thunk) {
 		return $r;
 	}(this));
 }
-stx.Options.orElseC = function(o1,o2) {
-	return stx.Options.orElse(o1,stx.Dynamics.toThunk(o2));
+stx.Maybes.orElseC = function(o1,o2) {
+	return stx.Maybes.orElse(o1,stx.Dynamics.toThunk(o2));
 }
-stx.Options.orEither = function(o1,thunk) {
+stx.Maybes.orEither = function(o1,thunk) {
 	return (function($this) {
 		var $r;
 		var $e = (o1);
@@ -6067,10 +6067,10 @@ stx.Options.orEither = function(o1,thunk) {
 		return $r;
 	}(this));
 }
-stx.Options.orEitherC = function(o1,c) {
-	return stx.Options.orEither(o1,stx.Dynamics.toThunk(c));
+stx.Maybes.orEitherC = function(o1,c) {
+	return stx.Maybes.orEither(o1,stx.Dynamics.toThunk(c));
 }
-stx.Options.getOrElse = function(o,thunk) {
+stx.Maybes.getOrElse = function(o,thunk) {
 	return (function($this) {
 		var $r;
 		var $e = (o);
@@ -6086,10 +6086,10 @@ stx.Options.getOrElse = function(o,thunk) {
 		return $r;
 	}(this));
 }
-stx.Options.getOrElseC = function(o,c) {
-	return stx.Options.getOrElse(o,stx.Dynamics.toThunk(c));
+stx.Maybes.getOrElseC = function(o,c) {
+	return stx.Maybes.getOrElse(o,stx.Dynamics.toThunk(c));
 }
-stx.Options.isEmpty = function(o) {
+stx.Maybes.isEmpty = function(o) {
 	return (function($this) {
 		var $r;
 		switch( (o)[1] ) {
@@ -6103,7 +6103,7 @@ stx.Options.isEmpty = function(o) {
 		return $r;
 	}(this));
 }
-stx.Options.isDefined = function(o) {
+stx.Maybes.isDefined = function(o) {
 	return (function($this) {
 		var $r;
 		switch( (o)[1] ) {
@@ -6283,11 +6283,11 @@ stx.Unit = $hxClasses["stx.Unit"] = { __ename__ : ["stx","Unit"], __constructs__
 stx.Unit.Unit = ["Unit",0];
 stx.Unit.Unit.toString = $estr;
 stx.Unit.Unit.__enum__ = stx.Unit;
-stx.Option = $hxClasses["stx.Option"] = { __ename__ : ["stx","Option"], __constructs__ : ["None","Some"] }
-stx.Option.None = ["None",0];
-stx.Option.None.toString = $estr;
-stx.Option.None.__enum__ = stx.Option;
-stx.Option.Some = function(v) { var $x = ["Some",1,v]; $x.__enum__ = stx.Option; $x.toString = $estr; return $x; }
+stx.Maybe = $hxClasses["stx.Maybe"] = { __ename__ : ["stx","Maybe"], __constructs__ : ["None","Some"] }
+stx.Maybe.None = ["None",0];
+stx.Maybe.None.toString = $estr;
+stx.Maybe.None.__enum__ = stx.Maybe;
+stx.Maybe.Some = function(v) { var $x = ["Some",1,v]; $x.__enum__ = stx.Maybe; $x.toString = $estr; return $x; }
 stx.TraversalOrder = $hxClasses["stx.TraversalOrder"] = { __ename__ : ["stx","TraversalOrder"], __constructs__ : ["PreOrder","InOrder","PostOrder","LevelOrder"] }
 stx.TraversalOrder.PreOrder = ["PreOrder",0];
 stx.TraversalOrder.PreOrder.toString = $estr;
@@ -6309,7 +6309,7 @@ stx.FieldOrder.__name__ = ["stx","FieldOrder"];
 stx.Promise = $hxClasses["stx.Promise"] = function(cancel) {
 	this.done = false;
 	this.fut = new stx.Future();
-	this.err = stx.Option.None;
+	this.err = stx.Maybe.None;
 	if(cancel != null) this.onError(cancel);
 };
 stx.Promise.__name__ = ["stx","Promise"];
@@ -6345,10 +6345,10 @@ stx.Promise.waitFor = function(toJoin) {
 			if(!failed) {
 				if(stx.Eithers.isLeft(el)) {
 					failed = true;
-					oc.resolve(stx.Either.Left(stx.Options.get(stx.Eithers.left(el))),{ fileName : "Promise.hx", lineNumber : 295, className : "stx.Promise", methodName : "waitFor"});
+					oc.resolve(stx.Either.Left(stx.Maybes.get(stx.Eithers.left(el))),{ fileName : "Promise.hx", lineNumber : 295, className : "stx.Promise", methodName : "waitFor"});
 					return;
 				}
-				results.push(stx.Options.get(stx.Eithers.right(el)));
+				results.push(stx.Maybes.get(stx.Eithers.right(el)));
 			}
 		});
 		if(!failed) oc.resolve(stx.Either.Right(results),{ fileName : "Promise.hx", lineNumber : 302, className : "stx.Promise", methodName : "waitFor"});
@@ -6472,7 +6472,7 @@ stx.Promise.prototype = {
 			switch( $e[1] ) {
 			case 1:
 				var v1 = $e[2];
-				this.err = stx.Option.Some(v1);
+				this.err = stx.Maybe.Some(v1);
 				if(this.userCancel != null) stx.reactive.Viaz.run(this.userCancel,v1);
 				break;
 			default:
@@ -6490,7 +6490,7 @@ stx.Promise.prototype = {
 	}
 	,onCancel: function(e) {
 		if(this.isDone()) return;
-		this.err = stx.Option.Some(e);
+		this.err = stx.Maybe.Some(e);
 		if(this.userCancel != null) stx.reactive.Viaz.run(this.userCancel,e);
 		this.done = true;
 	}
@@ -6615,17 +6615,17 @@ stx.Strings.__name__ = ["stx","Strings"];
 stx.Strings.toBool = function(v,d) {
 	if(v == null) return d;
 	var vLower = v.toLowerCase();
-	return stx.Options.getOrElseC(vLower == "false" || v == "0"?stx.Option.Some(false):vLower == "true" || v == "1"?stx.Option.Some(true):stx.Option.None,d);
+	return stx.Maybes.getOrElseC(vLower == "false" || v == "0"?stx.Maybe.Some(false):vLower == "true" || v == "1"?stx.Maybe.Some(true):stx.Maybe.None,d);
 }
 stx.Strings["int"] = function(v,d) {
 	if(v == null) return d;
-	return stx.Options.getOrElseC(stx.Options.filter(stx.Options.toOption(Std.parseInt(v)),function(i) {
+	return stx.Maybes.getOrElseC(stx.Maybes.filter(stx.Maybes.toMaybe(Std.parseInt(v)),function(i) {
 		return !Math.isNaN(i);
 	}),d);
 }
 stx.Strings.toFloat = function(v,d) {
 	if(v == null) return d;
-	return stx.Options.getOrElseC(stx.Options.filter(stx.Options.toOption(Std.parseFloat(v)),function(i) {
+	return stx.Maybes.getOrElseC(stx.Maybes.filter(stx.Maybes.toMaybe(Std.parseFloat(v)),function(i) {
 		return !Math.isNaN(i);
 	}),d);
 }
@@ -7542,11 +7542,11 @@ stx.ds.List.prototype = {
 	getTail: function() {
 		return SCore.error("List has no head",{ fileName : "List.hx", lineNumber : 432, className : "stx.ds.List", methodName : "getTail"});
 	}
-	,getLastOption: function() {
-		return stx.Option.None;
+	,getLastMaybe: function() {
+		return stx.Maybe.None;
 	}
-	,getHeadOption: function() {
-		return stx.Option.None;
+	,getHeadMaybe: function() {
+		return stx.Maybe.None;
 	}
 	,getLast: function() {
 		return SCore.error("List has no last element",{ fileName : "List.hx", lineNumber : 420, className : "stx.ds.List", methodName : "getLast"});
@@ -7561,7 +7561,7 @@ stx.ds.List.prototype = {
 		return "List " + stx.ds.plus.ArrayShow.toStringWith(IterableLambda.toArray(this),this.getShow());
 	}
 	,hashCode: function() {
-		var ha = this.getHash();
+		var ha = this.getMap();
 		return this.foldl(12289,function(a,b) {
 			return a * (ha(b) + 12289);
 		});
@@ -7575,8 +7575,8 @@ stx.ds.List.prototype = {
 	,getShow: function() {
 		return null == this._show?this.size() == 0?stx.ds.plus.Show.getShowFor(null):this._show = stx.ds.plus.Show.getShowFor(this.getHead()):this._show;
 	}
-	,getHash: function() {
-		return null == this._hash?this.size() == 0?stx.ds.plus.Hasher.getHashFor(null):this._hash = stx.ds.plus.Hasher.getHashFor(this.getHead()):this._hash;
+	,getMap: function() {
+		return null == this._hash?this.size() == 0?stx.ds.plus.Hasher.getMapFor(null):this._hash = stx.ds.plus.Hasher.getMapFor(this.getHead()):this._hash;
 	}
 	,getEqual: function() {
 		return null == this._equal?this.size() == 0?stx.ds.plus.Equal.getEqualFor(null):this._equal = stx.ds.plus.Equal.getEqualFor(this.getHead()):this._equal;
@@ -7591,7 +7591,7 @@ stx.ds.List.prototype = {
 	,withShowFunction: function(show) {
 		return stx.ds.List.create({ order : this._order, equal : this._equal, show : show, hash : this._hash}).addAll(this);
 	}
-	,withHashFunction: function(hash) {
+	,withMapFunction: function(hash) {
 		return stx.ds.List.create({ order : this._order, equal : this._equal, show : this._show, hash : hash}).addAll(this);
 	}
 	,withEqualFunction: function(equal) {
@@ -7805,15 +7805,15 @@ stx.ds.List.prototype = {
 	,hash: null
 	,order: null
 	,equal: null
-	,lastOption: null
-	,firstOption: null
-	,headOption: null
+	,lastMaybe: null
+	,firstMaybe: null
+	,headMaybe: null
 	,last: null
 	,first: null
 	,tail: null
 	,head: null
 	,__class__: stx.ds.List
-	,__properties__: {get_head:"getHead",get_tail:"getTail",get_first:"getHead",get_last:"getLast",get_headOption:"getHeadOption",get_firstOption:"getHeadOption",get_lastOption:"getLastOption",get_equal:"getEqual",get_order:"getOrder",get_hash:"getHash",get_show:"getShow"}
+	,__properties__: {get_head:"getHead",get_tail:"getTail",get_first:"getHead",get_last:"getLast",get_headMaybe:"getHeadMaybe",get_firstMaybe:"getHeadMaybe",get_lastMaybe:"getLastMaybe",get_equal:"getEqual",get_order:"getOrder",get_hash:"getMap",get_show:"getShow"}
 }
 if(!stx.ds._List) stx.ds._List = {}
 stx.ds._List.Cons = $hxClasses["stx.ds._List.Cons"] = function(tools,head,tail) {
@@ -7828,11 +7828,11 @@ stx.ds._List.Cons.prototype = $extend(stx.ds.List.prototype,{
 	size: function() {
 		return this._size;
 	}
-	,getLastOption: function() {
-		return stx.Option.Some(this.getLast());
+	,getLastMaybe: function() {
+		return stx.Maybe.Some(this.getLast());
 	}
-	,getHeadOption: function() {
-		return stx.Option.Some(this.getHead());
+	,getHeadMaybe: function() {
+		return stx.Maybe.Some(this.getHead());
 	}
 	,getTail: function() {
 		return this._tail;
@@ -7877,11 +7877,11 @@ stx.ds.Map = $hxClasses["stx.ds.Map"] = function(korder,kequal,khash,kshow,vorde
 	var self = this;
 	this._keyOrder = korder;
 	this._keyEqual = kequal;
-	this._keyHash = khash;
+	this._keyMap = khash;
 	this._keyShow = kshow;
 	this._valueOrder = vorder;
 	this._valueEqual = vequal;
-	this._valueHash = vhash;
+	this._valueMap = vhash;
 	this._valueShow = vshow;
 	this._size = size;
 	this._buckets = buckets;
@@ -7921,13 +7921,13 @@ stx.ds.Map.prototype = {
 			return $r;
 		}(this)):this._valueShow;
 	}
-	,getValueHash: function() {
-		return null == this._valueHash?(function($this) {
+	,getValueMap: function() {
+		return null == this._valueMap?(function($this) {
 			var $r;
 			var it = $this.iterator();
-			$r = !it.hasNext()?stx.ds.plus.Hasher.getHashFor(null):$this._valueHash = stx.ds.plus.Hasher.getHashFor(it.next()._2);
+			$r = !it.hasNext()?stx.ds.plus.Hasher.getMapFor(null):$this._valueMap = stx.ds.plus.Hasher.getMapFor(it.next()._2);
 			return $r;
-		}(this)):this._valueHash;
+		}(this)):this._valueMap;
 	}
 	,getValueEqual: function() {
 		return null == this._valueEqual?(function($this) {
@@ -7953,13 +7953,13 @@ stx.ds.Map.prototype = {
 			return $r;
 		}(this)):this._keyShow;
 	}
-	,getKeyHash: function() {
-		return null == this._keyHash?(function($this) {
+	,getKeyMap: function() {
+		return null == this._keyMap?(function($this) {
 			var $r;
 			var it = $this.iterator();
-			$r = !it.hasNext()?stx.ds.plus.Hasher.getHashFor(null):$this._keyHash = stx.ds.plus.Hasher.getHashFor(it.next()._1);
+			$r = !it.hasNext()?stx.ds.plus.Hasher.getMapFor(null):$this._keyMap = stx.ds.plus.Hasher.getMapFor(it.next()._1);
 			return $r;
-		}(this)):this._keyHash;
+		}(this)):this._keyMap;
 	}
 	,getKeyEqual: function() {
 		return null == this._keyEqual?(function($this) {
@@ -7978,11 +7978,11 @@ stx.ds.Map.prototype = {
 		}(this)):this._keyOrder;
 	}
 	,_valueShow: null
-	,_valueHash: null
+	,_valueMap: null
 	,_valueOrder: null
 	,_valueEqual: null
 	,_keyShow: null
-	,_keyHash: null
+	,_keyMap: null
 	,_keyOrder: null
 	,_keyEqual: null
 	,size: function() {
@@ -7992,7 +7992,7 @@ stx.ds.Map.prototype = {
 		return this._buckets.length == 0?[]:this._buckets[this.bucketFor(k)];
 	}
 	,bucketFor: function(k) {
-		return (this.getKeyHash())(k) % this._buckets.length;
+		return (this.getKeyMap())(k) % this._buckets.length;
 	}
 	,rebalance: function() {
 		var newSize = Math.round(this.size() / ((stx.ds.Map.MaxLoad + stx.ds.Map.MinLoad) / 2));
@@ -8025,7 +8025,7 @@ stx.ds.Map.prototype = {
 			var i = _g1++;
 			newTable.push(this._buckets[i]);
 		}
-		return new stx.ds.Map(this._keyOrder,this._keyEqual,this._keyHash,this._keyShow,this._valueOrder,this._valueEqual,this._valueHash,this._valueShow,newTable,this.size());
+		return new stx.ds.Map(this._keyOrder,this._keyEqual,this._keyMap,this._keyShow,this._valueOrder,this._valueEqual,this._valueMap,this._valueShow,newTable,this.size());
 	}
 	,removeInternal: function(k,v,ignoreValue) {
 		var bucket = this.bucketFor(k);
@@ -8056,50 +8056,50 @@ stx.ds.Map.prototype = {
 				while(bucket < buckets.length) if(element >= buckets[bucket].length) {
 					element = 0;
 					++bucket;
-				} else return stx.Option.Some(buckets[bucket][element++]);
-				return stx.Option.None;
+				} else return stx.Maybe.Some(buckets[bucket][element++]);
+				return stx.Maybe.None;
 			};
 			var nextValue = computeNextValue();
 			return { hasNext : function() {
-				return !stx.Options.isEmpty(nextValue);
+				return !stx.Maybes.isEmpty(nextValue);
 			}, next : function() {
 				var value = nextValue;
 				nextValue = computeNextValue();
-				return stx.Options.get(value);
+				return stx.Maybes.get(value);
 			}};
 		}};
 		return iterable;
 	}
 	,withValueShowFunction: function(show) {
-		return stx.ds.Map.create(this._keyOrder,this._keyEqual,this._keyHash,this._keyShow,this._valueOrder,this._valueEqual,this._valueHash,show).addAll(this);
+		return stx.ds.Map.create(this._keyOrder,this._keyEqual,this._keyMap,this._keyShow,this._valueOrder,this._valueEqual,this._valueMap,show).addAll(this);
 	}
-	,withValueHashFunction: function(hash) {
-		return stx.ds.Map.create(this._keyOrder,this._keyEqual,this._keyHash,this._keyShow,this._valueOrder,this._valueEqual,hash,this._valueShow).addAll(this);
+	,withValueMapFunction: function(hash) {
+		return stx.ds.Map.create(this._keyOrder,this._keyEqual,this._keyMap,this._keyShow,this._valueOrder,this._valueEqual,hash,this._valueShow).addAll(this);
 	}
 	,withValueEqualFunction: function(equal) {
-		return stx.ds.Map.create(this._keyOrder,this._keyEqual,this._keyHash,this._keyShow,this._valueOrder,equal,this._valueHash,this._valueShow).addAll(this);
+		return stx.ds.Map.create(this._keyOrder,this._keyEqual,this._keyMap,this._keyShow,this._valueOrder,equal,this._valueMap,this._valueShow).addAll(this);
 	}
 	,withValueOrderFunction: function(order) {
-		return stx.ds.Map.create(this._keyOrder,this._keyEqual,this._keyHash,this._keyShow,order,this._valueEqual,this._valueHash,this._valueShow).addAll(this);
+		return stx.ds.Map.create(this._keyOrder,this._keyEqual,this._keyMap,this._keyShow,order,this._valueEqual,this._valueMap,this._valueShow).addAll(this);
 	}
 	,withKeyShowFunction: function(show) {
-		return stx.ds.Map.create(this._keyOrder,this._keyEqual,this._keyHash,show,this._valueOrder,this._valueEqual,this._valueHash,this._valueShow).addAll(this);
+		return stx.ds.Map.create(this._keyOrder,this._keyEqual,this._keyMap,show,this._valueOrder,this._valueEqual,this._valueMap,this._valueShow).addAll(this);
 	}
-	,withKeyHashFunction: function(hash) {
-		return stx.ds.Map.create(this._keyOrder,this._keyEqual,hash,this._keyShow,this._valueOrder,this._valueEqual,this._valueHash,this._valueShow).addAll(this);
+	,withKeyMapFunction: function(hash) {
+		return stx.ds.Map.create(this._keyOrder,this._keyEqual,hash,this._keyShow,this._valueOrder,this._valueEqual,this._valueMap,this._valueShow).addAll(this);
 	}
 	,withKeyEqualFunction: function(equal) {
-		return stx.ds.Map.create(this._keyOrder,equal,this._keyHash,this._keyShow,this._valueOrder,this._valueEqual,this._valueHash,this._valueShow).addAll(this);
+		return stx.ds.Map.create(this._keyOrder,equal,this._keyMap,this._keyShow,this._valueOrder,this._valueEqual,this._valueMap,this._valueShow).addAll(this);
 	}
 	,withKeyOrderFunction: function(order) {
-		return stx.ds.Map.create(order,this._keyEqual,this._keyHash,this._keyShow,this._valueOrder,this._valueEqual,this._valueHash,this._valueShow).addAll(this);
+		return stx.ds.Map.create(order,this._keyEqual,this._keyMap,this._keyShow,this._valueOrder,this._valueEqual,this._valueMap,this._valueShow).addAll(this);
 	}
 	,load: function() {
 		return this._buckets.length == 0?stx.ds.Map.MaxLoad:Math.round(this.size() / this._buckets.length);
 	}
 	,hashCode: function() {
-		var kha = this.getKeyHash();
-		var vha = this.getValueHash();
+		var kha = this.getKeyMap();
+		var vha = this.getValueMap();
 		return this.foldl(786433,function(a,b) {
 			return a + (kha(b._1) * 49157 + 6151) * vha(b._2);
 		});
@@ -8119,8 +8119,8 @@ stx.ds.Map.prototype = {
 		var $it0 = keys1.iterator();
 		while( $it0.hasNext() ) {
 			var key = $it0.next();
-			var v1 = stx.Options.get(this.get(key));
-			var v2 = stx.Options.get(other.get(key));
+			var v1 = stx.Maybes.get(this.get(key));
+			var v2 = stx.Maybes.get(other.get(key));
 			if(!ve(v1,v2)) return false;
 		}
 		return true;
@@ -8151,7 +8151,7 @@ stx.ds.Map.prototype = {
 		}};
 	}
 	,keySet: function() {
-		return stx.ds.Set.create(this._keyOrder,this._keyEqual,this._keyHash,this._keyShow).addAll(this.keys());
+		return stx.ds.Set.create(this._keyOrder,this._keyEqual,this._keyMap,this._keyShow).addAll(this.keys());
 	}
 	,keys: function() {
 		var self = this;
@@ -8226,9 +8226,9 @@ stx.ds.Map.prototype = {
 		while(_g < _g1.length) {
 			var e = _g1[_g];
 			++_g;
-			if(ke(e._1,k)) return stx.Option.Some(e._2);
+			if(ke(e._1,k)) return stx.Maybe.Some(e._2);
 		}
-		return stx.Option.None;
+		return stx.Maybe.None;
 	}
 	,removeAllByKey: function(i) {
 		var map = this;
@@ -8328,15 +8328,15 @@ stx.ds.Map.prototype = {
 	,_size: null
 	,_buckets: null
 	,valueShow: null
-	,valueHash: null
+	,valueMap: null
 	,valueOrder: null
 	,valueEqual: null
 	,keyShow: null
-	,keyHash: null
+	,keyMap: null
 	,keyOrder: null
 	,keyEqual: null
 	,__class__: stx.ds.Map
-	,__properties__: {get_keyEqual:"getKeyEqual",get_keyOrder:"getKeyOrder",get_keyHash:"getKeyHash",get_keyShow:"getKeyShow",get_valueEqual:"getValueEqual",get_valueOrder:"getValueOrder",get_valueHash:"getValueHash",get_valueShow:"getValueShow"}
+	,__properties__: {get_keyEqual:"getKeyEqual",get_keyOrder:"getKeyOrder",get_keyMap:"getKeyMap",get_keyShow:"getKeyShow",get_valueEqual:"getValueEqual",get_valueOrder:"getValueOrder",get_valueMap:"getValueMap",get_valueShow:"getValueShow"}
 }
 stx.ds.IterableToMap = $hxClasses["stx.ds.IterableToMap"] = function() { }
 stx.ds.IterableToMap.__name__ = ["stx","ds","IterableToMap"];
@@ -8447,8 +8447,8 @@ stx.ds.Set.prototype = {
 	getShow: function() {
 		return this._map.getKeyShow();
 	}
-	,getHash: function() {
-		return this._map.getKeyHash();
+	,getMap: function() {
+		return this._map.getKeyMap();
 	}
 	,getEqual: function() {
 		return this._map.getKeyEqual();
@@ -8464,25 +8464,25 @@ stx.ds.Set.prototype = {
 	}
 	,withShowFunction: function(show) {
 		var m = this._map;
-		return stx.ds.Set.create(m._keyOrder,m._keyEqual,m._keyHash,show).addAll(this);
+		return stx.ds.Set.create(m._keyOrder,m._keyEqual,m._keyMap,show).addAll(this);
 	}
-	,withHashFunction: function(hash) {
+	,withMapFunction: function(hash) {
 		var m = this._map;
 		return stx.ds.Set.create(m._keyOrder,m._keyEqual,hash,m._keyShow).addAll(this);
 	}
 	,withEqualFunction: function(equal) {
 		var m = this._map;
-		return stx.ds.Set.create(m._keyOrder,equal,m._keyHash,m._keyShow).addAll(this);
+		return stx.ds.Set.create(m._keyOrder,equal,m._keyMap,m._keyShow).addAll(this);
 	}
 	,withOrderFunction: function(order) {
 		var m = this._map;
-		return stx.ds.Set.create(order,m._keyEqual,m._keyHash,m._keyShow).addAll(this);
+		return stx.ds.Set.create(order,m._keyEqual,m._keyMap,m._keyShow).addAll(this);
 	}
 	,toString: function() {
 		return "Set " + stx.ds.plus.ArrayShow.toStringWith(IterableLambda.toArray(this),this.getShow());
 	}
 	,hashCode: function() {
-		var ha = this.getHash();
+		var ha = this.getMap();
 		return this.foldl(393241,function(a,b) {
 			return a * (ha(b) + 6151);
 		});
@@ -8545,7 +8545,7 @@ stx.ds.Set.prototype = {
 	,order: null
 	,equal: null
 	,__class__: stx.ds.Set
-	,__properties__: {get_equal:"getEqual",get_order:"getOrder",get_hash:"getHash",get_show:"getShow"}
+	,__properties__: {get_equal:"getEqual",get_order:"getOrder",get_hash:"getMap",get_show:"getShow"}
 }
 stx.ds.Zipper = $hxClasses["stx.ds.Zipper"] = function(v,c,p) {
 	this.data = v;
@@ -8612,19 +8612,19 @@ stx.ds.ObjectZipper.spawn = function(z) {
 		};
 	})(z));
 }
-stx.ds.HashZipper = $hxClasses["stx.ds.HashZipper"] = function() { }
-stx.ds.HashZipper.__name__ = ["stx","ds","HashZipper"];
-stx.ds.HashZipper.key = function(z,field) {
+stx.ds.MapZipper = $hxClasses["stx.ds.MapZipper"] = function() { }
+stx.ds.MapZipper.__name__ = ["stx","ds","MapZipper"];
+stx.ds.MapZipper.key = function(z,field) {
 	var f = function(x) {
 		return new stx.Tuple2(field,x.get(field));
 	};
 	return z.map(f);
 }
-stx.ds.HashZipper.spawn = function(z) {
+stx.ds.MapZipper.spawn = function(z) {
 	var obj = z.get();
 	return ArrayLambda.map(IterableLambda.toArray(IterableLambda.toIterable(obj.keys())),(function(_e) {
 		return function(field) {
-			return stx.ds.HashZipper.key(_e,field);
+			return stx.ds.MapZipper.key(_e,field);
 		};
 	})(z));
 }
@@ -8701,7 +8701,7 @@ stx.ds.plus.Equal.getEqualForType = function(v) {
 				default:
 					$r = stx.ds.plus.Meta._hasMetaDataClass(c)?(function($this) {
 						var $r;
-						var fields = stx.ds.plus.Meta._fieldsWithMeta(c,"equalHash");
+						var fields = stx.ds.plus.Meta._fieldsWithMeta(c,"equalMap");
 						$r = stx.ds.plus.Equal._createEqualImpl(function(a,b) {
 							var values = ArrayLambda.map(fields,function(v1) {
 								return new stx.Tuple2(Reflect.field(a,v1),Reflect.field(b,v1));
@@ -8792,37 +8792,37 @@ stx.ds.plus.ProductEqual.equals = function(p,other) {
 }
 stx.ds.plus.Hasher = $hxClasses["stx.ds.plus.Hasher"] = function() { }
 stx.ds.plus.Hasher.__name__ = ["stx","ds","plus","Hasher"];
-stx.ds.plus.Hasher._createHashImpl = function(impl) {
+stx.ds.plus.Hasher._createMapImpl = function(impl) {
 	return function(v) {
 		if(null == v) return 0; else return impl(v);
 	};
 }
-stx.ds.plus.Hasher.getHashFor = function(t) {
-	return stx.ds.plus.Hasher.getHashForType(Type["typeof"](t));
+stx.ds.plus.Hasher.getMapFor = function(t) {
+	return stx.ds.plus.Hasher.getMapForType(Type["typeof"](t));
 }
-stx.ds.plus.Hasher.getHashForType = function(v) {
+stx.ds.plus.Hasher.getMapForType = function(v) {
 	return (function($this) {
 		var $r;
 		var $e = (v);
 		switch( $e[1] ) {
 		case 3:
-			$r = stx.ds.plus.Hasher._createHashImpl(stx.ds.plus.BoolHasher.hashCode);
+			$r = stx.ds.plus.Hasher._createMapImpl(stx.ds.plus.BoolHasher.hashCode);
 			break;
 		case 1:
-			$r = stx.ds.plus.Hasher._createHashImpl(stx.ds.plus.IntHasher.hashCode);
+			$r = stx.ds.plus.Hasher._createMapImpl(stx.ds.plus.IntHasher.hashCode);
 			break;
 		case 2:
-			$r = stx.ds.plus.Hasher._createHashImpl(stx.ds.plus.FloatHasher.hashCode);
+			$r = stx.ds.plus.Hasher._createMapImpl(stx.ds.plus.FloatHasher.hashCode);
 			break;
 		case 8:
-			$r = stx.ds.plus.Hasher._createHashImpl(function(v1) {
-				return SCore.error("can't retrieve hascode for TUnknown: " + Std.string(v1),{ fileName : "Hasher.hx", lineNumber : 36, className : "stx.ds.plus.Hasher", methodName : "getHashForType"});
+			$r = stx.ds.plus.Hasher._createMapImpl(function(v1) {
+				return SCore.error("can't retrieve hascode for TUnknown: " + Std.string(v1),{ fileName : "Hasher.hx", lineNumber : 36, className : "stx.ds.plus.Hasher", methodName : "getMapForType"});
 			});
 			break;
 		case 4:
-			$r = stx.ds.plus.Hasher._createHashImpl(function(v1) {
+			$r = stx.ds.plus.Hasher._createMapImpl(function(v1) {
 				var s = (stx.ds.plus.Show.getShowFor(v1))(v1);
-				return (stx.ds.plus.Hasher.getHashFor(s))(s);
+				return (stx.ds.plus.Hasher.getMapFor(s))(s);
 			});
 			break;
 		case 6:
@@ -8831,16 +8831,16 @@ stx.ds.plus.Hasher.getHashForType = function(v) {
 				var $r;
 				switch(Type.getClassName(c)) {
 				case "String":
-					$r = stx.ds.plus.Hasher._createHashImpl(stx.ds.plus.StringHasher.hashCode);
+					$r = stx.ds.plus.Hasher._createMapImpl(stx.ds.plus.StringHasher.hashCode);
 					break;
 				case "Date":
-					$r = stx.ds.plus.Hasher._createHashImpl(stx.ds.plus.DateHasher.hashCode);
+					$r = stx.ds.plus.Hasher._createMapImpl(stx.ds.plus.DateHasher.hashCode);
 					break;
 				case "Array":
-					$r = stx.ds.plus.Hasher._createHashImpl(stx.ds.plus.ArrayHasher.hashCode);
+					$r = stx.ds.plus.Hasher._createMapImpl(stx.ds.plus.ArrayHasher.hashCode);
 					break;
 				case "stx.Tuple2":case "stx.Tuple3":case "stx.Tuple4":case "stx.Tuple5":
-					$r = stx.ds.plus.Hasher._createHashImpl(stx.ds.plus.ProductHasher.hashCode);
+					$r = stx.ds.plus.Hasher._createMapImpl(stx.ds.plus.ProductHasher.hashCode);
 					break;
 				default:
 					$r = (function($this) {
@@ -8848,8 +8848,8 @@ stx.ds.plus.Hasher.getHashForType = function(v) {
 						var fields = Type.getInstanceFields(c);
 						$r = stx.ds.plus.Meta._hasMetaDataClass(c)?(function($this) {
 							var $r;
-							var fields1 = stx.ds.plus.Meta._fieldsWithMeta(c,"equalHash");
-							$r = stx.ds.plus.Hasher._createHashImpl(function(v1) {
+							var fields1 = stx.ds.plus.Meta._fieldsWithMeta(c,"equalMap");
+							$r = stx.ds.plus.Hasher._createMapImpl(function(v1) {
 								var className = Type.getClassName(c);
 								var values = ArrayLambda.filter(ArrayLambda.map(fields1,function(f) {
 									return Reflect.field(v1,f);
@@ -8857,13 +8857,13 @@ stx.ds.plus.Hasher.getHashForType = function(v) {
 									return !Reflect.isFunction(v2);
 								});
 								return ArrayLambda.foldl(values,9901 * stx.ds.plus.StringHasher.hashCode(className),function(v2,e) {
-									return v2 + 333667 * ((stx.ds.plus.Hasher.getHashFor(e))(e) + 197192);
+									return v2 + 333667 * ((stx.ds.plus.Hasher.getMapFor(e))(e) + 197192);
 								});
 							});
 							return $r;
-						}($this)):HxOverrides.remove(Type.getInstanceFields(c),"hashCode")?stx.ds.plus.Hasher._createHashImpl(function(v1) {
+						}($this)):HxOverrides.remove(Type.getInstanceFields(c),"hashCode")?stx.ds.plus.Hasher._createMapImpl(function(v1) {
 							return Reflect.field(v1,"hashCode").apply(v1,[]);
-						}):SCore.error("class does not have a hashCode method",{ fileName : "Hasher.hx", lineNumber : 64, className : "stx.ds.plus.Hasher", methodName : "getHashForType"});
+						}):SCore.error("class does not have a hashCode method",{ fileName : "Hasher.hx", lineNumber : 64, className : "stx.ds.plus.Hasher", methodName : "getMapForType"});
 						return $r;
 					}($this));
 				}
@@ -8872,20 +8872,20 @@ stx.ds.plus.Hasher.getHashForType = function(v) {
 			break;
 		case 7:
 			var e = $e[2];
-			$r = stx.ds.plus.Hasher._createHashImpl(function(v1) {
+			$r = stx.ds.plus.Hasher._createMapImpl(function(v1) {
 				var hash = stx.ds.plus.StringHasher.hashCode(v1[0]) * 6151;
 				var _g = 0, _g1 = v1.slice(2);
 				while(_g < _g1.length) {
 					var i = _g1[_g];
 					++_g;
-					hash += (stx.ds.plus.Hasher.getHashFor(i))(i) * 6151;
+					hash += (stx.ds.plus.Hasher.getMapFor(i))(i) * 6151;
 				}
 				return hash;
 			});
 			break;
 		case 5:
-			$r = stx.ds.plus.Hasher._createHashImpl(function(v1) {
-				return SCore.error("function can't provide a hash code",{ fileName : "Hasher.hx", lineNumber : 75, className : "stx.ds.plus.Hasher", methodName : "getHashForType"});
+			$r = stx.ds.plus.Hasher._createMapImpl(function(v1) {
+				return SCore.error("function can't provide a hash code",{ fileName : "Hasher.hx", lineNumber : 75, className : "stx.ds.plus.Hasher", methodName : "getMapForType"});
 			});
 			break;
 		case 0:
@@ -8904,7 +8904,7 @@ stx.ds.plus.Hasher.getHashForType = function(v) {
 stx.ds.plus.ArrayHasher = $hxClasses["stx.ds.plus.ArrayHasher"] = function() { }
 stx.ds.plus.ArrayHasher.__name__ = ["stx","ds","plus","ArrayHasher"];
 stx.ds.plus.ArrayHasher.hashCode = function(v) {
-	return stx.ds.plus.ArrayHasher.hashCodeWith(v,stx.ds.plus.Hasher.getHashFor(v[0]));
+	return stx.ds.plus.ArrayHasher.hashCodeWith(v,stx.ds.plus.Hasher.getMapFor(v[0]));
 }
 stx.ds.plus.ArrayHasher.hashCodeWith = function(v,hash) {
 	var h = 12289;
@@ -8949,15 +8949,15 @@ stx.ds.plus.BoolHasher.hashCode = function(v) {
 }
 stx.ds.plus.ProductHasher = $hxClasses["stx.ds.plus.ProductHasher"] = function() { }
 stx.ds.plus.ProductHasher.__name__ = ["stx","ds","plus","ProductHasher"];
-stx.ds.plus.ProductHasher.getHash = function(p,i) {
-	return stx.ds.plus.Hasher.getHashFor(p.element(i));
+stx.ds.plus.ProductHasher.getMap = function(p,i) {
+	return stx.ds.plus.Hasher.getMapFor(p.element(i));
 }
 stx.ds.plus.ProductHasher.hashCode = function(p) {
 	var h = 0;
 	var _g1 = 0, _g = p.get_length();
 	while(_g1 < _g) {
 		var i = _g1++;
-		h += stx.ds.plus.ProductHasher._baseHashes[p.get_length() - 2][i] * (stx.ds.plus.ProductHasher.getHash(p,i))(p.element(i));
+		h += stx.ds.plus.ProductHasher._baseMapes[p.get_length() - 2][i] * (stx.ds.plus.ProductHasher.getMap(p,i))(p.element(i));
 	}
 	return h;
 }
@@ -9476,15 +9476,15 @@ stx.framework._Injector.InjectorImpl.packageBindingsExtractor = function(b) {
 }
 stx.framework._Injector.InjectorImpl.inject = function(interf,pos) {
 	var binding = stx.framework._Injector.InjectorImpl.getMostSpecificBinding(interf,pos);
-	var factory = stx.Options.getOrElse(binding,stx.Functions2.lazy(SCore.error,"No binding defined for " + Type.getClassName(interf),Stax.here({ fileName : "Injector.hx", lineNumber : 154, className : "stx.framework._Injector.InjectorImpl", methodName : "inject"})));
+	var factory = stx.Maybes.getOrElse(binding,stx.Functions2.lazy(SCore.error,"No binding defined for " + Type.getClassName(interf),Stax.here({ fileName : "Injector.hx", lineNumber : 154, className : "stx.framework._Injector.InjectorImpl", methodName : "inject"})));
 	return factory();
 }
 stx.framework._Injector.InjectorImpl.forever = function(f) {
-	stx.framework._Injector.InjectorImpl.state.unshift({ defaultBindings : new Hash(), globalBindings : new Hash(), packageBindings : new Hash(), moduleBindings : new Hash(), classBindings : new Hash()});
+	stx.framework._Injector.InjectorImpl.state.unshift({ defaultBindings : new Map(), globalBindings : new Map(), packageBindings : new Map(), moduleBindings : new Map(), classBindings : new Map()});
 	return f(new stx.framework._Injector.InjectorConfigImpl());
 }
 stx.framework._Injector.InjectorImpl.enter = function(f) {
-	stx.framework._Injector.InjectorImpl.state.unshift({ defaultBindings : new Hash(), globalBindings : new Hash(), packageBindings : new Hash(), moduleBindings : new Hash(), classBindings : new Hash()});
+	stx.framework._Injector.InjectorImpl.state.unshift({ defaultBindings : new Map(), globalBindings : new Map(), packageBindings : new Map(), moduleBindings : new Map(), classBindings : new Map()});
 	var result = null;
 	try {
 		result = f(new stx.framework._Injector.InjectorConfigImpl());
@@ -9551,24 +9551,24 @@ stx.framework._Injector.InjectorImpl.getMostSpecificBinding = function(c,pos) {
 	var className = stx.framework._Injector.InjectorImpl.classOf(pos);
 	var moduleName = stx.framework._Injector.InjectorImpl.moduleOf(pos);
 	var packageName = stx.framework._Injector.InjectorImpl.packageOf(pos);
-	return stx.Options.orElse(stx.Options.orElse(stx.Options.orElse(stx.Options.orElse(stx.framework._Injector.InjectorImpl.getClassBinding(c,className),stx.Functions2.lazy(stx.framework._Injector.InjectorImpl.getModuleBinding,c,moduleName)),stx.Functions2.lazy(stx.framework._Injector.InjectorImpl.getPackageBinding,c,packageName)),stx.Functions1.lazy(stx.framework._Injector.InjectorImpl.getGlobalBinding,c)),stx.Functions1.lazy(stx.framework._Injector.InjectorImpl.getDefaultImplementationBinding,c));
+	return stx.Maybes.orElse(stx.Maybes.orElse(stx.Maybes.orElse(stx.Maybes.orElse(stx.framework._Injector.InjectorImpl.getClassBinding(c,className),stx.Functions2.lazy(stx.framework._Injector.InjectorImpl.getModuleBinding,c,moduleName)),stx.Functions2.lazy(stx.framework._Injector.InjectorImpl.getPackageBinding,c,packageName)),stx.Functions1.lazy(stx.framework._Injector.InjectorImpl.getGlobalBinding,c)),stx.Functions1.lazy(stx.framework._Injector.InjectorImpl.getDefaultImplementationBinding,c));
 }
 stx.framework._Injector.InjectorImpl.getDefaultImplementationBinding = function(c) {
 	if(stx.framework._Injector.InjectorImpl.existsDefaultBinding(c)) return stx.framework._Injector.InjectorImpl.getDefaultBinding(c);
-	var f = stx.Options.flatMap(stx.Options.flatMap(stx.Options.flatMap(stx.Options.toOption(haxe.rtti.Meta.getType(c)),function(m) {
-		return stx.Options.toOption(Reflect.hasField(m,"DefaultImplementation")?Reflect.field(m,"DefaultImplementation"):null);
+	var f = stx.Maybes.flatMap(stx.Maybes.flatMap(stx.Maybes.flatMap(stx.Maybes.toMaybe(haxe.rtti.Meta.getType(c)),function(m) {
+		return stx.Maybes.toMaybe(Reflect.hasField(m,"DefaultImplementation")?Reflect.field(m,"DefaultImplementation"):null);
 	}),function(p) {
 		var cls = null;
-		return null == p || null == p[0] || null == (cls = Type.resolveClass(p[0]))?stx.Option.None:stx.Option.Some(new stx.Tuple2(cls,null != p[1]?Type.createEnum(stx.framework.BindingType,p[1],[]):null));
+		return null == p || null == p[0] || null == (cls = Type.resolveClass(p[0]))?stx.Maybe.None:stx.Maybe.Some(new stx.Tuple2(cls,null != p[1]?Type.createEnum(stx.framework.BindingType,p[1],[]):null));
 	}),function(p) {
 		return (function($this) {
 			var $r;
 			switch( (stx.framework._Injector.InjectorImpl.bindingTypeDef(p._2))[1] ) {
 			case 0:
-				$r = stx.Options.toOption(stx.framework._Injector.InjectorImpl.factoryFor(p._1));
+				$r = stx.Maybes.toMaybe(stx.framework._Injector.InjectorImpl.factoryFor(p._1));
 				break;
 			case 1:
-				$r = stx.Options.toOption(stx.Dynamics.memoize(stx.framework._Injector.InjectorImpl.factoryFor(p._1)));
+				$r = stx.Maybes.toMaybe(stx.Dynamics.memoize(stx.framework._Injector.InjectorImpl.factoryFor(p._1)));
 				break;
 			}
 			return $r;
@@ -9579,8 +9579,8 @@ stx.framework._Injector.InjectorImpl.getDefaultImplementationBinding = function(
 }
 stx.framework._Injector.InjectorImpl.getGlobalBinding = function(c) {
 	var className = Type.getClassName(c);
-	return ArrayLambda.foldl(stx.framework._Injector.InjectorImpl.state,stx.Option.None,function(a,b) {
-		return stx.Options.orElseC(a,stx.Options.toOption(b.globalBindings.get(className)));
+	return ArrayLambda.foldl(stx.framework._Injector.InjectorImpl.state,stx.Maybe.None,function(a,b) {
+		return stx.Maybes.orElseC(a,stx.Maybes.toMaybe(b.globalBindings.get(className)));
 	});
 }
 stx.framework._Injector.InjectorImpl.getClassBinding = function(c,className) {
@@ -9610,17 +9610,17 @@ stx.framework._Injector.InjectorImpl.getSpecificBinding = function(extractor,c,s
 		var bindings = _g1[_g];
 		++_g;
 		var binding = extractor(bindings);
-		var result = stx.Options.flatMap(stx.Options.toOption(binding.get(Type.getClassName(c))),function(h) {
-			return stx.Options.toOption(h.get(specific));
+		var result = stx.Maybes.flatMap(stx.Maybes.toMaybe(binding.get(Type.getClassName(c))),function(h) {
+			return stx.Maybes.toMaybe(h.get(specific));
 		});
-		if(!stx.Options.isEmpty(result)) return result;
+		if(!stx.Maybes.isEmpty(result)) return result;
 	}
-	return stx.Option.None;
+	return stx.Maybe.None;
 }
 stx.framework._Injector.InjectorImpl.addSpecificBinding = function(bindings,c,specific,f) {
 	var h = bindings.get(Type.getClassName(c));
 	if(h == null) {
-		h = new Hash();
+		h = new Map();
 		bindings.set(Type.getClassName(c),h);
 	}
 	h.set(specific,f);
@@ -9643,7 +9643,7 @@ stx.framework._Injector.InjectorImpl.factoryFor = function(impl) {
 	};
 }
 stx.framework._Injector.InjectorImpl.bindingTypeDef = function(bindingType) {
-	return stx.Options.getOrElseC(stx.Options.toOption(bindingType),stx.framework.BindingType.OneToMany);
+	return stx.Maybes.getOrElseC(stx.Maybes.toMaybe(bindingType),stx.framework.BindingType.OneToMany);
 }
 stx.framework._Injector.InjectorConfigImpl = $hxClasses["stx.framework._Injector.InjectorConfigImpl"] = function() {
 };
@@ -9868,12 +9868,12 @@ stx.functional.FoldableExtensions.foreach = function(foldable,f) {
 	return foldable;
 }
 stx.functional.FoldableExtensions.find = function(foldable,f) {
-	return foldable.foldl(stx.Option.None,function(a,b) {
+	return foldable.foldl(stx.Maybe.None,function(a,b) {
 		return (function($this) {
 			var $r;
 			switch( (a)[1] ) {
 			case 0:
-				$r = stx.Options.filter(stx.Options.toOption(b),f);
+				$r = stx.Maybes.filter(stx.Maybes.toMaybe(b),f);
 				break;
 			default:
 				$r = a;
@@ -10045,7 +10045,7 @@ stx.functional._PartialFunctionExtensions.PartialFunction1Impl.prototype = {
 	toFunction: function() {
 		var self = this;
 		return function(a) {
-			return self.isDefinedAt(a)?stx.Option.Some(self.call(a)):stx.Option.None;
+			return self.isDefinedAt(a)?stx.Maybe.Some(self.call(a)):stx.Maybe.None;
 		};
 	}
 	,call: function(a) {
@@ -10101,7 +10101,7 @@ stx.functional._PartialFunctionExtensions.PartialFunction2Impl.prototype = {
 	toFunction: function() {
 		var self = this;
 		return function(a,b) {
-			return self.isDefinedAt(a,b)?stx.Option.Some(self.call(a,b)):stx.Option.None;
+			return self.isDefinedAt(a,b)?stx.Maybe.Some(self.call(a,b)):stx.Maybe.None;
 		};
 	}
 	,call: function(a,b) {
@@ -10157,7 +10157,7 @@ stx.functional._PartialFunctionExtensions.PartialFunction3Impl.prototype = {
 	toFunction: function() {
 		var self = this;
 		return function(a,b,c) {
-			return self.isDefinedAt(a,b,c)?stx.Option.Some(self.call(a,b,c)):stx.Option.None;
+			return self.isDefinedAt(a,b,c)?stx.Maybe.Some(self.call(a,b,c)):stx.Maybe.None;
 		};
 	}
 	,call: function(a,b,c) {
@@ -10213,7 +10213,7 @@ stx.functional._PartialFunctionExtensions.PartialFunction4Impl.prototype = {
 	toFunction: function() {
 		var self = this;
 		return function(a,b,c,d) {
-			return self.isDefinedAt(a,b,c,d)?stx.Option.Some(self.call(a,b,c,d)):stx.Option.None;
+			return self.isDefinedAt(a,b,c,d)?stx.Maybe.Some(self.call(a,b,c,d)):stx.Maybe.None;
 		};
 	}
 	,call: function(a,b,c,d) {
@@ -10269,7 +10269,7 @@ stx.functional._PartialFunctionExtensions.PartialFunction5Impl.prototype = {
 	toFunction: function() {
 		var self = this;
 		return function(a,b,c,d,e) {
-			return self.isDefinedAt(a,b,c,d,e)?stx.Option.Some(self.call(a,b,c,d,e)):stx.Option.None;
+			return self.isDefinedAt(a,b,c,d,e)?stx.Maybe.Some(self.call(a,b,c,d,e)):stx.Maybe.None;
 		};
 	}
 	,call: function(a,b,c,d,e) {
@@ -10340,10 +10340,10 @@ stx.io.http.HttpTransformer.__name__ = ["stx","io","http","HttpTransformer"];
 stx.io.http.HttpTransformer.__interfaces__ = [stx.io.http.Http];
 stx.io.http.HttpTransformer.prototype = {
 	addMimeType: function(map_) {
-		return stx.Options.getOrElseC(stx.Options.toOption(map_),stx.ds.Map.create().set("Content-Type",this.mimeType));
+		return stx.Maybes.getOrElseC(stx.Maybes.toMaybe(map_),stx.ds.Map.create().set("Content-Type",this.mimeType));
 	}
 	,transformResponse: function(r) {
-		return { body : stx.Options.map(r.body,this.decoder), headers : r.headers, code : r.code};
+		return { body : stx.Maybes.map(r.body,this.decoder), headers : r.headers, code : r.code};
 	}
 	,custom: function(method,url,data,params,headers) {
 		return this.http.custom(method,url,this.encoder(data),params,this.addMimeType(headers)).map($bind(this,this.transformResponse));
@@ -10399,7 +10399,7 @@ stx.io.http.HttpJValueJsonp.prototype = {
 		var requestId = Math.round(stx.io.http.HttpJValueJsonp.RequestMod * ++stx.io.http.HttpJValueJsonp.RequestCount);
 		var callbackName = "stx_jsonp_callback_" + requestId;
 		var callbackFullName = "stx.io.http.HttpJValueJsonp.Responders." + callbackName;
-		var params = stx.Options.getOrElseC(stx.Options.toOption(params_),stx.ds.Map.create()).set(this.callbackParameterName,callbackFullName);
+		var params = stx.Maybes.getOrElseC(stx.Maybes.toMaybe(params_),stx.ds.Map.create()).set(this.callbackParameterName,callbackFullName);
 		var url = stx.net.UrlExtensions.addQueryParameters(url_,params);
 		var doCleanup = function() {
 			var script = stx.js.Env.document.getElementById(callbackName);
@@ -10412,10 +10412,10 @@ stx.io.http.HttpJValueJsonp.prototype = {
 			var code;
 			var response;
 			try {
-				response = stx.Option.Some(stx.io.json.Json.fromObject(data));
+				response = stx.Maybe.Some(stx.io.json.Json.fromObject(data));
 				code = stx.net.HttpResponseCode.Normal(stx.net.HttpNormal.Success(stx.net.HttpSuccess.OK));
 			} catch( e ) {
-				response = stx.Option.None;
+				response = stx.Maybe.None;
 				code = stx.net.HttpResponseCode.Normal(stx.net.HttpNormal.Success(stx.net.HttpSuccess.NoContent));
 			}
 			future.deliver({ body : response, headers : stx.ds.Map.create(), code : code},{ fileName : "HttpJValue.hx", lineNumber : 111, className : "stx.io.http.HttpJValueJsonp", methodName : "get"});
@@ -10439,10 +10439,10 @@ stx.io.http.HttpStringAsync.__name__ = ["stx","io","http","HttpStringAsync"];
 stx.io.http.HttpStringAsync.__interfaces__ = [stx.io.http.HttpString];
 stx.io.http.HttpStringAsync.prototype = {
 	makeHeader: function(_headers,contentType) {
-		return stx.Options.getOrElseC(stx.Options.toOption(_headers),stx.ds.Map.create().set("Content-Type",contentType));
+		return stx.Maybes.getOrElseC(stx.Maybes.toMaybe(_headers),stx.ds.Map.create().set("Content-Type",contentType));
 	}
 	,custom: function(method,_url,data,_params,_headers) {
-		var url = _params != null?stx.net.UrlExtensions.addQueryParameters(_url,stx.Options.getOrElseC(stx.Options.toOption(_params),stx.ds.Map.create())):_url;
+		var url = _params != null?stx.net.UrlExtensions.addQueryParameters(_url,stx.Maybes.getOrElseC(stx.Maybes.toMaybe(_params),stx.ds.Map.create())):_url;
 		var future = new stx.Future();
 		var request = stx.js.dom.Quirks.createXMLHttpRequest();
 		future.ifCanceled(function() {
@@ -10453,7 +10453,7 @@ stx.io.http.HttpStringAsync.prototype = {
 		});
 		request.onreadystatechange = function() {
 			var toBody = function(text) {
-				return text == null || text.length == 0?stx.Option.None:stx.Option.Some(text);
+				return text == null || text.length == 0?stx.Maybe.None:stx.Maybe.Some(text);
 			};
 			if(request.readyState == stx.js.XmlHttpRequestState.DONE) {
 				var responseHeaders = request.getAllResponseHeaders() == null?"":request.getAllResponseHeaders();
@@ -10465,7 +10465,7 @@ stx.io.http.HttpStringAsync.prototype = {
 		} catch( e ) {
 			future.cancel();
 		}
-		stx.Options.map(stx.Options.toOption(_headers),function(headers) {
+		stx.Maybes.map(stx.Maybes.toMaybe(_headers),function(headers) {
 			stx.functional.FoldableExtensions.foreach(headers,function(header) {
 				request.setRequestHeader(header._1,header._2);
 			});
@@ -10615,21 +10615,21 @@ stx.io.json.JValueExtensions.map = function(v,f) {
 		return f(v);
 	}
 }
-stx.io.json.JValueExtensions.getOption = function(v,k) {
+stx.io.json.JValueExtensions.getMaybe = function(v,k) {
 	var $e = (v);
 	switch( $e[1] ) {
 	case 5:
 		var xs = $e[2];
-		var hash = stx.io.json.JValueExtensions.extractHash(v);
-		return hash.exists(k)?stx.Option.Some(hash.get(k)):stx.Option.None;
+		var hash = stx.io.json.JValueExtensions.extractMap(v);
+		return hash.exists(k)?stx.Maybe.Some(hash.get(k)):stx.Maybe.None;
 	default:
-		return stx.Option.None;
+		return stx.Maybe.None;
 	}
 }
 stx.io.json.JValueExtensions.get = function(v,k) {
 	return (function($this) {
 		var $r;
-		var $e = (stx.io.json.JValueExtensions.getOption(v,k));
+		var $e = (stx.io.json.JValueExtensions.getMaybe(v,k));
 		switch( $e[1] ) {
 		case 1:
 			var v1 = $e[2];
@@ -10645,7 +10645,7 @@ stx.io.json.JValueExtensions.get = function(v,k) {
 stx.io.json.JValueExtensions.getOrElse = function(v,k,def) {
 	return (function($this) {
 		var $r;
-		var $e = (stx.io.json.JValueExtensions.getOption(v,k));
+		var $e = (stx.io.json.JValueExtensions.getMaybe(v,k));
 		switch( $e[1] ) {
 		case 1:
 			var v1 = $e[2];
@@ -10724,7 +10724,7 @@ stx.io.json.JValueExtensions.extractField = function(v) {
 		return $r;
 	}(this));
 }
-stx.io.json.JValueExtensions.extractHash = function(v) {
+stx.io.json.JValueExtensions.extractMap = function(v) {
 	return (function($this) {
 		var $r;
 		var $e = (v);
@@ -10733,7 +10733,7 @@ stx.io.json.JValueExtensions.extractHash = function(v) {
 			var xs = $e[2];
 			$r = (function($this) {
 				var $r;
-				var hash = new Hash();
+				var hash = new Map();
 				{
 					var _g = 0;
 					while(_g < xs.length) {
@@ -10748,7 +10748,7 @@ stx.io.json.JValueExtensions.extractHash = function(v) {
 			}($this));
 			break;
 		default:
-			$r = SCore.error("Expected JObject but found: " + Std.string(v),{ fileName : "JValueExtensions.hx", lineNumber : 135, className : "stx.io.json.JValueExtensions", methodName : "extractHash"});
+			$r = SCore.error("Expected JObject but found: " + Std.string(v),{ fileName : "JValueExtensions.hx", lineNumber : 135, className : "stx.io.json.JValueExtensions", methodName : "extractMap"});
 		}
 		return $r;
 	}(this));
@@ -10789,22 +10789,22 @@ stx.io.json.JValueExtensions.extractArray = function(v) {
 		return $r;
 	}(this));
 }
-stx.io.json.OptionJValue = $hxClasses["stx.io.json.OptionJValue"] = function() { }
-stx.io.json.OptionJValue.__name__ = ["stx","io","json","OptionJValue"];
-stx.io.json.OptionJValue.decompose = function(v) {
-	return stx.Options.getOrElse(stx.Options.map(v,function(v1) {
+stx.io.json.MaybeJValue = $hxClasses["stx.io.json.MaybeJValue"] = function() { }
+stx.io.json.MaybeJValue.__name__ = ["stx","io","json","MaybeJValue"];
+stx.io.json.MaybeJValue.decompose = function(v) {
+	return stx.Maybes.getOrElse(stx.Maybes.map(v,function(v1) {
 		return (stx.io.json.TranscodeJValue.getDecomposerFor(Type["typeof"](v1)))(v1);
 	}),stx.Dynamics.toThunk(stx.io.json.JValue.JNull));
 }
-stx.io.json.OptionJValue.extract = function(c,v,e) {
+stx.io.json.MaybeJValue.extract = function(c,v,e) {
 	return (function($this) {
 		var $r;
 		switch( (v)[1] ) {
 		case 0:
-			$r = stx.Option.None;
+			$r = stx.Maybe.None;
 			break;
 		default:
-			$r = stx.Option.Some(e(v));
+			$r = stx.Maybe.Some(e(v));
 		}
 		return $r;
 	}(this));
@@ -10937,7 +10937,7 @@ stx.io.json.Json.fromObject = function(d) {
 		break;
 	case 6:
 		var c = $e[2];
-		if(js.Boot.__instanceof(d,String)) return stx.io.json.JValue.JString(d); else if(js.Boot.__instanceof(d,Hash)) return stx.io.json.JValue.JObject(d.keys.toArray().map(function(k) {
+		if(js.Boot.__instanceof(d,String)) return stx.io.json.JValue.JString(d); else if(js.Boot.__instanceof(d,Map)) return stx.io.json.JValue.JObject(d.keys.toArray().map(function(k) {
 			return stx.io.json.JValue.JField(k,d.get(k));
 		})); else if(js.Boot.__instanceof(d,Array)) return stx.io.json.JValue.JArray(ArrayLambda.map(js.Boot.__cast(d , Array),stx.io.json.Json.fromObject)); else return SCore.error("Unknown object type: " + Std.string(d),{ fileName : "Json.hx", lineNumber : 57, className : "stx.io.json.Json", methodName : "fromObject"});
 		break;
@@ -11430,8 +11430,8 @@ stx.io.json.TranscodeJValue.getDecomposerFor = function(v) {
 			$r = (function($this) {
 				var $r;
 				switch(Type.getEnumName(e)) {
-				case "Option":
-					$r = stx.io.json.TranscodeJValue._createDecomposeImpl(stx.io.json.OptionJValue.decompose);
+				case "Maybe":
+					$r = stx.io.json.TranscodeJValue._createDecomposeImpl(stx.io.json.MaybeJValue.decompose);
 					break;
 				case "stx.io.json.JValue":
 					$r = stx.io.json.TranscodeJValue._createDecomposeImpl(stx.io.json.JValueExtensions.decompose);
@@ -11576,9 +11576,9 @@ stx.io.json.TranscodeJValue.getExtractorFor = function(valueType,args) {
 			$r = (function($this) {
 				var $r;
 				switch(Type.getEnumName(e)) {
-				case "Option":
+				case "Maybe":
 					$r = stx.io.json.TranscodeJValue._createExtractorImpl(function(v) {
-						return stx.io.json.OptionJValue.extract(stx.Option,v,args[0]);
+						return stx.io.json.MaybeJValue.extract(stx.Maybe,v,args[0]);
 					});
 					break;
 				case "stx.io.json.JValue":
@@ -11988,33 +11988,33 @@ stx.js.detect.BrowserSupport = $hxClasses["stx.js.detect.BrowserSupport"] = func
 stx.js.detect.BrowserSupport.__name__ = ["stx","js","detect","BrowserSupport"];
 stx.js.detect.BrowserSupport.cssTransformationSupported = function() {
 	return stx.js.detect.BrowserSupport.testFeatureAndMemorize("cssTransformationSupported",function(v) {
-		var isSupported = stx.Option.None;
+		var isSupported = stx.Maybe.None;
 		var docEl = stx.js.Env.document.documentElement;
 		if(docEl != null) {
 			var s = docEl.style;
-			isSupported = stx.Option.Some(stx.js.Env.isDefined(s.WebkitTransform) || stx.js.Env.isDefined(s.MozTransform));
+			isSupported = stx.Maybe.Some(stx.js.Env.isDefined(s.WebkitTransform) || stx.js.Env.isDefined(s.MozTransform));
 		}
 		return isSupported;
 	});
 }
 stx.js.detect.BrowserSupport.elementTagnameUppercased = function() {
 	return stx.js.detect.BrowserSupport.testFeatureAndMemorize("elementTagnameUppercased",function(v) {
-		var isUppercased = stx.Option.None;
+		var isUppercased = stx.Maybe.None;
 		var docEl = stx.js.Env.document.documentElement;
-		if(docEl != null) isUppercased = stx.Option.Some("HTML" == docEl.nodeName);
+		if(docEl != null) isUppercased = stx.Maybe.Some("HTML" == docEl.nodeName);
 		return isUppercased;
 	});
 }
 stx.js.detect.BrowserSupport.querySelectorIgnoresCapitalizedValuesBug = function() {
 	return stx.js.detect.BrowserSupport.testBugAndMemorize("querySelectorIgnoresCapitalizedValuesBug",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null && stx.js.Env.document.compatMode == "BackCompat") {
 			var el = stx.js.Env.document.createElement("div");
 			var el2 = stx.js.Env.document.createElement("span");
 			if(el != null && el2 != null && el.querySelector != null) {
 				el2.className = "Test";
 				el.appendChild(el2);
-				result = stx.Option.Some(el.querySelector(".Test") != null);
+				result = stx.Maybe.Some(el.querySelector(".Test") != null);
 			}
 		}
 		return result;
@@ -12022,7 +12022,7 @@ stx.js.detect.BrowserSupport.querySelectorIgnoresCapitalizedValuesBug = function
 }
 stx.js.detect.BrowserSupport.isEventSrcelementPresent = function() {
 	return stx.js.detect.BrowserSupport.testFeatureAndMemorize("isEventSrcelementPresent",function(v) {
-		var isSupported = stx.Option.None;
+		var isSupported = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 			var i = stx.js.Env.document.createElement("input");
 			var root = stx.js.Env.document.documentElement;
@@ -12030,7 +12030,7 @@ stx.js.detect.BrowserSupport.isEventSrcelementPresent = function() {
 				i.type = "checkbox";
 				i.style.display = "none";
 				i.onclick = function(e) {
-					if(stx.js.Env.typeOf(e) == "object") isSupported = stx.Option.Some(stx.js.Env.isDefined(e.srcElement)); else isSupported = stx.Option.Some(false);
+					if(stx.js.Env.typeOf(e) == "object") isSupported = stx.Maybe.Some(stx.js.Env.isDefined(e.srcElement)); else isSupported = stx.Maybe.Some(false);
 				};
 				root.appendChild(i);
 				i.click();
@@ -12044,7 +12044,7 @@ stx.js.detect.BrowserSupport.isEventSrcelementPresent = function() {
 }
 stx.js.detect.BrowserSupport.isNativeHasAttributePresent = function() {
 	return stx.js.detect.BrowserSupport.testFeatureAndMemorize("isNativeHasAttributePresent",function(v) {
-		var isSupported = stx.Option.None;
+		var isSupported = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 			var i = stx.js.Env.document.createElement("iframe");
 			var root = stx.js.Env.document.documentElement;
@@ -12058,13 +12058,13 @@ stx.js.detect.BrowserSupport.isNativeHasAttributePresent = function() {
 						var doc = frame.document;
 						if(doc != null && $bind(doc,doc.write) != null) {
 							doc.write("<html><head><title></title></head><body></body></html>");
-							if(doc.documentElement != null) isSupported = stx.Option.Some(stx.js.Env.isDefined(($_=doc.documentElement,$bind($_,$_.hasAttribute)))); else isSupported = stx.Option.Some(false);
+							if(doc.documentElement != null) isSupported = stx.Maybe.Some(stx.js.Env.isDefined(($_=doc.documentElement,$bind($_,$_.hasAttribute)))); else isSupported = stx.Maybe.Some(false);
 							root.removeChild(i);
 							i = null;
 						}
 					}
 				} catch( e ) {
-					isSupported = stx.Option.Some(false);
+					isSupported = stx.Maybe.Some(false);
 				}
 			}
 		}
@@ -12073,12 +12073,12 @@ stx.js.detect.BrowserSupport.isNativeHasAttributePresent = function() {
 }
 stx.js.detect.BrowserSupport.isContextMenuEventSupported = function() {
 	return stx.js.detect.BrowserSupport.testFeatureAndMemorize("isContextMenuEventSupported",function(v) {
-		var isPresent = stx.Option.None;
+		var isPresent = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 			var el = stx.js.Env.document.createElement("p");
 			if(el != null && $bind(el,el.setAttribute) != null) {
 				el.setAttribute("oncontextmenu","");
-				isPresent = stx.Option.Some(stx.js.Env.isDefined(el.oncontextmenu));
+				isPresent = stx.Maybe.Some(stx.js.Env.isDefined(el.oncontextmenu));
 			}
 		}
 		return isPresent;
@@ -12086,7 +12086,7 @@ stx.js.detect.BrowserSupport.isContextMenuEventSupported = function() {
 }
 stx.js.detect.BrowserSupport.computedStyleReturnsValuesForStaticlyPositionedElements = function() {
 	return stx.js.detect.BrowserSupport.testFeatureAndMemorize("computedStyleReturnsValuesForStaticlyPositionedElements",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		var view = stx.js.Env.document.defaultView;
 		if(view != null && $bind(view,view.getComputedStyle) != null) {
 			var docEl = stx.js.Env.document.documentElement;
@@ -12099,7 +12099,7 @@ stx.js.detect.BrowserSupport.computedStyleReturnsValuesForStaticlyPositionedElem
 				docElStyle.position = "";
 			}
 			var computedStyle = view.getComputedStyle(docEl,null);
-			result = stx.Option.Some(computedStyle.left != "auto");
+			result = stx.Maybe.Some(computedStyle.left != "auto");
 			if(position != null) {
 				var docElStyle = docEl.style;
 				docElStyle.position = position;
@@ -12110,16 +12110,16 @@ stx.js.detect.BrowserSupport.computedStyleReturnsValuesForStaticlyPositionedElem
 }
 stx.js.detect.BrowserSupport.isRgbaSupported = function() {
 	return stx.js.detect.BrowserSupport.testFeatureAndMemorize("isRgbaSupported",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 			var value = "rgba(1,1,1,0.5)";
 			var el = stx.js.Env.document.createElement("p");
 			var re = /^rgba/;
 			if(el != null && el.style != null && stx.js.Env.typeOf(re.test) == "function") try {
 				el.style.color = value;
-				result = stx.Option.Some(re.test(el.style.color));
+				result = stx.Maybe.Some(re.test(el.style.color));
 			} catch( e ) {
-				result = stx.Option.Some(false);
+				result = stx.Maybe.Some(false);
 			}
 		}
 		return result;
@@ -12127,40 +12127,40 @@ stx.js.detect.BrowserSupport.isRgbaSupported = function() {
 }
 stx.js.detect.BrowserSupport.isCssBorderRadiusSupported = function() {
 	return stx.js.detect.BrowserSupport.testFeatureAndMemorize("isCssBorderRadiusSupported",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		var docEl = stx.js.Env.document.documentElement;
 		if(docEl != null) {
 			var s = docEl.style;
-			result = stx.Option.Some(stx.js.Env.typeOf(s.borderRadius) == "string" || stx.js.Env.typeOf(s.MozBorderRadius) == "string" || stx.js.Env.typeOf(s.WebkitBorderRadius) == "string" || stx.js.Env.typeOf(s.KhtmlBorderRadius) == "string");
+			result = stx.Maybe.Some(stx.js.Env.typeOf(s.borderRadius) == "string" || stx.js.Env.typeOf(s.MozBorderRadius) == "string" || stx.js.Env.typeOf(s.WebkitBorderRadius) == "string" || stx.js.Env.typeOf(s.KhtmlBorderRadius) == "string");
 		}
 		return result;
 	});
 }
 stx.js.detect.BrowserSupport.elemenChildrenReturnsElementNodes = function() {
 	return stx.js.detect.BrowserSupport.testFeatureAndMemorize("elemenChildrenReturnsElementNodes",function(v) {
-		var isSupported = stx.Option.None;
+		var isSupported = stx.Maybe.None;
 		var docEl = stx.js.Env.document.documentElement;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null && stx.js.Env.isDefined(docEl.children)) {
 			var el = stx.js.Env.document.createElement("div");
 			el.innerHTML = "<div><p>a</p></div>b<!-- x -->";
-			isSupported = stx.Option.Some(el.children && el.children.length == 1 && el.children[0] && el.children[0].tagName && el.children[0].tagName.toUpperCase() == "DIV");
+			isSupported = stx.Maybe.Some(el.children && el.children.length == 1 && el.children[0] && el.children[0].tagName && el.children[0].tagName.toUpperCase() == "DIV");
 		}
 		return isSupported;
 	});
 }
 stx.js.detect.BrowserSupport.isCanvasSupported = function() {
 	return stx.js.detect.BrowserSupport.testFeatureAndMemorize("isCanvasSupported",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 			var elCanvas = stx.js.Env.document.createElement("canvas");
-			result = stx.Option.Some(!!(elCanvas != null && (elCanvas.getContext != null && elCanvas.getContext("2d") != null)));
+			result = stx.Maybe.Some(!!(elCanvas != null && (elCanvas.getContext != null && elCanvas.getContext("2d") != null)));
 		}
 		return result;
 	});
 }
 stx.js.detect.BrowserSupport.positionFixed = function() {
 	return stx.js.detect.BrowserSupport.testFeatureAndMemorize("positionFixed",function(v) {
-		var isSupported = stx.Option.None;
+		var isSupported = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 			var el = stx.js.Env.document.createElement("div");
 			if(el != null && el.style != null) {
@@ -12169,7 +12169,7 @@ stx.js.detect.BrowserSupport.positionFixed = function() {
 				var root = stx.js.Env.document.body;
 				if(root != null) {
 					root.appendChild(el);
-					isSupported = stx.Option.Some(el.offsetTop == -10);
+					isSupported = stx.Maybe.Some(el.offsetTop == -10);
 					root.removeChild(el);
 				}
 			}
@@ -12179,14 +12179,14 @@ stx.js.detect.BrowserSupport.positionFixed = function() {
 }
 stx.js.detect.BrowserSupport.isCssEnabled = function() {
 	return stx.js.detect.BrowserSupport.testFeatureAndMemorize("isCssEnabled",function(v) {
-		var isSupported = stx.Option.None;
+		var isSupported = stx.Maybe.None;
 		var body = stx.js.Env.document.body;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null && body != null && $bind(body,body.appendChild) != null && $bind(body,body.removeChild) != null) {
 			var el = stx.js.Env.document.createElement("div");
 			if(el != null && el.style != null) {
 				el.style.display = "none";
 				body.appendChild(el);
-				isSupported = stx.Option.Some(el.offsetWidth == 0);
+				isSupported = stx.Maybe.Some(el.offsetWidth == 0);
 				body.removeChild(el);
 			}
 		}
@@ -12195,7 +12195,7 @@ stx.js.detect.BrowserSupport.isCssEnabled = function() {
 }
 stx.js.detect.BrowserSupport.isQuirksMode = function() {
 	return stx.js.detect.BrowserSupport.testFeatureAndMemorize("isQuirksMode",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 			var el = stx.js.Env.document.createElement("div");
 			if(el != null && el.style != null) {
@@ -12203,24 +12203,24 @@ stx.js.detect.BrowserSupport.isQuirksMode = function() {
 				style.width = "1";
 			}
 			var style = el.style;
-			result = stx.Option.Some(style.width == "1px");
+			result = stx.Maybe.Some(style.width == "1px");
 		}
 		return result;
 	});
 }
 stx.js.detect.BrowserSupport.isContainsBuggy = function() {
 	return stx.js.detect.BrowserSupport.testBugAndMemorize("isContainsBuggy",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 			var el1 = stx.js.Env.document.createElement("div"), el2 = stx.js.Env.document.createElement("div");
-			if(el1 != null && el2 != null && stx.js.Env.isDefined(el1.contains)) result = stx.Option.Some(el1.contains(el2));
+			if(el1 != null && el2 != null && stx.js.Env.isDefined(el1.contains)) result = stx.Maybe.Some(el1.contains(el2));
 		}
 		return result;
 	});
 }
 stx.js.detect.BrowserSupport.isActivexEnabled = function() {
 	return stx.js.detect.BrowserSupport.testFeatureAndMemorize("isActivexEnabled",function(v) {
-		var result = stx.Option.Some(false);
+		var result = stx.Maybe.Some(false);
 		if(window.ActiveXObject) {
 			var xmlVersions = ["Microsoft.XMLHTTP","Msxml2.XMLHTTP.3.0","Msxml2.XMLHTTP.4.0","Msxml2.XMLHTTP.5.0","Msxml2.XMLHTTP.6.0"];
 			var _g = 0;
@@ -12228,25 +12228,25 @@ stx.js.detect.BrowserSupport.isActivexEnabled = function() {
 				var value = xmlVersions[_g];
 				++_g;
 				try {
-					if(new ActiveXObject(value) != null) result = stx.Option.Some(true);
+					if(new ActiveXObject(value) != null) result = stx.Maybe.Some(true);
 				} catch( ex ) {
 				}
 			}
-			result = stx.Option.Some(stx.Options.getOrElseC(result,false));
+			result = stx.Maybe.Some(stx.Maybes.getOrElseC(result,false));
 		}
 		return result;
 	});
 }
 stx.js.detect.BrowserSupport.typeofNodelistIsFunctionBug = function() {
 	return stx.js.detect.BrowserSupport.testBugAndMemorize("typeofNodelistIsFunctionBug",function(v) {
-		var result = stx.Option.None;
-		if(stx.js.Env.document.forms != null) result = stx.Option.Some(stx.js.Env.typeOf(stx.js.Env.document.forms) == "function");
+		var result = stx.Maybe.None;
+		if(stx.js.Env.document.forms != null) result = stx.Maybe.Some(stx.js.Env.typeOf(stx.js.Env.document.forms) == "function");
 		return result;
 	});
 }
 stx.js.detect.BrowserSupport.getElementsByTagNameReturnsCommentNodesBug = function() {
 	return stx.js.detect.BrowserSupport.testBugAndMemorize("getElementsByTagNameReturnsCommentNodesBug",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 			var el = stx.js.Env.document.createElement("div");
 			if(el != null && $bind(el,el.getElementsByTagName) != null) {
@@ -12254,7 +12254,7 @@ stx.js.detect.BrowserSupport.getElementsByTagNameReturnsCommentNodesBug = functi
 				var all = el.getElementsByTagName("*");
 				if(all.length != null) {
 					var lastNode = el.getElementsByTagName("*")[1];
-					result = stx.Option.Some(!!(lastNode != null && lastNode.nodeType == 8));
+					result = stx.Maybe.Some(!!(lastNode != null && lastNode.nodeType == 8));
 				}
 			}
 		}
@@ -12263,7 +12263,7 @@ stx.js.detect.BrowserSupport.getElementsByTagNameReturnsCommentNodesBug = functi
 }
 stx.js.detect.BrowserSupport.setAttributeIgnoresNameAttributeBug = function() {
 	return stx.js.detect.BrowserSupport.testBugAndMemorize("setAttributeIgnoresNameAttributeBug",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 			var elForm = stx.js.Env.document.createElement("form");
 			var elInput = stx.js.Env.document.createElement("input");
@@ -12272,7 +12272,7 @@ stx.js.detect.BrowserSupport.setAttributeIgnoresNameAttributeBug = function() {
 				elInput.setAttribute("name","test");
 				elForm.appendChild(elInput);
 				root.appendChild(elForm);
-				if(elForm.elements != null) result = stx.Option.Some(stx.js.Env.typeOf(elForm.elements.test) == "undefined"); else result = stx.Option.Some(true);
+				if(elForm.elements != null) result = stx.Maybe.Some(stx.js.Env.typeOf(elForm.elements.test) == "undefined"); else result = stx.Maybe.Some(true);
 				root.removeChild(elForm);
 			}
 		}
@@ -12281,12 +12281,12 @@ stx.js.detect.BrowserSupport.setAttributeIgnoresNameAttributeBug = function() {
 }
 stx.js.detect.BrowserSupport.elementPropertiesAreAttributesBug = function() {
 	return stx.js.detect.BrowserSupport.testBugAndMemorize("elementPropertiesAreAttributesBug",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 			var el = stx.js.Env.document.createElement("div");
 			if(el != null && $bind(el,el.getAttribute) != null) {
 				el.__foo = 'bar';
-				result = stx.Option.Some(el.getAttribute("__foo") == "bar");
+				result = stx.Maybe.Some(el.getAttribute("__foo") == "bar");
 				el = null;
 			}
 		}
@@ -12295,21 +12295,21 @@ stx.js.detect.BrowserSupport.elementPropertiesAreAttributesBug = function() {
 }
 stx.js.detect.BrowserSupport.isRegexpWhitespaceCharacterClassBug = function() {
 	return stx.js.detect.BrowserSupport.testBugAndMemorize("isRegexpWhitespaceCharacterClassBug",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		var str = '\u0009\u000A\u000B\u000C\u000D\u0020\u00A0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029';
-		result = stx.Option.Some(!/^\s+$/.test(str));
+		result = stx.Maybe.Some(!/^\s+$/.test(str));
 		return result;
 	});
 }
 stx.js.detect.BrowserSupport.isStringPrototypeSplitRegexpBug = function() {
 	return stx.js.detect.BrowserSupport.testBugAndMemorize("isStringPrototypeSplitRegexpBug",function(v) {
 		var s = "a_b";
-		return stx.Option.Some(s.split(/(_)/).length != 3);
+		return stx.Maybe.Some(s.split(/(_)/).length != 3);
 	});
 }
 stx.js.detect.BrowserSupport.preElementsIgnoreNewLinesBug = function() {
 	return stx.js.detect.BrowserSupport.testBugAndMemorize("preElementsIgnoreNewLinesBug",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null && ($_=stx.js.Env.document,$bind($_,$_.createTextNode)) != null) {
 			var el = stx.js.Env.document.createElement("pre");
 			var txt = stx.js.Env.document.createTextNode("xx");
@@ -12322,7 +12322,7 @@ stx.js.detect.BrowserSupport.preElementsIgnoreNewLinesBug = function() {
 				var isIgnored = el.offsetHeight == initialHeight;
 				root.removeChild(el);
 				el = txt = null;
-				result = stx.Option.Some(isIgnored);
+				result = stx.Maybe.Some(isIgnored);
 			}
 		}
 		return result;
@@ -12330,12 +12330,12 @@ stx.js.detect.BrowserSupport.preElementsIgnoreNewLinesBug = function() {
 }
 stx.js.detect.BrowserSupport.selectElementInnerHtmlBug = function() {
 	return stx.js.detect.BrowserSupport.testBugAndMemorize("selectElementInnerHtmlBug",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 			var el = stx.js.Env.document.createElement("select");
 			if(el != null) {
 				el.innerHTML = "<option value=\"test\">test</option>";
-				if(el.options != null && el.options[0] != null) result = stx.Option.Some(el.options[0].nodeName.toUpperCase() != "OPTION");
+				if(el.options != null && el.options[0] != null) result = stx.Maybe.Some(el.options[0].nodeName.toUpperCase() != "OPTION");
 				el = null;
 			}
 		}
@@ -12344,31 +12344,31 @@ stx.js.detect.BrowserSupport.selectElementInnerHtmlBug = function() {
 }
 stx.js.detect.BrowserSupport.tableElementInnerHtmlBug = function() {
 	return stx.js.detect.BrowserSupport.testBugAndMemorize("tableElementInnerHtmlBug",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) try {
 			var el = stx.js.Env.document.createElement("table");
 			if(el != null && el.tBodies != null) {
 				el.innerHTML = "<tbody><tr><td>test</td></tr></tbody>";
-				result = stx.Option.Some(stx.js.Env.typeOf(el.tBodies[0]) == "undefined");
+				result = stx.Maybe.Some(stx.js.Env.typeOf(el.tBodies[0]) == "undefined");
 				el = null;
 			}
 		} catch( e ) {
-			result = stx.Option.Some(true);
+			result = stx.Maybe.Some(true);
 		}
 		return result;
 	});
 }
 stx.js.detect.BrowserSupport.scriptElementRejectsTextNodeAppendingBug = function() {
 	return stx.js.detect.BrowserSupport.testBugAndMemorize("scriptElementRejectsTextNodeAppendingBug",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null && ($_=stx.js.Env.document,$bind($_,$_.createTextNode)) != null) {
 			var s = stx.js.Env.document.createElement("script");
 			if(s != null && $bind(s,s.appendChild) != null) {
 				try {
 					s.appendChild(stx.js.Env.document.createTextNode(""));
-					result = stx.Option.Some(s.firstChild == null || s.firstChild != null && s.firstChild.nodeType != 3);
+					result = stx.Maybe.Some(s.firstChild == null || s.firstChild != null && s.firstChild.nodeType != 3);
 				} catch( e ) {
-					result = stx.Option.Some(true);
+					result = stx.Maybe.Some(true);
 				}
 				s = null;
 			}
@@ -12378,7 +12378,7 @@ stx.js.detect.BrowserSupport.scriptElementRejectsTextNodeAppendingBug = function
 }
 stx.js.detect.BrowserSupport.documentGetElementByIdConfusesIdsWithNamesBug = function() {
 	return stx.js.detect.BrowserSupport.testBugAndMemorize("documentGetElementByIdConfusesIdsWithNamesBug",function(v) {
-		var result = stx.Option.Some(false);
+		var result = stx.Maybe.Some(false);
 		if(($_=stx.js.Env.document,$bind($_,$_.getElementsByTagName)) != null && ($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 			var num = new Date().getTime();
 			var name = "__test_" + num;
@@ -12393,7 +12393,7 @@ stx.js.detect.BrowserSupport.documentGetElementByIdConfusesIdsWithNamesBug = fun
 			if($bind(head,head.appendChild) != null && $bind(head,head.removeChild) != null) {
 				head.appendChild(el);
 				var testElement = stx.js.Env.document.getElementById(name);
-				result = stx.Option.Some(!!(testElement != null && testElement.nodeName.toUpperCase() == "INPUT"));
+				result = stx.Maybe.Some(!!(testElement != null && testElement.nodeName.toUpperCase() == "INPUT"));
 				head.removeChild(el);
 				el = null;
 			}
@@ -12403,7 +12403,7 @@ stx.js.detect.BrowserSupport.documentGetElementByIdConfusesIdsWithNamesBug = fun
 }
 stx.js.detect.BrowserSupport.documentGetElementByIdIgnoresCaseBug = function() {
 	return stx.js.detect.BrowserSupport.testBugAndMemorize("documentGetElementByIdIgnoresCaseBug",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null && ($_=stx.js.Env.document,$bind($_,$_.getElementsByTagName)) != null && ($_=stx.js.Env.document,$bind($_,$_.getElementById)) != null) {
 			var el = stx.js.Env.document.createElement("script");
 			var head = stx.js.Env.document.getElementsByTagName("head")[0];
@@ -12411,7 +12411,7 @@ stx.js.detect.BrowserSupport.documentGetElementByIdIgnoresCaseBug = function() {
 				el.type = "text/javascript";
 				el.id = "A";
 				head.appendChild(el);
-				result = stx.Option.Some(!!(stx.js.Env.document.getElementById("a") != null));
+				result = stx.Maybe.Some(!!(stx.js.Env.document.getElementById("a") != null));
 				head.removeChild(el);
 				el = null;
 			}
@@ -12421,7 +12421,7 @@ stx.js.detect.BrowserSupport.documentGetElementByIdIgnoresCaseBug = function() {
 }
 stx.js.detect.BrowserSupport.offsetValuesForStaticElementsInsidePositionedOnesBug = function() {
 	return stx.js.detect.BrowserSupport.testBugAndMemorize("offsetValuesForStaticElementsInsidePositionedOnesBug",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		var body = stx.js.Env.document.body;
 		if(body != null && $bind(body,body.insertBefore) != null && ($_=stx.js.Env.document,$bind($_,$_.createElement)) != null && ($_=stx.js.Env.document,$bind($_,$_.getElementById)) != null) {
 			var id = "x" + HxOverrides.substr(Math.random() + "",2,null);
@@ -12435,8 +12435,8 @@ stx.js.detect.BrowserSupport.offsetValuesForStaticElementsInsidePositionedOnesBu
 				if(el != null && el.style != null) {
 					if(el.offsetTop != 10) {
 						el.style.position = "relative";
-						if(el.offsetTop == 10) result = stx.Option.Some(true);
-					} else result = stx.Option.Some(false);
+						if(el.offsetTop == 10) result = stx.Maybe.Some(true);
+					} else result = stx.Maybe.Some(false);
 				}
 				body.removeChild(wrapper);
 			}
@@ -12447,7 +12447,7 @@ stx.js.detect.BrowserSupport.offsetValuesForStaticElementsInsidePositionedOnesBu
 }
 stx.js.detect.BrowserSupport.isDocumentGetElementsByNameBug = function() {
 	return stx.js.detect.BrowserSupport.testBugAndMemorize("isDocumentGetElementsByNameBug",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		var docEl = stx.js.Env.document.documentElement;
 		if(docEl != null && $bind(docEl,docEl.appendChild) != null && $bind(docEl,docEl.removeChild) != null && ($_=stx.js.Env.document,$bind($_,$_.getElementsByName)) != null && ($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 			var el = stx.js.Env.document.createElement("div");
@@ -12455,7 +12455,7 @@ stx.js.detect.BrowserSupport.isDocumentGetElementsByNameBug = function() {
 				var uid = "x" + HxOverrides.substr(Math.random() + "",2,null);
 				el.id = uid;
 				docEl.appendChild(el);
-				result = stx.Option.Some(stx.js.Env.document.getElementsByName(uid)[0] == el);
+				result = stx.Maybe.Some(stx.js.Env.document.getElementsByName(uid)[0] == el);
 				docEl.removeChild(el);
 			}
 		}
@@ -12464,7 +12464,7 @@ stx.js.detect.BrowserSupport.isDocumentGetElementsByNameBug = function() {
 }
 stx.js.detect.BrowserSupport.isOverflowStyleBug = function() {
 	return stx.js.detect.BrowserSupport.testBugAndMemorize("isOverflowStyleBug",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 			var el = stx.js.Env.document.createElement("div");
 			el.innerHTML = "<p style=\"overflow: visible;\">x</p>";
@@ -12472,7 +12472,7 @@ stx.js.detect.BrowserSupport.isOverflowStyleBug = function() {
 			if(firstChild != null && firstChild.style != null) {
 				var style = firstChild.style;
 				style.overflow = "hidden";
-				result = stx.Option.Some(style.overflow != "hidden");
+				result = stx.Maybe.Some(style.overflow != "hidden");
 			}
 			el = null;
 			firstChild = null;
@@ -12482,12 +12482,12 @@ stx.js.detect.BrowserSupport.isOverflowStyleBug = function() {
 }
 stx.js.detect.BrowserSupport.isQuerySelectorAllBug = function() {
 	return stx.js.detect.BrowserSupport.testBugAndMemorize("isQuerySelectorAllBug",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 			var el = stx.js.Env.document.createElement("div");
 			if(el != null && el.querySelectorAll != null) {
 				el.innerHTML = "<object><param name=\"\"></object>";
-				result = stx.Option.Some(el.querySelectorAll("param").length != 1);
+				result = stx.Maybe.Some(el.querySelectorAll("param").length != 1);
 			}
 			el = null;
 		}
@@ -12496,10 +12496,10 @@ stx.js.detect.BrowserSupport.isQuerySelectorAllBug = function() {
 }
 stx.js.detect.BrowserSupport.html5Audio = function() {
 	return stx.js.detect.BrowserSupport.testFeatureAndMemorize("html5Audio",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 			var el = stx.js.Env.document.createElement("audio");
-			result = stx.Option.Some(!!el.canPlayType);
+			result = stx.Maybe.Some(!!el.canPlayType);
 			el = null;
 		}
 		return result;
@@ -12526,20 +12526,20 @@ stx.js.detect.BrowserSupport.html5AudioInAACFormat = function() {
 	});
 }
 stx.js.detect.BrowserSupport.canPlayType = function(element,format) {
-	var result = stx.Option.None;
+	var result = stx.Maybe.None;
 	if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 		var a = stx.js.Env.document.createElement(element);
-		result = stx.Option.Some(!!(a.canPlayType && a.canPlayType(format).replace("no","") != ""));
+		result = stx.Maybe.Some(!!(a.canPlayType && a.canPlayType(format).replace("no","") != ""));
 		a = null;
 	}
 	return result;
 }
 stx.js.detect.BrowserSupport.html5Canvas = function() {
 	return stx.js.detect.BrowserSupport.testFeatureAndMemorize("html5Canvas",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 			var a = stx.js.Env.document.createElement("canvas");
-			result = stx.Option.Some(!!a.getContext);
+			result = stx.Maybe.Some(!!a.getContext);
 			a = null;
 		}
 		return result;
@@ -12547,10 +12547,10 @@ stx.js.detect.BrowserSupport.html5Canvas = function() {
 }
 stx.js.detect.BrowserSupport.html5CanvasTextAPI = function() {
 	return stx.js.detect.BrowserSupport.testFeatureAndMemorize("html5CanvasTextAPI",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 			var c = stx.js.Env.document.createElement("canvas");
-			result = stx.Option.Some(c.getContext && stx.js.Env.typeOf(c.getContext("2d").fillText) == "function");
+			result = stx.Maybe.Some(c.getContext && stx.js.Env.typeOf(c.getContext("2d").fillText) == "function");
 			c = null;
 		}
 		return result;
@@ -12688,10 +12688,10 @@ stx.js.detect.BrowserSupport.html5Time = function() {
 }
 stx.js.detect.BrowserSupport.html5Video = function() {
 	return stx.js.detect.BrowserSupport.testFeatureAndMemorize("html5Video",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 			var el = stx.js.Env.document.createElement("video");
-			result = stx.Option.Some(!!el.canPlayType);
+			result = stx.Maybe.Some(!!el.canPlayType);
 			el = null;
 		}
 		return result;
@@ -12708,20 +12708,20 @@ stx.js.detect.BrowserSupport.html5VideoPoster = function() {
 	});
 }
 stx.js.detect.BrowserSupport.checIfExist = function(elementName,property) {
-	var result = stx.Option.None;
+	var result = stx.Maybe.None;
 	if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 		var c = stx.js.Env.document.createElement(elementName);
-		result = stx.Option.Some(stx.js.Env.typeOf(c[property]) != "undefined");
+		result = stx.Maybe.Some(stx.js.Env.typeOf(c[property]) != "undefined");
 		c = null;
 	}
 	return result;
 }
 stx.js.detect.BrowserSupport.checIputTypeProperty = function(type) {
-	var result = stx.Option.None;
+	var result = stx.Maybe.None;
 	if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 		var i = stx.js.Env.document.createElement("input");
 		i.setAttribute("type",type);
-		result = stx.Option.Some(i.type != "text");
+		result = stx.Maybe.Some(i.type != "text");
 		i = null;
 	}
 	return result;
@@ -12795,11 +12795,11 @@ stx.js.detect.BrowserSupport.html5SVG = function() {
 }
 stx.js.detect.BrowserSupport.html5SVGInTextHtml = function() {
 	return stx.js.detect.BrowserSupport.testFeatureAndMemorize("html5SVGInTextHtml",function(v) {
-		var result = stx.Option.None;
+		var result = stx.Maybe.None;
 		if(($_=stx.js.Env.document,$bind($_,$_.createElement)) != null) {
 			var e = stx.js.Env.document.createElement("div");
 			e.innerHTML = "<svg></svg>";
-			result = stx.Option.Some(!!(stx.js.Env.window.SVGSVGElement != null && js.Boot.__instanceof(e.firstChild,stx.js.Env.window.SVGSVGElement)));
+			result = stx.Maybe.Some(!!(stx.js.Env.window.SVGSVGElement != null && js.Boot.__instanceof(e.firstChild,stx.js.Env.window.SVGSVGElement)));
 			e = null;
 		}
 		return result;
@@ -12860,7 +12860,7 @@ stx.js.detect.BrowserSupport.cssFloat = function() {
 stx.js.detect.BrowserSupport.checkboxValueDefaultsToOn = function() {
 	return stx.js.detect.BrowserSupport.testSupport("<input type=\"checkbox\"/>","input",function(e) {
 		var value = e.value;
-		return stx.Options.getOrElseC(stx.Options.map(stx.Options.toOption(value),function(s) {
+		return stx.Maybes.getOrElseC(stx.Maybes.map(stx.Maybes.toMaybe(value),function(s) {
 			return new EReg("on","i").match(s);
 		}),false);
 	});
@@ -12881,12 +12881,12 @@ stx.js.detect.BrowserSupport.getComputedStyle = function() {
 stx.js.detect.BrowserSupport.offsetDoesNotIncludeMarginInBodyOffset = function() {
 	return stx.js.detect.BrowserSupport.testFeatureAndMemorize("offsetDoesNotIncludeMarginInBodyOffset",function(v) {
 		if(stx.js.Env.document != null && stx.js.Env.document.body != null) return stx.Dynamics.into(stx.js.Env.document.body,function(body) {
-			var bodyMarginTop = stx.Options.getOrElseC(stx.Options.map(stx.js.dom.Quirks.getComputedCssProperty(body,"margin-top"),function(s) {
+			var bodyMarginTop = stx.Maybes.getOrElseC(stx.Maybes.map(stx.js.dom.Quirks.getComputedCssProperty(body,"margin-top"),function(s) {
 				return stx.Strings["int"](s,0);
 			}),0);
-			return stx.Option.Some(body.offsetTop != bodyMarginTop);
+			return stx.Maybe.Some(body.offsetTop != bodyMarginTop);
 		});
-		return stx.Option.None;
+		return stx.Maybe.None;
 	});
 }
 stx.js.detect.BrowserSupport.spuriousTbodyInsertedBug = function() {
@@ -12916,7 +12916,7 @@ stx.js.detect.BrowserSupport.offsetDoesNotAddBorder = function() {
 				stx.Objects.extendWith(container1.style,{ position : "absolute", top : 0, left : 0, margin : 0, border : 0, width : "1px", height : "1px", visibility : "hidden"});
 				container1.innerHTML = "<div style='position:absolute;top:0;left:0;margin:0;border:5px solid #000;padding:0;width:1px;height:1px;'><div></div></div>";
 			});
-			return stx.Option.Some(stx.Dynamics.into(stx.js.Env.document.body,function(body) {
+			return stx.Maybe.Some(stx.Dynamics.into(stx.js.Env.document.body,function(body) {
 				body.insertBefore(container,body.firstChild);
 				var checkDiv = container.firstChild.firstChild;
 				return stx.Dynamics.withEffect(checkDiv.offsetTop != 5,function(_) {
@@ -12924,7 +12924,7 @@ stx.js.detect.BrowserSupport.offsetDoesNotAddBorder = function() {
 				});
 			}));
 		}
-		return stx.Option.None;
+		return stx.Maybe.None;
 	});
 }
 stx.js.detect.BrowserSupport.offsetAddsBorderForTableAndCells = function() {
@@ -12934,7 +12934,7 @@ stx.js.detect.BrowserSupport.offsetAddsBorderForTableAndCells = function() {
 				stx.Objects.extendWith(container1.style,{ position : "absolute", top : 0, left : 0, margin : 0, border : 0, width : "1px", height : "1px", visibility : "hidden"});
 				container1.innerHTML = "<table style='position:absolute;top:0;left:0;margin:0;border:5px solid #000;padding:0;width:1px;height:1px;' cellpadding='0' cellspacing='0'><tr><td></td></tr></table>";
 			});
-			return stx.Option.Some(stx.Dynamics.into(stx.js.Env.document.body,function(body) {
+			return stx.Maybe.Some(stx.Dynamics.into(stx.js.Env.document.body,function(body) {
 				body.insertBefore(container,body.firstChild);
 				var td = container.getElementsByTagName("td")[0];
 				return stx.Dynamics.withEffect(td.offsetTop == 5,function(_) {
@@ -12942,7 +12942,7 @@ stx.js.detect.BrowserSupport.offsetAddsBorderForTableAndCells = function() {
 				});
 			}));
 		}
-		return stx.Option.None;
+		return stx.Maybe.None;
 	});
 }
 stx.js.detect.BrowserSupport.offsetSubtractsBorderForOverflowNotVisible = function() {
@@ -12952,7 +12952,7 @@ stx.js.detect.BrowserSupport.offsetSubtractsBorderForOverflowNotVisible = functi
 				stx.Objects.extendWith(container1.style,{ position : "absolute", top : 0, left : 0, margin : 0, border : 0, width : "1px", height : "1px", visibility : "hidden"});
 				container1.innerHTML = "<div style='position:absolute;top:0;left:0;margin:0;border:5px solid #000;padding:0;width:1px;height:1px;'><div></div></div>";
 			});
-			return stx.Option.Some(stx.Dynamics.into(stx.js.Env.document.body,function(body) {
+			return stx.Maybe.Some(stx.Dynamics.into(stx.js.Env.document.body,function(body) {
 				body.insertBefore(container,body.firstChild);
 				var innerDiv = container.firstChild;
 				stx.Objects.extendWith(innerDiv.style,{ overflow : "hidden", position : "relative"});
@@ -12962,7 +12962,7 @@ stx.js.detect.BrowserSupport.offsetSubtractsBorderForOverflowNotVisible = functi
 				});
 			}));
 		}
-		return stx.Option.None;
+		return stx.Maybe.None;
 	});
 }
 stx.js.detect.BrowserSupport.testSupport = function(contents,tagName,f,def) {
@@ -12983,24 +12983,24 @@ stx.js.detect.BrowserSupport.testBugInBody = function(contents,tagName,f,def) {
 }
 stx.js.detect.BrowserSupport.test = function(contents,tagName,f,def1,def2) {
 	return stx.js.detect.BrowserSupport.testAndMemorize("testInBody" + contents + tagName,def1,function(v) {
-		return stx.js.Env.document == null?stx.Option.None:(function($this) {
+		return stx.js.Env.document == null?stx.Maybe.None:(function($this) {
 			var $r;
 			var div = stx.js.Env.document.createElement("div");
 			div.style.display = "none";
 			div.innerHTML = contents;
-			$r = stx.Option.Some(stx.Options.getOrElseC(stx.Options.map(stx.Arrays.firstOption(stx.js.dom.DomCollectionExtensions.toArray(div.getElementsByTagName(tagName))),f),def2));
+			$r = stx.Maybe.Some(stx.Maybes.getOrElseC(stx.Maybes.map(stx.Arrays.firstMaybe(stx.js.dom.DomCollectionExtensions.toArray(div.getElementsByTagName(tagName))),f),def2));
 			return $r;
 		}(this));
 	});
 }
 stx.js.detect.BrowserSupport.testInBody = function(contents,tagName,f,def1,def2) {
 	return stx.js.detect.BrowserSupport.testAndMemorize("testInBody" + contents + tagName,def1,function(v) {
-		return stx.js.Env.document == null || stx.js.Env.document.body == null?stx.Option.None:(function($this) {
+		return stx.js.Env.document == null || stx.js.Env.document.body == null?stx.Maybe.None:(function($this) {
 			var $r;
 			var div = stx.js.Env.document.createElement("div");
 			div.innerHTML = contents;
 			stx.js.Env.document.body.insertBefore(div,stx.js.Env.document.body.firstChild);
-			$r = stx.Option.Some(stx.Dynamics.withEffect(stx.Options.getOrElseC(stx.Options.map(stx.Arrays.firstOption(stx.js.dom.DomCollectionExtensions.toArray(div.getElementsByTagName(tagName))),f),def2),function(_) {
+			$r = stx.Maybe.Some(stx.Dynamics.withEffect(stx.Maybes.getOrElseC(stx.Maybes.map(stx.Arrays.firstMaybe(stx.js.dom.DomCollectionExtensions.toArray(div.getElementsByTagName(tagName))),f),def2),function(_) {
 				stx.js.Env.document.body.removeChild(div);
 				div.style.display = "none";
 			}));
@@ -13015,12 +13015,12 @@ stx.js.detect.BrowserSupport.testBugAndMemorize = function(key,testFunction) {
 	return stx.js.detect.BrowserSupport.testAndMemorize(key,false,testFunction);
 }
 stx.js.detect.BrowserSupport.testAndMemorize = function(key,defaultValue,testFunction) {
-	return stx.Options.getOrElse(stx.js.detect.BrowserSupport.memorized.get(key),function() {
+	return stx.Maybes.getOrElse(stx.js.detect.BrowserSupport.memorized.get(key),function() {
 		var result = testFunction.call();
-		stx.Options.foreach(result,function(v) {
+		stx.Maybes.foreach(result,function(v) {
 			stx.js.detect.BrowserSupport.memorized = stx.js.detect.BrowserSupport.memorized.set(key,v);
 		});
-		return stx.Options.getOrElseC(result,defaultValue);
+		return stx.Maybes.getOrElseC(result,defaultValue);
 	});
 }
 stx.js.detect.EnvironmentType = $hxClasses["stx.js.detect.EnvironmentType"] = { __ename__ : ["stx","js","detect","EnvironmentType"], __constructs__ : ["UnknownServer","NodeJs","IE","Firefox","Safari","Chrome","Unknown","Opera"] }
@@ -13100,7 +13100,7 @@ stx.js.dom.HTMLDocumentExtensions.newDiv = function(doc) {
 }
 stx.js.dom.HTMLDocumentExtensions.newIframe = function(doc,width,height) {
 	var iframe = doc.createElement("IFRAME");
-	stx.Options.map(stx.Options.zip(stx.Options.toOption(width),stx.Options.toOption(height)),function(t) {
+	stx.Maybes.map(stx.Maybes.zip(stx.Maybes.toMaybe(width),stx.Maybes.toMaybe(height)),function(t) {
 		iframe.setAttribute("width",stx.Floats.toString(width));
 		iframe.setAttribute("height",stx.Floats.toString(height));
 	});
@@ -13142,10 +13142,10 @@ stx.js.dom.HTMLDocumentExtensions.getIds = function(doc,a) {
 	return result;
 }
 stx.js.dom.HTMLDocumentExtensions.getTags = function(doc,s) {
-	return stx.Options.getOrElseC(stx.Options.toOption(doc.getElementsByTagName(s)),[]);
+	return stx.Maybes.getOrElseC(stx.Maybes.toMaybe(doc.getElementsByTagName(s)),[]);
 }
 stx.js.dom.HTMLDocumentExtensions.getClasses = function(doc,s) {
-	return stx.Options.getOrElseC(stx.Options.toOption(stx.js.Env.getElementsByClass(s)),[]);
+	return stx.Maybes.getOrElseC(stx.Maybes.toMaybe(stx.js.Env.getElementsByClass(s)),[]);
 }
 stx.js.dom.HTMLElementExtensions = $hxClasses["stx.js.dom.HTMLElementExtensions"] = function() { }
 stx.js.dom.HTMLElementExtensions.__name__ = ["stx","js","dom","HTMLElementExtensions"];
@@ -13177,346 +13177,346 @@ stx.js.dom.HTMLElementExtensions.setClass = function(e,className) {
 	return e;
 }
 stx.js.dom.HTMLElementExtensions.asIframe = function(e) {
-	return stx.Options.get(e.nodeName == "IFRAME"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "IFRAME"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asScript = function(e) {
-	return stx.Options.get(e.nodeName == "SCRIPT"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "SCRIPT"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asDiv = function(e) {
-	return stx.Options.get(e.nodeName == "DIV"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "DIV"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asForm = function(e) {
-	return stx.Options.get(e.nodeName == "FORM"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "FORM"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asBody = function(e) {
-	return stx.Options.get(e.nodeName == "BODY"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "BODY"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asStyle = function(e) {
-	return stx.Options.get(e.nodeName == "STYLE"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "STYLE"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asText = function(e) {
-	return stx.Options.get(e.nodeName == "TEXT"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "TEXT"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asVideo = function(e) {
-	return stx.Options.get(e.nodeName == "VIDEO"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "VIDEO"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asAudio = function(e) {
-	return stx.Options.get(e.nodeName == "AUDIO"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "AUDIO"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asHead = function(e) {
-	return stx.Options.get(e.nodeName == "HEAD"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "HEAD"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asLink = function(e) {
-	return stx.Options.get(e.nodeName == "LINK"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "LINK"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asTitle = function(e) {
-	return stx.Options.get(e.nodeName == "TITLE"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "TITLE"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asMeta = function(e) {
-	return stx.Options.get(e.nodeName == "META"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "META"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asBase = function(e) {
-	return stx.Options.get(e.nodeName == "BASE"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "BASE"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asIsIndex = function(e) {
-	return stx.Options.get(e.nodeName == "ISINDEX"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "ISINDEX"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asSelect = function(e) {
-	return stx.Options.get(e.nodeName == "SELECT"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "SELECT"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asCanvas = function(e) {
-	return stx.Options.get(e.nodeName == "CANVAS"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "CANVAS"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asOptGroup = function(e) {
-	return stx.Options.get(e.nodeName == "OPTGROUP"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "OPTGROUP"?stx.Maybe.Some(e):stx.Maybe.None);
 }
-stx.js.dom.HTMLElementExtensions.asOption = function(e) {
-	return stx.Options.get(e.nodeName == "OPTION"?stx.Option.Some(e):stx.Option.None);
+stx.js.dom.HTMLElementExtensions.asMaybe = function(e) {
+	return stx.Maybes.get(e.nodeName == "OPTION"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asInput = function(e) {
-	return stx.Options.get(e.nodeName == "INPUT"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "INPUT"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asTextArea = function(e) {
-	return stx.Options.get(e.nodeName == "TEXTAREA"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "TEXTAREA"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asButton = function(e) {
-	return stx.Options.get(e.nodeName == "BUTTON"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "BUTTON"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asLabel = function(e) {
-	return stx.Options.get(e.nodeName == "LABEL"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "LABEL"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asFieldSet = function(e) {
-	return stx.Options.get(e.nodeName == "FIELDSET"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "FIELDSET"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asLegend = function(e) {
-	return stx.Options.get(e.nodeName == "LEGEND"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "LEGEND"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asUList = function(e) {
-	return stx.Options.get(e.nodeName == "UL"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "UL"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asOList = function(e) {
-	return stx.Options.get(e.nodeName == "OL"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "OL"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asDList = function(e) {
-	return stx.Options.get(e.nodeName == "DL"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "DL"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asDir = function(e) {
-	return stx.Options.get(e.nodeName == "DIR"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "DIR"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asMenu = function(e) {
-	return stx.Options.get(e.nodeName == "MENU"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "MENU"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asLI = function(e) {
-	return stx.Options.get(e.nodeName == "LI"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "LI"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asP = function(e) {
-	return stx.Options.get(e.nodeName == "P"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "P"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asH = function(e) {
-	return stx.Options.get(e.nodeName == "H"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "H"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asQuote = function(e) {
-	return stx.Options.get(e.nodeName == "QUOTE"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "QUOTE"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asPre = function(e) {
-	return stx.Options.get(e.nodeName == "PRE"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "PRE"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asBR = function(e) {
-	return stx.Options.get(e.nodeName == "BR"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "BR"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asBaseFont = function(e) {
-	return stx.Options.get(e.nodeName == "BASEFONT"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "BASEFONT"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asFont = function(e) {
-	return stx.Options.get(e.nodeName == "FONT"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "FONT"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asHR = function(e) {
-	return stx.Options.get(e.nodeName == "HR"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "HR"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asMod = function(e) {
-	return stx.Options.get(e.nodeName == "MOD"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "MOD"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asA = function(e) {
-	return stx.Options.get(e.nodeName == "A"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "A"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asImage = function(e) {
-	return stx.Options.get(e.nodeName == "IMG"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "IMG"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asObject = function(e) {
-	return stx.Options.get(e.nodeName == "OBJECT"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "OBJECT"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asParam = function(e) {
-	return stx.Options.get(e.nodeName == "PARAM"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "PARAM"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asApplet = function(e) {
-	return stx.Options.get(e.nodeName == "APPLET"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "APPLET"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asMap = function(e) {
-	return stx.Options.get(e.nodeName == "MAP"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "MAP"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asArea = function(e) {
-	return stx.Options.get(e.nodeName == "AREA"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "AREA"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asTable = function(e) {
-	return stx.Options.get(e.nodeName == "TABLE"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "TABLE"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asCaption = function(e) {
-	return stx.Options.get(e.nodeName == "CAPTION"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "CAPTION"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asTD = function(e) {
-	return stx.Options.get(e.nodeName == "TD"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "TD"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asTHead = function(e) {
-	return stx.Options.get(e.nodeName == "THEAD"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "THEAD"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asTBody = function(e) {
-	return stx.Options.get(e.nodeName == "TBODY"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "TBODY"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asTFoot = function(e) {
-	return stx.Options.get(e.nodeName == "TFOOT"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "TFOOT"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asTR = function(e) {
-	return stx.Options.get(e.nodeName == "TR"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "TR"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asFrameSet = function(e) {
-	return stx.Options.get(e.nodeName == "FRAMESET"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "FRAMESET"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asFrame = function(e) {
-	return stx.Options.get(e.nodeName == "FRAME"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "FRAME"?stx.Maybe.Some(e):stx.Maybe.None);
 }
 stx.js.dom.HTMLElementExtensions.asIFrame = function(e) {
-	return stx.Options.get(e.nodeName == "IFRAME"?stx.Option.Some(e):stx.Option.None);
+	return stx.Maybes.get(e.nodeName == "IFRAME"?stx.Maybe.Some(e):stx.Maybe.None);
 }
-stx.js.dom.HTMLElementExtensions.asIframeOption = function(e) {
-	return e.nodeName == "IFRAME"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asIframeMaybe = function(e) {
+	return e.nodeName == "IFRAME"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asScriptOption = function(e) {
-	return e.nodeName == "SCRIPT"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asScriptMaybe = function(e) {
+	return e.nodeName == "SCRIPT"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asDivOption = function(e) {
-	return e.nodeName == "DIV"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asDivMaybe = function(e) {
+	return e.nodeName == "DIV"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asFormOption = function(e) {
-	return e.nodeName == "FORM"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asFormMaybe = function(e) {
+	return e.nodeName == "FORM"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asBodyOption = function(e) {
-	return e.nodeName == "BODY"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asBodyMaybe = function(e) {
+	return e.nodeName == "BODY"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asStyleOption = function(e) {
-	return e.nodeName == "STYLE"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asStyleMaybe = function(e) {
+	return e.nodeName == "STYLE"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asTextOption = function(e) {
-	return e.nodeName == "TEXT"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asTextMaybe = function(e) {
+	return e.nodeName == "TEXT"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asVideoOption = function(e) {
-	return e.nodeName == "VIDEO"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asVideoMaybe = function(e) {
+	return e.nodeName == "VIDEO"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asAudioOption = function(e) {
-	return e.nodeName == "AUDIO"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asAudioMaybe = function(e) {
+	return e.nodeName == "AUDIO"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asHeadOption = function(e) {
-	return e.nodeName == "HEAD"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asHeadMaybe = function(e) {
+	return e.nodeName == "HEAD"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asLinkOption = function(e) {
-	return e.nodeName == "LINK"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asLinkMaybe = function(e) {
+	return e.nodeName == "LINK"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asTitleOption = function(e) {
-	return e.nodeName == "TITLE"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asTitleMaybe = function(e) {
+	return e.nodeName == "TITLE"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asMetaOption = function(e) {
-	return e.nodeName == "META"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asMetaMaybe = function(e) {
+	return e.nodeName == "META"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asBaseOption = function(e) {
-	return e.nodeName == "BASE"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asBaseMaybe = function(e) {
+	return e.nodeName == "BASE"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asIsIndexOption = function(e) {
-	return e.nodeName == "ISINDEX"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asIsIndexMaybe = function(e) {
+	return e.nodeName == "ISINDEX"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asSelectOption = function(e) {
-	return e.nodeName == "SELECT"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asSelectMaybe = function(e) {
+	return e.nodeName == "SELECT"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asCanvasOption = function(e) {
-	return e.nodeName == "CANVAS"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asCanvasMaybe = function(e) {
+	return e.nodeName == "CANVAS"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asOptGroupOption = function(e) {
-	return e.nodeName == "OPTGROUP"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asOptGroupMaybe = function(e) {
+	return e.nodeName == "OPTGROUP"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asOptionOption = function(e) {
-	return e.nodeName == "OPTION"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asMaybeMaybe = function(e) {
+	return e.nodeName == "OPTION"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asInputOption = function(e) {
-	return e.nodeName == "INPUT"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asInputMaybe = function(e) {
+	return e.nodeName == "INPUT"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asTextAreaOption = function(e) {
-	return e.nodeName == "TEXTAREA"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asTextAreaMaybe = function(e) {
+	return e.nodeName == "TEXTAREA"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asButtonOption = function(e) {
-	return e.nodeName == "BUTTON"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asButtonMaybe = function(e) {
+	return e.nodeName == "BUTTON"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asLabelOption = function(e) {
-	return e.nodeName == "LABEL"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asLabelMaybe = function(e) {
+	return e.nodeName == "LABEL"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asFieldSetOption = function(e) {
-	return e.nodeName == "FIELDSET"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asFieldSetMaybe = function(e) {
+	return e.nodeName == "FIELDSET"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asLegendOption = function(e) {
-	return e.nodeName == "LEGEND"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asLegendMaybe = function(e) {
+	return e.nodeName == "LEGEND"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asUListOption = function(e) {
-	return e.nodeName == "UL"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asUListMaybe = function(e) {
+	return e.nodeName == "UL"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asOListOption = function(e) {
-	return e.nodeName == "OL"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asOListMaybe = function(e) {
+	return e.nodeName == "OL"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asDListOption = function(e) {
-	return e.nodeName == "DL"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asDListMaybe = function(e) {
+	return e.nodeName == "DL"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asDirOption = function(e) {
-	return e.nodeName == "DIR"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asDirMaybe = function(e) {
+	return e.nodeName == "DIR"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asMenuOption = function(e) {
-	return e.nodeName == "MENU"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asMenuMaybe = function(e) {
+	return e.nodeName == "MENU"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asLIOption = function(e) {
-	return e.nodeName == "LI"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asLIMaybe = function(e) {
+	return e.nodeName == "LI"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asPOption = function(e) {
-	return e.nodeName == "P"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asPMaybe = function(e) {
+	return e.nodeName == "P"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asHOption = function(e) {
-	return e.nodeName == "H"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asHMaybe = function(e) {
+	return e.nodeName == "H"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asQuoteOption = function(e) {
-	return e.nodeName == "QUOTE"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asQuoteMaybe = function(e) {
+	return e.nodeName == "QUOTE"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asPreOption = function(e) {
-	return e.nodeName == "PRE"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asPreMaybe = function(e) {
+	return e.nodeName == "PRE"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asBROption = function(e) {
-	return e.nodeName == "BR"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asBRMaybe = function(e) {
+	return e.nodeName == "BR"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asBaseFontOption = function(e) {
-	return e.nodeName == "BASEFONT"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asBaseFontMaybe = function(e) {
+	return e.nodeName == "BASEFONT"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asFontOption = function(e) {
-	return e.nodeName == "FONT"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asFontMaybe = function(e) {
+	return e.nodeName == "FONT"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asHROption = function(e) {
-	return e.nodeName == "HR"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asHRMaybe = function(e) {
+	return e.nodeName == "HR"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asModOption = function(e) {
-	return e.nodeName == "MOD"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asModMaybe = function(e) {
+	return e.nodeName == "MOD"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asAOption = function(e) {
-	return e.nodeName == "A"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asAMaybe = function(e) {
+	return e.nodeName == "A"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asImageOption = function(e) {
-	return e.nodeName == "IMG"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asImageMaybe = function(e) {
+	return e.nodeName == "IMG"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asObjectOption = function(e) {
-	return e.nodeName == "OBJECT"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asObjectMaybe = function(e) {
+	return e.nodeName == "OBJECT"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asParamOption = function(e) {
-	return e.nodeName == "PARAM"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asParamMaybe = function(e) {
+	return e.nodeName == "PARAM"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asAppletOption = function(e) {
-	return e.nodeName == "APPLET"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asAppletMaybe = function(e) {
+	return e.nodeName == "APPLET"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asMapOption = function(e) {
-	return e.nodeName == "MAP"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asMapMaybe = function(e) {
+	return e.nodeName == "MAP"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asAreaOption = function(e) {
-	return e.nodeName == "AREA"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asAreaMaybe = function(e) {
+	return e.nodeName == "AREA"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asTableOption = function(e) {
-	return e.nodeName == "TABLE"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asTableMaybe = function(e) {
+	return e.nodeName == "TABLE"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asCaptionOption = function(e) {
-	return e.nodeName == "CAPTION"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asCaptionMaybe = function(e) {
+	return e.nodeName == "CAPTION"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asTDOption = function(e) {
-	return e.nodeName == "TD"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asTDMaybe = function(e) {
+	return e.nodeName == "TD"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asTHeadOption = function(e) {
-	return e.nodeName == "THEAD"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asTHeadMaybe = function(e) {
+	return e.nodeName == "THEAD"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asTBodyOption = function(e) {
-	return e.nodeName == "TBODY"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asTBodyMaybe = function(e) {
+	return e.nodeName == "TBODY"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asTFootOption = function(e) {
-	return e.nodeName == "TFOOT"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asTFootMaybe = function(e) {
+	return e.nodeName == "TFOOT"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asTROption = function(e) {
-	return e.nodeName == "TR"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asTRMaybe = function(e) {
+	return e.nodeName == "TR"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asFrameSetOption = function(e) {
-	return e.nodeName == "FRAMESET"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asFrameSetMaybe = function(e) {
+	return e.nodeName == "FRAMESET"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asFrameOption = function(e) {
-	return e.nodeName == "FRAME"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asFrameMaybe = function(e) {
+	return e.nodeName == "FRAME"?stx.Maybe.Some(e):stx.Maybe.None;
 }
-stx.js.dom.HTMLElementExtensions.asIFrameOption = function(e) {
-	return e.nodeName == "IFRAME"?stx.Option.Some(e):stx.Option.None;
+stx.js.dom.HTMLElementExtensions.asIFrameMaybe = function(e) {
+	return e.nodeName == "IFRAME"?stx.Maybe.Some(e):stx.Maybe.None;
 }
 stx.js.dom.HTMLEventExtensions = $hxClasses["stx.js.dom.HTMLEventExtensions"] = function() { }
 stx.js.dom.HTMLEventExtensions.__name__ = ["stx","js","dom","HTMLEventExtensions"];
@@ -13608,7 +13608,7 @@ stx.js.dom.Quirks.deleteCssRule = function(doc,rule) {
 stx.js.dom.Quirks.addOverridingCssRule = function(el,style) {
 	if(style == null) style = "";
 	var doc = el.ownerDocument;
-	var id = stx.Options.getOrElse(stx.Options.filter(stx.Options.toOption(el.getAttribute("id")),function(id1) {
+	var id = stx.Maybes.getOrElse(stx.Maybes.filter(stx.Maybes.toMaybe(el.getAttribute("id")),function(id1) {
 		return id1 != "";
 	}),function() {
 		return stx.Dynamics.withEffect("id-" + stx.util.Guid.generate(),function(guid) {
@@ -13620,7 +13620,7 @@ stx.js.dom.Quirks.addOverridingCssRule = function(el,style) {
 	return stx.js.dom.Quirks.insertCssRule(lastStyleSheet,"#" + id + " {" + style + "}");
 }
 stx.js.dom.Quirks.addCssStylesheet = function(doc,content) {
-	var head = stx.Options.getOrElse(stx.Options.toOption(doc.getElementsByTagName("HEAD")[0]),function() {
+	var head = stx.Maybes.getOrElse(stx.Maybes.toMaybe(doc.getElementsByTagName("HEAD")[0]),function() {
 		return stx.Dynamics.withEffect(doc.createElement("HEAD"),function(newHead) {
 			doc.documentElement.appendChild(newHead);
 		});
@@ -13663,14 +13663,14 @@ stx.js.dom.Quirks.getActualCssPropertyName = function(name) {
 	return name;
 }
 stx.js.dom.Quirks.getComputedCssProperty = function(elem,name) {
-	return stx.Dynamics.into(stx.js.detect.BrowserSupport.getComputedStyle()?stx.Options.getOrElseC(stx.Options.orElse(stx.Options.flatMap(stx.Options.flatMap(stx.Options.toOption(elem.ownerDocument.defaultView),function(defaultView) {
-		return stx.Options.toOption(defaultView.getComputedStyle(elem,null));
+	return stx.Dynamics.into(stx.js.detect.BrowserSupport.getComputedStyle()?stx.Maybes.getOrElseC(stx.Maybes.orElse(stx.Maybes.flatMap(stx.Maybes.flatMap(stx.Maybes.toMaybe(elem.ownerDocument.defaultView),function(defaultView) {
+		return stx.Maybes.toMaybe(defaultView.getComputedStyle(elem,null));
 	}),function(computedStyle) {
-		return stx.Options.filter(stx.Options.toOption(computedStyle.getPropertyValue(name)),function(style) {
+		return stx.Maybes.filter(stx.Maybes.toMaybe(computedStyle.getPropertyValue(name)),function(style) {
 			return style != "";
 		});
 	}),function() {
-		return name == "opacity"?stx.Option.Some("1"):stx.Option.None;
+		return name == "opacity"?stx.Maybe.Some("1"):stx.Maybe.None;
 	}),""):elem.currentStyle != null?name == "opacity" && !stx.js.detect.BrowserSupport.opacity()?stx.js.dom.Quirks.OpacityPattern.match(elem.currentStyle.filter)?stx.Floats.toString(stx.Strings.toFloat(stx.js.dom.Quirks.OpacityPattern.matched(1)) / 100.0):"1":(function($this) {
 		var $r;
 		var style = elem.currentStyle[name];
@@ -13688,28 +13688,28 @@ stx.js.dom.Quirks.getComputedCssProperty = function(elem,name) {
 		}($this)):style;
 		return $r;
 	}(this)):"",function(computedStyle) {
-		return computedStyle == ""?stx.Option.None:stx.Options.toOption(computedStyle);
+		return computedStyle == ""?stx.Maybe.None:stx.Maybes.toMaybe(computedStyle);
 	});
 }
 stx.js.dom.Quirks.getCssProperty = function(elem,name) {
-	return stx.Options.orElse(stx.Options.flatMap(stx.Options.toOption(elem.style),function(style) {
+	return stx.Maybes.orElse(stx.Maybes.flatMap(stx.Maybes.toMaybe(elem.style),function(style) {
 		return stx.Objects.getAny(style,stx.js.dom.Quirks.getActualCssPropertyName(name));
 	}),function() {
 		return stx.js.dom.Quirks.getComputedCssProperty(elem,name);
 	});
 }
 stx.js.dom.Quirks.getCssPropertyIfSet = function(elem,name) {
-	return stx.Options.filter(stx.js.dom.Quirks.getCssProperty(elem,name),function(style) {
+	return stx.Maybes.filter(stx.js.dom.Quirks.getCssProperty(elem,name),function(style) {
 		return style != "";
 	});
 }
 stx.js.dom.Quirks.getViewportSize = function(win_) {
-	var win = stx.Options.getOrElseC(stx.Options.toOption(win_),stx.js.Env.window);
+	var win = stx.Maybes.getOrElseC(stx.Maybes.toMaybe(win_),stx.js.Env.window);
 	var doc = win.document;
 	return stx.js.Env.window.innerWidth != null?{ dx : win.innerWidth, dy : win.innerHeight}:doc.documentElement != null && (doc.documentElement.clientWidth != null && doc.documentElement.clientWidth != 0)?{ dx : doc.documentElement.clientWidth, dy : doc.documentElement.clientHeight}:{ dx : doc.body.clientWidth, dy : doc.body.clientHeight};
 }
 stx.js.dom.Quirks.getPageScroll = function(win_) {
-	var win = stx.Options.getOrElseC(stx.Options.toOption(win_),stx.js.Env.window);
+	var win = stx.Maybes.getOrElseC(stx.Maybes.toMaybe(win_),stx.js.Env.window);
 	var doc = win.document;
 	var xScroll = 0;
 	var yScroll = 0;
@@ -13732,16 +13732,16 @@ stx.js.dom.Quirks.hasAttribute = function(e,attr) {
 	}
 }
 stx.js.dom.Quirks.getBodyOffset = function(doc) {
-	return stx.Options.map(stx.Options.flatMap(stx.Options.toOption(stx.js.Env.document),function(document) {
-		return stx.Options.toOption(document.body);
+	return stx.Maybes.map(stx.Maybes.flatMap(stx.Maybes.toMaybe(stx.js.Env.document),function(document) {
+		return stx.Maybes.toMaybe(document.body);
 	}),function(body) {
 		var top = body.offsetTop;
 		var left = body.offsetLeft;
 		if(stx.js.detect.BrowserSupport.offsetDoesNotIncludeMarginInBodyOffset()) {
-			top += stx.Options.getOrElseC(stx.Options.map(stx.js.dom.Quirks.getComputedCssProperty(body,"margin-top"),function(s) {
+			top += stx.Maybes.getOrElseC(stx.Maybes.map(stx.js.dom.Quirks.getComputedCssProperty(body,"margin-top"),function(s) {
 				return stx.Strings["int"](s,0);
 			}),0);
-			left += stx.Options.getOrElseC(stx.Options.map(stx.js.dom.Quirks.getComputedCssProperty(body,"margin-left"),function(s) {
+			left += stx.Maybes.getOrElseC(stx.Maybes.map(stx.js.dom.Quirks.getComputedCssProperty(body,"margin-left"),function(s) {
 				return stx.Strings["int"](s,0);
 			}),0);
 		}
@@ -13751,14 +13751,14 @@ stx.js.dom.Quirks.getBodyOffset = function(doc) {
 stx.js.dom.Quirks.setOffset = function(elem,offset) {
 	if(elem == null || elem.ownerDocument == null) return elem; else {
 		var position = stx.js.dom.Quirks.getComputedCssProperty(elem,"position");
-		stx.Options.foreach(position,function(v) {
+		stx.Maybes.foreach(position,function(v) {
 			if(v == "static") elem.style.position = "relative";
 		});
-		var curOffset = stx.Options.getOrElseC(stx.js.dom.Quirks.getOffset(elem),{ x : 0, y : 0});
-		var curTop = stx.Options.getOrElseC(stx.Options.map(stx.js.dom.Quirks.getComputedCssProperty(elem,"top"),function(s) {
+		var curOffset = stx.Maybes.getOrElseC(stx.js.dom.Quirks.getOffset(elem),{ x : 0, y : 0});
+		var curTop = stx.Maybes.getOrElseC(stx.Maybes.map(stx.js.dom.Quirks.getComputedCssProperty(elem,"top"),function(s) {
 			return stx.Strings["int"](s,0);
 		}),0);
-		var curLeft = stx.Options.getOrElseC(stx.Options.map(stx.js.dom.Quirks.getComputedCssProperty(elem,"left"),function(s) {
+		var curLeft = stx.Maybes.getOrElseC(stx.Maybes.map(stx.js.dom.Quirks.getComputedCssProperty(elem,"left"),function(s) {
 			return stx.Strings["int"](s,0);
 		}),0);
 		elem.style.top = stx.Floats.toString(offset.y - curOffset.y + curTop) + "px";
@@ -13789,7 +13789,7 @@ stx.js.dom.Quirks.setCssProperty = function(elem,name,value) {
 		if(name == "opacity" && !stx.js.detect.BrowserSupport.opacity()) {
 			style.zoom = 1;
 			var opacity = "alpha(opacity=" + stx.Strings.toFloat(value) * 100 + ")";
-			var filter = style.filter != null?stx.Options.getOrElseC(stx.js.dom.Quirks.getComputedCssProperty(elem,"filter"),""):"";
+			var filter = style.filter != null?stx.Maybes.getOrElseC(stx.js.dom.Quirks.getComputedCssProperty(elem,"filter"),""):"";
 			var newFilter = stx.js.dom.Quirks.AlphaPattern.match(filter)?stx.js.dom.Quirks.AlphaPattern.replace(filter,opacity):opacity;
 			style.filter = newFilter;
 		} else {
@@ -13818,12 +13818,12 @@ stx.js.dom.Quirks.getWidth = function(elem) {
 	return stx.js.dom.Quirks.getWidthOrHeight(elem,"offsetWidth",stx.js.dom.Quirks.cssWidth,"");
 }
 stx.js.dom.Quirks.getWidthOrHeight = function(elem,offsetValueExtract,which,extra) {
-	if(elem == null || elem.ownerDocument == null) return stx.Option.None; else {
+	if(elem == null || elem.ownerDocument == null) return stx.Maybe.None; else {
 		var val = 0;
 		if(elem.offsetWidth != 0) val = stx.js.dom.Quirks.getWH(elem,offsetValueExtract,which,extra); else val = stx.js.dom.Quirks.swap(elem,stx.js.dom.Quirks.cssShow,function(value) {
 			return stx.js.dom.Quirks.getWH(elem,offsetValueExtract,which,extra);
 		});
-		return stx.Option.Some(stx.Floats["int"](Math.max(0,Math.round(val))));
+		return stx.Maybe.Some(stx.Floats["int"](Math.max(0,Math.round(val))));
 	}
 }
 stx.js.dom.Quirks.swap = function(elem,values,functionCallback) {
@@ -13845,19 +13845,19 @@ stx.js.dom.Quirks.setAndStore = function(elem,styles) {
 stx.js.dom.Quirks.getWH = function(elem,offsetValueExtract,which,extra) {
 	var val = elem[offsetValueExtract];
 	if(extra != "border") ArrayLambda.foreach(which,function(v) {
-		if(extra != "") val -= stx.Options.getOrElseC(stx.Options.map(stx.js.dom.Quirks.getCssPropertyIfSet(elem,"padding-" + v),function(s) {
+		if(extra != "") val -= stx.Maybes.getOrElseC(stx.Maybes.map(stx.js.dom.Quirks.getCssPropertyIfSet(elem,"padding-" + v),function(s) {
 			return stx.Strings["int"](s,0);
 		}),0);
-		if(extra == "margin") val += stx.Options.getOrElseC(stx.Options.map(stx.js.dom.Quirks.getCssPropertyIfSet(elem,"margin-" + v),function(s) {
+		if(extra == "margin") val += stx.Maybes.getOrElseC(stx.Maybes.map(stx.js.dom.Quirks.getCssPropertyIfSet(elem,"margin-" + v),function(s) {
 			return stx.Strings["int"](s,0);
-		}),0); else val -= stx.Options.getOrElseC(stx.Options.map(stx.js.dom.Quirks.getCssPropertyIfSet(elem,"border-" + v + "-width"),function(s) {
+		}),0); else val -= stx.Maybes.getOrElseC(stx.Maybes.map(stx.js.dom.Quirks.getCssPropertyIfSet(elem,"border-" + v + "-width"),function(s) {
 			return stx.Strings["int"](s,0);
 		}),0);
 	});
 	return val;
 }
 stx.js.dom.Quirks.getOffset = function(elem) {
-	if(elem == null || elem.ownerDocument == null) return stx.Option.None; else if(elem == elem.ownerDocument.body) return stx.js.dom.Quirks.getBodyOffset(elem.ownerDocument); else if(stx.js.Env.document.documentElement != null && ($_=stx.js.Env.document.documentElement,$bind($_,$_.getBoundingClientRect)) != null) {
+	if(elem == null || elem.ownerDocument == null) return stx.Maybe.None; else if(elem == elem.ownerDocument.body) return stx.js.dom.Quirks.getBodyOffset(elem.ownerDocument); else if(stx.js.Env.document.documentElement != null && ($_=stx.js.Env.document.documentElement,$bind($_,$_.getBoundingClientRect)) != null) {
 		var box = elem.getBoundingClientRect();
 		var doc = elem.ownerDocument;
 		var body = doc.body;
@@ -13866,7 +13866,7 @@ stx.js.dom.Quirks.getOffset = function(elem) {
 		var clientLeft = stx.Arrays.first(ArrayLambda.filter([docElem.clientLeft,body.clientLeft,0],stx.Predicates.isNotNull()));
 		var top = box.top + stx.Arrays.first(ArrayLambda.filter([stx.js.Env.window.pageYOffset,stx.js.detect.BrowserSupport.boxModel()?docElem.scrollTop:null,body.scrollTop],stx.Predicates.isNotNull())) - clientTop;
 		var left = box.left + stx.Arrays.first(ArrayLambda.filter([stx.js.Env.window.pageXOffset,stx.js.detect.BrowserSupport.boxModel()?docElem.scrollLeft:null,body.scrollLeft],stx.Predicates.isNotNull())) - clientLeft;
-		return stx.Option.Some({ x : left, y : top});
+		return stx.Maybe.Some({ x : left, y : top});
 	} else {
 		var getStyle = function(elem1) {
 			var defaultView = elem1.ownerDocument.defaultView;
@@ -13910,23 +13910,23 @@ stx.js.dom.Quirks.getOffset = function(elem) {
 			top += stx.Floats["int"](Math.max(docElem.scrollTop,body.scrollTop));
 			left += stx.Floats["int"](Math.max(docElem.scrollLeft,body.scrollLeft));
 		}
-		return stx.Option.Some({ x : left, y : top});
+		return stx.Maybe.Some({ x : left, y : top});
 	}
 }
 stx.js.dom.Quirks.getPosition = function(elem) {
-	if(elem == null || elem.ownerDocument == null) return stx.Option.None;
+	if(elem == null || elem.ownerDocument == null) return stx.Maybe.None;
 	var offsetParent = stx.js.dom.Quirks.offsetParent(elem);
-	var offset = stx.Options.getOrElseC(stx.js.dom.Quirks.getOffset(elem),{ x : 0, y : 0});
-	var parentOffset = stx.js.dom.Quirks.RootPattern.match(offsetParent.nodeName)?{ x : 0, y : 0}:stx.Options.getOrElseC(stx.js.dom.Quirks.getOffset(offsetParent),{ x : 0, y : 0});
-	offset.x -= stx.Strings["int"](stx.Options.getOrElseC(stx.js.dom.Quirks.getCssPropertyIfSet(elem,"marginTop"),"0"));
-	offset.y -= stx.Strings["int"](stx.Options.getOrElseC(stx.js.dom.Quirks.getCssPropertyIfSet(elem,"marginLeft"),"0"));
-	parentOffset.x += stx.Strings["int"](stx.Options.getOrElseC(stx.js.dom.Quirks.getCssPropertyIfSet(offsetParent,"borderTopWidth"),"0"));
-	parentOffset.y += stx.Strings["int"](stx.Options.getOrElseC(stx.js.dom.Quirks.getCssPropertyIfSet(offsetParent,"borderLeftWidth"),"0"));
-	return stx.Option.Some({ x : offset.x - parentOffset.x, y : offset.y - parentOffset.y});
+	var offset = stx.Maybes.getOrElseC(stx.js.dom.Quirks.getOffset(elem),{ x : 0, y : 0});
+	var parentOffset = stx.js.dom.Quirks.RootPattern.match(offsetParent.nodeName)?{ x : 0, y : 0}:stx.Maybes.getOrElseC(stx.js.dom.Quirks.getOffset(offsetParent),{ x : 0, y : 0});
+	offset.x -= stx.Strings["int"](stx.Maybes.getOrElseC(stx.js.dom.Quirks.getCssPropertyIfSet(elem,"marginTop"),"0"));
+	offset.y -= stx.Strings["int"](stx.Maybes.getOrElseC(stx.js.dom.Quirks.getCssPropertyIfSet(elem,"marginLeft"),"0"));
+	parentOffset.x += stx.Strings["int"](stx.Maybes.getOrElseC(stx.js.dom.Quirks.getCssPropertyIfSet(offsetParent,"borderTopWidth"),"0"));
+	parentOffset.y += stx.Strings["int"](stx.Maybes.getOrElseC(stx.js.dom.Quirks.getCssPropertyIfSet(offsetParent,"borderLeftWidth"),"0"));
+	return stx.Maybe.Some({ x : offset.x - parentOffset.x, y : offset.y - parentOffset.y});
 }
 stx.js.dom.Quirks.offsetParent = function(elem) {
 	var offsetParent = elem.offsetParent != null?elem.offsetParent:stx.js.Env.document.body;
-	while(offsetParent != null && (!stx.js.dom.Quirks.RootPattern.match(offsetParent.nodeName) && stx.Options.getOrElseC(stx.js.dom.Quirks.getCssProperty(offsetParent,"position"),"") == "static")) offsetParent = offsetParent.offsetParent;
+	while(offsetParent != null && (!stx.js.dom.Quirks.RootPattern.match(offsetParent.nodeName) && stx.Maybes.getOrElseC(stx.js.dom.Quirks.getCssProperty(offsetParent,"position"),"") == "static")) offsetParent = offsetParent.offsetParent;
 	return offsetParent;
 }
 if(!stx.js.io) stx.js.io = {}
@@ -13981,8 +13981,8 @@ stx.js.io.AbstractIFrameIO.prototype = {
 	,__class__: stx.js.io.AbstractIFrameIO
 }
 stx.js.io.IFrameIOAutoDetect = $hxClasses["stx.js.io.IFrameIOAutoDetect"] = function(w) {
-	this.bindTarget = stx.Options.getOrElseC(stx.Options.toOption(w),stx.js.Env.window);
-	this.underlying = ($_=this.bindTarget,$bind($_,$_.postMessage)) != null?js.Boot.__cast(new stx.js.io.IFrameIOPostMessage(this.bindTarget) , stx.js.io.IFrameIO):js.Boot.__cast(new stx.js.io.IFrameIOPollingHashtag(this.bindTarget) , stx.js.io.IFrameIO);
+	this.bindTarget = stx.Maybes.getOrElseC(stx.Maybes.toMaybe(w),stx.js.Env.window);
+	this.underlying = ($_=this.bindTarget,$bind($_,$_.postMessage)) != null?js.Boot.__cast(new stx.js.io.IFrameIOPostMessage(this.bindTarget) , stx.js.io.IFrameIO):js.Boot.__cast(new stx.js.io.IFrameIOPollingMaptag(this.bindTarget) , stx.js.io.IFrameIO);
 };
 stx.js.io.IFrameIOAutoDetect.__name__ = ["stx","js","io","IFrameIOAutoDetect"];
 stx.js.io.IFrameIOAutoDetect.__interfaces__ = [stx.js.io.IFrameIO];
@@ -14017,23 +14017,23 @@ stx.js.io.IFrameIOPostMessage = $hxClasses["stx.js.io.IFrameIOPostMessage"] = fu
 stx.js.io.IFrameIOPostMessage.__name__ = ["stx","js","io","IFrameIOPostMessage"];
 stx.js.io.IFrameIOPostMessage.__interfaces__ = [stx.js.io.IFrameIO];
 stx.js.io.IFrameIOPostMessage.normalizeOpt = function(url) {
-	return stx.Options.map(stx.net.UrlExtensions.toParsedUrl(url),function(p) {
-		return stx.net.UrlExtensions.toUrl(stx.net.UrlExtensions.withoutSearch(stx.net.UrlExtensions.withoutPathname(stx.net.UrlExtensions.withoutHash(p))));
+	return stx.Maybes.map(stx.net.UrlExtensions.toParsedUrl(url),function(p) {
+		return stx.net.UrlExtensions.toUrl(stx.net.UrlExtensions.withoutSearch(stx.net.UrlExtensions.withoutPathname(stx.net.UrlExtensions.withoutMap(p))));
 	});
 }
 stx.js.io.IFrameIOPostMessage.normalize = function(url) {
-	return stx.Options.getOrElseC(stx.js.io.IFrameIOPostMessage.normalizeOpt(url),url);
+	return stx.Maybes.getOrElseC(stx.js.io.IFrameIOPostMessage.normalizeOpt(url),url);
 }
 stx.js.io.IFrameIOPostMessage.getUrlFor = function(w,url_) {
 	return stx.Strings.startsWith(url_,"about:")?(function($this) {
 		var $r;
 		var allWindows = [w].concat(IterableLambda.toArray(SCore.unfold(w,function(w1) {
 			var parentWindow = w1.parent;
-			return w1 == parentWindow?stx.Option.None:stx.Option.Some(stx.Entuple.entuple(parentWindow,parentWindow));
+			return w1 == parentWindow?stx.Maybe.None:stx.Maybe.Some(stx.Entuple.entuple(parentWindow,parentWindow));
 		})));
 		$r = stx.Arrays.first(ArrayLambda.flatMap(allWindows,function(w1) {
 			try {
-				return stx.Options.toArray(stx.js.io.IFrameIOPostMessage.normalizeOpt(w1.location.href));
+				return stx.Maybes.toArray(stx.js.io.IFrameIOPostMessage.normalizeOpt(w1.location.href));
 			} catch( e ) {
 				return [];
 			}
@@ -14076,55 +14076,55 @@ stx.js.io.IFrameIOPostMessage.prototype = $extend(stx.js.io.AbstractIFrameIO.pro
 	,bindTarget: null
 	,__class__: stx.js.io.IFrameIOPostMessage
 });
-stx.js.io.IFrameIOPollingHashtag = $hxClasses["stx.js.io.IFrameIOPollingHashtag"] = function(w) {
+stx.js.io.IFrameIOPollingMaptag = $hxClasses["stx.js.io.IFrameIOPollingMaptag"] = function(w) {
 	stx.js.io.AbstractIFrameIO.call(this);
 	this.bindTarget = w;
-	this.executor = stx.framework.Injector.inject(stx.time.ScheduledExecutor,{ fileName : "IFrameIO.hx", lineNumber : 320, className : "stx.js.io.IFrameIOPollingHashtag", methodName : "new"});
-	this.fragmentsToSend = stx.js.io.IFrameIOPollingHashtag.newFragmentsList();
+	this.executor = stx.framework.Injector.inject(stx.time.ScheduledExecutor,{ fileName : "IFrameIO.hx", lineNumber : 320, className : "stx.js.io.IFrameIOPollingMaptag", methodName : "new"});
+	this.fragmentsToSend = stx.js.io.IFrameIOPollingMaptag.newFragmentsList();
 	this.fragmentsReceived = stx.ds.Map.create();
-	this.receivers = new Hash();
-	this.originUrlToWindow = new Hash();
-	this.senderFuture = stx.Option.None;
-	this.receiverFuture = stx.Option.None;
+	this.receivers = new Map();
+	this.originUrlToWindow = new Map();
+	this.senderFuture = stx.Maybe.None;
+	this.receiverFuture = stx.Maybe.None;
 };
-stx.js.io.IFrameIOPollingHashtag.__name__ = ["stx","js","io","IFrameIOPollingHashtag"];
-stx.js.io.IFrameIOPollingHashtag.__interfaces__ = [stx.js.io.IFrameIO];
-stx.js.io.IFrameIOPollingHashtag.normalizeOpt = function(url) {
-	return stx.Options.map(stx.net.UrlExtensions.toParsedUrl(url),function(p) {
-		return stx.net.UrlExtensions.toUrl(stx.net.UrlExtensions.withoutHash(p));
+stx.js.io.IFrameIOPollingMaptag.__name__ = ["stx","js","io","IFrameIOPollingMaptag"];
+stx.js.io.IFrameIOPollingMaptag.__interfaces__ = [stx.js.io.IFrameIO];
+stx.js.io.IFrameIOPollingMaptag.normalizeOpt = function(url) {
+	return stx.Maybes.map(stx.net.UrlExtensions.toParsedUrl(url),function(p) {
+		return stx.net.UrlExtensions.toUrl(stx.net.UrlExtensions.withoutMap(p));
 	});
 }
-stx.js.io.IFrameIOPollingHashtag.normalize = function(url) {
-	return stx.Options.getOrElseC(stx.js.io.IFrameIOPollingHashtag.normalizeOpt(url),url);
+stx.js.io.IFrameIOPollingMaptag.normalize = function(url) {
+	return stx.Maybes.getOrElseC(stx.js.io.IFrameIOPollingMaptag.normalizeOpt(url),url);
 }
-stx.js.io.IFrameIOPollingHashtag.messageKeyFrom = function(o) {
+stx.js.io.IFrameIOPollingMaptag.messageKeyFrom = function(o) {
 	return new stx.js.io.MessageKey(stx.Strings["int"](o.messageId),o.from,o.to,stx.Strings["int"](o.fragmentCount));
 }
-stx.js.io.IFrameIOPollingHashtag.__super__ = stx.js.io.AbstractIFrameIO;
-stx.js.io.IFrameIOPollingHashtag.prototype = $extend(stx.js.io.AbstractIFrameIO.prototype,{
+stx.js.io.IFrameIOPollingMaptag.__super__ = stx.js.io.AbstractIFrameIO;
+stx.js.io.IFrameIOPollingMaptag.prototype = $extend(stx.js.io.AbstractIFrameIO.prototype,{
 	stopReceiver: function() {
-		stx.Options.map(this.receiverFuture,function(r) {
+		stx.Maybes.map(this.receiverFuture,function(r) {
 			r.cancel();
 			return stx.Unit.Unit;
 		});
-		this.receiverFuture = stx.Option.None;
+		this.receiverFuture = stx.Maybe.None;
 	}
 	,startReceiver: function() {
-		if(stx.Options.isEmpty(this.receiverFuture)) this.receiverFuture = stx.Option.Some(this.executor.forever($bind(this,this.receiver),10));
+		if(stx.Maybes.isEmpty(this.receiverFuture)) this.receiverFuture = stx.Maybe.Some(this.executor.forever($bind(this,this.receiver),10));
 	}
 	,stopSender: function() {
-		stx.Options.map(this.senderFuture,function(s) {
+		stx.Maybes.map(this.senderFuture,function(s) {
 			s.cancel();
 			return stx.Unit.Unit;
 		});
-		this.senderFuture = stx.Option.None;
+		this.senderFuture = stx.Maybe.None;
 	}
 	,startSender: function() {
-		if(stx.Options.isEmpty(this.senderFuture)) this.senderFuture = stx.Option.Some(this.executor.forever($bind(this,this.sender),20));
+		if(stx.Maybes.isEmpty(this.senderFuture)) this.senderFuture = stx.Maybe.Some(this.executor.forever($bind(this,this.sender),20));
 	}
 	,fragmentsReceivedFor: function(messageKey) {
 		if(!this.fragmentsReceived.containsKey(messageKey)) this.fragmentsReceived = this.fragmentsReceived.set(messageKey,[]);
-		return stx.Options.get(this.fragmentsReceived.get(messageKey));
+		return stx.Maybes.get(this.fragmentsReceived.get(messageKey));
 	}
 	,findMissingFragments: function() {
 		return IterableLambda.foldl(this.fragmentsReceived.values(),stx.ds.List.nil(),function(allMissing,fragments) {
@@ -14181,7 +14181,7 @@ stx.js.io.IFrameIOPollingHashtag.prototype = $extend(stx.js.io.AbstractIFrameIO.
 			var unknown = stx.ds.MapExtensions.toObject(stx.net.UrlExtensions.toQueryParameters(query));
 			if(unknown.type == "delivery") {
 				var packet = unknown;
-				var messageKey = stx.js.io.IFrameIOPollingHashtag.messageKeyFrom(packet);
+				var messageKey = stx.js.io.IFrameIOPollingMaptag.messageKeyFrom(packet);
 				var fragments = this.fragmentsReceivedFor(messageKey);
 				var alreadyReceived = ArrayLambda.foldl(fragments,false,function(b,f) {
 					return b || f.fragmentId == packet.fragmentId;
@@ -14192,10 +14192,10 @@ stx.js.io.IFrameIOPollingHashtag.prototype = $extend(stx.js.io.AbstractIFrameIO.
 				}
 			} else if(unknown.type == "request") {
 				var packet = unknown;
-				var messageKey = stx.js.io.IFrameIOPollingHashtag.messageKeyFrom(packet);
+				var messageKey = stx.js.io.IFrameIOPollingMaptag.messageKeyFrom(packet);
 			} else if(unknown.type == "receipt") {
 				var packet = unknown;
-				var messageKey = stx.js.io.IFrameIOPollingHashtag.messageKeyFrom(packet);
+				var messageKey = stx.js.io.IFrameIOPollingMaptag.messageKeyFrom(packet);
 			}
 			this.bindTarget.location.hash = "#&";
 		} else {
@@ -14211,7 +14211,7 @@ stx.js.io.IFrameIOPollingHashtag.prototype = $extend(stx.js.io.AbstractIFrameIO.
 		}
 	}
 	,sender: function() {
-		var $e = (this.fragmentsToSend.getHeadOption());
+		var $e = (this.fragmentsToSend.getHeadMaybe());
 		switch( $e[1] ) {
 		case 0:
 			this.stopSender();
@@ -14231,16 +14231,16 @@ stx.js.io.IFrameIOPollingHashtag.prototype = $extend(stx.js.io.AbstractIFrameIO.
 		return this;
 	}
 	,send: function(data,to_,iframe) {
-		var from = stx.js.io.IFrameIOPollingHashtag.normalize(this.bindTarget.location.href);
-		var to = stx.js.io.IFrameIOPollingHashtag.normalize(to_);
+		var from = stx.js.io.IFrameIOPollingMaptag.normalize(this.bindTarget.location.href);
+		var to = stx.js.io.IFrameIOPollingMaptag.normalize(to_);
 		var maxFragSize = 1500 - to.length;
 		var fragmentId = 1;
 		var fragments = stx.ds.ArrayToList.toList(stx.Strings.chunk(stx.io.json.Json.encodeObject(data),maxFragSize));
-		var encoded = stx.functional.FoldableExtensions.mapTo(fragments,stx.js.io.IFrameIOPollingHashtag.newFragmentsList(),function(chunk) {
-			return stx.Entuple.entuple(iframe,{ type : "delivery", from : from, to : to, messageId : stx.Floats.toString(stx.js.io.IFrameIOPollingHashtag.lastMessageId), fragmentId : stx.Floats.toString(fragmentId++), fragmentCount : stx.Floats.toString(fragments.size()), data : chunk});
+		var encoded = stx.functional.FoldableExtensions.mapTo(fragments,stx.js.io.IFrameIOPollingMaptag.newFragmentsList(),function(chunk) {
+			return stx.Entuple.entuple(iframe,{ type : "delivery", from : from, to : to, messageId : stx.Floats.toString(stx.js.io.IFrameIOPollingMaptag.lastMessageId), fragmentId : stx.Floats.toString(fragmentId++), fragmentCount : stx.Floats.toString(fragments.size()), data : chunk});
 		});
 		this.fragmentsToSend = this.fragmentsToSend.concat(encoded);
-		++stx.js.io.IFrameIOPollingHashtag.lastMessageId;
+		++stx.js.io.IFrameIOPollingMaptag.lastMessageId;
 		this.startSender();
 		return this;
 	}
@@ -14274,7 +14274,7 @@ stx.js.io.IFrameIOPollingHashtag.prototype = $extend(stx.js.io.AbstractIFrameIO.
 	,fragmentsReceived: null
 	,fragmentsToSend: null
 	,executor: null
-	,__class__: stx.js.io.IFrameIOPollingHashtag
+	,__class__: stx.js.io.IFrameIOPollingMaptag
 });
 stx.js.io.MessageKey = $hxClasses["stx.js.io.MessageKey"] = function(messageId,from,to,fragmentCount) {
 	this.messageId = messageId;
@@ -14483,8 +14483,8 @@ stx.math.tween.Tween.linear = function(state1,state2,def) {
 	if(def == null) def = 0.0;
 	var combinedFields = stx.ds.ArrayToSet.toSet(Reflect.fields(state1)).addAll(Reflect.fields(state2));
 	var data = stx.ds.FoldableToMap.toMap(stx.functional.FoldableExtensions.map(combinedFields,function(name) {
-		var start = stx.Options.getOrElseC(stx.Options.toOption(Reflect.field(state1,name)),def);
-		var end = stx.Options.getOrElseC(stx.Options.toOption(Reflect.field(state2,name)),def);
+		var start = stx.Maybes.getOrElseC(stx.Maybes.toMaybe(Reflect.field(state1,name)),def);
+		var end = stx.Maybes.getOrElseC(stx.Maybes.toMaybe(Reflect.field(state2,name)),def);
 		return stx.Entuple.entuple(name,{ start : start, delta : end - start});
 	}));
 	return function(t) {
@@ -14523,11 +14523,11 @@ if(!stx.net) stx.net = {}
 stx.net.HttpHeaderExtensions = $hxClasses["stx.net.HttpHeaderExtensions"] = function() { }
 stx.net.HttpHeaderExtensions.__name__ = ["stx","net","HttpHeaderExtensions"];
 stx.net.HttpHeaderExtensions.toHttpHeader = function(str) {
-	return stx.net.HttpHeaderExtensions.HeaderPattern.match(str)?stx.Option.Some(stx.Entuple.entuple(stx.Strings.trim(stx.net.HttpHeaderExtensions.HeaderPattern.matched(1)),stx.Strings.trim(stx.net.HttpHeaderExtensions.HeaderPattern.matched(2)))):stx.Option.None;
+	return stx.net.HttpHeaderExtensions.HeaderPattern.match(str)?stx.Maybe.Some(stx.Entuple.entuple(stx.Strings.trim(stx.net.HttpHeaderExtensions.HeaderPattern.matched(1)),stx.Strings.trim(stx.net.HttpHeaderExtensions.HeaderPattern.matched(2)))):stx.Maybe.None;
 }
 stx.net.HttpHeaderExtensions.toHttpHeaders = function(str) {
 	return stx.ds.Map.create().addAll(ArrayLambda.flatMap(stx.net.HttpHeaderExtensions.HeaderLinesPattern.split(str),function(line) {
-		return stx.Options.toArray(stx.net.HttpHeaderExtensions.toHttpHeader(stx.Strings.trim(line)));
+		return stx.Maybes.toArray(stx.net.HttpHeaderExtensions.toHttpHeader(stx.Strings.trim(line)));
 	}));
 }
 stx.net.HttpInformational = $hxClasses["stx.net.HttpInformational"] = { __ename__ : ["stx","net","HttpInformational"], __constructs__ : ["Continue","SwitchingProtocols","Processing"] }
@@ -15288,7 +15288,7 @@ stx.net.UrlExtensions.toParsedUrl = function(s) {
 	var nonNull = function(s1) {
 		return s1 == null?"":s1;
 	};
-	return stx.net.UrlExtensions.UrlPattern.match(s)?stx.Option.Some(stx.net.UrlExtensions.formUrl(nonNull(stx.net.UrlExtensions.UrlPattern.matched(stx.net.UrlExtensions.Protocol)),nonNull(stx.net.UrlExtensions.UrlPattern.matched(stx.net.UrlExtensions.Hostname)),nonNull(stx.net.UrlExtensions.UrlPattern.matched(stx.net.UrlExtensions.Port)),nonNull(stx.net.UrlExtensions.UrlPattern.matched(stx.net.UrlExtensions.Pathname)),nonNull(stx.net.UrlExtensions.UrlPattern.matched(stx.net.UrlExtensions.Search)),nonNull(stx.net.UrlExtensions.UrlPattern.matched(stx.net.UrlExtensions.Hash)))):stx.Option.None;
+	return stx.net.UrlExtensions.UrlPattern.match(s)?stx.Maybe.Some(stx.net.UrlExtensions.formUrl(nonNull(stx.net.UrlExtensions.UrlPattern.matched(stx.net.UrlExtensions.Protocol)),nonNull(stx.net.UrlExtensions.UrlPattern.matched(stx.net.UrlExtensions.Hostname)),nonNull(stx.net.UrlExtensions.UrlPattern.matched(stx.net.UrlExtensions.Port)),nonNull(stx.net.UrlExtensions.UrlPattern.matched(stx.net.UrlExtensions.Pathname)),nonNull(stx.net.UrlExtensions.UrlPattern.matched(stx.net.UrlExtensions.Search)),nonNull(stx.net.UrlExtensions.UrlPattern.matched(stx.net.UrlExtensions.Map)))):stx.Maybe.None;
 }
 stx.net.UrlExtensions.toUrl = function(parsed) {
 	return parsed.href;
@@ -15320,7 +15320,7 @@ stx.net.UrlExtensions.withSubdomains = function(parsed,subdomains) {
 	};
 	return stx.net.UrlExtensions.formUrl(parsed.protocol,replaceSubdomains(parsed.hostname,subdomains),parsed.port,parsed.pathname,parsed.search,parsed.hash);
 }
-stx.net.UrlExtensions.withHash = function(parsed,hash) {
+stx.net.UrlExtensions.withMap = function(parsed,hash) {
 	return stx.net.UrlExtensions.formUrl(parsed.protocol,parsed.hostname,parsed.port,parsed.pathname,parsed.search,hash);
 }
 stx.net.UrlExtensions.withFile = function(parsed,file) {
@@ -15346,8 +15346,8 @@ stx.net.UrlExtensions.withoutSearch = function(parsed) {
 stx.net.UrlExtensions.withoutSubdomains = function(parsed) {
 	return stx.net.UrlExtensions.withSubdomains(parsed,"");
 }
-stx.net.UrlExtensions.withoutHash = function(parsed) {
-	return stx.net.UrlExtensions.withHash(parsed,"");
+stx.net.UrlExtensions.withoutMap = function(parsed) {
+	return stx.net.UrlExtensions.withMap(parsed,"");
 }
 stx.net.UrlExtensions.withoutFile = function(parsed) {
 	return stx.net.UrlExtensions.withFile(parsed,"");
@@ -15378,7 +15378,7 @@ stx.net.UrlExtensions.extractSearch = function(url) {
 stx.net.UrlExtensions.extractProtocol = function(url) {
 	return stx.net.UrlExtensions.extractField(url,"protocol");
 }
-stx.net.UrlExtensions.extractHash = function(url) {
+stx.net.UrlExtensions.extractMap = function(url) {
 	return stx.net.UrlExtensions.extractField(url,"hash");
 }
 stx.net.UrlExtensions.extractPathname = function(url) {
@@ -15417,7 +15417,7 @@ stx.net.UrlExtensions.formUrl = function(protocol,hostname,port,pathname,search,
 	return { hash : hash, host : host, hostname : hostname, href : protocol.length > 0?protocol + "//" + $final:$final, pathname : pathname, port : port, protocol : protocol, search : search};
 }
 stx.net.UrlExtensions.extractField = function(url,field) {
-	return stx.Options.getOrElseC(stx.Options.map(stx.net.UrlExtensions.toParsedUrl(url),function(parsed) {
+	return stx.Maybes.getOrElseC(stx.Maybes.map(stx.net.UrlExtensions.toParsedUrl(url),function(parsed) {
 		return Reflect.field(parsed,field);
 	}),"");
 }
@@ -15594,8 +15594,8 @@ stx.reactive.MapArrow.prototype = {
 		var o = [];
 		var index = 0;
 		return new stx.reactive.RepeatArrow(stx.reactive.Then.then(stx.reactive.Then.then(stx.reactive.F1A.lift(function(iter1) {
-			return iter1.hasNext()?stx.Option.Some(iter1.next()):stx.Option.None;
-		}),stx.reactive.OptionArrow.option(this.a)),stx.reactive.F1A.lift(function(x) {
+			return iter1.hasNext()?stx.Maybe.Some(iter1.next()):stx.Maybe.None;
+		}),stx.reactive.MaybeArrow.option(this.a)),stx.reactive.F1A.lift(function(x) {
 			return (function($this) {
 				var $r;
 				var $e = (x);
@@ -15620,29 +15620,29 @@ stx.reactive.MapArrow.prototype = {
 	,a: null
 	,__class__: stx.reactive.MapArrow
 }
-stx.reactive.OptionArrow = $hxClasses["stx.reactive.OptionArrow"] = function(a) {
+stx.reactive.MaybeArrow = $hxClasses["stx.reactive.MaybeArrow"] = function(a) {
 	this.a = a;
 };
-stx.reactive.OptionArrow.__name__ = ["stx","reactive","OptionArrow"];
-stx.reactive.OptionArrow.__interfaces__ = [stx.reactive.Arrow];
-stx.reactive.OptionArrow.option = function(a) {
-	return new stx.reactive.OptionArrow(a);
+stx.reactive.MaybeArrow.__name__ = ["stx","reactive","MaybeArrow"];
+stx.reactive.MaybeArrow.__interfaces__ = [stx.reactive.Arrow];
+stx.reactive.MaybeArrow.option = function(a) {
+	return new stx.reactive.MaybeArrow(a);
 }
-stx.reactive.OptionArrow.prototype = {
+stx.reactive.MaybeArrow.prototype = {
 	withInput: function(i,cont) {
 		var $e = (i);
 		switch( $e[1] ) {
 		case 1:
 			var v = $e[2];
-			stx.reactive.Viaz.apply().withInput(stx.Entuple.entuple(this.a,v),stx.Functions1.then(stx.Option.Some,cont));
+			stx.reactive.Viaz.apply().withInput(stx.Entuple.entuple(this.a,v),stx.Functions1.then(stx.Maybe.Some,cont));
 			break;
 		case 0:
-			cont(stx.Option.None);
+			cont(stx.Maybe.None);
 			break;
 		}
 	}
 	,a: null
-	,__class__: stx.reactive.OptionArrow
+	,__class__: stx.reactive.MaybeArrow
 }
 stx.reactive.DelayArrow = $hxClasses["stx.reactive.DelayArrow"] = function(a,delay) {
 	this.a = a;
@@ -15715,14 +15715,14 @@ stx.reactive.Pair.prototype = {
 			cont(new stx.Tuple2(l,r));
 		};
 		var check = function() {
-			if(ol != null && or != null) merge(stx.Options.get(ol),stx.Options.get(or));
+			if(ol != null && or != null) merge(stx.Maybes.get(ol),stx.Maybes.get(or));
 		};
 		var hl = function(v) {
-			ol = v == null?stx.Option.None:stx.Option.Some(v);
+			ol = v == null?stx.Maybe.None:stx.Maybe.Some(v);
 			check();
 		};
 		var hr = function(v) {
-			or = v == null?stx.Option.None:stx.Option.Some(v);
+			or = v == null?stx.Maybe.None:stx.Maybe.Some(v);
 			check();
 		};
 		this.l.withInput(i._1,hl);
@@ -17168,7 +17168,7 @@ stx.reactive.Signals.constant = function(value) {
 stx.reactive.Signals.cond = function(conditions,elseS) {
 	return (function($this) {
 		var $r;
-		var $e = (stx.Iterables.headOption(conditions));
+		var $e = (stx.Iterables.headMaybe(conditions));
 		switch( $e[1] ) {
 		case 0:
 			$r = elseS;
@@ -17323,7 +17323,7 @@ stx.reactive.Streams.receiver = function() {
 stx.reactive.Streams.cond = function(conditions) {
 	return (function($this) {
 		var $r;
-		var $e = (stx.Iterables.headOption(conditions));
+		var $e = (stx.Iterables.headMaybe(conditions));
 		switch( $e[1] ) {
 		case 0:
 			$r = stx.reactive.Streams.zero();
@@ -17598,7 +17598,7 @@ stx.test.Assert.sameAs = function(expected,value,status) {
 			}
 			return true;
 		}
-		if(js.Boot.__instanceof(expected,Hash) || js.Boot.__instanceof(expected,IntHash)) {
+		if(js.Boot.__instanceof(expected,Map) || js.Boot.__instanceof(expected,IntMap)) {
 			if(status.recursive || status.path == "") {
 				var keys = Lambda.array({ iterator : function() {
 					return expected.keys();
@@ -17882,7 +17882,7 @@ stx.test.Assert.createAsync = function(f,timeout) {
 }
 stx.test.Assert.delivered = function(future,assertions,timeout) {
 	var f = stx.test.Assert.createAsync(function() {
-		if(future.isCanceled()) stx.test.Assert.fail("expected delivery of future " + stx.test.Assert.q(future) + ", but it was canceled",{ fileName : "Assert.hx", lineNumber : 701, className : "stx.test.Assert", methodName : "delivered"}); else assertions(stx.Options.get(future.value()));
+		if(future.isCanceled()) stx.test.Assert.fail("expected delivery of future " + stx.test.Assert.q(future) + ", but it was canceled",{ fileName : "Assert.hx", lineNumber : 701, className : "stx.test.Assert", methodName : "delivered"}); else assertions(stx.Maybes.get(future.value()));
 	},timeout);
 	future.deliverTo(function(value) {
 		f();
@@ -17894,7 +17894,7 @@ stx.test.Assert.canceled = function(future,assertions,timeout) {
 }
 stx.test.Assert.notDelivered = function(future,timeout,pos) {
 	var f = stx.test.Assert.createAsync(function() {
-		if(future.isDelivered()) stx.test.Assert.fail("Did not expect delivery of: " + Std.string(stx.Options.get(future.value())),pos); else stx.test.Assert.isTrue(true,null,{ fileName : "Assert.hx", lineNumber : 728, className : "stx.test.Assert", methodName : "notDelivered"});
+		if(future.isDelivered()) stx.test.Assert.fail("Did not expect delivery of: " + Std.string(stx.Maybes.get(future.value())),pos); else stx.test.Assert.isTrue(true,null,{ fileName : "Assert.hx", lineNumber : 728, className : "stx.test.Assert", methodName : "notDelivered"});
 	},timeout + 10);
 	haxe.Timer.delay(f,timeout);
 	future.deliverTo(function(value) {
@@ -18264,15 +18264,15 @@ stx.test.Runner.prototype = {
 		if(prefix == null) prefix = "test";
 		if(!Reflect.isObject(test)) throw "can't add a null object as a test case";
 		var patternMatches = function(field) {
-			return stx.Options.map(stx.Options.toOption(pattern),function(p) {
+			return stx.Maybes.map(stx.Maybes.toMaybe(pattern),function(p) {
 				return p.match(field);
 			});
 		};
 		var prefixMatches = function(field) {
-			return stx.Option.Some(stx.Strings.startsWith(field,prefix));
+			return stx.Maybe.Some(stx.Strings.startsWith(field,prefix));
 		};
 		var fieldIsTest = function(field) {
-			return stx.Options.getOrElseC(stx.Options.orElseC(patternMatches(field),prefixMatches(field)),false);
+			return stx.Maybes.getOrElseC(stx.Maybes.orElseC(patternMatches(field),prefixMatches(field)),false);
 		};
 		var fieldIsMethod = (stx.Functions2.curry($bind(this,this.isMethod)))(test);
 		var testMethods = ArrayLambda.filter(Type.getInstanceFields(Type.getClass(test)),stx.Predicates.and(fieldIsTest,fieldIsMethod));
@@ -18847,7 +18847,7 @@ stx.test.ui.Report.create = function(runner,displaySuccessResults,headerDisplayM
 }
 if(!stx.test.ui.common) stx.test.ui.common = {}
 stx.test.ui.common.ClassResult = $hxClasses["stx.test.ui.common.ClassResult"] = function(className,setupName,teardownName) {
-	this.fixtures = new Hash();
+	this.fixtures = new Map();
 	this.className = className;
 	this.setupName = setupName;
 	this.hasSetup = setupName != null;
@@ -18988,8 +18988,8 @@ stx.test.ui.common.IReport.prototype = {
 }
 stx.test.ui.common.PackageResult = $hxClasses["stx.test.ui.common.PackageResult"] = function(packageName) {
 	this.packageName = packageName;
-	this.classes = new Hash();
-	this.packages = new Hash();
+	this.classes = new Map();
+	this.packages = new Map();
 	this.stats = new stx.test.ui.common.ResultStats();
 };
 stx.test.ui.common.PackageResult.__name__ = ["stx","test","ui","common","PackageResult"];
@@ -19959,7 +19959,7 @@ stx.ds.Map.MaxLoad = 10;
 stx.ds.Map.MinLoad = 1;
 stx.ds.Range.MIN = -1.7976931348623157 * Math.pow(10,308);
 stx.ds.Range.MAX = 1.7976931348623157 * Math.pow(10,308);
-stx.ds.plus.ProductHasher._baseHashes = [[786433,24593],[196613,3079,389],[1543,49157,196613,97],[12289,769,393241,193,53]];
+stx.ds.plus.ProductHasher._baseMapes = [[786433,24593],[196613,3079,389],[1543,49157,196613,97],[12289,769,393241,193,53]];
 stx.ds.plus.Meta.__meta__ = { statics : { _hasMetaDataClass : { deprecate : ["0b1kn00b","thx"]}, _fieldsWithMeta : { deprecate : ["0b1kn00b","thx"]}}};
 stx.framework._Injector.InjectorImpl.state = [];
 stx.io.http.HttpJValue.__meta__ = { obj : { DefaultImplementation : ["stx.io.http.HttpJValueAsync","OneToMany"]}};
@@ -20155,8 +20155,8 @@ stx.js.dom.Quirks.cssHeight = ["top","bottom"];
 stx.js.dom.Quirks.cssShow = stx.ds.Map.create().set("position","absolute").set("visibility","hidden").set("display","block");
 stx.js.dom.Quirks.border = "border";
 stx.js.dom.Quirks.margin = "margin";
-stx.js.io.IFrameIOPollingHashtag.lastMessageId = 1;
-stx.js.io.IFrameIOPollingHashtag.newFragmentsList = stx.ds.List.factory();
+stx.js.io.IFrameIOPollingMaptag.lastMessageId = 1;
+stx.js.io.IFrameIOPollingMaptag.newFragmentsList = stx.ds.List.factory();
 stx.math.tween.TweenerExtensions.DefaultFrequency = stx.Floats.round(1000.0 / 24.0,null);
 stx.net.HttpHeaderExtensions.HeaderPattern = new EReg("^([^:]+): *(.+)$","");
 stx.net.HttpHeaderExtensions.HeaderLinesPattern = new EReg("[\r\n]+","");
@@ -20166,7 +20166,7 @@ stx.net.UrlExtensions.Hostname = 2;
 stx.net.UrlExtensions.Port = 3;
 stx.net.UrlExtensions.Pathname = 4;
 stx.net.UrlExtensions.Search = 5;
-stx.net.UrlExtensions.Hash = 6;
+stx.net.UrlExtensions.Map = 6;
 stx.reactive.Stamp._stamp = 1;
 stx.reactive.Rank._rank = 0;
 stx.test.TestHandler.POLLING_TIME = 10;

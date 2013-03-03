@@ -7,7 +7,7 @@ package stx.functional;
  */
 interface Foldable<A, B> {
   /** Creates an "empty" version of the foldable structure. */    
-  function empty<C, D>() : Foldable<C, D>;  
+  function unit<C, D>() : Foldable<C, D>;  
   
   /** Append a value to the specified foldable and returns the result. */
   function add(b: B): A;

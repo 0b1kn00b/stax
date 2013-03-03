@@ -23,7 +23,7 @@ using stx.Arrays;
 using stx.js.dom.HTMLDocumentExtensions;
 using stx.js.dom.DomExtensions.DomCollectionExtensions;
 
-using stx.Options;
+using stx.Maybes;
 
 class HTMLElementExtensions {
   
@@ -65,462 +65,462 @@ class HTMLElementExtensions {
 // ************************  As Element Functions
   
   public static inline function asIframe(e: HTMLElement): HTMLIFrameElement {
-    return asIframeOption(e).get();
+    return asIframeMaybe(e).get();
   }
   
   public static inline function asScript(e: HTMLElement): HTMLScriptElement {
-    return asScriptOption(e).get();
+    return asScriptMaybe(e).get();
   }
   
   public static inline function asDiv(e: HTMLElement): HTMLDivElement {
-    return asDivOption(e).get();
+    return asDivMaybe(e).get();
   }
   
   public static inline function asForm(e: HTMLElement): HTMLFormElement {
-    return asFormOption(e).get();
+    return asFormMaybe(e).get();
   }
   
   public static inline function asBody(e: HTMLElement): HTMLBodyElement {
-    return asBodyOption(e).get();
+    return asBodyMaybe(e).get();
   }
   
   public static inline function asStyle(e: HTMLElement): HTMLStyleElement {
-    return asStyleOption(e).get();
+    return asStyleMaybe(e).get();
   }
 
   public static inline function asText(e: HTMLElement): HTMLTextElement {
-    return asTextOption(e).get();
+    return asTextMaybe(e).get();
   }
   
   public static inline function asVideo(e: HTMLElement): HTMLVideoElement {
-    return asVideoOption(e).get();
+    return asVideoMaybe(e).get();
   }
   
   public static inline function asAudio(e: HTMLElement): HTMLAudioElement {
-    return asAudioOption(e).get();
+    return asAudioMaybe(e).get();
   }
   
   public static inline function asHead(e: HTMLElement): HTMLHeadElement {
-    return asHeadOption(e).get();
+    return asHeadMaybe(e).get();
   }
   
   public static inline function asLink(e: HTMLElement): HTMLLinkElement {
-    return asLinkOption(e).get();
+    return asLinkMaybe(e).get();
   }
   
   public static inline function asTitle(e: HTMLElement): HTMLTitleElement {
-    return asTitleOption(e).get();
+    return asTitleMaybe(e).get();
   }
   
   public static inline function asMeta(e: HTMLElement): HTMLMetaElement {
-    return asMetaOption(e).get();
+    return asMetaMaybe(e).get();
   }
   
   public static inline function asBase(e: HTMLElement): HTMLBaseElement {
-    return asBaseOption(e).get();
+    return asBaseMaybe(e).get();
   }
   
   public static inline function asIsIndex(e: HTMLElement): HTMLIsIndexElement {
-    return asIsIndexOption(e).get();
+    return asIsIndexMaybe(e).get();
   }
   
   public static inline function asSelect(e: HTMLElement): HTMLSelectElement {
-    return asSelectOption(e).get();
+    return asSelectMaybe(e).get();
   }
   
   public static inline function asCanvas(e: HTMLElement): HTMLCanvasElement {
-    return asCanvasOption(e).get();
+    return asCanvasMaybe(e).get();
   }
   
   public static inline function asOptGroup(e: HTMLElement): HTMLOptGroupElement {
-    return asOptGroupOption(e).get();
+    return asOptGroupMaybe(e).get();
   }
   
-  public static inline function asOption(e: HTMLElement): HTMLOptionElement {
-    return asOptionOption(e).get();
+  public static inline function asMaybe(e: HTMLElement): HTMLMaybeElement {
+    return asMaybeMaybe(e).get();
   }
   
   public static inline function asInput(e: HTMLElement): HTMLInputElement {
-    return asInputOption(e).get();
+    return asInputMaybe(e).get();
   }
   
   public static inline function asTextArea(e: HTMLElement): HTMLTextAreaElement {
-    return asTextAreaOption(e).get();
+    return asTextAreaMaybe(e).get();
   }
   
   public static inline function asButton(e: HTMLElement): HTMLButtonElement {
-    return asButtonOption(e).get();
+    return asButtonMaybe(e).get();
   }
   
   public static inline function asLabel(e: HTMLElement): HTMLLabelElement {
-    return asLabelOption(e).get();
+    return asLabelMaybe(e).get();
   }
   
   public static inline function asFieldSet(e: HTMLElement): HTMLFieldSetElement {
-    return asFieldSetOption(e).get();
+    return asFieldSetMaybe(e).get();
   }
   
   public static inline function asLegend(e: HTMLElement): HTMLLegendElement {
-    return asLegendOption(e).get();
+    return asLegendMaybe(e).get();
   }
   
   public static inline function asUList(e: HTMLElement): HTMLUListElement {
-    return asUListOption(e).get();
+    return asUListMaybe(e).get();
   }
   
   public static inline function asOList(e: HTMLElement): HTMLOListElement {
-    return asOListOption(e).get();
+    return asOListMaybe(e).get();
   }
   
   public static inline function asDList(e: HTMLElement): HTMLDListElement {
-    return asDListOption(e).get();
+    return asDListMaybe(e).get();
   }
   
   public static inline function asDir(e: HTMLElement): HTMLDirectoryElement {
-    return asDirOption(e).get();
+    return asDirMaybe(e).get();
   }
   
   public static inline function asMenu(e: HTMLElement): HTMLMenuElement {
-    return asMenuOption(e).get();
+    return asMenuMaybe(e).get();
   }
   
   public static inline function asLI(e: HTMLElement): HTMLLIElement {
-    return asLIOption(e).get();
+    return asLIMaybe(e).get();
   }
   
   public static inline function asP(e: HTMLElement): HTMLParagraphElement {
-    return asPOption(e).get();
+    return asPMaybe(e).get();
   }
   
   public static inline function asH(e: HTMLElement): HTMLHeadingElement {
-    return asHOption(e).get();
+    return asHMaybe(e).get();
   }
   
   public static inline function asQuote(e: HTMLElement): HTMLQuoteElement {
-    return asQuoteOption(e).get();
+    return asQuoteMaybe(e).get();
   }
   
   public static inline function asPre(e: HTMLElement): HTMLPreElement {
-    return asPreOption(e).get();
+    return asPreMaybe(e).get();
   }
   
   public static inline function asBR(e: HTMLElement): HTMLBRElement {
-    return asBROption(e).get();
+    return asBRMaybe(e).get();
   }
   
   public static inline function asBaseFont(e: HTMLElement): HTMLBaseFontElement {
-    return asBaseFontOption(e).get();
+    return asBaseFontMaybe(e).get();
   }
   
   public static inline function asFont(e: HTMLElement): HTMLFontElement {
-    return asFontOption(e).get();
+    return asFontMaybe(e).get();
   }
   
   public static inline function asHR(e: HTMLElement): HTMLHRElement {
-    return asHROption(e).get();
+    return asHRMaybe(e).get();
   }
   
   public static inline function asMod(e: HTMLElement): HTMLModElement {
-    return asModOption(e).get();
+    return asModMaybe(e).get();
   }
   
   public static inline function asA(e: HTMLElement): HTMLAnchorElement {
-    return asAOption(e).get();
+    return asAMaybe(e).get();
   }
   
   public static inline function asImage(e: HTMLElement): HTMLImageElement {
-    return asImageOption(e).get();
+    return asImageMaybe(e).get();
   }
   
   public static inline function asObject(e: HTMLElement): HTMLObjectElement {
-    return asObjectOption(e).get();
+    return asObjectMaybe(e).get();
   }
   
   public static inline function asParam(e: HTMLElement): HTMLParamElement {
-    return asParamOption(e).get();
+    return asParamMaybe(e).get();
   }
   
   public static inline function asApplet(e: HTMLElement): HTMLAppletElement {
-    return asAppletOption(e).get();
+    return asAppletMaybe(e).get();
   }
   
   public static inline function asMap(e: HTMLElement): HTMLMapElement {
-    return asMapOption(e).get();
+    return asMapMaybe(e).get();
   }
   
   public static inline function asArea(e: HTMLElement): HTMLAreaElement {
-    return asAreaOption(e).get();
+    return asAreaMaybe(e).get();
   }
   
   public static inline function asTable(e: HTMLElement): HTMLTableElement {
-    return asTableOption(e).get();
+    return asTableMaybe(e).get();
   }
   
   public static inline function asCaption(e: HTMLElement): HTMLTableCaptionElement {
-    return asCaptionOption(e).get();
+    return asCaptionMaybe(e).get();
   }
   
   public static inline function asTD(e: HTMLElement): HTMLTableColElement {
-    return asTDOption(e).get();
+    return asTDMaybe(e).get();
   }
   
   public static inline function asTHead(e: HTMLElement): HTMLTableSectionElement {
-    return asTHeadOption(e).get();
+    return asTHeadMaybe(e).get();
   }
   
   public static inline function asTBody(e: HTMLElement): HTMLTableSectionElement {
-    return asTBodyOption(e).get();
+    return asTBodyMaybe(e).get();
   }
   
   public static inline function asTFoot(e: HTMLElement): HTMLTableSectionElement {
-    return asTFootOption(e).get();
+    return asTFootMaybe(e).get();
   }
   
   public static inline function asTR(e: HTMLElement): HTMLTableRowElement {
-    return asTROption(e).get();
+    return asTRMaybe(e).get();
   }
   
   public static inline function asFrameSet(e: HTMLElement): HTMLFrameSetElement {
-    return asFrameSetOption(e).get();
+    return asFrameSetMaybe(e).get();
   }
   
   public static inline function asFrame(e: HTMLElement): HTMLFrameElement {
-    return asFrameOption(e).get();
+    return asFrameMaybe(e).get();
   }
   
   public static inline function asIFrame(e: HTMLElement): HTMLIFrameElement {
-    return asIFrameOption(e).get();
+    return asIFrameMaybe(e).get();
   }
   
   
   
-// ************************ As Element Option Functions
+// ************************ As Element Maybe Functions
 
-  public static inline function asIframeOption(e: HTMLElement): Option<HTMLIFrameElement> {
+  public static inline function asIframeMaybe(e: HTMLElement): Maybe<HTMLIFrameElement> {
     return if (e.nodeName == 'IFRAME') Some(cast e); else None;
   }
   
-  public static inline function asScriptOption(e: HTMLElement): Option<HTMLScriptElement> {
+  public static inline function asScriptMaybe(e: HTMLElement): Maybe<HTMLScriptElement> {
     return if (e.nodeName == 'SCRIPT') Some(cast e); else None;
   }
   
-  public static inline function asDivOption(e: HTMLElement): Option<HTMLDivElement> {
+  public static inline function asDivMaybe(e: HTMLElement): Maybe<HTMLDivElement> {
     return if (e.nodeName == 'DIV') Some(cast e); else None;
   }
   
-  public static inline function asFormOption(e: HTMLElement): Option<HTMLFormElement> {
+  public static inline function asFormMaybe(e: HTMLElement): Maybe<HTMLFormElement> {
     return if (e.nodeName == 'FORM') Some(cast e); else None;
   }
   
-  public static inline function asBodyOption(e: HTMLElement): Option<HTMLBodyElement> {
+  public static inline function asBodyMaybe(e: HTMLElement): Maybe<HTMLBodyElement> {
     return if (e.nodeName == 'BODY') Some(cast e); else None;
   }
   
-  public static inline function asStyleOption(e: HTMLElement): Option<HTMLStyleElement> {
+  public static inline function asStyleMaybe(e: HTMLElement): Maybe<HTMLStyleElement> {
     return if (e.nodeName == 'STYLE') Some(cast e); else None;
   }
 
-  public static inline function asTextOption(e: HTMLElement): Option<HTMLTextElement> {
+  public static inline function asTextMaybe(e: HTMLElement): Maybe<HTMLTextElement> {
     return if (e.nodeName == 'TEXT') Some(cast e); else None;
   }
   
-  public static inline function asVideoOption(e: HTMLElement): Option<HTMLVideoElement> {
+  public static inline function asVideoMaybe(e: HTMLElement): Maybe<HTMLVideoElement> {
     return if (e.nodeName == 'VIDEO') Some(cast e); else None;
   }
   
-  public static inline function asAudioOption(e: HTMLElement): Option<HTMLAudioElement> {
+  public static inline function asAudioMaybe(e: HTMLElement): Maybe<HTMLAudioElement> {
     return if (e.nodeName == 'AUDIO') Some(cast e); else None;
   }
   
-  public static inline function asHeadOption(e: HTMLElement): Option<HTMLHeadElement> {
+  public static inline function asHeadMaybe(e: HTMLElement): Maybe<HTMLHeadElement> {
     return if (e.nodeName == 'HEAD') Some(cast e); else None;
   }
   
-  public static inline function asLinkOption(e: HTMLElement): Option<HTMLLinkElement> {
+  public static inline function asLinkMaybe(e: HTMLElement): Maybe<HTMLLinkElement> {
     return if (e.nodeName == 'LINK') Some(cast e); else None;
   }
   
-  public static inline function asTitleOption(e: HTMLElement): Option<HTMLTitleElement> {
+  public static inline function asTitleMaybe(e: HTMLElement): Maybe<HTMLTitleElement> {
     return if (e.nodeName == 'TITLE') Some(cast e); else None;
   }
   
-  public static inline function asMetaOption(e: HTMLElement): Option<HTMLMetaElement> {
+  public static inline function asMetaMaybe(e: HTMLElement): Maybe<HTMLMetaElement> {
     return if (e.nodeName == 'META') Some(cast e); else None;
   }
   
-  public static inline function asBaseOption(e: HTMLElement): Option<HTMLBaseElement> {
+  public static inline function asBaseMaybe(e: HTMLElement): Maybe<HTMLBaseElement> {
     return if (e.nodeName == 'BASE') Some(cast e); else None;
   }
   
-  public static inline function asIsIndexOption(e: HTMLElement): Option<HTMLIsIndexElement> {
+  public static inline function asIsIndexMaybe(e: HTMLElement): Maybe<HTMLIsIndexElement> {
     return if (e.nodeName == 'ISINDEX') Some(cast e); else None;
   }
   
-  public static inline function asSelectOption(e: HTMLElement): Option<HTMLSelectElement> {
+  public static inline function asSelectMaybe(e: HTMLElement): Maybe<HTMLSelectElement> {
     return if (e.nodeName == 'SELECT') Some(cast e); else None;
   }
   
-  public static inline function asCanvasOption(e: HTMLElement): Option<HTMLCanvasElement> {
+  public static inline function asCanvasMaybe(e: HTMLElement): Maybe<HTMLCanvasElement> {
     return if (e.nodeName == 'CANVAS') Some(cast e); else None;
   }
   
-  public static inline function asOptGroupOption(e: HTMLElement): Option<HTMLOptGroupElement> {
+  public static inline function asOptGroupMaybe(e: HTMLElement): Maybe<HTMLOptGroupElement> {
     return if (e.nodeName == 'OPTGROUP') Some(cast e); else None;
   }
   
-  public static inline function asOptionOption(e: HTMLElement): Option<HTMLOptionElement> {
+  public static inline function asMaybeMaybe(e: HTMLElement): Maybe<HTMLMaybeElement> {
     return if (e.nodeName == 'OPTION') Some(cast e); else None;
   }
   
-  public static inline function asInputOption(e: HTMLElement): Option<HTMLInputElement> {
+  public static inline function asInputMaybe(e: HTMLElement): Maybe<HTMLInputElement> {
     return if (e.nodeName == 'INPUT') Some(cast e); else None;
   }
   
-  public static inline function asTextAreaOption(e: HTMLElement): Option<HTMLTextAreaElement> {
+  public static inline function asTextAreaMaybe(e: HTMLElement): Maybe<HTMLTextAreaElement> {
     return if (e.nodeName == 'TEXTAREA') Some(cast e); else None;
   }
   
-  public static inline function asButtonOption(e: HTMLElement): Option<HTMLButtonElement> {
+  public static inline function asButtonMaybe(e: HTMLElement): Maybe<HTMLButtonElement> {
     return if (e.nodeName == 'BUTTON') Some(cast e); else None;
   }
   
-  public static inline function asLabelOption(e: HTMLElement): Option<HTMLLabelElement> {
+  public static inline function asLabelMaybe(e: HTMLElement): Maybe<HTMLLabelElement> {
     return if (e.nodeName == 'LABEL') Some(cast e); else None;
   }
   
-  public static inline function asFieldSetOption(e: HTMLElement): Option<HTMLFieldSetElement> {
+  public static inline function asFieldSetMaybe(e: HTMLElement): Maybe<HTMLFieldSetElement> {
     return if (e.nodeName == 'FIELDSET') Some(cast e); else None;
   }
   
-  public static inline function asLegendOption(e: HTMLElement): Option<HTMLLegendElement> {
+  public static inline function asLegendMaybe(e: HTMLElement): Maybe<HTMLLegendElement> {
     return if (e.nodeName == 'LEGEND') Some(cast e); else None;
   }
   
-  public static inline function asUListOption(e: HTMLElement): Option<HTMLUListElement> {
+  public static inline function asUListMaybe(e: HTMLElement): Maybe<HTMLUListElement> {
     return if (e.nodeName == 'UL') Some(cast e); else None;
   }
   
-  public static inline function asOListOption(e: HTMLElement): Option<HTMLOListElement> {
+  public static inline function asOListMaybe(e: HTMLElement): Maybe<HTMLOListElement> {
     return if (e.nodeName == 'OL') Some(cast e); else None;
   }
   
-  public static inline function asDListOption(e: HTMLElement): Option<HTMLDListElement> {
+  public static inline function asDListMaybe(e: HTMLElement): Maybe<HTMLDListElement> {
     return if (e.nodeName == 'DL') Some(cast e); else None;
   }
   
-  public static inline function asDirOption(e: HTMLElement): Option<HTMLDirectoryElement> {
+  public static inline function asDirMaybe(e: HTMLElement): Maybe<HTMLDirectoryElement> {
     return if (e.nodeName == 'DIR') Some(cast e); else None;
   }
   
-  public static inline function asMenuOption(e: HTMLElement): Option<HTMLMenuElement> {
+  public static inline function asMenuMaybe(e: HTMLElement): Maybe<HTMLMenuElement> {
     return if (e.nodeName == 'MENU') Some(cast e); else None;
   }
   
-  public static inline function asLIOption(e: HTMLElement): Option<HTMLLIElement> {
+  public static inline function asLIMaybe(e: HTMLElement): Maybe<HTMLLIElement> {
     return if (e.nodeName == 'LI') Some(cast e); else None;
   }
   
-  public static inline function asPOption(e: HTMLElement): Option<HTMLParagraphElement> {
+  public static inline function asPMaybe(e: HTMLElement): Maybe<HTMLParagraphElement> {
     return if (e.nodeName == 'P') Some(cast e); else None;
   }
   
-  public static inline function asHOption(e: HTMLElement): Option<HTMLHeadingElement> {
+  public static inline function asHMaybe(e: HTMLElement): Maybe<HTMLHeadingElement> {
     return if (e.nodeName == 'H') Some(cast e); else None;
   }
   
-  public static inline function asQuoteOption(e: HTMLElement): Option<HTMLQuoteElement> {
+  public static inline function asQuoteMaybe(e: HTMLElement): Maybe<HTMLQuoteElement> {
     return if (e.nodeName == 'QUOTE') Some(cast e); else None;
   }
   
-  public static inline function asPreOption(e: HTMLElement): Option<HTMLPreElement> {
+  public static inline function asPreMaybe(e: HTMLElement): Maybe<HTMLPreElement> {
     return if (e.nodeName == 'PRE') Some(cast e); else None;
   }
   
-  public static inline function asBROption(e: HTMLElement): Option<HTMLBRElement> {
+  public static inline function asBRMaybe(e: HTMLElement): Maybe<HTMLBRElement> {
     return if (e.nodeName == 'BR') Some(cast e); else None;
   }
   
-  public static inline function asBaseFontOption(e: HTMLElement): Option<HTMLBaseFontElement> {
+  public static inline function asBaseFontMaybe(e: HTMLElement): Maybe<HTMLBaseFontElement> {
     return if (e.nodeName == 'BASEFONT') Some(cast e); else None;
   }
   
-  public static inline function asFontOption(e: HTMLElement): Option<HTMLFontElement> {
+  public static inline function asFontMaybe(e: HTMLElement): Maybe<HTMLFontElement> {
     return if (e.nodeName == 'FONT') Some(cast e); else None;
   }
   
-  public static inline function asHROption(e: HTMLElement): Option<HTMLHRElement> {
+  public static inline function asHRMaybe(e: HTMLElement): Maybe<HTMLHRElement> {
     return if (e.nodeName == 'HR') Some(cast e); else None;
   }
   
-  public static inline function asModOption(e: HTMLElement): Option<HTMLModElement> {
+  public static inline function asModMaybe(e: HTMLElement): Maybe<HTMLModElement> {
     return if (e.nodeName == 'MOD') Some(cast e); else None;
   }
   
-  public static inline function asAOption(e: HTMLElement): Option<HTMLAnchorElement> {
+  public static inline function asAMaybe(e: HTMLElement): Maybe<HTMLAnchorElement> {
     return if (e.nodeName == 'A') Some(cast e); else None;
   }
   
-  public static inline function asImageOption(e: HTMLElement): Option<HTMLImageElement> {
+  public static inline function asImageMaybe(e: HTMLElement): Maybe<HTMLImageElement> {
     return if (e.nodeName == 'IMG') Some(cast e); else None;
   }
   
-  public static inline function asObjectOption(e: HTMLElement): Option<HTMLObjectElement> {
+  public static inline function asObjectMaybe(e: HTMLElement): Maybe<HTMLObjectElement> {
     return if (e.nodeName == 'OBJECT') Some(cast e); else None;
   }
   
-  public static inline function asParamOption(e: HTMLElement): Option<HTMLParamElement> {
+  public static inline function asParamMaybe(e: HTMLElement): Maybe<HTMLParamElement> {
     return if (e.nodeName == 'PARAM') Some(cast e); else None;
   }
   
-  public static inline function asAppletOption(e: HTMLElement): Option<HTMLAppletElement> {
+  public static inline function asAppletMaybe(e: HTMLElement): Maybe<HTMLAppletElement> {
     return if (e.nodeName == 'APPLET') Some(cast e); else None;
   }
   
-  public static inline function asMapOption(e: HTMLElement): Option<HTMLMapElement> {
+  public static inline function asMapMaybe(e: HTMLElement): Maybe<HTMLMapElement> {
     return if (e.nodeName == 'MAP') Some(cast e); else None;
   }
   
-  public static inline function asAreaOption(e: HTMLElement): Option<HTMLAreaElement> {
+  public static inline function asAreaMaybe(e: HTMLElement): Maybe<HTMLAreaElement> {
     return if (e.nodeName == 'AREA') Some(cast e); else None;
   }
   
-  public static inline function asTableOption(e: HTMLElement): Option<HTMLTableElement> {
+  public static inline function asTableMaybe(e: HTMLElement): Maybe<HTMLTableElement> {
     return if (e.nodeName == 'TABLE') Some(cast e); else None;
   }
   
-  public static inline function asCaptionOption(e: HTMLElement): Option<HTMLTableCaptionElement> {
+  public static inline function asCaptionMaybe(e: HTMLElement): Maybe<HTMLTableCaptionElement> {
     return if (e.nodeName == 'CAPTION') Some(cast e); else None;
   }
   
-  public static inline function asTDOption(e: HTMLElement): Option<HTMLTableColElement> {
+  public static inline function asTDMaybe(e: HTMLElement): Maybe<HTMLTableColElement> {
     return if (e.nodeName == 'TD') Some(cast e); else None;
   }
   
-  public static inline function asTHeadOption(e: HTMLElement): Option<HTMLTableSectionElement> {
+  public static inline function asTHeadMaybe(e: HTMLElement): Maybe<HTMLTableSectionElement> {
     return if (e.nodeName == 'THEAD') Some(cast e); else None;
   }
   
-  public static inline function asTBodyOption(e: HTMLElement): Option<HTMLTableSectionElement> {
+  public static inline function asTBodyMaybe(e: HTMLElement): Maybe<HTMLTableSectionElement> {
     return if (e.nodeName == 'TBODY') Some(cast e); else None;
   }
   
-  public static inline function asTFootOption(e: HTMLElement): Option<HTMLTableSectionElement> {
+  public static inline function asTFootMaybe(e: HTMLElement): Maybe<HTMLTableSectionElement> {
     return if (e.nodeName == 'TFOOT') Some(cast e); else None;
   }
   
-  public static inline function asTROption(e: HTMLElement): Option<HTMLTableRowElement> {
+  public static inline function asTRMaybe(e: HTMLElement): Maybe<HTMLTableRowElement> {
     return if (e.nodeName == 'TR') Some(cast e); else None;
   }
   
-  public static inline function asFrameSetOption(e: HTMLElement): Option<HTMLFrameSetElement> {
+  public static inline function asFrameSetMaybe(e: HTMLElement): Maybe<HTMLFrameSetElement> {
     return if (e.nodeName == 'FRAMESET') Some(cast e); else None;
   }
   
-  public static inline function asFrameOption(e: HTMLElement): Option<HTMLFrameElement> {
+  public static inline function asFrameMaybe(e: HTMLElement): Maybe<HTMLFrameElement> {
     return if (e.nodeName == 'FRAME') Some(cast e); else None;
   }
   
-  public static inline function asIFrameOption(e: HTMLElement): Option<HTMLIFrameElement> {
+  public static inline function asIFrameMaybe(e: HTMLElement): Maybe<HTMLIFrameElement> {
     return if (e.nodeName == 'IFRAME') Some(cast e); else None;
   }
   

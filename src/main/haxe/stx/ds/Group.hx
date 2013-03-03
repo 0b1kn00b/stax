@@ -36,7 +36,7 @@ class ArrayGroup {
 }
 class FoldableGroup {
   public static function groupBy<C, T, K>(foldable: Foldable<C, T>, grouper: T -> K) : Map<K, C> { 
-    var def = foldable.empty();
+    var def = foldable.unit();
     return cast foldable.foldl(Map.create(), function(map, e) {
       var key = grouper(e);
       var result = map.getOrElseC(key, def);

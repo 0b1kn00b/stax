@@ -51,7 +51,7 @@ class Json {
     switch (Type.typeof (d)) {
       case TUnknown:  throw "Type of object must be definite: " + d;
       case TClass(c):      if (Std.is (d, String)) return JString (d);
-                      else if (Std.is (d, Hash))   return JObject (d.keys.toArray().map (function (k: String): JValue {return JField (k, d.get (k));}));
+                      else if (Std.is (d, Map))   return JObject (d.keys.toArray().map (function (k: String): JValue {return JField (k, d.get (k));}));
                       else if (Std.is (d, Array)) return JArray  (cast(d, Array<Dynamic>).map (fromObject));
                       else return Prelude.error()("Unknown object type: " + d);
                       

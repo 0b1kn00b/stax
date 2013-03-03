@@ -5,24 +5,25 @@ import stx.Prelude;
 
 import Type;
 
+using Std;
+
 import stx.Maths;
 import stx.plus.Show;
 
 using stx.Prelude;
-using stx.Options;
+using stx.Maybes;
 using stx.Strings;
 using stx.plus.Show;
-using Std;
-using stx.Prelude;
 
+using stx.Prelude;
 
 enum Unit {
   Unit;
 }
-
 typedef AnyRef = {}
+
 typedef CodeBlock = Void -> Void
-typedef Function<P1, R> = P1 -> R
+
 typedef Function0<R> = Void -> R
 typedef Function1<P1, R> = P1 -> R
 typedef Function2<P1, P2, R> = P1 -> P2 -> R
@@ -40,7 +41,8 @@ typedef Factory<T>    = Void -> T
 typedef RC<R,A>       = (A -> R) -> R
 typedef Receive<A>    = RC<Void,A>
 typedef ReceiveE<A,B> = Receive<Either<A,B>>;
-
+typedef Modify<T>     = T -> T;
+typedef Field<T>      = Tup2<String,T>;
 /**
  A function which takes no parameter and returns a result.
  */
@@ -48,22 +50,15 @@ typedef Thunk<T>    = Void -> T
 
 /** 
 		An option represents an optional value -- the value may or may not be
- 		present. Option is a much safer alternative to null that often enables
+ 		present. Maybe is a much safer alternative to null that often enables
   	reduction in code size and increase in code clarity.
  */
-enum Option<T> {
+enum Maybe<T> {
   None;
   Some(v: T);
 }
-
-enum TraversalOrder {
-	PreOrder;
-	InOrder;
-	PostOrder;
-	LevelOrder;
-}
 /** 
-	Either represents a type that is either a "left" value or a "right" value,
+  Either represents a type that is either a "left" value or a "right" value,
   but not both. Either is often used to represent success/failure, where the
   left side represents failure, and the right side represents success.
  */
@@ -71,17 +66,22 @@ enum Either<A, B> {
   Left(v: A);
   Right(v: B);
 }
+enum TraversalOrder {
+	PreOrder;
+	InOrder;
+	PostOrder;
+	LevelOrder;
+}
 enum FreeM<A, B>{
   Cont(v:A);
   Done(v:B);
 }
-typedef FailureOrSuccess<A, B> 	= Either<A, B>
 typedef Outcome<A>              = Either<Error,A>
 
 typedef OrderFunction<T>  			= Function2<T, T, Int>;
 typedef EqualFunction<T>  			= Function2<T, T, Bool>;
 typedef ShowFunction<T>   			= Function1<T, String>;
-typedef HashFunction<T> 				= Function1<T, Int>;   
+typedef MapFunction<T> 				= Function1<T, Int>;   
 
 typedef Lense<A, B> = {
   get : A -> B,
@@ -92,7 +92,7 @@ typedef CollectionTools<T> = {
 		order : Null<OrderFunction<T>>,
 		equal	: Null<EqualFunction<T>>,
 		show	: Null<ShowFunction<T>>,
-		hash	: Null<HashFunction<T>>,
+		hash	: Null<MapFunction<T>>,
 }
 class FieldOrder {
   public static inline var Ascending	 	= 1;
@@ -107,14 +107,14 @@ class Prelude{
   public static function here(?pos:haxe.PosInfos) {
     return pos;
   }
-  inline static public  function tool<A>(?order:OrderFunction<A>,?equal:EqualFunction<A>,?hash:HashFunction<A>,?show:ShowFunction<A>):CollectionTools<A>{
+  inline static public  function tool<A>(?order:OrderFunction<A>,?equal:EqualFunction<A>,?hash:MapFunction<A>,?show:ShowFunction<A>):CollectionTools<A>{
     return { order : order , equal : equal , show : show , hash : hash };
   }
   
-  static public function unfold<T, R>(initial: T, unfolder: T -> Option<Tuple2<T, R>>): Iterable<R> {
+  static public function unfold<T, R>(initial: T, unfolder: T -> Maybe<Tuple2<T, R>>): Iterable<R> {
     return {
       iterator: function(): Iterator<R> {
-        var _next: Option<R> = None;
+        var _next: Maybe<R> = None;
         var _progress: T = initial;
 
         var precomputeNext = function() {
@@ -152,6 +152,13 @@ class Prelude{
     return 
       function(msg: String):T{
         throw '$msg at $pos';  return null;
+      }
+  }
+  static public function err<T>(?pos:haxe.PosInfos): Error->T{
+    return 
+      function(err:Error):T{
+        throw(err);
+        return null;
       }
   }
 }

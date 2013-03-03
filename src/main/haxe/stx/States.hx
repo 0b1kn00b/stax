@@ -9,9 +9,9 @@ using stx.Tuples;
                       using stx.Dynamics;
                       using stx.States;
 
-class State<S,R> extends Apply<S,Tuple2<R,S>>{
+class State<S,R>{
   @:noUsing 
-  static public function create<A,B>( opts : TApply<A,Tuple2<B,A>> ):State<A,B>{
+  static public function create<A,B>( opts : TApply<A,Tup2<B,A>> ):State<A,B>{
     return new State(opts);
   }
   @:noUsing
@@ -20,6 +20,15 @@ class State<S,R> extends Apply<S,Tuple2<R,S>>{
       State.pure(
         function(s:S):Tuple2<A,S>{
           return Tuples.t2(value,s);
+        }
+      );
+  }
+  @:noUsing
+  static public function unit<S>():State<S,Unit>{
+    return 
+      State.pure(
+        function(s:S){
+          return Tups.t2(Unit,s);
         }
       );
   }
@@ -33,8 +42,9 @@ class State<S,R> extends Apply<S,Tuple2<R,S>>{
           }
       });
   }
-  public function new(opts){
-    super(opts);
+  dynamic public function apply(s:S):Tup2<R,S>{return null;}
+  public function new(opts:TApply<S,Tup2<R,S>>){
+    this.apply = opts.apply;
   }
   /**
   * Run `State` with `s`, dropping the result and returning `s`.
@@ -57,6 +67,14 @@ class State<S,R> extends Apply<S,Tuple2<R,S>>{
           return fn(o._1).entuple(o._2);
         }
       );
+  }
+  public function foreach(fn:R->Void):State<S,R>{
+    return map(
+      function(x){
+        fn(x);
+        return x;
+      }
+    );
   }
   public function mapSt(fn:S->S):State<S,R>{
     return

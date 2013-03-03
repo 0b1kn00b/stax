@@ -13,6 +13,14 @@ using stx.Functions;
 typedef EqualFunction<T>        = Function2<T, T, Bool>;
 class Equal {
   @:noUsing
+  static public function equalOn<A>(key:String):EqualFunction<Dynamic>{
+    return function(x:A,y:A):Bool{
+      var l = Reflect.field(x,key);
+      var r = Reflect.field(y,key);
+      return Equal.getEqualFor(l)(l,r);
+    }
+  }
+  @:noUsing
   static public function nil<A>(a:A,b:A){
     return 
       _createEqualImpl(function(a:A, b:A) { return stx.Prelude.error()("at least one of the arguments should be null"); })(a,b);
@@ -56,7 +64,7 @@ class Equal {
           _createEqualImpl(ProductEqual.equals);
         default:    
           if(Meta._hasMetaDataClass(c)) {  
-            var fields = Meta._fieldsWithMeta(c, "equalHash");
+            var fields = Meta._fieldsWithMeta(c, "equalMap");
             _createEqualImpl(function(a, b) {         
               var values = fields.map(function(v){return Tuples.t2(Reflect.field(a, v), Reflect.field(b, v));});
               for (value in values) {
@@ -76,7 +84,7 @@ class Equal {
             Prelude.error()("class "+Type.getClassName(c)+" has no equals method");
           }
       }
-    case TEnum(e):
+    case TEnum(_):
       _createEqualImpl(function(a, b) {
         if(0 != Type.enumIndex(a) - Type.enumIndex(b))
           return false;

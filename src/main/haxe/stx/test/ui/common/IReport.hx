@@ -17,7 +17,8 @@ package stx.test.ui.common;
 
 import stx.test.ui.common.HeaderDisplayMode;
 
-interface IReport<T : IReport<Dynamic>>
+@:note('recursive constraint')
+interface IReport<T/*: IReport<Dynamic>*/>
 {
   public var displaySuccessResults : SuccessResultsDisplayMode;
   public var displayHeader : HeaderDisplayMode;

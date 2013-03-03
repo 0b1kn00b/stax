@@ -7,7 +7,7 @@ import stx.ds.List;
 
 using stx.Prelude;
 using stx.Arrays;
-using stx.Options;
+using stx.Maybes;
 
 class ListJValue<T> extends AbstractTranscode<List<T>,JExtractorFunction<T>>, implements Singleton{
 	public function new(){}

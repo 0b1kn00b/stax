@@ -15,6 +15,8 @@
 */
 package stx.test;
 
+import haxe.ds.IntMap;
+
 import stx.Prelude;
 import stx.Future;
 
@@ -26,7 +28,7 @@ import stx.test.MustMatchers;
 import haxe.PosInfos;
 import stx.error.AssertionError;
 
-using stx.Options;
+using stx.Maybes;
 
 
 
@@ -324,7 +326,7 @@ class Assert {
         }
 
         // hash, inthash
-        if(Std.is(expected, Hash) || Std.is(expected, IntHash)) {
+        if(Std.is(expected, Map) || Std.is(expected, IntMap)) {
           if(status.recursive || status.path == '') {
             var keys  = Lambda.array({ iterator : function() return expected.keys() });
             var vkeys = Lambda.array({ iterator : function() return value.keys() });
@@ -690,7 +692,7 @@ class Assert {
   *   haxe.Timer.delay(async, 50);
   * }
   * @param f: A function that contains other Assert tests
-  * @param timeout: Optional timeout value in milliseconds.
+  * @param timeout: Maybeal timeout value in milliseconds.
   */
   public static dynamic function createAsync(f : Void->Void, ?timeout : Int) {
     return function(){};
@@ -759,7 +761,7 @@ class Assert {
   * It works the same way as Assert.assertAsync() but accepts a function with one
   * argument (usually some event data) instead of a function with no arguments
   * @param f: A function that contains other Assert tests
-  * @param timeout: Optional timeout value in milliseconds.
+  * @param timeout: Maybeal timeout value in milliseconds.
   */
   public static dynamic function createEvent<EventArg>(f : EventArg->Void, ?timeout : Int) {
     return function(e:EventArg){};

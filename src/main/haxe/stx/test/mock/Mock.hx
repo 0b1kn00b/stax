@@ -34,7 +34,7 @@ class Mock<T> {
     _target  = Type.createEmptyInstance(c);
   }
   
-  public function expect1<P1, R>(name: String, f: Function<P1, R>, times: Int = 1): Void {
+  public function expect1<P1, R>(name: String, f: Function1<P1, R>, times: Int = 1): Void {
     var self = this;
     
     for (i in 0...times) {
@@ -94,7 +94,7 @@ class Mock<T> {
     }
   }
   
-  public function allow1<P1, R>(name: String, f: Function<P1, R>): Void {
+  public function allow1<P1, R>(name: String, f: Function1<P1, R>): Void {
     Reflect.setField(_target, name, f);
   }
   

@@ -1,60 +1,59 @@
 package stx;
 
+import stx.Maybes;
 import stx.Future;
 import stx.Prelude;
 import stx.Tuples;
 
-//from monax
+private typedef TCont<R,A>  = Method<A -> R, R>;
+typedef Cont<R,A>           = Continuation<R,A>;
 
-typedef Cont = Continuations;
-class Continuations{
-  @:noUsing
-  static public function create<R,A>(g:RC<R,A>):RC<R,A>{
-    return function(f:A->R) { return g(f); }
-  }
-  @:noUsing
-  static public function pure<A>(a:A):RC<A,A>{
-    return 
-      function(f:A->A){ return f(a); }
-  }
-  static public function apply<R,A>(cont:RC<R,A>,fn:A->R):R{
-    return cont(fn);
-  }
-  static public function flatMap<A,B,R>(m:RC<R,A>,k:A -> RC<R,B>):RC<R,B>{
-    return 
-      function(cont : B -> R){
-        return m(function(a){ return k(a)(cont); });
+abstract Continuation<R,A>(TCont<R,A>) from TCont<R,A> to TCont<R,A>{
+  @:noUsing static public function pure<R,A>(r:R):Continuation<R,A>{
+    return function(x:A->R){
+        return r;
       }
   }
-  static public function map<A,B,R>(m:RC<R,A>, k : A -> B):RC<R,B>{
-    return 
-      function(cont: B->R) {
-        return m(
-          function(a) {
-            return cont(k(a));
+  public function new(v){
+    this = v;
+  }
+  public function apply(?fn:A->R):R{
+    fn = Maybes.orDefault(fn,function(x){ trace('continuation result dropped'); return null; });
+    return this.apply(fn);
+  }
+  public function map<B>(k:A->B):Continuation<R,B>{
+    return new Continuation(
+      function(cont:B->R):R{
+        return apply(this,
+          function(v:A){
+            return cont(k(v));
           }
         );
       }
+    );
   }
-
-  static public function cc<R,A,B>(f:(A->RC<R,B>)->RC<R,A>):RC<R,A>{
-    return 
-      function(k){
-        return 
-          f(
-            function(a){
-            return 
+  public function flatMap<B>(k:A -> Continuation<R,B>):Continuation<R,B>{
+    return new Continuation(
+      function(cont : B -> R):R{
+        return apply(this, function(a:A):R{ return k(a).apply(cont); });
+      }
+    );
+  }
+  public function cc<B>(f:(A->Continuation<R,B>)->Continuation<R,A>):Continuation<R,A>{
+    return new Continuation(
+      function(k:A->R):R{
+        return f(
+          function(a){
+            return new Continuation(
               function(x){
                 return k(a);
               }
+            );
           }
-          )(k);
-      };
+        ).apply(k);
+      }
+    );
   }
-  static inline public function callcc(f){
-    return cc(f);
-  }
-  
   static public function futureOf<A>(cont:Receive<A>):Future<A>{
     var ft = Future.create();
     cont(

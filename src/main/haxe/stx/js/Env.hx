@@ -211,7 +211,7 @@ class Env {
     return document.cookie.split(";");
   }
   
-  private static function getCookieExpiration(expires: Int): String {
+  private static function getCookieExpiration(expires: Null<Int>): String {
     return if (expires != null) {
       var result = Date.fromTime(Date.now().getTime() + (expires * 1000 * 60 * 60 * 24));
       ";expires=" + Std.string(untyped result.toGMTString());

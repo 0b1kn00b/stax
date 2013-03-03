@@ -1,7 +1,7 @@
 package stx;
 
 using stx.Maths;
-using stx.Options;
+using stx.Maybes;
 
 import stx.Prelude;
 
@@ -25,7 +25,7 @@ class Strings {
   static public function int(v: String, ?d: Null<Int>): Int {
     if (v == null) return d;
     
-    return Std.parseInt(v).toOption().filter(function(i) return !Math.isNaN(i)).getOrElseC(d);
+    return Std.parseInt(v).toMaybe().filter(function(i) return !Math.isNaN(i)).getOrElseC(d);
   }
   /**
   * Returns a Float from String format, defaulting to d
@@ -33,7 +33,7 @@ class Strings {
   static public function toFloat(v: String, ?d: Null<Float>): Float { 
     if (v == null) return d;
     
-    return Std.parseFloat(v).toOption().filter(function(i) return !Math.isNaN(i)).getOrElseC(d);
+    return Std.parseFloat(v).toMaybe().filter(function(i) return !Math.isNaN(i)).getOrElseC(d);
   }
   /**
   * Returns true if frag is at the beginning of String v, false otherwise.
@@ -77,6 +77,12 @@ class Strings {
   static public function trim(v: String): String {
     return StringTools.trim(v);
   }
+  static public function drop(v:String,n:Int):String{
+    return v.substr(n);
+  }
+  static public function take(v:String,n:Int):String {
+    return v.substr(0,n);
+  }
   /**
   * Returns true if v contains s, false otherwise.
   */
@@ -107,8 +113,17 @@ class Strings {
   static public function toString(v: String): String {
     return v;
   }
-  static public function surround(str:String,before:String,after:String){
-    return before + str + after;
+  static public function surround(l:String,r:String){
+    return 
+      function(v:String){
+        return '$l$v$r';
+      }
+  }
+  static public function join(with:String){
+    return 
+      function(before:String,after:String){
+        return before + with + after;
+      }
   }
   static public function prepend(str:String,before:String){
     return before + str;

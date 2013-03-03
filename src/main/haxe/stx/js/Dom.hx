@@ -28,7 +28,7 @@ typedef Object = Dynamic // Object
 
 typedef DOMUserData = Dynamic //any
 
-extern class DomCollection<T> implements ArrayAccess<T> {
+extern interface DomCollection<T> implements ArrayAccess<T> {
   var length (default, null) : Int;
 }
 
@@ -49,7 +49,7 @@ typedef DOMStringMap = {
     public function deleter(name: DOMString): Void;
 }
 
-interface DOMTokenList<T> implements ArrayAccess<T>, implements Dynamic<T> {
+interface DOMTokenList<T> implements ArrayAccess<T> implements Dynamic<T> {
     public var length       (default, null): Int;
     
     public function item(index: Int): DOMString;
@@ -65,7 +65,7 @@ interface DOMTokenList<T> implements ArrayAccess<T>, implements Dynamic<T> {
     public function stringifier(): DOMString;
 }
 
-interface DOMSettableTokenList<T> implements ArrayAccess<T>, implements Dynamic<T> {
+interface DOMSettableTokenList<T> implements ArrayAccess<T> implements Dynamic<T> {
     public var value:       DOMString;
     
     public var length       (default, null): Int;
@@ -96,7 +96,7 @@ interface DOMStringList implements ArrayAccess<DOMString> {
     
 }
 
-interface NameList<T> implements ArrayAccess<T>, implements Dynamic<T> {
+interface NameList<T> implements ArrayAccess<T> implements Dynamic<T> {
     public function getName(index: Int): DOMString;
     
     public function getNamespaceURI(index: Int): DOMString;
@@ -1827,7 +1827,7 @@ typedef Storage = {
 *
 */
 //Tested
-extern interface HTMLCollection<T> implements ArrayAccess<T>, implements Dynamic<T> {
+extern interface HTMLCollection<T> implements ArrayAccess<T> implements Dynamic<T> {
     public var length (default,null): Int;
     
     public function item(index: Int): HTMLElement;
@@ -1873,7 +1873,7 @@ typedef MutableTimedTrack = {
     public var onexitcue            (default, null): EventListener<Event>;
 }
 
-interface TimedTrackCueList<T> implements ArrayAccess<T>, implements Dynamic<T> {
+interface TimedTrackCueList<T> implements ArrayAccess<T> implements Dynamic<T> {
     public var length               (default, null): Int;
     
     public function getter(index: Int): TimedTrackCue;
@@ -2666,17 +2666,17 @@ typedef HTMLMediaElement = {
     public function getUserData(key: DOMString): DOMUserData;
 }
 
-extern interface HTMLFormControlsCollection<T> implements HTMLCollection<T> {
+extern interface HTMLFormControlsCollection<T> extends HTMLCollection<T> {
 }
 
-extern interface RadioNodeList implements DomCollection<Node> {
+extern interface RadioNodeList extends DomCollection<Node> {
     public var value: DOMString;
 }
 
-typedef HTMLOptionsCollection = {
+typedef HTMLMaybesCollection = {
     public var length (default,null): Int;
     
-    public function item(index: Int): HTMLOptionElement;
+    public function item(index: Int): HTMLMaybeElement;
     
     public function namedItem(name: DOMString): Node;
 }
@@ -5917,7 +5917,7 @@ typedef HTMLSelectElement = {
     public var value:           DOMString;
     public var length           (default, null): Int;
     public var form             (default, null): HTMLFormElement;
-    public var options          (default, null): HTMLOptionsCollection;
+    public var options          (default, null): HTMLMaybesCollection;
     public var disabled         (default, null):        Bool;
     public var multiple:        Bool;
     public var name:            DOMString;
@@ -6691,7 +6691,7 @@ typedef HTMLOptGroupElement = {
     public function getUserData(key: DOMString): DOMUserData;
 }
 //Tested
-typedef HTMLOptionElement = {
+typedef HTMLMaybeElement = {
     public var form             (default, null): HTMLFormElement;
     public var defaultSelected  : Bool;
     public var text             (default, null): DOMString;
@@ -16747,11 +16747,11 @@ typedef PageTransitionEvent = {
     public function stopImmediatePropagation(): Void;
 }
 
-typedef HashChangeEvent = {
+typedef MapChangeEvent = {
     public var oldURL       (default, null): DOMString;
     public var newURL       (default, null): DOMString;
     
-    public function initHashChangeEvent(
+    public function initMapChangeEvent(
         typeArg:        DOMString, 
         canBubbleArg:   Bool, 
         cancelableArg:  Bool, 

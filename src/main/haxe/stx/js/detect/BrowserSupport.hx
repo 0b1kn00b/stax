@@ -21,7 +21,7 @@ import stx.js.Env;
 import stx.js.dom.Quirks;
 import stx.ds.Map;
 
-using stx.Options;
+using stx.Maybes;
 using stx.Arrays;
 
 using stx.Dynamics;
@@ -720,7 +720,7 @@ class BrowserSupport {
       return canPlayType('audio', 'audio/mp4; codecs="mp4a.40.2"');
     });
   }
-  private static function canPlayType(element: String, format: String): Option<Bool> {
+  private static function canPlayType(element: String, format: String): Maybe<Bool> {
     var result = None;
     if (Env.document.createElement != null) {
       var a = Env.document.createElement(element);
@@ -907,7 +907,7 @@ class BrowserSupport {
     });
   }
 
-  private static function checIfExist(elementName: String, property: String): Option<Bool>{
+  private static function checIfExist(elementName: String, property: String): Maybe<Bool>{
     var result = None;
     if (Env.document.createElement != null) {
       var c = Env.document.createElement(elementName);
@@ -916,7 +916,7 @@ class BrowserSupport {
     }
     return result;
   }
-  private static function checIputTypeProperty(type: String): Option<Bool>{
+  private static function checIputTypeProperty(type: String): Maybe<Bool>{
     var result = None;
     if (Env.document.createElement != null) {
       var i = Env.document.createElement("input");
@@ -1092,7 +1092,7 @@ class BrowserSupport {
     return testSupport('<input type="checkbox"/>', 'input', function(e) {
       var value: String = untyped e.value;
 
-      return value.toOption().map(function(s) return ~/on/i.match(s)).getOrElseC(false);
+      return value.toMaybe().map(function(s) return ~/on/i.match(s)).getOrElseC(false);
     });
   }
 
@@ -1127,7 +1127,7 @@ class BrowserSupport {
   public static function offsetDoesNotIncludeMarginInBodyOffset(): Bool {
     return testFeatureAndMemorize("offsetDoesNotIncludeMarginInBodyOffset", function() {
       if (Env.document != null && Env.document.body != null) {
-        return Env.document.body.with(function(body) {
+        return Env.document.body.sendTo(function(body) {
           var bodyMarginTop = Quirks.getComputedCssProperty(body, "margin-top").map(function(s) return s.int(0)).getOrElseC(0);
 
           return Some(body.offsetTop != bodyMarginTop);
@@ -1187,7 +1187,7 @@ class BrowserSupport {
           container.innerHTML = "<div style='position:absolute;top:0;left:0;margin:0;border:5px solid #000;padding:0;width:1px;height:1px;'><div></div></div>";
         });
 
-        return Some(Env.document.body.with(function(body) {
+        return Some(Env.document.body.sendTo(function(body) {
           body.insertBefore(container, body.firstChild);
 
           var checkDiv: HTMLElement = cast container.firstChild.firstChild;
@@ -1216,7 +1216,7 @@ class BrowserSupport {
           container.innerHTML = "<table style='position:absolute;top:0;left:0;margin:0;border:5px solid #000;padding:0;width:1px;height:1px;' cellpadding='0' cellspacing='0'><tr><td></td></tr></table>";
         });
 
-        return Some(Env.document.body.with(function(body) {
+        return Some(Env.document.body.sendTo(function(body) {
           body.insertBefore(container, body.firstChild);
 
           var td: HTMLElement = cast container.getElementsByTagName('td')[0];
@@ -1244,7 +1244,7 @@ class BrowserSupport {
           container.innerHTML = "<div style='position:absolute;top:0;left:0;margin:0;border:5px solid #000;padding:0;width:1px;height:1px;'><div></div></div>";
         });
 
-        return Some(Env.document.body.with(function(body) {
+        return Some(Env.document.body.sendTo(function(body) {
           body.insertBefore(container, body.firstChild);
 
           var innerDiv: HTMLElement = cast container.firstChild;
@@ -1291,7 +1291,7 @@ class BrowserSupport {
         div.style.display = 'none';
         div.innerHTML = contents;
 
-        Some(div.getElementsByTagName(tagName).toArray().firstOption().map(f).getOrElseC(def2));
+        Some(div.getElementsByTagName(tagName).toArray().firstMaybe().map(f).getOrElseC(def2));
       }
     });
   }
@@ -1307,7 +1307,7 @@ class BrowserSupport {
 
         Env.document.body.insertBefore(div, Env.document.body.firstChild);
 
-        Some(div.getElementsByTagName(tagName).toArray().firstOption().map(f).getOrElseC(def2).withEffect(function(_) {
+        Some(div.getElementsByTagName(tagName).toArray().firstMaybe().map(f).getOrElseC(def2).withEffect(function(_) {
           Env.document.body.removeChild(div);
 
           div.style.display = 'none';
@@ -1315,15 +1315,15 @@ class BrowserSupport {
       }
     });
   }
-  private static function testFeatureAndMemorize(key: String, testFunction: Thunk<Option<Bool>>): Bool{
+  private static function testFeatureAndMemorize(key: String, testFunction: Thunk<Maybe<Bool>>): Bool{
     return testAndMemorize(key, true, testFunction);
   }
-  private static function testBugAndMemorize(key: String, testFunction: Thunk<Option<Bool>>): Bool{
+  private static function testBugAndMemorize(key: String, testFunction: Thunk<Maybe<Bool>>): Bool{
     return testAndMemorize(key, false, testFunction);
   }
-  private static function testAndMemorize(key: String, defaultValue: Bool, testFunction: Thunk<Option<Bool>>): Bool{
+  private static function testAndMemorize(key: String, defaultValue: Bool, testFunction: Thunk<Maybe<Bool>>): Bool{
     return memorized.get(key).getOrElse(function(){
-      var result: Option<Bool> = untyped testFunction.call();
+      var result: Maybe<Bool> = untyped testFunction.call();
       result.foreach(function(v){
         memorized = memorized.set(key, v);
       });

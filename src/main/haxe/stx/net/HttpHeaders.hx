@@ -26,7 +26,7 @@ import stx.net.HttpHeader;
 
 using stx.Strings;
  
-using stx.Options;
+using stx.Maybes;
 
 typedef HttpHeaders = Map<String, String>
 
@@ -34,7 +34,7 @@ class Headers {
   static var HeaderPattern = ~/^([^:]+): *(.+)$/;
   static var HeaderLinesPattern = ~/[\r\n]+/;
   
-  public static function toHttpHeader(str: String): Option<HttpHeader> {
+  public static function toHttpHeader(str: String): Maybe<HttpHeader> {
     return if (HeaderPattern.match(str)) Some(HeaderPattern.matched(1).trim().entuple(HeaderPattern.matched(2).trim())); else None;
   }
   

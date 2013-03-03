@@ -12,8 +12,8 @@ import stx.ds.Map;
 
 import stx.Future;
 
-import stx.Options;
-using stx.Options;
+import stx.Maybes;
+using stx.Maybes;
 
 #if js
 import stx.js.Dom;
@@ -30,12 +30,12 @@ using stx.net.HttpHeaders;
 #if js
 @DefaultImplementation("stx.io.http.HttpJValueAsync", "OneToMany")
 #end
-interface HttpJValue implements Http<JValue> {
+interface HttpJValue extends Http<JValue> {
 }
 
 #if js
 
-class HttpJValueAsync extends HttpTransformer<String, JValue>, implements HttpJValue {
+class HttpJValueAsync extends HttpTransformer<String, JValue> implements HttpJValue {
   public function new() {
     super(new HttpStringAsync(), Json.encode, Json.decode, "application/json");
   }
@@ -63,7 +63,7 @@ class HttpJValueJsonp implements HttpJValue {
     var callbackName     = 'stx_jsonp_callback_' + requestId;
     var callbackFullName = 'stx.io.http.HttpJValueJsonp.Responders.' + callbackName;
     
-    var params = Options.create(params_).getOrElseC(Map.create()).set(callbackParameterName, callbackFullName);
+    var params = Maybes.create(params_).getOrElseC(Map.create()).set(callbackParameterName, callbackFullName);
     
     var url = url_.addQueryParameters(params);
     
@@ -82,7 +82,7 @@ class HttpJValueJsonp implements HttpJValue {
       doCleanup();
       
       var code: HttpResponseCode;
-      var response: Option<JValue>;
+      var response: Maybe<JValue>;
       
       try {
         response = Some(Json.fromObject(data));

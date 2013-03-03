@@ -24,15 +24,15 @@ import stx.test.Assertation;
 */
 class PackageResult {
   public var packageName(default, null) : String;
-  var classes : Hash<ClassResult>;
-  var packages : Hash<PackageResult>;
+  var classes   : Map<String,ClassResult>;
+  var packages  : Map<String,PackageResult>;
 
   public var stats(default, null) : ResultStats;
 
   public function new(packageName : String) {
     this.packageName = packageName;
-    classes = new Hash();
-    packages = new Hash();
+    classes = new Map();
+    packages = new Map();
     stats = new ResultStats();
   }
 

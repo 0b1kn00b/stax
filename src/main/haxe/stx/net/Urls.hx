@@ -23,7 +23,7 @@ import stx.ds.Map;
 
 using stx.Tuples;
 using stx.Strings;
-using stx.Options;
+using stx.Maybes;
 using stx.functional.Foldable;
 
 class Urls {
@@ -38,11 +38,11 @@ class Urls {
   static var Port     = 3;
   static var Pathname = 4;
   static var Search   = 5;
-  static var Hash     = 6;
+  static var Map     = 6;
   
   /** Tries to parse the url, returning None if unsuccessful.
    */
-  public static function toParsedUrl(s: String): Option<ParsedUrl> {
+  public static function toParsedUrl(s: String): Maybe<ParsedUrl> {
     var nonNull = function(s: String) return if (s == null) ''; else s;
     
     return if (UrlPattern.match(s)) {
@@ -52,7 +52,7 @@ class Urls {
         nonNull(UrlPattern.matched(Port)),
         nonNull(UrlPattern.matched(Pathname)),
         nonNull(UrlPattern.matched(Search)),
-        nonNull(UrlPattern.matched(Urls.Hash))
+        nonNull(UrlPattern.matched(Urls.Map))
       ));
     }
     else None;
@@ -99,7 +99,7 @@ class Urls {
     return formUrl(parsed.protocol, replaceSubdomains(parsed.hostname, subdomains), parsed.port, parsed.pathname, parsed.search, parsed.hash);
   }
   
-  public static function withHash(parsed: ParsedUrl, hash: String): ParsedUrl {
+  public static function withMap(parsed: ParsedUrl, hash: String): ParsedUrl {
     return formUrl(parsed.protocol, parsed.hostname, parsed.port, parsed.pathname, parsed.search, hash);
   }
   
@@ -135,8 +135,8 @@ class Urls {
     return withSubdomains(parsed, '');
   }
   
-  public static function withoutHash(parsed: ParsedUrl): ParsedUrl {
-    return withHash(parsed, '');
+  public static function withoutMap(parsed: ParsedUrl): ParsedUrl {
+    return withMap(parsed, '');
   }
   
   public static function withoutFile(parsed: ParsedUrl): ParsedUrl {
@@ -170,7 +170,7 @@ class Urls {
     return extractField(url, 'protocol');
   }
   
-  public static function extractHash(url: Url): String {
+  public static function extractMap(url: Url): String {
     return extractField(url, 'hash');
   }
   
@@ -194,14 +194,14 @@ class Urls {
    * object, whose fields all have string values.
    */
   public static function toQueryParameters(query: String): QueryParameters {
-    return if (!query.startsWith('?')) Map.create();
+    return if (!query.startsWith('?')) stx.ds.Map.create();
            else query.substr(1).split('&').flatMap(function(kv) {
              var a = kv.split('=').map(function(s) return s.urlDecode());
       
               return if (a.length == 0) [];
                      else if (a.length == 1) [Tuples.t2(a[0],'')];
                      else [Tuples.t2(a[0],a[1])];
-           }).foldl(Map.create(), function(m, t) {
+           }).foldl(stx.ds.Map.create(), function(m, t) {
              return m.add(t);
            });
   }

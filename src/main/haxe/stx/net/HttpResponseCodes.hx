@@ -87,7 +87,7 @@ class HttpResponseCodes {
   
   public static function isNormal(response: HttpResponseCode): Bool {
     return switch(response) { 
-      case Normal(v): true;
+      case Normal(_): true;
       
       default: false;
     }
@@ -96,7 +96,7 @@ class HttpResponseCodes {
   public static function isInformational(response: HttpResponseCode): Bool {
     return switch(response) { 
       case Normal(v): switch (v) {
-        case Informational(v): true;
+        case Informational(_): true;
         
         default: false;
       }
@@ -108,7 +108,7 @@ class HttpResponseCodes {
   public static function isSuccess(response: HttpResponseCode): Bool {
     return switch(response) { 
       case Normal(v): switch (v) {
-        case Success(v): true;
+        case Success(_): true;
         
         default: false;
       }
@@ -120,7 +120,7 @@ class HttpResponseCodes {
   public static function isRedirection(response: HttpResponseCode): Bool {
     return switch(response) { 
       case Normal(v): switch (v) {
-        case Redirection(v): true;
+        case Redirection(_): true;
         
         default: false;
       }
@@ -131,7 +131,7 @@ class HttpResponseCodes {
   
   public static function isError(response: HttpResponseCode): Bool {
     return switch(response) { 
-      case Error(v): true;
+      case Error(_): true;
       
       default: false;
     }
@@ -140,7 +140,7 @@ class HttpResponseCodes {
   public static function isClientError(response: HttpResponseCode): Bool {
     return switch(response) { 
       case Error(v): switch (v) {
-        case Client(v): true;
+        case Client(_): true;
         
         default: false;
       }
@@ -152,7 +152,7 @@ class HttpResponseCodes {
   public static function isServerError(response: HttpResponseCode): Bool {
     return switch(response) { 
       case Error(v): switch (v) {
-        case Server(v): true;
+        case Server(_): true;
         
         default: false;
       }

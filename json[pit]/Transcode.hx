@@ -48,10 +48,10 @@ class AbstractTranscode<T,E> implements Transcode<T,E>{
 	}
 }
 class Transcodes{
-	static public var transcoders(default,null)  : Hash<Transcode<Dynamic,Dynamic>>;
+	static public var transcoders(default,null)  : Map<Transcode<Dynamic,Dynamic>>;
 
 	private static function __init__(){
-		transcoders = new Hash();
+		transcoders = new Map();
 		transcoders.set( Std.string(Type.typeof(Array))		, new stx.io.json.types.ArrayJValue() );
 		transcoders.set( Std.string(Type.typeof(Bool)) 		, new stx.io.json.types.BoolJValue() );
 		transcoders.set( Std.string(Type.typeof(Date)) 		, new stx.io.json.types.DateJValue() );
@@ -59,7 +59,7 @@ class Transcodes{
 		transcoders.set( Std.string(Type.typeof(Int)) 		, new stx.io.json.types.IntJValue() );
 		transcoders.set( Std.string(Type.typeof(String)) 	, new stx.io.json.types.StringJValue() );
 
-		transcoders.set( Std.string(Type.getEnumName(stx.Option)) 					, new stx.io.json.types.stx.OptionJValue() );
+		transcoders.set( Std.string(Type.getEnumName(stx.Maybe)) 					, new stx.io.json.types.stx.MaybeJValue() );
 		transcoders.set( Std.string(Type.getEnumName(stx.io.json.JValue)) 	, new stx.io.json.types.stx.io.json.JValue() );
 	}
 

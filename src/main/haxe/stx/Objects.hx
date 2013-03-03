@@ -16,9 +16,16 @@ typedef Object = {};
 */
 @note('0b1kn00b','Does this handle reference loops, should it, could it?')
 class Objects {
-  
+  @:noUsing
+  static public function asObject(d:Dynamic):Object{
+    return cast d;
+  }
+  @:noUsing
+  static public function create():Object{
+    return {};
+  }
   inline static public function copyDeep(d: Object): Object return 
-    copy(d, false)
+    copy(d, false);
   
   /**
     Generic copy function
@@ -33,10 +40,10 @@ class Objects {
   }
 
   inline static public function copyTypedDeep<T>(d: T): T return 
-    untyped copy(d, false)
+    cast copy(untyped d, false);
     
   inline static public function copyTyped<T>(d: T, shallow: Bool = true): T return
-    untyped copy(d, shallow)
+    cast copy(untyped d, shallow);
   
   static public function copyTo(src: Object, dest: Object, shallow: Bool = true): Object {
     function safecopy(d: Dynamic): Dynamic
@@ -142,11 +149,11 @@ class Objects {
     });
   }
   
-  static public function getO<T>(d: Dynamic<T>, k: String): Option<T> {
+  static public function getO<T>(d: Dynamic<T>, k: String): Maybe<T> {
     return if (Reflect.hasField(d, k)) Some(Reflect.field(d, k)); else None;
   }
   
-  static public function getAnyO(d: Object, k: String): Option<Dynamic> {
+  static public function getAnyO(d: Object, k: String): Maybe<Dynamic> {
     return if (Reflect.hasField(d, k)) Some(Reflect.field(d, k)); else None;
   }
   
@@ -213,7 +220,7 @@ class Objects {
         }
       );
   }
-  static public function hasAllFields(d:Object,fields:Array<String>):Option<String>{
+  static public function hasAllFields(d:Object,fields:Array<String>):Maybe<String>{
     return 
       fields.foldl(
         None,

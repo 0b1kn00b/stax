@@ -30,7 +30,7 @@ class Eithers {
   /**
     Returns an option which is Some if the either is Left, None otherwise
   */
-  static public function left<A, B>(e: Either<A, B>): Option<A> {
+  static public function left<A, B>(e: Either<A, B>): Maybe<A> {
     return switch (e) {
       case Left(v): Some(v);
       
@@ -49,7 +49,7 @@ class Eithers {
   /**
     Returns an option which is Some if the either is Right, none otherwise.
   */
-  static public function right<A, B>(e: Either<A, B>): Option<B> {
+  static public function right<A, B>(e: Either<A, B>): Maybe<B> {
     return switch (e) {
       case Right(v): Some(v);
       
@@ -132,7 +132,7 @@ class Eithers {
     return switch (e1) {
       case Left(v1): switch (e2) {
         case Left(v2): Left(ac(v1, v2));
-        case Right(v2): Left(v1);
+        case Right(_): Left(v1);
       }
       case Right(v1): switch (e2) {
         case Left(v2): Left(v2);
@@ -152,7 +152,7 @@ class Eithers {
         case Right(v2): Right(v2);
       }
       case Right(v1): switch (e2) {
-        case Left(v2): Right(v1);
+        case Left(_): Right(v1);
         case Right(v2): Right(bc(v1, v2));
       }
     }

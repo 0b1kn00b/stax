@@ -1,7 +1,7 @@
 package stx;
 
 import stx.Prelude;
-using stx.Options;
+using stx.Maybes;
 using Std;
 
 class Iterators {
@@ -20,12 +20,17 @@ class Iterators {
 		}
 		return ok;
 	}
+	static public function foreach<T>( iterator : Iterator<T>, fn : T -> Void):Iterator<T>{
+		for (o in iterator)
+			fn(o);
+		return iterator;
+	}
 }
 class LazyIterator<T>{
 	public static function create(fn,stack){
 		return new LazyIterator(fn,stack);
 	}
-	public function new(f:Void -> Option<T>,stack:Array<Option<T>>){
+	public function new(f:Void -> Maybe<T>,stack:Array<Maybe<T>>){
 		this.fn 			= 
 			function(i:Int){
 	      //trace(i);
@@ -40,7 +45,7 @@ class LazyIterator<T>{
 	    };
 		this.index 		= 0;
 	}
-	private var fn 		: Int->Option<T>;
+	private var fn 		: Int->Maybe<T>;
 	private var index : Int;
 
 	public function next():T{
@@ -51,7 +56,7 @@ class LazyIterator<T>{
 	}
 	public function hasNext():Bool{
 		var o = switch (fn(index)) {
-			case Some(v) 	: true;
+			case Some(_) 	: true;
 			case None 		: false;
 		}
 		//trace('hasNext $index '.format() + o + ' ' + fn(index));

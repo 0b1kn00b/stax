@@ -24,18 +24,19 @@ private enum EventException {
 */
 class Dispatcher<T> {
 
-  private var handlers : Array<T -> Void>;
-
-  public function new() {
-    handlers = new Array();
+  @:isVar private var handlers(get_handlers,null) : Array<T -> Void>;
+  private function get_handlers(){
+    return (handlers == null) ? handlers = [] : handlers;
   }
-
-  public function add(h : T -> Void) : T -> Void {
+  public function new() {
+    
+  }
+  public function add(h : T -> Void):T->Void {
     handlers.push(h);
     return h;
   }
 
-  public function remove(h : T -> Void) : T -> Void {
+  public function remove(h : T -> Void):T-> Void {
     for(i in 0...handlers.length)
       if(Reflect.compareMethods(handlers[i], h))
         return handlers.splice(i, 1)[0];

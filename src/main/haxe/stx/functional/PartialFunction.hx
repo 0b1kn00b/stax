@@ -17,10 +17,11 @@
 package stx.functional;
 
 import stx.Prelude;
+import stx.ifs.Apply;
 
 typedef PartialFunction<A, Z> = PartialFunction1<A, Z>
 
-interface PartialFunction1<A, Z> {
+interface PartialFunction1<A, Z> extends IApply<A,Z>{
   public function isDefinedAt(a: A): Bool;
   
   public function orElse(that: PartialFunction1<A, Z>): PartialFunction1<A, Z>;
@@ -28,10 +29,8 @@ interface PartialFunction1<A, Z> {
   public function orAlways(f: A ->  Z): PartialFunction1<A, Z>;
   
   public function orAlwaysC(z: Thunk<Z>): PartialFunction1<A, Z>;
-  
-  public function call(a: A): Z;
     
-  public function toFunction(): A -> Option<Z>;
+  public function toFunction(): A -> Maybe<Z>;
 }
 
 interface PartialFunction2<A, B, Z> {
@@ -43,9 +42,9 @@ interface PartialFunction2<A, B, Z> {
   
   public function orAlwaysC(z: Thunk<Z>): PartialFunction2<A, B, Z>;
   
-  public function call(a: A, b: B): Z;
+  public function apply(a: A, b: B): Z;
     
-  public function toFunction(): A -> B -> Option<Z>;
+  public function toFunction(): A -> B -> Maybe<Z>;
 }
 
 interface PartialFunction3<A, B, C, Z> {
@@ -57,9 +56,9 @@ interface PartialFunction3<A, B, C, Z> {
   
   public function orAlwaysC(z: Thunk<Z>): PartialFunction3<A, B, C, Z>;
   
-  public function call(a: A, b: B, c: C): Z;
+  public function apply(a: A, b: B, c: C): Z;
     
-  public function toFunction(): A -> B -> C -> Option<Z>;
+  public function toFunction(): A -> B -> C -> Maybe<Z>;
 }
 
 interface PartialFunction4<A, B, C, D, Z> {
@@ -71,9 +70,9 @@ interface PartialFunction4<A, B, C, D, Z> {
   
   public function orAlwaysC(z: Thunk<Z>): PartialFunction4<A, B, C, D, Z>;
   
-  public function call(a: A, b: B, c: C, d: D): Z;
+  public function apply(a: A, b: B, c: C, d: D): Z;
     
-  public function toFunction(): A -> B -> C -> D -> Option<Z>;
+  public function toFunction(): A -> B -> C -> D -> Maybe<Z>;
 }
 
 interface PartialFunction5<A, B, C, D, E, Z> {
@@ -85,7 +84,7 @@ interface PartialFunction5<A, B, C, D, E, Z> {
   
   public function orAlwaysC(z: Thunk<Z>): PartialFunction5<A, B, C, D, E, Z>;
   
-  public function call(a: A, b: B, c: C, d: D, e: E): Z;
+  public function apply(a: A, b: B, c: C, d: D, e: E): Z;
     
-  public function toFunction(): A -> B -> C -> D -> E -> Option<Z>;
+  public function toFunction(): A -> B -> C -> D -> E -> Maybe<Z>;
 }

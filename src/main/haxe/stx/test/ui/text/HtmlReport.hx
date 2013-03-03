@@ -17,6 +17,10 @@ package stx.test.ui.text;
 
 import haxe.PosInfos;
 import haxe.Timer;
+
+#if js
+import js.Browser;
+#end
 import stx.test.ui.common.ClassResult;
 import stx.test.ui.common.FixtureResult;
 import stx.test.ui.common.IReport;
@@ -199,7 +203,7 @@ class HtmlReport implements IReport < HtmlReport > {
     var messages = [];
     for(assertation in result.iterator()) {
       switch(assertation) {
-        case Success(pos):
+        case Success(_):
         case Failure(msg, pos):
           messages.push("<strong>line " + pos.lineNumber + "</strong>: <em>" + StringTools.htmlEscape(msg) + "</em>");
         case Error(e, s):
@@ -208,7 +212,7 @@ class HtmlReport implements IReport < HtmlReport > {
           messages.push("<strong>setup error</strong>: " + StringTools.htmlEscape(Std.string(e)) + "\n" + formatStack(s));
         case TeardownError(e, s):
           messages.push("<strong>tear-down error</strong>: " + StringTools.htmlEscape(Std.string(e)) + "\n" + formatStack(s));
-        case TimeoutError(missedAsyncs, s):
+        case TimeoutError(missedAsyncs, _):
           messages.push("<strong>missed async call(s)</strong>: " + missedAsyncs);
         case AsyncError(e, s):
           messages.push("<strong>async error</strong>: " + StringTools.htmlEscape(Std.string(e)) + "\n" + formatStack(s));
@@ -604,9 +608,9 @@ function utestRemoveTooltip() {
       return untyped __js__("typeof v != 'undefined'");
     }
     
-    var head = Lib.document.getElementsByTagName("head")[0];
+    var head = Browser.document.getElementsByTagName("head")[0];
     // add script
-    var script = Lib.document.createElement('script');
+    var script = Browser.document.createElement('script');
     untyped script.type = 'text/javascript';
     var sjs = report.jsScript();
     untyped if (isDef(script.text)) {
@@ -617,7 +621,7 @@ function utestRemoveTooltip() {
     head.appendChild(script);
     
     // add style
-    var style = Lib.document.createElement('style');
+    var style = Browser.document.createElement('style');
     untyped style.type = 'text/css';
     
     var scss = report.cssStyle();
@@ -634,11 +638,11 @@ function utestRemoveTooltip() {
     head.appendChild(style);
     
     // add content
-    var el = Lib.document.getElementById("utest-results");
+    var el = Browser.document.getElementById("utest-results");
     if (null == el) {
-      el = Lib.document.createElement("div");
+      el = Browser.document.createElement("div");
       el.id = "utest-results";
-      Lib.document.body.appendChild(el);
+      Browser.document.body.appendChild(el);
     }
     el.innerHTML = report.getAll();
 #elseif flash

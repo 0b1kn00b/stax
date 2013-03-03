@@ -5,7 +5,7 @@ using Lambda;
 
 import stx.js.Dom;
 import stx.js.Env;
-import js.Dom;
+import stx.js.Dom;
 #end
 
 class HTMLParser {

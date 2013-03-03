@@ -4,6 +4,7 @@ using stx.Compose;
 using stx.Tuples;
 using stx.Prelude;
 using stx.Functions;
+using stx.Eithers;
 
 class ComposeDo{
   /**
@@ -210,18 +211,23 @@ class Compose{
     return function(x:A){ return v; }
   }
   static public function split<A,B,C>(split_:A->B,_split:A->C):A->Tuple2<B,C>{ 
-    return 
-      function(x){
+    return function(x){
         return Tuples.t2( split_(x), _split(x) );
       }
   }
-  static public function bind<A,B,C>(bindl:A->C,bindr:Tuple2<A,C>->B):A->B{
+  static public function binds<A,B,C>(bindl:A->C,bindr:Tuple2<A,C>->B):A->B{
     return unit().split(bindl).then( bindr );
   }
   static public function pinch<A,B,C>(fn0:Tup2<A,A>->Tup2<B,C>):A->Tup2<B,C>{
     return 
       function(x:A){
         return fn0(Tups.t2(x,x));
+      }
+  }
+  static public function both<A,B>(fn:A->B):Pair<A>->Pair<B>{
+    return 
+      function(t){
+        return Tup2.create(fn(t._1),fn(t._2));
       }
   }
   /**

@@ -4,7 +4,7 @@ using Std;
 using stx.Prelude;
 using stx.Arrays;
 using stx.Functions;
-using stx.Options;
+using stx.Maybes;
 using stx.Prelude;
 using stx.Iterators;
 
@@ -44,14 +44,14 @@ class BinaryTrees{
 		return
 			switch (t) {
 				case Empty 				: 0;
-				case Node(el,l,r) : 1 + size(l) + size(r);
+				case Node(_,l,r) : 1 + size(l) + size(r);
 			}
 	}
 	static public function leafCount<A>(t:BinaryTree<A>):Int{
 		return 
 			switch (t) {
 				case Empty 					: 0;
-				case Node(el,l,r) 	:
+				case Node(_,l,r) 	:
 					if(l == Empty && r == Empty){
 						1;
 					}else{
@@ -75,7 +75,7 @@ class BinaryTrees{
 		return
 			switch (t) {
 				case Empty 					: 0;
-				case Node(el,l,r) 	: 1 + Std.int( Math.max( height(l), height(r) ) );
+				case Node(_,l,r) 	: 1 + Std.int( Math.max( height(l), height(r) ) );
 			}
 	}
 }

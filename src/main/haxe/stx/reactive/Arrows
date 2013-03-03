@@ -184,20 +184,20 @@ class MapArrow <I,O> implements Arrow<Iterable<I>,Iterable<O>>{
 		return new MapArrow(a);
 	}
 }
-class OptionArrow<I,O> implements Arrow<Option<I>,Option<O>>{
+class MaybeArrow<I,O> implements Arrow<Maybe<I>,Maybe<O>>{
 	private var a : Arrow<I,O>;
 
 	public function new(a:Arrow<I,O>){
 		this.a = a;
 	}
-	inline public function withInput(?i:Option<I>,cont:Function1<Option<O>,Void>){
+	inline public function withInput(?i:Maybe<I>,cont:Function1<Maybe<O>,Void>){
 		switch (i) {
-			case Some(v) : Viaz.applyA().withInput( a.entuple(v) , Option.Some.then(cont));
+			case Some(v) : Viaz.applyA().withInput( a.entuple(v) , Maybe.Some.then(cont));
 			case None 	 : cont(None);
 		}
 	}
-	public static function option<I,O>(a:Arrow<I,O>):Arrow<Option<I>,Option<O>>{
-		return new OptionArrow(a);
+	public static function option<I,O>(a:Arrow<I,O>):Arrow<Maybe<I>,Maybe<O>>{
+		return new MaybeArrow(a);
 	}
 }
 #if !(neko || php || cpp )
@@ -247,8 +247,8 @@ class PairArrow<A,B,C,D> implements Arrow<Pair<A,C>,Pair<B,D>>{
 	}
 	inline public function withInput(?i : Pair<A,C>, cont : Function1<Pair<B,D>,Void> ) : Void{
 
-		var ol : Option<B> 	= null;
-		var or : Option<D> 	= null;
+		var ol : Maybe<B> 	= null;
+		var or : Maybe<D> 	= null;
 
 		var merge 	=
 			function(l:B,r:D){
@@ -257,7 +257,7 @@ class PairArrow<A,B,C,D> implements Arrow<Pair<A,C>,Pair<B,D>>{
 		var check 	=
 			function(){
 				if (((ol!=null) && (or!=null))){
-					merge(Options.get(ol),Options.get(or));
+					merge(Maybes.get(ol),Maybes.get(or));
 				}
 			}
 		var hl 		= 

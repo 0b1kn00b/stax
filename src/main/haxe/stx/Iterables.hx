@@ -12,7 +12,7 @@ class Iterables {
   */
 	 public static function foldl1<T, T>(iter: Iterable<T>, mapper: T -> T -> T): T {
     var folded = iter.head();
-		switch (iter.tailOption()) {
+		switch (iter.tailMaybe()) {
 			case Some(v) 	:
 				for (e in v) { folded = mapper(folded, e); }
 			default 			:
@@ -23,7 +23,7 @@ class Iterables {
     Concetenates two Iterables
   */
   public static function concat<T>(iter1: Iterable<T>, iter2: Iterable<T>): Iterable<T>
-    return iter1.toArray().concat(iter2.toArray())
+    return iter1.toArray().concat(iter2.toArray());
   /**
     Fold the collection from the right hand side
   */
@@ -31,9 +31,9 @@ class Iterables {
     return Arrays.foldr(iterable.toArray(), z, f);
   }
   /**
-    Produces the first element of `iter` as an Option, Option.None if the Iterable is empty.
+    Produces the first element of `iter` as an Maybe, Maybe.None if the Iterable is empty.
   */
-  public static function headOption<T>(iter: Iterable<T>): Option<T> {
+  public static function headMaybe<T>(iter: Iterable<T>): Maybe<T> {
     var iterator = iter.iterator();
     return if (iterator.hasNext()) {
 			var o = iterator.next();
@@ -45,7 +45,7 @@ class Iterables {
     Produces the first elelment of `iter`, throwing an error if the Iterable is empty.
   */
   public static function head<T>(iter: Iterable<T>): T {
-    return switch(headOption(iter)) {
+    return switch(headMaybe(iter)) {
       case None: Prelude.error()('Iterable has no head');
       case Some(h): h;
     }
@@ -53,7 +53,7 @@ class Iterables {
   /**
     Drops the first value, returning Some if there are further values, None if there aren't
   */
-  public static function tailOption<T>(iter: Iterable<T>): Option<Iterable<T>> {
+  public static function tailMaybe<T>(iter: Iterable<T>): Maybe<Iterable<T>> {
     var iterator = iter.iterator();
     return if (!iterator.hasNext()) None;
            else Some(drop(iter, 1));
@@ -65,7 +65,7 @@ class Iterables {
     @return Iterable
    */
   public static function tail<T>(iter: Iterable<T>): Iterable<T> {
-    return switch (tailOption(iter)) {
+    return switch (tailMaybe(iter)) {
       case None: Prelude.error()('Iterable has no tail');
       
       case Some(t): t;
@@ -99,7 +99,7 @@ class Iterables {
     
     for (e in iter) {
       if (p(e)) {
-				switch (r.tailOption()) {
+				switch (r.tailMaybe()) {
 					case Some(v) 	: r = v;
 					default:			 r = [];
 				}
@@ -156,12 +156,12 @@ class Iterables {
     Preform nub using `f` as a comparator
   */
   public static function nubBy<T>(iter:Iterable<T>, f: T -> T -> Bool): Iterable<T> {
-    return Prelude.SIterables.foldl(iter, [], function(a, b) {
+    return SIterables.foldl(iter, [], function(a, b) {
       return if(existsP(a, b, f)) {
         a;
       }
       else {
-        a.push(b);
+        a.add(b);
         a;
       }
     });
@@ -183,7 +183,7 @@ class Iterables {
   public static function at<T>(iter: Iterable<T>, index: Int): T {
     var result: T = null;
     
-    if (index < 0) index = Prelude.SIterables.size(iter) - (-1 * index);
+    if (index < 0) index = SIterables.size(iter) - (-1 * index);
     
     var curIndex  = 0;
     for (e in iter) {
@@ -199,7 +199,7 @@ class Iterables {
   */
   public static function flatten<T>(iter: Iterable<Iterable<T>>): Iterable<T> {
 		var empty : Iterable<T> = [];
-		return Prelude.SIterables.foldl(iter, empty, concat);
+		return SIterables.foldl(iter, empty, concat);
   }
   /**
     For each Iterable, take each element and flatten to an output
@@ -248,6 +248,26 @@ class Iterables {
     return result;
   }
   /**
+    Produces an `Array` of the result of `f` where the left parameter is `a[n]`, and the right: `b[n]`
+   */
+  static public function zipWith<A, B, C>(a: Iterable<A>, b: Iterable<B>, f : A -> B -> C): Iterable<C> {
+    var len = Math.floor(Math.min(a.size(), b.size()));    
+    return a.zip(b).map(f.spread());
+  }
+  /**
+    Performs a `zip` where the resulting `Tuple2` has the element on the left, and it's index on the right
+   */
+  static public function zipWithIndex<A>(a: Iterable<A>): Iterable<Tuple2<A, Int>> {
+    return zipWithIndexWith(a, Tuples.t2);
+  }
+   /**
+    Performs a `zip` with the right hand parameter is the index of the element.
+   */
+  static public function zipWithIndexWith<A, B>(a: Iterable<A>, f : A -> Int -> B): Iterable<B> {
+    var idx = 0.until(a.size());
+    return a.zip(idx).map(f.spread());
+  }
+  /**
     Append `e` to the end of `iter`.
   */
   public static function add<T>(iter: Iterable<T>, e: T): Iterable<T> {
@@ -263,7 +283,7 @@ class Iterables {
 	  @param e 		The element to prepend.
    */
   public static function cons<T>(iter: Iterable<T>, e: T): Iterable<T> {
-    return Prelude.SIterables.foldl(iter, [e], function(b, a) {
+    return SIterables.foldl(iter, [e], function(b, a) {
       b.push(a);
       
       return b;
@@ -273,7 +293,7 @@ class Iterables {
 	  Returns the Iterable with elements in reverse order.
 	 */
   public static function reversed<T>(iter: Iterable<T>): Iterable<T> {
-    return Prelude.SIterables.foldl(iter, [], function(a, b) {
+    return SIterables.foldl(iter, [], function(a, b) {
       a.unshift(b);
       
       return a;
@@ -359,7 +379,7 @@ class Iterables {
     Return an Iterable of values contained in both inputs, as decided by ´f´
   */ 
   public static function intersectBy<T>(iter1: Iterable<T>, iter2: Iterable<T>, f: T -> T -> Bool): Iterable<T> {
-    return Prelude.SIterables.foldl(iter1, cast [], function(a: Iterable<T>, b: T): Iterable<T> {
+    return SIterables.foldl(iter1, cast [], function(a: Iterable<T>, b: T): Iterable<T> {
       return if (existsP(iter2, b, f)) add(a, b); else a;
     });
   }
@@ -367,7 +387,7 @@ class Iterables {
    Return an Iterable of values contained in both inputs.
   */
   public static function intersect<T>(iter1: Iterable<T>, iter2: Iterable<T>): Iterable<T> {
-    return Prelude.SIterables.foldl(iter1, cast [], function(a: Iterable<T>, b: T): Iterable<T> {
+    return SIterables.foldl(iter1, cast [], function(a: Iterable<T>, b: T): Iterable<T> {
       return if (existsP(iter2, b, stx.plus.Equal.getEqualFor(iter1.head()))) add(a, b); else a;
     });
   }
@@ -446,10 +466,10 @@ class Iterables {
     return !iter.iterator().hasNext();
   }
   /**
-   Produces an Option Some(element) the first time the predicate returns true,
+   Produces an Maybe Some(element) the first time the predicate returns true,
    None otherwise.
   */
-  public static function find<T>(iter: Iterable<T>, f: T -> Bool): Option<T> {
+  public static function find<T>(iter: Iterable<T>, f: T -> Bool): Maybe<T> {
     return Arrays.find(iter.toArray(),f);
   }
   /**
@@ -486,16 +506,16 @@ class Iterables {
     }
     visit(root);
     return 
-      function():Option<A>{
+      function():Maybe<A>{
         var val = stack[index];
         index++;
-        return Options.create(val);
+        return Maybes.create(val);
       }.yield();
   }
   /**
     Creates an Iterable by calling fn until it returns None, caching the results.
   */
-  static public function yield<A>(fn : Void -> Option<A>):Iterable<A>{
+  static public function yield<A>(fn : Void -> Maybe<A>):Iterable<A>{
     var stack = [];    
     return cast {
       iterator : function() return stx.Iterators.LazyIterator.create(cast fn,stack).iterator()

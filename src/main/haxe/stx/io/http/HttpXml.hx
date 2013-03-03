@@ -15,5 +15,5 @@
 */
 package stx.io.http;
 
-interface HttpXml implements Http<Xml> {
+interface HttpXml extends Http<Xml> {
 }

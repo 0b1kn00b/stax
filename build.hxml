@@ -1,14 +1,6 @@
+#builds/build-dev-js-haxe3.hxml
+#builds/build-classes.hxml
+#builds/stx-swc.hxml
+#builds/build-swc.hxml
+#builds/build-as3.hxml
 builds/build-test-js-haxe3.hxml
-#-main StaxTestSuite
-
-#-cp src/main/haxe
-#-cp src/test/haxe
-
-#-js bin/test.js
-
-#-lib singleton
-#-lib hxevents
-
-#-D haxe3
-
-#-D dev

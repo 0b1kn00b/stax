@@ -31,7 +31,7 @@ class Enums {
 	  @param	e
 	  @return
 	 */
-	public static function constructorOf(value:EnumValue) : String {
+	public static function name(value:EnumValue) : String {
 		return Type.enumConstructor(value);
 	}
 	/**

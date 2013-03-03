@@ -7,8 +7,8 @@ import haxe.PosInfos;
 
 
  
-import stx.Options; 
-using stx.Options; 
+import stx.Maybes; 
+using stx.Maybes; 
 using stx.Functions;
 using stx.Dynamics;
 
@@ -116,11 +116,11 @@ class Injector {
 }
 
 private typedef Bindings = {
-  defaultBindings: Hash<Option<Void -> Dynamic>>,
-  globalBindings:  Hash<Void -> Dynamic>,
-  packageBindings: Hash<Hash<Void -> Dynamic>>,
-  moduleBindings:  Hash<Hash<Void -> Dynamic>>,
-  classBindings:   Hash<Hash<Void -> Dynamic>>
+  defaultBindings: Map<String,Maybe<Void -> Dynamic>>,
+  globalBindings:  Map<String,Void -> Dynamic>,
+  packageBindings: Map<String,Map<String,Void -> Dynamic>>,
+  moduleBindings:  Map<String,Map<String,Void -> Dynamic>>,
+  classBindings:   Map<String,Map<String,Void -> Dynamic>>
 }
 
 // Exists to workaround lack of "package" or "module" access specifiers:
@@ -145,11 +145,11 @@ private class InjectorImpl {
   
   public static function forever<T>(f: InjectorConfig -> T): T {
     state.unshift({
-      defaultBindings: new Hash(),
-      globalBindings:  new Hash(),
-      packageBindings: new Hash(),
-      moduleBindings:  new Hash(),
-      classBindings:   new Hash()
+      defaultBindings: new Map(),
+      globalBindings:  new Map(),
+      packageBindings: new Map(),
+      moduleBindings:  new Map(),
+      classBindings:   new Map()
     });
     
     return f(new InjectorConfigImpl());
@@ -157,11 +157,11 @@ private class InjectorImpl {
   
   public static function enter<T>(f: InjectorConfig -> T): T {
     state.unshift({
-      defaultBindings: new Hash(),
-      globalBindings:  new Hash(),
-      packageBindings: new Hash(),
-      moduleBindings:  new Hash(),
-      classBindings:   new Hash()
+      defaultBindings: new Map(),
+      globalBindings:  new Map(),
+      packageBindings: new Map(),
+      moduleBindings:  new Map(),
+      classBindings:   new Map()
     });
     
     var result: T = null;
@@ -248,7 +248,7 @@ private class InjectorImpl {
     }
   }
 
-  private static function bindForSpecificF<T>(extractor: Bindings -> Hash<Hash<Void -> Dynamic>>, interf: Class<T>, specific: String, f: Void -> T, bindingType: BindingType):Void {
+  private static function bindForSpecificF<T>(extractor: Bindings -> Map<String,Map<String,Void -> Dynamic>>, interf: Class<T>, specific: String, f: Void -> T, bindingType: BindingType):Void {
     switch (bindingTypeDef(bindingType)) {
       case OneToOne:
         addSpecificBinding(extractor(state[0]), interf, specific, f);
@@ -258,7 +258,7 @@ private class InjectorImpl {
     }
   }
 
-  private static function getMostSpecificBinding(c: Class<Dynamic>, pos: PosInfos): Option<Void -> Dynamic> {
+  private static function getMostSpecificBinding(c: Class<Dynamic>, pos: PosInfos): Maybe<Void -> Dynamic> {
     var className   = classOf(pos);
     var moduleName  = moduleOf(pos);
     var packageName = packageOf(pos);
@@ -266,21 +266,21 @@ private class InjectorImpl {
     return getClassBinding(c, className).orElse(getModuleBinding.lazy(c, moduleName)).orElse(getPackageBinding.lazy(c, packageName)).orElse(getGlobalBinding.lazy(c)).orElse(getDefaultImplementationBinding.lazy(c));
   }
   
-  private static function getDefaultImplementationBinding(c: Class<Dynamic>): Option<Void -> Dynamic> {
+  private static function getDefaultImplementationBinding(c: Class<Dynamic>): Maybe<Void -> Dynamic> {
     if(existsDefaultBinding(c))
       return getDefaultBinding(c);
-    var f = Options.create(haxe.rtti.Meta.getType(c))
+    var f = Maybes.create(haxe.rtti.Meta.getType(c))
       .flatMap(function(m : Dynamic) { 
-        return Options.create((Reflect.hasField(m, "DefaultImplementation") ? Reflect.field(m, "DefaultImplementation") : null)); })
+        return Maybes.create((Reflect.hasField(m, "DefaultImplementation") ? Reflect.field(m, "DefaultImplementation") : null)); })
       .flatMap(function(p) {
         var cls = null;
         return cast if(null == p || null == p[0] || null == (cls = Type.resolveClass(p[0]))) None else Some(Tuples.t2(cls, null != p[1] ? Type.createEnum(BindingType, p[1], []) : null)); })
       .flatMap(function(p : Tuple2<Class<Dynamic>, BindingType>) {
         return switch(bindingTypeDef(p._2)) {
           case OneToOne:
-            factoryFor(p._1).toOption();
+            factoryFor(p._1).toMaybe();
           case OneToMany:
-            factoryFor(p._1).memoize().toOption();
+            factoryFor(p._1).memoize().toMaybe();
         };
       });
     try{
@@ -292,23 +292,23 @@ private class InjectorImpl {
     return f;    
   }
 
-  private static function getGlobalBinding(c: Class<Dynamic>): Option<Void -> Dynamic> {
+  private static function getGlobalBinding(c: Class<Dynamic>): Maybe<Void -> Dynamic> {
     var className = Type.getClassName(c);
   
-    return state.foldl(None, function(a: Option<Void -> Dynamic>, b: Bindings): Option<Void -> Dynamic> {
-      return a.orElseC(b.globalBindings.get(className).toOption());
+    return state.foldl(None, function(a: Maybe<Void -> Dynamic>, b: Bindings): Maybe<Void -> Dynamic> {
+      return a.orElseC(b.globalBindings.get(className).toMaybe());
     });
   }
 
-  private static function getClassBinding(c: Class<Dynamic>, className: String): Option<Void -> Dynamic> {
+  private static function getClassBinding(c: Class<Dynamic>, className: String): Maybe<Void -> Dynamic> {
     return getSpecificBinding(classBindingsExtractor, c, className);
   }
 
-  private static function getModuleBinding(c: Class<Dynamic>, moduleName: String): Option<Void -> Dynamic> {
+  private static function getModuleBinding(c: Class<Dynamic>, moduleName: String): Maybe<Void -> Dynamic> {
     return getSpecificBinding(moduleBindingsExtractor, c, moduleName);
   }
 
-  private static function getPackageBinding(c: Class<Dynamic>, packageName: String): Option<Void -> Dynamic> {
+  private static function getPackageBinding(c: Class<Dynamic>, packageName: String): Maybe<Void -> Dynamic> {
     return getSpecificBinding(packageBindingsExtractor, c, packageName);
   }
 
@@ -320,20 +320,20 @@ private class InjectorImpl {
     return state[0] == null ? false : state[0].defaultBindings.exists(Type.getClassName(c));
   }
   
-  private static function addDefaultBinding(c : Class<Dynamic>, f: Option<Void -> Dynamic>):Void {
+  private static function addDefaultBinding(c : Class<Dynamic>, f: Maybe<Void -> Dynamic>):Void {
     state[0].defaultBindings.set(Type.getClassName(c), f);
   }
   
-  private static function getDefaultBinding(c : Class<Dynamic>) : Option<Void->Dynamic> {
+  private static function getDefaultBinding(c : Class<Dynamic>) : Maybe<Void->Dynamic> {
     return state[0].defaultBindings.get(Type.getClassName(c));
   }
 
-  private static function getSpecificBinding(extractor: Bindings -> Hash < Hash < Void -> Dynamic >> , c: Class<Dynamic>, specific: String): Option < Void -> Dynamic > {
+  private static function getSpecificBinding(extractor: Bindings->Map<String, Map<String,Void->Dynamic>> , c: Class<Dynamic>, specific: String): Maybe < Void -> Dynamic > {
 		//trace(state);
     for (bindings in state) {
       var binding = extractor(bindings);
       
-      var result = binding.get(Type.getClassName(c)).toOption().flatMap(function(h) return h.get(specific).toOption());
+      var result = binding.get(Type.getClassName(c)).toMaybe().flatMap(function(h) return h.get(specific).toMaybe());
     
       if (!result.isEmpty()) {
         return result;
@@ -343,11 +343,11 @@ private class InjectorImpl {
     return None;
   }
 
-  private static function addSpecificBinding(bindings: Hash<Hash<Void -> Dynamic>>, c: Class<Dynamic>, specific: String, f: Void -> Dynamic) {
+  private static function addSpecificBinding(bindings: Map<String,Map<String,Void -> Dynamic>>, c: Class<Dynamic>, specific: String, f: Void -> Dynamic) {
     var h = bindings.get(Type.getClassName(c));
   
     if (h == null) {
-      h = new Hash();
+      h = new Map();
     
       bindings.set(Type.getClassName(c), h);
     }
@@ -378,7 +378,7 @@ private class InjectorImpl {
   }
 
   private static function bindingTypeDef(bindingType: BindingType) {
-    return bindingType.toOption().getOrElseC(OneToMany);
+    return bindingType.toMaybe().getOrElseC(OneToMany);
   }
 }
 

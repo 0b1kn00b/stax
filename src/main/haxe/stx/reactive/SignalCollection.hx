@@ -142,7 +142,7 @@ class SignalCollection {
         return b.map(function(c) { return c.existsP(ref, cmp); });
     }
     
-    public static function find<C, T>(b: Signal<Collection<C, T>>, cmp: T -> Bool): Signal<Option<T>> {
+    public static function find<C, T>(b: Signal<Collection<C, T>>, cmp: T -> Bool): Signal<Maybe<T>> {
         return b.map(function(c) { return c.find(cmp); });
     }
     
@@ -190,11 +190,11 @@ class SignalCollection {
         return b.map(function(c) { return c.findIndicesOf(cmp); });
     }
     
-    public static function findIndexOf<C, T>(b: Signal<Collection<C, T>>, cmp: T -> Bool): Signal<Option<Int>> {
+    public static function findIndexOf<C, T>(b: Signal<Collection<C, T>>, cmp: T -> Bool): Signal<Maybe<Int>> {
         return b.map(function(c) { return c.findIndexOf(cmp); });
     }
     
-    public static function indexOf<C, T>(b: Signal<Collection<C, T>>, val: T): Signal<Option<Int>> {
+    public static function indexOf<C, T>(b: Signal<Collection<C, T>>, val: T): Signal<Maybe<Int>> {
         return b.map(function(c) { return c.indexOf(val); });
     }
     

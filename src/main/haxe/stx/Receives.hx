@@ -15,7 +15,7 @@ class Receives{
   }
   @:noUsing
   static public function pure<A>(e:A):Receive<A>{
-    return cast Continuations.pure(e);
+    return cast Continuation.pure(e);
   }
   @:noUsing
   static public function create<A>():Receive<A>{
@@ -175,19 +175,19 @@ class ReceivesE{
   }
   @:noUsing
   static public function pure<A,B>(e:Either<A,B>):Receive<Either<A,B>>{
-    return cast Continuations.pure(e);
+    return cast Continuation.pure(e);
   }
   /**
     Resolves as a right hand value.
   */
   static public function right<A,B>(f:Receive<Either<A,B>>,v:B->Void):Void{
-    f.map( Eithers.right ).foreach( Options.foreach.p2(v).effectOf() );
+    f.map( Eithers.right ).foreach( Maybes.foreach.p2(v).effectOf() );
   }
   /**
     Resolves as a left hand value.
   */
   static public function left<A,B>(f:Receive<Either<A,B>>,v:A->Void):Void{
-    f.map( Eithers.left ).foreach( Options.foreach.p2(v).effectOf() );
+    f.map( Eithers.left ).foreach( Maybes.foreach.p2(v).effectOf() );
   }
   /**
     Creates a pure Receive and delivers to the right hand side.
@@ -235,7 +235,7 @@ class ReceivesE{
   static public function foreachR<A,B>(v:Receive<Either<A,B>>,f:B->Void){
     return 
       v.foreach(
-        Eithers.right.then( Options.foreach.p2( f ) ).effectOf()
+        Eithers.right.then( Maybes.foreach.p2( f ) ).effectOf()
       );
   }
   /**
@@ -244,7 +244,7 @@ class ReceivesE{
   static public function foreachL<A,B>(v:Receive<Either<A,B>>,f:A->Void){
     return 
       v.foreach(
-        Eithers.left.then( Options.foreach.p2( f ) ).effectOf()
+        Eithers.left.then( Maybes.foreach.p2( f ) ).effectOf()
       );
   }
   static public function unzip<A,B,C>(tp:Tuple2<Receive<Either<A,B>>,Receive<Either<A,C>>>):Receive<Either<A,Tuple2<B,C>>>{

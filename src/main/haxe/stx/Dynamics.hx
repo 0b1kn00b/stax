@@ -1,9 +1,9 @@
 package stx;
 
 import stx.Prelude;
-using stx.Options;
+using stx.Maybes;
 
-typedef Any = Dynamics;
+//typedef Any = Dynamics;
 
 class Dynamics {
 	/**
@@ -77,7 +77,7 @@ class Dynamics {
     @param      f     Modifier function.
     @usage a.into( function(x) return ... )
    */
-  static public function with<A, B>(a: A, f: A -> B): B {
+  static public function sendTo<A, B>(a: A, f: A -> B): B {
     return f(a);
   }
   /**
@@ -90,12 +90,12 @@ class Dynamics {
     Check if ´v´ is null, returns result of ´fn´ if not.
   */
   static public function orIfNull<A>(v:A,fn:Thunk<A>):A{
-    return Options.create(v).getOrElse(fn);
+    return Maybes.create(v).getOrElse(fn);
   }
   /**
     Check if ´v´ is null, returns ´v2´ if not.
   */
   static public function orIfNullC<A>(v:A,v2:A):A{
-    return Options.create(v).getOrElseC(v2);
+    return Maybes.create(v).getOrElseC(v2);
   }
 }

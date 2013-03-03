@@ -53,10 +53,10 @@ class JValues{
     }
   }
   
-  static public function getOption(v: JValue, k: String): Option<JValue> {
+  static public function getMaybe(v: JValue, k: String): Maybe<JValue> {
     switch(v) {
-      case JObject(xs):
-        var hash = extractHash(v);
+      case JObject(_):
+        var hash = extractMap(v);
         
         return if (hash.exists(k)) Some(hash.get(k));
                else None;
@@ -65,13 +65,13 @@ class JValues{
     }
   }
   static public function get(v: JValue, k: String): JValue {
-    return switch (getOption(v, k)) {
+    return switch (getMaybe(v, k)) {
       case Some(v): v;      
       case None:    Prelude.error()("Expected to find field " + k + " in " + v);
     }
   }
   static public function getOrElse(v: JValue, k: String, def: Thunk<JValue>) {
-    return switch (getOption(v, k)) {
+    return switch (getMaybe(v, k)) {
       case Some(v): v;
       case None:    def();
     }
@@ -109,10 +109,10 @@ class JValues{
       default						: Prelude.error()("Expected JField but found: " + v);
     }
   }  
-  static public function extractHash(v: JValue): Hash<JValue> {
+  static public function extractMap(v: JValue): Map<String,JValue> {
     return switch (v) {
       case JObject(xs): 
-        var hash = new Hash<JValue>();
+        var hash = new Map<String,JValue>();
         
         for (x in xs) {
           var field = extractField(x);

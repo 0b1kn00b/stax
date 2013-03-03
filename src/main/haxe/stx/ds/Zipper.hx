@@ -13,27 +13,29 @@ using stx.Prelude;
 using stx.Maths;
 import stx.Tuples;
 import stx.Functions;
-import stx.Arrays; 			using stx.Arrays;
-using stx.Options;
+using stx.Arrays;
+using stx.Maybes;
 
 using stx.ds.Zipper;
+
+import Map;
 
 class Zipper<T,C> {
 	var data 														: T; 
 	var path 														: Array<Function1<Dynamic,Dynamic>>;
-	public var current( default, null ) : Option<C>;
+	public var current( default, null ) : Maybe<C>;
 	
 	public function new(v:T,?c:C,?p){
 		this.data 		= v;
 		this.path			= p;
-		this.current 	= p == null ? untyped Options.create(v) : Options.create(c);
+		this.current 	= p == null ? untyped Maybes.create(v) : Maybes.create(c);
 		this.path 		= path == null ? [] : path;
 	}
 	public function root():Zipper<T,T> {
 		return new Zipper(data);
 	}
 	public function down<N>(f:Function1<C,N>):Zipper<T,N>{
-		var o : Option<N> = current.map(f);
+		var o : Maybe<N> = current.map(f);
 		//if (o == null) { throw "Transform function failed"; }
 		return new Zipper( data , o.get() , path.add(f) );
 	}
@@ -42,7 +44,7 @@ class Zipper<T,C> {
 		var p : P = cast s.foldl( data , function(value,func):Dynamic { return func(value); } );
 		return new Zipper( data , p , s );
 	}
-	public function get():Option<C> {
+	public function get():Maybe<C> {
 		return current;
 	}
 	@noUsing
@@ -82,12 +84,12 @@ class ObjectZipper {
 			);
 	}
 }
-class HashZipper {
-	public static function key<T,C>(z:Zipper<T,Hash<C>>,field : String):Zipper<T,Tuple2<String,C>>{
-		var f	: Hash<C> -> Tuple2<String,C>= function(x:Hash<C>):Tuple2<String,C> { return Tuples.t2( field , x.get(field) ); };
+class MapZipper {
+	public static function key<T,C>(z:Zipper<T,Map<String,C>>,field : String):Zipper<T,Tuple2<String,C>>{
+		var f	: Map<String,C> -> Tuple2<String,C>= function(x:Map<String,C>):Tuple2<String,C> { return Tuples.t2( field , x.get(field) ); };
 		return z.down( f );
 	}
-	static public function hashZ<T,C>(z:Zipper<T,Hash<C>>):Array<Zipper<T,Tuple2<String,Dynamic>>>{
+	static public function hashZ<T,C>(z:Zipper<T,Map<String,C>>):Array<Zipper<T,Tuple2<String,Dynamic>>>{
 		return 
 				z.get().map( function(obj) return obj.keys().toIterable().toArray().map( z.key ) )
 					.getOrElseC([]);

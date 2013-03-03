@@ -130,7 +130,7 @@ class PlainTextReport implements IReport<PlainTextReport> {
           var messages = '';
           for(assertation in fix.iterator()) {
             switch(assertation) {
-              case Success(pos):
+              case Success(_):
                 buf.add('.');
               case Failure(msg, pos):
                 buf.add('F');
