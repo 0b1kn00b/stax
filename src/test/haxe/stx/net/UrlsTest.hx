@@ -23,7 +23,7 @@ import stx.net.Url;
 
 using stx.net.Urls;
 using stx.ds.Map;
-using stx.Options;
+using stx.Maybes;
 using stx.Strings;
 using stx.Functions;
 using stx.Compose;
@@ -74,21 +74,21 @@ class UrlsTest extends TestCase {
     
     assertEquals('ftp://eau.ww.eesd.gov.calgary/home/smith/budget.wk1?foo=bar#top', p.withoutPort().toUrl());
     assertEquals('ftp://eau.ww.eesd.gov.calgary:923/home/smith/budget.wk1#top', p.withoutSearch().toUrl());
-    assertEquals('ftp://eau.ww.eesd.gov.calgary:923/home/smith/budget.wk1?foo=bar', p.withoutHash().toUrl());
+    assertEquals('ftp://eau.ww.eesd.gov.calgary:923/home/smith/budget.wk1?foo=bar', p.withoutMap().toUrl());
     assertEquals('ftp://:923/home/smith/budget.wk1?foo=bar#top', p.withoutHostname().toUrl());
     assertEquals('eau.ww.eesd.gov.calgary:923/home/smith/budget.wk1?foo=bar#top', p.withoutProtocol().toUrl());
     assertEquals('ftp://eau.ww.eesd.gov.calgary:923/home/smith/?foo=bar#top', p.withoutFile().toUrl());
     assertEquals('ftp://gov.calgary:923/home/smith/budget.wk1?foo=bar#top', p.withoutSubdomains().toUrl());
     
-    assertEquals('ftp://eau.ww.eesd.gov.calgary:923', p.withoutSearch().withoutHash().withoutPathname().toUrl());
+    assertEquals('ftp://eau.ww.eesd.gov.calgary:923', p.withoutSearch().withoutMap().withoutPathname().toUrl());
     
     var p2 = 'http://co121w.col121.mail.live.com/mail/home.mvc?n=1025401125&livecom=1';
     
-    assertEquals('http://co121w.col121.mail.live.com', p2.toParsedUrl().get().withoutHash().withoutPathname().withoutSearch().toUrl());
+    assertEquals('http://co121w.col121.mail.live.com', p2.toParsedUrl().get().withoutMap().withoutPathname().withoutSearch().toUrl());
     
     var p3 = 'http://co121w.col121.mail.live.com/?rru=home&livecom=1';
     
-    assertEquals('http://co121w.col121.mail.live.com', p3.toParsedUrl().get().withoutHash().withoutPathname().withoutSearch().toUrl());
+    assertEquals('http://co121w.col121.mail.live.com', p3.toParsedUrl().get().withoutMap().withoutPathname().withoutSearch().toUrl());
   }
   
   public function testCanParseFileProtocol() {

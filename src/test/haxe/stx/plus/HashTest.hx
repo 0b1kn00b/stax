@@ -1,12 +1,12 @@
-class HashTest{
+class MapTest{
    @:todo('#0b1kn00b: the typer is now ignoring casts')
-  public function testTupleHashCode() {    
-    var tests : Array<HashFunction<Product>> = cast [
-      cast Hasher.getHashFor(Tuples.t2("b",0)),
-      cast Hasher.getHashFor(Tuples.t2("a",1)), 
-      cast Hasher.getHashFor(Tuples.t3("a",0,0.1)),
-      cast Hasher.getHashFor(Tuples.t4("a",0,0.1,"b")),
-      cast Hasher.getHashFor(Tuples.t5("a",0,0.1,"a",1)), 
+  public function testTupleMapCode() {    
+    var tests : Array<MapFunction<Product>> = cast [
+      cast Hasher.getMapFor(Tuples.t2("b",0)),
+      cast Hasher.getMapFor(Tuples.t2("a",1)), 
+      cast Hasher.getMapFor(Tuples.t3("a",0,0.1)),
+      cast Hasher.getMapFor(Tuples.t4("a",0,0.1,"b")),
+      cast Hasher.getMapFor(Tuples.t5("a",0,0.1,"a",1)), 
     ];
    
     while(tests.length > 0)
@@ -19,52 +19,52 @@ class HashTest{
       assertNotEquals(0, value);
     } 
   }
-  public function testHash() {
-    assertHashCodeForIsZero(null);
-    assertHashCodeForIsZero(0);
+  public function testMap() {
+    assertMapCodeForIsZero(null);
+    assertMapCodeForIsZero(0);
        
-    assertHashCodeForIsNotZero(true);
-    assertHashCodeForIsNotZero(false);
-    assertHashCodeForIsNotZero("");
-    assertHashCodeForIsNotZero("a");
-    assertHashCodeForIsNotZero(1);
-    assertHashCodeForIsNotZero(0.1);
-    assertHashCodeForIsNotZero([]);
-    assertHashCodeForIsNotZero([1]);
-    assertHashCodeForIsNotZero({});
-    assertHashCodeForIsNotZero({n:"a"});
-    assertHashCodeForIsNotZero(new HasHash(1));
-    assertHashCodeForIsNotZero(Date.fromString("2000-01-01"));       
-    assertHashCodeForIsNotZero(None);
-    assertHashCodeForIsNotZero(Some("a"));
+    assertMapCodeForIsNotZero(true);
+    assertMapCodeForIsNotZero(false);
+    assertMapCodeForIsNotZero("");
+    assertMapCodeForIsNotZero("a");
+    assertMapCodeForIsNotZero(1);
+    assertMapCodeForIsNotZero(0.1);
+    assertMapCodeForIsNotZero([]);
+    assertMapCodeForIsNotZero([1]);
+    assertMapCodeForIsNotZero({});
+    assertMapCodeForIsNotZero({n:"a"});
+    assertMapCodeForIsNotZero(new HasMap(1));
+    assertMapCodeForIsNotZero(Date.fromString("2000-01-01"));       
+    assertMapCodeForIsNotZero(None);
+    assertMapCodeForIsNotZero(Some("a"));
   }
 
   public function testReflectiveHasher(){
     var zerocodes : Array<Dynamic> = [null, 0];
     for(z in zerocodes)
-      assertEquals(0, Hasher.getHashFor(z)(z));
+      assertEquals(0, Hasher.getMapFor(z)(z));
 
-    var nonzerocodes : Array<Dynamic> = [true, false, "", "a", 1, 0.1, [],[1], {}, {n:"a"}, new HasNoHashAndShow(1), new HasHash(1), Date.fromString("2000-01-01"), None, Some("a")];
+    var nonzerocodes : Array<Dynamic> = [true, false, "", "a", 1, 0.1, [],[1], {}, {n:"a"}, new HasNoMapAndShow(1), new HasMap(1), Date.fromString("2000-01-01"), None, Some("a")];
     for(n in nonzerocodes)
-      this.assertNotEquals(0, Hasher.getHashFor(n)(n));
+      this.assertNotEquals(0, Hasher.getMapFor(n)(n));
   }
 
-  public function assertHashCodeForIsZero<T>(v : T) {
-    assertEquals(0, Hasher.getHashFor(v)(v));
+  public function assertMapCodeForIsZero<T>(v : T) {
+    assertEquals(0, Hasher.getMapFor(v)(v));
   }
 
-  public function assertHashCodeForIsNotZero<T>(v : T) {
-    assertNotEquals(0, Hasher.getHashFor(v)(v));
+  public function assertMapCodeForIsNotZero<T>(v : T) {
+    assertNotEquals(0, Hasher.getMapFor(v)(v));
   }
 
 }
-@DataClass private class HasNoHashAndShow
+@DataClass private class HasNoMapAndShow
 { 
   @DataField({show:false})   
   var v : Int;
   public function new(v : Int) this.v = v
 }
-private class HasHash
+private class HasMap
 {
   var v : Int;
   public function new(v : Int) this.v = v

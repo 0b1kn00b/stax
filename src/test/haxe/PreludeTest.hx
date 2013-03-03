@@ -27,7 +27,7 @@ import stx.plus.Hasher;
 
 import stx.test.TestCase;
 
-using stx.Options;
+using stx.Maybes;
 using stx.Functions;
 
 class PreludeTest extends TestCase {

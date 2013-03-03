@@ -1,6 +1,9 @@
 package stx.plus;
 
+import haxe.ds.HashMap;
+
 using stx.Prelude;
+
 import stx.Tuples;
 import stx.Prelude;
 
@@ -88,7 +91,7 @@ class OrderTest extends TestCase{
   } 
 
   public function testOrderForNotComparableClass() {                 
-    this.assertThrowsException(function() Order.getOrderFor(new Hash()));
+    this.assertThrowsException(function() Order.getOrderFor(new HashMap()));
   }
 
   public function testReflectiveOrderForDynamicComparableClass() {

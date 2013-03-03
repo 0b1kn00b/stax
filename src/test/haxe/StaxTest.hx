@@ -4,7 +4,6 @@ import stx.test.Assert;
 using stx.Prelude;
 using Stx;
 
-import stx.macro.F;
 
 class StaxTest extends TestCase{
 	public function testUsings<T>(){
@@ -18,7 +17,7 @@ class StaxTest extends TestCase{
 		
 		//def( var a : {thing : A});
 		//def({ value : String });
-		var a = F.n(a,return a);
+		//var a = F.n(a,return a);
 //		trace(tup(fnc,2));
 		/*var mapper = fn({x+3;});
 		var c = [1,2,3].map(mapper);*/

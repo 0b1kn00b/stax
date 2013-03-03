@@ -44,8 +44,8 @@ class TranscodeJValuesTest extends TestCase {
     doTest([Date.now(), Date.fromTime(0.0)]);
   }
 
-  public function testOption() {
-    var a: Array<Option<Int>> = [Some(123), None];
+  public function testMaybe() {
+    var a: Array<Maybe<Int>> = [Some(123), None];
 
     doTest(a, [Extractor.getExtractorForType(TInt)]);
   }

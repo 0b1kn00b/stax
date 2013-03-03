@@ -24,7 +24,7 @@ import stx.io.json.types.IntJValue;
 import stx.io.json.types.FloatJValue;
 import stx.io.json.types.StringJValue;
 
-import stx.io.json.types.stx.OptionJValue;
+import stx.io.json.types.stx.MaybeJValue;
 import stx.io.json.types.stx.Tuple2JValue;
 import stx.io.json.types.stx.Tuple3JValue;
 import stx.io.json.types.stx.Tuple4JValue;
@@ -55,10 +55,10 @@ class JValueTest extends TestCase {
     doTest(DateJValue.decomposer(), function(v){return DateJValue.extractor()(v);}, [Date.now(), Date.fromTime(0.0)]);
   }
 
-  public function testOption() {
-    var a: Array<Option<Int>> = [Some(123), None];
+  public function testMaybe() {
+    var a: Array<Maybe<Int>> = [Some(123), None];
 
-    doTest(OptionJValue.decomposer(), function(v){return OptionJValue.extractor()(v);}, a);
+    doTest(MaybeJValue.decomposer(), function(v){return MaybeJValue.extractor()(v);}, a);
   }
 
   public function testTuple2() {

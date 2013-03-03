@@ -8,7 +8,7 @@ import stx.js.dom.Quirks;
 import stx.test.TestCase;
 using stx.js.dom.Quirks;
 
-using stx.Options;
+using stx.Maybes;
 
 class QuirksTestCase extends TestCase {
   var element: HTMLElement;

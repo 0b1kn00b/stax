@@ -2454,11 +2454,11 @@ class ReactiveTest extends TestCase {
     
     var headOpt = SignalCollectionExtensions.headOpt(signal);
     
-    assertOptionEquals(None, headOpt.valueNow());
+    assertMaybeEquals(None, headOpt.valueNow());
     
     signal.sendSignal(toCollection([1, 2, 3]));
     
-    assertOptionEquals(Some(1), headOpt.valueNow());
+    assertMaybeEquals(Some(1), headOpt.valueNow());
   }
   
   public function testSignalCollectionSlice(): Void {
@@ -2478,11 +2478,11 @@ class ReactiveTest extends TestCase {
     
     var lastOpt = SignalCollectionExtensions.lastOpt(signal);
     
-    assertOptionEquals(None, lastOpt.valueNow());
+    assertMaybeEquals(None, lastOpt.valueNow());
     
     signal.sendSignal(toCollection([1, 2, 3]));
     
-    assertOptionEquals(Some(3), lastOpt.valueNow());
+    assertMaybeEquals(Some(3), lastOpt.valueNow());
   }
 
   public function testSignalCollectionCountWhile(): Void {
@@ -2898,8 +2898,8 @@ class ReactiveTest extends TestCase {
     var find =  SignalCollectionExtensions.find(signal, function(v) { return v < 10; });
     var find2 = SignalCollectionExtensions.find(signal, function(v) { return v > 7; });
    
-    assertOptionEquals(Some(4), find.valueNow());
-    assertOptionEquals(None, find2.valueNow());
+    assertMaybeEquals(Some(4), find.valueNow());
+    assertMaybeEquals(None, find2.valueNow());
   }
   
   public function testSignalCollectionExistsP(): Void {
@@ -3038,8 +3038,8 @@ class ReactiveTest extends TestCase {
     var indexOf = SignalCollectionExtensions.indexOf(signal, 4);
     var indexOf2 = SignalCollectionExtensions.indexOf(signal, 10);
     
-    assertOptionEquals(Some(3), indexOf.valueNow());
-    assertOptionEquals(None, indexOf2.valueNow());
+    assertMaybeEquals(Some(3), indexOf.valueNow());
+    assertMaybeEquals(None, indexOf2.valueNow());
   }
   
   public function testSignalCollectionIndicesOf(): Void {
@@ -3245,7 +3245,7 @@ class ReactiveTest extends TestCase {
     } 
     */
 /*F    
-    private function assertOptionEquals<T>(opt1: Option<T>, opt2: Option<T>, equals: T -> T -> Bool = null): Void {
+    private function assertMaybeEquals<T>(opt1: Maybe<T>, opt2: Maybe<T>, equals: T -> T -> Bool = null): Void {
         if (equals == null) {
             equals = Filter.isEqual;
         }

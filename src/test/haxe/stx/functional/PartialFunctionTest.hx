@@ -23,7 +23,7 @@ import stx.functional.PartialFunction;
 import stx.Tuples;
 using stx.Dynamics;
 
-using stx.functional.PartialFunctions;
+using stx.PartialFunctions;
 
 class PartialFunctionTest extends TestCase {
     public function testIsDefinedAtForPartialFunction1() {
@@ -36,7 +36,7 @@ class PartialFunctionTest extends TestCase {
     public function testCallForPartialFunction1() {
       var f = [Tuples.t2(function(i: Int) return i > 0, function(i: Int) return i * i)].toPartialFunction();
       
-      assertEquals(4, f.call(2));
+      assertEquals(4, f.apply(2));
     }
     
     public function testOrElseForPartialFunction1() {
@@ -47,8 +47,8 @@ class PartialFunctionTest extends TestCase {
       
       assertTrue(f.isDefinedAt(-2));
       
-      assertEquals(4, f.call(-2));
-      assertEquals(4, f.call(2));
+      assertEquals(4, f.apply(-2));
+      assertEquals(4, f.apply(2));
     }
     
     public function testOrAlwaysCForPartialFunction1() {

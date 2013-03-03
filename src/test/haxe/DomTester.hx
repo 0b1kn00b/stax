@@ -835,9 +835,9 @@ class DomTest extends TestCase {
       verifyThatPropertiesExist(bodyElement, properties);
   }
   
-  public function testThatHTMLOptionElementHasProperties(): Void {
+  public function testThatHTMLMaybeElementHasProperties(): Void {
       var element =  _doc.getElementsByTagName("option")[1];
-      var optionElement: HTMLOptionElement = cast element;
+      var optionElement: HTMLMaybeElement = cast element;
       
       var properties = [
           "form",

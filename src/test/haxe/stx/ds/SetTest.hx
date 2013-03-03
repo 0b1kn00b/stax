@@ -126,7 +126,7 @@ class SetTest extends TestCase {
   assertEquals("Set [1, 2, 3]", set([1,2,3]).toString()); 
   }     
 
-  public function testHashCode() {       
+  public function testMapCode() {       
   assertNotEquals(0, set().hashCode());
   assertNotEquals(0, set([1,2]).hashCode());            
   }

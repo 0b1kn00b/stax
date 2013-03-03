@@ -1,0 +1,12 @@
+-cp ./src/main/haxe/
+-cp ./src/test/haxe/
+
+-js ./bin/test.js
+
+-D haxe3
+-D pattern_matching
+-D development
+
+-main StaxTestSuite
+
+--connect 2331

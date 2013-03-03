@@ -1,58 +1,97 @@
 package stx.arw;
 
 import stx.Prelude;
-import stx.Tuples;
+
+using stx.Tuples;
 using stx.arw.Arrows;
+using stx.Compose;
 
-class StateArrow{
-		static public function write<S,A,B>(a:Arrow<Pair<A,S>,Pair<B,S>>,a1:Arrow<Pair<B,S>,S>):Arrow<Pair<A,S>,Pair<B,S>>{
-		return
-			a.join( a1 )
-			.then(
-				function(t:Pair<Pair<B,S>,S>){
-					return Tuples.t2(t._1._1,t._2);
-				}.lift()
-			);
-	}
+typedef ArrowState<S,A> = Arrow<S,Tuple2<A,S>>;
+
+abstract StateArrow<S,A>(ArrowState<S,A>) from ArrowState<S,A> to ArrowState<S,A>{
+  @:from static public function fromFunction<S,A>(fn:S->A):StateArrow<S,A>{
+    return new StateArrow(function(s:S){
+      return Tups.t2(fn(s),s);
+    }.lift());
+  }
+  @:from static public function fromArrow<S,A>(arw:Arrow<S,A>):StateArrow<S,A>{
+    return new StateArrow(
+      function(s:S){
+        return arw.apply(s).map(Tups.t2.bind(_,s));
+      }.arrowOf()
+    );
+  }
+  @:noUsing
+  static public function unit<S,A>():StateArrow<S,A>{
+    return new StateArrow(
+      function(s:S):Tup2<A,S>{
+        return Tups.t2(null,s);
+      }.lift()
+    );
+  }
+  public function new(v){
+    this = v;
+  }
+  public function reply():ArrowState<S,A>{
+    return this;
+  }
+  public function mod(a1:Arrow<Tup2<A,S>,S>):StateArrow<S,A>{
+    return new StateArrow( this.fan().then(a1.second())
+      .then(
+        function(l:Tuple2<A,S>,r){
+          return Tups.t2(l._1,r);
+        }.spread().lift()
+      )
+    );
+  }
+  public function change<B>(a1:Arrow<Tup2<A,S>,B>):StateArrow<S,B>{
+    return new StateArrow(
+      this.join(a1)
+      .then(
+        function(l:Tup2<A,S>,r:B){
+          return Tups.t2(r,l._2);
+        }.spread().lift()
+      )
+    );
+  }
+  public function map<B>(a1:Arrow<A,B>):StateArrow<S,B>{
+    return new StateArrow(
+      this.then(
+        a1.first()
+      )
+    );
+  }
+  public function put(v:S):StateArrow<S,A>{
+    return new StateArrow(
+      this.then(
+        v.pure().second().lift()
+      )
+    );
+  }
+  public function ret():StateArrow<S,S>{
+    return new StateArrow(
+      this.then(
+        function(tp:Tup2<A,S>){
+          return Tups.t2(tp._2,tp._2);
+        }.lift()
+      )
+    );
+  }
+  public function withInput(?i : S, cont : Function1<Tup2<A,S>,Void>) : Void{
+    this.withInput(i,cont);
+  }
+  public function apply(?i:S):Future<Tup2<A,S>>{
+    return this.apply(i);
+  }
 }
-class StateArrowImpl<S,A,B> implements Arrow<Pair<A,S>,Pair<B,S>>{
-
-	/*static public function thenUsing<A,B,C,D>(a:Arrow<A,B>,a2:Arrow<C,D>,f:B->Pair<C,B>):Arrow<A,Pair<D,B>>{
-
-	}
-	public function composeWith<C>(sa:StateArrow<S,B,C>){
-		return 
-				new StateArrow(
-						function(p1:Pair<A,S>){
-							return this.then(sa);
-						}.lift()
-				);
-	}
-	*/
-	var arrow : Arrow<Pair<A,S>,Pair<B,S>>;
-	
-	public static function new(a){
-		this.arrow = a;
-	}
-	inline public function withInput(?i:Pair<A,S>,cont:Function<Pair<B,S>,Void>){
-		arrow.withInput( i , cont );
-	}
-	static public function stateA<S,A,B>(a:Arrow<Pair<A,S>,Pair<B,S>>){
-		return new StateArrowImpl(a);
-	}
-	/*
-	public function change<B,C>(fn:Function1<Pair<B,S>,S>):StateArrow<S,A,B> { 
-
-	}*/
-	public function fetch():Arrow<S,S>{
-		return null;
-	}
-	//static function composeWithUsing<C,D>(
-	/*static private function merge<S,B,C>(t : Pair<Pair<S,B>,S>) :Pair<S,B>{
-		return Tuples.t2(t._2,t._1._2);
-	}*/
-	public function access() { }
-	public function get() { }
-	public function set() { }
-	public function next(){ }
+class StateArrows{
+  static public function mod<S,A>(a0:StateArrow<S,A>,fn:Tup2<A,S>->S):StateArrow<S,A>{
+    return a0.mod(fn.lift());
+  }
+  static public function change<S,A,B>(a0:StateArrow<S,A>,fn:Tup2<A,S>->B):StateArrow<S,B>{
+    return a0.change(fn.lift());
+  }
+  static public function map<S,A,B,C>(a0:StateArrow<S,A>,fn:A->B):StateArrow<S,B>{
+    return a0.map(fn.lift());
+  }
 }

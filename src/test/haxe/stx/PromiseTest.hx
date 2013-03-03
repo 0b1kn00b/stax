@@ -9,10 +9,11 @@ using stx.Prelude;
 import stx.test.TestCase;
 import stx.test.Assert;             using stx.test.Assert;
 
-import stx.Future;                 using stx.Future;
-using stx.Promises;
-import stx.Maths;                   using stx.Maths;
-import stx.Iterables;               using stx.Iterables;
+using stx.Future;
+using stx.Promise;
+using stx.Error;
+using stx.Maths;
+using stx.Iterables;
 
 class PromiseTest extends TestCase{
   public function new() {
@@ -22,24 +23,24 @@ class PromiseTest extends TestCase{
   * Resolve Right of Future (success)
   */
   public function testRight() {
-    var a = new Future();
-    a.foreachR( 
+    var a = new Promise();
+    a.foreach( 
         function(x:String) {
           x.equals('ok');
         }
     );
-    a.right('ok');
+    a.ok('ok');
   }
   /**
   * Map success to value.
   */
   public function testMap() {
-    var a = Promises.success('ok');
-        a.mapR(
+    var a = 'ok'.intact();
+        a.map(
             function(x:String) {
               return 3;
             }
-        ).foreachR(
+        ).foreach(
             function(y:Int) {
               3.equals(y);
             }
@@ -49,13 +50,13 @@ class PromiseTest extends TestCase{
   * Flatmap chain
   */
   public function testFlatMap() {
-    var a = Promises.success('ok');
-        a.flatMapR(
+    var a = 'ok'.intact();
+        a.flatMap(
             function(x) {
               'ok'.equals(x);
-              return  Promises.success('yup');
+              return  'yup'.intact();
             }
-        ).foreachR(
+        ).foreach(
             function(x) {
               'yup'.equals(x);
             }
@@ -68,10 +69,10 @@ class PromiseTest extends TestCase{
     0.until(10)
         .map(
             function(int:Int) {
-              return Promises.success(int);
+              return int.intact();
             }
         ).toArray().wait()
-         .mapR(
+         .map(
             function(arr) {
               return arr.foldl(               
                 0,
@@ -80,7 +81,7 @@ class PromiseTest extends TestCase{
                 }
               );
             }
-         ).foreachR(
+         ).foreach(
             function(total) {
               45.equals(total);
             }
@@ -90,8 +91,8 @@ class PromiseTest extends TestCase{
   * Test simple error handler
   */
   public function testFutureFailure() {
-    var outcome2 = new Future().left('notok')
-        .foreachL(
+    var outcome2 = 'notok'.breach()
+        .foreach(
             function(x) {
               true.isTrue();
               //['notok', 'notok again'].equals(cast x);
@@ -103,16 +104,16 @@ class PromiseTest extends TestCase{
   */
   public function testFuturesFailure0() {
     var async   = Assert.createAsync( function() { } , 200);
-    var outcome2 = new Future();
+    var outcome2 = new Promise();
     
     haxe.Timer.delay(
         function() {
-          outcome2.left('notok');
+          outcome2.no('notok'.toError());
         },10
     );
     
     outcome2
-        .foreachL(
+        .foreach(
             function(x:Dynamic) {
               true.isTrue();
               async();
@@ -125,11 +126,11 @@ class PromiseTest extends TestCase{
   */
   public function testFuturesFailure2() {
     var async   = Assert.createAsync( function() { } , 200);
-    var outcome = new Future();
+    var outcome = new Promise();
     
     haxe.Timer.delay(
         function() {
-          outcome.left('not ok1');
+          outcome.no('not ok1'.toError());
         }
         ,10
     );
@@ -139,7 +140,7 @@ class PromiseTest extends TestCase{
             function(x) {
               return x;
             }
-        ).foreachL(
+        ).failure(
             function(x:Dynamic) {
               true.isTrue();
               async();
@@ -153,11 +154,11 @@ class PromiseTest extends TestCase{
   */
   public function testFuturesFailure3() {
     var async   = Assert.createAsync( function() { } , 200);
-    var outcome = new Future();
+    var outcome = new Promise();
     
     haxe.Timer.delay(
         function() {
-          outcome.right('ok1');
+          outcome.ok('ok1');
         }
         ,10
     );
@@ -165,9 +166,9 @@ class PromiseTest extends TestCase{
     outcome
         .flatMap(
             function (x) {
-              return  Promises.failure('false');
+              return  'false'.breach();
             }
-        ).foreachL(
+        ).failure(
             function(x:Dynamic) {
               true.isTrue();
               async();
@@ -181,18 +182,18 @@ class PromiseTest extends TestCase{
   */
   public function testFuturesFailure4() {
     var async   = Assert.createAsync( function() { } , 200);
-    var outcome = new Future().right('ok1');
+    var outcome = 'ok1'.intact();
   
     outcome
         .flatMap(
             function (x) {
-              return  Promises.failure('false');
+              return  'false'.breach();
             }
         ).map(
             function(x) {
               return x;
             }
-        ).foreachL(
+        ).failure(
             function(x:Dynamic) {
               true.isTrue();
               async();
@@ -204,20 +205,20 @@ class PromiseTest extends TestCase{
   * Test error from parallel execution
   */
   public function testWaitFailer10() {
-    var outcome1 = Promises.success('ok1');
-    var outcome2 = new Future().left('notok');
+    var outcome1 = 'ok1'.intact();
+    var outcome2 = 'notok'.breach();
     
 
     [outcome1, outcome2].wait()
-    .mapR(
+    .map(
         function (x) {
           return x;
         }
-    ).foreachL(
+    ).failure(
         function(x) {
           true.isTrue();
         }
-    ).foreachR(
+    ).foreach(
         function(x) {
           Assert.fail();
         }
@@ -228,17 +229,17 @@ class PromiseTest extends TestCase{
   */
     public function testWaitFailer11() {
     var async   = Assert.createAsync( function() { } ,200);
-    var outcome1 = Promises.failure('ok1');
-    var outcome2 = new Future();
+    var outcome1 = 'ok1'.breach();
+    var outcome2 = new Promise();
     haxe.Timer.delay(
         function() {
-          outcome2.left('notok');
+          outcome2.no('notok'.toError());
         }
         ,10
     );
     
     [outcome2, outcome1].wait()
-    .foreachL(
+    .failure(
         function(x) {
           true.isTrue();
           async();
@@ -251,21 +252,21 @@ class PromiseTest extends TestCase{
   */
   public function testFuturesFailure7() {
     var async   = Assert.createAsync( function() { } ,200);
-    var outcome0 = Promises.success('ok0');
-    var outcome1 = Promises.success('ok1');
-    var outcome2 = new Future().left('notok0');
-    var outcome3 = new Future().left('notok again');
-    var outcome4 = new Future();
+    var outcome0 = 'ok0'.intact();
+    var outcome1 = 'ok1'.intact();
+    var outcome2 = 'notok0'.breach();
+    var outcome3 = 'notok again'.breach();
+    var outcome4 = new Promise();
     
     haxe.Timer.delay(
         function() {
-          outcome4.left('notok');
+          outcome4.no('notok'.toError());
         }
         ,10
     );
     
     [outcome0, outcome1]
-        .waitFor()
+        .wait()
         .flatMap(
             function (x){
               return outcome4;
@@ -274,7 +275,7 @@ class PromiseTest extends TestCase{
             function(x) {
               return x;
             }
-        ).foreachL(
+        ).failure(
             function(x:Dynamic) {
               true.isTrue();
               async();
@@ -289,24 +290,23 @@ class PromiseTest extends TestCase{
   public function testFuturesFailure8() {
     var async     = Assert.createAsync( function() { } ,200);
 
-    var outcome0 : Future<Either<Dynamic,Dynamic>> 
-                  = new stx.Future();
+    var outcome0  = new Promise();
 
-    var outcome1  = Promises.success('ok1');
-    var outcome2 : Future<Either<Dynamic,Dynamic>> = new Future();
-    var outcome3  = new Future().left('notok again');
-    var outcome4  = new Future();
-    var outcome5  = new Future().right('ok');
+    var outcome1  = 'ok1'.intact();
+    var outcome2  = new Promise();
+    var outcome3  = 'notok again'.breach();
+    var outcome4  = new Promise();
+    var outcome5  = 'ok'.intact();
     
     haxe.Timer.delay(
         function() {
-          outcome4.left('notok');
+          outcome4.no('notok'.toError());
         }
         ,10
     );
     haxe.Timer.delay(
         function() {
-          outcome2.left('notok 2');
+          outcome2.no('notok 2'.toError());
         }
         ,20
     );
@@ -315,24 +315,24 @@ class PromiseTest extends TestCase{
     
     haxe.Timer.delay(
         function() {
-          outcome0.right('ok');
+          outcome0.ok('ok');
         }
         ,10
     );
     outcome0
-        .flatMapR(
+        .flatMap(
             function (x){
               return outcome2;
             }
-        ).mapR(
+        ).map(
             function(x) {
               return true;
             }
-        ).foreachR(
+        ).foreach(
             function(x) {
               Assert.fail();
             }
-        ).toCallback(
+        ).callback(
             function(err, res) {
               if (err != null) {
                 true.isTrue();
@@ -346,20 +346,20 @@ class PromiseTest extends TestCase{
   */
   public function testFuturesFailure6() {
     var async   = Assert.createAsync( function() { } ,200);
-    var outcome1 = Promises.success('ok1');
-    var outcome2 = new Future().left('notok');
-    var outcome3 = new Future().left('notok again');
-    var outcome4 = new Future();
+    var outcome1 = 'ok1'.intact();
+    var outcome2 = 'notok'.breach();
+    var outcome3 = 'notok again'.breach();
+    var outcome4 = new Promise();
     
     haxe.Timer.delay(
         function() {
-          outcome4.right('ok1');
+          outcome4.ok('ok1');
         }
         ,10
     );
     [outcome1, outcome2, outcome3,outcome4]
         .wait()
-        .mapR( 
+        .map( 
             function(arr) {
               return arr.foldl(
                 '',
@@ -368,7 +368,7 @@ class PromiseTest extends TestCase{
                     }
               );
             }
-        ).foreachL(
+        ).failure(
             function(x:Dynamic) {
               true.isTrue();
               async();
@@ -382,28 +382,28 @@ class PromiseTest extends TestCase{
   */
   public function testFuturesFailure9() {
     var async   = Assert.createAsync( function() { } , 200);
-    var outcome1 = Promises.success('ok1');
-    var outcome2 = new Future().left('notok');
-    var outcome3 = new Future().left('notok again');
-    var outcome4 = new Future();
+    var outcome1 = 'ok1'.intact();
+    var outcome2 = 'notok'.breach();
+    var outcome3 = 'notok again'.breach();
+    var outcome4 = new Promise();
     var errors   = 4;
     var count    = 0;
 
     haxe.Timer.delay(
         function() {
-          outcome4.right('ok1');
+          outcome4.ok('ok1');
         }
         ,10
     );
     
     [outcome1, outcome2, outcome3,outcome4]
         .wait()
-        .foreachL(
+        .recover(
             function(x:Dynamic) {
               count++;
-              return x;
+              return Right(x);
             }
-        ).mapR( 
+        ).map( 
             function(arr) {
               return arr.foldl(
                 '',
@@ -412,25 +412,25 @@ class PromiseTest extends TestCase{
                     }
               );
             }
-        ).foreachL(
+        ).failure(
             function(x:Dynamic) {
               count++;
               return x;
             }
-        ).flatMapR(
+        ).flatMap(
             function(succ) {
-              return Promises.failure('');
+              return ''.breach();
             }
-        ).foreachL(
+        ).failure(
             function(x:Dynamic) {
               count++;
               return x;
             }
-        ).mapR(
+        ).map(
             function(x) {
               return x;
             }
-        ).foreachL(
+        ).failure(
             function(x:Dynamic) {
               count++;
               true.isTrue();
@@ -445,25 +445,25 @@ class PromiseTest extends TestCase{
   */
   public function testFuturesFailure10() {
     var async   = Assert.createAsync( function() { } , 200);
-    var outcome1 = Promises.success('ok1');
-    var outcome4 = new Future();
+    var outcome1 = 'ok1'.intact();
+    var outcome4 = new Promise();
     var errors   = 2;
     var count    = 0;
     haxe.Timer.delay(
         function() {
-          outcome4.right('ok1');
+          outcome4.ok('ok1');
         }
         ,10
     );
-    
-    [outcome1, outcome4]
+    var ocs : Array<Promise<Dynamic>> = [outcome1, outcome4];
+    ocs
         .wait()
-        .foreachR(
+        .foreach(
             function(x:Dynamic) {
               return x;
             }
-        ).mapR( 
-            function(arr) {
+        ).map( 
+            function(arr:Array<Dynamic>) {
               return arr.foldl(
                 '',
                     function(a, b) {
@@ -471,30 +471,28 @@ class PromiseTest extends TestCase{
                     }
               );
             }
-        ).foreachR(
+        ).foreach(
             function(x:Dynamic) {
               return x;
             }
-        ).flatMapR(
+        ).flatMap(
             function(succ) {
-              return Promises.failure('');
+              return ''.breach();
             }
-        ).foreachL(
+        ).failure(
             function(x:Dynamic) {
               count++;
-              return x;
             }
-        ).mapR(
+        ).map(
             function(x) {
               return x;
             }
-        ).foreachL(
+        ).failure(
             function(x:Dynamic) {
               count++;
               Assert.equals( count , errors );
               true.isTrue();
               async();
-              return x;
             }
         );
   }

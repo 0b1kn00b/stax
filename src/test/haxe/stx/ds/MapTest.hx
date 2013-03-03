@@ -9,7 +9,7 @@ import stx.ds.Map;
 
 using stx.functional.Foldables;
 
-using stx.Options;
+using stx.Maybes;
 
 class MapTest extends TestCase {
   /*public function testAdd(){
@@ -155,7 +155,7 @@ class MapTest extends TestCase {
     assertEquals("Map (1 -> a, 2 -> a)", map([Tuples.t2(1, "a"), Tuples.t2(2, "a")]).toString());
   }     
 
-  public function testHashCode() {     
+  public function testMapCode() {     
     assertNotEquals(0, map().hashCode());
     assertNotEquals(0, map([Tuples.t2(1, "a"), Tuples.t2(2, "a")]).hashCode());              
   }

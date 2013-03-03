@@ -3,6 +3,7 @@ using stx.Prelude;
 
 import stx.test.Runner;
 import stx.test.ui.Report;
+
 import stx.LogLevel;
 
 import stx.Assert;
@@ -15,7 +16,7 @@ using stx.Log;
 #end
 
 class StaxTestSuite {
-  public static function main (): Void {
+  public static function main ():Void{
     new StaxTestSuite();
   }
   public function new(){
@@ -38,69 +39,71 @@ class StaxTestSuite {
           , new stx.io.http.HttpStringTest() // This one should be cross-platform, eventually
           , new stx.io.http.HttpJValueJsonpTest()
         ];*/
-        var dev   = 
-        [
-            new StaxTest()
-          , new stx.ErrorTest()
-          , new stx.reactive.ArrowsTest()
-          , new stx.StateTest()
-         // , new stx.ReaderTest()
-          , new stx.reactive.StreamTest()
-          , new stx.io.log.LogTest()
-          //, new stx.IntIteratorTest()
-          , new OptimiseTest()
-          , new stx.ds.ZipperTest()
-          , new stx.ds.IterateeTest()
-          , new stx.PromiseTest()//#0b1kn00b how to test delayed easily without timer.
-        ];
-        var b = [
-          new StaxTest()
-        ];
-        var tests =
-        [
-          new stx.plus.OrderTest(),
+        #if development
+          var tests   = 
+          [   
+              new stx.arw.StateArrowTest()
+            /*
+              new stx.MethodTest()
+              new stx.arw.ArrowsTest()
+              new stx.ContinuationTest()
+              new stx.MethodTest()
+              new StaxTest()
+            , new stx.ErrorTest()
+            , new stx.StateTest()
+            , new stx.ReaderTest()
+            , new stx.reactive.StreamTest()
+            , new stx.io.log.LogTest()
+            , new stx.IntIteratorTest()
+            , new OptimiseTest()
+            , new stx.ds.ZipperTest()
+            , new stx.ds.IterateeTest()
+            , new stx.PromiseTest()//#0b1kn00b how to test delayed easily without timer.*/
+          ];
+        #else 
+          var tests =
+          [
+/*            new stx.plus.OrderTest(),
+              
+            new stx.ArraysTest(),
+            new stx.ds.MapTest(),
+            new stx.ds.SetTest(),
+            new stx.ds.ListTest(),
             
-          new stx.ArraysTest(),
-          new stx.ds.MapTest(),
-          new stx.ds.SetTest(),
-          new stx.ds.ListTest(),
-          
-          new stx.functional.FoldablesTest(),
-          new stx.functional.PartialFunctionTest(),   
+            new stx.functional.FoldablesTest(),
+            new stx.functional.PartialFunctionTest(),   
 
-          new stx.math.tween.TweensTest(),
-#if !(neko || php || cpp || java || cs )  
-          new stx.time.ScheduledExecutorTest(),
-          new stx.reactive.ReactiveTest(),
-#end
-          new stx.net.UrlsTest(),   
-          new stx.net.HttpHeadersTest(),
-          //new ReactiveTester(),
-          //new stx.StringsTest(),
-          new stx.framework.InjectorTest(),
-          new stx.math.geom.PointTest(),
-          new stx.util.GuidTest()
-#if js
-          , new js.io.IFrameIOTest()      
-          , new js.dom.HTMLElementsTest()
-          , new js.dom.HTMLDocumentsTest()
-          , new js.dom.QuirksTestCase()
-          
-#end
-          , new stx.ObjectsTest()
-          , new stx.TupleTest()
-          , new stx.ds.RangeTest()
-          , new stx.MathsTest()
-          , new stx.BoolsTest()
-        ];
+            new stx.math.tween.TweensTest(),
+  #if !(neko || php || cpp || java || cs )  
+            new stx.time.ScheduledExecutorTest(),
+            new stx.reactive.ReactiveTest(),
+  #end
+            new stx.net.UrlsTest(),   
+            new stx.net.HttpHeadersTest(),
+            //new ReactiveTester(),
+            //new stx.StringsTest(),
+            new stx.framework.Injec <torTest(),
+            new stx.math.geom.PointTest(),
+            new stx.util.GuidTest()
+  #if js
+            , new js.io.IFrameIOTest()      
+            , new js.dom.HTMLElementsTest()
+            , new js.dom.HTMLDocumentsTest()
+            , new js.dom.QuirksTestCase()
+  #end
+            , new stx.ObjectsTest()
+            , new stx.TupleTest()
+            , new stx.ds.RangeTest()
+            , new stx.MathsTest()
+            , new stx.BoolsTest()*/
+          ];
+        #end
         haxe.Log.trace = stx.Log.trace;
 
         var runner = new Runner();
-          //  runner.addAll(#if dev dev #else tests #end);
-          runner.addAll(tests);
+            runner.addAll(tests);
 
         Report.create(runner);
-
         runner.run();
 
         return Unit;

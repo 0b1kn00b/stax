@@ -4,11 +4,15 @@ import stx.Prelude;
 
 using stx.arw.Arrows;
 
-class FutureArrow<O> extends Arrow<Future<O>,O>{
+typedef ArrowFuture<O> = Arrow<Future<O>,O>;
+
+abstract FutureArrow<O>(ArrowFuture<O>) from ArrowFuture<O> to ArrowFuture<O>{
 	public function new(){
-		super();
+    this = new Arrow(inline function (?i:Future<O>,cont:Function1<O,Void>):Void{
+      i.foreach( cont );  
+    });
 	}
-	override inline public function withInput(?i:Future<O>,cont:Function<O,Void>):Void{
-		i.foreach( cont );
-	}
+  public function apply(?i){
+    return this.apply(i);
+  }
 }

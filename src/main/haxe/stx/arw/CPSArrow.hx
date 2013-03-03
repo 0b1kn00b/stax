@@ -4,17 +4,14 @@ import stx.Prelude;
 import stx.arw.Arrows;
 
 @:note("#0b1kn00b, Doesn't run unless cont filled in, how to fix?")
-class CPSArrow<A,B> extends Arrow<A,B>{
-	var cps : A -> RC<Void,B>;
-
+abstract CPSArrow<A,B>(Arrow<A,B>){
 	public function new(cps:A->RC<Void,B>){
-		super();
-		this.cps = cps;
+		this = new Arrow(
+			inline function(?i:A, cont: Function1<B,Void>):Void{
+			cps(i)(cont);
+		});
 	}
-	override inline public function withInput(?i:A, cont: Function1<B,Void>):Void{
-		cps(i)(cont);
-	}
-	static public function arrowOf<A,B>(v:A -> RC<Void,B>):Arrow<A,B>{
-		return new CPSArrow(v);
+	public function apply(?i){
+		return this.apply(i);
 	}
 }

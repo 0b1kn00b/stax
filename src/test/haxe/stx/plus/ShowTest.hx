@@ -17,7 +17,7 @@ class ShowTest extends TestCase{
     assertEquals("<function>", getShow(function() trace("")));
     assertEquals("None", getShow(None));
     assertEquals("Some(Some(value))", getShow(Some(Some("value"))));
-    assertEquals("_PreludeTest.HasNoHashAndShow()", getShow(new HasNoHashAndShow(1)));
+    assertEquals("_PreludeTest.HasNoMapAndShow()", getShow(new HasNoMapAndShow(1)));
     assertEquals("_PreludeTest.DynamicComparable(1)", getShow(new DynamicComparable(1)));
   }
   public function testTupleString() {    
