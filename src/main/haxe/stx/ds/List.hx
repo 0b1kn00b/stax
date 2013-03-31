@@ -2,7 +2,7 @@ package stx.ds;
 
 import stx.Prelude;
 
-import stx.Tuples;
+using stx.Tuples;
 using stx.Prelude;
 
 
@@ -335,7 +335,7 @@ class List<T> implements Collection<List<T>, T> {
    * @param f Called with every two consecutive elements to retrieve a list of gaps.
    */
   public function gaps<G>(f: T -> T -> List<G>, ?equal: EqualFunction<G>): List<G> {
-    return zip(drop(1)).flatMapTo(List.nil(Prelude.tool(null,equal)), function(tuple) return f(tuple._1, tuple._2));
+    return zip(drop(1)).flatMapTo(List.nil(Prelude.tool(null,equal)), function(tuple) return f(tuple.fst(), tuple.snd()));
   }
 
   /** Returns a list that contains all the elements of this list, sorted by

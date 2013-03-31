@@ -20,7 +20,7 @@ import stx.Prelude;
 import stx.test.TestCase;
 import stx.functional.PartialFunction;
 
-import stx.Tuples;
+using stx.Tuples;
 using stx.Dynamics;
 
 using stx.PartialFunctions;

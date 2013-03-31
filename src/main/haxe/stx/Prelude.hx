@@ -1,6 +1,5 @@
 package stx;
 
-import stx.Tuples;
 import stx.Prelude;
 
 import Type;
@@ -10,6 +9,7 @@ using Std;
 import stx.Maths;
 import stx.plus.Show;
 
+using stx.Tuples;
 using stx.Prelude;
 using stx.Maybes;
 using stx.Strings;
@@ -39,10 +39,9 @@ typedef Function10<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, R> = P1 -> P2 -> P3 
 typedef Reducer<T>    = T -> T -> T
 typedef Factory<T>    = Void -> T
 typedef RC<R,A>       = (A -> R) -> R
-typedef Receive<A>    = RC<Void,A>
-typedef ReceiveE<A,B> = Receive<Either<A,B>>;
+/*typedef Receive<A>    = RC<Void,A>
+typedef ReceiveE<A,B> = Receive<Either<A,B>>;*/
 typedef Modify<T>     = T -> T;
-typedef Field<T>      = Tup2<String,T>;
 /**
  A function which takes no parameter and returns a result.
  */
@@ -124,8 +123,8 @@ class Prelude{
               _next     = None;
 
             case Some(tuple):
-              _progress = tuple._1;
-              _next     = Some(tuple._2);
+              _progress = tuple.fst();
+              _next     = Some(tuple.snd());
           }
         }
 

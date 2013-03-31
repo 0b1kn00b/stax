@@ -1,6 +1,6 @@
 package stx.arw;
 
-import stx.Tuples;
+using stx.Tuples;
 import stx.Prelude;
 import stx.arw.Arrows;
 
@@ -20,7 +20,7 @@ abstract PairArrow<A,B,C,D>(ArrowPair<A,B,C,D>) from ArrowPair<A,B,C,D> to Arrow
 				var check 	=
 					function(){
 						if (((ol!=null) && (or!=null))){
-							merge(Maybes.get(ol),Maybes.get(or));
+							merge(Maybes.getOrElseC(ol,null),Maybes.getOrElseC(or,null));
 						}
 					}
 				var hl 		= 
@@ -33,8 +33,8 @@ abstract PairArrow<A,B,C,D>(ArrowPair<A,B,C,D>) from ArrowPair<A,B,C,D> to Arrow
 						or = v == null ? None : Some(v);
 						check();
 					}
-				l.withInput( i._1 , hl );
-				r.withInput( i._2 , hr );
+				l.withInput( i.fst() , hl );
+				r.withInput( i.snd() , hr );
 			}
 		);
 	}

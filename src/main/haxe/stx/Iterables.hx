@@ -2,7 +2,7 @@ package stx;
 
 using stx.Prelude;
 
-import stx.Tuples;							using stx.Tuples;
+using stx.Tuples;							using stx.Tuples;
 																using stx.Functions;
 using stx.Iterables;
 
@@ -234,8 +234,8 @@ class Iterables {
     Zip an Iterable of tuples from a tuple of iterables
   */
   public static function zipup<T1, T2>(tuple:Tuple2<Iterable<T1>, Iterable<T2>>): Iterable<Tuple2<T1, T2>> {
-    var i1 = tuple._1.iterator();
-    var i2 = tuple._2.iterator();
+    var i1 = tuple.fst().iterator();
+    var i2 = tuple.snd().iterator();
     
     var result = [];
     
@@ -528,11 +528,11 @@ class Iterables {
     var size    = length == 0 ? iter2.size() : length;
 
     for( val in itern){
-      if(val._1 >= start && val._1 < start + size){
+      if(val.fst() >= start && val.fst() < start + size){
         na.push(iter2.head());
         iter2 = iter2.tail();
       }else{
-        na.push(val._2);
+        na.push(val.snd());
       }
     }
     return na;

@@ -3,7 +3,7 @@ package stx.plus;
 												using Std;
 import Type;
 
-import stx.Tuples;			using stx.Tuples;
+using stx.Tuples;			using stx.Tuples;
 import stx.Maths;
 
 using stx.Prelude;
@@ -65,6 +65,7 @@ class Order {
           _createOrderImpl(ProductOrder.compare);
       default:
         if(Meta._hasMetaDataClass(c)) {
+          
           var i = 0;
           var fields = Type.getInstanceFields(c).map(function(v){
             var fieldMeta = Meta._getMetaDataField(c, v);
@@ -73,16 +74,16 @@ class Order {
             else
               1;
             return Tuples.t3(v, weight, if(fieldMeta != null && Reflect.hasField(fieldMeta, "index")) Reflect.field(fieldMeta, "index"); else i++);                
-          }).filter(function(v){return v._2 != 0;}).sortWith(function(a, b) {
-            var c = a._3 - b._3;
+          }).filter(function(v){return v.snd() != 0;}).sortWith(function(a, b) {
+            var c = a.thd() - b.thd();
             if(c != 0)
               return c;
-            return Strings.compare(a._1, b._1);
+            return Strings.compare(a.fst(), b.fst());
           });
 		      _createOrderImpl(function(a, b) {       
-            var values = fields.filter(function(v) return !Reflect.isFunction(Reflect.field(a, v._1))).map(function(v){return Tuples.t3(Reflect.field(a, v._1), Reflect.field(b, v._1), v._2);});
+            var values = fields.filter(function(v) return !Reflect.isFunction(Reflect.field(a, v.fst()))).map(function(v){return Tuples.t3(Reflect.field(a, v.fst()), Reflect.field(b, v.fst()), v.snd());});
             for (value in values) {
-              var c = getOrderFor(value._1)(value._1, value._2) * value._3;
+              var c = getOrderFor(value.fst())(value.fst(), value.snd()) * value.thd();
               if (c != 0) return c;
             }
 

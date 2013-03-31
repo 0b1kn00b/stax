@@ -1,8 +1,10 @@
 package stx.arw;
 
 using stx.Tuples;
-import stx.Prelude;
+
 using stx.arw.Arrows;
+
+import stx.Prelude;
 
 typedef AAIn<I,O> 			= Tuple2<Arrow<I,O>,I>
 typedef ArrowApply<I,O> = Arrow<AAIn<I,O>,O>;
@@ -11,8 +13,8 @@ abstract ApplyArrow<I,O>(ArrowApply<I,O>) from ArrowApply<I,O> to ArrowApply<I,O
 	public function new(){
 		this = new Arrow(
 			inline function(?i:Tuple2<Arrow<I,O>,I>,cont : Function1<O,Void>){
-				i._1.withInput(
-					i._2,
+				i.fst().withInput(
+					i.snd(),
 						function(x){
 							cont(x);
 						}
@@ -31,7 +33,7 @@ abstract ApplyArrow<I,O>(ArrowApply<I,O>) from ArrowApply<I,O> to ArrowApply<I,O
 	static public function mod<A,B,C,D>(a:Arrow<A,Tuple2<Arrow<B,C>,B>>,fn:C->D):Arrow<A,Tuple2<Arrow<B,D>,B>>{
 		return a.then(
 			function(t:Tuple2<Arrow<B,C>,B>):Tuple2<Arrow<B,D>,B>{
-				return t._1.then(fn.lift()).entuple(t._2);
+				return t.fst().then(fn.lift()).entuple(t.snd());
 			}.lift()
 		);
 	}

@@ -211,8 +211,8 @@ class Urls {
    */
   public static function toQueryString(query: QueryParameters): String {
     return query.foldl('?', function(url, tuple) {
-      var fieldName = tuple._1;
-      var fieldValue = tuple._2;
+      var fieldName = tuple.fst();
+      var fieldValue = tuple.snd();
       
       var rest = StringTools.urlEncode(fieldName) + '=' + StringTools.urlEncode(fieldValue);
       

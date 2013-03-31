@@ -6,7 +6,7 @@ import stx.Prelude;
 import stx.plus.Equal;
 
 import Type;
-import stx.Tuples;
+using stx.Tuples;
 import stx.Prelude;
 import stx.test.TestCase;
 import stx.io.json.JValue;

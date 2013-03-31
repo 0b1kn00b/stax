@@ -1,7 +1,7 @@
 package stx;
 
 
-import stx.Tuples;                using stx.Tuples;
+using stx.Tuples;                using stx.Tuples;
 using stx.Prelude; 
 import stx.plus.Equal;
 
@@ -58,9 +58,9 @@ class Arrays {
   static public function partition<T>(arr: Array<T>, f: T -> Bool): Tuple2<Array<T>, Array<T>> {
     return arr.foldl(Tuples.t2([], []), function(a, b) {
       if(f(b))
-        a._1.push(b);
+        a.fst().push(b);
       else
-        a._2.push(b);
+        a.snd().push(b);
       return a;
     });
   }
@@ -75,14 +75,14 @@ class Arrays {
     return arr.foldl(Tuples.t2([], []), function(a, b) {
       if (partitioning) {
         if (f(b))
-          a._1.push(b);
+          a.fst().push(b);
         else {
           partitioning = false;
-          a._2.push(b);
+          a.snd().push(b);
         }
       }
       else
-        a._2.push(b);
+        a.snd().push(b);
       return a;
     });
   }

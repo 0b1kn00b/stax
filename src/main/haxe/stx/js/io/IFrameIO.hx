@@ -29,7 +29,7 @@ import stx.net.Url;
 import stx.Log;								using stx.Log;
 
 import stx.Future;
-import stx.Tuples;
+using stx.Tuples;
 
 using stx.Prelude;
 using stx.Tuples;
@@ -405,8 +405,8 @@ class IFrameIOPollingMaptag extends AbstractIFrameIO implements IFrameIO {
       case Some(tuple): 
         fragmentsToSend = fragmentsToSend.drop(1);
         
-        var win  = tuple._1;
-        var frag = tuple._2;
+        var win  = tuple.fst();
+        var frag = tuple.snd();
                 
         // Send this chunk via the hash tag:        
         win.location.href = frag.to + '#&' + frag.toMap().toQueryString().substr(1);

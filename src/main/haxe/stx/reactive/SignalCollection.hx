@@ -16,7 +16,7 @@
 package stx.reactive;
 
 import stx.Prelude;
-import stx.Tuples;
+using stx.Tuples;
 import stx.reactive.Reactive;
 import stx.ds.Collection;
 import stx.ds.List;
@@ -30,7 +30,7 @@ class SignalCollection {
 
     
     public static function concatS<C, T>(b1: Signal<Collection<C, T>>, b2: Signal<Collection<C, T>>): Signal<Collection<C, T>> {
-        return b1.zip(b2).map(function(c) { return cast c._1.concat(c._2); });
+        return b1.zip(b2).map(function(c) { return cast c.fst().concat(c.snd()); });
     }
     
     public static function join<C, T>(b: Signal<Collection<C, T>>, char: String): Signal<String> {
@@ -42,7 +42,7 @@ class SignalCollection {
     }
     
     public static function zipS<C, T, B>(b1: Signal<List<T>>, b2: Signal<List<B>>): Signal<List<Tuple2<T, B>>> {
-        return b1.zip(b2).map(function(c) { return c._1.zip(c._2); });
+        return b1.zip(b2).map(function(c) { return c.fst().zip(c.snd()); });
     }
     
     public static function append<C, T>(b: Signal<Collection<C, T>>, element: T): Signal<Collection<C, T>> {
@@ -155,27 +155,27 @@ class SignalCollection {
     }
     
     public static function intersectS<C, T>(b1: Signal<Collection<C, T>>, b2: Signal<Collection<C, T>>): Signal<Collection<C, T>> {
-        return b1.zip(b2).map(function(c) { return c._1.intersect(v._2); });
+        return b1.zip(b2).map(function(c) { return c.fst().intersect(v.snd()); });
     }
     
     public static function intersectByS<C, T>(b1: Signal<Collection<C, T>>, b2: Signal<Collection<C, T>>, cmp: T -> T -> Bool): Signal<Collection<C, T>> {
-        return b1.zip(b2).map(function(c) { return c._1.intersectBy(v._2, cmp); });
+        return b1.zip(b2).map(function(c) { return c.fst().intersectBy(v.snd(), cmp); });
     }
     
     public static function unionByS<C, T>(b1: Signal<Collection<C, T>>, b2: Signal<Collection<C, T>>, cmp: T -> T -> Bool): Signal<Collection<C, T>> {
-        return b1.zip(b2).map(function(c) { return c._1.unionBy(v._2, cmp); });
+        return b1.zip(b2).map(function(c) { return c.fst().unionBy(v.snd(), cmp); });
     }
     
     public static function unionS<C, T>(b1: Signal<Collection<C, T>>, b2: Signal<Collection<C, T>>): Signal<Collection<C, T>> {
-        return b1.zip(b2).map(function(c) { return c._1.union(v._2); });
+        return b1.zip(b2).map(function(c) { return c.fst().union(v.snd()); });
     }
     
     public static function isPrefixOfS<C, T>(b1: Signal<Collection<C, T>>, b2: Signal<Collection<C, T>>): Signal<Bool> {
-        return b1.zip(b2).map(function(c) { return c._1.isPrefixOf(v._2); });
+        return b1.zip(b2).map(function(c) { return c.fst().isPrefixOf(v.snd()); });
     }
     
     public static function isSuffixOfS<C, T>(b1: Signal<Collection<C, T>>, b2: Signal<Collection<C, T>>): Signal<Bool> {
-        return b1.zip(b2).map(function(c) { return c._1.isSuffixOf(v._2); });
+        return b1.zip(b2).map(function(c) { return c.fst().isSuffixOf(v.snd()); });
     }
     
     public static function delete<C, T>(b: Signal<Collection<C, T>>, val: T): Signal<Collection<C, T>> {
@@ -219,7 +219,7 @@ class SignalCollection {
     }
     
     public static function deleteFirstByS<C, T>(b1: Signal<Collection<C, T>>, b2: Signal<Collection<C, T>>, cmp: T -> T -> Bool): Signal<Collection<C, T>> {
-        return b1.zip(b2).map(function(c) { return c._1.deleteFirstBy(v._2, cmp); });
+        return b1.zip(b2).map(function(c) { return c.fst().deleteFirstBy(v.snd(), cmp); });
     }
     
     public static function tails<C, T>(b: Signal<Collection<C, T>>): Signal<Collection<C, Collection<C, T>>> {
@@ -243,7 +243,7 @@ class SignalCollection {
     }
     
     public static function minusS<C, T>(b1: Signal<Collection<C, T>>, b2: Signal<Collection<C, T>>): Signal<Collection<C, T>> {
-        return b1.zip(b2).map(function(c) { return c._1.minus(v._2); });
+        return b1.zip(b2).map(function(c) { return c.fst().minus(v.snd()); });
     }
     */
 }

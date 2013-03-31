@@ -1,6 +1,6 @@
 package stx.ds;
 
-import stx.Tuples;
+using stx.Tuples;
 import stx.Prelude;
 
 import stx.functional.Foldable;
@@ -128,7 +128,7 @@ class MapTest extends TestCase {
   }
   
   public function testFilter(): Void {
-    var m = defaultMap().filter(function(t) { return t._1 < 50; });
+    var m = defaultMap().filter(function(t) { return t.fst() < 50; });
     
     assertEquals(50, m.size());
   }  

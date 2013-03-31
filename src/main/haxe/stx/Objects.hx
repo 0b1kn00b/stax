@@ -107,7 +107,7 @@ class Objects {
   
   static public function setAll<T>(d: Dynamic<T>, fields: Iterable<Tuple2<String, T>>): Dynamic<T> {
     for (field in fields) {
-      Reflect.setField(d, field._1, field._2);
+      Reflect.setField(d, field.fst(), field.snd());
     }
     
     return d;
@@ -121,7 +121,7 @@ class Objects {
     extendWith(cast d1, cast d2);
     
     return names.zip(oldValues).foldl({}, function(o, t) {
-      Reflect.setField(o, t._1, t._2);
+      Reflect.setField(o, t.fst(), t.snd());
       
       return o;
     });
@@ -129,7 +129,7 @@ class Objects {
   
   static public function setAllAny(d: Object, fields: Iterable<Tuple2<String, Dynamic>>): Object {
     for (field in fields) {
-      Reflect.setField(d, field._1, field._2);
+      Reflect.setField(d, field.fst(), field.snd());
     }
     
     return d;
@@ -143,7 +143,7 @@ class Objects {
     extendWith(d1, d2);
     
     return names.zip(oldValues).foldl({}, function(o, t) {
-      Reflect.setField(o, t._1, t._2);
+      Reflect.setField(o, t.fst(), t.snd());
       
       return o;
     });
@@ -200,18 +200,18 @@ class Objects {
   static public function iterator(d: Object): Iterator<String> {
     return Reflect.fields(d).iterator();
   }
-  static public function toObject(a:Array<Tuple2<String,Dynamic>>):Object{
+  static public function toObject<A>(a:Array<Tuple2<String,A>>):Object{
     return a.foldl(
       {},
       function(init,el){
-        Reflect.setField( init , el._1, el._2 );
+        Reflect.setField( init , el.fst(), el.snd() );
         return init;
       }
     );
   }
   static public function hasFields(d:Object,fields:Array<String>):Bool{
     var vals   = extractAllAny(d);
-    var names  = vals.map( Pair.fst );
+    var names  = vals.map( T2s.fst );
 
     return 
       fields.forAll(

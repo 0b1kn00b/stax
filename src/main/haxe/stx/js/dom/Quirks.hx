@@ -28,6 +28,7 @@ using stx.Arrays;
 
 import stx.util.Guid;
 
+using stx.Tuples;
 using stx.Strings;
 using stx.Dynamics;
 using stx.Maybes;
@@ -95,9 +96,9 @@ class Quirks {
     else if (untyped iframe.document != null) {
       return untyped iframe.document;
     }
-    else { throw "Cannot find iframe content document for " + iframe; return null; }
+    else { throw "Cannot find iframe content document for "/* + iframe*/; return null; }
   }
-
+  @:bug('#0b1kn00b: concatenate iframe and the compiler hangs. 28/03/13')
   public static function getIframeWindow(iframe: HTMLIFrameElement): Window {
     if (iframe.contentWindow != null) {
       return untyped iframe.contentWindow;
@@ -108,8 +109,9 @@ class Quirks {
     else if (untyped iframe.document != null && untyped iframe.document.window != null) {
       return untyped iframe.document.window;
     }
-    else { throw "Cannot find iframe content document for " + iframe; return null; }
+    else { throw "Cannot find iframe content document for " /*+ iframe*/; return null; }
   }
+
   @bug('#0b1kn00b: why do I need to use untyped here?')
   public static function addEventListener(target: EventTarget, type: DOMString, listener: EventListener<Dynamic>, useCapture: Bool): Void untyped {
     if (untyped __js__('target.addEventListener') != null) {
@@ -562,8 +564,8 @@ class Quirks {
   private static function setAndStore(elem: HTMLElement, styles: Map<String, String>){
     var values : Map<String, String> = Map.create();
     for (k in styles.iterator()) {
-      values = values.set(k._1, untyped elem.style[ k._1 ]);
-      untyped elem.style[ k._1 ] = k._2;
+      values = values.set(k.fst(), untyped elem.style[ k.fst() ]);
+      untyped elem.style[ k.fst() ] = k.snd();
     }
     return values;
   }

@@ -17,7 +17,7 @@ package stx.js.dom;
 
 import stx.js.Dom;
 import stx.js.Env;
-import stx.Tuples;
+using stx.Tuples;
 
 import stx.Prelude;
 
@@ -35,7 +35,7 @@ class HTMLDocumentExtensions {
     var element = document.createElement(eType);
     if (atts != null) {
 			for (i in 0...atts.length) {
-				element.setAttribute(atts[i]._1, atts[i]._2);
+				element.setAttribute(atts[i].fst(), atts[i].snd());
 			}			
 		}
     if (style != null) {

@@ -16,8 +16,7 @@ class State<S,R>{
   }
   @:noUsing
   static public function toState<S,A>(value:A):State<S,A>{
-    return
-      State.pure(
+    return State.pure(
         function(s:S):Tuple2<A,S>{
           return Tuples.t2(value,s);
         }
@@ -25,8 +24,7 @@ class State<S,R>{
   }
   @:noUsing
   static public function unit<S>():State<S,Unit>{
-    return 
-      State.pure(
+    return State.pure(
         function(s:S){
           return Tups.t2(Unit,s);
         }
@@ -34,8 +32,7 @@ class State<S,R>{
   }
   @:noUsing
   static public function pure<A,B>(fn:A->Tuple2<B,A>):State<A,B>{
-    return 
-      State.create({
+    return State.create({
         apply : 
           function(a:A){
             return fn(a);
@@ -50,13 +47,13 @@ class State<S,R>{
   * Run `State` with `s`, dropping the result and returning `s`.
   */
   public function exec(s:S):S{
-    return apply(s).second();
+    return apply(s).snd();
   }
   /**
   * Run `State` with `s`, returning the result.
   */
   public function eval(s:S):R{
-    return apply(s).first();
+    return apply(s).fst();
   }
   public function map<R1>(fn:R->R1):State<S,R1>{
     var fn2 : Tuple2<R,S> -> Tuple2<R1,S> = fn.first();
@@ -64,7 +61,7 @@ class State<S,R>{
       State.pure(
         function(s:S){
           var o = this.apply(s);
-          return fn(o._1).entuple(o._2);
+          return fn(o.fst()).entuple(o.snd());
         }
       );
   }
@@ -81,7 +78,7 @@ class State<S,R>{
       State.pure(
         function(s:S):Tuple2<R,S>{
           var o = apply(s);
-          return Tuples.t2( o._1, fn(o._2) );
+          return Tuples.t2( o.fst(), fn(o.snd()) );
         }
       );
   }
@@ -92,7 +89,7 @@ class State<S,R>{
         .then( fn.pair(Compose.unit()) )
         .then(
           function(t:Tuple2<State<S,R1>,S>) {
-            return t._1.apply(t._2);
+            return t.fst().apply(t.snd());
           }
         )
       );
@@ -102,7 +99,7 @@ class State<S,R>{
       State.pure(
         function(s:S):Tuple2<S,S>{
           var o = apply(s);
-          return Tuples.t2(o._2,o._2);
+          return Tuples.t2(o.snd(),o.snd());
         }
       );
   }

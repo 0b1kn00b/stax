@@ -98,7 +98,7 @@ class HttpStringAsync implements HttpString {
 
     _headers.toMaybe().map(function(headers) {
       headers.foreach(function(header) {
-        request.setRequestHeader(header._1, header._2);
+        request.setRequestHeader(header.fst(), header.snd());
       });
     });
     request.send(data);

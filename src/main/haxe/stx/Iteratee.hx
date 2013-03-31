@@ -129,12 +129,11 @@ class Iteratee<E,A>{
     );
   }
   public function map<B>(f:A->B):Iteratee<E,B>{
-    return 
-      this.flatMap(
-        function(a){
-          return Iteratees.Over(f(a),Input.Empty);
-        }
-      );
+    return this.flatMap(
+      function(a){
+        return Iteratees.Over(f(a),Input.Empty);
+      }
+    );
   }
   public function flatMapInput<B>(f:Step<E,A>->Iteratee<E,B>):Iteratee<E,B>{
     return this.pureFlatFold(f);

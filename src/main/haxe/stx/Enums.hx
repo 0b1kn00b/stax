@@ -6,6 +6,7 @@ class Enums {
 	/**
 		 Creates an Enum
 	 */
+	@:noUsing
 	public static inline function create<T>(e : Enum<T>, constr : String, ?params : Array<Dynamic>):T {
 		return Type.createEnum(e, constr, params);
 	}
@@ -77,7 +78,7 @@ class Enums {
 	  @param	name
 	  @return
 	 */
-	public static function enumOf( name : String ) : Enum<Dynamic> {
+	public static function resolve( name : String ) : Enum<Dynamic> {
 		return Type.resolveEnum(name);
 	}
 	/**

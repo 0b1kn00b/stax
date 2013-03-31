@@ -26,7 +26,7 @@ import stx.ds.List;
 
 using stx.functional.Foldables;
 
-import stx.Tuples;
+using stx.Tuples;
 using stx.Tuples;
 using stx.Maths;
 

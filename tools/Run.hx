@@ -1,5 +1,5 @@
 import stx.Prelude;
-import stx.Tuples;
+using stx.Tuples;
 import haxe.io.Input;
 import stx.reactive.Arrows; 	using stx.reactive.Arrows;
 															using stx.Eithers;

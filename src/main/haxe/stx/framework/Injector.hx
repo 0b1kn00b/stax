@@ -1,6 +1,6 @@
 package stx.framework;
 
-import stx.Tuples;
+using stx.Tuples;
 using stx.Prelude;
 
 import haxe.PosInfos;
@@ -276,11 +276,11 @@ private class InjectorImpl {
         var cls = null;
         return cast if(null == p || null == p[0] || null == (cls = Type.resolveClass(p[0]))) None else Some(Tuples.t2(cls, null != p[1] ? Type.createEnum(BindingType, p[1], []) : null)); })
       .flatMap(function(p : Tuple2<Class<Dynamic>, BindingType>) {
-        return switch(bindingTypeDef(p._2)) {
+        return switch(bindingTypeDef(p.snd())) {
           case OneToOne:
-            factoryFor(p._1).toMaybe();
+            factoryFor(p.fst()).toMaybe();
           case OneToMany:
-            factoryFor(p._1).memoize().toMaybe();
+            factoryFor(p.fst()).memoize().toMaybe();
         };
       });
     try{

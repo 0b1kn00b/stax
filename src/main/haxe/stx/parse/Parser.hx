@@ -1,7 +1,7 @@
 package stx.parse;
 
 import stx.Prelude;
-import stx.Tuples;
+using stx.Tuples;
 import stx.ds.List;
 using stx.Maybes;
 										
@@ -616,7 +616,7 @@ class FailureObj {
    * 0..n
    */
   public static function rep1sep < I, T > (p1 : Void -> Parser<I,T>, sep : Void -> Parser<I,Dynamic> ) : Void -> Parser < I, Array<T> > return    
-    then(and(p1, many(_and(sep, p1))), function (t) { t._2.insert(0, t._1); return t._2;}) ;/* Optimize that! */
+    then(and(p1, many(_and(sep, p1))), function (t) { t.snd().insert(0, t.fst()); return t.snd();}) ;/* Optimize that! */
 
   /*
    * 0..n

@@ -30,7 +30,7 @@ class MultiMap<V>{
 		return this;
 	}
 	public function set(t:Tuple2<String,V>){
-		this.put(t._1,t._2);
+		this.put(t.fst(),t.snd());
 		return this;
 	}
 	public function iterator(){

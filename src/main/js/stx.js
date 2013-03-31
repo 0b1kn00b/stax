@@ -628,8 +628,8 @@ SCore.unfold = function(initial,unfolder) {
 				break;
 			case 1:
 				var tuple = $e[2];
-				_progress = tuple._1;
-				_next = stx.Maybe.Some(tuple._2);
+				_progress = tuple.fst();
+				_next = stx.Maybe.Some(tuple.snd());
 				break;
 			}
 		};
@@ -3128,7 +3128,7 @@ stx.Arrays = $hxClasses["stx.Arrays"] = function() { }
 stx.Arrays.__name__ = ["stx","Arrays"];
 stx.Arrays.partition = function(arr,f) {
 	return ArrayLambda.foldl(arr,new stx.Tuple2([],[]),function(a,b) {
-		if(f(b)) a._1.push(b); else a._2.push(b);
+		if(f(b)) a.fst().push(b); else a.snd().push(b);
 		return a;
 	});
 }
@@ -3136,11 +3136,11 @@ stx.Arrays.partitionWhile = function(arr,f) {
 	var partitioning = true;
 	return ArrayLambda.foldl(arr,new stx.Tuple2([],[]),function(a,b) {
 		if(partitioning) {
-			if(f(b)) a._1.push(b); else {
+			if(f(b)) a.fst().push(b); else {
 				partitioning = false;
-				a._2.push(b);
+				a.snd().push(b);
 			}
-		} else a._2.push(b);
+		} else a.snd().push(b);
 		return a;
 	});
 }
@@ -4808,8 +4808,8 @@ stx.Iterables.zip = function(iter1,iter2) {
 	return result;
 }
 stx.Iterables.zipup = function(tuple) {
-	var i1 = $iterator(tuple._1)();
-	var i2 = $iterator(tuple._2)();
+	var i1 = $iterator(tuple.fst())();
+	var i2 = $iterator(tuple.snd())();
 	var result = [];
 	while(i1.hasNext() && i2.hasNext()) {
 		var t1 = i1.next();
@@ -5497,10 +5497,10 @@ stx.Method2.prototype = $extend(stx.Method.prototype,{
 	replaceAt: function(i,v) {
 		if(i > 1) throw new stx.error.OutOfBoundsError({ fileName : "Methods.hx", lineNumber : 157, className : "stx.Method2", methodName : "replaceAt"}); else switch(i) {
 		case 0:
-			this.args._1 = v;
+			this.args.fst() = v;
 			break;
 		case 1:
-			this.args._2 = v;
+			this.args.snd() = v;
 			break;
 		}
 		return this;
@@ -5519,7 +5519,7 @@ stx.Method2.prototype = $extend(stx.Method.prototype,{
 			break;
 		default:
 		}
-		return this.fn(v._1,v._2);
+		return this.fn(v.fst(),v.snd());
 	}
 	,get_length: function() {
 		return 2;
@@ -5538,13 +5538,13 @@ stx.Method3.prototype = $extend(stx.Method.prototype,{
 	replaceAt: function(i,v) {
 		if(i > 2) throw new stx.error.OutOfBoundsError({ fileName : "Methods.hx", lineNumber : 198, className : "stx.Method3", methodName : "replaceAt"}); else switch(i) {
 		case 0:
-			this.args._1 = v;
+			this.args.fst() = v;
 			break;
 		case 1:
-			this.args._2 = v;
+			this.args.snd() = v;
 			break;
 		case 2:
-			this.args._3 = v;
+			this.args.thd() = v;
 			break;
 		}
 		return this;
@@ -5563,7 +5563,7 @@ stx.Method3.prototype = $extend(stx.Method.prototype,{
 			break;
 		default:
 		}
-		return this.fn(v._1,v._2,v._3);
+		return this.fn(v.fst(),v.snd(),v.thd());
 	}
 	,get_length: function() {
 		return 3;
@@ -5582,16 +5582,16 @@ stx.Method4.prototype = $extend(stx.Method.prototype,{
 	replaceAt: function(i,v) {
 		if(i > 3) throw new stx.error.OutOfBoundsError({ fileName : "Methods.hx", lineNumber : 238, className : "stx.Method4", methodName : "replaceAt"}); else switch(i) {
 		case 0:
-			this.args._1 = v;
+			this.args.fst() = v;
 			break;
 		case 1:
-			this.args._2 = v;
+			this.args.snd() = v;
 			break;
 		case 2:
-			this.args._3 = v;
+			this.args.thd() = v;
 			break;
 		case 3:
-			this.args._4 = v;
+			this.args.frt() = v;
 			break;
 		}
 		return this;
@@ -5610,7 +5610,7 @@ stx.Method4.prototype = $extend(stx.Method.prototype,{
 			break;
 		default:
 		}
-		return this.fn(v._1,v._2,v._3,v._4);
+		return this.fn(v.fst(),v.snd(),v.thd(),v.frt());
 	}
 	,get_length: function() {
 		return 4;
@@ -5629,19 +5629,19 @@ stx.Method5.prototype = $extend(stx.Method.prototype,{
 	replaceAt: function(i,v) {
 		if(i > 4) throw new stx.error.OutOfBoundsError({ fileName : "Methods.hx", lineNumber : 279, className : "stx.Method5", methodName : "replaceAt"}); else switch(i) {
 		case 0:
-			this.args._1 = v;
+			this.args.fst() = v;
 			break;
 		case 1:
-			this.args._2 = v;
+			this.args.snd() = v;
 			break;
 		case 2:
-			this.args._3 = v;
+			this.args.thd() = v;
 			break;
 		case 3:
-			this.args._4 = v;
+			this.args.frt() = v;
 			break;
 		case 4:
-			this.args._5 = v;
+			this.args.fth() = v;
 			break;
 		}
 		this.args = v;
@@ -5661,7 +5661,7 @@ stx.Method5.prototype = $extend(stx.Method.prototype,{
 			break;
 		default:
 		}
-		return this.fn(v._1,v._2,v._3,v._4,v._5);
+		return this.fn(v.fst(),v.snd(),v.thd(),v.frt(),v.fth());
 	}
 	,get_length: function() {
 		return 5;
@@ -5794,7 +5794,7 @@ stx.Objects.setAll = function(d,fields) {
 	var $it0 = $iterator(fields)();
 	while( $it0.hasNext() ) {
 		var field = $it0.next();
-		d[field._1] = field._2;
+		d[field.fst()] = field.snd();
 	}
 	return d;
 }
@@ -5803,7 +5803,7 @@ stx.Objects.replaceAll = function(d1,d2,def) {
 	var oldValues = stx.Objects.extractValues(d1,names,def);
 	stx.Objects.extendWith(d1,d2);
 	return ArrayLambda.foldl(stx.Arrays.zip(names,oldValues),{ },function(o,t) {
-		o[t._1] = t._2;
+		o[t.fst()] = t.snd();
 		return o;
 	});
 }
@@ -5811,7 +5811,7 @@ stx.Objects.setAllAny = function(d,fields) {
 	var $it0 = $iterator(fields)();
 	while( $it0.hasNext() ) {
 		var field = $it0.next();
-		d[field._1] = field._2;
+		d[field.fst()] = field.snd();
 	}
 	return d;
 }
@@ -5820,7 +5820,7 @@ stx.Objects.replaceAllAny = function(d1,d2,def) {
 	var oldValues = stx.Objects.extractValues(d1,names,def);
 	stx.Objects.extendWith(d1,d2);
 	return ArrayLambda.foldl(stx.Arrays.zip(names,oldValues),{ },function(o,t) {
-		o[t._1] = t._2;
+		o[t.fst()] = t.snd();
 		return o;
 	});
 }
@@ -5862,7 +5862,7 @@ stx.Objects.iterator = function(d) {
 }
 stx.Objects.toObject = function(a) {
 	return ArrayLambda.foldl(a,{ },function(init,el) {
-		init[el._1] = el._2;
+		init[el.fst()] = el.snd();
 		return init;
 	});
 }
@@ -6536,19 +6536,19 @@ SCore.unfold()),fn));
 stx.States.mapS = function(state,fn) {
 	return function(s) {
 		var o = state(s);
-		return new stx.Tuple2(o._1,fn(o._2));
+		return new stx.Tuple2(o.fst(),fn(o.snd()));
 	};
 }
 stx.States.flatMap = function(state,fn) {
 	return stx.Functions1.then(stx.Functions1.then(stx.Functions2.p1(stx.States.apply,state),stx.Functions2.p2(stx.Functions3.p3(stx.Tuple2.translate,SCore.unfold
 SCore.unfold()),fn)),function(t) {
-		return t._1(t._2);
+		return t.fst()(t.snd());
 	});
 }
 stx.States.getS = function(state) {
 	return function(s) {
 		var o = state(s);
-		return new stx.Tuple2(o._2,o._2);
+		return new stx.Tuple2(o.snd(),o.snd());
 	};
 }
 stx.States.putS = function(state,n) {
@@ -6866,7 +6866,7 @@ SCore.unfold()):[v];
 				$r = (function($this) {
 					var $r;
 					var p = $this;
-					$r = [p._1,p._2,p._3,p._4,p._5];
+					$r = [p.fst(),p.snd(),p.thd(),p.frt(),p.fth()];
 					return $r;
 				}($this));
 				break;
@@ -6874,7 +6874,7 @@ SCore.unfold()):[v];
 				$r = (function($this) {
 					var $r;
 					var p = $this;
-					$r = [p._1,p._2,p._3,p._4];
+					$r = [p.fst(),p.snd(),p.thd(),p.frt()];
 					return $r;
 				}($this));
 				break;
@@ -6882,7 +6882,7 @@ SCore.unfold()):[v];
 				$r = (function($this) {
 					var $r;
 					var p = $this;
-					$r = [p._1,p._2,p._3];
+					$r = [p.fst(),p.snd(),p.thd()];
 					return $r;
 				}($this));
 				break;
@@ -6890,7 +6890,7 @@ SCore.unfold()):[v];
 				$r = (function($this) {
 					var $r;
 					var p = $this;
-					$r = [p._1,p._2];
+					$r = [p.fst(),p.snd()];
 					return $r;
 				}($this));
 				break;
@@ -6924,29 +6924,29 @@ SCore.unfold()):[v];
 	,__properties__: {get_prefix:"get_prefix",get_length:"get_length"}
 }
 stx.Tuple2 = $hxClasses["stx.Tuple2"] = function(_1,_2) {
-	this._1 = _1;
-	this._2 = _2;
+	this.fst() = _1;
+	this.snd() = _2;
 	stx.AbstractProduct.call(this,[_1,_2]);
 };
 stx.Tuple2.__name__ = ["stx","Tuple2"];
 stx.Tuple2.entuple = function(t,c) {
-	return new stx.Tuple3(t._1,t._2,c);
+	return new stx.Tuple3(t.fst(),t.snd(),c);
 }
 stx.Tuple2.into = function(t,f) {
-	return f(t._1,t._2);
+	return f(t.fst(),t.snd());
 }
 stx.Tuple2.first = function(t) {
-	return t._1;
+	return t.fst();
 }
 stx.Tuple2.second = function(t) {
-	return t._2;
+	return t.snd();
 }
 stx.Tuple2.translate = function(t,f1,f2) {
-	return stx.Entuple.entuple(f1(t._1),f2(t._2));
+	return stx.Entuple.entuple(f1(t.fst()),f2(t.snd()));
 }
 stx.Tuple2.patch = function(t0,t1) {
-	var _1 = t1._1 == null?t0._1:t1._1;
-	var _2 = t1._2 == null?t0._2:t1._2;
+	var _1 = t1.fst() == null?t0.fst():t1.fst();
+	var _2 = t1.snd() == null?t0.snd():t1.snd();
 	return new stx.Tuple2(_1,_2);
 }
 stx.Tuple2.__super__ = stx.AbstractProduct;
@@ -6962,34 +6962,34 @@ stx.Tuple2.prototype = $extend(stx.AbstractProduct.prototype,{
 	,__class__: stx.Tuple2
 });
 stx.Tuple3 = $hxClasses["stx.Tuple3"] = function(_1,_2,_3) {
-	this._1 = _1;
-	this._2 = _2;
-	this._3 = _3;
+	this.fst() = _1;
+	this.snd() = _2;
+	this.thd() = _3;
 	stx.AbstractProduct.call(this,[_1,_2,_3]);
 };
 stx.Tuple3.__name__ = ["stx","Tuple3"];
 stx.Tuple3.into = function(t,f) {
-	return f(t._1,t._2,t._3);
+	return f(t.fst(),t.snd(),t.thd());
 }
 stx.Tuple3.translate = function(t,f1,f2,f3) {
-	return stx.Tuple2.entuple(stx.Entuple.entuple(f1(t._1),f2(t._2)),f3(t._3));
+	return stx.Tuple2.entuple(stx.Entuple.entuple(f1(t.fst()),f2(t.snd())),f3(t.thd()));
 }
 stx.Tuple3.entuple = function(t,d) {
-	return new stx.Tuple4(t._1,t._2,t._3,d);
+	return new stx.Tuple4(t.fst(),t.snd(),t.thd(),d);
 }
 stx.Tuple3.first = function(t) {
-	return t._1;
+	return t.fst();
 }
 stx.Tuple3.second = function(t) {
-	return t._2;
+	return t.snd();
 }
 stx.Tuple3.third = function(t) {
-	return t._3;
+	return t.thd();
 }
 stx.Tuple3.patch = function(t0,t1) {
-	var _1 = t1._1 == null?t0._1:t1._1;
-	var _2 = t1._2 == null?t0._2:t1._2;
-	var _3 = t1._3 == null?t0._3:t1._3;
+	var _1 = t1.fst() == null?t0.fst():t1.fst();
+	var _2 = t1.snd() == null?t0.snd():t1.snd();
+	var _3 = t1.thd() == null?t0.thd():t1.thd();
 	return new stx.Tuple3(_1,_2,_3);
 }
 stx.Tuple3.__super__ = stx.AbstractProduct;
@@ -7007,38 +7007,38 @@ stx.Tuple3.prototype = $extend(stx.AbstractProduct.prototype,{
 });
 stx.Tuple4 = $hxClasses["stx.Tuple4"] = function(first,second,third,fourth) {
 	stx.AbstractProduct.call(this,[first,second,third,fourth]);
-	this._1 = first;
-	this._2 = second;
-	this._3 = third;
-	this._4 = fourth;
+	this.fst() = first;
+	this.snd() = second;
+	this.thd() = third;
+	this.frt() = fourth;
 };
 stx.Tuple4.__name__ = ["stx","Tuple4"];
 stx.Tuple4.into = function(t,f) {
-	return f(t._1,t._2,t._3,t._4);
+	return f(t.fst(),t.snd(),t.thd(),t.frt());
 }
 stx.Tuple4.first = function(t) {
-	return t._1;
+	return t.fst();
 }
 stx.Tuple4.second = function(t) {
-	return t._2;
+	return t.snd();
 }
 stx.Tuple4.third = function(t) {
-	return t._3;
+	return t.thd();
 }
 stx.Tuple4.fourth = function(t) {
-	return t._4;
+	return t.frt();
 }
 stx.Tuple4.patch = function(t0,t1) {
-	var _1 = t1._1 == null?t0._1:t1._1;
-	var _2 = t1._2 == null?t0._2:t1._2;
-	var _3 = t1._3 == null?t0._3:t1._3;
-	var _4 = t1._4 == null?t0._4:t1._4;
+	var _1 = t1.fst() == null?t0.fst():t1.fst();
+	var _2 = t1.snd() == null?t0.snd():t1.snd();
+	var _3 = t1.thd() == null?t0.thd():t1.thd();
+	var _4 = t1.frt() == null?t0.frt():t1.frt();
 	return new stx.Tuple4(_1,_2,_3,_4);
 }
 stx.Tuple4.__super__ = stx.AbstractProduct;
 stx.Tuple4.prototype = $extend(stx.AbstractProduct.prototype,{
 	entuple: function(_5) {
-		return new stx.Tuple5(this._1,this._2,this._3,this._4,_5);
+		return new stx.Tuple5(this.fst(),this.snd(),this.thd(),this.frt(),_5);
 	}
 	,get_length: function() {
 		return 4;
@@ -7054,37 +7054,37 @@ stx.Tuple4.prototype = $extend(stx.AbstractProduct.prototype,{
 });
 stx.Tuple5 = $hxClasses["stx.Tuple5"] = function(first,second,third,fourth,fifth) {
 	stx.AbstractProduct.call(this,[first,second,third,fourth,fifth]);
-	this._1 = first;
-	this._2 = second;
-	this._3 = third;
-	this._4 = fourth;
-	this._5 = fifth;
+	this.fst() = first;
+	this.snd() = second;
+	this.thd() = third;
+	this.frt() = fourth;
+	this.fth() = fifth;
 };
 stx.Tuple5.__name__ = ["stx","Tuple5"];
 stx.Tuple5.into = function(t,f) {
-	return f(t._1,t._2,t._3,t._4,t._5);
+	return f(t.fst(),t.snd(),t.thd(),t.frt(),t.fth());
 }
 stx.Tuple5.first = function(t) {
-	return t._1;
+	return t.fst();
 }
 stx.Tuple5.second = function(t) {
-	return t._2;
+	return t.snd();
 }
 stx.Tuple5.third = function(t) {
-	return t._3;
+	return t.thd();
 }
 stx.Tuple5.fourth = function(t) {
-	return t._4;
+	return t.frt();
 }
 stx.Tuple5.fifth = function(t) {
-	return t._5;
+	return t.fth();
 }
 stx.Tuple5.patch = function(t0,t1) {
-	var _1 = t1._1 == null?t0._1:t1._1;
-	var _2 = t1._2 == null?t0._2:t1._2;
-	var _3 = t1._3 == null?t0._3:t1._3;
-	var _4 = t1._4 == null?t0._4:t1._4;
-	var _5 = t1._5 == null?t0._5:t1._5;
+	var _1 = t1.fst() == null?t0.fst():t1.fst();
+	var _2 = t1.snd() == null?t0.snd():t1.snd();
+	var _3 = t1.thd() == null?t0.thd():t1.thd();
+	var _4 = t1.frt() == null?t0.frt():t1.frt();
+	var _5 = t1.fth() == null?t0.fth():t1.fth();
 	return new stx.Tuple5(_1,_2,_3,_4,_5);
 }
 stx.Tuple5.__super__ = stx.AbstractProduct;
@@ -7616,7 +7616,7 @@ stx.ds.List.prototype = {
 	}
 	,gaps: function(f,equal) {
 		return stx.functional.FoldableExtensions.flatMapTo(this.zip(this.drop(1)),stx.ds.List.nil(null,{ order : null, equal : equal, show : null, hash : null}),function(tuple) {
-			return f(tuple._1,tuple._2);
+			return f(tuple.fst(),tuple.snd());
 		});
 	}
 	,zip: function(that) {
@@ -7917,7 +7917,7 @@ stx.ds.Map.prototype = {
 		return null == this._valueShow?(function($this) {
 			var $r;
 			var it = $this.iterator();
-			$r = !it.hasNext()?stx.ds.plus.Show.getShowFor(null):$this._valueShow = stx.ds.plus.Show.getShowFor(it.next()._2);
+			$r = !it.hasNext()?stx.ds.plus.Show.getShowFor(null):$this._valueShow = stx.ds.plus.Show.getShowFor(it.next().snd());
 			return $r;
 		}(this)):this._valueShow;
 	}
@@ -7925,7 +7925,7 @@ stx.ds.Map.prototype = {
 		return null == this._valueMap?(function($this) {
 			var $r;
 			var it = $this.iterator();
-			$r = !it.hasNext()?stx.ds.plus.Hasher.getMapFor(null):$this._valueMap = stx.ds.plus.Hasher.getMapFor(it.next()._2);
+			$r = !it.hasNext()?stx.ds.plus.Hasher.getMapFor(null):$this._valueMap = stx.ds.plus.Hasher.getMapFor(it.next().snd());
 			return $r;
 		}(this)):this._valueMap;
 	}
@@ -7933,7 +7933,7 @@ stx.ds.Map.prototype = {
 		return null == this._valueEqual?(function($this) {
 			var $r;
 			var it = $this.iterator();
-			$r = !it.hasNext()?stx.ds.plus.Equal.getEqualFor(null):$this._valueEqual = stx.ds.plus.Equal.getEqualFor(it.next()._2);
+			$r = !it.hasNext()?stx.ds.plus.Equal.getEqualFor(null):$this._valueEqual = stx.ds.plus.Equal.getEqualFor(it.next().snd());
 			return $r;
 		}(this)):this._valueEqual;
 	}
@@ -7941,7 +7941,7 @@ stx.ds.Map.prototype = {
 		return null == this._valueOrder?(function($this) {
 			var $r;
 			var it = $this.iterator();
-			$r = !it.hasNext()?stx.ds.plus.Order.getOrderFor(null):$this._valueOrder = stx.ds.plus.Order.getOrderFor(it.next()._2);
+			$r = !it.hasNext()?stx.ds.plus.Order.getOrderFor(null):$this._valueOrder = stx.ds.plus.Order.getOrderFor(it.next().snd());
 			return $r;
 		}(this)):this._valueOrder;
 	}
@@ -7949,7 +7949,7 @@ stx.ds.Map.prototype = {
 		return null == this._keyShow?(function($this) {
 			var $r;
 			var it = $this.iterator();
-			$r = !it.hasNext()?stx.ds.plus.Show.getShowFor(null):$this._keyShow = stx.ds.plus.Show.getShowFor(it.next()._1);
+			$r = !it.hasNext()?stx.ds.plus.Show.getShowFor(null):$this._keyShow = stx.ds.plus.Show.getShowFor(it.next().fst());
 			return $r;
 		}(this)):this._keyShow;
 	}
@@ -7957,7 +7957,7 @@ stx.ds.Map.prototype = {
 		return null == this._keyMap?(function($this) {
 			var $r;
 			var it = $this.iterator();
-			$r = !it.hasNext()?stx.ds.plus.Hasher.getMapFor(null):$this._keyMap = stx.ds.plus.Hasher.getMapFor(it.next()._1);
+			$r = !it.hasNext()?stx.ds.plus.Hasher.getMapFor(null):$this._keyMap = stx.ds.plus.Hasher.getMapFor(it.next().fst());
 			return $r;
 		}(this)):this._keyMap;
 	}
@@ -7965,7 +7965,7 @@ stx.ds.Map.prototype = {
 		return null == this._keyEqual?(function($this) {
 			var $r;
 			var it = $this.iterator();
-			$r = !it.hasNext()?stx.ds.plus.Equal.getEqualFor(null):$this._keyEqual = stx.ds.plus.Equal.getEqualFor(it.next()._1);
+			$r = !it.hasNext()?stx.ds.plus.Equal.getEqualFor(null):$this._keyEqual = stx.ds.plus.Equal.getEqualFor(it.next().fst());
 			return $r;
 		}(this)):this._keyEqual;
 	}
@@ -7973,7 +7973,7 @@ stx.ds.Map.prototype = {
 		return null == this._keyOrder?(function($this) {
 			var $r;
 			var it = $this.iterator();
-			$r = !it.hasNext()?stx.ds.plus.Order.getOrderFor(null):$this._keyOrder = stx.ds.plus.Order.getOrderFor(it.next()._1);
+			$r = !it.hasNext()?stx.ds.plus.Order.getOrderFor(null):$this._keyOrder = stx.ds.plus.Order.getOrderFor(it.next().fst());
 			return $r;
 		}(this)):this._keyOrder;
 	}
@@ -8007,7 +8007,7 @@ stx.ds.Map.prototype = {
 			var $it0 = $iterator(all)();
 			while( $it0.hasNext() ) {
 				var e = $it0.next();
-				var bucket = this.bucketFor(e._1);
+				var bucket = this.bucketFor(e.fst());
 				this._buckets[bucket].push(e);
 			}
 		}
@@ -8036,8 +8036,8 @@ stx.ds.Map.prototype = {
 		while(_g1 < _g) {
 			var i = _g1++;
 			var entry = list[i];
-			if(ke(entry._1,k)) {
-				if(ignoreValue || ve(entry._2,v)) {
+			if(ke(entry.fst(),k)) {
+				if(ignoreValue || ve(entry.snd(),v)) {
 					var newMap = this.copyWithMod(bucket);
 					newMap._buckets[bucket] = list.slice(0,i).concat(list.slice(i + 1,list.length));
 					newMap._size -= 1;
@@ -8101,14 +8101,14 @@ stx.ds.Map.prototype = {
 		var kha = this.getKeyMap();
 		var vha = this.getValueMap();
 		return this.foldl(786433,function(a,b) {
-			return a + (kha(b._1) * 49157 + 6151) * vha(b._2);
+			return a + (kha(b.fst()) * 49157 + 6151) * vha(b.snd());
 		});
 	}
 	,toString: function() {
 		var ksh = this.getKeyShow();
 		var vsh = this.getValueShow();
 		return "Map " + stx.ds.plus.IterableShow.toString(stx.Iterables.elements(this),function(t) {
-			return ksh(t._1) + " -> " + vsh(t._2);
+			return ksh(t.fst()) + " -> " + vsh(t.snd());
 		});
 	}
 	,equals: function(other) {
@@ -8131,8 +8131,8 @@ stx.ds.Map.prototype = {
 		var ko = this.getKeyOrder();
 		var vo = this.getValueOrder();
 		var sorter = function(t1,t2) {
-			var c = ko(t1._1,t2._1);
-			return c != 0?c:vo(t1._2,t2._2);
+			var c = ko(t1.fst(),t2.fst());
+			return c != 0?c:vo(t1.snd(),t2.snd());
 		};
 		a1.sort(sorter);
 		a2.sort(sorter);
@@ -8146,7 +8146,7 @@ stx.ds.Map.prototype = {
 		return { iterator : function() {
 			var entryIterator = $iterator(self.entries())();
 			return { hasNext : $bind(entryIterator,entryIterator.hasNext), next : function() {
-				return entryIterator.next()._2;
+				return entryIterator.next().snd();
 			}};
 		}};
 	}
@@ -8158,7 +8158,7 @@ stx.ds.Map.prototype = {
 		return { iterator : function() {
 			var entryIterator = $iterator(self.entries())();
 			return { hasNext : $bind(entryIterator,entryIterator.hasNext), next : function() {
-				return entryIterator.next()._1;
+				return entryIterator.next().fst();
 			}};
 		}};
 	}
@@ -8184,7 +8184,7 @@ stx.ds.Map.prototype = {
 		var $it0 = $iterator(this.entries())();
 		while( $it0.hasNext() ) {
 			var e = $it0.next();
-			if(ke(e._1,t._1) && ve(t._2,t._2)) return true;
+			if(ke(e.fst(),t.fst()) && ve(t.snd(),t.snd())) return true;
 		}
 		return false;
 	}
@@ -8226,7 +8226,7 @@ stx.ds.Map.prototype = {
 		while(_g < _g1.length) {
 			var e = _g1[_g];
 			++_g;
-			if(ke(e._1,k)) return stx.Maybe.Some(e._2);
+			if(ke(e.fst(),k)) return stx.Maybe.Some(e.snd());
 		}
 		return stx.Maybe.None;
 	}
@@ -8252,7 +8252,7 @@ stx.ds.Map.prototype = {
 		return map;
 	}
 	,remove: function(t) {
-		return this.removeInternal(t._1,t._2,false);
+		return this.removeInternal(t.fst(),t.snd(),false);
 	}
 	,addAll: function(i) {
 		var map = this;
@@ -8264,18 +8264,18 @@ stx.ds.Map.prototype = {
 		return map;
 	}
 	,add: function(t) {
-		var k = t._1;
-		var v = t._2;
+		var k = t.fst();
+		var v = t.snd();
 		var bucket = this.bucketFor(k);
 		var list = this._buckets[bucket];
-		if(null == this._keyEqual) this._keyEqual = stx.ds.plus.Equal.getEqualFor(t._1);
-		if(null == this._valueEqual) this._valueEqual = stx.ds.plus.Equal.getEqualFor(t._2);
+		if(null == this._keyEqual) this._keyEqual = stx.ds.plus.Equal.getEqualFor(t.fst());
+		if(null == this._valueEqual) this._valueEqual = stx.ds.plus.Equal.getEqualFor(t.snd());
 		var _g1 = 0, _g = list.length;
 		while(_g1 < _g) {
 			var i = _g1++;
 			var entry = list[i];
-			if(this._keyEqual(entry._1,k)) {
-				if(!this._valueEqual(entry._2,v)) {
+			if(this._keyEqual(entry.fst(),k)) {
+				if(!this._valueEqual(entry.snd(),v)) {
 					var newMap = this.copyWithMod(bucket);
 					newMap._buckets[bucket][i] = t;
 					return newMap;
@@ -8360,7 +8360,7 @@ stx.ds.MapExtensions = $hxClasses["stx.ds.MapExtensions"] = function() { }
 stx.ds.MapExtensions.__name__ = ["stx","ds","MapExtensions"];
 stx.ds.MapExtensions.toObject = function(map) {
 	return map.foldl({ },function(object,tuple) {
-		object[tuple._1] = tuple._2;
+		object[tuple.fst()] = tuple.snd();
 		return object;
 	});
 }
@@ -8526,7 +8526,7 @@ stx.ds.Set.prototype = {
 		var $it0 = this._map.iterator();
 		while( $it0.hasNext() ) {
 			var e = $it0.next();
-			acc = f(acc,e._1);
+			acc = f(acc,e.fst());
 		}
 		return acc;
 	}
@@ -8710,8 +8710,8 @@ stx.ds.plus.Equal.getEqualForType = function(v) {
 							while(_g < values.length) {
 								var value = values[_g];
 								++_g;
-								if(Reflect.isFunction(value._1)) continue;
-								if(!(stx.ds.plus.Equal.getEqualFor(value._1))(value._1,value._2)) return false;
+								if(Reflect.isFunction(value.fst())) continue;
+								if(!(stx.ds.plus.Equal.getEqualFor(value.fst()))(value.fst(),value.snd())) return false;
 							}
 							return true;
 						});
@@ -8981,13 +8981,13 @@ stx.ds.plus.Meta._fieldsWithMeta = function(c,name) {
 		var inc = fieldMeta == null || !Reflect.hasField(fieldMeta,name) || Reflect.field(fieldMeta,name);
 		return new stx.Tuple3(v,inc,fieldMeta != null && Reflect.hasField(fieldMeta,"index")?Reflect.field(fieldMeta,"index"):i++);
 	}),function(v) {
-		return v._2;
+		return v.snd();
 	}),function(a,b) {
-		var c1 = a._3 - b._3;
+		var c1 = a.thd() - b.thd();
 		if(c1 != 0) return c1;
-		return stx.Strings.compare(a._1,b._1);
+		return stx.Strings.compare(a.fst(),b.fst());
 	}),function(v) {
-		return v._1;
+		return v.fst();
 	});
 }
 stx.ds.plus.Order = $hxClasses["stx.ds.plus.Order"] = function() { }
@@ -9059,23 +9059,23 @@ stx.ds.plus.Order.getOrderForType = function(v) {
 							var weight = fieldMeta != null && Reflect.hasField(fieldMeta,"order")?Reflect.field(fieldMeta,"order"):1;
 							return new stx.Tuple3(v1,weight,fieldMeta != null && Reflect.hasField(fieldMeta,"index")?Reflect.field(fieldMeta,"index"):i++);
 						}),function(v1) {
-							return v1._2 != 0;
+							return v1.snd() != 0;
 						}),function(a,b) {
-							var c1 = a._3 - b._3;
+							var c1 = a.thd() - b.thd();
 							if(c1 != 0) return c1;
-							return stx.Strings.compare(a._1,b._1);
+							return stx.Strings.compare(a.fst(),b.fst());
 						});
 						$r = stx.ds.plus.Order._createOrderImpl(function(a,b) {
 							var values = ArrayLambda.map(ArrayLambda.filter(fields,function(v1) {
-								return !Reflect.isFunction(Reflect.field(a,v1._1));
+								return !Reflect.isFunction(Reflect.field(a,v1.fst()));
 							}),function(v1) {
-								return new stx.Tuple3(Reflect.field(a,v1._1),Reflect.field(b,v1._1),v1._2);
+								return new stx.Tuple3(Reflect.field(a,v1.fst()),Reflect.field(b,v1.fst()),v1.snd());
 							});
 							var _g = 0;
 							while(_g < values.length) {
 								var value = values[_g];
 								++_g;
-								var c1 = (stx.ds.plus.Order.getOrderFor(value._1))(value._1,value._2) * value._3;
+								var c1 = (stx.ds.plus.Order.getOrderFor(value.fst()))(value.fst(),value.snd()) * value.thd();
 								if(c1 != 0) return c1;
 							}
 							return 0;
@@ -9563,12 +9563,12 @@ stx.framework._Injector.InjectorImpl.getDefaultImplementationBinding = function(
 	}),function(p) {
 		return (function($this) {
 			var $r;
-			switch( (stx.framework._Injector.InjectorImpl.bindingTypeDef(p._2))[1] ) {
+			switch( (stx.framework._Injector.InjectorImpl.bindingTypeDef(p.snd()))[1] ) {
 			case 0:
-				$r = stx.Maybes.toMaybe(stx.framework._Injector.InjectorImpl.factoryFor(p._1));
+				$r = stx.Maybes.toMaybe(stx.framework._Injector.InjectorImpl.factoryFor(p.fst()));
 				break;
 			case 1:
-				$r = stx.Maybes.toMaybe(stx.Dynamics.memoize(stx.framework._Injector.InjectorImpl.factoryFor(p._1)));
+				$r = stx.Maybes.toMaybe(stx.Dynamics.memoize(stx.framework._Injector.InjectorImpl.factoryFor(p.fst())));
 				break;
 			}
 			return $r;
@@ -9711,18 +9711,18 @@ stx.functional.FoldableExtensions.filter = function(foldable,f) {
 }
 stx.functional.FoldableExtensions.partition = function(foldable,f) {
 	return foldable.foldl(new stx.Tuple2(foldable.empty(),foldable.empty()),function(a,b) {
-		return f(b)?new stx.Tuple2(a._1.add(b),a._2):new stx.Tuple2(a._1,a._2.add(b));
+		return f(b)?new stx.Tuple2(a.fst().add(b),a.snd()):new stx.Tuple2(a.fst(),a.snd().add(b));
 	});
 }
 stx.functional.FoldableExtensions.partitionWhile = function(foldable,f) {
 	var partitioning = true;
 	return foldable.foldl(new stx.Tuple2(foldable.empty(),foldable.empty()),function(a,b) {
-		return partitioning?f(b)?new stx.Tuple2(a._1.add(b),a._2):(function($this) {
+		return partitioning?f(b)?new stx.Tuple2(a.fst().add(b),a.snd()):(function($this) {
 			var $r;
 			partitioning = false;
-			$r = new stx.Tuple2(a._1,a._2.add(b));
+			$r = new stx.Tuple2(a.fst(),a.snd().add(b));
 			return $r;
-		}(this)):new stx.Tuple2(a._1,a._2.add(b));
+		}(this)):new stx.Tuple2(a.fst(),a.snd().add(b));
 	});
 }
 stx.functional.FoldableExtensions.map = function(src,f) {
@@ -10053,7 +10053,7 @@ stx.functional._PartialFunctionExtensions.PartialFunction1Impl.prototype = {
 		while(_g < _g1.length) {
 			var d = _g1[_g];
 			++_g;
-			if(d._1(a)) return d._2(a);
+			if(d.fst()(a)) return d.snd()(a);
 		}
 		return SCore.error("Function undefined at " + Std.string(a),{ fileName : "PartialFunctionExtensions.hx", lineNumber : 67, className : "stx.functional._PartialFunctionExtensions.PartialFunction1Impl", methodName : "call"});
 	}
@@ -10077,7 +10077,7 @@ stx.functional._PartialFunctionExtensions.PartialFunction1Impl.prototype = {
 		while(_g < _g1.length) {
 			var d = _g1[_g];
 			++_g;
-			if(d._1(a)) return true;
+			if(d.fst()(a)) return true;
 		}
 		return false;
 	}
@@ -10109,7 +10109,7 @@ stx.functional._PartialFunctionExtensions.PartialFunction2Impl.prototype = {
 		while(_g < _g1.length) {
 			var d = _g1[_g];
 			++_g;
-			if(d._1(a,b)) return d._2(a,b);
+			if(d.fst()(a,b)) return d.snd()(a,b);
 		}
 		return SCore.error("Function undefined at (" + Std.string(a) + ", " + Std.string(b) + ")",{ fileName : "PartialFunctionExtensions.hx", lineNumber : 128, className : "stx.functional._PartialFunctionExtensions.PartialFunction2Impl", methodName : "call"});
 	}
@@ -10133,7 +10133,7 @@ stx.functional._PartialFunctionExtensions.PartialFunction2Impl.prototype = {
 		while(_g < _g1.length) {
 			var d = _g1[_g];
 			++_g;
-			if(d._1(a,b)) return true;
+			if(d.fst()(a,b)) return true;
 		}
 		return false;
 	}
@@ -10165,7 +10165,7 @@ stx.functional._PartialFunctionExtensions.PartialFunction3Impl.prototype = {
 		while(_g < _g1.length) {
 			var d = _g1[_g];
 			++_g;
-			if(d._1(a,b,c)) return d._2(a,b,c);
+			if(d.fst()(a,b,c)) return d.snd()(a,b,c);
 		}
 		return SCore.error("Function undefined at (" + Std.string(a) + ", " + Std.string(b) + ", " + Std.string(c) + ")",{ fileName : "PartialFunctionExtensions.hx", lineNumber : 189, className : "stx.functional._PartialFunctionExtensions.PartialFunction3Impl", methodName : "call"});
 	}
@@ -10189,7 +10189,7 @@ stx.functional._PartialFunctionExtensions.PartialFunction3Impl.prototype = {
 		while(_g < _g1.length) {
 			var d = _g1[_g];
 			++_g;
-			if(d._1(a,b,c)) return true;
+			if(d.fst()(a,b,c)) return true;
 		}
 		return false;
 	}
@@ -10221,7 +10221,7 @@ stx.functional._PartialFunctionExtensions.PartialFunction4Impl.prototype = {
 		while(_g < _g1.length) {
 			var def = _g1[_g];
 			++_g;
-			if(def._1(a,b,c,d)) return def._2(a,b,c,d);
+			if(def.fst()(a,b,c,d)) return def.snd()(a,b,c,d);
 		}
 		return SCore.error("Function undefined at (" + Std.string(a) + ", " + Std.string(b) + ", " + Std.string(c) + ", " + Std.string(d) + ")",{ fileName : "PartialFunctionExtensions.hx", lineNumber : 250, className : "stx.functional._PartialFunctionExtensions.PartialFunction4Impl", methodName : "call"});
 	}
@@ -10245,7 +10245,7 @@ stx.functional._PartialFunctionExtensions.PartialFunction4Impl.prototype = {
 		while(_g < _g1.length) {
 			var def = _g1[_g];
 			++_g;
-			if(def._1(a,b,c,d)) return true;
+			if(def.fst()(a,b,c,d)) return true;
 		}
 		return false;
 	}
@@ -10277,7 +10277,7 @@ stx.functional._PartialFunctionExtensions.PartialFunction5Impl.prototype = {
 		while(_g < _g1.length) {
 			var def = _g1[_g];
 			++_g;
-			if(def._1(a,b,c,d,e)) return def._2(a,b,c,d,e);
+			if(def.fst()(a,b,c,d,e)) return def.snd()(a,b,c,d,e);
 		}
 		return SCore.error("Function undefined at (" + Std.string(a) + ", " + Std.string(b) + ", " + Std.string(c) + ", " + Std.string(d) + ")",{ fileName : "PartialFunctionExtensions.hx", lineNumber : 311, className : "stx.functional._PartialFunctionExtensions.PartialFunction5Impl", methodName : "call"});
 	}
@@ -10301,7 +10301,7 @@ stx.functional._PartialFunctionExtensions.PartialFunction5Impl.prototype = {
 		while(_g < _g1.length) {
 			var def = _g1[_g];
 			++_g;
-			if(def._1(a,b,c,d,e)) return true;
+			if(def.fst()(a,b,c,d,e)) return true;
 		}
 		return false;
 	}
@@ -10467,7 +10467,7 @@ stx.io.http.HttpStringAsync.prototype = {
 		}
 		stx.Maybes.map(stx.Maybes.toMaybe(_headers),function(headers) {
 			stx.functional.FoldableExtensions.foreach(headers,function(header) {
-				request.setRequestHeader(header._1,header._2);
+				request.setRequestHeader(header.fst(),header.snd());
 			});
 		});
 		request.send(data);
@@ -10704,10 +10704,10 @@ stx.io.json.JValueExtensions.extractBool = function(v) {
 	}(this));
 }
 stx.io.json.JValueExtensions.extractKey = function(v) {
-	return stx.io.json.JValueExtensions.extractField(v)._1;
+	return stx.io.json.JValueExtensions.extractField(v).fst();
 }
 stx.io.json.JValueExtensions.extractValue = function(v) {
-	return stx.io.json.JValueExtensions.extractField(v)._2;
+	return stx.io.json.JValueExtensions.extractField(v).snd();
 }
 stx.io.json.JValueExtensions.extractField = function(v) {
 	return (function($this) {
@@ -10740,7 +10740,7 @@ stx.io.json.JValueExtensions.extractMap = function(v) {
 						var x = xs[_g];
 						++_g;
 						var field = stx.io.json.JValueExtensions.extractField(x);
-						hash.set(field._1,field._2);
+						hash.set(field.fst(),field.snd());
 					}
 				}
 				$r = hash;
@@ -10921,7 +10921,7 @@ stx.io.json.Json.toObject = function(v) {
 		var fs = $e[2];
 		return ArrayLambda.foldl(fs,{ },function(o,e) {
 			var field = stx.io.json.JValueExtensions.extractField(e);
-			o[field._1] = stx.io.json.Json.toObject(field._2);
+			o[field.fst()] = stx.io.json.Json.toObject(field.snd());
 			return o;
 		});
 	case 6:
@@ -10984,7 +10984,7 @@ stx.io.json.Json.encode = function(v) {
 		var fs = $e[2];
 		return "{" + ArrayLambda.map(fs,function(f) {
 			var field = stx.io.json.JValueExtensions.extractField(f);
-			return stx.io.json.Json.encode(stx.io.json.JValue.JString(field._1)) + ":" + stx.io.json.Json.encode(field._2);
+			return stx.io.json.Json.encode(stx.io.json.JValue.JString(field.fst())) + ":" + stx.io.json.Json.encode(field.snd());
 		}).join(",") + "}";
 	case 6:
 		var v1 = $e[3], k = $e[2];
@@ -11265,7 +11265,7 @@ stx.io.json.ObjectJValue.extract = function(v) {
 		var fs = $e[2];
 		return ArrayLambda.foldl(fs,{ },function(o,e) {
 			var field = stx.io.json.JValueExtensions.extractField(e);
-			o[field._1] = stx.io.json.ObjectJValue.extract(field._2);
+			o[field.fst()] = stx.io.json.ObjectJValue.extract(field.snd());
 			return o;
 		});
 	case 6:
@@ -11313,9 +11313,9 @@ stx.io.json.MapOps.__name__ = ["stx","io","json","MapOps"];
 stx.io.json.MapOps.stringKeyDecompose = function(v) {
 	var it = v.iterator();
 	if(it.hasNext()) {
-		var dv = stx.io.json.TranscodeJValue.getDecomposerFor(Type["typeof"](it.next()._2));
+		var dv = stx.io.json.TranscodeJValue.getDecomposerFor(Type["typeof"](it.next().snd()));
 		return stx.io.json.JValue.JObject(ArrayLambda.map(IterableLambda.toArray(v),function(t) {
-			return stx.io.json.JValue.JField(t._1,dv(t._2));
+			return stx.io.json.JValue.JField(t.fst(),dv(t.snd()));
 		}));
 	} else return stx.io.json.JValue.JObject([]);
 }
@@ -11604,7 +11604,7 @@ stx.io.json.TranscodeJValue.getExtractorFor = function(valueType,args) {
 										var $r;
 										if(args == null) args = [];
 										$r = ArrayLambda.map(stx.Arrays.zip(a,args),function(t) {
-											return t._2(t._1);
+											return t.snd()(t.fst());
 										});
 										return $r;
 									}($this));
@@ -13086,7 +13086,7 @@ stx.js.dom.HTMLDocumentExtensions.newElement = function(document,eType,atts,styl
 		var _g1 = 0, _g = atts.length;
 		while(_g1 < _g) {
 			var i = _g1++;
-			element.setAttribute(atts[i]._1,atts[i]._2);
+			element.setAttribute(atts[i].fst(),atts[i].snd());
 		}
 	}
 	if(style != null) element.style.cssText = style;
@@ -13837,8 +13837,8 @@ stx.js.dom.Quirks.setAndStore = function(elem,styles) {
 	var $it0 = styles.iterator();
 	while( $it0.hasNext() ) {
 		var k = $it0.next();
-		values = values.set(k._1,elem.style[k._1]);
-		elem.style[k._1] = k._2;
+		values = values.set(k.fst(),elem.style[k.fst()]);
+		elem.style[k.fst()] = k.snd();
 	}
 	return values;
 }
@@ -14219,8 +14219,8 @@ stx.js.io.IFrameIOPollingMaptag.prototype = $extend(stx.js.io.AbstractIFrameIO.p
 		case 1:
 			var tuple = $e[2];
 			this.fragmentsToSend = this.fragmentsToSend.drop(1);
-			var win = tuple._1;
-			var frag = tuple._2;
+			var win = tuple.fst();
+			var frag = tuple.snd();
 			win.location.href = frag.to + "#&" + HxOverrides.substr(stx.net.UrlExtensions.toQueryString(stx.ds.MapExtensions.toMap(frag)),1,null);
 			break;
 		}
@@ -14489,9 +14489,9 @@ stx.math.tween.Tween.linear = function(state1,state2,def) {
 	}));
 	return function(t) {
 		return data.foldl({ },function(r,tuple) {
-			var name = tuple._1;
-			var start = tuple._2.start;
-			var delta = tuple._2.delta;
+			var name = tuple.fst();
+			var start = tuple.snd().start;
+			var delta = tuple.snd().delta;
 			r[name] = start + t * delta;
 			return r;
 		});
@@ -15405,8 +15405,8 @@ stx.net.UrlExtensions.toQueryParameters = function(query) {
 }
 stx.net.UrlExtensions.toQueryString = function(query) {
 	return query.foldl("?",function(url,tuple) {
-		var fieldName = tuple._1;
-		var fieldValue = tuple._2;
+		var fieldName = tuple.fst();
+		var fieldValue = tuple.snd();
 		var rest = StringTools.urlEncode(fieldName) + "=" + StringTools.urlEncode(fieldValue);
 		return url + (url == "?"?rest:"&" + rest);
 	});
@@ -15725,8 +15725,8 @@ stx.reactive.Pair.prototype = {
 			or = v == null?stx.Maybe.None:stx.Maybe.Some(v);
 			check();
 		};
-		this.l.withInput(i._1,hl);
-		this.r.withInput(i._2,hr);
+		this.l.withInput(i.fst(),hl);
+		this.r.withInput(i.snd(),hr);
 	}
 	,r: null
 	,l: null
@@ -15868,7 +15868,7 @@ stx.reactive.ArrowApply.__name__ = ["stx","reactive","ArrowApply"];
 stx.reactive.ArrowApply.__interfaces__ = [stx.reactive.Arrow];
 stx.reactive.ArrowApply.prototype = {
 	withInput: function(i,cont) {
-		i._1.withInput(i._2,function(x) {
+		i.fst().withInput(i.snd(),function(x) {
 			cont(x);
 		});
 	}
@@ -16735,7 +16735,7 @@ stx.reactive.SignalCollection = $hxClasses["stx.reactive.SignalCollection"] = fu
 stx.reactive.SignalCollection.__name__ = ["stx","reactive","SignalCollection"];
 stx.reactive.SignalCollection.concatS = function(b1,b2) {
 	return b1.zip(b2).map(function(c) {
-		return stx.functional.FoldableExtensions.concat(c._1,c._2);
+		return stx.functional.FoldableExtensions.concat(c.fst(),c.snd());
 	});
 }
 stx.reactive.SignalCollection.join = function(b,$char) {
@@ -16750,7 +16750,7 @@ stx.reactive.SignalCollection.size = function(b) {
 }
 stx.reactive.SignalCollection.zipS = function(b1,b2) {
 	return b1.zip(b2).map(function(c) {
-		return c._1.zip(c._2);
+		return c.fst().zip(c.snd());
 	});
 }
 stx.reactive.SignalCollection.append = function(b,element) {
@@ -16831,7 +16831,7 @@ stx.reactive.SignalCollectionExtensions = $hxClasses["stx.reactive.SignalCollect
 stx.reactive.SignalCollectionExtensions.__name__ = ["stx","reactive","SignalCollectionExtensions"];
 stx.reactive.SignalCollectionExtensions.concatS = function(b1,b2) {
 	return b1.zip(b2).map(function(c) {
-		return stx.functional.FoldableExtensions.concat(c._1,c._2);
+		return stx.functional.FoldableExtensions.concat(c.fst(),c.snd());
 	});
 }
 stx.reactive.SignalCollectionExtensions.join = function(b,$char) {
@@ -16846,7 +16846,7 @@ stx.reactive.SignalCollectionExtensions.size = function(b) {
 }
 stx.reactive.SignalCollectionExtensions.zipS = function(b1,b2) {
 	return b1.zip(b2).map(function(c) {
-		return c._1.zip(c._2);
+		return c.fst().zip(c.snd());
 	});
 }
 stx.reactive.SignalCollectionExtensions.append = function(b,element) {
@@ -16940,12 +16940,12 @@ stx.reactive.SignalFloat.plus = function(b,value) {
 }
 stx.reactive.SignalFloat.plusS = function(b1,b2) {
 	return b1.zip(b2).map(function(t) {
-		return t._1 + t._2;
+		return t.fst() + t.snd();
 	});
 }
 stx.reactive.SignalFloat.minusS = function(b1,b2) {
 	return b1.zip(b2).map(function(t) {
-		return t._1 - t._2;
+		return t.fst() - t.snd();
 	});
 }
 stx.reactive.SignalFloat.minus = function(b,value) {
@@ -16953,7 +16953,7 @@ stx.reactive.SignalFloat.minus = function(b,value) {
 }
 stx.reactive.SignalFloat.timesS = function(b1,b2) {
 	return b1.zip(b2).map(function(t) {
-		return t._1 * t._2;
+		return t.fst() * t.snd();
 	});
 }
 stx.reactive.SignalFloat.times = function(b,value) {
@@ -16961,7 +16961,7 @@ stx.reactive.SignalFloat.times = function(b,value) {
 }
 stx.reactive.SignalFloat.dividedByS = function(b1,b2) {
 	return b1.zip(b2).map(function(t) {
-		return t._1 / t._2;
+		return t.fst() / t.snd();
 	});
 }
 stx.reactive.SignalFloat.dividedBy = function(b,value) {
@@ -17009,7 +17009,7 @@ stx.reactive.SignalFloat.atan = function(b) {
 }
 stx.reactive.SignalFloat.atan2B = function(b1,b2) {
 	return b1.zip(b2).map(function(t) {
-		return Math.atan2(t._1,t._2);
+		return Math.atan2(t.fst(),t.snd());
 	});
 }
 stx.reactive.SignalFloat.atan2 = function(b,value) {
@@ -17032,7 +17032,7 @@ stx.reactive.SignalFloat.log = function(b) {
 }
 stx.reactive.SignalFloat.maxS = function(b1,b2) {
 	return b1.zip(b2).map(function(t) {
-		return Math.max(t._1,t._2);
+		return Math.max(t.fst(),t.snd());
 	});
 }
 stx.reactive.SignalFloat.max = function(b,value) {
@@ -17040,7 +17040,7 @@ stx.reactive.SignalFloat.max = function(b,value) {
 }
 stx.reactive.SignalFloat.minS = function(b1,b2) {
 	return b1.zip(b2).map(function(t) {
-		return Math.min(t._1,t._2);
+		return Math.min(t.fst(),t.snd());
 	});
 }
 stx.reactive.SignalFloat.min = function(b,value) {
@@ -17048,7 +17048,7 @@ stx.reactive.SignalFloat.min = function(b,value) {
 }
 stx.reactive.SignalFloat.powS = function(b1,b2) {
 	return b1.zip(b2).map(function(t) {
-		return Math.pow(t._1,t._2);
+		return Math.pow(t.fst(),t.snd());
 	});
 }
 stx.reactive.SignalFloat.pow = function(b,value) {
@@ -17080,12 +17080,12 @@ stx.reactive.SignalInt.plus = function(b,value) {
 }
 stx.reactive.SignalInt.plusS = function(b1,b2) {
 	return b1.zip(b2).map(function(t) {
-		return t._1 + t._2;
+		return t.fst() + t.snd();
 	});
 }
 stx.reactive.SignalInt.minusS = function(b1,b2) {
 	return b1.zip(b2).map(function(t) {
-		return t._1 - t._2;
+		return t.fst() - t.snd();
 	});
 }
 stx.reactive.SignalInt.minus = function(b,value) {
@@ -17093,7 +17093,7 @@ stx.reactive.SignalInt.minus = function(b,value) {
 }
 stx.reactive.SignalInt.timesS = function(b1,b2) {
 	return b1.zip(b2).map(function(t) {
-		return t._1 * t._2;
+		return t.fst() * t.snd();
 	});
 }
 stx.reactive.SignalInt.times = function(b,value) {
@@ -17101,7 +17101,7 @@ stx.reactive.SignalInt.times = function(b,value) {
 }
 stx.reactive.SignalInt.modS = function(b1,b2) {
 	return b1.zip(b2).map(function(t) {
-		return t._1 % t._2;
+		return t.fst() % t.snd();
 	});
 }
 stx.reactive.SignalInt.mod = function(b,value) {
@@ -17109,7 +17109,7 @@ stx.reactive.SignalInt.mod = function(b,value) {
 }
 stx.reactive.SignalInt.dividedByS = function(b1,b2) {
 	return b1.zip(b2).map(function(t) {
-		return t._1 / t._2 | 0;
+		return t.fst() / t.snd() | 0;
 	});
 }
 stx.reactive.SignalInt.dividedBy = function(b,value) {
@@ -17175,7 +17175,7 @@ stx.reactive.Signals.cond = function(conditions,elseS) {
 			break;
 		case 1:
 			var h = $e[2];
-			$r = stx.reactive.SignalBool.ifTrue(h._1,h._2,stx.reactive.Signals.cond(stx.Iterables.tail(conditions),elseS));
+			$r = stx.reactive.SignalBool.ifTrue(h.fst(),h.snd(),stx.reactive.Signals.cond(stx.Iterables.tail(conditions),elseS));
 			break;
 		}
 		return $r;
@@ -17330,7 +17330,7 @@ stx.reactive.Streams.cond = function(conditions) {
 			break;
 		case 1:
 			var h = $e[2];
-			$r = stx.reactive.StreamBool.ifTrue(h._1,h._2,stx.reactive.Streams.cond(stx.Iterables.tail(conditions)));
+			$r = stx.reactive.StreamBool.ifTrue(h.fst(),h.snd(),stx.reactive.Streams.cond(stx.Iterables.tail(conditions)));
 			break;
 		}
 		return $r;

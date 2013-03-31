@@ -16,7 +16,7 @@
 */
 package stx.functional;
 
-import stx.Tuples;
+using stx.Tuples;
 import stx.Prelude;
 
 import stx.plus.Show;
@@ -51,7 +51,7 @@ class Foldables {
   
   public static function partition<A, B>(foldable: Foldable<A, B>, f: B -> Bool): Tuple2<A, A> {
     return cast foldable.foldl(Tuples.t2(foldable.unit(), foldable.unit()), function(a, b) {
-      return if (f(b)) Tuples.t2(cast a._1.add(b), a._2); else Tuples.t2(a._1, cast a._2.add(b));
+      return if (f(b)) Tuples.t2(cast a.fst().add(b), a.snd()); else Tuples.t2(a.fst(), cast a.snd().add(b));
     });
   }
   
@@ -61,16 +61,16 @@ class Foldables {
     return cast foldable.foldl(Tuples.t2(foldable.unit(), foldable.unit()), function(a, b) {
       return if (partitioning) {
         if (f(b)) {
-          Tuples.t2(cast a._1.add(b), a._2);
+          Tuples.t2(cast a.fst().add(b), a.snd());
         }
         else {
           partitioning = false;
           
-          Tuples.t2(a._1, cast a._2.add(b));
+          Tuples.t2(a.fst(), cast a.snd().add(b));
         }
       }
       else {
-        Tuples.t2(a._1, cast a._2.add(b));
+        Tuples.t2(a.fst(), cast a.snd().add(b));
       }
     });
   }

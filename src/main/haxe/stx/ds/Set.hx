@@ -16,6 +16,7 @@
 */
 package stx.ds;
 
+using stx.Tuples;
 using stx.Prelude;
 
 
@@ -82,7 +83,7 @@ class Set<T> implements Collection<Set<T>, T> {
     var acc = z;
     
     for (e in _map) {
-      acc = f(acc, e._1);
+      acc = f(acc, e.fst());
     }
     
     return acc;

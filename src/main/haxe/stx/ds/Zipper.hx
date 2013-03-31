@@ -11,7 +11,7 @@ import stx.Prelude;
 using stx.Prelude;
 
 using stx.Maths;
-import stx.Tuples;
+using stx.Tuples;
 import stx.Functions;
 using stx.Arrays;
 using stx.Maybes;
@@ -79,7 +79,7 @@ class ObjectZipper {
 		return 
 			za.map(
 				function(z){
-					return z.down( Tuple2.second );
+					return z.down( T2.snd );
 				}
 			);
 	}
@@ -98,7 +98,7 @@ class MapZipper {
 		return 
 			za.map(
 				function(z){
-					return z.down( Tuple2.second );
+					return z.down( T2.snd );
 				}
 			);
 	}
@@ -121,7 +121,7 @@ class ArrayZipper {
 		return 
 			za.map(
 				function(z){
-					return z.down( Tuple2.second );
+					return z.down( T2.snd );
 				}
 			);
 	}

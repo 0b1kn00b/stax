@@ -13,7 +13,7 @@ import stx.Prelude;
 import stx.test.TestCase;
 import stx.functional.Foldables;
 
-import stx.Tuples;
+using stx.Tuples;
 
 using stx.Maths;
 

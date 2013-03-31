@@ -4,7 +4,7 @@ package stx;
  * ...
  * @author 0b1kn00b
  */
-import stx.Tuples;				using stx.Tuples;
+using stx.Tuples;				using stx.Tuples;
 import stx.test.TestCase;
 import stx.test.Assert;		using stx.test.Assert;
 

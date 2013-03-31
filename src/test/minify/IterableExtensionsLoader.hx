@@ -10,7 +10,7 @@ import stx.Iterables;
 //import stx.ds.Map;
 /* import stx.Prelude;
 
-import stx.Tuples;
+using stx.Tuples;
 using stx.Tuples;
 
 import stx.ArrayOps;

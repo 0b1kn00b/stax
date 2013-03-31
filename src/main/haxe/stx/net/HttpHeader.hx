@@ -16,7 +16,7 @@
 package stx.net;
 
 import stx.Prelude;
-import stx.Tuples;
+using stx.Tuples;
 import stx.ds.Map;
 
 typedef HttpHeader = Tuple2<String, String>

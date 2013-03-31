@@ -6,7 +6,7 @@ package stx.reactive;
 import stx.Prelude;
 
 														using stx.arw.Arrows;
-import stx.Tuples; 					using stx.Tuples;
+using stx.Tuples; 					using stx.Tuples;
 														using stx.Functions;
 
 import haxe.Timer;
@@ -270,8 +270,8 @@ class PairArrow<A,B,C,D> implements Arrow<Pair<A,C>,Pair<B,D>>{
 				or = v == null ? None : Some(v);
 				check();
 			}
-		l.withInput( i._1 , hl );
-		r.withInput( i._2 , hr );
+		l.withInput( i.fst() , hl );
+		r.withInput( i.snd() , hr );
 	}
 	static public function pair<A,B,C,D>(pair_:Arrow<A,B>,_pair:Arrow<C,D>):Arrow<Pair<A,C>,Pair<B,D>>{ 
 		return new PairArrow(pair_,_pair); 
@@ -417,8 +417,8 @@ class ArrowApply<I,O> implements Arrow<Pair<Arrow<I,O>,I>,O>{
 	public function new(){
 	}
 	inline public function withInput(?i:Pair<Arrow<I,O>,I>,cont : Function1<O,Void>){
-		i._1.withInput(
-			i._2,
+		i.fst().withInput(
+			i.snd(),
 				function(x){
 					cont(x);
 				}
@@ -458,7 +458,7 @@ class StateArrows{
 			a.join( a1 )
 			.then(
 				function(t:Pair<Pair<B,S>,S>){
-					return Tuples.t2(t._1._1,t._2);
+					return Tuples.t2(t.fst().fst(),t.snd());
 				}.lift()
 			);
 	}
@@ -497,7 +497,7 @@ class StateArrowImpl<S,A,B> implements Arrow<Pair<A,S>,Pair<B,S>>{
 	}
 	//static function composeWithUsing<C,D>(
 	/*static private function merge<S,B,C>(t : Pair<Pair<S,B>,S>) :Pair<S,B>{
-		return Tuples.t2(t._2,t._1._2);
+		return Tuples.t2(t.snd(),t.fst().snd());
 	}*/
 	public function access() { }
 	public function get() { }

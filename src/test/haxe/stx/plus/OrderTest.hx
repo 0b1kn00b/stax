@@ -4,7 +4,7 @@ import haxe.ds.HashMap;
 
 using stx.Prelude;
 
-import stx.Tuples;
+using stx.Tuples;
 import stx.Prelude;
 
 import stx.test.TestCase;
@@ -91,7 +91,7 @@ class OrderTest extends TestCase{
   } 
 
   public function testOrderForNotComparableClass() {                 
-    this.assertThrowsException(function() Order.getOrderFor(new HashMap()));
+    this.assertThrowsException(function() Order.getOrderFor(new NotComparable()));
   }
 
   public function testReflectiveOrderForDynamicComparableClass() {
@@ -131,10 +131,10 @@ class OrderTest extends TestCase{
   
 		tests.foreach(
 				function(test:Tuple2 < Product, Product > ) {
-					var l : Product = test._1;
-					var r = test._2;
-						assertTrue(Order.getOrderFor(l)(l, r) > 0, "failed to compare " + test._1 + " to " + test._2);
-						assertTrue(l.compare(r) > 0, "failed to compare " + test._1 + " to " + test._2);  
+					var l : Product = test.fst();
+					var r = test.snd();
+						assertTrue(Order.getOrderFor(l)(l, r) > 0, "failed to compare " + test.fst() + " to " + test.snd());
+						assertTrue(l.compare(r) > 0, "failed to compare " + test.fst() + " to " + test.snd());  
 				}
 		);
   }
@@ -163,8 +163,8 @@ class OrderTest extends TestCase{
     ] );
     
     for(test in tests) {
-      assertTrue(Equal.getEqualFor(test._1)(test._1, test._2));
-      assertTrue(test._1.equals(test._2)); 
+      assertTrue(Equal.getEqualFor(test.fst())(test.fst(), test.snd()));
+      assertTrue(test.fst().equals(test.snd())); 
 
     } 
   }
@@ -190,7 +190,7 @@ class OrderTest extends TestCase{
     assertTrue (Ints.compare.equal()(1, 1));
     assertFalse(Ints.compare.equal()(1, 2));
   }
-  /*
+  
   public function testOrderForAnonymousTyped() {
     var o1 = { name : "haxe"};                      
     var o2 = { name : "stx"};
@@ -202,23 +202,26 @@ class OrderTest extends TestCase{
     assertTrue(order(o1, null)    > 0);
     assertTrue(order(null, o1)    < 0);
     assertTrue(order(null, null) == 0);
-  }       */
+  }       
+}
+private class NotComparable{
+  public function new(){}
 }
 private class Comparable
 {                               
   var v : Int;
-  public function new(v : Int) this.v = v
-  public function compare(other : Comparable) return v == other.v ? 0 : (v > other.v ? 1 : -1)
+  public function new(v : Int) this.v = v;
+  public function compare(other : Comparable) return v == other.v ? 0 : (v > other.v ? 1 : -1);
 }             
 
 @DataClass private class DynamicComparable
 {           
 	var v : Int;  
-	public function new(v : Int) this.v = v     
+	public function new(v : Int) this.v = v;     
 }
 @DataClass private class DynamicComparableDescending
 {  
   @DataField({order: -1})
 	var v : Int;
-	public function new(v : Int) this.v = v 
+	public function new(v : Int) this.v = v; 
 }

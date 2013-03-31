@@ -1,6 +1,6 @@
 package stx.plus;
 
-import stx.Tuples;
+using stx.Tuples;
 
 using stx.Prelude;
 using stx.Objects;
@@ -26,17 +26,17 @@ class Meta {
     var i = 0;   
     return Type.getInstanceFields(c).map(function(v){ 
       var fieldMeta = _getMetaDataField(c, v);     
-      var inc = (fieldMeta == null || !Reflect.hasField(fieldMeta, name) || Reflect.field(fieldMeta, name)); 
+      var inc : Bool = (fieldMeta == null || !Reflect.hasField(fieldMeta, name) || Reflect.field(fieldMeta, name)); 
       return Tuples.t3(v, inc, if(fieldMeta != null && Reflect.hasField(fieldMeta, "index")) Reflect.field(fieldMeta, "index"); else i++);                
-    }).filter(function(v) {
-      return v._2;
+    }).filter(function(l) {
+      return l.snd();
     }).sortWith(function(a, b) {
-      var c = a._3 - b._3;
+      var c = a.thd() - b.thd();
       if(c != 0)
         return c;
-      return Strings.compare(a._1, b._1);
+      return Strings.compare(a.fst(), b.fst());
     }).map(function(v) {
-      return v._1;
+      return v.fst();
     });
   }
 	

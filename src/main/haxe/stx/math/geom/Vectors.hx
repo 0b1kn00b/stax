@@ -20,7 +20,7 @@ import stx.Prelude;
 																		using stx.Iterables;
 																		using stx.Maths;
 																		using stx.Tuples;
-import stx.Tuples;
+using stx.Tuples;
 import stx.math.geom.Vector;
 import stx.math.geom.Point;
 

@@ -17,7 +17,7 @@ package stx.reactive;
 
 import stx.Maybes;
 import stx.Prelude;
-import stx.Tuples;
+using stx.Tuples;
 import stx.plus.Equal;
 
 import stx.reactive.Streams;

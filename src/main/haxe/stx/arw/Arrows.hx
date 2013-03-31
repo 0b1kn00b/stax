@@ -3,26 +3,37 @@ package stx.arw;
 using stx.arw.Arrows;
 
 import stx.Prelude;
-import stx.Tuples;
+using stx.Tuples;
 import stx.Eithers;
 
 using stx.Functions;
 
-abstract Arrow<I,O>(Null<I>->(O->Void)->Void){
-  @:noUsing static public function action<I>(fn:I->Void):Arrow<I,I>{
-    return Arrows.lift(
-      function(x){
-        fn(x); return x;
-      }
-    );
-  }
-  @:noUsing static public function unit<I>():Arrow<I,I>{
-    return Arrows.lift(function(x:I):I {
-      return x;
+typedef ArrowFunction<I,O> = Null<I>->(O->Void)->Void;
+abstract Arrow<I,O>(ArrowFunction<I,O>){
+  /*@:from static public function fromReceiver(fn:(I->Void)->Void):Arrow<I,I>{
+    return new Arrow(function(?i:I,cont:I->Void):Void{
+      fn(
+        function(i){
+          cont(i);
+        }
+      );
     });
   }
+  @:from static public function fromFunction1<I,O>(fn:I->O):Arrow<I,O>{
+    return Arrows.lift(fn);
+  }*/
+  @:noUsing static public function action<I>(fn:I->Void):Arrow<I,I>{
+    return function(x){
+      fn(x); return x;
+    }.lift();
+  }
+  @:noUsing static public function unit<I>():Arrow<I,I>{
+    return function(x:I):I {
+      return x;
+    }.lift();
+  }
   @:noUsing static public function pure<I,O>(v:O):Arrow<I,O>{
-    return Arrows.lift(function(x:I):O {return v;});
+    return function(x:I):O {return v;}.lift();
   }
   @:noUsing
   static public function future<A>():Arrow<Future<A>,A>{
@@ -42,12 +53,6 @@ abstract Arrow<I,O>(Null<I>->(O->Void)->Void){
       withInput(this,i,ft.deliver.effectOf());
     return ft;
   }
-  @:from static public function fromFunction1<I,O>(fn:I->O):Arrow<I,O>{
-    return Arrows.lift(fn);
-  }
-  @:from static public function fromFutureConstructor<I,O>(fn:I->Future<O>):Arrow<I,O>{
-    return Arrows.arrowOf(fn);
-  }
 }
 class Arrows{
 	static inline public function lift<I,O>(fn:I->O):Arrow<I,O>{
@@ -57,8 +62,9 @@ class Arrows{
 			}
 		);
 	}
-	static inline public function arrowOf<I,O>(fn:I->Future<O>){
-		return lift(fn).then(Arrow.future());
+	static inline public function arrowOf<I,O>(fn:I->Future<O>):Arrow<I,O>{
+    var arw : Arrow<I,Future<O>> = lift(fn);
+		return arw.then(Arrow.future());
 	}
 	static public function first<A,B,C>(first:Arrow<A,B>):Arrow<Tuple2<A,C>,Tuple2<B,C>>{
 		return new PairArrow(first, Arrow.unit());
@@ -73,6 +79,9 @@ class Arrows{
 	static public function pair<A,B,C,D>(pair_:Arrow<A,B>,_pair:Arrow<C,D>):Arrow<Tuple2<A,C>,Tuple2<B,D>>{ 
 		return new PairArrow(pair_, _pair); 
 	}
+  static public function swap<A,B,C>(a:Arrow<A,Tup2<B,C>>):Arrow<A,Tup2<C,B>>{
+    return a.then(T2.swap.lift());
+  }
 	/**
 
 		a----f----b =====> a-----(f(a),f(a))-----(b,b)
@@ -185,4 +194,20 @@ class Arrows0{
 	static public function lift<O>(fn:Void->O):Arrow<Unit,O>{
 		return Arrows.lift(fn.promote());
 	}
+}
+class Arrows2{
+  static public function lift<A,B,C>(fn:A->B->C):Arrow<Tup2<A,B>,C>{
+    return fn.spread().lift();
+  }
+  static public function arrowOf<A,B,C>(fn:A->B->Future<C>):Arrow<Tup2<A,B>,C>{
+    return fn.spread().arrowOf();
+  }
+}
+class Arrows3{
+  static public function lift<A,B,C,D>(fn:A->B->C->D):Arrow<Tup3<A,B,C>,D>{
+    return fn.spread().lift();
+  }
+  static public function arrowOf<A,B,C,D>(fn:A->B->C->Future<D>):Arrow<Tup3<A,B,C>,D>{
+    return fn.spread().arrowOf();
+  }
 }

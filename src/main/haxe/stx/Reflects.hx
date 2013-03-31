@@ -1,19 +1,22 @@
 package stx;
 
-import stx.Predicates;
+using stx.Predicates;
 import stx.Prelude;
-import stx.Tuples;
+using stx.Tuples;
 import stx.Maybes;
 
 using stx.Maybes;
 using stx.Objects;
 using stx.Arrays;
 using stx.Prelude;
+using stx.Compose;
 using stx.Functions;
+
+typedef Field<K,V> = Tup3<Dynamic,String,V>;
 
 class Reflects{
 	static public function setFieldTp<A,B>(v:A,t:Tuple2<String,B>):A{
-		Reflect.setField(v,t._1,t._2);
+		Reflect.setField(v,t.fst(),t.snd());
 		return v;
 	}
 	static public function getFieldO<A,B>(v:A,key:String):Maybe<B>{
@@ -33,17 +36,20 @@ class Reflects{
 		return Reflect.field.p2(fieldname);
 	}
 	static public function extractObjectFromAny<A>(v:A):Object{
-		return 
-			switch(Type.typeof(v)){
-				case TClass(v) 	: Types.extractObjectFromType(v);
-				default 				:	Objects.extractAll(cast v);
-			}
+		return switch(Type.typeof(v)){
+			case TClass(v) 	: Types.extractObjectFromType(v);
+			default 				:	Objects.extractAll(cast v);
+		}
 	}
 	static public function extractFieldsFromAny<A>(v:A):Array<Tup2<String,Dynamic>>{
-		return 
-			Types.extractAllAnyFromType(v)
-				.getOrElse(
-					Objects.extractAllAny.lazy(cast v)
-				);	
+		return Types.extractAllAnyFromType(v)
+			.getOrElse(
+				Objects.extractAllAny.lazy(cast v)
+			);	
+	}
+	static public function extractProperties<A>(v:A):Array<Tup2<String,Dynamic>>{
+		return extractFieldsFromAny(v).filter(
+			Reflect.isFunction.not().second().sndOf()
+		);
 	}
 }

@@ -17,7 +17,7 @@ package stx.concurrent;
 
 import stx.Prelude;
 import stx.Future;
-import stx.Tuples;
+using stx.Tuples;
 
 enum ActorStatus {
   Running; // The actor is currently running and processing messages

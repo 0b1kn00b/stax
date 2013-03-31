@@ -1,6 +1,6 @@
 package stx.io.json;
 
-import stx.Tuples;
+using stx.Tuples;
 import stx.Prelude;
 
 using stx.Prelude;

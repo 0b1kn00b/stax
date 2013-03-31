@@ -159,9 +159,9 @@ class Eithers {
   }
   static public function unzip<A,B,C>(tp:Tuple2<Either<A,B>,Either<A,C>>):Either<A,Tuple2<B,C>>{
     return 
-      tp._1.flatMapR(
+      tp.fst().flatMapR(
         function(b:B){
-          return tp._2.mapR( Tuples.t2.p1(b) );
+          return tp.snd().mapR( Tuples.t2.p1(b) );
         }
       );
   }

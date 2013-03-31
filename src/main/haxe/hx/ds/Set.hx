@@ -25,6 +25,7 @@
 * OTHER DEALINGS IN THE SOFTWARE.
 **/
 
+using stx.Tuples;
 package hx.ds;
 
 /**

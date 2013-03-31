@@ -25,11 +25,11 @@ class SignalFloat {
     }
     
     public static function plusS(b1: Signal<Float>, b2: Signal<Float>): Signal<Float> {
-        return b1.zip(b2).map(function(t) { return t._1 + t._2; });
+        return b1.zip(b2).map(function(t) { return t.fst() + t.snd(); });
     }
     
     public static function minusS(b1: Signal<Float>, b2: Signal<Float>): Signal<Float> {
-        return b1.zip(b2).map(function(t) { return t._1 - t._2; });
+        return b1.zip(b2).map(function(t) { return t.fst() - t.snd(); });
     }
     
     public static function minus(b: Signal<Float>, value: Float): Signal<Float> {
@@ -37,7 +37,7 @@ class SignalFloat {
     }
     
     public static function timesS(b1: Signal<Float>, b2: Signal<Float>): Signal<Float> {
-        return b1.zip(b2).map(function(t) { return t._1 * t._2; });
+        return b1.zip(b2).map(function(t) { return t.fst() * t.snd(); });
     }
     
     public static function times(b: Signal<Float>, value: Float): Signal<Float> {
@@ -45,7 +45,7 @@ class SignalFloat {
     }
     
     public static function dividedByS(b1: Signal<Float>, b2: Signal<Float>): Signal<Float> {
-        return b1.zip(b2).map(function(t) { return t._1 / t._2; });
+        return b1.zip(b2).map(function(t) { return t.fst() / t.snd(); });
     }
     
     public static function dividedBy(b: Signal<Float>, value: Float): Signal<Float> {
@@ -85,7 +85,7 @@ class SignalFloat {
     }
     
     public static function atan2B(b1: Signal<Float>, b2: Signal<Float>): Signal<Float> {
-        return b1.zip(b2).map(function(t) { return Math.atan2(t._1, t._2); });
+        return b1.zip(b2).map(function(t) { return Math.atan2(t.fst(), t.snd()); });
     }
     
     public static function atan2(b: Signal<Float>, value: Float): Signal<Float> {
@@ -105,7 +105,7 @@ class SignalFloat {
     }
     
     public static function maxS(b1: Signal<Float>, b2: Signal<Float>): Signal<Float> {
-        return b1.zip(b2).map(function(t) { return Math.max(t._1, t._2); });
+        return b1.zip(b2).map(function(t) { return Math.max(t.fst(), t.snd()); });
     }
     
     public static function max(b: Signal<Float>, value: Float): Signal<Float> {
@@ -113,7 +113,7 @@ class SignalFloat {
     }
     
     public static function minS(b1: Signal<Float>, b2: Signal<Float>): Signal<Float> {
-        return b1.zip(b2).map(function(t) { return Math.min(t._1, t._2); });
+        return b1.zip(b2).map(function(t) { return Math.min(t.fst(), t.snd()); });
     }
     
     public static function min(b: Signal<Float>, value: Float): Signal<Float> {
@@ -121,7 +121,7 @@ class SignalFloat {
     }
     
     public static function powS(b1: Signal<Float>, b2: Signal<Float>): Signal<Float> {
-        return b1.zip(b2).map(function(t) { return Math.pow(t._1, t._2); });
+        return b1.zip(b2).map(function(t) { return Math.pow(t.fst(), t.snd()); });
     }
     
     public static function pow(b: Signal<Float>, value: Float): Signal<Float> {

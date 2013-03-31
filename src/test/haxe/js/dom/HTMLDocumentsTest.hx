@@ -18,7 +18,7 @@
 package js.dom;
 
 import stx.js.Dom;
-import stx.Tuples;
+using stx.Tuples;
 import stx.js.Env;
 import stx.js.dom.Quirks;
 import stx.js.dom.HTMLElementExtensions;

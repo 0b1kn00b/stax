@@ -39,13 +39,13 @@ class Assert{
 		return optionOf(equalsWith.p1(val).p2(eq),msg).then(Maybes.map.p2(error.p1(pos)));
 	}
 	static public function areEqualToWith<A>(eq, ?pos):(Tuple2<A,A> -> Maybe<Error> ){
-		return optionOf(Tuple2.into.p2(equalsWith.p3(eq))).then(Maybes.map.p2(error.p1(pos)));
+		return optionOf(T2.into.p2(equalsWith.p3(eq))).then(Maybes.map.p2(error.p1(pos)));
 	}
 	static public function areEqualTo<A>(?pos){
 		return areEqualToWith(null,pos);
 	}
 	static public function isEqualToWith<A>(eq, ?pos){ 
-		return Tuple2.create.curry().then(Compose.then.p2(areEqualToWith(eq,pos)));
+		return T2.create.curry().then(Compose.then.p2(areEqualToWith(eq,pos)));
 	}
 	static public function isEqualTo(?pos){
 		return isEqualToWith(null,pos);

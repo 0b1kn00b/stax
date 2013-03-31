@@ -103,10 +103,10 @@ class Compose0{
 class Compose{
   
   static public function fstOf<A,B,C,D>(a:Tuple2<A,B>->Tuple2<C,D>):Tuple2<A,B>->C{
-    return a.then( Tuple2.fst );
+    return a.then( T2s.fst );
   }
   static public function sndOf<A,B,C,D>(a:Tuple2<A,B>->Tuple2<C,D>):Tuple2<A,B>->D{
-    return a.then( Tuple2.snd );
+    return a.then( T2s.snd );
   }
   /**
     Returns a function that applies fn1 then fn2 on the input
@@ -123,7 +123,7 @@ class Compose{
   static public function first<A,B,C,D>(fn1:A->C):Tuple2<A,B>->Tuple2<C,B>{
     return 
       function(t:Tuple2<A,B>){
-        return Tuples.t2(fn1(t._1),t._2);
+        return Tuples.t2(fn1(t.fst()),t.snd());
       }
   }
   /**
@@ -132,13 +132,13 @@ class Compose{
   static public function second<A,B,C,D>(fn1:B->D):Tuple2<A,B>->Tuple2<A,D>{
     return 
       function(t:Tuple2<A,B>){
-        return Tuples.t2(t._1,fn1(t._2));
+        return Tuples.t2(t.fst(),fn1(t.snd()));
       } 
   }
   static public function pair<A,B,C,D>(fn1:A->C,fn2:B->D):Tuple2<A,B>->Tuple2<C,D>{
     return 
       function(t){
-        return Tuples.t2(fn1(t._1),fn2(t._2));
+        return Tuples.t2(fn1(t.fst()),fn2(t.snd()));
       }
   }
   /**
@@ -148,7 +148,7 @@ class Compose{
     return 
       function(v:A):O{
         var t = fn(v);
-        return t._1(t._2);
+        return t.fst()(t.snd());
       }
   }
   /**
@@ -227,7 +227,7 @@ class Compose{
   static public function both<A,B>(fn:A->B):Pair<A>->Pair<B>{
     return 
       function(t){
-        return Tup2.create(fn(t._1),fn(t._2));
+        return T2.create(fn(t.fst()),fn(t.snd()));
       }
   }
   /**

@@ -16,7 +16,7 @@
 package stx.math.geom;
 
 import stx.Prelude;
-import stx.Tuples;
+using stx.Tuples;
 using stx.Tuples;
 
 using stx.Maths;

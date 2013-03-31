@@ -6,7 +6,7 @@ import stx.Prelude;
 import stx.test.TestCase;
 
 import stx.ds.Collection;
-import stx.Tuples;
+using stx.Tuples;
 import stx.reactive.Reactive;
 import stx.reactive.ReactiveTestCase;
 
@@ -545,10 +545,10 @@ class ReactiveTester extends TestCase {
         var greaterThanFive =       function(v) { return v > 5; }
         
         var partition =     stream.partition(greaterThanFive);
-        var partitioned =   pumpTuple2(stream, arr1, partition._1.toArray(), partition._2.toArray());
+        var partitioned =   pumpTuple2(stream, arr1, partition.fst().toArray(), partition.snd().toArray());
         
-        assertIterableEquals([6, 7], partitioned._1);
-        assertIterableEquals([1, 2, 3, 4, 5], partitioned._2);
+        assertIterableEquals([6, 7], partitioned.fst());
+        assertIterableEquals([1, 2, 3, 4, 5], partitioned.snd());
     }
     
     public function testPartitionWhile():Void {
@@ -562,14 +562,14 @@ class ReactiveTester extends TestCase {
         
         
         
-        assertIterableEquals([1], pump(stream, arr1, stream.partition(lessThanTwo)._1));
-        assertIterableEquals([2, 3, 4, 5, 6, 7], pump(stream, arr1, stream.partition(lessThanTwo)._2));
+        assertIterableEquals([1], pump(stream, arr1, stream.partition(lessThanTwo).fst()));
+        assertIterableEquals([2, 3, 4, 5, 6, 7], pump(stream, arr1, stream.partition(lessThanTwo).snd()));
         
-        assertIterableEquals([], pump(stream, arr1, stream.partition(lessThanOne)._1));
-        assertIterableEquals([1, 2, 3, 4, 5, 6, 7], pump(stream, arr1, stream.partition(lessThanOne)._2));
+        assertIterableEquals([], pump(stream, arr1, stream.partition(lessThanOne).fst()));
+        assertIterableEquals([1, 2, 3, 4, 5, 6, 7], pump(stream, arr1, stream.partition(lessThanOne).snd()));
         
-        assertIterableEquals([1, 2, 3, 4, 5, 6, 7], pump(stream, arr1, stream.partition(lessThanTwenty)._1));
-        assertIterableEquals([], pump(stream, arr1, stream.partition(lessThanTwenty)._2));
+        assertIterableEquals([1, 2, 3, 4, 5, 6, 7], pump(stream, arr1, stream.partition(lessThanTwenty).fst()));
+        assertIterableEquals([], pump(stream, arr1, stream.partition(lessThanTwenty).snd()));
     }
     
     public function testFilter():Void {
@@ -606,7 +606,7 @@ class ReactiveTester extends TestCase {
         var arr0: Iterable<Int> = [];
         var arr1: Iterable<Int> = [1, 2, 3, 4, 5, 6, 7];
         
-        var zipped = stream.zip(stream.shift(2)).map(function(t) { return t._1 * t._2; });
+        var zipped = stream.zip(stream.shift(2)).map(function(t) { return t.fst() * t.snd(); });
         
         assertIterableEquals([], pump(stream, arr0, zipped));
         assertIterableEquals([3, 8, 15, 24, 35], pump(stream, arr1, zipped));
@@ -618,7 +618,7 @@ class ReactiveTester extends TestCase {
         var arr0: Iterable<Int> = [];
         var arr1: Iterable<Int> = [1, 2, 3, 4, 5, 6, 7];
         
-        var zipped = stream.zip3(stream, stream).map(function(t) { return t._1 + t._2 - t._3; });
+        var zipped = stream.zip3(stream, stream).map(function(t) { return t.fst() + t.snd() - t.thd(); });
         
         assertIterableEquals([], pump(stream, arr0, zipped));
         assertIterableEquals([1, 2, 3, 4, 5, 6, 7], pump(stream, arr1, zipped));
@@ -2620,8 +2620,8 @@ class ReactiveTester extends TestCase {
         
         var partition = SignalCollection.partition(signal, filter);
         
-        assertIterableEquals([1, 2, 3, 3], partition.valueNow()._1);
-        assertIterableEquals([4, 5, 6, 7, 4], partition.valueNow()._2);
+        assertIterableEquals([1, 2, 3, 3], partition.valueNow().fst());
+        assertIterableEquals([4, 5, 6, 7, 4], partition.valueNow().snd());
     }
     
     public function testSignalCollectionPartitionWhile(): Void {
@@ -2630,8 +2630,8 @@ class ReactiveTester extends TestCase {
         
         var partitionWhile = SignalCollection.partitionWhile(signal, filter);
         
-        assertIterableEquals([1, 2, 3, 4, 5], partitionWhile.valueNow()._1);
-        assertIterableEquals([6, 7, 3, 4], partitionWhile.valueNow()._2);
+        assertIterableEquals([1, 2, 3, 4, 5], partitionWhile.valueNow().fst());
+        assertIterableEquals([6, 7, 3, 4], partitionWhile.valueNow().snd());
     }
     
     public function testSignalCollectionTranspose(): Void {

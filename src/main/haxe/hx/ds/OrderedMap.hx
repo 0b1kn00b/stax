@@ -43,7 +43,7 @@ class OrderedMap<V>{
 		return findAtKey(key).isDefined();
 	}
 	public function get(key:String):V{
-		return findAtKey(key).map(Tup2.snd).getOrElseC(null);
+		return findAtKey(key).map(T2.snd).getOrElseC(null);
 	}
 	public function del(key:String){
 		findAtKey(key)
@@ -60,7 +60,7 @@ class OrderedMap<V>{
 		impl =
 			impl.sortWith(
 				function(t1,t2){
-					return fn(t1._1,t2._1);
+					return fn(t1.fst(),t2.fst());
 				}
 			);
 	}
@@ -68,9 +68,9 @@ class OrderedMap<V>{
 		return impl.iterator();
 	}
 	public function vals():Iterator<V>{
-		return impl.map( Tup2.snd ).iterator();
+		return impl.map( T2.snd ).iterator();
 	}
 	private function findAtKey(key:String):Maybe<Tuple2<String,V>>{
-		return impl.find(function(t){ return t._1 == key; });
+		return impl.find(function(t){ return t.fst() == key; });
 	}
 }

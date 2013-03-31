@@ -2,7 +2,7 @@ package stx;
 
 import stx.ifs.Value;
 
-import stx.Tuples;
+using stx.Tuples;
 
 using stx.Error;            
 using stx.Prelude;
@@ -412,5 +412,47 @@ class Futures{
             );
         }
       );
+  }
+}
+class Futures1{
+  /**
+    One parameter callback handler, where callback is called exactly once.
+  */
+  static public function futureOf<A>(f:(A->Void)->Void):Future<A>{
+    var fut = new Future();
+    f(
+      function(res){
+        fut.deliver(res);
+      }
+    );
+    return fut;
+  }
+}
+class Futures2{
+  /**
+    Creates a Future of Tuple2<A,B> from a callback function(a:A,b:B)
+  */
+  static public function futureOf<A,B>(f:(A->B->Void)->Void):Future<Tuple2<A,B>>{
+    var ft = new Future();
+    f(
+      function(a,b){
+        ft.deliver( Tuples.t2(a,b) );
+      }
+    );
+    return ft;
+  }
+}
+class Futures3{
+  /**
+    Creates a Future of Tuple2<A,B,C> from a callback function(a:A,b:B,c:C)
+  */
+  static public function futureOf<A,B,C>(f:(A->B->C->Void)->Void):Future<Tuple3<A,B,C>>{
+    var ft = new Future();
+    f(
+      function(a,b,c){
+        ft.deliver( Tuples.t3(a,b,c) );
+      }
+    );
+    return ft;
   }
 }

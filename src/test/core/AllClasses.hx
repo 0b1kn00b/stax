@@ -46,7 +46,7 @@ import stx.Predicates;
 import stx.Prelude;
 import stx.Promises;
 import stx.Strings;
-import stx.Tuples;
+using stx.Tuples;
 
 @IgnoreCover
 class AllClasses

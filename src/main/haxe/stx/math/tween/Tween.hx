@@ -22,7 +22,7 @@ using stx.ds.Group;           using stx.ds.Map;
 
 import stx.Maybes;           using stx.Maybes;
 
-import stx.Tuples;            using stx.Tuples;
+using stx.Tuples;            using stx.Tuples;
 
 using stx.functional.Foldables;
 
@@ -44,9 +44,9 @@ class Tween {
     
     return function(t: Float): Dynamic<Float> {
       return data.foldl({}, function(r, tuple) {
-        var name  = tuple._1;
-        var start = tuple._2.start;
-        var delta = tuple._2.delta;
+        var name  = tuple.fst();
+        var start = tuple.snd().start;
+        var delta = tuple.snd().delta;
         
         Reflect.setField(r, name, start + t * delta);
         

@@ -35,7 +35,7 @@ class Json {
       case JObject (fs): return fs.foldl({}, function (o: Dynamic, e: JValue) {
         var field = e.extractField();
         
-        Reflect.setField (o, field._1, toObject (field._2)); 
+        Reflect.setField (o, field.fst(), toObject (field.snd())); 
         
         return o;
       });
@@ -74,7 +74,7 @@ class Json {
       case JObject (fs): return "{" + fs.map (function (f) {
         var field = f.extractField();
         
-        return encode(JString(field._1)) + ":" + encode (field._2);
+        return encode(JString(field.fst())) + ":" + encode (field.snd());
       }).join (",") + "}";
       case JField(_, _): return Prelude.error()("Cannot encode JField");
     }

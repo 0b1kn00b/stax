@@ -7,7 +7,7 @@ import Type;
 using stx.Strings;
 
 import stx.plus.Show;
-import stx.Tuples;										using stx.Tuples;
+using stx.Tuples;										using stx.Tuples;
 using stx.plus.Hasher;
 
 typedef MapFunction<T>         = Function1<T, Int>; 

@@ -10,7 +10,7 @@ using stx.ds.List;
 using stx.ds.Map;
 using stx.ds.Group;
  
-import stx.Tuples;
+using stx.Tuples;
 
 
 class ArraysTest extends TestCase {

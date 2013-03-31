@@ -43,7 +43,7 @@ class PartialFunction1<A, Z>{
   
   public function isDefinedAt(a: A): Bool {
     for (d in _def) {
-        if (d._1(a)) return true;
+        if (d.fst()(a)) return true;
       }
       
       return false;
@@ -69,7 +69,7 @@ class PartialFunction1<A, Z>{
   
   public function apply(a: A): Z {
     for (d in _def) {
-      if (d._1(a)) return d._2(a);
+      if (d.fst()(a)) return d.snd()(a);
     }
     
     return Prelude.error()("Function undefined at " + a);
@@ -102,7 +102,7 @@ class PartialFunction2<A, B, Z> {
   
   public function isDefinedAt(a: A, b: B): Bool {
     for (d in _def) {
-        if (d._1(a, b)) return true;
+        if (d.fst()(a, b)) return true;
       }
       
       return false;
@@ -128,7 +128,7 @@ class PartialFunction2<A, B, Z> {
   
     public function apply(a: A, b: B): Z {
       for (d in _def) {
-        if (d._1(a, b)) return d._2(a, b);
+        if (d.fst()(a, b)) return d.snd()(a, b);
       }
       
       return Prelude.error()("Function undefined at (" + a + ", " + b + ")");
@@ -159,7 +159,7 @@ private class PartialFunction3<A, B, C, Z>{
   
   public function isDefinedAt(a: A, b: B, c: C): Bool {
     for (d in _def) {
-        if (d._1(a, b, c)) return true;
+        if (d.fst()(a, b, c)) return true;
       }
       
       return false;
@@ -185,7 +185,7 @@ private class PartialFunction3<A, B, C, Z>{
   
     public function apply(a: A, b: B, c: C): Z {
       for (d in _def) {
-        if (d._1(a, b, c)) return d._2(a, b, c);
+        if (d.fst()(a, b, c)) return d.snd()(a, b, c);
       }
       
       return Prelude.error()("Function undefined at (" + a + ", " + b + ", " + c + ")");
@@ -218,7 +218,7 @@ class PartialFunction4<A, B, C, D, Z>{
   
   public function isDefinedAt(a: A, b: B, c: C, d: D): Bool {
     for (def in _def) {
-        if (def._1(a, b, c, d)) return true;
+        if (def.fst()(a, b, c, d)) return true;
       }
       
       return false;
@@ -244,7 +244,7 @@ class PartialFunction4<A, B, C, D, Z>{
   
     public function apply(a: A, b: B, c: C, d: D): Z {
       for (def in _def) {
-        if (def._1(a, b, c, d)) return def._2(a, b, c, d);
+        if (def.fst()(a, b, c, d)) return def.snd()(a, b, c, d);
       }
       
       return Prelude.error()("Function undefined at (" + a + ", " + b + ", " + c + ", " + d + ")");
@@ -276,7 +276,7 @@ private class PartialFunction5<A, B, C, D, E, Z>{
   
   public function isDefinedAt(a: A, b: B, c: C, d: D, e: E): Bool {
     for (def in _def) {
-        if (def._1(a, b, c, d, e)) return true;
+        if (def.fst()(a, b, c, d, e)) return true;
       }
       
       return false;
@@ -302,7 +302,7 @@ private class PartialFunction5<A, B, C, D, E, Z>{
   
     public function apply(a: A, b: B, c: C, d: D, e: E): Z {
       for (def in _def) {
-        if (def._1(a, b, c, d, e)) return def._2(a, b, c, d, e);
+        if (def.fst()(a, b, c, d, e)) return def.snd()(a, b, c, d, e);
       }
       
       return Prelude.error()("Function undefined at (" + a + ", " + b + ", " + c + ", " + d + ")");

@@ -1,7 +1,7 @@
 package stx.plus;
 
 
-import stx.Tuples;								using stx.Tuples;
+using stx.Tuples;								using stx.Tuples;
 
 using stx.Prelude;
 import Type;
@@ -68,9 +68,9 @@ class Equal {
             _createEqualImpl(function(a, b) {         
               var values = fields.map(function(v){return Tuples.t2(Reflect.field(a, v), Reflect.field(b, v));});
               for (value in values) {
-                if(Reflect.isFunction(value._1))
+                if(Reflect.isFunction(value.fst()))
                   continue;
-                if(!getEqualFor(value._1)(value._1, value._2))
+                if(!getEqualFor(value.fst())(value.fst(), value.snd()))
                   return false;
               }
               return true;

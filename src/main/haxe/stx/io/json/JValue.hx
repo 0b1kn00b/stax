@@ -17,7 +17,7 @@
 package stx.io.json;
 
 using stx.Prelude;
-import stx.Tuples;
+using stx.Tuples;
 
 enum JValue {
   JNull;
@@ -98,10 +98,10 @@ class JValues{
     }
   }
   static public function extractKey(v: JValue): String {
-    return extractField(v)._1;
+    return extractField(v).fst();
   }
   static public function extractValue(v: JValue): JValue {
-    return extractField(v)._2;
+    return extractField(v).snd();
   }
   static public function extractField(v: JValue): Tuple2<String, JValue> {
     return switch (v) {
@@ -117,7 +117,7 @@ class JValues{
         for (x in xs) {
           var field = extractField(x);
           
-          hash.set(field._1, field._2);
+          hash.set(field.fst(), field.snd());
         }
         
         hash;

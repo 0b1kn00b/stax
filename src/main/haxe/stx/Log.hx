@@ -33,12 +33,7 @@ class LogItem {
 	}
 	public var level : LogLevel;
 	public var value : Dynamic;
-}
-enum LogListing {
-	Include(s:String);
-	Exclude(s:String);
-}
-class Log {
+
 	public static function debug(v:Dynamic) {
 		return new LogItem(LogLevel.Debug, v);
 	}
@@ -54,7 +49,13 @@ class Log {
 	public static function fatal(v:Dynamic) {
 		return new LogItem(LogLevel.Fatal, v);
 	}
-	public static function trace(v:Dynamic, ?pos:PosInfos) {
+}
+enum LogListing {
+	Include(s:String);
+	Exclude(s:String);
+}
+class Log {
+	public static function trace<A>(v:A, ?pos:PosInfos):A{
 		var log : Logger = null;
 		try{
 			log = Logger.inject(pos);
@@ -64,10 +65,11 @@ class Log {
 		switch (Type.typeof(v)) {
 			case TClass(c)	:
 					if ( Type.getClassName(c) == Type.getClassName(LogItem) ){
-							var e : EnumValue = v.level;
+							var o : LogItem 	= cast v;
+							var e : EnumValue = o.level;
 							if (e.indexOf() >= log.level.indexOf() ) {
-								if (log.check(v, pos)) {
-										log.trace( v.toString(), pos );
+								if (log.check(o, pos)) {
+										log.trace( o.toString(), pos );
 								}
 							}
 					}else {
@@ -76,10 +78,10 @@ class Log {
 			default				:
 				log.trace(v,pos);
 		}
+		return v;
 	}
 	public static function printer<A>(?p:PosInfos):Dynamic->A{
-		return 
-			function(x:A){
+		return function(x:A){
 				haxe.Log.trace(x,p);
 				return x;
 			}

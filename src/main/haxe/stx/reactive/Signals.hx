@@ -16,7 +16,7 @@
 package stx.reactive;
 
 using stx.Prelude;
-import stx.Tuples;
+using stx.Tuples;
 import stx.reactive.Reactive;
 import stx.ds.Collection;
 
@@ -39,18 +39,18 @@ class Signals {
      * @param conditions    An Iterable of Tuple2s, composed of a
      *                      true/false Signals and an 'if true' 
      *                      Signal that will be returned if 
-     *                      Tuple._1 == 'true.'
+     *                      Tuple.fst() == 'true.'
      *
-     * @param elseS         The Signal to return if Tuple._1
+     * @param elseS         The Signal to return if Tuple.fst()
      *                      == false.
      *
-     * @return              An 'ifTrue' Signal if Tuple._1
+     * @return              An 'ifTrue' Signal if Tuple.fst()
      *                      == true, else an 'ifFalse' Signal.
      */
     public static function cond<T>(conditions: Iterable<Tuple2<Signal<Bool>, Signal<T>>>, elseS: Signal<T>): Signal<T> {
         return switch (conditions.headMaybe()) {
             case None:    elseS;
-            case Some(h): SignalBool.ifTrue(h._1, h._2, cond(conditions.tail(), elseS));
+            case Some(h): SignalBool.ifTrue(h.fst(), h.snd(), cond(conditions.tail(), elseS));
         }
     }
     

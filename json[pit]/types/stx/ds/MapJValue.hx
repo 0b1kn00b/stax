@@ -5,7 +5,7 @@ import stx.io.json.Transcode;
 import stx.ds.Map;
 import stx.io.json.Decomposer;
 import stx.io.json.JValue;
-import stx.Tuples;
+using stx.Tuples;
 import stx.Transformers;
 
 using stx.Prelude;

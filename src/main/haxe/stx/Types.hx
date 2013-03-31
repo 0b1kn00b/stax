@@ -21,6 +21,9 @@ class Types{
   static public function resolveClassO(s:String):Maybe<Class<Dynamic>>{
     return Maybes.create(Type.resolveClass(s));
   }
+  static public function resolveClassE(s:String):Outcome<Class<Dynamic>>{
+    return resolveClassO(s).orEitherC(Error.create('no type $s found.'));
+  }
   static public function getClassO<A>(c:A):Maybe<Class<A>>{
     return Maybes.create(Type.getClass(c));
   }
@@ -51,8 +54,13 @@ class Types{
   }
   static public function createInstanceE<A>(type:Class<A>,?args:Array<Dynamic>):Either<Error,A>{
     args = if(args == null) [] else args;
-    return 
-      Type.createInstance.lazy(type,args).catching()();
+    var v : A = null;
+    try{
+      v = Type.createInstance(type,args);  
+    }catch(e:Dynamic){
+      return Left(new Error('Constuctor ' + Std.string(e)));
+    }
+    return Right(v);
   }
   static public function resolveCreate<A>(name:String,?args:Array<Dynamic>):Outcome<A>{
     return Types.resolveClassO.first().pinch().then(

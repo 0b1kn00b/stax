@@ -24,11 +24,11 @@ class StateTest extends TestCase{
 
 		//$type( fn2 );
 		//sr.apply(null).then( fn2 );
-		//trace( untyped sr(null)._1 );	}
+		//trace( untyped sr(null).fst() );	}
 		var sr3 = new stx.States.StateRef('pooty');
 		var val = sr.flatMap( fn2 ).flatMap( fn3 );
 		//$type (val.map) ;
-		trace(val.apply(null)._1);
+		trace(val.apply(null).fst());
 		var val2 = sr.flatMap( StateRefs.reader );
 		trace(val2.apply(null));
 		trace('___________');

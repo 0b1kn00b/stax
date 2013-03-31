@@ -31,7 +31,7 @@ class CodeBlocks {
           }catch(e:Error){
             o = Left(e);
           }catch(e:Dynamic){
-            o = Left(new Error(e));
+            o = Left(new Error(Std.string(e)));
           }
         return o;
       }
@@ -142,6 +142,22 @@ class Functions0 {
   } 
 } 
 class Functions1 {
+  /**
+   Applies a Thunk and returns Either an error or it's result
+  */
+  public static function catching<A,B>(fn:A->B):A->Outcome<B>{
+    return function(a){
+        var o = null;
+          try{
+            o = Right(fn(a));
+          }catch(e:Error){
+            o = Left(e);
+          }catch(e:Dynamic){
+            o = Left(new Error(Std.string(e)));
+          }
+        return o;
+      }
+  }
 /*  static public function apply<P,R>(f:P->R,p1:P){
     return (p1);   
   }   */

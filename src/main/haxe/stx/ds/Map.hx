@@ -19,7 +19,7 @@ package stx.ds;
 
 using stx.Prelude;
 
-import stx.Tuples;
+using stx.Tuples;
 import stx.Prelude;
 
 using stx.Bools;
@@ -233,8 +233,8 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
   
   public function add(t: Tuple2<K, V>): Map<K, V> {
     //trace('add $t');
-    var key   : K   = t._1;
-    var value : V   = t._2;
+    var key   : K   = t.fst();
+    var value : V   = t.snd();
     var bucket  = bucketFor(key);
     
     var list = _buckets[bucket];  
@@ -242,8 +242,8 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
     for (i in 0...list.length) {
       var entry = list[i];
 
-      if (keyEqual(entry._1, key)) {
-        if (!valueEqual(entry._2, value)) {
+      if (keyEqual(entry.fst(), key)) {
+        if (!valueEqual(entry.snd(), value)) {
           var newMap = copyWithMod(bucket);
           newMap._buckets[bucket][i] = t;
                   
@@ -277,7 +277,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
   }
 
   public function remove(t: Tuple2<K, V>): Map<K, V> {
-    return removeInternal(t._1, t._2, false);
+    return removeInternal(t.fst(), t.snd(), false);
   }
   
   public function removeAll(i: Iterable<Tuple2<K, V>>): Map<K, V> {
@@ -303,8 +303,8 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
   public function get(k: K): Maybe<V> {  
 
     for (e in listFor(k)) {
-      if (keyEqual(e._1, k)) {
-        return Some(e._2);
+      if (keyEqual(e.fst(), k)) {
+        return Some(e.snd());
       }
     }
     return None;
@@ -326,7 +326,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
   
   public function contains(t: Tuple2<K, V>): Bool {      
     for (e in entries()) {
-      if (keyEqual(e._1, t._1) && valueEqual(t._2, t._2)) return true;
+      if (keyEqual(e.fst(), t.fst()) && valueEqual(t.snd(), t.snd())) return true;
     }
     
     return false;
@@ -350,7 +350,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
           hasNext: entryIterator.hasNext,
           
           next: function() {
-            return entryIterator.next()._1;
+            return entryIterator.next().fst();
           }
         }
       }
@@ -372,7 +372,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
           hasNext: entryIterator.hasNext,
           
           next: function() {
-            return entryIterator.next()._2;
+            return entryIterator.next().snd();
           }
         }
       }
@@ -389,11 +389,11 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
     var a2 = other.toArray(); 
     
     var sorter = function(t1: Tuple2<K, V>, t2: Tuple2<K, V>): Int {
-      var c = keyOrder(t1._1, t2._1);
+      var c = keyOrder(t1.fst(), t2.fst());
       return if(c != 0)
         c;
       else
-        valueOrder(t1._2, t2._2);
+        valueOrder(t1.snd(), t2.snd());
     }
     
     a1.sort(sorter);
@@ -420,13 +420,13 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
     return "Map " + 
       IterableShow.toString(entries(),
         function(t:Tuple2<K,V>):String{ 
-          return keyShow(t._1) + " -> " + valueShow(t._2); 
+          return keyShow(t.fst()) + " -> " + valueShow(t.snd()); 
         }
       );  
   }
 
   public function hashCode() {
-    return foldl(786433, function(a, b) return a + (keyMap(b._1) * 49157 + 6151) * valueMap(b._2));
+    return foldl(786433, function(a, b) return a + (keyMap(b.fst()) * 49157 + 6151) * valueMap(b.snd()));
   }
 
   public function load(): Int {
@@ -519,8 +519,8 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
     for (i in 0...list.length) {
       var entry = list[i];
       
-      if (ke(entry._1, k)) {
-        if (ignoreValue || ve(entry._2, v)) {
+      if (ke(entry.fst(), k)) {
+        if (ignoreValue || ve(entry.snd(), v)) {
           var newMap = copyWithMod(bucket);
         
           newMap._buckets[bucket] = list.slice(0, i).concat(list.slice(i + 1, list.length));
@@ -568,7 +568,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
       }
     
       for (e in all) {
-        var bucket = bucketFor(e._1);
+        var bucket = bucketFor(e.fst());
       
         _buckets[bucket].push(e);
       }
@@ -609,7 +609,7 @@ class ArrayToMap {
 class MapExtensions {
   public static function toObject<V>(map: Map<String, V>): Dynamic<V> {
     return map.foldl({}, function(object, tuple) {
-      Reflect.setField(object, tuple._1, tuple._2);
+      Reflect.setField(object, tuple.fst(), tuple.snd());
       
       return object;
     });

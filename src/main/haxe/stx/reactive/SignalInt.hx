@@ -25,11 +25,11 @@ class SignalInt {
     }
     
     public static function plusS(b1: Signal<Int>, b2: Signal<Int>): Signal<Int> {
-        return b1.zip(b2).map(function(t) { return t._1 + t._2; });
+        return b1.zip(b2).map(function(t) { return t.fst() + t.snd(); });
     }
     
     public static function minusS(b1: Signal<Int>, b2: Signal<Int>): Signal<Int> {
-        return b1.zip(b2).map(function(t) { return t._1 - t._2; });
+        return b1.zip(b2).map(function(t) { return t.fst() - t.snd(); });
     }
     
     public static function minus(b: Signal<Int>, value: Int): Signal<Int> {
@@ -37,7 +37,7 @@ class SignalInt {
     }
     
     public static function timesS(b1: Signal<Int>, b2: Signal<Int>): Signal<Int> {
-        return b1.zip(b2).map(function(t) { return t._1 * t._2; });
+        return b1.zip(b2).map(function(t) { return t.fst() * t.snd(); });
     }
     
     public static function times(b: Signal<Int>, value: Int): Signal<Int> {
@@ -45,7 +45,7 @@ class SignalInt {
     }
     
     public static function modS(b1: Signal<Int>, b2: Signal<Int>): Signal<Int> {
-        return b1.zip(b2).map(function(t) { return t._1 % t._2; });
+        return b1.zip(b2).map(function(t) { return t.fst() % t.snd(); });
     }
     
     public static function mod(b: Signal<Int>, value: Int): Signal<Int> {
@@ -53,7 +53,7 @@ class SignalInt {
     }
     
     public static function dividedByS(b1: Signal<Int>, b2: Signal<Int>): Signal<Int> {
-        return b1.zip(b2).map(function(t) { return Std.int(t._1 / t._2); });
+        return b1.zip(b2).map(function(t) { return Std.int(t.fst() / t.snd()); });
     }
     
     public static function dividedBy(b: Signal<Int>, value: Int): Signal<Int> {

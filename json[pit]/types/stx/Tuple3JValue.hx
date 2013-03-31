@@ -1,6 +1,6 @@
 package stx.io.json.types.stx;
 
-import stx.Tuples;
+using stx.Tuples;
 
 import stx.io.json.Transcode;
 using stx.io.json.types.stx.AbstractProductJValue;

@@ -42,8 +42,11 @@ class StaxTestSuite {
         #if development
           var tests   = 
           [   
-              new stx.arw.StateArrowTest()
+              new stx.plus.OrderTest(),
+              
             /*
+              new stx.arw.ArrowsTest(),
+              new stx.arw.StateArrowTest()
               new stx.MethodTest()
               new stx.arw.ArrowsTest()
               new stx.ContinuationTest()
@@ -63,17 +66,19 @@ class StaxTestSuite {
         #else 
           var tests =
           [
-/*            new stx.plus.OrderTest(),
               
             new stx.ArraysTest(),
             new stx.ds.MapTest(),
             new stx.ds.SetTest(),
             new stx.ds.ListTest(),
+
+            new stx.plus.OrderTest(),
             
             new stx.functional.FoldablesTest(),
             new stx.functional.PartialFunctionTest(),   
 
             new stx.math.tween.TweensTest(),
+
   #if !(neko || php || cpp || java || cs )  
             new stx.time.ScheduledExecutorTest(),
             new stx.reactive.ReactiveTest(),
@@ -82,26 +87,29 @@ class StaxTestSuite {
             new stx.net.HttpHeadersTest(),
             //new ReactiveTester(),
             //new stx.StringsTest(),
-            new stx.framework.Injec <torTest(),
+            new stx.framework.InjectorTest(),
             new stx.math.geom.PointTest(),
-            new stx.util.GuidTest()
+            new stx.util.GuidTest(),
+
   #if js
-            , new js.io.IFrameIOTest()      
-            , new js.dom.HTMLElementsTest()
-            , new js.dom.HTMLDocumentsTest()
-            , new js.dom.QuirksTestCase()
-  #end
-            , new stx.ObjectsTest()
-            , new stx.TupleTest()
-            , new stx.ds.RangeTest()
-            , new stx.MathsTest()
-            , new stx.BoolsTest()*/
+            new js.io.IFrameIOTest(),
+            new js.dom.HTMLElementsTest(),
+            new js.dom.HTMLDocumentsTest(),
+            new js.dom.QuirksTestCase(),
+  #end 
+
+
+            new stx.ObjectsTest(),
+            new stx.TupleTest(),
+            new stx.ds.RangeTest(),
+            new stx.MathsTest(),
+            new stx.BoolsTest(),
           ];
         #end
         haxe.Log.trace = stx.Log.trace;
 
         var runner = new Runner();
-            runner.addAll(tests);
+            runner.addAll(tests #if selector ,'devtest' #end);
 
         Report.create(runner);
         runner.run();

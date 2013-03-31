@@ -38,6 +38,9 @@ class Error {
 	static public function build(?pos:PosInfos):String->Error{
 		return toError.p2(pos);
 	}
+	static public function err(message:String,?pos:PosInfos){
+		return new Error(message,pos);
+	}
 }
 class Positions {
 	public static function toString(pos:PosInfos){

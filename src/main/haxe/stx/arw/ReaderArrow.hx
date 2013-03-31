@@ -1,15 +1,18 @@
-package vnl.arw;
+package stx.arw;
 
+using stx.arw.Arrows;
+
+import stx.arw.StateArrow;
 //Arrow<S,Tuple2<A,S>>;
 
-abstract ReaderArrow(ArrowState<S,A>)<S,A> from ArrowState<S,A> to ArrowState<S,A>{
+abstract ReaderArrow<S,A>(ArrowState<S,A>) from ArrowState<S,A> to ArrowState<S,A>{
   public function new(state){
-    this = v;
+    this = state;
   }
   public function map<B>(fn:A->B){
-    return this.map(fn);
-  }
-  public function read<B>():Arrow<B,S>{
     
   }
+  /*public function read<B>():Arrow<B,S>{
+    
+  }*/
 }

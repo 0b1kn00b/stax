@@ -249,9 +249,9 @@ class ReceivesE{
   }
   static public function unzip<A,B,C>(tp:Tuple2<Receive<Either<A,B>>,Receive<Either<A,C>>>):Receive<Either<A,Tuple2<B,C>>>{
     return 
-      tp._1.flatMapR(
+      tp.fst().flatMapR(
         function(b:B){
-          return tp._2.mapR( Tuples.t2.p1(b) );
+          return tp.snd().mapR( Tuples.t2.p1(b) );
         }
       );
   }

@@ -3,10 +3,11 @@ package stx;
 
 using stx.Prelude;
 
-import stx.Tuples;
+using stx.Tuples;
 
 using stx.Future;
 using stx.Promise;
+using stx.Maybes;
 using stx.Eithers;
 using stx.Arrays;
 using stx.Functions;
@@ -30,8 +31,8 @@ abstract Promise<A>(Future<Outcome<A>>) from Future<Outcome<A>> to Future<Outcom
   public function no(err:Error):Promise<A>{
     return this.deliver(Left(err));
   }
-  public function new(){
-    this = Future.create();
+  public function new(?p){
+    this = Maybes.orDefault(p,Future.create());
   }
   public function recover<B>(fn:Error->Outcome<A>):Promise<A>{
     return this.map(
@@ -152,7 +153,7 @@ abstract Promise<A>(Future<Outcome<A>>) from Future<Outcome<A>> to Future<Outcom
       Eithers.left.then( Maybes.foreach.p2( f ) ).effectOf()
     );
   }
-  public function reply(){
+  public function future():Future<Outcome<A>>{
     return this;
   }
 }
@@ -206,9 +207,9 @@ class Promises{
   }
   static public function unzip<A,B,C>(tp:Tup2<Promise<A>,Promise<B>>):Promise<Tup2<A,B>>{
     return 
-      tp._1.flatMap(
+      tp.fst().flatMap(
         function(b:A){
-          return tp._2.map( Tuples.t2.p1(b) );
+          return tp.snd().map( Tuples.t2.p1(b) );
         }
       );
   }

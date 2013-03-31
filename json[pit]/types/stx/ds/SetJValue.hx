@@ -1,7 +1,7 @@
 package stx.io.json.types.stx.ds;
 
 import stx.ds.Set;
-import stx.Tuples;
+using stx.Tuples;
 import stx.io.json.Transcode;
 import stx.Prelude;
 import stx.Transformers;

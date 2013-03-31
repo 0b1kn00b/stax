@@ -21,7 +21,7 @@ using stx.Prelude;
 import stx.reactive.Reactive;
 import stx.ds.Collection;
 
-import stx.Tuples;
+using stx.Tuples;
 using stx.Iterables;
 using stx.Functions;
 
@@ -80,6 +80,7 @@ class Streams {
     /**
      * Creates an event stream that will send a single value.
      */
+     @:noUsing
     static public function one<T>(val: T): Stream<T> {
         var sent = false;
         
@@ -141,16 +142,16 @@ class Streams {
      * @param conditions    An Iterable of Tuple2s, composed of a
      *                      true/false Stream and an 'if true' 
      *                      Stream that will be returned if 
-     *                      Tuple._1 == 'true.'
+     *                      Tuple.fst() == 'true.'
      *
-     * @return              If 'conditions' contains aTuple2._1 
+     * @return              If 'conditions' contains aT2.fst() 
      *                      == 'true', Stream<T> else a
      *                      zero Stream.
      */
     static public function cond<T>(conditions: Iterable<Tuple2<Stream<Bool>, Stream<T>>>): Stream<T> {
         return switch (conditions.headMaybe()) {
             case None:    Streams.zero();
-            case Some(h): StreamBool.ifTrue(h._1, h._2, cond(conditions.tail()));
+            case Some(h): StreamBool.ifTrue(h.fst(), h.snd(), cond(conditions.tail()));
         }
     }
     #if (js || flash)

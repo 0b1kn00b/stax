@@ -6,6 +6,7 @@
 -D haxe3
 -D pattern_matching
 -D development
+#-D selector
 
 -main StaxTestSuite
 
