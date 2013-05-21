@@ -11,9 +11,9 @@ typedef Equality<T> = {
 }
 @:note('#0b1kn00b: The assumption that the right hand value is of the correct type could be questioned')
 class Equal{
-  static public function equals<T>(a:T,b:T,?func:T->T->Bool):Bool{
+  /*static public function equals<T>(a:T,b:T,?func:T->T->Bool):Bool{
     if (func == null){
-      func = getEqualForType(Type.typeof(a));
+      func = getEqualFor(a);
     }
     return func(a,b);
   }
@@ -25,7 +25,7 @@ class Equal{
     }else if (b!=null){
       __equals__(b.equals)(a,b);
     }
-  }
+  }*/
   static public function getEqualFor<T>(v:T):EqualFunction<T>{
     return getEqualForType(Type.typeof(v));
   }
@@ -65,6 +65,23 @@ class Equal{
     };
   }
 }
+class NullEqual{
+  @:noUsing static public inline function equals(a:Dynamic,b:Dynamic){
+    return (a == null) && (b == null);
+  }
+}
+class ObjectEquals{
+  static public inline function equals<A>(a:Dynamic,b:Dynamic){
+    var o = true;
+    for(key in Reflect.fields(a)) {
+      var va = Reflect.field(a, key);
+      if(!Equal.getEqualFor(va)(va, Reflect.field(b, key))){
+        o = false;break;
+      }
+    }
+    return o;
+  }
+}
 class ProductEquals{
   static public inline function equals(a:AbstractProduct,b:AbstractProduct){
     var els0  = a.elements();
@@ -84,30 +101,13 @@ class ProductEquals{
     return o;
   }
 }
-class ObjectEquals{
-  static public inline function equals<A>(a:Dynamic,b:Dynamic){
-    var o = true;
-    for(key in Reflect.fields(a)) {
-      var va = Reflect.field(a, key);
-      if(!Equal.getEqualFor(va)(va, Reflect.field(b, key))){
-        o = false;break;
-      }
-    }
-    return o;
-  }
-}
 class EqualsEquals{
   static public inline function equals<A>(a:{ equals : A -> Bool },b:Dynamic){
     return a.equals(b);
   }
 }
-class NullEqual{
-  static public inline function equals(a:Dynamic,b:Dynamic){
-    return (a == null) && (b == null);
-  }
-}
 class EnumEqual{
-  static public inline function equals(a:Dynamic,b:Dynamic){
+  @:noUsing static public inline function equals(a:Dynamic,b:Dynamic){
     return if(0 != Type.enumIndex(a) - Type.enumIndex(b)){
       false;
     }else{

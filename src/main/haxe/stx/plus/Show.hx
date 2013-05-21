@@ -47,7 +47,7 @@ class Show {
           }else{
             __show__(function(v) return Type.getClassName(Type.getClass(v)));
           }
-      case TNull                        : __show__(NullShow.toString);
+      case TNull                        : NullShow.toString;
       case TFunction                    : __show__(function(v) return '<function>');
     }
   }
