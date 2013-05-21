@@ -17,7 +17,7 @@
 			],
 			[
 				"Abs",
-				"AbstractMethodError	stx.error"
+				"AbstractMethodError	stx.err"
 			],
 			[
 				"Ma",
@@ -52,8 +52,8 @@
 				"extractor"
 			],
 			[
-				"Maybe",
-				"MaybeJValue"
+				"Option",
+				"OptionJValue"
 			],
 			[
 				"Str",
@@ -177,7 +177,7 @@
 			],
 			[
 				"Oo",
-				"Maybes"
+				"Options"
 			],
 			[
 				"getE",
@@ -699,7 +699,7 @@
 		"/C/world/stack/projects/stax/src/test/haxe/stx/io/json/JsonTest.hx",
 		"/C/world/stack/projects/stax/src/main/haxe/stx/io/json/types/ArrayJValue.hx",
 		"/C/world/stack/projects/stax/src/main/haxe/stx/io/json/types/stx/ObjectJValue.hx",
-		"/C/world/stack/projects/stax/src/main/haxe/stx/io/json/types/stx/MaybeJValue.hx",
+		"/C/world/stack/projects/stax/src/main/haxe/stx/io/json/types/stx/OptionJValue.hx",
 		"/C/world/stack/projects/stax/src/main/haxe/stx/io/json/types/stx/Tuple2JValue.hx",
 		"/C/world/stack/projects/stax/src/main/haxe/stx/io/json/types/stx/Tuple3JValue.hx",
 		"/C/world/stack/projects/stax/src/main/haxe/stx/io/json/types/stx/Tuple4JValue.hx",
@@ -716,7 +716,7 @@
 		"/C/world/stack/projects/stax/src/main/haxe/stx/io/json/types/stx/AbstractProductJValue.hx",
 		"/C/world/stack/projects/stax/src/test/haxe/stx/io/json/JValueTest.hx",
 		"/C/world/stack/projects/stax/[Finished in 2.2s with exit code 1]./src/main/haxe/stx/io/json/types/stx/ds/SetJValue.hx",
-		"/C/world/stack/projects/stax/[Finished in 2.5s]./src/main/haxe/stx/io/json/types/stx/MaybeJValue.hx",
+		"/C/world/stack/projects/stax/[Finished in 2.5s]./src/main/haxe/stx/io/json/types/stx/OptionJValue.hx",
 		"/C/world/stack/projects/stax/src/test/haxe/stx/io/json/JsonGenerator.hx",
 		"/C/world/stack/projects/stax/src/main/haxe/stx/io/json/CollectionsJValue.hx",
 		"/C/world/stack/projects/stax/src/main/haxe/stx/Types.hx",
@@ -757,7 +757,7 @@
 		"/C/world/stack/projects/stax/src/main/haxe/stx/io/http/Http.hx",
 		"/C/world/stack/projects/stax/src/main/haxe/stx/plus/Equal.hx",
 		"/C/world/stack/projects/stax/src/test/haxe/stx/plus/EqualTest.hx",
-		"/C/world/stack/projects/stax/src/main/haxe/stx/Maybes.hx",
+		"/C/world/stack/projects/stax/src/main/haxe/stx/Options.hx",
 		"/C/world/stack/projects/stax/src/test/haxe/stx/PromiseTest.hx",
 		"/C/world/stack/projects/stax/src/main/haxe/stx/Promises.hx",
 		"/C/world/stack/projects/stax/src/test/haxe/stx/ds/MapTest.hx",
@@ -944,7 +944,7 @@
 			"open",
 			"load",
 			"getMapFor",
-			"Maybes",
+			"Options",
 			"add",
 			"valEqual",
 			"key",
@@ -1023,7 +1023,7 @@
 			"import SCore;",
 			"using SCore;",
 			"static public",
-			"Maybes.create",
+			"Options.create",
 			"Step",
 			"static public",
 			"BinaryTree",
@@ -1112,11 +1112,11 @@
 			"$1.execute($2);",
 			"new AbstractMethodError",
 			"State",
-			"Maybes.toMaybe($1)",
+			"Options.toOption($1)",
 			"Selector",
 			"__internal__",
 			"call",
-			"Maybe<$1>",
+			"Option<$1>",
 			"hsm_currentState",
 			"heart",
 			"//@Test",

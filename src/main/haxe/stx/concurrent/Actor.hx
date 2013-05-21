@@ -49,7 +49,7 @@ typedef Coalescer<T> = {
    commutes: T -> T -> Bool,
    
    /** Tries to coalesce the two elements into a single element */
-   coalesce: T -> T -> Maybe<T>
+   coalesce: T -> T -> Option<T>
 }
 
 interface ActorFactory<T, S> {

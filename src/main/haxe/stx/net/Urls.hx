@@ -17,13 +17,14 @@ package stx.net;
 
 using stx.Prelude;
 
+import stx.Tuples.*;
 import stx.Prelude;
 import stx.net.Url;
 import stx.ds.Map;
 
 using stx.Tuples;
 using stx.Strings;
-using stx.Maybes;
+using stx.Options;
 using stx.functional.Foldable;
 
 class Urls {
@@ -42,7 +43,7 @@ class Urls {
   
   /** Tries to parse the url, returning None if unsuccessful.
    */
-  public static function toParsedUrl(s: String): Maybe<ParsedUrl> {
+  public static function toParsedUrl(s: String): Option<ParsedUrl> {
     var nonNull = function(s: String) return if (s == null) ''; else s;
     
     return if (UrlPattern.match(s)) {
@@ -199,8 +200,8 @@ class Urls {
              var a = kv.split('=').map(function(s) return s.urlDecode());
       
               return if (a.length == 0) [];
-                     else if (a.length == 1) [Tuples.t2(a[0],'')];
-                     else [Tuples.t2(a[0],a[1])];
+                     else if (a.length == 1) [tuple2(a[0],'')];
+                     else [tuple2(a[0],a[1])];
            }).foldl(stx.ds.Map.create(), function(m, t) {
              return m.add(t);
            });

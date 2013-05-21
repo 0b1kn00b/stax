@@ -5,9 +5,11 @@ import Type;
 import stx.Maths;
 
 
+using stx.Options;
 using stx.Prelude;
 using stx.Tuples;
 using stx.plus.Show;
+using stx.Compose;
 
 typedef ShowFunction<T>         = Function1<T, String>;
 
@@ -15,7 +17,7 @@ class Show {
   static public function show<A>(v:A):String{
     return getShowFor(v)(v);
   }
-  static function _createShowImpl<T>(impl : ShowFunction<Dynamic>) : ShowFunction<T> {
+  static public function __show__<T>(impl : ShowFunction<Dynamic>) : ShowFunction<T> {
     return function(v) return null == v ? 'null' : impl(v);
   }
   /** Returns a ShowFunction (T -> String). It works for any type. For Custom Classes you must provide a toString()
@@ -31,64 +33,52 @@ class Show {
    */
   public static function getShowForType<T>(v : ValueType) : ShowFunction<T> {
     return switch(v) {
-      case TBool:
-        _createShowImpl(BoolShow.toString);
-      case TInt:
-        _createShowImpl(IntShow.toString);
-      case TFloat:
-        _createShowImpl(FloatShow.toString);
-      case TUnknown:
-      _createShowImpl(function(v) return '<unknown>');
-      case TObject:
-        _createShowImpl(function(v)
-        {
-        var buf = [];
-        for(k in Reflect.fields(v)) {
-          var i = Reflect.field(v, k);
-          buf.push(k + ":" + getShowFor(i)(i));
-        }
-        return "{" + buf.join(",") + "}";
-        });
-      case TClass(c):
-        switch(Type.getClassName(c)) {
-        case "String":
-          _createShowImpl(Strings.toString);
-        case "Array":
-          _createShowImpl(ArrayShow.toString);
-        default:
-            if(Meta._hasMetaDataClass(c)) {
-              var fields = Meta._fieldsWithMeta(c, "show");
-              _createShowImpl(function(v : T) { 
-                var values = fields.map(function(f){return Reflect.field(v, f);}).filter(function(v) return !Reflect.isFunction(v)).map(function(v){return Show.getShowFor(v)(v);});
-                return IterableShow.mkString(values,Type.getClassName(c) + '(', ')', ', '); 
-              });
-            } else if(Type.getInstanceFields(c).remove("toString"))
-              _createShowImpl(function(v) return Reflect.callMethod(v, Reflect.field(v, "toString"), []));
-            else
-              _createShowImpl(function(v) return Type.getClassName(Type.getClass(v)));
-        }
-      case TEnum(_):
-        _createShowImpl(function(v) {
-          var buf = Type.enumConstructor(v);
-          var params = Type.enumParameters(v);
-          if(params.length == 0)
-            return buf;
-          else {
-          buf +="(";
-          for(p in params)
-            buf += getShowFor(p)(p);
-          return buf + ")";
+      case TBool                        : __show__(BoolShow.toString);
+      case TInt                         : __show__(IntShow.toString);
+      case TFloat                       : __show__(FloatShow.toString);
+      case TUnknown                     : __show__(function(v) return '<unknown>');
+      case TObject                      : __show__(ObjectShow.toString);
+      case TEnum(_)                     : __show__(EnumShow.toString);
+      case TClass(c) if(c == String)    : __show__(Strings.toString);
+      case TClass(c) if(c == Array)     : __show__(ArrayShow.toString);
+      case TClass(c)                    : 
+          if(Type.getInstanceFields(c).remove("toString")){
+            __show__(function(v) return Reflect.callMethod(v, Reflect.field(v, "toString"), []));
+          }else{
+            __show__(function(v) return Type.getClassName(Type.getClass(v)));
           }
-        });
-      case TNull:
-        nil;
-      case TFunction:
-        _createShowImpl(function(v) return '<function>');
+      case TNull                        : __show__(NullShow.toString);
+      case TFunction                    : __show__(function(v) return '<function>');
     }
   }
-  @:noUsing
-  static public function nil<A>(v:A):String{
+}
+class NullShow{
+  static public function toString<A>(v:A):String{
     return "null";
+  }
+}
+class EnumShow{
+  static public function toString(v:Dynamic):String {
+    var buf = Type.enumConstructor(v);
+    var params = Type.enumParameters(v);
+    if(params.length == 0)
+      return buf;
+    else {
+    buf +="(";
+    for(p in params)
+      buf += Show.getShowFor(p)(p);
+    return buf + ")";
+    }
+  }
+}
+class ObjectShow {
+  static public function toString(v:Dynamic):String{
+    var buf = [];
+    for(k in Reflect.fields(v)) {
+      var i = Reflect.field(v, k);
+      buf.push(k + ":" + Show.getShowFor(i)(i));
+    }
+    return "{" + buf.join(",") + "}";
   }
 }
 class ArrayShow {
@@ -146,25 +136,13 @@ class FloatShow {
     return "" + v;
   }
 }
-class ProductShow {
-	public static function getProductShow(p:Product, i : Int) {
-    return Show.getShowFor(p.element(i));
-  }
-	public static function toString(p:Product): String {
-		var productPrefix = 'Tuple' + p.length;
-    var s = productPrefix + "(" + getProductShow(p,1)(p.element(1));
-    for(i in 2...p.length+1)
-      s += ", " + getProductShow(p,i)(p.element(i));
-    return s + ")";
-  }
-}
 class StackItemShow{
   static public function toString(s:StackItem){
     return 
       switch (s){
         case CFunction                      : 'function';
         case Module( m )                    : m;
-        case FilePos( si , _ , line )     : toString(si) + ':$line';
+        case FilePos( si , _ , line )       : toString(si) + ':$line';
         case Method( classname , method )   : '$classname.$method';
         case Lambda( v )                    : '@$v';
       }

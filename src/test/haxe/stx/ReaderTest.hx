@@ -1,8 +1,6 @@
 package stx;
 import stx.Reader;
+import stx.test.TestCase;
 
-class ReaderTest{
-	public function new(){
-		
-	}	
+class ReaderTest extends TestCase{
 }

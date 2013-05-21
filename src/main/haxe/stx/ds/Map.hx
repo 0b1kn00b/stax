@@ -16,7 +16,7 @@
 */
 package stx.ds;
 
-
+import stx.Tuples.*;
 using stx.Prelude;
 
 using stx.Tuples;
@@ -29,7 +29,7 @@ using stx.PartialFunctions;
 import stx.ds.Collection;
 import stx.functional.Foldables;
 
-using stx.Maybes;
+using stx.Options;
 using stx.Functions;
 
 import stx.plus.Order; 
@@ -41,10 +41,6 @@ using stx.Iterables;
 
 using stx.functional.Foldables;
 
-/** A cross-platform, immutable map with support for arbitrary keys.
- * TODO: Use an array of lists to avoid unnecessary copying when adding/removing elements.
- */
- //, implements PartialFunction1<K, V>
 class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
   public static var MaxLoad = 10;
   public static var MinLoad = 1;
@@ -54,7 +50,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
   private function get_keyOrder(){
     return 
       if (keyOrder == null || keyOrder == Order.nil ){
-          keys().headMaybe().map( Order.getOrderFor )
+          keys().headOption().map( Order.getOrderFor )
           .foreach( function(x) keyOrder = x)
           .getOrElseC( Order.getOrderFor(null) );
       }else{
@@ -67,7 +63,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
     //trace('value_order');
     return 
       if (valueOrder == null || valueOrder == Order.nil){
-          values().headMaybe().map( Order.getOrderFor )
+          values().headOption().map( Order.getOrderFor )
           .foreach( function(x) valueOrder = x)
           .getOrElseC( Order.getOrderFor(null) );
       }else{
@@ -79,10 +75,10 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
   private function get_keyMap(){
     return 
       if (keyMap == null || keyMap == Hasher.nil){
-        keys().headMaybe()
-          .map( Hasher.getMapFor )
+        keys().headOption()
+          .map( Hasher.getHashFor )
           .foreach( function(x) keyMap = x)
-          .getOrElseC( Hasher.getMapFor(null) );
+          .getOrElseC( Hasher.getHashFor(null) );
       }else{
         keyMap;
       }
@@ -91,10 +87,10 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
   private function get_valueMap(){
     return 
       if (valueMap == null || valueMap == Hasher.nil){
-        values().headMaybe()
-          .map( Hasher.getMapFor )
+        values().headOption()
+          .map( Hasher.getHashFor )
           .foreach( function(x) valueMap = x)
-          .getOrElseC( Hasher.getMapFor(null) );
+          .getOrElseC( Hasher.getHashFor(null) );
       }else{
         valueMap;
       }
@@ -103,8 +99,8 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
   public var keyShow(get_keyShow,null)       : ShowFunction<K>;
   private function get_keyShow(){
     return 
-      if (keyShow == null || keyShow == Show.nil){
-        keys().headMaybe()
+      if (keyShow == null || keyShow == NullShow.toString){
+        keys().headOption()
           .map( Show.getShowFor )
           .foreach( function(x) keyShow = x)
           .getOrElseC( Show.getShowFor(null) );
@@ -115,8 +111,8 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
   public var valueShow(get_valueShow,null)   : ShowFunction<V>;
   private function get_valueShow(){
     return 
-      if (valueShow == null || valueShow == Show.nil){
-        values().headMaybe()
+      if (valueShow == null || valueShow == NullShow.toString){
+        values().headOption()
           .map( Show.getShowFor )
           .foreach( function(x) valueShow = x)
           .getOrElseC( Show.getShowFor(null) );
@@ -127,8 +123,8 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
   public var keyEqual(get_keyEqual,null)     : EqualFunction<K>;
   private function get_keyEqual(){
     return 
-      if (keyEqual == null || keyEqual == Equal.nil){
-          keys().headMaybe().map( Equal.getEqualFor )
+      if (keyEqual == null || keyEqual == NullEqual.equals){
+          keys().headOption().map( Equal.getEqualFor )
           .foreach( function(x){ keyEqual = x;})
           .getOrElseC( Equal.getEqualFor(null) );
       }else{
@@ -138,8 +134,8 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
   public var valueEqual(get_valueEqual,null)    : EqualFunction<V>;
   private function get_valueEqual(){
     return 
-      if (valueEqual == null || valueEqual == Equal.nil ){
-          values().headMaybe().map( Equal.getEqualFor )
+      if (valueEqual == null || valueEqual == NullEqual.equals ){
+          values().headOption().map( Equal.getEqualFor )
           .foreach( function(x) valueEqual = x)
           .getOrElseC( Equal.getEqualFor(null) );
       }else{
@@ -178,7 +174,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
 
     this._size     = size;
     this._buckets  = buckets;
-    this._pf       = [stx.Tuples.t2(
+    this._pf       = [tuple2(
       containsKey,
       function(k) {
         return switch(self.get(k)) {
@@ -209,7 +205,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
     return _pf.apply(k);
   }
     
-  public function toFunction(): K -> Maybe<V> {
+  public function toFunction(): K -> Option<V> {
     return get;
   }
   
@@ -228,7 +224,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
   }
   
   public function set(k: K, v: V): Map<K, V> {
-    return add(stx.Tuples.t2(k, v));
+    return add(tuple2(k, v));
   }
   
   public function add(t: Tuple2<K, V>): Map<K, V> {
@@ -300,7 +296,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
     return map;
   }
 
-  public function get(k: K): Maybe<V> {  
+  public function get(k: K): Option<V> {  
 
     for (e in listFor(k)) {
       if (keyEqual(e.fst(), k)) {
@@ -400,8 +396,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
     a2.sort(sorter);
 
     return ArrayOrder.compare(a1,a2);
-  } 
-
+  }
   public function equals(other : Map<K, V>) {
     var keys1 = this.keySet();
     var keys2 = other.keySet();
@@ -415,7 +410,6 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
     }
     return true;
   }
-
   public function toString() { 
     return "Map " + 
       IterableShow.toString(entries(),
@@ -424,7 +418,6 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
         }
       );  
   }
-
   public function hashCode() {
     return foldl(786433, function(a, b) return a + (keyMap(b.fst()) * 49157 + 6151) * valueMap(b.snd()));
   }
@@ -473,7 +466,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
       iterator: function(): Iterator<Tuple2<K, V>> {
         var bucket = 0, element = 0;
         
-        var computeNextValue = function(): Maybe<Tuple2<K, V>> {
+        var computeNextValue = function(): Option<Tuple2<K, V>> {
           while (bucket < buckets.length) {
             if (element >= buckets[bucket].length) {
               element = 0;
@@ -554,7 +547,6 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
     }
     return new Map<K, V>(keyOrder, keyEqual, keyMap, keyShow, valueOrder, valueEqual, valueMap, valueShow, newTable, size());
   }
-
   private function rebalance(): Void {
     var newSize = Math.round(size() / ((MaxLoad + MinLoad) / 2));
     
@@ -574,16 +566,13 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
       }
     }
   }
-
   private function bucketFor(k: K): Int {
     return keyMap(k) % _buckets.length;
   }
-
   private function listFor(k: K): Array<Tuple2<K, V>> {
     return if (_buckets.length == 0) []
     else _buckets[bucketFor(k)];
   }
-
   public function size(): Int {
     return _size;
   }

@@ -15,13 +15,13 @@
 */
 package stx.reactive;
 
-import stx.Maybes;
+import stx.Options;
 import stx.Prelude;
-using stx.Tuples;
 import stx.plus.Equal;
-
+import stx.Tuples.*;
 import stx.reactive.Streams;
 
+using stx.Tuples;
 using stx.Prelude;
 using stx.Iterables;
 
@@ -834,7 +834,7 @@ class Stream<T> {
             [this]
         );
         
-        return Tuples.t2(trueStream, falseStream);
+        return tuple2(trueStream, falseStream);
     }
 
     /**
@@ -846,7 +846,7 @@ class Stream<T> {
         var trueStream  = takeWhile(pred);
         var falseStream = dropWhile(pred);
         
-        return Tuples.t2(trueStream, falseStream);
+        return tuple2(trueStream, falseStream);
     }
     
     /**
@@ -897,7 +897,7 @@ class Stream<T> {
      * Zips elements of supplied streams together using a function and returns a
      * Stream of the resulting elements.
      *
-     * [1, 2, 3].zipWith([1, 2, 3], Tuples.t2) == [Tuple2[1, 1], Tuple2[2, 2], Tuple2[3, 3]]
+     * [1, 2, 3].zipWith([1, 2, 3], tuple2) == [Tuple2[1, 1], Tuple2[2, 2], Tuple2[3, 3]]
      *
      * @param as  The stream with which to zipWith 'this'.
      * @param f  The function that will be used to get the result from the inputs streams ('this' and as).
@@ -942,7 +942,7 @@ class Stream<T> {
      *             stream
      */
     public function zip<A>(as: Stream<A>): Stream < Tuple2 < T, A >> {
-		return zipWith(as, Tuples.t2);
+		return zipWith(as, tuple2);
     }
     
     /**
@@ -964,7 +964,7 @@ class Stream<T> {
         streams.push(as);
         streams.push(bs);
         
-        return Streams.zipN(streams).map(function(i: Iterable<Dynamic>): Tuple3<T, A, B> { return Tuples.t3(i.at(0), i.at(1), i.at(2)); });
+        return Streams.zipN(streams).map(function(i: Iterable<Dynamic>): Tuple3<T, A, B> { return tuple3(i.at(0), i.at(1), i.at(2)); });
     }
     
     /**
@@ -988,7 +988,7 @@ class Stream<T> {
         streams.push(bs);
         streams.push(cs);
         
-        return Streams.zipN(streams).map(function(i: Iterable<Dynamic>): Tuple4<T, A, B, C> { return Tuples.t4(i.at(0), i.at(1), i.at(2), i.at(3)); });
+        return Streams.zipN(streams).map(function(i: Iterable<Dynamic>): Tuple4<T, A, B, C> { return tuple4(i.at(0), i.at(1), i.at(2), i.at(3)); });
     }
     
     /**
@@ -1014,7 +1014,7 @@ class Stream<T> {
         streams.push(cs);
         streams.push(ds);
         
-        return Streams.zipN(streams).map(function(i: Iterable<Dynamic>): Tuple5<T, A, B, C, D> { return Tuples.t5(i.at(0), i.at(1), i.at(2), i.at(3), i.at(4)); });
+        return Streams.zipN(streams).map(function(i: Iterable<Dynamic>): Tuple5<T, A, B, C, D> { return tuple5(i.at(0), i.at(1), i.at(2), i.at(3), i.at(4)); });
     }
     
     /**
@@ -1299,7 +1299,7 @@ class Signal<T> {
      * Zips elements of supplied streams together using a function and returns a
      * Signal of the resulting elements.
      *
-     * [1, 2, 3].zipWith([1, 2, 3], Tuples.t2) == [Tuple2[1, 1], Tuple2[2, 2], Tuple2[3, 3]]
+     * [1, 2, 3].zipWith([1, 2, 3], tuple2) == [Tuple2[1, 1], Tuple2[2, 2], Tuple2[3, 3]]
      *
      * @param as  The signal with which to zipWith 'this'.
      * @param f  The function that will be used to get the result from the inputs signals ('this' and as).
@@ -1337,7 +1337,7 @@ class Signal<T> {
      *             supplied Signal
      */
     public function zip<B>(b2: Signal<B>): Signal < Tuple2 < T, B >> {
-		return zipWith(b2, Tuples.t2);
+		return zipWith(b2, tuple2);
     }
     
     /**
@@ -1354,7 +1354,7 @@ class Signal<T> {
         var self = this;
         
         var createTuple = function() {
-            return Tuples.t3(self.valueNow(), b2.valueNow(), b3.valueNow());
+            return tuple3(self.valueNow(), b2.valueNow(), b3.valueNow());
         }
         
         var arr : Array<Signal<Dynamic>> = [this, b2, b3];
@@ -1381,7 +1381,7 @@ class Signal<T> {
         var self = this;
         
         var createTuple = function() {
-            return Tuples.t4(self.valueNow(), b2.valueNow(), b3.valueNow(), b4.valueNow());
+            return tuple4(self.valueNow(), b2.valueNow(), b3.valueNow(), b4.valueNow());
         }
         
         var arr : Array<Signal<Dynamic>> = [this, b2, b3, b4];
@@ -1409,7 +1409,7 @@ class Signal<T> {
         var self = this;
         
         var createTuple = function() {
-            return Tuples.t5(self.valueNow(), b2.valueNow(), b3.valueNow(), b4.valueNow(), b5.valueNow());
+            return tuple5(self.valueNow(), b2.valueNow(), b3.valueNow(), b4.valueNow(), b5.valueNow());
         }
     
         var arr : Array<Signal<Dynamic>> =  [this, b2, b3, b4, b5];

@@ -19,7 +19,7 @@ package stx.io.json;
 import stx.Prelude;
 using stx.Tuples;
 
-import stx.error.AbstractMethodError;
+import stx.err.AbstractMethodError;
 
 typedef ExtractorFunction<I, O>  					= Function<I, O>;
 typedef DecomposerFunction<I, O> 					= Function<I, O>;
@@ -59,7 +59,7 @@ class Transcodes{
 		transcoders.set( Std.string(Type.typeof(Int)) 		, new stx.io.json.types.IntJValue() );
 		transcoders.set( Std.string(Type.typeof(String)) 	, new stx.io.json.types.StringJValue() );
 
-		transcoders.set( Std.string(Type.getEnumName(stx.Maybe)) 					, new stx.io.json.types.stx.MaybeJValue() );
+		transcoders.set( Std.string(Type.getEnumName(stx.Option)) 					, new stx.io.json.types.stx.OptionJValue() );
 		transcoders.set( Std.string(Type.getEnumName(stx.io.json.JValue)) 	, new stx.io.json.types.stx.io.json.JValue() );
 	}
 

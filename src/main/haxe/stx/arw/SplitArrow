@@ -1,0 +1,13 @@
+package stx.arw;
+
+using stx.Tuples;
+import stx.Prelude;
+
+using stx.arw.Arrows;
+import stx.arw.PairArrow;
+
+abstract SplitArrow<A,B,C>(Arrow<A,Tuple2<B,C>>){
+	public function new(l,r){
+    this = inline 
+	}
+}

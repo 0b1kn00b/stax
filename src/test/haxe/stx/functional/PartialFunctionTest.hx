@@ -16,32 +16,33 @@
 */
 package stx.functional;
 
+import stx.Tuples.*;
 import stx.Prelude;
 import stx.test.TestCase;
 import stx.functional.PartialFunction;
 
 using stx.Tuples;
-using stx.Dynamics;
+using stx.Anys;
 
 using stx.PartialFunctions;
 
 class PartialFunctionTest extends TestCase {
     public function testIsDefinedAtForPartialFunction1() {
-      var f = [Tuples.t2(function(i: Int) return i > 0, function(i: Int) return i * i)].toPartialFunction();
+      var f = [tuple2(function(i: Int) return i > 0, function(i: Int) return i * i)].toPartialFunction();
       
       assertTrue(f.isDefinedAt(2));
       assertFalse(f.isDefinedAt(-2));
     }
     
     public function testCallForPartialFunction1() {
-      var f = [Tuples.t2(function(i: Int) return i > 0, function(i: Int) return i * i)].toPartialFunction();
+      var f = [tuple2(function(i: Int) return i > 0, function(i: Int) return i * i)].toPartialFunction();
       
       assertEquals(4, f.apply(2));
     }
     
     public function testOrElseForPartialFunction1() {
-      var f1 = [Tuples.t2(function(i: Int) return i > 0, function(i: Int) return i * i)].toPartialFunction();
-      var f2 = [Tuples.t2(function(i: Int) return i < 0, function(i: Int) return i * i)].toPartialFunction();
+      var f1 = [tuple2(function(i: Int) return i > 0, function(i: Int) return i * i)].toPartialFunction();
+      var f2 = [tuple2(function(i: Int) return i < 0, function(i: Int) return i * i)].toPartialFunction();
       
       var f = f1.orElse(f2);
       
@@ -52,7 +53,7 @@ class PartialFunctionTest extends TestCase {
     }
     
     public function testOrAlwaysCForPartialFunction1() {
-      var f = [Tuples.t2(function(i: Int) return i > 0, function(i: Int) return i * i)].toPartialFunction();
+      var f = [tuple2(function(i: Int) return i > 0, function(i: Int) return i * i)].toPartialFunction();
       
       assertTrue(f.orAlwaysC(9.toThunk()).isDefinedAt(-2));
     }

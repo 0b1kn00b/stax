@@ -21,7 +21,7 @@ import stx.net.Url;
 import stx.net.HttpResponseCode;
 import stx.io.http.Http;
 import stx.Future;
-using stx.Maybes;
+using stx.Options;
 
 // Transforms an Http<S> into an Http<T> given encoder/decoder functions.
 class HttpTransformer<S, T> implements Http<T> {
@@ -66,6 +66,6 @@ class HttpTransformer<S, T> implements Http<T> {
   }
   
   private function addMimeType(map_: Map<String, String>): Map<String, String> {
-    return map_.toMaybe().getOrElseC(Map.create().set("Content-Type", this.mimeType));
+    return map_.toOption().getOrElseC(Map.create().set("Content-Type", this.mimeType));
   }
 }

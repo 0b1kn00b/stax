@@ -30,12 +30,12 @@ import stx.util.Guid;
 
 using stx.Tuples;
 using stx.Strings;
-using stx.Dynamics;
-using stx.Maybes;
+using stx.Anys;
+using stx.Options;
 using stx.Maths;
  
 
-import stx.Dynamics;
+import stx.Anys;
 
 using stx.Log;
 using stx.js.dom.DomExtensions;
@@ -185,7 +185,7 @@ class Quirks {
   public static function addOverridingCssRule(el: HTMLElement, style: String = ''): CSSStyleRule {
     var doc: HTMLDocument = cast el.ownerDocument;
 
-    var id = el.getAttribute('id').toMaybe().filter(function(id) return id != '').getOrElse(function() {
+    var id = el.getAttribute('id').toOption().filter(function(id) return id != '').getOrElse(function() {
       return ('id-' + Guid.create()).withEffect(function(guid) {
         el.setAttribute('id', guid);
       });
@@ -201,7 +201,7 @@ class Quirks {
   /** Adds a new style sheet to the document with the specified content.
    */
   public static function addCssStylesheet(doc: HTMLDocument, content: String): CSSStyleSheet {
-    var head = doc.getElementsByTagName('HEAD')[0].toMaybe().getOrElse(function() {
+    var head = doc.getElementsByTagName('HEAD')[0].toOption().getOrElse(function() {
       return doc.createElement('HEAD').withEffect(function(newHead) {
         doc.documentElement.appendChild(newHead);
       });
@@ -282,12 +282,12 @@ class Quirks {
 
   /** Retrieves the computed value for a particular CSS property.
    */
-  public static function getComputedCssProperty(elem: HTMLElement, name: String): Maybe<String> {
+  public static function getComputedCssProperty(elem: HTMLElement, name: String): Option<String> {
    return (if (BrowserSupport.getComputedStyle()) {
-     elem.ownerDocument.defaultView.toMaybe().flatMap(function(defaultView) {
-       return defaultView.getComputedStyle(elem, null).toMaybe();
-     }).flatMap(function(computedStyle: CSSStyleDeclaration): Maybe<String> {
-       return computedStyle.getPropertyValue(name).toMaybe().filter(function(style) return style != '');
+     elem.ownerDocument.defaultView.toOption().flatMap(function(defaultView) {
+       return defaultView.getComputedStyle(elem, null).toOption();
+     }).flatMap(function(computedStyle: CSSStyleDeclaration): Option<String> {
+       return computedStyle.getPropertyValue(name).toOption().filter(function(style) return style != '');
      }).orElse(function() {
        return if (name == 'opacity') Some('1'); else None;
      }).getOrElseC('');
@@ -313,7 +313,7 @@ class Quirks {
 
          elem.style.left = (name == "font-size") ? "1em" : style;
 
-         Dynamics.withEffect(untyped elem.style.pixelLeft + "px", function(t) untyped {
+         Anys.withEffect(untyped elem.style.pixelLeft + "px", function(t) untyped {
            // Revert the changed values
            elem.style.left        = oldLeft;
            elem.runtimeStyle.left = oldRtLeft;
@@ -323,28 +323,28 @@ class Quirks {
      }
    }
    else '').sendTo(function(computedStyle) {
-     return if (computedStyle == '') None; else computedStyle.toMaybe();
+     return if (computedStyle == '') None; else computedStyle.toOption();
    });
   }
 
   /** Retrieves a particular CSS property.
    */
-  public static function getCssProperty(elem: HTMLElement, name: String): Maybe<String> {
-    return elem.style.toMaybe().flatMap(function(style) {
+  public static function getCssProperty(elem: HTMLElement, name: String): Option<String> {
+    return elem.style.toOption().flatMap(function(style) {
       return style.getAnyO(getActualCssPropertyName(name));
     }).orElse(function() {
       return getComputedCssProperty(elem, name);
     });
   }
 
-  public static function getCssPropertyIfSet(elem: HTMLElement, name: String): Maybe<String> {
+  public static function getCssPropertyIfSet(elem: HTMLElement, name: String): Option<String> {
     return getCssProperty(elem, name).filter(function(style) return style != '');
   }
   /** Retrieves the dimensions of the viewport (inner window of the browser,
    * for top-level windows).
    */
   public static function getViewportSize(?win_: Window): { dx: Int, dy: Int } {
-    var win = win_.toMaybe().getOrElseC(Env.window);
+    var win = win_.toOption().getOrElseC(Env.window);
     var doc = win.document;
     
     return if (Env.window.innerWidth != null) {
@@ -363,7 +363,7 @@ class Quirks {
 
   /** Retrieves the scroll of the page, in pixels. */
   public static function getPageScroll(?win_: Window): { x: Int, y: Int } {
-    var win = win_.toMaybe().getOrElseC(Env.window);
+    var win = win_.toOption().getOrElseC(Env.window);
     var doc = win.document;
     
     var xScroll: Int = 0;
@@ -400,9 +400,9 @@ class Quirks {
 
   /** Retrieves the offset of the document's body, relative to the window origin.
    */
-  public static function getBodyOffset(doc: HTMLDocument): Maybe<{ x: Int, y: Int }> {
-    return Env.document.toMaybe().flatMap(function(document) {
-      return document.body.toMaybe();
+  public static function getBodyOffset(doc: HTMLDocument): Option<{ x: Int, y: Int }> {
+    return Env.document.toOption().flatMap(function(document) {
+      return document.body.toOption();
     }).map(function(body) {
       var top  = body.offsetTop;
       var left = body.offsetLeft;
@@ -509,39 +509,39 @@ class Quirks {
    /**
  * Get the current computed height for the  element , including padding but not border.
  */
-  public static function getInnerHeight(elem: HTMLElement): Maybe<Int>{
+  public static function getInnerHeight(elem: HTMLElement): Option<Int>{
     return getWidthOrHeight(elem, "offsetHeight", cssHeight, "padding");
   }
  /**
  * Get the current computed height for the element, including padding, border, and optionally margin.
  */
-  public static function getOuterHeight(elem: HTMLElement, includeMargin: Bool): Maybe<Int>{
+  public static function getOuterHeight(elem: HTMLElement, includeMargin: Bool): Option<Int>{
     return getWidthOrHeight(elem, "offsetHeight", cssHeight, if (includeMargin) "margin" else "border");
   }
 
   /**
   * Get the current computed width for the element, including padding but not border.
   */
-  public static function getInnerWidth(elem: HTMLElement): Maybe<Int>{
+  public static function getInnerWidth(elem: HTMLElement): Option<Int>{
     return getWidthOrHeight(elem, "offsetWidth", cssWidth, "padding");
   }
   /**
   * Get the current computed width for the element, including padding and border.
   */
-  public static function getOuterWidth(elem: HTMLElement, includeMargin: Bool): Maybe<Int>{
+  public static function getOuterWidth(elem: HTMLElement, includeMargin: Bool): Option<Int>{
     return getWidthOrHeight(elem, "offsetWidth", cssWidth, if (includeMargin) "margin" else "border");
   }
 
 
-  public static function getHeight(elem: HTMLElement): Maybe<Int>{
+  public static function getHeight(elem: HTMLElement): Option<Int>{
     return getWidthOrHeight(elem, "offsetHeight", cssHeight, "");
   }
 
-  public static function getWidth(elem: HTMLElement): Maybe<Int>{
+  public static function getWidth(elem: HTMLElement): Option<Int>{
     return getWidthOrHeight(elem, "offsetWidth", cssWidth, "");
   }
 
-  private static function getWidthOrHeight(elem: HTMLElement, offsetValueExtract: String, which: Array<String>, extra: String): Maybe<Int>{
+  private static function getWidthOrHeight(elem: HTMLElement, offsetValueExtract: String, which: Array<String>, extra: String): Option<Int>{
     if (elem == null || elem.ownerDocument == null) return None;
     else{
       var val = 0;
@@ -591,7 +591,7 @@ class Quirks {
 
   /** Retrieves the offset of the element, relative to the window origin.
    */
-  public static function getOffset(elem: HTMLElement): Maybe<{ x: Int, y: Int }> {
+  public static function getOffset(elem: HTMLElement): Option<{ x: Int, y: Int }> {
     if (elem == null || elem.ownerDocument == null) return None;
     else if (elem == untyped elem.ownerDocument.body) return getBodyOffset(cast elem.ownerDocument);
     else if (untyped Env.document.documentElement != null && untyped Env.document.documentElement.getBoundingClientRect != null) {
@@ -668,7 +668,7 @@ class Quirks {
     }
   }
 
-  public static function getPosition(elem: HTMLElement): Maybe<{ x: Int, y: Int }> {
+  public static function getPosition(elem: HTMLElement): Option<{ x: Int, y: Int }> {
     if (elem == null || elem.ownerDocument == null) return None;
 
     var offsetParent = offsetParent(elem);

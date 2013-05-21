@@ -1,6 +1,6 @@
-
 using stx.Prelude;
 
+import stx.test.TestCase;
 import stx.test.Runner;
 import stx.test.ui.Report;
 
@@ -40,33 +40,35 @@ class StaxTestSuite {
           , new stx.io.http.HttpJValueJsonpTest()
         ];*/
         #if development
-          var tests   = 
-          [   
-              new stx.plus.OrderTest(),
-              
-            /*
-              new stx.arw.ArrowsTest(),
-              new stx.arw.StateArrowTest()
-              new stx.MethodTest()
-              new stx.arw.ArrowsTest()
-              new stx.ContinuationTest()
-              new stx.MethodTest()
-              new StaxTest()
-            , new stx.ErrorTest()
-            , new stx.StateTest()
-            , new stx.ReaderTest()
-            , new stx.reactive.StreamTest()
-            , new stx.io.log.LogTest()
-            , new stx.IntIteratorTest()
-            , new OptimiseTest()
-            , new stx.ds.ZipperTest()
-            , new stx.ds.IterateeTest()
-            , new stx.PromiseTest()//#0b1kn00b how to test delayed easily without timer.*/
+          var tests   : Array<TestCase> = 
+          [ 
+            new stx.macro.LensesMacroTest(),
+/*          
+            new stx.arw.ArrowsTest(), 
+            new stx.plus.HashTest(), 
+            new stx.ds.MapTest(), 
+            new stx.plus.OrderTest(),
+            new stx.arw.StateArrowTest(),
+            new stx.MethodTest(),
+            new stx.ContinuationTest(),
+            new stx.MethodTest(),
+            new StaxTest(),
+            new stx.ErrorTest(),
+            new stx.StateTest(),
+            new stx.ReaderTest(),
+            new stx.reactive.StreamTest(),
+            new stx.io.log.LogTest(),
+            //new stx.IntIteratorTest(),
+            new OptimiseTest(),
+            new stx.ds.ZipperTest(),
+            new stx.ds.IterateeTest(),
+            new stx.PromiseTest(),//#0b1kn00b how to test delayed easily without timer.
+            */
           ];
         #else 
           var tests =
           [
-              
+            new stx.arw.ArrowsTest(),
             new stx.ArraysTest(),
             new stx.ds.MapTest(),
             new stx.ds.SetTest(),
@@ -101,7 +103,7 @@ class StaxTestSuite {
 
             new stx.ObjectsTest(),
             new stx.TupleTest(),
-            new stx.ds.RangeTest(),
+            //new stx.ds.RangeTest(),
             new stx.MathsTest(),
             new stx.BoolsTest(),
           ];

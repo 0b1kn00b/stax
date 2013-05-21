@@ -33,43 +33,43 @@ class HTMLElementsTest extends TestCase {
         _doc = Env.document;
     }
     
-    private function testThatHTMLElementExtensionsIFrameMaybeWorks(): Void {
+    private function testThatHTMLElementExtensionsIFrameOptionWorks(): Void {
       var iframe = _doc.getElementsByTagName('iframe')[0];
       
       assertEquals("IFRAME", iframe.asIframe().nodeName);
     }
     
-    private function testThatHTMLElementExtensionsScriptMaybeWorks(): Void {
+    private function testThatHTMLElementExtensionsScriptOptionWorks(): Void {
       var script = _doc.getElementsByTagName('script')[0];
       
       assertEquals("SCRIPT", script.asScript().nodeName);
     }
     
-    private function testThatHTMLElementExtensionsDIVMaybeWorks(): Void {
+    private function testThatHTMLElementExtensionsDIVOptionWorks(): Void {
       var div = _doc.getElementsByTagName('div')[0];
       
       assertEquals("DIV", div.asDiv().nodeName);
     }
     
-    private function testThatHTMLElementExtensionsFORMMaybeWorks(): Void {
+    private function testThatHTMLElementExtensionsFORMOptionWorks(): Void {
       var form = _doc.getElementsByTagName('form')[0];
       
       assertEquals("FORM", form.asForm().nodeName);
     }
     
-    private function testThatHTMLElementExtensionsBODYMaybeWorks(): Void {
+    private function testThatHTMLElementExtensionsBODYOptionWorks(): Void {
       var body = _doc.getElementsByTagName('body')[0];
       
       assertEquals("BODY", body.asBody().nodeName);
     }
     
-    private function testThatHTMLElementExtensionsSTYLEMaybeWorks(): Void {
+    private function testThatHTMLElementExtensionsSTYLEOptionWorks(): Void {
       var style = _doc.getElementsByTagName('STYLE')[0];
       
       assertEquals("STYLE", style.asStyle().nodeName);
     }
     
-    private function testThatHTMLElementExtensionsTEXTMaybeWorks(): Void {
+    private function testThatHTMLElementExtensionsTEXTOptionWorks(): Void {
       var p = createTestElement('P', 'test');
       var appendText = _doc.createTextNode('foo');
       
@@ -81,49 +81,49 @@ class HTMLElementsTest extends TestCase {
       removeTestElement('test');
     }
     
-    private function testThatHTMLElementExtensionsVideoMaybeWorks(): Void {
+    private function testThatHTMLElementExtensionsVideoOptionWorks(): Void {
       var video = createTestElement('video', 'test');
             
       assertEquals("VIDEO", video.asVideo().nodeName);
       removeTestElement('test');
     }
     
-    private function testThatHTMLElementExtensionsAUDIOMaybeWorks(): Void {
+    private function testThatHTMLElementExtensionsAUDIOOptionWorks(): Void {
       var audio = createTestElement('audio', 'test');
             
       assertEquals("AUDIO", audio.asAudio().nodeName);
       removeTestElement('test');
     }
     
-    private function testThatHTMLElementExtensionsHEADMaybeWorks(): Void {
+    private function testThatHTMLElementExtensionsHEADOptionWorks(): Void {
       var head = createTestElement('HEAD', 'test');
       
       assertEquals("HEAD", head.asHead().nodeName);
       removeTestElement('test');
     }
     
-    private function testThatHTMLElementExtensionsLINKMaybeWorks(): Void {
+    private function testThatHTMLElementExtensionsLINKOptionWorks(): Void {
       var link = createTestElement('link', 'test');
             
       assertEquals("LINK", link.asLink().nodeName);
       removeTestElement('test');
     }
     
-    private function testThatHTMLElementExtensionsTITLEMaybeWorks(): Void {
+    private function testThatHTMLElementExtensionsTITLEOptionWorks(): Void {
       var title = createTestElement('title', 'test');
             
       assertEquals("TITLE", title.asTitle().nodeName);
       removeTestElement('test');
     }
     
-    private function testThatHTMLElementExtensionsMETAMaybeWorks(): Void {
+    private function testThatHTMLElementExtensionsMETAOptionWorks(): Void {
       var meta = createTestElement('meta', 'test');
             
       assertEquals("META", meta.asMeta().nodeName);
       removeTestElement('test');
     }
     
-    private function testThatHTMLElementExtensionsBASEMaybeWorks(): Void {
+    private function testThatHTMLElementExtensionsBASEOptionWorks(): Void {
       var base = createTestElement('base', 'test');
             
       assertEquals("BASE", base.asBase().nodeName);
@@ -131,38 +131,38 @@ class HTMLElementsTest extends TestCase {
     }
     
     
-    private function testThatHTMLElementExtensionsISINDEXMaybeWorks(): Void {
+    private function testThatHTMLElementExtensionsISINDEXOptionWorks(): Void {
       var isIndex = createTestElement('isIndex', 'test');
             
       assertEquals("ISINDEX", isIndex.asIsIndex().nodeName);
       removeTestElement('test');
     }
     
-    private function testThatHTMLElementExtensionsSELECTMaybeWorks(): Void {
+    private function testThatHTMLElementExtensionsSELECTOptionWorks(): Void {
       var select = createTestElement('select', 'test');
             
       assertEquals("SELECT", select.asSelect().nodeName);
       removeTestElement('test');
     }
     
-    private function testThatHTMLElementExtensionsCANVASMaybeWorks(): Void {
+    private function testThatHTMLElementExtensionsCANVASOptionWorks(): Void {
       var canvas = createTestElement('canvas', 'test');
             
       assertEquals("CANVAS", canvas.asCanvas().nodeName);
       removeTestElement('test');
     }
     
-    private function testThatHTMLElementExtensionsOPTGROUPMaybeWorks(): Void {
+    private function testThatHTMLElementExtensionsOPTGROUPOptionWorks(): Void {
       var optGroup = createTestElement('optGroup', 'test');
             
       assertEquals("OPTGROUP", optGroup.asOptGroup().nodeName);
       removeTestElement('test');
     }
     
-    private function testThatHTMLElementExtensionsOPTIONMaybeWorks(): Void {
+    private function testThatHTMLElementExtensionsOPTIONOptionWorks(): Void {
       var option = createTestElement('option', 'test');
             
-      assertEquals("OPTION", option.asMaybe().nodeName);
+      assertEquals("OPTION", option.asOption().nodeName);
       removeTestElement('test');
     }
     

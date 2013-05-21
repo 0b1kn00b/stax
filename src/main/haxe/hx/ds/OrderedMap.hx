@@ -1,16 +1,19 @@
 package hx.ds;
 
+import stx.plus.Show;
+
+import stx.Tuples.*;
+
 using stx.Compose;
 using stx.Functions;
-
 using stx.Prelude;
 using stx.Bools;
 using stx.Prelude;
 using stx.Iterables;
 using stx.Arrays;
-using stx.Maybes;
+using stx.Options;
 using stx.Tuples;
-
+using stx.Strings;
 
 using stx.plus.Order;
 
@@ -21,7 +24,7 @@ class OrderedMap<V>{
 		impl = [];
 	}
 	public function put(key:String,val:V){
-		var tp = Tups.t2(key,val);
+		var tp = tuple2(key,val);
 		findAtKey(key)
 			.flatMap(
 				function(t){
@@ -43,7 +46,7 @@ class OrderedMap<V>{
 		return findAtKey(key).isDefined();
 	}
 	public function get(key:String):V{
-		return findAtKey(key).map(T2.snd).getOrElseC(null);
+		return findAtKey(key).map(T2s.snd).getOrElseC(null);
 	}
 	public function del(key:String){
 		findAtKey(key)
@@ -68,9 +71,25 @@ class OrderedMap<V>{
 		return impl.iterator();
 	}
 	public function vals():Iterator<V>{
-		return impl.map( T2.snd ).iterator();
+		return impl.map( T2s.snd ).iterator();
 	}
-	private function findAtKey(key:String):Maybe<Tuple2<String,V>>{
+	private function findAtKey(key:String):Option<Tuple2<String,V>>{
 		return impl.find(function(t){ return t.fst() == key; });
+	}
+	public function toString():String{
+		var shw 	= null;
+		var gsh 	= function(x) {return shw == null ? shw = Show.getShowFor(x) : shw;}
+
+		var vals 	= 
+			impl.map(
+				function(key,val){
+					return '$key : ${gsh(val)(val)}';
+				}.spread()
+			);
+		return vals.foldl('',
+			function(memo,next){
+				return memo.append('\n\t').append(next);
+			}
+		);
 	}
 }

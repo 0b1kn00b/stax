@@ -1,4 +1,4 @@
-package stx.error;
+package stx.err;
 import haxe.PosInfos;
 
 import haxe.PosInfos;

@@ -6,7 +6,7 @@
 --macro include('stx.ds')
 --macro include('stx.concurrent')
 --macro include('stx.core')
---macro include('stx.error')
+--macro include('stx.err')
 --macro include('stx.framework')
 --macro include('stx.functional')
 --macro include('stx.ifs')

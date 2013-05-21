@@ -21,20 +21,20 @@ typedef KV<V>           = Tup2<String,V>;
 
 class Entuple{
   static public function entuple<A,B>(a:A,b:B){
-    return Tuples.t2(a,b);
+    return Tuples.tuple2(a,b);
   }
 }
 @:noUsing class Tuples {	
-	@:noUsing static public inline function t2<A,B>(_1:A,_2:B):stx.Tuple2<A,B>{
+	@:noUsing static public function tuple2<A,B>(_1:A,_2:B):stx.Tuple2<A,B>{
 		return new Tuple2(_1, _2);
 	}
-	@:noUsing static public inline function t3<A,B,C>(_1:A,_2:B,_3:C):stx.Tuple3<A,B,C>{
+	@:noUsing static public function tuple3<A,B,C>(_1:A,_2:B,_3:C):stx.Tuple3<A,B,C>{
 		return new Tuple3(_1, _2, _3);
 	}
-	@:noUsing static public inline function t4<A,B,C,D>(_1:A,_2:B,_3:C,_4:D):stx.Tuple4<A,B,C,D>{
+	@:noUsing static public function tuple4<A,B,C,D>(_1:A,_2:B,_3:C,_4:D):stx.Tuple4<A,B,C,D>{
 		return new Tuple4(_1, _2, _3, _4);
 	}
-	@:noUsing static public inline function t5<A,B,C,D,E>(_1:A,_2:B,_3:C,_4:D,_5:E):stx.Tuple5<A,B,C,D,E>{
+	@:noUsing static public function tuple5<A,B,C,D,E>(_1:A,_2:B,_3:C,_4:D,_5:E):stx.Tuple5<A,B,C,D,E>{
 		return new Tuple5(_1, _2, _3, _4, _5);
 	}
 }
@@ -103,7 +103,7 @@ class AbstractProduct implements Product {
       default : [];
     }
   }
-  public function flatten():Array<Dynamic>{
+  public function flatten():Array<Dynamic> {
     var flatn : Product -> Array<Dynamic> = null;
 
     flatn = function(p:Product){
@@ -135,7 +135,7 @@ class Pairs{
 class Tuple2<A, B> extends AbstractProduct {
   @:noUsing
   static public inline function create<A, B>(_1: A, _2: B): stx.Tuple2<A, B> {
-    return Tups.t2(_1, _2);
+    return Tuples.tuple2(_1, _2);
   }
   public var _1 (default, null): A;
   public var _2 (default, null): B;
@@ -145,12 +145,10 @@ class Tuple2<A, B> extends AbstractProduct {
 		this._2 = _2;
 		super([_1,_2]);
 	}
-  @:noUsing
-  static public function fromArray(a:Array<Dynamic>){
+  @:noUsing static public function fromArray(a:Array<Dynamic>){
     return new Tuple2(a[0],a[1]);
   }
-  @:noUsing
-  static public function unit(){
+  @:noUsing static public function unit(){
     return new Tuple2(null,null);
   }
 	static public function entuple<A, B, C>(t:stx.Tuple2<A,B>,c:C): stx.Tuple3<A, B, C> {
@@ -171,7 +169,7 @@ class Tuple2<A, B> extends AbstractProduct {
     return f1(t.fst()).entuple(f2(t.snd()));
   }
   static public function swap<A,B>(t:Tuple2<A,B>):Tuple2<B,A>{
-    return Tuples.t2(t.snd(),t.fst());
+    return Tuples.tuple2(t.snd(),t.fst());
   }
   override private function get_prefix(): String {
     return "stx.Tuple2";
@@ -183,7 +181,7 @@ class Tuple2<A, B> extends AbstractProduct {
 class Tuple3<A, B, C> extends AbstractProduct {
   @:noUsing
   static public function create<A, B, C>(_1: A, _2: B, _3: C): stx.Tuple3<A, B, C> {
-    return Tups.t3(_1, _2, _3);
+    return Tuples.tuple3(_1, _2, _3);
   }
   public var _1 (default, null) : A;
   public var _2 (default, null) : B;
@@ -213,7 +211,7 @@ class Tuple3<A, B, C> extends AbstractProduct {
     return new Tuple3(a[0],a[1],a[2]);
   }
   static public function map<A,B,C,D,E,F>(t:Tuple3<A,B,C>,f1: A -> D, f2: B -> E, f3 : C -> F):Tuple3<D,E,F>{
-    return Tuples.t3(f1(t.fst()),f2(t.snd()),f3(t.thd()));
+    return Tuples.tuple3(f1(t.fst()),f2(t.snd()),f3(t.thd()));
   }
 	static public function entuple<A, B, C, D>(t:stx.Tuple3<A,B,C>,d:D): stx.Tuple4<A, B, C, D> {
     return new Tuple4(t._1, t._2, t._3, d);
@@ -230,7 +228,7 @@ class Tuple3<A, B, C> extends AbstractProduct {
 class Tuple4< A, B, C, D> extends AbstractProduct {
   @:noUsing
   static public function create<A, B, C, D>(_1: A, _2: B, _3: C, _4: D): stx.Tuple4<A, B, C, D> {
-    return Tups.t4(_1, _2, _3, _4);
+    return Tuples.tuple4(_1, _2, _3, _4);
   }
   public var _1 (default, null): A;
   public var _2 (default, null): B;
@@ -271,14 +269,14 @@ class Tuple4< A, B, C, D> extends AbstractProduct {
   }
 
   public function entuple<E>(_5: E): stx.Tuple5<A, B, C, D, E> {
-    return stx.Tuples.t5(_1, _2, _3, _4, _5);
+    return stx.Tuples.tuple5(_1, _2, _3, _4, _5);
   }
 }
 
 class Tuple5< A, B, C, D, E> extends AbstractProduct {
   @:noUsing
   static public function create<A, B, C, D, E>(_1: A, _2: B, _3: C, _4: D, _5: E): stx.Tuple5<A, B, C, D, E> {
-    return Tups.t5(_1, _2, _3, _4, _5);
+    return Tups.tuple5(_1, _2, _3, _4, _5);
   }
   public var _1 (default, null): A;
   public var _2 (default, null): B;
@@ -325,6 +323,11 @@ class T2s{
   
   static public inline function fst<A, B>(t : Tuple2<A, B>):A return t._1;
   static public inline function snd<A, B>(t : Tuple2<A, B>):B return t._2;
+
+  //static public inline function bothOrNone<A,B>(t : Tuple2<A,Option<B>):Option<
+  static inline public function into<A,B,C>(t:Tuple2<A,B>, f : A -> B -> C ) : C{
+    return f(t.fst(), t.snd());
+  }
 }
 class T3s{
   static public inline function fst<A, B, C>(t : Tuple3<A, B, C>) return t._1;
@@ -333,6 +336,14 @@ class T3s{
   static public inline function first<A, B>(t : Tuple2<A, B>):A return t._1;
   static public inline function second<A, B>(t : Tuple2<A, B>):B return t._2;
   static public inline function third<A, B, C>(t : stx.Tuple3<A, B, C>):C return t._3;
+
+  static public inline function tag<A,B,C>(t:Tup3<A,B,C>,a,b,c):Dynamic{
+    var o = {};
+    Reflect.setField(o,a,t.fst());
+    Reflect.setField(o,b,t.snd());
+    Reflect.setField(o,c,t.thd());
+    return o;
+  }
 }
 class T4s{
   static public inline function fst<A, B, C, D>(t : Tuple4<A, B, C, D>):A return t._1;

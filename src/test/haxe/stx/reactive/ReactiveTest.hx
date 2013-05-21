@@ -2,6 +2,7 @@ package stx.reactive;
 
 using stx.Prelude;
 
+import stx.Tuples.*;
 using stx.Tuples;
 import stx.Prelude;
 import stx.test.TestCase;
@@ -1039,7 +1040,7 @@ class ReactiveTest extends TestCase {
     var boolStream: Stream<Bool> =      Streams.pure();
     var ifTrueStream: Stream<String> =  boolStream.map(function(v) { return "Is True"; } );
     
-    var conditions: Iterable<Tuple2<Stream<Bool>, Stream<String>>> = [Tuples.t2(boolStream, ifTrueStream)];
+    var conditions: Iterable<Tuple2<Stream<Bool>, Stream<String>>> = [tuple2(boolStream, ifTrueStream)];
     var boolArray = [true, false, true];
     
     var conded = Streams.cond(conditions).toArray();
@@ -1380,15 +1381,15 @@ class ReactiveTest extends TestCase {
     
     var all = zipped.changes().toArray();
     
-    assertEquals(Tuples.t2(0, 1), zipped.valueNow());
+    assertEquals(tuple2(0, 1), zipped.valueNow());
     
     mySignal.sendSignal(2);
     
-    assertEquals(Tuples.t2(2, 3), zipped.valueNow());
+    assertEquals(tuple2(2, 3), zipped.valueNow());
     
     mySignal.sendSignal(3);
     
-    assertEquals(Tuples.t2(3, 4), zipped.valueNow());
+    assertEquals(tuple2(3, 4), zipped.valueNow());
   }
   
   public function testSignalZip3():Void {
@@ -1399,15 +1400,15 @@ class ReactiveTest extends TestCase {
     
     var zipped = mySignal.zip3(mappedSignal1, mappedSignal2);
     
-    assertEquals(Tuples.t3(0, 1, 2), zipped.valueNow());
+    assertEquals(tuple3(0, 1, 2), zipped.valueNow());
     
     mySignal.sendSignal(2);
     
-    assertEquals(Tuples.t3(2, 3, 4), zipped.valueNow());
+    assertEquals(tuple3(2, 3, 4), zipped.valueNow());
     
     mySignal.sendSignal(3);
     
-    assertEquals(Tuples.t3(3, 4, 5), zipped.valueNow());
+    assertEquals(tuple3(3, 4, 5), zipped.valueNow());
   }
     
   public function testSignalZip4():Void {
@@ -1419,15 +1420,15 @@ class ReactiveTest extends TestCase {
     
     var zipped = mySignal.zip4(mappedSignal1, mappedSignal2, mappedSignal3);
     
-    assertEquals(Tuples.t4(0, 1, 2, 4), zipped.valueNow());
+    assertEquals(tuple4(0, 1, 2, 4), zipped.valueNow());
     
     mySignal.sendSignal(2);
     
-    assertEquals(Tuples.t4(2, 3, 4, 8), zipped.valueNow());
+    assertEquals(tuple4(2, 3, 4, 8), zipped.valueNow());
     
     mySignal.sendSignal(3);
     
-    assertEquals(Tuples.t4(3, 4, 5, 10), zipped.valueNow());
+    assertEquals(tuple4(3, 4, 5, 10), zipped.valueNow());
   }
   
   public function testSignalZip5():Void {
@@ -1440,15 +1441,15 @@ class ReactiveTest extends TestCase {
     
     var zipped = mySignal.zip5(mappedSignal1, mappedSignal2, mappedSignal3, mappedSignal4);
     
-    assertEquals(Tuples.t5(0, 1, 2, 4, -2), zipped.valueNow());
+    assertEquals(tuple5(0, 1, 2, 4, -2), zipped.valueNow());
     
     mySignal.sendSignal(2);
     
-    assertEquals(Tuples.t5(2, 3, 4, 8, 6), zipped.valueNow());
+    assertEquals(tuple5(2, 3, 4, 8, 6), zipped.valueNow());
     
     mySignal.sendSignal(3);
     
-    assertEquals(Tuples.t5(3, 4, 5, 10, 10), zipped.valueNow());
+    assertEquals(tuple5(3, 4, 5, 10, 10), zipped.valueNow());
   }
 
   public function testSignalZipN():Void {
@@ -1643,27 +1644,27 @@ class ReactiveTest extends TestCase {
     
     advanceTime(5);
     
-    assertEquals(Tuples.t3(1, 0, 0), streams.valueNow());
+    assertEquals(tuple3(1, 0, 0), streams.valueNow());
     
     advanceTime(5);
     
-    assertEquals(Tuples.t3(2, 0, 1), streams.valueNow());
+    assertEquals(tuple3(2, 0, 1), streams.valueNow());
     
     advanceTime(5);
       
-    assertEquals(Tuples.t3(3, 1, 2), streams.valueNow());
+    assertEquals(tuple3(3, 1, 2), streams.valueNow());
     
     advanceTime(5);
     
-    assertEquals(Tuples.t3(4, 2, 3), streams.valueNow());
+    assertEquals(tuple3(4, 2, 3), streams.valueNow());
     
     advanceTime(5);
     
-    assertEquals(Tuples.t3(4, 3, 3), streams.valueNow());
+    assertEquals(tuple3(4, 3, 3), streams.valueNow());
     
     advanceTime(5);
     
-    assertEquals(Tuples.t3(4, 4, 3), streams.valueNow());
+    assertEquals(tuple3(4, 4, 3), streams.valueNow());
   }
   
   public function testSignalDelayS(): Void {
@@ -1678,23 +1679,23 @@ class ReactiveTest extends TestCase {
     
     advanceTime(5);
     
-    assertEquals(Tuples.t3(1, 0, 0), streams.valueNow());
+    assertEquals(tuple3(1, 0, 0), streams.valueNow());
     
     advanceTime(5);
     
-    assertEquals(Tuples.t3(2, 1, 1), streams.valueNow());
+    assertEquals(tuple3(2, 1, 1), streams.valueNow());
     
     advanceTime(5);
     
-    assertEquals(Tuples.t3(3, 2, 2), streams.valueNow());
+    assertEquals(tuple3(3, 2, 2), streams.valueNow());
     
     advanceTime(5);
     
-    assertEquals(Tuples.t3(4, 3, 3), streams.valueNow());
+    assertEquals(tuple3(4, 3, 3), streams.valueNow());
     
     advanceTime(5);
     
-    assertEquals(Tuples.t3(4, 4, 3), streams.valueNow());
+    assertEquals(tuple3(4, 4, 3), streams.valueNow());
   }
   
   public function testSignalSend(): Void {
@@ -1775,7 +1776,7 @@ class ReactiveTest extends TestCase {
     
     var t = Signals.constant(true);
     
-    var conditions: Array<Tuple2<Signal<Bool>, Signal<String>>> = [Tuples.t2(t, trueSignal)];
+    var conditions: Array<Tuple2<Signal<Bool>, Signal<String>>> = [tuple2(t, trueSignal)];
     
     var conded = Signals.cond(conditions, falseSignal);
     
@@ -2397,7 +2398,7 @@ class ReactiveTest extends TestCase {
     
     var zipped = SignalCollectionExtensions.zipS(signal1, signal2).valueNow();
     
-    assertEquals([Tuples.t2(1, 6), Tuples.t2(2, 7), Tuples.t2(3, 8)], zipped.toArray());
+    assertEquals([tuple2(1, 6), tuple2(2, 7), tuple2(3, 8)], zipped.toArray());
   }
 /*F 
   public function testSignalCollectionZip3(): Void {
@@ -2454,11 +2455,11 @@ class ReactiveTest extends TestCase {
     
     var headOpt = SignalCollectionExtensions.headOpt(signal);
     
-    assertMaybeEquals(None, headOpt.valueNow());
+    assertOptionEquals(None, headOpt.valueNow());
     
     signal.sendSignal(toCollection([1, 2, 3]));
     
-    assertMaybeEquals(Some(1), headOpt.valueNow());
+    assertOptionEquals(Some(1), headOpt.valueNow());
   }
   
   public function testSignalCollectionSlice(): Void {
@@ -2478,11 +2479,11 @@ class ReactiveTest extends TestCase {
     
     var lastOpt = SignalCollectionExtensions.lastOpt(signal);
     
-    assertMaybeEquals(None, lastOpt.valueNow());
+    assertOptionEquals(None, lastOpt.valueNow());
     
     signal.sendSignal(toCollection([1, 2, 3]));
     
-    assertMaybeEquals(Some(3), lastOpt.valueNow());
+    assertOptionEquals(Some(3), lastOpt.valueNow());
   }
 
   public function testSignalCollectionCountWhile(): Void {
@@ -2898,8 +2899,8 @@ class ReactiveTest extends TestCase {
     var find =  SignalCollectionExtensions.find(signal, function(v) { return v < 10; });
     var find2 = SignalCollectionExtensions.find(signal, function(v) { return v > 7; });
    
-    assertMaybeEquals(Some(4), find.valueNow());
-    assertMaybeEquals(None, find2.valueNow());
+    assertOptionEquals(Some(4), find.valueNow());
+    assertOptionEquals(None, find2.valueNow());
   }
   
   public function testSignalCollectionExistsP(): Void {
@@ -3038,8 +3039,8 @@ class ReactiveTest extends TestCase {
     var indexOf = SignalCollectionExtensions.indexOf(signal, 4);
     var indexOf2 = SignalCollectionExtensions.indexOf(signal, 10);
     
-    assertMaybeEquals(Some(3), indexOf.valueNow());
-    assertMaybeEquals(None, indexOf2.valueNow());
+    assertOptionEquals(Some(3), indexOf.valueNow());
+    assertOptionEquals(None, indexOf2.valueNow());
   }
   
   public function testSignalCollectionIndicesOf(): Void {
@@ -3210,7 +3211,7 @@ class ReactiveTest extends TestCase {
             masterStream.sendEvent(e);
         }
         
-        return Tuples.t2(eventStream1, eventStream2);
+        return tuple2(eventStream1, eventStream2);
     }
 
     /*F
@@ -3245,7 +3246,7 @@ class ReactiveTest extends TestCase {
     } 
     */
 /*F    
-    private function assertMaybeEquals<T>(opt1: Maybe<T>, opt2: Maybe<T>, equals: T -> T -> Bool = null): Void {
+    private function assertOptionEquals<T>(opt1: Option<T>, opt2: Option<T>, equals: T -> T -> Bool = null): Void {
         if (equals == null) {
             equals = Filter.isEqual;
         }

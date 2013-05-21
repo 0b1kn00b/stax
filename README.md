@@ -36,8 +36,8 @@ Stax makes heavy use of haxes 'using' instruction to allow method chaining.
 
 In addition you can find:
 
- * *Tuples*, of arity 1 - 5, which are ideal containers for a bundle of times when a class would be too heavyweight. `var t = Tuples.t2(23, "foo");`
- * *Maybe*, which eliminates the need for `null` and makes code much safer. `var o = Some(23); var n = None;`
+ * *Tuples*, of arity 1 - 5, which are ideal containers for a bundle of times when a class would be too heavyweight. `var t = tuple2(23, "foo");`
+ * *Option*, which eliminates the need for `null` and makes code much safer. `var o = Some(23); var n = None;`
  * *Future*, which makes it easy to chain asynchronous operations.
  * *Conversions*, which enable you to convert between primitives. `var float = 12.toFloat();`
  * *Array enhancements*, which allow you to write functional code with arrays. `[123, 24].map(function(i) return i * 2;);`

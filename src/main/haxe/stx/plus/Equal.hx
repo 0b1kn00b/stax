@@ -1,144 +1,146 @@
 package stx.plus;
 
-
-using stx.Tuples;								using stx.Tuples;
-
-using stx.Prelude;
+import stx.Tuples;
 import Type;
 
-import stx.Maths;
+using stx.Prelude;
+using stx.Arrays;
 
-using stx.Functions;
-
-typedef EqualFunction<T>        = Function2<T, T, Bool>;
-class Equal {
-  @:noUsing
-  static public function equalOn<A>(key:String):EqualFunction<Dynamic>{
-    return function(x:A,y:A):Bool{
-      var l = Reflect.field(x,key);
-      var r = Reflect.field(y,key);
-      return Equal.getEqualFor(l)(l,r);
+typedef Equality<T> = {
+  function equals(a:T,b:T):Bool;
+}
+@:note('#0b1kn00b: The assumption that the right hand value is of the correct type could be questioned')
+class Equal{
+  static public function equals<T>(a:T,b:T,?func:T->T->Bool):Bool{
+    if (func == null){
+      func = getEqualForType(Type.typeof(a));
+    }
+    return func(a,b);
+  }
+  static public function equals_Equals<T:{equals : T -> T -> Bool}>(a:T,b:T,?func:T->T->Bool):Bool{
+    return if (func!=null){
+      func(a,b);
+    }else if(a!=null){
+      __equals__(a.equals)(a,b);
+    }else if (b!=null){
+      __equals__(b.equals)(a,b);
     }
   }
-  @:noUsing
-  static public function nil<A>(a:A,b:A){
-    return 
-      _createEqualImpl(function(a:A, b:A) { return stx.Prelude.error()("at least one of the arguments should be null"); })(a,b);
-  } 
-	/** 
-    Returns an EqualFunction (T -> T -> Bool). It works for any type. Custom Classes can provide
-    an "equals(other : T) : Bool" method or a "compare(other : T) : Int" method otherwise  simple comparison operators will be used.
-   */
-  public static function getEqualFor<A>(v:A):EqualFunction<A>{
-    var o = getEqualForType(Type.typeof(v));
-    return o;
+  static public function getEqualFor<T>(v:T):EqualFunction<T>{
+    return getEqualForType(Type.typeof(v));
   }
-  public static function getEqualForType<T>(v: ValueType) : EqualFunction<T> {
-    return switch(v) {
-      case TBool:
-        _createEqualImpl(Bools.equals);
-      case TInt:
-        _createEqualImpl(Ints.equals);
-      case TFloat:
-        _createEqualImpl(Floats.equals);
-      case TUnknown:
-      function(a : T, b : T) return a == b;
-      case TObject:
-        _createEqualImpl(function(a, b) {
-        for(key in Reflect.fields(a)) {
-          var va = Reflect.field(a, key);
-          if(!getEqualFor(va)(va, Reflect.field(b, key)))
-            return false;
+  static public function getEqualForType<T>(v: ValueType):EqualFunction<T>{
+    return switch (v){
+      case TNull                                                        : NullEqual.equals;
+      case TInt,TFloat,TBool                                            : __equals__(inline function(x,y) return x == y);
+      case TFunction                                                    : __equals__(Reflect.compareMethods); 
+      case TClass( c ) if ( c == Array  )                               : __equals__(ArrayEqual.equals);
+      case TClass( c ) if ( c == Date   )                               : __equals__(stx.Dates.equals);
+      case TClass( c ) if ( c == String )                               : __equals__(stx.Strings.equals);
+      case TClass( c ) if (stx.Types.hasSuperClass(c,AbstractProduct))  : __equals__(ProductEquals.equals);
+      case TEnum(_)                                                     : __equals__(EnumEqual.equals);
+      case TClass( c )                                                  :
+        if(Type.getInstanceFields(c).remove("equals")){
+          __equals__(EqualsEquals.equals);
+        }else{
+          throw new stx.err.NullReferenceError('equals'); __equals__(function(x,y){return false;});
         }
-        return true;
-      });
-    case TClass(c):
-      switch(Type.getClassName(c)) {
-        case "String":
-          _createEqualImpl(Strings.equals);
-        case "Date":
-          _createEqualImpl(Dates.equals);
-        case "Array":
-          _createEqualImpl(ArrayEqual.equals);
-        case "stx.Tuple2" , "stx.Tuple3" , "stx.Tuple4" , "stx.Tuple5" :
-          _createEqualImpl(ProductEqual.equals);
-        default:    
-          if(Meta._hasMetaDataClass(c)) {  
-            var fields = Meta._fieldsWithMeta(c, "equalMap");
-            _createEqualImpl(function(a, b) {         
-              var values = fields.map(function(v){return Tuples.t2(Reflect.field(a, v), Reflect.field(b, v));});
-              for (value in values) {
-                if(Reflect.isFunction(value.fst()))
-                  continue;
-                if(!getEqualFor(value.fst())(value.fst(), value.snd()))
-                  return false;
-              }
-              return true;
-            });    
-          } else if(Type.getInstanceFields(c).remove("equals")) {
-            _createEqualImpl(function(a, b) return (cast a).equals(b));
-          }/*else{
-            _createEqualImpl( function(a,b) return a == b );
-          }*/
-          else {
-            Prelude.error()("class "+Type.getClassName(c)+" has no equals method");
+      case TObject      : __equals__(ObjectEquals.equals);
+      case TUnknown     : __equals__(
+        inline function(x,y){
+          return if(Reflect.hasField(x,'equals')){
+            EqualsEquals.equals(x,y);
+          }else{
+            ObjectEquals.equals(x,y);
           }
-      }
-    case TEnum(_):
-      _createEqualImpl(function(a, b) {
-        if(0 != Type.enumIndex(a) - Type.enumIndex(b))
-          return false;
-        var pa = Type.enumParameters(a);
-        var pb = Type.enumParameters(b);
-        for(i in 0...pa.length) {
-          if(!Equal.getEqualFor(pa[i])(pa[i], pb[i]))
-            return false;
         }
-        return true;
-      });
-    case TNull:
-      nil;
-    case TFunction:
-      _createEqualImpl(Reflect.compareMethods);
-		}
+      );
+    }
   }
-	static function _createEqualImpl<A>(impl : EqualFunction<Dynamic>):A->A->Bool {
-    return function(a, b) {
+  public static inline function  __equals__<A>(impl:EqualFunction<Dynamic>):A->A->Bool {
+    return inline function(a, b) {
       return if(a == b || (a == null && b == null)) true;
         else if(a == null || b == null) false;
         else impl(a, b);
     };
   }
 }
-class ArrayEqual {
-	 public static function equals<T>(v1: Array<T>, v2: Array<T>) {
-    return equalsWith(v1, v2, Equal.getEqualFor(v1[0]));
-  }
-  
-  public static function equalsWith<T>(v1: Array<T>, v2: Array<T>, equal : EqualFunction<T>) { 
-    if (v1.length != v2.length) return false;
-    if (v1.length == 0) return true;
-    for (i in 0...v1.length) {
-      if (!equal(v1[i], v2[i])) return false;
+class ProductEquals{
+  static public inline function equals(a:AbstractProduct,b:AbstractProduct){
+    var els0  = a.elements();
+    var els1  = b.elements();
+    var o     = true;
+    if(els0.length != els1.length){ o  = false; }
+    else{
+      for (idx in 0...els0.length){
+        var l = els0[idx];
+        var r = els1[idx];
+        if( Equal.getEqualFor(l)(l,r) == false){
+          o = false;
+          break;
+        }
+      }
     }
-    
-    return true;
+    return o;
   }
 }
-class ProductEqual {
-	static public function getEqual(p:Product,i : Int) {
-    return Equal.getEqualFor(p.element(i));
+class ObjectEquals{
+  static public inline function equals<A>(a:Dynamic,b:Dynamic){
+    var o = true;
+    for(key in Reflect.fields(a)) {
+      var va = Reflect.field(a, key);
+      if(!Equal.getEqualFor(va)(va, Reflect.field(b, key))){
+        o = false;break;
+      }
+    }
+    return o;
   }
-	static public function productEquals(p:Product, other : Product): Bool {
-    for(i in 0...p.length)
-      if(!getEqual(p,i)(p.element(i), other.element(i)))
-        return false;
-    return true;
+}
+class EqualsEquals{
+  static public inline function equals<A>(a:{ equals : A -> Bool },b:Dynamic){
+    return a.equals(b);
   }
-	static public function equals(p:Product, other:Product):Bool {
-		for(i in 0...p.length)
-      if(!getEqual(p,i)(p.element(i), other.element(i)))
-        return false;
-    return true;
-	}
+}
+class NullEqual{
+  static public inline function equals(a:Dynamic,b:Dynamic){
+    return (a == null) && (b == null);
+  }
+}
+class EnumEqual{
+  static public inline function equals(a:Dynamic,b:Dynamic){
+    return if(0 != Type.enumIndex(a) - Type.enumIndex(b)){
+      false;
+    }else{
+      var pa  = Enums.params(a);
+      var pb  = Enums.params(b);
+      var b   = true;
+      for(i in 0...pa.length) {
+        if(!Equal.getEqualFor(pa[i])(pa[i], pb[i]))
+          b = false;
+      }
+      b;
+    }
+  }
+}
+@:note('#0b1kn00b: this assumes no subtyping, and that [0] is defined. Faster but incorrect.')
+class ArrayEqual {
+  public static inline function equals<T>(v1: Array<T>, v2: Array<T>) {
+    return equalsWith(v1, v2, Equal.getEqualFor(v1[0]));
+  }
+  public static inline function equalsWith<T>(v1: Array<T>, v2: Array<T>, equal : EqualFunction<T>) { 
+    var o = true;
+    if (v1.length != v2.length) {
+      o = false;
+    }else if (v1.length == 0) { 
+      o = true;
+    }else{
+      for (i in 0...v1.length) {
+        if (!equal(v1[i], v2[i])) {
+          o = false;
+          break;
+        }
+      }
+    }
+    return o;
+  }
 }

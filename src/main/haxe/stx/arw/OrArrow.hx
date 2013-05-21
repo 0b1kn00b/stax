@@ -1,9 +1,9 @@
 package stx.arw;
 
 import stx.Prelude;
-import stx.arw.Arrows;
+using stx.arw.Arrows;
 
-abstract OrArrow<L, R, R0>(Arrow<Either<L,R>, R0>) {
+abstract OrArrow<L, R, R0>(Arrow<Either<L,R>, R0>) from Arrow<Either<L,R>, R0> to Arrow<Either<L,R>, R0>{
 	public function new(l:Arrow<L,R0>, r:Arrow<R,R0>) {
 		this = new Arrow(
 			inline function (?i : Either<L,R>, cont : Function1< R0, Void > ) : Void {
@@ -13,11 +13,5 @@ abstract OrArrow<L, R, R0>(Arrow<Either<L,R>, R0>) {
 				}
 			}
 		);
-	}
-	public function apply(i){
-		return this.apply(i);
-	}
-	public function rep(){
-		return this;
 	}
 }

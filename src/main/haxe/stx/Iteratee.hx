@@ -13,11 +13,6 @@ using stx.Functions;
 typedef Iterate<E,A> 						= Input<E>    -> Iteratee<E,A>;
 private typedef Folder<E,A,B>  	= (Step<E,A>  -> Promise<B>) -> Promise<B>;
 
-enum Input<E>{
-	El(e:E);
-	Empty;
-	End;
-}
 enum Step<E,A> {
   Cont(k: Iterate<E, A>);
   Over(a:A, remaining:Input<E>);
@@ -43,8 +38,8 @@ class Iteratee<E,A>{
 			function(step:Step<E,A>){
 				return 
 					switch (step) {
-						case Step.Over(a,_) 		: Promises.intact(a);
-						case Step.Cont(k) 							:
+						case Step.Over(a,_) 		          : Promises.intact(a);
+						case Step.Cont(k) 							  :
 							k(Input.End).fold(
 								function(step1){
 									return switch (step1) {
@@ -54,7 +49,7 @@ class Iteratee<E,A>{
 									}
 								}
 							);
-						case Step.Error(err,_) 		: Promises.breach(err);
+						case Step.Error(err,_) 		        : Promises.breach(err);
 					}
 			}
 		);

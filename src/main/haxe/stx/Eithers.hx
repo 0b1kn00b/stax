@@ -1,6 +1,9 @@
 package stx;
 
+import stx.Tuples.*;
 import stx.Prelude;
+import stx.Tuples;
+
 using stx.Tuples;
 using stx.Eithers;
 using stx.Functions;
@@ -30,7 +33,7 @@ class Eithers {
   /**
     Returns an option which is Some if the either is Left, None otherwise
   */
-  static public function left<A, B>(e: Either<A, B>): Maybe<A> {
+  static public function left<A, B>(e: Either<A, B>): Option<A> {
     return switch (e) {
       case Left(v): Some(v);
       
@@ -49,7 +52,7 @@ class Eithers {
   /**
     Returns an option which is Some if the either is Right, none otherwise.
   */
-  static public function right<A, B>(e: Either<A, B>): Maybe<B> {
+  static public function right<A, B>(e: Either<A, B>): Option<B> {
     return switch (e) {
       case Right(v): Some(v);
       
@@ -161,7 +164,7 @@ class Eithers {
     return 
       tp.fst().flatMapR(
         function(b:B){
-          return tp.snd().mapR( Tuples.t2.p1(b) );
+          return tp.snd().mapR( tuple2.p1(b) );
         }
       );
   }
@@ -191,6 +194,12 @@ class Eithers {
     return switch (e) {
       case Left(v)  : v;
       case Right(v) : v;
+    }
+  }
+  public static function toBool<T1, T2>(either : Either<T1, T2>) : Bool {
+    return switch(either) {
+      case Right(_): true;
+      case _: false;
     }
   }
 }

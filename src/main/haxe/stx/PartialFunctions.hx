@@ -18,6 +18,7 @@ package stx;
 */
 
 import stx.Prelude;
+import stx.Tuples.*;
 
 using stx.Tuples;
 using stx.Compose;
@@ -51,7 +52,7 @@ class PartialFunction1<A, Z>{
   
   public function orElse(that: PartialFunction1<A, Z>): PartialFunction1<A, Z> {
     return PartialFunction1.create(this._def.concat(
-      [Tuples.t2(that.isDefinedAt, that.apply)]
+      [tuple2(that.isDefinedAt, that.apply)]
     ));
   }
   
@@ -75,7 +76,7 @@ class PartialFunction1<A, Z>{
     return Prelude.error()("Function undefined at " + a);
   }
     
-  public function toFunction(): A -> Maybe<Z> {
+  public function toFunction(): A -> Option<Z> {
   var self = this;
   
   return function(a) {
@@ -110,7 +111,7 @@ class PartialFunction2<A, B, Z> {
   
   public function orElse(that: PartialFunction2<A, B, Z>): PartialFunction2<A, B, Z> {
     return PartialFunction2.create(this._def.concat(
-      [Tuples.t2(that.isDefinedAt, that.apply)]
+      [tuple2(that.isDefinedAt, that.apply)]
     ));
   }
   
@@ -134,7 +135,7 @@ class PartialFunction2<A, B, Z> {
       return Prelude.error()("Function undefined at (" + a + ", " + b + ")");
     }
     
-    public function toFunction(): A -> B -> Maybe<Z> {
+    public function toFunction(): A -> B -> Option<Z> {
     var self = this;
     
     return function(a, b) {
@@ -167,7 +168,7 @@ private class PartialFunction3<A, B, C, Z>{
   
   public function orElse(that: PartialFunction3<A, B, C, Z>): PartialFunction3<A, B, C, Z> {
     return PartialFunction3.create(this._def.concat(
-      [Tuples.t2(that.isDefinedAt, that.apply)]
+      [tuple2(that.isDefinedAt, that.apply)]
     ));
   }
   
@@ -191,7 +192,7 @@ private class PartialFunction3<A, B, C, Z>{
       return Prelude.error()("Function undefined at (" + a + ", " + b + ", " + c + ")");
     }
     
-    public function toFunction(): A -> B -> C -> Maybe<Z> {
+    public function toFunction(): A -> B -> C -> Option<Z> {
     var self = this;
     
     return function(a, b, c) {
@@ -226,7 +227,7 @@ class PartialFunction4<A, B, C, D, Z>{
   
   public function orElse(that: PartialFunction4<A, B, C, D, Z>): PartialFunction4<A, B, C, D, Z> {
     return PartialFunction4.create(this._def.concat(
-      [Tuples.t2(that.isDefinedAt, that.apply)]
+      [tuple2(that.isDefinedAt, that.apply)]
     ));
   }
   
@@ -250,7 +251,7 @@ class PartialFunction4<A, B, C, D, Z>{
       return Prelude.error()("Function undefined at (" + a + ", " + b + ", " + c + ", " + d + ")");
     }
     
-    public function toFunction(): A -> B -> C -> D -> Maybe<Z> {
+    public function toFunction(): A -> B -> C -> D -> Option<Z> {
     var self = this;
     
     return function(a, b, c, d) {
@@ -284,7 +285,7 @@ private class PartialFunction5<A, B, C, D, E, Z>{
   
   public function orElse(that: PartialFunction5<A, B, C, D, E, Z>): PartialFunction5<A, B, C, D, E, Z> {
     return PartialFunction5.create(this._def.concat(
-      [Tuples.t2(that.isDefinedAt, that.apply)]
+      [tuple2(that.isDefinedAt, that.apply)]
     ));
   }
   
@@ -308,7 +309,7 @@ private class PartialFunction5<A, B, C, D, E, Z>{
       return Prelude.error()("Function undefined at (" + a + ", " + b + ", " + c + ", " + d + ")");
     }
     
-    public function toFunction(): A -> B -> C -> D -> E -> Maybe<Z> {
+    public function toFunction(): A -> B -> C -> D -> E -> Option<Z> {
     var self = this;
     
     return function(a, b, c, d, e) {

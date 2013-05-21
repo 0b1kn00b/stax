@@ -8,7 +8,7 @@ import stx.test.TestCase;
 import stx.Log;									using stx.Log;
 import stx.framework.Injector; 	using stx.framework.Injector;
 																using stx.Functions;
-																using stx.Dynamics;
+																using stx.Anys;
 																
 class LogTest extends TestCase{
 

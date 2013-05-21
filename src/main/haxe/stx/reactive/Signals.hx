@@ -48,7 +48,7 @@ class Signals {
      *                      == true, else an 'ifFalse' Signal.
      */
     public static function cond<T>(conditions: Iterable<Tuple2<Signal<Bool>, Signal<T>>>, elseS: Signal<T>): Signal<T> {
-        return switch (conditions.headMaybe()) {
+        return switch (conditions.headOption()) {
             case None:    elseS;
             case Some(h): SignalBool.ifTrue(h.fst(), h.snd(), cond(conditions.tail(), elseS));
         }

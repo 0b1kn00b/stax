@@ -1,132 +1,106 @@
 package stx.arw;
 
 import stx.Prelude;
+import stx.Continuation.*;
+import stx.Tuples.*;
 
 using stx.Tuples;
 using stx.arw.Arrows;
 using stx.Compose;
+using stx.Continuation;
+using stx.arw.StateArrow;
 
 typedef ArrowState<S,A> = Arrow<S,Tuple2<A,S>>;
 
-abstract StateArrow<S,A>(ArrowState<S,A>) from ArrowState<S,A> to ArrowState<S,A>{
-  @:from static public function fromFunction<S,A>(fn:S->A):StateArrow<S,A>{
-    return new StateArrow(function(s:S){
-      return Tups.t2(fn(s),s);
-    }.lift());
-  }
-  @:from static public function fromArrow<S,A>(arw:Arrow<S,A>):StateArrow<S,A>{
-    return new StateArrow(
-      function(s:S){
-        return arw.apply(s).map(Tups.t2.bind(_,s));
-      }.arrowOf()
-    );
-  }
-  @:from static public function fromFutureConstructor<S,A>(fn:S->Future<A>):StateArrow<S,A>{
-    return fromArrow(fn.arrowOf());
-  }
+class StateArrows<S,A>{
   @:noUsing
-  static public function unit<S,A>():StateArrow<S,A>{
-    return new StateArrow(
-      function(s:S):Tup2<A,S>{
-        return Tups.t2(null,s);
-      }.lift()
-    );
+  static public function unit<S,A>():ArrowState<S,A>{
+    return function(s:S):Tuple2<A,S>{
+      return tuple2(null,s);
+    }
   }
-  public function new(v){
-    this = v;
-  }
-  public function reply():ArrowState<S,A>{
-    return this;
-  }
-  public function change(a1:Arrow<Tup2<A,S>,S>):StateArrow<S,A>{
-    return new StateArrow( this.fan().then(a1.second())
+  static public function change<S,A>(arw0:ArrowState<S,A>,arw1:Arrow<Tuple2<A,S>,S>):ArrowState<S,A>{
+    return arw0.fan().then(arw1.second())
       .then(
-        function(l:Tuple2<A,S>,r){
-          return Tups.t2(l.fst(),r);
-        }.spread().lift()
+        function(l:Tuple2<A,S>,r:S){
+          return tuple2(l.fst(),r);
+        }.spread()
+      );
+  }
+  static public function use<S,A>(arw0:ArrowState<S,A>,arw1:Arrow<S,S>):ArrowState<S,A>{
+    return arw0.change(
+      arw1.second().then(
+        function(a:A,s:S){
+          return s;
+        }.spread()
       )
     );
   }
-  public function use(a:Arrow<S,S>):StateArrow<S,A>{
-    return change( this,
-      a.second().then(T2s.snd.lift())
+  static public function drawWith<S,A,B,C>(arw0:ArrowState<S,A>,arw1:Arrow<S,B>,fn:A->B->C):ArrowState<S,C>{
+    return arw0.access(
+      arw1.second().then(fn.spread())
     );
   }
-  public function drawWith<B,C>(a:Arrow<S,B>,fn:A->B->C):StateArrow<S,C>{
-    return access( this,
-      a.second().then(fn.spread().lift())
-    );
+  static public function draw<S,A,B>(arw0:ArrowState<S,A>,arw1:Arrow<S,B>):ArrowState<S,Tuple2<A,B>>{
+    return drawWith(arw0,arw1,tuple2);
   }
-  public function draw<B>(a:Arrow<S,B>):StateArrow<S,Tup2<A,B>>{
-    return drawWith(this,a,Tups.t2);
-  }
-  public function access<B>(a1:Arrow<Tup2<A,S>,B>):StateArrow<S,B>{
-    return new StateArrow(
-      this.join(a1)
+  static public function access<S,A,B>(arw0:ArrowState<S,A>,arw1:Arrow<Tuple2<A,S>,B>):ArrowState<S,B>{
+    return arw0.join(arw1)
       .then(
-        function(l:Tup2<A,S>,r:B){
-          return Tups.t2(r,l.snd());
-        }.spread().lift()
-      )
-    );
+        function(l:Tuple2<A,S>,r:B){
+          return tuple2(r,l.snd());
+        }.spread()
+      );
   }
-  public function nextWith<B,C>(a1:StateArrow<S,B>,fn:A->B->C):StateArrow<S,C>{
-    return this.then(
+  static public function nextWith<S,A,B,C>(arw0:ArrowState<S,A>,arw1:ArrowState<S,B>,fn:A->B->C):ArrowState<S,C>{
+    return arw0.then(
       function(v:A,st:S){
-        return a1.then(
+        return arw1.then(
           function(v0:B,st:S){
-            return fn(v,v0).entuple(st);       
-          }.spread().lift()
+            return tuple2(fn(v,v0),st);
+          }.spread()
         ).apply(st);
-      }.spread().arrowOf()
+      }.spread()
     );
   }
-  public function next<B>(a1:StateArrow<S,B>):StateArrow<S,Tuple2<A,B>>{
-    return nextWith(this,a1,Tups.t2);
+  static public function next<S,A,B>(arw0:ArrowState<S,A>,arw1:ArrowState<S,B>):ArrowState<S,Tuple2<A,B>>{
+    return nextWith(arw0,arw1,tuple2);
   }
-  public function split<B>(a1:StateArrow<S,B>):StateArrow<S,Tuple2<A,B>>{
-    return this.split(a1).then(
-      function(l:Tup2<A,S>,r:Tup2<B,S>){
-        return Tups.t2(Tups.t2(l.fst(),r.fst()),r.snd());
-      }.spread().lift()
+  static public function split<S,A,B>(arw0:ArrowState<S,A>,arw1:ArrowState<S,B>):ArrowState<S,Tuple2<A,B>>{
+    return Arrows.split(arw0,arw1).then(
+      function(l:Tuple2<A,S>,r:Tuple2<B,S>):Tuple2<Tuple2<A,B>,S>{
+        return tuple2(tuple2(l.fst(),r.fst()),r.snd());
+      }.spread()
     );
   }
-  public function edit<B>(a1:Arrow<A,B>):StateArrow<S,B>{
-    return new StateArrow(
-      this.then(
-        a1.first()
-      )
+  static public function edit<S,A,B>(arw0:ArrowState<S,A>,arw1:Arrow<A,B>):ArrowState<S,B>{
+    return arw0.then(
+      arw1.first()
     );
   }
-  public function put(v:S):StateArrow<S,A>{
-    return new StateArrow(
-      this.then(
-        v.pure().second().lift()
-      )
+  static public function put<S,A,B>(arw0:ArrowState<S,A>,v:S):ArrowState<S,A>{
+    return arw0.then(
+      v.pure().second()
     );
   }
-  public function ret():StateArrow<S,S>{
-    return new StateArrow(
-      this.then(
-        function(tp:Tup2<A,S>){
-          return Tups.t2(tp.snd(),tp.snd());
-        }.lift()
-      )
+  static public function ret<S,A>(arw0:ArrowState<S,A>):ArrowState<S,S>{
+    return arw0.then(
+      function(tp:Tuple2<A,S>){
+        return tuple2(tp.snd(),tp.snd());
+      }
     );
   }
-  public function withInput(?i : S, cont : Function1<Tup2<A,S>,Void>) : Void{
-    this.withInput(i,cont);
+  static public function request<S,A>(arw0:ArrowState<S,A>,i:S){
+    return arw0.apply(i).map(T2s.fst);
   }
-  public function apply(?i:S):Future<Tup2<A,S>>{
-    return this.apply(i);
+  static public function resolve<S,A>(arw0:ArrowState<S,A>,i:S){
+    return arw0.apply(i).map(T2s.snd);
   }
-  public function request(?i:S):Future<A>{
-    return this.apply(i).map(T2s.fst);
-  }
-  public function resolve(?i:S):Future<S>{
-    return this.apply(i).map(T2s.snd);
-  }
-  @:to public inline function toArrow(){
-    return this;
+  static public function breakout<S,A>(arw:ArrowState<S,A>):Arrow<S,A>{
+    return arw.then(
+      function(x:Tuple2<A,S>):A{
+        return x.fst();
+      }
+    );
   }
 }

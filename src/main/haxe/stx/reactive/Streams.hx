@@ -35,7 +35,7 @@ class Streams {
      * Creates a new stream with the specified updater and optional sources.
      *
      * @param updater   The updater.
-     * @param sources   (Maybeal) The sources.
+     * @param sources   (Optional) The sources.
      *
      */
     @:noUsing
@@ -115,7 +115,7 @@ class Streams {
      * sources will be mapped to the constant.
      *
      * @param value     The constant.
-     * @param sources   (Maybeal) Source streams.
+     * @param sources   (Optional) Source streams.
      */
     static public function constant<I, O>(value: O, sources: Iterable<Stream<I>> = null): Stream<O> {
         return Streams.create(
@@ -149,7 +149,7 @@ class Streams {
      *                      zero Stream.
      */
     static public function cond<T>(conditions: Iterable<Tuple2<Stream<Bool>, Stream<T>>>): Stream<T> {
-        return switch (conditions.headMaybe()) {
+        return switch (conditions.headOption()) {
             case None:    Streams.zero();
             case Some(h): StreamBool.ifTrue(h.fst(), h.snd(), cond(conditions.tail()));
         }

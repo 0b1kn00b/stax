@@ -1,7 +1,7 @@
 package stx.arw;
 
 import stx.Prelude;
-import stx.arw.Arrows;
+using stx.arw.Arrows;
 
 @:note("#0b1kn00b, Doesn't run unless cont filled in, how to fix?")
 abstract CPSArrow<A,B>(Arrow<A,B>){

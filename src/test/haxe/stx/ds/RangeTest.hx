@@ -1,7 +1,7 @@
 ﻿package stx.ds;
 import stx.ds.Range;
 using stx.Functions;
-using stx.Dynamics;
+using stx.Anys;
 
 class RangeTest extends stx.test.TestCase{
 	

@@ -18,8 +18,7 @@ class Predicates {
     Produces a predicate that succeeds on any input
   */
   static public function isAny<A>() : Predicate<A>{
-    return 
-      function(value){
+    return function(value){
         return true;
       }
   }
@@ -91,8 +90,7 @@ class Predicates {
     Produces a predicate that succeeds if the input is contained in `vals`.
   */
   static public function isOneOf<A>(vals:Iterable<A>,?equal: EqualFunction<A>):Predicate<A>{
-    return 
-      function(x:A){
+    return function(x:A){
         return vals.forAny( isEqualTo(x,equal) );
       }
   }
@@ -100,8 +98,7 @@ class Predicates {
     return Enums.alike.p1(e);
   }
   static public function matches(reg:EReg):Predicate<String>{
-    return 
-      function(str:String){
+    return function(str:String){
         return reg.match(str);
       }
   }
@@ -161,5 +158,25 @@ class Predicates {
       
       return result;
     }
+  }
+}
+class Predcates2{
+  public static function and<T1, T2>(p0 : Predicate2<T1, T2>, p1 : Predicate2<T1, T2>) : Predicate2<T1, T2> {
+      return function(value0, value1) return p0(value0, value1) && p1(value0, value1);
+  }
+
+  public static function not<T1, T2>(p : Predicate2<T1, T2>) : Predicate2<T1, T2> {
+      return function(value0, value1) return !p(value0, value1);
+  }
+
+  public static function or<T1, T2>(p0 : Predicate2<T1, T2>, p1 : Predicate2<T1, T2>) : Predicate2<T1, T2> {
+      return function(value0, value1) return p0(value0, value1) || p1(value0, value1);
+  }
+
+  public static function ifElse<T1, T2, R>(   p : Predicate2<T1, T2>,
+                                              ifFunc : Function0<R>,
+                                              elseFunc : Function0<R>
+                                              ) : Function2<T1, T2, R> {
+      return function(value0, value1) return p(value0, value1) ? ifFunc() :elseFunc();
   }
 }

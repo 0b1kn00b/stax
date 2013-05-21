@@ -6,7 +6,7 @@ using stx.Log;
 using stx.plus.Equal;
 using stx.plus.Order;
 using stx.Functions;
-using stx.Maybes;
+using stx.Options;
 		
 import stx.io.json.Json;
 

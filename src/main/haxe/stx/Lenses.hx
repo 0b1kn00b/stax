@@ -4,12 +4,14 @@ import stx.Prelude;
 
 class Lenses {
 
-  inline public static function mod<A, B>(l1 : Lense < A, B > , f : B -> B, a : A) : A  return
-    l1.set(f(l1.get(a)), a);
-
-  public static function then < A, B, C > (l1 : Lense < A, B > , l2 : Lense < B, C > ) : Lense < A, C > return {
-    get : function (a : A) return l2.get(l1.get(a)),
-    set : function (c : C, a : A) : A return mod(l1, function (b) return l2.set(c, b), a)
+  inline public static function mod<A,B>(l1:Lense<A,B>, f:B->B,a:A):A{
+    return l1.set(f(l1.get(a)), a);
+  }  
+  public static function then<A,B,C>(l1:Lense<A,B>, l2:Lense<B,C>):Lense<A,C>{
+    return{
+      get : function (a : A) return l2.get(l1.get(a)),
+      set : function (c : C, a : A) : A return mod(l1, function (b) return l2.set(c, b), a)
+    }
   }
   
   inline public static function compose < A, B, C > ( l2 : Lense < B, C >, l1 : Lense < A, B > ) : Lense < A, C > return then(l1, l2); 

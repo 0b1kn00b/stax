@@ -5,7 +5,7 @@ import stx.Error;
 using stx.Eithers;
 
 using stx.Functions;
-using stx.Dynamics;
+using stx.Anys;
 
 class CodeBlocks {
 	/**

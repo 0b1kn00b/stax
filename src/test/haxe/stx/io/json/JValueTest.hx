@@ -24,7 +24,7 @@ import stx.io.json.types.IntJValue;
 import stx.io.json.types.FloatJValue;
 import stx.io.json.types.StringJValue;
 
-import stx.io.json.types.stx.MaybeJValue;
+import stx.io.json.types.stx.OptionJValue;
 import stx.io.json.types.stx.Tuple2JValue;
 import stx.io.json.types.stx.Tuple3JValue;
 import stx.io.json.types.stx.Tuple4JValue;
@@ -55,14 +55,14 @@ class JValueTest extends TestCase {
     doTest(DateJValue.decomposer(), function(v){return DateJValue.extractor()(v);}, [Date.now(), Date.fromTime(0.0)]);
   }
 
-  public function testMaybe() {
-    var a: Array<Maybe<Int>> = [Some(123), None];
+  public function testOption() {
+    var a: Array<Option<Int>> = [Some(123), None];
 
-    doTest(MaybeJValue.decomposer(), function(v){return MaybeJValue.extractor()(v);}, a);
+    doTest(OptionJValue.decomposer(), function(v){return OptionJValue.extractor()(v);}, a);
   }
 
   public function testTuple2() {
-    var a = [Tuples.t2(123, "foo"), Tuples.t2(0, "bar")];
+    var a = [tuple2(123, "foo"), tuple2(0, "bar")];
     var dt = Tuple2JValue.decomposer();
     var et = Tuple2JValue.extractor();
 
@@ -132,7 +132,7 @@ class JValueTest extends TestCase {
   }
 
   public function testMap() {
-    var a: Array<Map<Int, String>> = [Map.create().addAll([stx.Tuples.t2(123, "foo"), stx.Tuples.t2(-23, "bar"), stx.Tuples.t2(0, "baz")]), Map.create()];
+    var a: Array<Map<Int, String>> = [Map.create().addAll([tuple2(123, "foo"), tuple2(-23, "bar"), tuple2(0, "baz")]), Map.create()];
 
     doTest(
         MapJValue.decomposer()

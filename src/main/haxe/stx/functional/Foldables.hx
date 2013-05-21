@@ -16,13 +16,14 @@
 */
 package stx.functional;
 
-using stx.Tuples;
+import stx.Tuples.*;
 import stx.Prelude;
 
 import stx.plus.Show;
 import stx.plus.Equal;
 
-using stx.Maybes;
+using stx.Tuples;
+using stx.Options;
 
 import stx.functional.Foldable; 
 
@@ -50,27 +51,27 @@ class Foldables {
   }
   
   public static function partition<A, B>(foldable: Foldable<A, B>, f: B -> Bool): Tuple2<A, A> {
-    return cast foldable.foldl(Tuples.t2(foldable.unit(), foldable.unit()), function(a, b) {
-      return if (f(b)) Tuples.t2(cast a.fst().add(b), a.snd()); else Tuples.t2(a.fst(), cast a.snd().add(b));
+    return cast foldable.foldl(tuple2(foldable.unit(), foldable.unit()), function(a, b) {
+      return if (f(b)) tuple2(cast a.fst().add(b), a.snd()); else tuple2(a.fst(), cast a.snd().add(b));
     });
   }
   
   public static function partitionWhile<A, B>(foldable: Foldable<A, B>, f: B -> Bool): Tuple2<A, A> {
     var partitioning = true;
     
-    return cast foldable.foldl(Tuples.t2(foldable.unit(), foldable.unit()), function(a, b) {
+    return cast foldable.foldl(tuple2(foldable.unit(), foldable.unit()), function(a, b) {
       return if (partitioning) {
         if (f(b)) {
-          Tuples.t2(cast a.fst().add(b), a.snd());
+          tuple2(cast a.fst().add(b), a.snd());
         }
         else {
           partitioning = false;
           
-          Tuples.t2(a.fst(), cast a.snd().add(b));
+          tuple2(a.fst(), cast a.snd().add(b));
         }
       }
       else {
-        Tuples.t2(a.fst(), cast a.snd().add(b));
+        tuple2(a.fst(), cast a.snd().add(b));
       }
     });
   }
@@ -241,12 +242,11 @@ class Foldables {
     return foldable;
   }
   
-  public static function find<A, B>(foldable: Foldable<A, B>, f: B -> Bool): Maybe<B> {
+  public static function find<A, B>(foldable: Foldable<A, B>, f: B -> Bool): Option<B> {
     return foldable.foldl(None, function(a, b) {
       return switch (a) {
-        case None: b.toMaybe().filter(f);
-        
-        default: a;
+        case None     : Options.create(b).filter(f);
+        case Some(_)  : a;
       }
     });
   }

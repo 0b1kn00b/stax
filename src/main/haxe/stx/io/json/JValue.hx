@@ -16,6 +16,7 @@
 */
 package stx.io.json;
 
+import stx.Tuples.*;
 using stx.Prelude;
 using stx.Tuples;
 
@@ -53,7 +54,7 @@ class JValues{
     }
   }
   
-  static public function getMaybe(v: JValue, k: String): Maybe<JValue> {
+  static public function getOption(v: JValue, k: String): Option<JValue> {
     switch(v) {
       case JObject(_):
         var hash = extractMap(v);
@@ -65,13 +66,13 @@ class JValues{
     }
   }
   static public function get(v: JValue, k: String): JValue {
-    return switch (getMaybe(v, k)) {
+    return switch (getOption(v, k)) {
       case Some(v): v;      
       case None:    Prelude.error()("Expected to find field " + k + " in " + v);
     }
   }
   static public function getOrElse(v: JValue, k: String, def: Thunk<JValue>) {
-    return switch (getMaybe(v, k)) {
+    return switch (getOption(v, k)) {
       case Some(v): v;
       case None:    def();
     }
@@ -105,7 +106,7 @@ class JValues{
   }
   static public function extractField(v: JValue): Tuple2<String, JValue> {
     return switch (v) {
-      case JField (k, v): Tuples.t2(k, v);
+      case JField (k, v): tuple2(k, v);
       default						: Prelude.error()("Expected JField but found: " + v);
     }
   }  
@@ -128,7 +129,7 @@ class JValues{
   static public function extractFields(v: JValue): Array<Tuple2<String, JValue>> {
     return extractArray(v).flatMap(function(j) {
       return switch(j) {
-        case JField(k, v): [Tuples.t2(k, v)];
+        case JField(k, v): [tuple2(k, v)];
         
         default: [];
       }

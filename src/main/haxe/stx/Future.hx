@@ -2,13 +2,14 @@ package stx;
 
 import stx.ifs.Value;
 
+import stx.Tuples.*;
 using stx.Tuples;
 
 using stx.Error;            
 using stx.Prelude;
 using stx.Arrays;
-using stx.Maybes;
-using stx.Dynamics;
+using stx.Options;
+using stx.Anys;
 using stx.Iterables;
 using stx.Future;
 using stx.Eithers;
@@ -247,7 +248,7 @@ class Future<T> implements IValue<T>{
     execute independently of the other.
    */
   public function zip<A>(f2: Future<A>): Future<Tuple2<T, A>> {
-    return zipWith( f2, Tuples.t2 );
+    return zipWith( f2, Tuples.tuple2 );
   }
   public function zipWith<A,B>(f2:Future<A>,fn : T -> A -> B):Future<B>{
     //trace('zip');
@@ -276,10 +277,10 @@ class Future<T> implements IValue<T>{
   /** 
     Retrieves the value of the future, as an option.
    */
-  public function valueO(): Maybe<T> {
+  public function valueO(): Option<T> {
     return if (_isSet) Some(value) else None;
   }
-  public function toMaybe(): Maybe<T> {
+  public function toOption(): Option<T> {
     return valueO();
   }
 
@@ -436,7 +437,7 @@ class Futures2{
     var ft = new Future();
     f(
       function(a,b){
-        ft.deliver( Tuples.t2(a,b) );
+        ft.deliver( tuple2(a,b) );
       }
     );
     return ft;
@@ -450,7 +451,7 @@ class Futures3{
     var ft = new Future();
     f(
       function(a,b,c){
-        ft.deliver( Tuples.t3(a,b,c) );
+        ft.deliver( tuple3(a,b,c) );
       }
     );
     return ft;

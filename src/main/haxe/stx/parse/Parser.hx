@@ -1,9 +1,11 @@
 package stx.parse;
 
 import stx.Prelude;
-using stx.Tuples;
 import stx.ds.List;
-using stx.Maybes;
+import stx.Tuples.*;
+
+using stx.Tuples;
+using stx.Options;
 										
 import stx.parse.InputStream;
 
@@ -51,7 +53,7 @@ typedef Parser<I,T> = Input<I> -> ParseResult<I,T>
 typedef LR = {
   seed: ParseResult<Dynamic,Dynamic>,
   rule: Parser<Dynamic,Dynamic>,
-  head: Maybe<Head>
+  head: Option<Head>
 }
 
 typedef Head = {
@@ -118,13 +120,13 @@ class MemoObj {
     r.memo.memoEntries.set(key, entry);    
     return entry;
   }
-  public inline static function getFromCache<I>(r : Input<I>, genKey : Int -> String) : Maybe<MemoEntry> {
+  public inline static function getFromCache<I>(r : Input<I>, genKey : Int -> String) : Option<MemoEntry> {
     var key = genKey(r.offset);
     var res = r.memo.memoEntries.get(key);
     return res == null?None: Some(res);
   }
 
-  public inline static function getRecursionHead<I>(r : Input<I>) : Maybe<Head> {
+  public inline static function getRecursionHead<I>(r : Input<I>) : Option<Head> {
     var res = r.memo.recursionHeads.get(r.offset + "");
     return res == null?None: Some(res);
   }
@@ -137,7 +139,7 @@ class MemoObj {
     r.memo.recursionHeads.remove(r.offset + "");
   }
   
-  inline public static function forKey(m : Memo, key : MemoKey) : Maybe<MemoEntry> {
+  inline public static function forKey(m : Memo, key : MemoKey) : Option<MemoEntry> {
     var value = m.memoEntries.get(key);
     if (value == null) {
       return None;
@@ -185,7 +187,7 @@ class FailureObj {
 
 @:native("Parsers") class Parsers {
   
-  public static function mkLR<I,T>(seed: ParseResult<I,Dynamic>, rule: Parser<I,T>, head: Maybe<Head>) : LR return {
+  public static function mkLR<I,T>(seed: ParseResult<I,Dynamic>, rule: Parser<I,T>, head: Option<Head>) : LR return {
     seed: seed,
     rule: cast(rule),
     head: head
@@ -234,7 +236,7 @@ class FailureObj {
     }
   }
   
-  static function recall<I,T>(p : Parser<I,T>, genKey : Int -> String, input : Input<I>) : Maybe<MemoEntry> {
+  static function recall<I,T>(p : Parser<I,T>, genKey : Int -> String, input : Input<I>) : Option<MemoEntry> {
     var cached = input.getFromCache(genKey);
     switch (input.getRecursionHead()) {
       case None: return cached;
@@ -315,7 +317,7 @@ class FailureObj {
    * Lift a parser to a packrat parser (memo is derived from scala's library)
    */
   public static function memo<I,T>(_p : Void -> Parser<I,T>) : Void -> Parser<I,T>
-    return stx.Dynamics.toThunk({
+    return stx.Anys.toThunk({
       // generates an uid for this parser.
       var uid = parserUid();
       function genKey(pos : Int) return uid+"@"+pos;
@@ -355,15 +357,15 @@ class FailureObj {
     });
   
   public static function fail<I,T>(error : String, isError : Bool) : Void -> Parser <I,T>
-    return stx.Dynamics.toThunk(function (input :Input<I>) return Failure(error.errorAt(input).newStack(), input, isError));
+    return stx.Anys.toThunk(function (input :Input<I>) return Failure(error.errorAt(input).newStack(), input, isError));
 
   public static function success<I,T>(v : T) : Void -> Parser <I,T>
-    return stx.Dynamics.toThunk(function (input) return Success(v, input));
+    return stx.Anys.toThunk(function (input) return Success(v, input));
 
   public static function identity<I,T>(p : Void -> Parser<I,T>) : Void -> Parser <I,T> return p;
 
   public static function andWith < I, T, U, V > (p1 : Void -> Parser<I,T>, p2 : Void -> Parser<I,U>, f : T -> U -> V) : Void -> Parser <I,V>
-    return stx.Dynamics.toThunk({
+    return stx.Anys.toThunk({
       function (input:Input<I>):ParseResult<I,V> {
         var res = p1()(input);
         switch (res) {
@@ -379,7 +381,7 @@ class FailureObj {
     });
 
   inline public static function and < I, T, U > (p1 : Void -> Parser<I,T>, p2 : Void -> Parser<I,U>) : Void -> Parser < I, Tuple2 < T, U >> return
-    andWith(p1, p2, Tuples.t2);
+    andWith(p1, p2, tuple2);
     
   inline static function sndParam<A,B>(_, b) return b;
     
@@ -393,7 +395,7 @@ class FailureObj {
 
   // aka flatmap
   public static function andThen < I, T, U > (p1 : Void -> Parser<I, T>, fp2 : T -> (Void -> Parser<I, U>)) : Void -> Parser < I, U >
-    return stx.Dynamics.toThunk({
+    return stx.Anys.toThunk({
       function (input:Input<I>):ParseResult<I,U> {
         var res = p1()(input);
         switch (res) {
@@ -405,7 +407,7 @@ class FailureObj {
 
   // map
   public static function then < I, T, U > (p1 : Void -> Parser<I,T>, f : T -> U) : Void -> Parser < I, U >
-    return stx.Dynamics.toThunk({
+    return stx.Anys.toThunk({
       function (input):ParseResult<I,U> {
         var res = p1()(input);
         switch (res) {
@@ -428,7 +430,7 @@ class FailureObj {
 	 * Takes a predicate function for an item of Input and returns it's parser.
 	 */
 	public static function predicated<I,I>(p:I->Bool) : Void -> Parser<I,I> {
-		return stx.Dynamics.toThunk(
+		return stx.Anys.toThunk(
 			function(x:Input<I>) {
 				var res = p( x.content.at(x.offset) ) ;
 				//trace(x.offset + ":z" + x.content.at(x.offset)  + " " + Std.string(res));
@@ -445,7 +447,7 @@ class FailureObj {
    * Generates an error if the parser returns a failure (an error make the choice combinator fail with an error without evaluating alternatives).
    */
   public static function commit < I, T > (p1 : Void -> Parser<I,T>) : Void -> Parser < I, T >
-    return stx.Dynamics.toThunk( {
+    return stx.Anys.toThunk( {
       function (input) {        
         var res = p1()(input);
         return switch(res) {
@@ -457,7 +459,7 @@ class FailureObj {
     });
   
   public static function or < I,T > (p1 : Void -> Parser<I,T>, p2 : Void -> Parser<I,T>) : Void -> Parser < I, T >
-    return stx.Dynamics.toThunk({
+    return stx.Anys.toThunk({
       function (input) {
         var res = p1()(input);
         switch (res) {
@@ -474,7 +476,7 @@ class FailureObj {
 */    
   // unrolled version of the above one
   public static function ors<I,T>(ps : Array < Void -> Parser<I,T> > ) : Void -> Parser<I,T>
-    return stx.Dynamics.toThunk({
+    return stx.Anys.toThunk({
       function (input) {
         var pIndex = 0;
         while (pIndex < ps.length) {
@@ -493,7 +495,7 @@ class FailureObj {
    * 0..n
    */
   public static function many < I,T > (p1 : Void -> Parser<I,T>) : Void -> Parser < I, Array<T> >
-    return stx.Dynamics.toThunk( {
+    return stx.Anys.toThunk( {
       function (input) {
         var parser = p1();
         var arr = [];
@@ -534,7 +536,7 @@ class FailureObj {
 	 * Returns the original input if the parse operation succeeds.
 	 */
 	public static function lookahead<I,O>(p0:Void->Parser<I,O> ):Void->Parser<I,O>  {
-		return stx.Dynamics.toThunk( 
+		return stx.Anys.toThunk( 
 			function(input:Input<I>) {
 				return switch(p0()(input)) {
 					case Success(_, _)								: Success( null , input );
@@ -546,8 +548,8 @@ class FailureObj {
 	/**
 	 * Returns true if the parser fails and vice versa.
 	 */
-	public static function not<I,O>(p:Void->Parser<I,O>):Void->Parser<I,O> {
-		return stx.Dynamics.toThunk( 
+	public static function not<I,O>(p:Void->Parser<I,O>):Void->Parser<I,O>{
+		return stx.Anys.toThunk( 
 			function(input:Input<I>) {
 				return switch(p()(input)) {
 					case Success(_, _)								: 
@@ -567,7 +569,7 @@ class FailureObj {
 	 * Returns true if there is anything left on the InputStream.
 	 */
 	public static function anything<I,I>():Void->Parser<I,I> {
-		return stx.Dynamics.toThunk(
+		return stx.Anys.toThunk(
 			function(input:Input<I>) {
 				return if ( !input.isEnd() ) {
 					Success( input.take(1) , input.drop(1) );
@@ -583,7 +585,7 @@ class FailureObj {
 	public static function parser < I, O > (f:I->O, ?isError:Bool = false ):Void-> Parser<I,O>{
 		return 
 				available()._and(
-						stx.Dynamics.toThunk(
+						stx.Anys.toThunk(
 								function(input:Input<I>) : ParseResult < I, O > {
 									var o = null;
 									try {
@@ -627,14 +629,14 @@ class FailureObj {
   /*
    * 0..1
    */
-  public static function option < I,T > (p1 : Void -> Parser<I,T>) : Void -> Parser < I,Maybe<T> > return
+  public static function option < I,T > (p1 : Void -> Parser<I,T>) : Void -> Parser < I,Option<T> > return
     p1.then(Some).or(success(None));
 
   public static function trace<I,T>(p : Void -> Parser<I,T>, f : T -> String) : Void -> Parser<I,T> return
     then(p, function (x) { trace(f(x)); return x;} );
 
   public static function withError<I,T>(p : Void -> Parser<I,T>, f : String -> String ) : Void -> Parser<I,T>
-    return stx.Dynamics.toThunk(function (input : Input<I>) {
+    return stx.Anys.toThunk(function (input : Input<I>) {
       var r = p()(input);
       switch(r) {
         case Failure(err, input, isError): return Failure(err.report((f(err.head.msg)).errorAt(input)), input, isError);

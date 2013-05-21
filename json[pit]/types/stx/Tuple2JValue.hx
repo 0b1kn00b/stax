@@ -13,7 +13,7 @@ class Tuple2JValue<A,B> extends AbstractTranscode<Tuple2<A,B>,JExtractorFunction
 
   override public function extractWith(v: JValue, ex : JExtractorFunction2<A,B>): Tuple2<A, B> {
     return switch(v) {
-      case JArray(v): ex(Tuples.t2(v[0],v[1]));
+      case JArray(v): ex(tuple2(v[0],v[1]));
 
       default: 
     }

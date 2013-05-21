@@ -3,24 +3,24 @@ package stx;
 using stx.Predicates;
 import stx.Prelude;
 using stx.Tuples;
-import stx.Maybes;
+import stx.Options;
 
-using stx.Maybes;
+using stx.Options;
 using stx.Objects;
 using stx.Arrays;
 using stx.Prelude;
 using stx.Compose;
 using stx.Functions;
 
-typedef Field<K,V> = Tup3<Dynamic,String,V>;
+typedef Field = Tup2<Dynamic,String>;
 
 class Reflects{
 	static public function setFieldTp<A,B>(v:A,t:Tuple2<String,B>):A{
 		Reflect.setField(v,t.fst(),t.snd());
 		return v;
 	}
-	static public function getFieldO<A,B>(v:A,key:String):Maybe<B>{
-		return Maybes.create( Reflect.field(v,key) );
+	static public function getFieldO<A,B>(v:A,key:String):Option<B>{
+		return Options.create( Reflect.field(v,key) );
 	}
 	static public function getField<A,B>(v:A,key:String):Null<B>{
 		return Reflect.field(v,key);
@@ -29,7 +29,7 @@ class Reflects{
 		Reflect.setField(o,key,v);
 		return o;
 	}
-	static public function getterO<A,B>(fieldname:String):A->Maybe<B>{
+	static public function getterO<A,B>(fieldname:String):A->Option<B>{
 		return getField.p2(fieldname);
 	}
 	static public function getter<A,B>(fieldname:String):A->B{

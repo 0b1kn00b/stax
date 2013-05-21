@@ -24,10 +24,10 @@ import stx.functional.Foldable;
 import stx.ds.Collection;
 import stx.functional.Foldables;
 
-import stx.plus.Order; using stx.plus.Order;
-import stx.plus.Hasher; using stx.plus.Hasher;
-import stx.plus.Show; using stx.plus.Show;
-import stx.plus.Equal; using stx.plus.Equal;
+using stx.plus.Order; 
+using stx.plus.Hasher;
+using stx.plus.Show;
+using stx.plus.Equal;
 
 using stx.functional.Foldables;
 

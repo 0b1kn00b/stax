@@ -9,7 +9,7 @@ import stx.io.json.JValue;
 using stx.Prelude;
 using stx.Enums;
 using stx.Types;
-using stx.Maybes;
+using stx.Options;
 
 class Decomposer{
 	static function _createDecomposeImpl<T>(impl : JDecomposerFunction<Dynamic>):JDecomposerFunction<Dynamic> {

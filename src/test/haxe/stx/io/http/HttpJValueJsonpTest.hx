@@ -25,7 +25,7 @@ import stx.io.json.Json;
 
 
 using stx.io.json.JValue;
-using stx.Maybes;
+using stx.Options;
 using stx.ds.Map;
 
 class HttpJValueJsonpTest extends TestCase {

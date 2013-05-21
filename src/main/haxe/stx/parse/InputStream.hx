@@ -10,7 +10,6 @@ import stx.parse.Parser;
 
 class Tools {
 	public static function enumerable < C, T > (v:C):Enumerable < C, T > {
-		//TODO ugh.
 		var o : Enumerable<C,T> = null;
 		cast( switch( Type.typeof(v) ) {
 				case 		TClass(c)	: switch (Type.getClassName(c)) {
@@ -18,7 +17,7 @@ class Tools {
 						case "String"	: o = cast new StringEnumerable(cast v);
 						default 			: throw "no Enumerable found for " + c;
 				}
-				default : throw "no Enumerable found for: " + v;
+				default : o = cast new NullEnumerable(cast v);
 				}
 		);
 		return o;
@@ -60,6 +59,23 @@ class Enumerable<C,T> extends Indexable	<C,T> {
 	}
 	public function range(loc:Int,?len:Null<Int>):C {
 		throw "abstract function";
+		return null;
+	}
+}
+class NullEnumerable extends Enumerable<Dynamic,Dynamic>{
+	public function new(v, ?i){
+		super(v,i);
+	}
+	override private function get_length() {
+		return 0;
+	}
+	override public function hasNext():Bool {
+		return false;
+	}
+	override public function prepend(v:Dynamic):Enumerable<Dynamic,Dynamic> {
+		return this;
+	}
+	override public function range(loc:Int,?len:Null<Int>):Dynamic {
 		return null;
 	}
 }

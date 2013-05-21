@@ -1,12 +1,13 @@
 package stx;
 
+import stx.Tuples.*;
 import stx.Prelude;
 import stx.ifs.Apply;
 
 using stx.Tuples;
                       using stx.Functions;
                       using stx.Compose;
-                      using stx.Dynamics;
+                      using stx.Anys;
                       using stx.States;
 
 class State<S,R>{
@@ -18,7 +19,7 @@ class State<S,R>{
   static public function toState<S,A>(value:A):State<S,A>{
     return State.pure(
         function(s:S):Tuple2<A,S>{
-          return Tuples.t2(value,s);
+          return tuple2(value,s);
         }
       );
   }
@@ -26,7 +27,7 @@ class State<S,R>{
   static public function unit<S>():State<S,Unit>{
     return State.pure(
         function(s:S){
-          return Tups.t2(Unit,s);
+          return tuple2(Unit,s);
         }
       );
   }
@@ -78,7 +79,7 @@ class State<S,R>{
       State.pure(
         function(s:S):Tuple2<R,S>{
           var o = apply(s);
-          return Tuples.t2( o.fst(), fn(o.snd()) );
+          return tuple2( o.fst(), fn(o.snd()) );
         }
       );
   }
@@ -99,7 +100,7 @@ class State<S,R>{
       State.pure(
         function(s:S):Tuple2<S,S>{
           var o = apply(s);
-          return Tuples.t2(o.snd(),o.snd());
+          return tuple2(o.snd(),o.snd());
         }
       );
   }
@@ -107,7 +108,7 @@ class State<S,R>{
     return 
       State.pure(
         function (s:S){
-          return Tuples.t2(null,n);
+          return tuple2(null,n);
         }
       );
   }
@@ -125,7 +126,7 @@ class StateRef<S,A>{
       State.pure(
         function(s:S){
           this.value = a;
-          return Tuples.t2(this,s);
+          return tuple2(this,s);
         }
       );
   }

@@ -2,8 +2,8 @@ package stx.ds;
 
 import stx.Prelude;
 
-using stx.Tuples;
-using stx.Prelude;
+import stx.Tuples.*;
+
 
 
 import stx.functional.Foldable;
@@ -11,12 +11,14 @@ import stx.ds.Collection;
 import stx.functional.Foldables;
 
 using stx.Maths;
-using stx.Maybes;
+using stx.Options;
+using stx.Tuples;
+using stx.Prelude;
 
-import stx.plus.Order; using stx.plus.Order;
-import stx.plus.Hasher; using stx.plus.Hasher;
-import stx.plus.Show; using stx.plus.Show;
-import stx.plus.Equal; using stx.plus.Equal;
+using stx.plus.Order; 
+using stx.plus.Hasher;
+using stx.plus.Show; 
+using stx.plus.Equal;
 
 using stx.functional.Foldables;
 
@@ -41,17 +43,17 @@ class List<T> implements Collection<List<T>, T> {
   public var first (get_first, null): T;
   public var last  (get_last, null): T;
 
-  public var headMaybe  (get_headMaybe, null): Maybe<T>;
-  public var firstMaybe (get_firstMaybe, null): Maybe<T>;
-  public var lastMaybe  (get_lastMaybe, null): Maybe<T>;
+  public var headOption  (get_headOption, null): Option<T>;
+  public var firstOption (get_firstOption, null): Option<T>;
+  public var lastOption  (get_lastOption, null): Option<T>;
   
   public var equal (get_equal, null) : EqualFunction<T>;
   function get_equal() {
     return 
-      if (equal == null || equal == Equal.nil ){
-        headMaybe.map( Equal.getEqualFor )
+      if (equal == null || equal == NullEqual.equals ){
+        headOption.map( Equal.getEqualFor )
         .foreach(function(x) equal = x)
-        .getOrElseC( Equal.nil );
+        .getOrElseC( NullEqual.equals );
       }else{
         equal;
       }
@@ -60,7 +62,7 @@ class List<T> implements Collection<List<T>, T> {
   function get_order() {
     return 
       if (order == null || order == Order.nil ){
-        headMaybe.map( Order.getOrderFor )
+        headOption.map( Order.getOrderFor )
         .foreach( function(x) order = x)
         .getOrElseC( Order.getOrderFor(null) );
       }else{
@@ -72,7 +74,7 @@ class List<T> implements Collection<List<T>, T> {
   function get_hash(){
     return 
       if (hash == null || hash == Hasher.nil ){
-        headMaybe.map( Hasher.getMapFor )
+        headOption.map( Hasher.getHashFor )
         .foreach(function(x) hash = x)
         .getOrElseC( Hasher.nil );
       }else{
@@ -82,10 +84,10 @@ class List<T> implements Collection<List<T>, T> {
   public var show  (get_show, null) : ShowFunction<T>;
   function get_show(){
     return 
-      if (show == null || show == Show.nil ){
-        headMaybe.map( Show.getShowFor )
+      if (show == null || show == NullShow.toString ){
+        headOption.map( Show.getShowFor )
         .foreach(function(x) show = x)
-        .getOrElseC( Show.nil );
+        .getOrElseC( NullShow.toString );
       }else{
         show;
       }
@@ -324,7 +326,7 @@ class List<T> implements Collection<List<T>, T> {
     var r = List.create();
 
     for (i in 0...len) {
-      r = r.cons(Tuples.t2(iterator1.next(), iterator2.next()));
+      r = r.cons(tuple2(iterator1.next(), iterator2.next()));
     }
 
     return r;
@@ -404,14 +406,14 @@ class List<T> implements Collection<List<T>, T> {
     return Prelude.error()("List has no last element");
   }
 
-  private function get_headMaybe(): Maybe<T> {
+  private function get_headOption(): Option<T> {
     return None;
   }
-  private function get_firstMaybe(): Maybe<T> {
+  private function get_firstOption(): Option<T> {
     return None;
   }
 
-  private function get_lastMaybe(): Maybe<T> {
+  private function get_lastOption(): Option<T> {
     return None;
   }
 
@@ -452,13 +454,13 @@ private class Cons<T> extends List<T> {
     return _tail;
   }
 
-  override private function get_headMaybe(): Maybe<T> {
+  override private function get_headOption(): Option<T> {
     return Some(head);
   }
-  override private function get_firstMaybe(): Maybe<T> {
+  override private function get_firstOption(): Option<T> {
     return Some(head);
   }
-  override private function get_lastMaybe(): Maybe<T> {
+  override private function get_lastOption(): Option<T> {
     return Some(last);
   }
 

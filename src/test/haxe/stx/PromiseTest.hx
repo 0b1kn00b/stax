@@ -24,7 +24,7 @@ class PromiseTest extends TestCase{
   */
   public function testRight() {
     var a = new Promise();
-    a.foreach( 
+    a.success( 
         function(x:String) {
           x.equals('ok');
         }
@@ -40,7 +40,7 @@ class PromiseTest extends TestCase{
             function(x:String) {
               return 3;
             }
-        ).foreach(
+        ).success(
             function(y:Int) {
               3.equals(y);
             }
@@ -56,7 +56,7 @@ class PromiseTest extends TestCase{
               'ok'.equals(x);
               return  'yup'.intact();
             }
-        ).foreach(
+        ).success(
             function(x) {
               'yup'.equals(x);
             }
@@ -81,7 +81,7 @@ class PromiseTest extends TestCase{
                 }
               );
             }
-         ).foreach(
+         ).success(
             function(total) {
               45.equals(total);
             }
@@ -92,7 +92,7 @@ class PromiseTest extends TestCase{
   */
   public function testFutureFailure() {
     var outcome2 = 'notok'.breach()
-        .foreach(
+        .success(
             function(x) {
               true.isTrue();
               //['notok', 'notok again'].equals(cast x);
@@ -113,7 +113,7 @@ class PromiseTest extends TestCase{
     );
     
     outcome2
-        .foreach(
+        .success(
             function(x:Dynamic) {
               true.isTrue();
               async();
@@ -218,7 +218,7 @@ class PromiseTest extends TestCase{
         function(x) {
           true.isTrue();
         }
-    ).foreach(
+    ).success(
         function(x) {
           Assert.fail();
         }
@@ -328,7 +328,7 @@ class PromiseTest extends TestCase{
             function(x) {
               return true;
             }
-        ).foreach(
+        ).success(
             function(x) {
               Assert.fail();
             }
@@ -458,7 +458,7 @@ class PromiseTest extends TestCase{
     var ocs : Array<Promise<Dynamic>> = [outcome1, outcome4];
     ocs
         .wait()
-        .foreach(
+        .success(
             function(x:Dynamic) {
               return x;
             }
@@ -471,7 +471,7 @@ class PromiseTest extends TestCase{
                     }
               );
             }
-        ).foreach(
+        ).success(
             function(x:Dynamic) {
               return x;
             }

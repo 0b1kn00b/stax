@@ -1,9 +1,5 @@
 package stx.rtti;
 
-/**
- * ...
- * @author 0b1kn00b
- */
 import Type;
 
 import haxe.rtti.CType;

@@ -10,67 +10,67 @@ import stx.plus.Show;
 using stx.Tuples;										using stx.Tuples;
 using stx.plus.Hasher;
 
-typedef MapFunction<T>         = Function1<T, Int>; 
+typedef HashFunction<T>         = Function1<T, Int>; 
 
 class Hasher {
-	static function _createMapImpl<T>(impl : MapFunction<Dynamic>) return function(v : T) if(null == v) return 0 else return impl(v);
+	static function _createHashImpl<T>(impl : HashFunction<Dynamic>) return function(v : T) if(null == v) return 0 else return impl(v);
 
   /** 
-    Returns a MapFunction (T -> Int). It works for any type. For Custom Classes you must provide a hashCode()
+    Returns a HashFunction (T -> Int). It works for any type. For Custom Classes you must provide a hashCode()
     method, otherwise the full class name is returned.
    */
-  public static function getMapFor<T>(t : T) : MapFunction<T> {
-    return getMapForType(Type.typeof(t));
+  public static function getHashFor<T>(t : T) : HashFunction<T> {
+    return getHashForType(Type.typeof(t));
   }
-  public static function getMapForType<T>(v: ValueType) : MapFunction<T> {
+  public static function getHashForType<T>(v: ValueType) : HashFunction<T> {
     return switch(v) {
       case TBool:
-        _createMapImpl(BoolHasher.hashCode);
+        _createHashImpl(BoolHasher.hashCode);
       case TInt:
-        _createMapImpl(IntHasher.hashCode);
+        _createHashImpl(IntHasher.hashCode);
       case TFloat:
-        _createMapImpl(FloatHasher.hashCode);
+        _createHashImpl(FloatHasher.hashCode);
       case TUnknown:
-      _createMapImpl(function(v : T) return Prelude.error()("can't retrieve hascode for TUnknown: " + v));
+      _createHashImpl(function(v : T) return Prelude.error()("can't retrieve hascode for TUnknown: " + v));
       case TObject:
-        _createMapImpl(function(v){
+        _createHashImpl(function(v){
         var s = Show.getShowFor(v)(v);
-        return getMapFor(s)(s);
+        return getHashFor(s)(s);
         });
       case TClass(c):
         switch(Type.getClassName(c)) {
         case "String":
-          _createMapImpl(StringHasher.hashCode);
+          _createHashImpl(StringHasher.hashCode);
         case "Date":
-          _createMapImpl(DateHasher.hashCode);
+          _createHashImpl(DateHasher.hashCode);
         case "Array":
-          _createMapImpl(ArrayHasher.hashCode);
+          _createHashImpl(ArrayHasher.hashCode);
         case "stx.Tuple2" , "stx.Tuple3" , "stx.Tuple4" , "stx.Tuple5" :
-          _createMapImpl(ProductHasher.hashCode);
+          _createHashImpl(ProductHasher.hashCode);
         default:
           var fields = Type.getInstanceFields(c);
           if(Meta._hasMetaDataClass(c)) {       
-            var fields = Meta._fieldsWithMeta(c, "equalMap");
-            _createMapImpl(function(v : T) {
+            var fields = Meta._fieldsWithMeta(c, "equalHash");
+            _createHashImpl(function(v : T) {
               var className = Type.getClassName(c);
               var values    = fields.map(function(f){return Reflect.field(v, f);}).filter(function(v) return !Reflect.isFunction(v));
-              return values.foldl(9901 * StringHasher.hashCode(className), function(v, e){return v + (333667 * (Hasher.getMapFor(e)(e) + 197192));});
+              return values.foldl(9901 * StringHasher.hashCode(className), function(v, e){return v + (333667 * (Hasher.getHashFor(e)(e) + 197192));});
             });
           } else if(Type.getInstanceFields(c).remove("hashCode")) {
-            _createMapImpl(function(v) return Reflect.callMethod(v, Reflect.field(v, "hashCode"), []));
+            _createHashImpl(function(v) return Reflect.callMethod(v, Reflect.field(v, "hashCode"), []));
           } else {
             Prelude.error()("class does not have a hashCode method");
           }
         }
       case TEnum(_):
-        _createMapImpl(function(v : T) { 
+        _createHashImpl(function(v : T) { 
         var hash = Type.enumConstructor(cast v).hashCode() * 6151;
         for(i in Type.enumParameters(cast v))
-          hash += Hasher.getMapFor(i)(i) * 6151;
+          hash += Hasher.getHashFor(i)(i) * 6151;
         return hash;
       });
       case TFunction:
-        _createMapImpl(function(v : T) return Prelude.error()("function can't provide a hash code"));
+        _createHashImpl(function(v : T) return Prelude.error()("function can't provide a hash code"));
       case TNull:
         nil;
       /*_ :
@@ -82,9 +82,9 @@ class Hasher {
 }
 class ArrayHasher {
 	public static function hashCode<T>(v: Array<T>) {
-    return hashCodeWith(v, Hasher.getMapFor(v[0]));
+    return hashCodeWith(v, Hasher.getHashFor(v[0]));
   }
-	public static function hashCodeWith<T>(v: Array<T>, hash : MapFunction<T>) {
+	public static function hashCodeWith<T>(v: Array<T>, hash : HashFunction<T>) {
     var h = 12289;
     if(v.length == 0) return h;
     for (i in 0...v.length) {
@@ -130,7 +130,7 @@ class BoolHasher {
 }
 class ProductHasher {
   static function __init__(){
-    _baseMapes 
+    _baseHashes 
       = [
           [786433, 24593],
           [196613, 3079, 389],
@@ -138,15 +138,15 @@ class ProductHasher {
           [12289, 769, 393241, 193, 53]
         ];
   }
-	static public function getMap(p:Product, i : Int) {
-    return Hasher.getMapFor(p.element(i));
+	static public function getHash(p:Product, i : Int) {
+    return Hasher.getHashFor(p.element(i));
   }
-  static var _baseMapes : Array<Array<Int>>;
+  static var _baseHashes : Array<Array<Int>>;
 
   public static function hashCode(p:Product) : Int {
     var h = 0;
     for(i in 0...p.length){
-      h += ProductHasher._baseMapes[p.length-2][i] * getMap(p,i)(p.element(i));
+      h += ProductHasher._baseHashes[p.length-2][i] * getHash(p,i)(p.element(i));
     }
     return h;
   }

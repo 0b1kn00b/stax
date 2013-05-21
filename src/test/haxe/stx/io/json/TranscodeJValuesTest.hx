@@ -44,14 +44,14 @@ class TranscodeJValuesTest extends TestCase {
     doTest([Date.now(), Date.fromTime(0.0)]);
   }
 
-  public function testMaybe() {
-    var a: Array<Maybe<Int>> = [Some(123), None];
+  public function testOption() {
+    var a: Array<Option<Int>> = [Some(123), None];
 
     doTest(a, [Extractor.getExtractorForType(TInt)]);
   }
 
   public function testTuple2() {
-    var a = [Tuples.t2(123, "foo"), Tuples.t2(0, "bar")];
+    var a = [tuple2(123, "foo"), tuple2(0, "bar")];
 
     doTest(a, [Extractor.getExtractorForType(TInt), Extractor.getExtractorForType(TClass(String))]);
   }
@@ -94,7 +94,7 @@ class TranscodeJValuesTest extends TestCase {
   }
 
   public function testMap() {
-    var a: Array<Map<Int, String>> = [Map.create().addAll([Tuples.t2(123, "foo"), Tuples.t2(-23, "bar"), Tuples.t2(0, "baz")]), Map.create()];
+    var a: Array<Map<Int, String>> = [Map.create().addAll([tuple2(123, "foo"), tuple2(-23, "bar"), tuple2(0, "baz")]), Map.create()];
 		
 		doTest(a, [Extractor.getExtractorForType(TInt), Extractor.getExtractorForType(TClass(String))]);
   }

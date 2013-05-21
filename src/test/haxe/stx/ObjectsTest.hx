@@ -3,7 +3,7 @@ package stx;
 import stx.Prelude;
 
 import stx.test.TestCase;
-import stx.Objects;                   using stx.Maybes;
+import stx.Objects;                   using stx.Options;
 
 using stx.Objects;
 

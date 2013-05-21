@@ -8,7 +8,7 @@ import stx.Transformers;
 
 using stx.Prelude;
 using stx.Arrays;
-using stx.Maybes;
+using stx.Options;
 
 class ArrayJValue<T> implements Transcode<Array<T>,JExtractorFunction<T>> {
   public function new(){

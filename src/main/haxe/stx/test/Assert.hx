@@ -26,9 +26,9 @@ import haxe.io.Bytes;
 import stx.test.Assertation;
 import stx.test.MustMatchers;
 import haxe.PosInfos;
-import stx.error.AssertionError;
+import stx.err.AssertionError;
 
-using stx.Maybes;
+using stx.Options;
 
 
 
@@ -692,7 +692,7 @@ class Assert {
   *   haxe.Timer.delay(async, 50);
   * }
   * @param f: A function that contains other Assert tests
-  * @param timeout: Maybeal timeout value in milliseconds.
+  * @param timeout: Optional timeout value in milliseconds.
   */
   public static dynamic function createAsync(f : Void->Void, ?timeout : Int) {
     return function(){};
@@ -761,7 +761,7 @@ class Assert {
   * It works the same way as Assert.assertAsync() but accepts a function with one
   * argument (usually some event data) instead of a function with no arguments
   * @param f: A function that contains other Assert tests
-  * @param timeout: Maybeal timeout value in milliseconds.
+  * @param timeout: Optional timeout value in milliseconds.
   */
   public static dynamic function createEvent<EventArg>(f : EventArg->Void, ?timeout : Int) {
     return function(e:EventArg){};

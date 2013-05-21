@@ -24,10 +24,9 @@
 * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 * OTHER DEALINGS IN THE SOFTWARE.
 **/
-
-using stx.Tuples;
 package hx.ds;
 
+using stx.Tuples;
 /**
     A set is a collection of values, without any particular order and no
     repeated values. Implementation is through a list.

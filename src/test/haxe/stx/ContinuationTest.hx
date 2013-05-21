@@ -5,7 +5,7 @@ import stx.Method;
 import stx.test.TestCase;
 import stx.test.Assert;
 
-import stx.Continuations;
+import stx.Continuation;
 
 class ContinuationTest extends TestCase{
   public function testCC(){

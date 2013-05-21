@@ -10,7 +10,7 @@ import stx.net.HttpResponseCode;
 
 typedef HttpResponse<T> = {
   code:     HttpResponseCode,
-  body:     Maybe<T>,
+  body:     Option<T>,
   headers:  Map<String, String>
 }
 

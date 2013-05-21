@@ -16,7 +16,6 @@ using Lambda;
 #if macro
 
 class Helper {
-  
   static function classFieldsForClassType(c : ClassType) return
     c.fields.get();
   
@@ -40,7 +39,7 @@ class Helper {
       case TFun(args, ret)  : args.map(function (x) return x.t).concat([ret]).map(nameForType).join(" -> ");
       case TEnum(t, params) : typeName(t.get().name, params.map(nameForType));
       case TAbstract(t,ps)  : typeName(t.get().name, ps.map(nameForType));
-      //case TDynamic(t)      : (t == null) ? "Dynamic" : nameForType(t);
+      case TDynamic(t)      : (t == null) ? "Dynamic" : nameForType(t);
       default               : throw "not allowed " + Std.string(x);
     }
   }
@@ -48,7 +47,6 @@ class Helper {
     return null;
   }    
   public static function classFieldsFor(t : Type) : Array<ClassField> {
-    //trace(t);
     return switch (t) {
       case TMono( t )            : classFieldsFor(t.get());
 	    case TEnum( _,  _ )        : throw "lenses for enum not supported yet"; // could support common fields.. (would be quite nice!)
@@ -73,10 +71,10 @@ class Helper {
     
     var exprString = '
       { 
-        get : function (___obj : $typeName) return ___obj.$cname,
+        get : function (___obj : $typeName) return ___obj!=null ? ___obj.$cname : null,
         set : function ($cname : $cTypeName, ___obj : $typeName) {
           var ___cp = Reflect.copy(___obj);
-          ___cp.$cname = $cname;
+          if (___cp != null) ___cp.$cname = $cname;
           return ___cp;
         }
       }

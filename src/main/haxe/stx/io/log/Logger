@@ -19,7 +19,7 @@ package stx.io.log;
 import stx.Prelude;
 import haxe.PosInfos;
 
-using stx.Dynamics;
+using stx.Anys;
 
 typedef LogHandler = LogLevel -> String -> PosInfos -> Void
 

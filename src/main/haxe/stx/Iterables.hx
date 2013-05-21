@@ -2,7 +2,9 @@ package stx;
 
 using stx.Prelude;
 
-using stx.Tuples;							using stx.Tuples;
+import stx.Tuples.*;
+
+using stx.Tuples;
 																using stx.Functions;
 using stx.Iterables;
 
@@ -12,7 +14,7 @@ class Iterables {
   */
 	 public static function foldl1<T, T>(iter: Iterable<T>, mapper: T -> T -> T): T {
     var folded = iter.head();
-		switch (iter.tailMaybe()) {
+		switch (iter.tailOption()) {
 			case Some(v) 	:
 				for (e in v) { folded = mapper(folded, e); }
 			default 			:
@@ -31,9 +33,9 @@ class Iterables {
     return Arrays.foldr(iterable.toArray(), z, f);
   }
   /**
-    Produces the first element of `iter` as an Maybe, Maybe.None if the Iterable is empty.
+    Produces the first element of `iter` as an Option, Option.None if the Iterable is empty.
   */
-  public static function headMaybe<T>(iter: Iterable<T>): Maybe<T> {
+  public static function headOption<T>(iter: Iterable<T>): Option<T> {
     var iterator = iter.iterator();
     return if (iterator.hasNext()) {
 			var o = iterator.next();
@@ -45,7 +47,7 @@ class Iterables {
     Produces the first elelment of `iter`, throwing an error if the Iterable is empty.
   */
   public static function head<T>(iter: Iterable<T>): T {
-    return switch(headMaybe(iter)) {
+    return switch(headOption(iter)) {
       case None: Prelude.error()('Iterable has no head');
       case Some(h): h;
     }
@@ -53,7 +55,7 @@ class Iterables {
   /**
     Drops the first value, returning Some if there are further values, None if there aren't
   */
-  public static function tailMaybe<T>(iter: Iterable<T>): Maybe<Iterable<T>> {
+  public static function tailOption<T>(iter: Iterable<T>): Option<Iterable<T>> {
     var iterator = iter.iterator();
     return if (!iterator.hasNext()) None;
            else Some(drop(iter, 1));
@@ -65,7 +67,7 @@ class Iterables {
     @return Iterable
    */
   public static function tail<T>(iter: Iterable<T>): Iterable<T> {
-    return switch (tailMaybe(iter)) {
+    return switch (tailOption(iter)) {
       case None: Prelude.error()('Iterable has no tail');
       
       case Some(t): t;
@@ -99,7 +101,7 @@ class Iterables {
     
     for (e in iter) {
       if (p(e)) {
-				switch (r.tailMaybe()) {
+				switch (r.tailOption()) {
 					case Some(v) 	: r = v;
 					default:			 r = [];
 				}
@@ -225,7 +227,7 @@ class Iterables {
       var t1 = i1.next();
       var t2 = i2.next();
       
-      result.push(Tuples.t2(t1,t2));
+      result.push(tuple2(t1,t2));
     }
     
     return result;
@@ -243,7 +245,7 @@ class Iterables {
       var t1 = i1.next();
       var t2 = i2.next();
       
-      result.push(Tuples.t2(t1,t2));
+      result.push(tuple2(t1,t2));
     }
     return result;
   }
@@ -258,7 +260,7 @@ class Iterables {
     Performs a `zip` where the resulting `Tuple2` has the element on the left, and it's index on the right
    */
   static public function zipWithIndex<A>(a: Iterable<A>): Iterable<Tuple2<A, Int>> {
-    return zipWithIndexWith(a, Tuples.t2);
+    return Iterables.zipWithIndexWith(a, tuple2);
   }
    /**
     Performs a `zip` with the right hand parameter is the index of the element.
@@ -466,10 +468,10 @@ class Iterables {
     return !iter.iterator().hasNext();
   }
   /**
-   Produces an Maybe Some(element) the first time the predicate returns true,
+   Produces an Option Some(element) the first time the predicate returns true,
    None otherwise.
   */
-  public static function find<T>(iter: Iterable<T>, f: T -> Bool): Maybe<T> {
+  public static function find<T>(iter: Iterable<T>, f: T -> Bool): Option<T> {
     return Arrays.find(iter.toArray(),f);
   }
   /**
@@ -506,16 +508,16 @@ class Iterables {
     }
     visit(root);
     return 
-      function():Maybe<A>{
+      function():Option<A>{
         var val = stack[index];
         index++;
-        return Maybes.create(val);
+        return Options.create(val);
       }.yield();
   }
   /**
     Creates an Iterable by calling fn until it returns None, caching the results.
   */
-  static public function yield<A>(fn : Void -> Maybe<A>):Iterable<A>{
+  static public function yield<A>(fn : Void -> Option<A>):Iterable<A>{
     var stack = [];    
     return cast {
       iterator : function() return stx.Iterators.LazyIterator.create(cast fn,stack).iterator()

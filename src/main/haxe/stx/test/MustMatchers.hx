@@ -18,12 +18,11 @@ package stx.test;
 import stx.Prelude;
 import stx.plus.Equal;
 
-import stx.ds.Collection;
-
 using stx.Strings;
 using stx.Eithers;
 
 using stx.functional.Foldables;
+using stx.ds.Collection;
 
 typedef MatchResult = { assertion: String, negation: String }
 typedef MustMatcher<T> = T -> Either<MatchResult, MatchResult>
@@ -171,8 +170,8 @@ class Must {
     }
   }
   
-  public static function containElement<C, T>(element: T): MustMatcher<Collection<C, T>> {
-    return function(c: Collection<C, T>) {
+  public static function containElement<C,T>(element: T): MustMatcher<Collection<C, T>> {
+    return function(c: Collection<C,T>) {
       var result = {
         assertion: 'x.contains(' + element + ')',
         negation:  '!x.contains(' + element + ')'

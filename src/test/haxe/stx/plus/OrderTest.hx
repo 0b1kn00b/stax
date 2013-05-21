@@ -2,18 +2,18 @@ package stx.plus;
 
 import haxe.ds.HashMap;
 
-using stx.Prelude;
-
-using stx.Tuples;
 import stx.Prelude;
-
+import stx.Tuples.*;
 import stx.test.TestCase;
 import stx.test.Assert;
 
+
+using stx.Prelude;
+using stx.Tuples;
+using stx.Maths;
+
 using stx.plus.Order;
 using stx.plus.Equal;
-
-using stx.Maths;
 
 class OrderTest extends TestCase{
 	public function testOrderForInt() {
@@ -121,11 +121,11 @@ class OrderTest extends TestCase{
   public function testTupleOrder() {    
     var tests : Array<Tuple2<Product,Product>>= cast( 
       [
-       Tuples.t2(Tuples.t2("b",0), Tuples.t2("a",0)),
-       Tuples.t2(Tuples.t2("a",1), Tuples.t2("a",0)), 
-       Tuples.t2(Tuples.t3("a",0,0.1), Tuples.t3("a",0,0.05)),
-       Tuples.t2(Tuples.t4("a",0,0.1,"b"), Tuples.t4("a",0,0.1,"a")),
-       Tuples.t2(Tuples.t5("a",0,0.1,"a",1), Tuples.t5("a",0,0.1,"a",0)), 
+       tuple2(tuple2("b",0), tuple2("a",0)),
+       tuple2(tuple2("a",1), tuple2("a",0)), 
+       tuple2(tuple3("a",0,0.1), tuple3("a",0,0.05)),
+       tuple2(tuple4("a",0,0.1,"b"), tuple4("a",0,0.1,"a")),
+       tuple2(tuple5("a",0,0.1,"a",1), tuple5("a",0,0.1,"a",0)), 
       ] 
     );
   
@@ -155,11 +155,11 @@ class OrderTest extends TestCase{
   }    
   public function testTupleEqual() {    
     var tests : Array<Tuple2<Tuple2<Dynamic,Dynamic>,Tuple2<Dynamic,Dynamic>>> = cast ([
-      Tuples.t2(Tuples.t2("b",0), Tuples.t2("b",0)),
-      Tuples.t2(Tuples.t2("a",1), Tuples.t2("a",1)), 
-      Tuples.t2(Tuples.t3("a",0,0.1), Tuples.t3("a",0,0.1)),
-      Tuples.t2(Tuples.t4("a",0,0.1,"b"), Tuples.t4("a",0,0.1,"b")),
-      Tuples.t2(Tuples.t5("a",0,0.1,"a",1), Tuples.t5("a",0,0.1,"a",1)), 
+      tuple2(tuple2("b",0), tuple2("b",0)),
+      tuple2(tuple2("a",1), tuple2("a",1)), 
+      tuple2(tuple3("a",0,0.1), tuple3("a",0,0.1)),
+      tuple2(tuple4("a",0,0.1,"b"), tuple4("a",0,0.1,"b")),
+      tuple2(tuple5("a",0,0.1,"a",1), tuple5("a",0,0.1,"a",1)), 
     ] );
     
     for(test in tests) {

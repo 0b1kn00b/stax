@@ -1,5 +1,7 @@
 package stx;
 
+import stx.Tuples.*;
+
 using stx.Prelude;
 using stx.plus.Show;
 
@@ -16,12 +18,12 @@ using stx.Tuples;
 class ArraysTest extends TestCase {
   public function testPartition() {
     var t = [1,2,3,4,5,6].partition(function(v) return v % 2 != 0);  
-    assertEquals(Tuples.t2([1,3,5], [2,4,6]), t);
+    assertEquals(tuple2([1,3,5], [2,4,6]), t);
   }
   
   public function testPartitionWhile() {
     var t = [1,2,3,4,5,6].partitionWhile(function(v) return v < 4);
-    assertEquals(Tuples.t2([1,2,3], [4,5,6]), t);
+    assertEquals(tuple2([1,2,3], [4,5,6]), t);
   } 
   
   public function testMapTo() { 
@@ -120,7 +122,7 @@ class ArraysTest extends TestCase {
   }
   
   public function testToMap() {
-    var map = [Tuples.t2("a", 1), Tuples.t2("b", 2)].toMap();
+    var map = [tuple2("a", 1), tuple2("b", 2)].toMap();
     assertIs(map, stx.ds.Map);
     assertEquals(2, map.size());
   }

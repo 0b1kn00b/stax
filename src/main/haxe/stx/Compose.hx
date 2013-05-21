@@ -1,5 +1,7 @@
 package stx;
 
+import stx.Tuples.*;
+
 using stx.Compose;
 using stx.Tuples;
 using stx.Prelude;
@@ -123,7 +125,7 @@ class Compose{
   static public function first<A,B,C,D>(fn1:A->C):Tuple2<A,B>->Tuple2<C,B>{
     return 
       function(t:Tuple2<A,B>){
-        return Tuples.t2(fn1(t.fst()),t.snd());
+        return tuple2(fn1(t.fst()),t.snd());
       }
   }
   /**
@@ -132,13 +134,13 @@ class Compose{
   static public function second<A,B,C,D>(fn1:B->D):Tuple2<A,B>->Tuple2<A,D>{
     return 
       function(t:Tuple2<A,B>){
-        return Tuples.t2(t.fst(),fn1(t.snd()));
+        return tuple2(t.fst(),fn1(t.snd()));
       } 
   }
   static public function pair<A,B,C,D>(fn1:A->C,fn2:B->D):Tuple2<A,B>->Tuple2<C,D>{
     return 
       function(t){
-        return Tuples.t2(fn1(t.fst()),fn2(t.snd()));
+        return tuple2(fn1(t.fst()),fn2(t.snd()));
       }
   }
   /**
@@ -177,7 +179,7 @@ class Compose{
           }
       }
   }
-  static public function rout<A,B,C>(fn:B->Either<A,C>):Either<A,B>->Either<A,C>{
+  static public function fromR<A,B,C>(fn:B->Either<A,C>):Either<A,B>->Either<A,C>{
     return function(e:Either<A,B>){
       return switch (e){
         case    Left(l)      : Left(l);
@@ -200,7 +202,7 @@ class Compose{
     return 
       a.then(
         function(x){
-          return Tuples.t2(x,x);
+          return tuple2(x,x);
         }
       );
   }
@@ -212,22 +214,22 @@ class Compose{
   }
   static public function split<A,B,C>(split_:A->B,_split:A->C):A->Tuple2<B,C>{ 
     return function(x){
-        return Tuples.t2( split_(x), _split(x) );
+        return tuple2( split_(x), _split(x) );
       }
   }
   static public function binds<A,B,C>(bindl:A->C,bindr:Tuple2<A,C>->B):A->B{
     return unit().split(bindl).then( bindr );
   }
-  static public function pinch<A,B,C>(fn0:Tup2<A,A>->Tup2<B,C>):A->Tup2<B,C>{
+  static public function pinch<A,B,C>(fn0:Tuple2<A,A>->Tuple2<B,C>):A->Tuple2<B,C>{
     return 
       function(x:A){
-        return fn0(Tups.t2(x,x));
+        return fn0(tuple2(x,x));
       }
   }
   static public function both<A,B>(fn:A->B):Pair<A>->Pair<B>{
     return 
       function(t){
-        return T2.create(fn(t.fst()),fn(t.snd()));
+        return tuple2(fn(t.fst()),fn(t.snd()));
       }
   }
   /**
@@ -239,6 +241,12 @@ class Compose{
     return function(u: U): W {
       return f1(f2(u));
     }
+  }
+  static public function option<A,B>(fn:A->B):Option<A>->Option<B>{
+    return Options.map.bind(_,fn);
+  }
+  static public function fromMbe<A,B>(fn:A->Option<B>):Option<A>->Option<B>{
+    return Options.map.bind(_,fn).then(Options.flatten);
   }
 }
 class Compose2{

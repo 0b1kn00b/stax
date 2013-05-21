@@ -21,8 +21,8 @@ import stx.io.http.Http;
 import stx.net.Url;
 import stx.net.HttpResponseCode;
 import stx.ds.Map;
-import stx.Maybes;
-using stx.Maybes;
+import stx.Options;
+using stx.Options;
 
 #if js
 import stx.js.Dom;
@@ -64,7 +64,7 @@ class HttpStringAsync implements HttpString {
   }
   
   public function custom(method: String, _url: Url, data: String, ?_params: QueryParameters, ?_headers: Map<String, String>): Future<HttpResponse<String>> {
-    var url = if (_params != null) _url.addQueryParameters(Maybes.create(_params).getOrElseC(Map.create())); else _url;
+    var url = if (_params != null) _url.addQueryParameters(Options.create(_params).getOrElseC(Map.create())); else _url;
     var future: Future<HttpResponse<String>> = new Future();
     
     var request = Quirks.createXMLHttpRequest();
@@ -77,7 +77,7 @@ class HttpStringAsync implements HttpString {
     });
      
     request.onreadystatechange = function() {
-      var toBody = function(text: String): Maybe<String> { return if (text == null || text.length == 0) None; else Some(text); }
+      var toBody = function(text: String): Option<String> { return if (text == null || text.length == 0) None; else Some(text); }
       if (request.readyState == XmlHttpRequestState.DONE) {
         var responseHeaders = if (request.getAllResponseHeaders() == null) ''; else request.getAllResponseHeaders();
         
@@ -96,7 +96,7 @@ class HttpStringAsync implements HttpString {
       future.cancel();
     }
 
-    _headers.toMaybe().map(function(headers) {
+    _headers.toOption().map(function(headers) {
       headers.foreach(function(header) {
         request.setRequestHeader(header.fst(), header.snd());
       });
@@ -107,7 +107,7 @@ class HttpStringAsync implements HttpString {
   }
   
   private function makeHeader(?_headers: Map<String, String>, contentType: String): Map<String, String>{
-    return Maybes.create(_headers).getOrElseC(Map.create().set("Content-Type", contentType));
+    return Options.create(_headers).getOrElseC(Map.create().set("Content-Type", contentType));
   }
 }
 

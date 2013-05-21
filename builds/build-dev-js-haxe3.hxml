@@ -3,6 +3,8 @@
 
 -js ./bin/test.js
 
+-lib scutsCore
+
 -D haxe3
 -D pattern_matching
 -D development
@@ -11,3 +13,4 @@
 -main StaxTestSuite
 
 --connect 2331
+#-v

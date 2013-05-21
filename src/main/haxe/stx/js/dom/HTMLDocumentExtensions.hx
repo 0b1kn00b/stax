@@ -23,8 +23,8 @@ import stx.Prelude;
 
 
 using stx.Maths;
-import stx.Maybes;
-using stx.Maybes;
+import stx.Options;
+using stx.Options;
 
 
 /** 
@@ -55,7 +55,7 @@ class HTMLDocumentExtensions {
   public static function newIframe(doc: HTMLDocument, ?width: Int, ?height: Int): HTMLIFrameElement {
     var iframe: HTMLIFrameElement = cast doc.createElement('IFRAME');
     
-    width.toMaybe().zip(height.toMaybe()).map(function(t) {
+    width.toOption().zip(height.toOption()).map(function(t) {
       iframe.setAttribute('width',   width.toString());
       iframe.setAttribute('height',  height.toString());
     });
@@ -110,10 +110,10 @@ class HTMLDocumentExtensions {
   }
   
   public static function getTags(doc: HTMLDocument, s: String): Array<HTMLElement> {
-    return Maybes.getOrElseC(Maybes.create( cast doc.getElementsByTagName(s)), []);
+    return Options.getOrElseC(Options.create( cast doc.getElementsByTagName(s)), []);
   }
   
   public static function getClasses(doc: HTMLDocument, s: String): Array<HTMLElement> {
-    return Maybes.getOrElseC(Maybes.create(Env.getElementsByClass(s)), []);
+    return Options.getOrElseC(Options.create(Env.getElementsByClass(s)), []);
   }
 }

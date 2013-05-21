@@ -16,13 +16,10 @@
 package stx.math.tween;
 
 import stx.Prelude;
-import stx.ds.Set;            using stx.ds.Set;
-
-using stx.ds.Group;           using stx.ds.Map;
-
-import stx.Maybes;           using stx.Maybes;
-
-using stx.Tuples;            using stx.Tuples;
+using stx.ds.Set;
+using stx.ds.Map;
+using stx.Options;
+using stx.Tuples;
 
 using stx.functional.Foldables;
 
@@ -33,8 +30,8 @@ class Tween {
     var combinedFields = Reflect.fields(state1).toSet().append(Reflect.fields(state2));
     
     var data = combinedFields.map(function(name: String): Tuple2<String, {start: Float, delta: Float}> {
-      var start: Float = Maybes.create(Reflect.field(state1, name)).getOrElseC(def);
-      var end:   Float = Maybes.create(Reflect.field(state2, name)).getOrElseC(def);
+      var start: Float = Options.create(Reflect.field(state1, name)).getOrElseC(def);
+      var end:   Float = Options.create(Reflect.field(state2, name)).getOrElseC(def);
       
       return name.entuple({
         start:  start,

@@ -11,7 +11,7 @@ import stx.plus.Show;
 
 using stx.Tuples;
 using stx.Prelude;
-using stx.Maybes;
+using stx.Options;
 using stx.Strings;
 using stx.plus.Show;
 
@@ -20,7 +20,6 @@ using stx.Prelude;
 enum Unit {
   Unit;
 }
-typedef AnyRef = {}
 
 typedef CodeBlock = Void -> Void
 
@@ -49,10 +48,10 @@ typedef Thunk<T>    = Void -> T
 
 /** 
 		An option represents an optional value -- the value may or may not be
- 		present. Maybe is a much safer alternative to null that often enables
+ 		present. Option is a much safer alternative to null that often enables
   	reduction in code size and increase in code clarity.
  */
-enum Maybe<T> {
+enum Option<T> {
   None;
   Some(v: T);
 }
@@ -110,10 +109,10 @@ class Prelude{
     return { order : order , equal : equal , show : show , hash : hash };
   }
   
-  static public function unfold<T, R>(initial: T, unfolder: T -> Maybe<Tuple2<T, R>>): Iterable<R> {
+  static public function unfold<T, R>(initial: T, unfolder: T -> Option<Tuple2<T, R>>): Iterable<R> {
     return {
       iterator: function(): Iterator<R> {
-        var _next: Maybe<R> = None;
+        var _next: Option<R> = None;
         var _progress: T = initial;
 
         var precomputeNext = function() {
@@ -232,8 +231,9 @@ class SIterables{
   /**
     Apply f to each element in iter.
   */
-  static public function foreach<T>(iter : Iterable<T>, f : T-> Void ):Void {
+  static public function foreach<T>(iter : Iterable<T>, f : T-> Void ):Iterable<T> {
     for (e in iter) f(e);
+    return iter;
   }
 }
 class SArrays {

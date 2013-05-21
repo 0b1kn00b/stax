@@ -16,6 +16,7 @@
 ****/
 package stx.js.io;
 
+import stx.Tuples.*;
 import stx.js.Dom;
 import stx.Prelude;
 
@@ -36,8 +37,8 @@ using stx.Tuples;
 using stx.Arrays;
 using stx.Strings;
 using stx.Maths;
-using stx.Maybes;
-using stx.Dynamics;
+using stx.Options;
+using stx.Anys;
 using stx.Iterables;
 
 using stx.plus.Hasher;
@@ -181,7 +182,7 @@ class IFrameIOAutoDetect implements IFrameIO {
   var underlying: IFrameIO;
   
   public function new(?w: Window) {
-    this.bindTarget = w.toMaybe().getOrElseC(Env.window);    
+    this.bindTarget = w.toOption().getOrElseC(Env.window);    
     this.underlying = if (bindTarget.postMessage != null) cast(new IFrameIOPostMessage(bindTarget), IFrameIO); 
                       else cast(new IFrameIOPollingMaptag(bindTarget), IFrameIO);
   }
@@ -268,7 +269,7 @@ class IFrameIOPostMessage extends AbstractIFrameIO implements IFrameIO {
     return this;
   }
   
-  private static function normalizeOpt(url: Url): Maybe<Url> {
+  private static function normalizeOpt(url: Url): Option<Url> {
     return url.toParsedUrl().map(function(p) return p.withoutMap().withoutPathname().withoutSearch().toUrl());
   }
   
@@ -282,7 +283,7 @@ class IFrameIOPostMessage extends AbstractIFrameIO implements IFrameIO {
         var parentWindow = w.parent;
         
         return if (w == parentWindow) None;
-               else Some(Tups.t2(parentWindow,parentWindow));
+               else Some(tuple2(parentWindow,parentWindow));
       }).toArray());
       
       allWindows.flatMap(function(w) {
@@ -309,8 +310,8 @@ class IFrameIOPollingMaptag extends AbstractIFrameIO implements IFrameIO {
   var receivers:          std.Map<String,Array<Dynamic -> Void>>;
   var originUrlToWindow:  std.Map<String,Window>;
   var bindTarget:         Window;
-  var senderFuture:       Maybe<Future<Void>>;
-  var receiverFuture:     Maybe<Future<Void>>;
+  var senderFuture:       Option<Future<Void>>;
+  var receiverFuture:     Option<Future<Void>>;
   
   
   public function new(w: Window) {
@@ -389,7 +390,7 @@ class IFrameIOPollingMaptag extends AbstractIFrameIO implements IFrameIO {
     return this;
   }
   
-  private static function normalizeOpt(url: Url): Maybe<Url> {
+  private static function normalizeOpt(url: Url): Option<Url> {
     return url.toParsedUrl().map(function(p) return p.withoutMap().toUrl());
   }
   
@@ -398,7 +399,7 @@ class IFrameIOPollingMaptag extends AbstractIFrameIO implements IFrameIO {
   }
   
   private function sender(): Void {
-    switch (fragmentsToSend.headMaybe) {
+    switch (fragmentsToSend.headOption) {
       case None:
         stopSender();
       

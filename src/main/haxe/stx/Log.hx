@@ -9,7 +9,7 @@ import Type;
 														using stx.Arrays;
 														using stx.Enums;
 														using stx.Bools;
-														using stx.Maybes;
+														using stx.Options;
 														using stx.Functions;
 														
 														using stx.Log;
@@ -164,14 +164,14 @@ class DefaultLogger implements Logger{
 														return white(includes) ? 
 																(excludes.length > 0)
 																		.ifTrue( black.lazy(excludes) )
-																		.orElseC( Some(permissive) ).get() : false;
+																		.orElseConst( Some(permissive) ).get() : false;
 													}
 												,
 													function() {
 														return
 																(excludes.length > 0)
 																		.ifTrue( black.lazy(excludes) )
-																		.orElseC( Some(permissive) ).get();
+																		.orElseConst( Some(permissive) ).get();
 													}
 											);
 								}

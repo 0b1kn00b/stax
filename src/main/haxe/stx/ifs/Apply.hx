@@ -1,9 +1,9 @@
 package stx.ifs;
 
 import stx.Prelude;
-import stx.error.AbstractMethodError;
+import stx.err.AbstractMethodError;
 
-using stx.Maybes;
+using stx.Options;
 using stx.Functions;
 using stx.Compose;
 

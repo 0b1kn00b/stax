@@ -1,4 +1,4 @@
-package stx.error;
+package stx.err;
 
 /**
  * ...
@@ -11,6 +11,6 @@ using Std;
 class NullReferenceError extends Error {
 
 	public function new(fieldname: String, ?pos) {
-		super( "'$fieldname' is null.", pos );
+		super( '"$fieldname" is null.', pos );
 	}
 }

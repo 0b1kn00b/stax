@@ -141,8 +141,8 @@ class ListTest extends TestCase {
     assertEquals(99, defaultList().last);
   }
   
-  public function testLastMaybe(): Void {
-    switch (defaultList().lastMaybe) {
+  public function testLastOption(): Void {
+    switch (defaultList().lastOption) {
       case Some(v): assertEquals(99, v);
       
       default: assertTrue(false);
@@ -153,8 +153,8 @@ class ListTest extends TestCase {
     assertEquals(0, defaultList().head);
   }
   
-  public function testHeadMaybe(): Void {
-    switch (defaultList().headMaybe) {
+  public function testHeadOption(): Void {
+    switch (defaultList().headOption) {
       case Some(v): assertEquals(0, v);
       
       default: assertTrue(false);

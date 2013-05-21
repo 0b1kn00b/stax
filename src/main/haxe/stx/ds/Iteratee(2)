@@ -33,7 +33,7 @@ class Enumerators{
 		);*/
 	}	
 	 /*private def enumerateSeq[E, A]: (Seq[E], Iteratee[E, A]) => Promise[Iteratee[E, A]] = { (l, i) =>
-    l.foldLeft(Promise.pure(i))((i, e) =>
+    l.foldl(Promise.pure(i))((i, e) =>
       i.flatMap(it => it.pureFold{ 
         case Step.Cont(k) => k(Input.El(e))
         case _ => it

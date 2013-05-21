@@ -1,14 +1,15 @@
 package stx;
 
-
-using stx.Tuples;                using stx.Tuples;
-using stx.Prelude; 
 import stx.plus.Equal;
+import stx.Tuples.*;
 
-                                  using stx.Maths;
-                                  using stx.Maybes;
-                                  using stx.Functions;
-                                  using stx.Arrays;
+using stx.Tuples;
+using stx.Prelude;
+using stx.Maths;
+using stx.Options;
+using stx.Functions;
+using stx.Arrays;
+
 
 class Arrays {
   /**
@@ -16,9 +17,9 @@ class Arrays {
   */
   inline static public function map<T, S>(a: Array<T>, f: T -> S): Array<S> {
     var n: Array<S> = [];
-    
+      
     for (e in a) n.push(f(e));
-    
+      
     return n;
   }
   @:noUsing
@@ -42,7 +43,7 @@ class Arrays {
   */
    static public function foldl1<T, T>(a: Array<T>, mapper: T -> T -> T): T {
     var folded = a.first();
-    switch (Iterables.tailMaybe(a)) {
+    switch (Iterables.tailOption(a)) {
       case Some(v)  :
         for (e in v) { folded = mapper(folded, e); }
       default       :
@@ -56,7 +57,7 @@ class Arrays {
    @param A predicate
   */
   static public function partition<T>(arr: Array<T>, f: T -> Bool): Tuple2<Array<T>, Array<T>> {
-    return arr.foldl(Tuples.t2([], []), function(a, b) {
+    return arr.foldl(tuple2([], []), function(a, b) {
       if(f(b))
         a.fst().push(b);
       else
@@ -72,7 +73,7 @@ class Arrays {
   static public function partitionWhile<T>(arr: Array<T>, f: T -> Bool): Tuple2<Array<T>, Array<T>> {
     var partitioning = true;
     
-    return arr.foldl(Tuples.t2([], []), function(a, b) {
+    return arr.foldl(tuple2([], []), function(a, b) {
       if (partitioning) {
         if (f(b))
           a.fst().push(b);
@@ -239,26 +240,26 @@ class Arrays {
     return arr.length > 0;
   }
   /**
-    Produces an `Maybe.Some(element)` the first time the predicate returns `true`,
+    Produces an `Option.Some(element)` the first time the predicate returns `true`,
     `None` otherwise.
    */
-  static public function find<T>(arr: Array<T>, f: T -> Bool): Maybe<T>{
+  static public function find<T>(arr: Array<T>, f: T -> Bool): Option<T>{
     return arr.foldl(
 		None,
 		function(a, b) {
       return
 		  	switch (a) {
-		  		case None: Maybes.create(b).filter(f);
+		  		case None: Options.create(b).filter(f);
 			 	default: a;
 		    }
       }
     );
   }
   /**
-    Returns an `Maybe.Some(index)` if an object reference is contain in `arr`
+    Returns an `Option.Some(index)` if an object reference is contain in `arr`
     `None` otherwise
    */
-  static public function findIndexOf<T>(arr: Array<T>, obj: T): Maybe<Int> {
+  static public function findIndexOf<T>(arr: Array<T>, obj: T): Option<Int> {
 	 var index = arr.indexOf(obj);
 	 return if (index == -1) None else Some(index);
   }
@@ -345,10 +346,10 @@ class Arrays {
     Produces a `Tuple2`, on the left those elements before `index`, on the right those elements on or after.
    */
 	static public function splitAt<T>(srcArr : Array<T>, index : Int) : Tuple2 < Array<T>, Array<T> > return
-	stx.Tuples.t2(srcArr.slice(0, index),srcArr.slice(index));
+	tuple2(srcArr.slice(0, index),srcArr.slice(index));
   
   /**
-    Produces the index of element `t`, for a function prodcing an `Maybe` , see `findIndexOf`
+    Produces the index of element `t`, for a function prodcing an `Option` , see `findIndexOf`
    */
   static public function indexOf<T>(a: Array<T>, t: T): Int {
     var index = 0;
@@ -364,7 +365,7 @@ class Arrays {
   static public function withIndex<A>(a:Array<A>):Array<Tup2<A,Int>>{
     var o = [];
     for(i in 0...a.length){
-      o.push( Tups.t2( a[i] , i ) );
+      o.push( tuple2( a[i] , i ) );
     }
     return o;
   }
@@ -396,7 +397,7 @@ class Arrays {
     Produces an `Array` of `Tuple2` where `Tuple2.t2(a[n],b[n]).`
    */
   static public function zip<A, B>(a: Array<A>, b: Array<B>): Array<Tuple2<A, B>> {
-		return zipWith(a, b, Tuples.t2);
+		return zipWith(a, b, tuple2);
   }
   /**
     Produces an `Array` of the result of `f` where the left parameter is `a[n]`, and the right: `b[n]`
@@ -416,14 +417,13 @@ class Arrays {
     Performs a `zip` where the resulting `Tuple2` has the element on the left, and it's index on the right
    */
   static public function zipWithIndex<A>(a: Array<A>): Array<Tuple2<A, Int>> {
-		return zipWithIndexWith(a, Tuples.t2);
+		return zipWithIndexWith(a, tuple2);
   }
   /**
     Performs a `zip` with the right hand parameter is the index of the element.
    */
   static public function zipWithIndexWith<A, B>(a: Array<A>, f : A -> Int -> B): Array<B> {
     var len = a.length;
-    
     var r: Array<B> = [];
     
     for (i in 0...len) {
@@ -459,9 +459,9 @@ class Arrays {
     return a[0];
   }
   /**
-    Produces the first element of `a` as an `Maybe`, `Maybe.None` if the `Array` is empty.
+    Produces the first element of `a` as an `Option`, `Option.None` if the `Array` is empty.
    */
-  static public function firstMaybe<T>(a: Array<T>): Maybe<T> {
+  static public function firstOption<T>(a: Array<T>): Option<T> {
     return if (a.length == 0) None; else Some(a[0]);
   }
   /**
@@ -471,9 +471,9 @@ class Arrays {
     return a[a.length - 1];
   }
   /**
-    Produces the last element of `a` as an `Maybe`, `Maybe.None` if the `Array` is empty.
+    Produces the last element of `a` as an `Option`, `Option.None` if the `Array` is empty.
    */
-  static public function lastMaybe<T>(a: Array<T>): Maybe<T> {
+  static public function lastOption<T>(a: Array<T>): Option<T> {
     return if (a.length == 0) None; else Some(a[a.length - 1]);
   }
   

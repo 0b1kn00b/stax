@@ -1,9 +1,12 @@
 package stx;
 
-using stx.Maths;
-using stx.Maybes;
-
+import stx.Errors.*;
 import stx.Prelude;
+
+using stx.Maths;
+using stx.Options;
+
+using StringTools;
 
 class Strings {
   static var SepAlphaPattern        = ~/(-|_)([a-z])/g;
@@ -25,7 +28,7 @@ class Strings {
   static public function int(v: String, ?d: Null<Int>): Int {
     if (v == null) return d;
     
-    return Std.parseInt(v).toMaybe().filter(function(i) return !Math.isNaN(i)).getOrElseC(d);
+    return Std.parseInt(v).toOption().filter(function(i) return !Math.isNaN(i)).getOrElseC(d);
   }
   /**
   * Returns a Float from String format, defaulting to d
@@ -33,7 +36,7 @@ class Strings {
   static public function toFloat(v: String, ?d: Null<Float>): Float { 
     if (v == null) return d;
     
-    return Std.parseFloat(v).toMaybe().filter(function(i) return !Math.isNaN(i)).getOrElseC(d);
+    return Std.parseFloat(v).toOption().filter(function(i) return !Math.isNaN(i)).getOrElseC(d);
   }
   /**
   * Returns true if frag is at the beginning of String v, false otherwise.
@@ -134,7 +137,6 @@ class Strings {
   static public function cca(str:String,i:Int){
     return str.charCodeAt(i);
   }
-
   static public function chunk(str: String, len: Int): Array<String> {
     var start = 0;
     var end   = (start + len).min(str.length);
@@ -167,16 +169,69 @@ class Strings {
   static public function toCamelCase(str: String): String {
     return SepAlphaPattern.map(str, function(e) { return e.matched(2).toUpperCase(); });
   }
-  
   static public function fromCamelCase(str: String, sep: String): String {
     return AlphaUpperAlphaPattern.map(str, function(e) { return e.matched(1) + sep + e.matched(2).toLowerCase(); });
   }
   static public function split(st:String,sep:String):Array<String>{
     return st.split(sep);
   }
+  public static function isEmpty(value : String):Bool{
+    return value == null || value.length < 1;
+  }
+  public static function isNotEmpty(value : String) : Bool {
+    return !isEmpty(value);
+  }
+  public static function isEmptyOrBlank(value : String) : Bool {
+    return isEmpty(StringTools.trim(value));
+  }
+  public static function isNotEmptyOrBlank(value : String) : Bool {
+    return isNotEmpty(StringTools.trim(value));
+  }
+  public static function pure() : String {
+    return "";
+  }
+  public static function uuid(value : String = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx') : String {
+    var reg = ~/[xy]/g;
+    return reg.map(value, function(reg) {
+        var r = Std.int(Math.random() * 16) | 0;
+        var v = reg.matched(0) == 'x' ? r : (r & 0x3 | 0x8);
+        return v.hex();
+    }).toLowerCase();
+  }
+  public static function iterator(value : String) : Iterator<String> {
+    var index = 0;
+    return {
+        hasNext: function() {
+            return index < value.length;
+        },
+        next: function() {
+            return if (index < value.length) {
+                value.substr(index++, 1);
+            } else {
+                Prelude.err()(out_of_bounds_error());
+            }
+        }
+    };
+  }
 }
 class ERegs{
   static public function replace(s:String,reg:EReg,with:String):String {
     return reg.replace(s,with);
+  }
+  static public function matches(reg:EReg):Array<String>{
+    var out = [];
+    var idx = 0;
+    var val = null;
+
+    while(true){
+      try{
+        val = reg.matched(idx);
+      }catch(e:Dynamic){
+        break;
+      }
+      out.push(val);
+      idx++;
+    }
+    return out;
   }
 }

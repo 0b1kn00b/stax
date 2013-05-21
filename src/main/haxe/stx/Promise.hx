@@ -1,13 +1,12 @@
 package stx;
 
+import stx.Tuples.*;
 
 using stx.Prelude;
-
 using stx.Tuples;
-
 using stx.Future;
 using stx.Promise;
-using stx.Maybes;
+using stx.Options;
 using stx.Eithers;
 using stx.Arrays;
 using stx.Functions;
@@ -32,7 +31,7 @@ abstract Promise<A>(Future<Outcome<A>>) from Future<Outcome<A>> to Future<Outcom
     return this.deliver(Left(err));
   }
   public function new(?p){
-    this = Maybes.orDefault(p,Future.create());
+    this = Options.orDefault(p,Future.create());
   }
   public function recover<B>(fn:Error->Outcome<A>):Promise<A>{
     return this.map(
@@ -120,7 +119,7 @@ abstract Promise<A>(Future<Outcome<A>>) from Future<Outcome<A>> to Future<Outcom
     Zips the right hand value.
   */
   public function zip<A,B>(f1:Promise<B>):Promise<Tup2<A,B>>{
-    return zipWith(this,f1,Tuples.t2);
+    return zipWith(f1,tuple2);
   }
   /**
     flatMaps the right hand value
@@ -145,16 +144,19 @@ abstract Promise<A>(Future<Outcome<A>>) from Future<Outcome<A>> to Future<Outcom
   }
   public function onSuccess(f:A->Void):Promise<A>{
    return this.foreach(
-      Eithers.right.then( Maybes.foreach.p2( f ) ).effectOf()
+      Eithers.right.then( Options.foreach.p2( f ) ).effectOf()
     );
   }
   public function onFailure(f:Error->Void):Promise<A>{
     return this.foreach(
-      Eithers.left.then( Maybes.foreach.p2( f ) ).effectOf()
+      Eithers.left.then( Options.foreach.p2( f ) ).effectOf()
     );
   }
   public function future():Future<Outcome<A>>{
     return this;
+  }
+  public function isDelivered(){
+    return this.isDelivered();
   }
 }
 class Promises{
@@ -209,7 +211,7 @@ class Promises{
     return 
       tp.fst().flatMap(
         function(b:A){
-          return tp.snd().map( Tuples.t2.p1(b) );
+          return tp.snd().map( tuple2.p1(b) );
         }
       );
   }
@@ -246,7 +248,7 @@ class Promises1{
     As with ´promiseOf´ but using a constant rather than a Thunk.
   */
   static public function promiseOfC<A>(f:(String->Void)->Void,success:A):Promise<A>{
-    return promiseOf(f,Dynamics.toThunk(success));
+    return promiseOf(f,Anys.toThunk(success));
   }
 }
 class Promises2{
@@ -275,7 +277,7 @@ class Promises3{
         if(a!=null){
           ft.deliver(Left(Error.create(a)));
         }else{
-          ft.deliver(Right(Tups.t2(b,c)));
+          ft.deliver(Right(tuple2(b,c)));
         }
       }
     );
@@ -290,7 +292,7 @@ class Promises4{
         if(e!=null){
           ft.deliver(Left(Error.create(e)));
         }else{
-          ft.deliver(Right(Tuples.t3(a,b,c)));
+          ft.deliver(Right(tuple3(a,b,c)));
         }
       }
     );

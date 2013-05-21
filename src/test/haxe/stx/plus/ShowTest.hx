@@ -22,11 +22,11 @@ class ShowTest extends TestCase{
   }
   public function testTupleString() {    
     var tests = [
-      Tuples.t2(Tuples.t2("b",0), "stx.Tuple2(b, 0)"),
-      Tuples.t2(Tuples.t2("a",1), "stx.Tuple2(a, 1)"), 
-      Tuples.t2(Tuples.t3("a",0,0.1), "stx.Tuple3(a, 0, 0.1)"),
-      Tuples.t2(Tuples.t4("a",0,0.1,"b"), "stx.Tuple4(a, 0, 0.1, b)"),
-      Tuples.t2(Tuples.t5("a",0,0.1,"a",1), "stx.Tuple5(a, 0, 0.1, a, 1)"), 
+      tuple2(tuple2("b",0), "stx.Tuple2(b, 0)"),
+      tuple2(tuple2("a",1), "stx.Tuple2(a, 1)"), 
+      tuple2(Tuples.t3("a",0,0.1), "stx.Tuple3(a, 0, 0.1)"),
+      tuple2(Tuples.t4("a",0,0.1,"b"), "stx.Tuple4(a, 0, 0.1, b)"),
+      tuple2(Tuples.t5("a",0,0.1,"a",1), "stx.Tuple5(a, 0, 0.1, a, 1)"), 
     ];
     
     for (test in tests) {

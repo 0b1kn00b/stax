@@ -46,7 +46,7 @@ class Viaz<I,O> implements Arrow<I,O>{
 		return 
 			a.then(
 				function(x){
-					return Tuples.t2(x,x);
+					return tuple2(x,x);
 				}.lift()
 			);
 	}
@@ -184,20 +184,20 @@ class MapArrow <I,O> implements Arrow<Iterable<I>,Iterable<O>>{
 		return new MapArrow(a);
 	}
 }
-class MaybeArrow<I,O> implements Arrow<Maybe<I>,Maybe<O>>{
+class OptionArrow<I,O> implements Arrow<Option<I>,Option<O>>{
 	private var a : Arrow<I,O>;
 
 	public function new(a:Arrow<I,O>){
 		this.a = a;
 	}
-	inline public function withInput(?i:Maybe<I>,cont:Function1<Maybe<O>,Void>){
+	inline public function withInput(?i:Option<I>,cont:Function1<Option<O>,Void>){
 		switch (i) {
-			case Some(v) : Viaz.applyA().withInput( a.entuple(v) , Maybe.Some.then(cont));
+			case Some(v) : Viaz.applyA().withInput( a.entuple(v) , Option.Some.then(cont));
 			case None 	 : cont(None);
 		}
 	}
-	public static function option<I,O>(a:Arrow<I,O>):Arrow<Maybe<I>,Maybe<O>>{
-		return new MaybeArrow(a);
+	public static function option<I,O>(a:Arrow<I,O>):Arrow<Option<I>,Option<O>>{
+		return new OptionArrow(a);
 	}
 }
 #if !(neko || php || cpp )
@@ -247,17 +247,17 @@ class PairArrow<A,B,C,D> implements Arrow<Pair<A,C>,Pair<B,D>>{
 	}
 	inline public function withInput(?i : Pair<A,C>, cont : Function1<Pair<B,D>,Void> ) : Void{
 
-		var ol : Maybe<B> 	= null;
-		var or : Maybe<D> 	= null;
+		var ol : Option<B> 	= null;
+		var or : Option<D> 	= null;
 
 		var merge 	=
 			function(l:B,r:D){
-				cont( Tuples.t2(l,r) );
+				cont( tuple2(l,r) );
 			}
 		var check 	=
 			function(){
 				if (((ol!=null) && (or!=null))){
-					merge(Maybes.get(ol),Maybes.get(or));
+					merge(Options.get(ol),Options.get(or));
 				}
 			}
 		var hl 		= 
@@ -293,7 +293,7 @@ class Cleave<A,B> implements Arrow<A,Pair<B,B>>{
 		//Debug("Split: " + i).log();
 		a.withInput( i , 
 			function(o){
-				cont( Tuples.t2(o,o) );
+				cont( tuple2(o,o) );
 			}
 		);
 	}
@@ -335,7 +335,7 @@ class Split<A,B,C> implements Arrow<A,Pair<B,C>>{
 		this.a = new PairArrow(l,r);
 	}
 	inline public function withInput(?i : A, cont : Function1< Pair<B,C> , Void > ) : Void{
-		a.withInput( Tuples.t2(i,i) , cont);
+		a.withInput( tuple2(i,i) , cont);
 	}
 	static public function split<A,B,C>(split_:Arrow<A,B>,_split:Arrow<A,C>):Arrow<A,Pair<B,C>> { 
 		return new Split(split_,_split); 
@@ -368,7 +368,7 @@ class LeftChoice<B,C,D> implements Arrow<Either<B,D>,Either<C,D>>{
 	inline public function withInput(?i:Either<B,D>, cont : Function1<Either<C,D>,Void>){
 		switch (i) {
 			case Left(v) 	:
-				new ArrowApply().withInput( Tuples.t2(a,v) ,
+				new ArrowApply().withInput( tuple2(a,v) ,
 					function(x){
 						cont( Left(x) );
 					}
@@ -392,7 +392,7 @@ class RightChoice<B,C,D> implements Arrow<Either<D,B>,Either<D,C>>{
 	inline public function withInput(?i:Either<D,B>, cont : Function1<Either<D,C>, Void>){
 		switch (i) {
 			case Right(v) 	:
-				new ArrowApply().withInput( Tuples.t2(a,v) ,
+				new ArrowApply().withInput( tuple2(a,v) ,
 					function(x){
 						cont( Right(x) );
 					}
@@ -436,7 +436,7 @@ class ProcessArrow {
 			function(a:Array<String>){
 				var cmd = a.shift();
 				var proc = new Process(cmd,a);
-				return Tuples.t2(proc.stderr,proc.stdout);
+				return tuple2(proc.stderr,proc.stdout);
 			}.lift();
 }
 #end
@@ -458,7 +458,7 @@ class StateArrows{
 			a.join( a1 )
 			.then(
 				function(t:Pair<Pair<B,S>,S>){
-					return Tuples.t2(t.fst().fst(),t.snd());
+					return tuple2(t.fst().fst(),t.snd());
 				}.lift()
 			);
 	}
@@ -497,7 +497,7 @@ class StateArrowImpl<S,A,B> implements Arrow<Pair<A,S>,Pair<B,S>>{
 	}
 	//static function composeWithUsing<C,D>(
 	/*static private function merge<S,B,C>(t : Pair<Pair<S,B>,S>) :Pair<S,B>{
-		return Tuples.t2(t.snd(),t.fst().snd());
+		return tuple2(t.snd(),t.fst().snd());
 	}*/
 	public function access() { }
 	public function get() { }

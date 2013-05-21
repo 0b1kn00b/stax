@@ -1,5 +1,6 @@
 package stx;
 
+import stx.Tuples.*;
 
 using stx.Tuples;
 using stx.Functions;
@@ -14,7 +15,7 @@ typedef Object = {};
 /**
   Object defined as {} is different from Dynamic in that it does not allow closures.
 */
-@note('0b1kn00b','Does this handle reference loops, should it, could it?')
+@:note('0b1kn00b','Does this handle reference loops, should it, could it?')
 class Objects {
   @:noUsing
   static public function asObject(d:Dynamic):Object{
@@ -89,7 +90,7 @@ class Objects {
   
   static public function mapValues<T, S>(d: Dynamic<T>, f: T -> S): Dynamic<S> {
     return setAll({}, Reflect.fields(d).map(function(name) {
-      return Tuples.t2(name,f(Reflect.field(d, name)));
+      return tuple2(name,f(Reflect.field(d, name)));
     }));
   }
   
@@ -149,11 +150,11 @@ class Objects {
     });
   }
   
-  static public function getO<T>(d: Dynamic<T>, k: String): Maybe<T> {
+  static public function getO<T>(d: Dynamic<T>, k: String): Option<T> {
     return if (Reflect.hasField(d, k)) Some(Reflect.field(d, k)); else None;
   }
   
-  static public function getAnyO(d: Object, k: String): Maybe<Dynamic> {
+  static public function getAnyO(d: Object, k: String): Option<Dynamic> {
     return if (Reflect.hasField(d, k)) Some(Reflect.field(d, k)); else None;
   }
   
@@ -169,7 +170,7 @@ class Objects {
   }
   
   static public function extractAll<T>(d: Dynamic<T>): Array<Tuple2<String, T>> {
-    return Reflect.fields(d).map(function(name) return Tuples.t2(name,Reflect.field(d, name)));
+    return Reflect.fields(d).map(function(name) return tuple2(name,Reflect.field(d, name)));
   }
   static public function extractObject<A>(d:Dynamic<A>,fieldnames:Array<String>):Array<Tuple2<String, Dynamic>>{
     return 
@@ -220,7 +221,7 @@ class Objects {
         }
       );
   }
-  static public function hasAllFields(d:Object,fields:Array<String>):Maybe<String>{
+  static public function hasAllFields(d:Object,fields:Array<String>):Option<String>{
     return 
       fields.foldl(
         None,

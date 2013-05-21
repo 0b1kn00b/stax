@@ -2673,10 +2673,10 @@ extern interface RadioNodeList extends DomCollection<Node> {
     public var value: DOMString;
 }
 
-typedef HTMLMaybesCollection = {
+typedef HTMLOptionsCollection = {
     public var length (default,null): Int;
     
-    public function item(index: Int): HTMLMaybeElement;
+    public function item(index: Int): HTMLOptionElement;
     
     public function namedItem(name: DOMString): Node;
 }
@@ -5917,7 +5917,7 @@ typedef HTMLSelectElement = {
     public var value:           DOMString;
     public var length           (default, null): Int;
     public var form             (default, null): HTMLFormElement;
-    public var options          (default, null): HTMLMaybesCollection;
+    public var options          (default, null): HTMLOptionsCollection;
     public var disabled         (default, null):        Bool;
     public var multiple:        Bool;
     public var name:            DOMString;
@@ -6691,7 +6691,7 @@ typedef HTMLOptGroupElement = {
     public function getUserData(key: DOMString): DOMUserData;
 }
 //Tested
-typedef HTMLMaybeElement = {
+typedef HTMLOptionElement = {
     public var form             (default, null): HTMLFormElement;
     public var defaultSelected  : Bool;
     public var text             (default, null): DOMString;

@@ -1,7 +1,9 @@
-package stx.error;
+package stx.err;
 
 using Std;
 
+using stx.Prelude;
+using stx.Iterables;
 using stx.Arrays;
 
 import haxe.PosInfos;
@@ -23,7 +25,7 @@ class ErrorStack<T> extends DataError<Iterable<T>>{
 	}
 }
 class ErrorStacks{
-	public function merge(e0:Error,e1:Error){
+	static public function merge(e0:Error,e1:Error){
 		var o = [];
 		if( Types.hasSuperClass(Type.getClass(e0),ErrorStack) ){
 			o = o.append( cast(e0).data.toArray() );
@@ -36,5 +38,8 @@ class ErrorStacks{
 			o.push(e1);
 		}
 		return new ErrorStack(o);
+	}
+	@:noUsing static public function all(iter:Array<Error>){
+		return iter.foldl1(merge);
 	}
 }

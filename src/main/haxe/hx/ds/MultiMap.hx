@@ -1,5 +1,7 @@
 package hx.ds;
 
+import stx.Tuples.*;
+
 using stx.Functions;
 using stx.Compose;
 using stx.plus.Order;
@@ -41,12 +43,14 @@ class MultiMap<V>{
 		untyped this.impl.impl = ArrayOrder.sort( (this.impl.impl) );
 	}
 	public function toArray():Array<Tup2<String,V>>{
-		return 
-			impl.toArray().map(
+		return impl.toArray().map(
 				function(k:String,v:Array<V>){
-					return v.map(Tups.t2.p1(k));
+					return v.map(tuple2.bind(k));
 				}.spread()
 			).flatten();
+	}
+	public function toString():String{
+		return impl.toString();		
 	}
 	@:noUsing
 	static public function fromArray<A>(v:Array<Tuple2<String,A>>){

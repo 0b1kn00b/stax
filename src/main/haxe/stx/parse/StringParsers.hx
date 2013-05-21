@@ -1,10 +1,7 @@
 package stx.parse;
 
-/**
- * ...
- * from sledorzes parsex
- */
 import stx.parse.InputStream;
+
 using stx.parse.Parser;
 using stx.parse.StringParsers;
 
@@ -13,7 +10,7 @@ using stx.Iterables;
 class StringParsers {
 
   public static function identifier(x : String) : Void -> Parser<String,String>
-    return stx.Dynamics.toThunk(function (input : Input<String>)
+    return stx.Anys.toThunk(function (input : Input<String>)
       if (input.startsWith(x)) {
         return Success(x, input.drop(x.length));
       } else {
@@ -22,7 +19,7 @@ class StringParsers {
     );
 
   public static function regexParser(r : EReg) : Void -> Parser<String,String>
-    return stx.Dynamics.toThunk(function (input : Input<String>) return
+    return stx.Anys.toThunk(function (input : Input<String>) return
       if (input.matchedBy(r)) {
         var pos = r.matchedPos();
         if (pos.pos == 0) {

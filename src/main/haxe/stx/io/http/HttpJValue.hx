@@ -12,8 +12,8 @@ import stx.ds.Map;
 
 import stx.Future;
 
-import stx.Maybes;
-using stx.Maybes;
+import stx.Options;
+using stx.Options;
 
 #if js
 import stx.js.Dom;
@@ -63,7 +63,7 @@ class HttpJValueJsonp implements HttpJValue {
     var callbackName     = 'stx_jsonp_callback_' + requestId;
     var callbackFullName = 'stx.io.http.HttpJValueJsonp.Responders.' + callbackName;
     
-    var params = Maybes.create(params_).getOrElseC(Map.create()).set(callbackParameterName, callbackFullName);
+    var params = Options.create(params_).getOrElseC(Map.create()).set(callbackParameterName, callbackFullName);
     
     var url = url_.addQueryParameters(params);
     
@@ -82,7 +82,7 @@ class HttpJValueJsonp implements HttpJValue {
       doCleanup();
       
       var code: HttpResponseCode;
-      var response: Maybe<JValue>;
+      var response: Option<JValue>;
       
       try {
         response = Some(Json.fromObject(data));
