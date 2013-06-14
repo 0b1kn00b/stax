@@ -15,20 +15,17 @@ using stx.Compose;
 using stx.Types;
 
 class Types{
-  /**
-    Safe resolveClass
-  */
-  static public function resolveClassO(s:String):Option<Class<Dynamic>>{
+  static public function resolveClassOption(s:String):Option<Class<Dynamic>>{
     return Options.create(Type.resolveClass(s));
   }
-  static public function resolveClassE(s:String):Outcome<Class<Dynamic>>{
-    return resolveClassO(s).orEitherC(Error.create('no type $s found.'));
+  static public function resolveClassEither(s:String):Outcome<Class<Dynamic>>{
+    return resolveClassOption(s).orEitherC(Error.create('no type $s found.'));
   }
-  static public function getClassO<A>(c:A):Option<Class<A>>{
+  static public function getClassOption<A>(c:A):Option<Class<A>>{
     return Options.create(Type.getClass(c));
   }
-  static public function extractClassNameO(v:Dynamic):Option<String>{
-    return Types.getClassO(v).map( Type.getClassName );
+  static public function extractClassNameOption(v:Dynamic):Option<String>{
+    return Types.getClassOption(v).map( Type.getClassName );
   }
   static public function getClassHierarchy<A>(type:Class<A>):Array<Class<Dynamic>>{
     var o = [];
@@ -49,10 +46,10 @@ class Types{
         }
       ).add(until);
   }
-  static public function getSuperClassO(type:Class<Dynamic>):Option<Class<Dynamic>>{
+  static public function getSuperClassOption(type:Class<Dynamic>):Option<Class<Dynamic>>{
     return Options.create(Type.getSuperClass(type));
   }
-  static public function createInstanceE<A>(type:Class<A>,?args:Array<Dynamic>):Either<Error,A>{
+  static public function createInstanceEither<A>(type:Class<A>,?args:Array<Dynamic>):Either<Error,A>{
     args = if(args == null) [] else args;
     var v : A = null;
     try{
@@ -62,15 +59,15 @@ class Types{
     }
     return Right(v);
   }
-  static public function resolveCreate<A>(name:String,?args:Array<Dynamic>):Outcome<A>{
-    return Types.resolveClassO.first().pinch().then(
+  static public function resolveCreateOutcome<A>(name:String,?args:Array<Dynamic>):Outcome<A>{
+    return Types.resolveClassOption.first().pinch().then(
       function(l:Option<Class<Dynamic>>,r:String){
         return switch (l){
           case Some(v)      : Right(v);
           default           : Left(stx.Error.create('Type "$r" not found.'));
         }
       }.spread()
-    )(name).flatMapR(Types.createInstanceE.p2(args == null ? [] : args));
+    )(name).flatMapR(Types.createInstanceEither.p2(args == null ? [] : args));
   }
   /**
     Does ´type´ exist in the Class hierarchy?
@@ -99,18 +96,15 @@ class Types{
    static public inline function of<T>(type : Class<T>, value : Dynamic) : Null<T>{
       return (Std.is(value, type) ? cast value : null);
    }
-   static public function extractAllAnyFromType<A>(v:A):Option<Array<Tuple2<String,Dynamic>>>{
+   static public function extractAllAnyFromTypeOption<A>(v:A):Option<Array<Tuple2<String,Dynamic>>>{
     return
-      Types.getClassO(v)
+      Types.getClassOption(v)
         .map(
           function(x){
             var a = Type.getInstanceFields(x);
             return a.zip(a.map(Reflect.field.p1(v)));
           }
         );
-   }
-   static public function extractObjectFromType<A>(v:A):Object{
-      return extractAllAnyFromType(v).map(Objects.toObject).getOrElse(Objects.create);
    }
 
    //static public function extractFieldsFromType<A>(v:A)
@@ -119,9 +113,7 @@ class Types{
    @param o       A typed object.
    @return        The objects typename.
  */
- @:thx
-  inline public static function className(o : Dynamic):String
-  {
+ @:thx inline public static function className(o : Dynamic):String{
     return fullName(o).split('.').pop();
   }
 
@@ -129,9 +121,7 @@ class Types{
     Gets the full Class name of a Class instance.
     @param o
    */
-  @:thx
-  inline public static function fullName(o : Dynamic)
-  {
+  @:thx inline public static function fullName(o : Dynamic){
     return Type.getClassName(Type.getClass(o));
   }
   /**
@@ -139,11 +129,8 @@ class Types{
     @param o
     @return
    */
-  @:thx
-  public static function typeName(o : Dynamic) : String
-  {
-    return switch(Type.typeof(o))
-    {
+  @:thx public static function typeName(o : Dynamic):String{
+    return switch(Type.typeof(o)){
       case TNull    : "null";
       case TInt     : "Int";
       case TFloat   : "Float";
@@ -155,4 +142,5 @@ class Types{
       case TUnknown : "Unknown";
     }
   }
+
 }
