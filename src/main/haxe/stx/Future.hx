@@ -414,6 +414,18 @@ class Futures{
         }
       );
   }
+
+  #if (js || flash)
+  static public function delayC<A>(s:Int,c:A):Future<A>{
+    var ft = new Future();
+    haxe.Timer.delay(
+      function(){
+        ft.deliver(c);
+      },s
+    );
+    return ft;
+  }
+  #end
 }
 class Futures1{
   /**
