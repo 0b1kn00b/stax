@@ -24,7 +24,7 @@ abstract Arrow<I,O>(ArrowType<I,O>) from ArrowType<I,O>{
     return new EventArrow1(str);
   }
   #end*/
-  static public inline function arr<A,B>(?arw:ArrowType<A,B>):Arrow<A,B>{
+  static public inline function arw<A,B>(?arw:ArrowType<A,B>):Arrow<A,B>{
     return arw == null ? cast unit : arw;
   }
   @:noUsing static public function unit<A>():Arrow<A,A>{

@@ -22,16 +22,18 @@ abstract OutcomeArrow<I,O>(ArrowOutcome<I,O>) from ArrowOutcome<I,O> to ArrowOut
       }
     );
   }
-  public function attempt<N>(arw:Arrow<O,Outcome<N>>):OutcomeArrow<I,N>{
-    return this.then(arw.fromR());
+}
+class OutcomeArrows{
+  static public function attempt<I,O,N>(arw0:ArrowOutcome<I,O>,arw1:Arrow<O,Outcome<N>>):OutcomeArrow<I,N>{
+    return arw0.then(arw1.fromR());
   }
-  public function edit<N>(arw:Arrow<O,N>):OutcomeArrow<I,N>{
-    return this.then(arw.right());
+  static public function edit<I,O,N>(arw0:ArrowOutcome<I,O>,arw1:Arrow<O,N>):OutcomeArrow<I,N>{
+    return arw0.then(arw1.right());
   }
-  public function split<N>(arw:OutcomeArrow<I,N>):OutcomeArrow<I,Tup2<O,N>>{
-    return this.split(arw).then(Eithers.unzip);
+  static public function split<I,O,N>(arw0:ArrowOutcome<I,O>,arw1:OutcomeArrow<I,N>):OutcomeArrow<I,Tup2<O,N>>{
+    return arw0.split(arw1).then(Eithers.unzip);
   }
-  public function imply(v:I){
-    return this.apply(Right(v));
+  static public function imply<I,O>(arw0:ArrowOutcome<I,O>,v:I){
+    return arw0.apply(Right(v));
   }
 }
