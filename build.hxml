@@ -3,4 +3,5 @@
 #builds/stx-swc.hxml
 #builds/build-swc.hxml
 #builds/build-as3.hxml
-builds/build-test-js-haxe3.hxml
+#builds/build-test-js-haxe3.hxml
+builds/build-test-js-muster.hxml
