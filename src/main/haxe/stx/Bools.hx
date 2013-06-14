@@ -34,11 +34,12 @@ class Bools
   static public function equals(v1 : Bool, v2 : Bool) : Bool {
     return v1 == v2;   
   }
-  public function function_name(arguments) {
-    
-  }
   public static inline function eq(v1:Bool, v2:Bool) return v1 == v2;  
   public static inline function and(v1:Bool, v2:Bool) return v1 && v2;
+  public static inline function nand(v1:Bool, v2:Bool){
+    if( v1 ) return !v2;
+    else return v2;
+  }
   public static inline function or(v1:Bool, v2:Bool) return v1 || v2;
   public static inline function not(v:Bool) return !v;
 }
