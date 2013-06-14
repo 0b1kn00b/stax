@@ -22,12 +22,13 @@ class Arrays {
       
     return n;
   }
-  @:noUsing
-  static public function create<A>():Array<A>{
+  @:noUsing static public function create<A>():Array<A>{
     return [];
   }
-  @:noUsing
-  static public function one<A>(v:A):Array<A>{
+  static public function unit<A>(c:Class<Array<Dynamic>>):Array<A>{
+    return [];
+  }
+  @:noUsing static public function one<A>(v:A):Array<A>{
     return [v];
   }
   static public function put<A>(arr:Array<A>,i:Int,v:A):Array<A>{
@@ -445,7 +446,7 @@ class Arrays {
   /**
     Adds a single elements to the beginning if the Array.
    */
-  static public function prepend<T>(a: Array<T>, t: T): Array<T> {
+  static public function cons<T>(a: Array<T>, t: T): Array<T> {
     var copy = SArrays.snapshot(a);
     
     copy.unshift(t);
