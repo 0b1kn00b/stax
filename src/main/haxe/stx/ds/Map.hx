@@ -17,29 +17,24 @@
 package stx.ds;
 
 import stx.Tuples.*;
-using stx.Prelude;
-
-using stx.Tuples;
-import stx.Prelude;
-
-using stx.Bools;
-
 import stx.functional.Foldable;
-using stx.PartialFunctions;
 import stx.ds.Collection;
-import stx.functional.Foldables;
-
-using stx.Options;
-using stx.Functions;
 
 import stx.plus.Order; 
 import stx.plus.Hasher;
 import stx.plus.Show;
 import stx.plus.Equal;
 
+using stx.Tuples;
+using stx.Prelude;
+using stx.Bools;
+using stx.PartialFunctions;
+using stx.Options;
+using stx.Functions;
 using stx.Iterables;
-
 using stx.functional.Foldables;
+
+private typedef NativeMap<K,V> = std.Map<K,V>;
 
 class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
   public static var MaxLoad = 10;
@@ -613,5 +608,15 @@ class MapExtensions {
     }
     
     return map;
+  }
+}
+class NativeMapToMap{
+  static public function toMap<I,O>(m:NativeMap<I,O>):Map<I,O>{
+    var nm : Map<I,O> = Map.create();
+    for( key in m.keys() ){
+      var val = m.get(key);
+      nm.set(key,val);
+    }
+    return nm;
   }
 }
