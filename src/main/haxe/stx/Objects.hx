@@ -15,9 +15,10 @@ typedef Object = {};
 /**
   Object defined as {} is different from Dynamic in that it does not allow closures.
 */
-@:note('0b1kn00b','Does this handle reference loops, should it, could it?')
+@:note('0b1kn00b','reference loops')
 class Objects {
   @:noUsing
+  @:note('#0b1kn00b: could throw an error')
   static public function asObject(d:Dynamic):Object{
     return cast d;
   }
