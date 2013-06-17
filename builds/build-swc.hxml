@@ -1,4 +1,5 @@
 -cp src/main/haxe
+-cp funk/src/main/haxe
 
 --macro exclude('haxe')
 --macro exclude('flash')
@@ -21,8 +22,6 @@
 --macro include('stx.reactive')
 --macro include('hx')
 
--D haxe3
--D pattern_matching
 
 -swf bin/stx.swc
 -main AllClasses.hx

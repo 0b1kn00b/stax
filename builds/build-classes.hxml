@@ -2,9 +2,6 @@
 
 #-lib scutsCore
 
--D haxe3
--D pattern_matching
-
 -js test/classes.js
 
 --no-output

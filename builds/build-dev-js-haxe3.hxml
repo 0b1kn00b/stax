@@ -1,12 +1,12 @@
 -cp ./src/main/haxe/
 -cp ./src/test/haxe/
 
+-cp funk/src/main/haxe
+
 -js ./bin/test.js
 
 -lib scutsCore
 
--D haxe3
--D pattern_matching
 -D development
 #-D selector
 

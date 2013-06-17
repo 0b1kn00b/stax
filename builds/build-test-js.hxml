@@ -1,8 +1,7 @@
-# @tm-preview                          
--cp ../src/main/haxe/
--cp ../src/test/haxe/
--js ../bin/test.js
+-cp src/main/haxe/
+-cp funk/src/main/haxe
+
+-cp src/test/haxe/
+-js bin/test.js
 -main StaxTestSuite
-#-debug
-# @tm-html <form></form> 
-# @tm-html <div id="haxe:trace"></div> 
+

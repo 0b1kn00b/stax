@@ -1,6 +1,8 @@
-# @tm-preview                          
--cp ../src/main/haxe/
--cp ../src/test/haxe/
+-cp src/main/haxe/
+-cp src/test/haxe/
+
+-cp funk/src/main/haxe
+
 -php ../bin
--lib hxevents
+
 -main StaxTestSuite

@@ -1,5 +1,6 @@
--neko ../run.n
+-neko bin/run.n
 -main Run
--cp 	../tools
--lib hxevents
--cp ../src/main/haxe
+
+-cp tools
+-cp src/main/haxe
+-cp funk/src/main/haxe

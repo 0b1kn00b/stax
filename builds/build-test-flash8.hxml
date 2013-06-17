@@ -1,6 +1,8 @@
--lib hxevents
--cp ../src/main/haxe/
--cp ../src/test/haxe/
--swf ../bin/test.8.swf
+-cp src/main/haxe/
+
+-cp funk/src/main/haxe
+
+-cp src/test/haxe/
+-swf bin/test.8.swf
 
 -main StaxTestSuite

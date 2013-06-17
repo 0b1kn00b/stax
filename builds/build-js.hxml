@@ -1,4 +1,6 @@
 -cp src/main/haxe
+-cp funk/src/main/haxe
+
 -js src/main/js/stax.js
 
 -main AllClasses.hx
