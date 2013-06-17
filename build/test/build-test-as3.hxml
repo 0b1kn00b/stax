@@ -1,0 +1,14 @@
+# as3
+
+--next
+-swf bin/as3_test.swf
+-swf-version 9
+-main TestMain
+-cp src/main/haxe
+-cp src/test/haxe
+-debug
+-lib munit
+-lib hamcrest
+-D test
+#-D parallel
+#-D net
