@@ -10,6 +10,7 @@ import funk.types.extensions.Strings;
 
 using funk.futures.Promise;
 
+@:support('#0b1kn00b: why the sender param not used?')
 class AskSupport {
 
     public static function ask( actor : ActorRef,
@@ -38,18 +39,19 @@ private class AskSupportRef extends Actor {
 
         _deferred = deferred;
     }
-
+    @:support("#0b1kn00b: Abstracts aren't always types: this might break code in other platforms, but the cast foxes the pattern matching in js.")
     override public function receive(value : AnyRef) : Void {
-        function dispatch(attempt : Attempt<AnyRef>) {
+        function dispatch(attempt : AttemptType<AnyRef>) {
             switch(attempt){
-                case Success(v): _deferred.resolve(v);
-                case Failure(e): _deferred.reject(e);
+                case Success(v): 
+                    _deferred.resolve(v);
+                case Failure(e): 
+                _deferred.reject(e);
             }
         }
-
         switch(Type.typeof(value)) {
-            case TEnum(e) if(e == AttemptType): dispatch(cast e);
-            case TClass(c) if(c == Attempt): dispatch(cast c);
+            case TEnum(e) if(e == AttemptType): dispatch(value);
+            //case TClass(c) if(c == Attempt): dispatch(c);
             case _: _deferred.resolve(value);
         }
     }
