@@ -62,7 +62,9 @@ class Actor implements ActorRef {
 
     inline public function actorFor(path : ActorPath) : Option<ActorRef> return _self.actorFor(path);
 
-    inline public function send(value : AnyRef, ?sender : ActorRef = null) : Void _self.send(value, sender);
+    inline public function send(value : AnyRef, ?sender : ActorRef = null) : Void{
+        this._self.send(value, sender);
+    }
 
     inline public function stop() : Void _context.stop();
 

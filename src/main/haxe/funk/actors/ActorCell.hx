@@ -152,7 +152,9 @@ class ActorCell implements Cell implements ActorContext {
 
     inline public function children() : List<ActorRef> return _children.children();
 
-    inline public function system() : ActorSystem return _system;
+    inline public function system() : ActorSystem{
+        return _system;
+    }
 
     inline public function parent() : InternalActorRef return _parent;
 
