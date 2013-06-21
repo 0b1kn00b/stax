@@ -10,7 +10,9 @@ using funk.types.Tuple2;
 
 @:final
 class Injector {
-
+    static public function __init__(){
+        _initialized = false;
+    }
     private static var _map : List<Tuple2<Class<Dynamic>, IModule>>;
 
     private static var _scopes : List<IModule>;
@@ -19,7 +21,7 @@ class Injector {
 
     private static var _currentScope : Option<IModule>;
 
-    private static var _initialized : Bool = false;
+    private static var _initialized : Bool;
 
     public static function initialize() : Void {
         _initialized = true;
