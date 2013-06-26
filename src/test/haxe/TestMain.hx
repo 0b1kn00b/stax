@@ -50,12 +50,12 @@ class TestMain {
         suites.push(NetSuite);
         suites.push(ReactivesSuite);
         suites.push(SignalsSuite);
-        suites.push(TypesSuite);
+        suites.push(TypesSuite);*/
 
         #if MCOVER
             var client = new mcover.coverage.munit.client.MCoverPrintClient();
         #else
-            var client = new RichPrintClient();
+            var client = new PrintClient();
         #end
 
         var runner:TestRunner = new TestRunner(client);

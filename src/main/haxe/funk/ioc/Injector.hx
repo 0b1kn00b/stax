@@ -86,7 +86,9 @@ class Injector {
     }
 
     @:noUsing
-    public static function currentScope() : Option<IModule> return _currentScope;
+    public static function currentScope() : Option<IModule> {
+        return _currentScope;
+    }
 
     @:noUsing
     public static function scopeOf<T>(type : Class<T>) : Option<IModule> {
