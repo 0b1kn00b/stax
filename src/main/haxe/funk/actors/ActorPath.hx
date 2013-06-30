@@ -9,6 +9,11 @@ using funk.types.extensions.Strings;
 using funk.ds.immutable.ListUtil;
 using funk.ds.immutable.List;
 
+class ActorPaths{
+    static public function relative(str:String):ActorPath{
+        return new RelativeActorPath(str);
+    }
+}
 interface ActorPath {
 
     function address() : AddressType;
