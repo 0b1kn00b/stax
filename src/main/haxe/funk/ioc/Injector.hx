@@ -11,7 +11,7 @@ using funk.types.Tuple2;
 @:final
 class Injector {
     static public function __init__(){
-        _initialized = false;
+        initialized = false;
     }
     private static var _map : List<Tuple2<Class<Dynamic>, IModule>>;
 
@@ -21,10 +21,10 @@ class Injector {
 
     private static var _currentScope : Option<IModule>;
 
-    private static var _initialized : Bool;
+    public static var initialized(default,null)  : Bool;
 
     public static function initialize() : Void {
-        _initialized = true;
+        initialized = true;
 
         _map = Nil;
         _scopes = Nil;
@@ -34,7 +34,7 @@ class Injector {
 
     @:noUsing
     public static function add(module : IModule) : IModule {
-        if (!_initialized) {
+        if (!initialized) {
             return Funk.error(InjectorError("Injector.initialize() must be called first"));
         }
 
@@ -47,7 +47,7 @@ class Injector {
 
     @:noUsing
     public static function remove(module : IModule) : IModule {
-        if (!_initialized) {
+        if (!initialized) {
             return Funk.error(InjectorError("Injector.initialize() must be called first"));
         }
 
@@ -92,7 +92,7 @@ class Injector {
 
     @:noUsing
     public static function scopeOf<T>(type : Class<T>) : Option<IModule> {
-        if (!_initialized) {
+        if (!initialized) {
             return Funk.error(InjectorError("Injector.initialize() must be called first"));
         }
 
@@ -118,7 +118,7 @@ class Injector {
 
     @:noUsing
     public static function moduleOf<T>(type : Class<T>) : Option<IModule> {
-        if (!_initialized) {
+        if (!initialized) {
             return Funk.error(InjectorError("Injector.initialize() must be called first"));
         }
 
