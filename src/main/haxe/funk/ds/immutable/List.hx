@@ -23,30 +23,30 @@ enum ListType<T> {
 
 abstract List<T>(ListType<T>) from ListType<T> to ListType<T> {
 
-    inline function new(list : ListType<T>) {
+    /*inline */function new(list : ListType<T>) {
         this = list;
     }
 
-    inline public function head() : T {
+    /*inline */public function head() : T {
         return switch(this) {
             case Cons(value, _): value;
             case Nil: null;
         }
     }
 
-    inline public function tail() : List<T> {
+    /*inline */public function tail() : List<T> {
         return switch (this) {
             case Cons(_, value): value;
             case Nil: Nil;
         }
     }
 
-    inline public function iterator() : Iterator<T> return ListTypes.iterator(this);
+    /*inline */public function iterator() : Iterator<T> return ListTypes.iterator(this);
 
-    inline public function size() : Int return ListTypes.size(this);
+    /*inline */public function size() : Int return ListTypes.size(this);
 
     @:to
-    inline public function toFoldable<T>() : Foldable<T> {
+    /*inline */public function toFoldable<T>() : Foldable<T> {
         var list : List<T> = this;
         var foldable : Foldable<T> = {
             foldLeft: function(value : T, func : Function2<T, T, T>) return ListTypes.foldLeft(list, value, func),
@@ -56,7 +56,7 @@ abstract List<T>(ListType<T>) from ListType<T> to ListType<T> {
     }
 
     @:to
-    inline public function toReducible<T>() : Reducible<T> {
+    /*inline */public function toReducible<T>() : Reducible<T> {
         var list : List<T> = this;
         var reducible : Reducible<T> = {
             reduceLeft: function(func : Function2<T, T, T>) return ListTypes.reduceLeft(list, func),
@@ -66,7 +66,7 @@ abstract List<T>(ListType<T>) from ListType<T> to ListType<T> {
     }
 
     @:to
-    inline public function toDropable<T>() : Dropable<T> {
+    /*inline */public function toDropable<T>() : Dropable<T> {
         var list : List<T> = this;
         var dropable : Dropable<T> = {
             dropLeft: function(amount : Int) return ListTypes.collection(ListTypes.dropLeft(list, amount)),
@@ -77,20 +77,20 @@ abstract List<T>(ListType<T>) from ListType<T> to ListType<T> {
     }
 
     @:from
-    inline public static function fromArray<T>(array : Array<T>) : List<T> return ListUtil.toList(array);
+    /*inline */public static function fromArray<T>(array : Array<T>) : List<T> return ListUtil.toList(array);
 
     @:to
-    inline public static function toArray<T>(list : ListType<T>) : Array<T> {
+    /*inline */public static function toArray<T>(list : ListType<T>) : Array<T> {
         var stack = [];
         for(i in ListTypes.iterator(list)) stack.push(i);
         return stack;
     }
 
     @:to
-    inline public static function toCollection<T>(list : ListType<T>) : Collection<T> return ListTypes.collection(list);
+    /*inline */public static function toCollection<T>(list : ListType<T>) : Collection<T> return ListTypes.collection(list);
 
     @:to
-    inline public static function toString<T>(list : ListType<T>) : String return ListTypes.toString(list);
+    /*inline */public static function toString<T>(list : ListType<T>) : String return ListTypes.toString(list);
 }
 
 class ListTypes {
@@ -212,7 +212,7 @@ class ListTypes {
         return reverse(stack);
     }
 
-    inline public static function flatten<T1, T2>(list : List<T1>) : List<T2> {
+    /*inline */public static function flatten<T1, T2>(list : List<T1>) : List<T2> {
         var p = list;
         return flatMap(p, function(x) return ListUtil.toList(x));
     }
@@ -515,7 +515,7 @@ class ListTypes {
         }
     }
 
-    inline public static function append<T>(list : List<T>, item : T) : List<T> {
+    /*inline */public static function append<T>(list : List<T>, item : T) : List<T> {
         return appendAll(list, Cons(item, Nil));
     }
 
@@ -544,7 +544,7 @@ class ListTypes {
         return appendIterator(list, iterable.iterator());
     }
 
-    inline public static function prepend<T>(list : List<T>, item : T) : List<T> return Cons(item, list);
+    /*inline */public static function prepend<T>(list : List<T>, item : T) : List<T> return Cons(item, list);
 
     public static function prependAll<T>(list : List<T>, items : List<T>) : List<T> {
         var p = list;
@@ -639,7 +639,7 @@ class ListTypes {
         return stack;
     }
 
-    inline public static function init<T>(list : List<T>) : List<T> return dropRight(list, 1);
+    /*inline */public static function init<T>(list : List<T>) : List<T> return dropRight(list, 1);
 
     public static function last<T>(list : List<T>) : Option<T> {
         var value = None;
@@ -669,29 +669,29 @@ class ListTypes {
         return reverse(stack);
     }
 
-    inline public static function isEmpty<T>(list : List<T>) : Bool {
+    /*inline */public static function isEmpty<T>(list : List<T>) : Bool {
         return switch(list) {
             case Cons(_, _): false;
             case _: true;
         };
     }
 
-    inline public static function nonEmpty<T>(list : List<T>) : Bool return !isEmpty(list);
+    /*inline */public static function nonEmpty<T>(list : List<T>) : Bool return !isEmpty(list);
 
-    inline public static function hasDefinedSize<T>(list : List<T>) : Bool {
+    /*inline */public static function hasDefinedSize<T>(list : List<T>) : Bool {
         return switch (list) {
             case Cons(_, _): true;
             case _: false;
         };
     }
 
-    inline public static function collection<T>(list : List<T>) : Collection<T> return new ListInstanceImpl(list);
+    /*inline */public static function collection<T>(list : List<T>) : Collection<T> return new ListInstanceImpl(list);
 
-    inline public static function iterable<T>(list : List<T>) : Iterable<T> return new ListInstanceImpl(list);
+    /*inline */public static function iterable<T>(list : List<T>) : Iterable<T> return new ListInstanceImpl(list);
 
-    inline public static function iterator<T>(list : List<T>) : Iterator<T> return iterable(list).iterator();
+    /*inline */public static function iterator<T>(list : List<T>) : Iterator<T> return iterable(list).iterator();
 
-    inline public static function toString<T>(list : List<T>, ?func : Function1<T, String>) : String {
+    /*inline */public static function toString<T>(list : List<T>, ?func : Function1<T, String>) : String {
         var p = list;
         return switch(p) {
             case Cons(_, _):
