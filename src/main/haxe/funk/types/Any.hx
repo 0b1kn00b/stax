@@ -114,14 +114,15 @@ class AnyTypes {
     }
 
     public static function toBool<T>(value : Null<T>) : Bool {
-        return if(value == null) false;
-        else if(isInstanceOf(value, Bool)) cast value;
-        else if(isInstanceOf(value, Float) || isInstanceOf(value, Int)) cast(value) > 0;
-        else if(isInstanceOf(value, String)) Strings.isNonEmpty(cast value);
-        else if(isInstanceOf(value, Option)) OptionTypes.toBool(cast value);
-        else if(isInstanceOf(value, Attempt)) AttemptTypes.toBool(cast value);
-        else if(isInstanceOf(value, Either)) EitherTypes.toBool(cast value);
-        else true;
+        return switch (Type.typeof(value)) {
+            case TNull                              : false;
+            case TInt,TFloat                        : cast (value) > 0;
+            case TBool                              : cast value;
+            case TEnum( e ) if (e == OptionType)    : OptionTypes.toBool(cast value);
+            case TEnum( e ) if (e == AttemptType)   : AttemptTypes.toBool(cast value);
+            case TEnum( e ) if (e == EitherType)    : EitherTypes.toBool(cast value);
+            default                                 : true;
+        }
     }
 
     public static function toString<T>(value : T, ?func : Function1<T, String>) : String {
