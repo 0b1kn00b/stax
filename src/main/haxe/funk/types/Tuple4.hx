@@ -69,9 +69,7 @@ class Tuple4Types {
                     case tuple4(t1_1, t2_1, t3_1, t4_1):
                         AnyTypes.equals(t1_0, t1_1, func1) && AnyTypes.equals(t2_0, t2_1, func2) &&
                             AnyTypes.equals(t3_0, t3_1, func3) && AnyTypes.equals(t4_0, t4_1, func4);
-                    case _: false;
                 }
-            case _: false;
         }
     }
 

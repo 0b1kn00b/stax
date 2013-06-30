@@ -79,9 +79,7 @@ class Tuple5Types {
                         AnyTypes.equals(t1_0, t1_1, func1) && AnyTypes.equals(t2_0, t2_1, func2) &&
                             AnyTypes.equals(t3_0, t3_1, func3) && AnyTypes.equals(t4_0, t4_1, func4) &&
                                 AnyTypes.equals(t5_0, t5_1, func5);
-                    case _: false;
                 }
-            case _: false;
         }
     }
 
