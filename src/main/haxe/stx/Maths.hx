@@ -336,6 +336,9 @@ class Ints {
 	static public inline function mod(a:Int,b:Int):Float{
 		return a % b;
 	}
+	static public inline function inv(n:Int):Int{
+		return -n;
+	}
 	static public inline function toString(a:Int):String{
 		return '$a';
 	}

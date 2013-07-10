@@ -7,7 +7,7 @@ import stx.time.ScheduledExecutor;
 
 using stx.framework.Injector;
 
-import stx.Future;
+import stx.Eventual;
 
 class ScheduledExecutorTest extends TestCase {
   var _executor: ScheduledExecutor;
@@ -69,7 +69,7 @@ class ScheduledExecutorTest extends TestCase {
   }
   
   public function testForever(): Void {
-    var future: Future<Void> = null;
+    var future: Eventual<Void> = null;
     var count = 0;
     
     future = _executor.forever(function() { 

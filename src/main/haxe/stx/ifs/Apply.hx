@@ -1,23 +1,25 @@
 package stx.ifs;
 
+import stx.Error.*;
+import stx.StaxError;
+
 import stx.Prelude;
-import stx.err.AbstractMethodError;
 
 using stx.Options;
 using stx.Functions;
 using stx.Compose;
 
-typedef TApply<I,O> = {
+typedef ApplyType<I,O> = {
 	function apply(v:I):O;
 }
-interface IApply<I,O>{
+interface Apply<I,O>{
 	public function apply(v:I):O;
 }
-class Apply<E,A> implements IApply<E,A>{
+class DefaultApply<E,A> implements Apply<E,A>{
 	public function new( ){
 
 	}
 	public function apply(v:E):A{
-		return Prelude.err()( new AbstractMethodError() );
+		return Prelude.err()(err(AbstractMethodError()));
 	}
 }

@@ -3,6 +3,9 @@ package stx;
 using stx.Prelude;
 using stx.Arrays;
 
+import stx.Error.*;
+import stx.StaxError;
+
 import stx.Objects;
 import stx.Prelude;
 
@@ -15,11 +18,14 @@ using stx.Compose;
 using stx.Types;
 
 class Types{
+  static public function resolve(name:String):Class<Dynamic>{
+    return Type.resolveClass(name);
+  }
   static public function resolveClassOption(s:String):Option<Class<Dynamic>>{
     return Options.create(Type.resolveClass(s));
   }
   static public function resolveClassEither(s:String):Outcome<Class<Dynamic>>{
-    return resolveClassOption(s).orEitherC(Error.create('no type $s found.'));
+    return resolveClassOption(s).orEitherC(err(NullReferenceError('$s')));
   }
   static public function getClassOption<A>(c:A):Option<Class<A>>{
     return Options.create(Type.getClass(c));
@@ -55,7 +61,7 @@ class Types{
     try{
       v = Type.createInstance(type,args);  
     }catch(e:Dynamic){
-      return Left(new Error('Constuctor ' + Std.string(e)));
+      return Left(err(NativeError(Std.string(e))));
     }
     return Right(v);
   }
@@ -64,7 +70,7 @@ class Types{
       function(l:Option<Class<Dynamic>>,r:String){
         return switch (l){
           case Some(v)      : Right(v);
-          default           : Left(stx.Error.create('Type "$r" not found.'));
+          default           : Left(err(NullReferenceError('Type "$r"')));
         }
       }.spread()
     )(name).flatMapR(Types.createInstanceEither.p2(args == null ? [] : args));
@@ -142,5 +148,4 @@ class Types{
       case TUnknown : "Unknown";
     }
   }
-
 }

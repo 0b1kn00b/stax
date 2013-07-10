@@ -3,71 +3,50 @@ package stx;
 import haxe.CallStack;
 import haxe.PosInfos;
 
+import stx.StaxError;
+
+using stx.Arrays;
+using stx.Prelude;
+using stx.Enums;
+using stx.Compose;
+using stx.Positions;
 using stx.Functions;
 
-abstract Fails(Array<Error>) from Array<Error> to Array<Error>{
-	@:from static public inline function fromError(e:Error){
-		return new Fails([e]);
-	}
-	public function new(v){
-		this = v;
-	}
-	public function messages(){
-		return Arrays.map(this, function(x) return x.msg);
-	}
-	public var length(get,never):Int;
-	private function get_length():Int{
-		return this.length;
-	}
-}
 class Error{
-	public static var exception(get_exception, null):Future<Error>;
-	private static function get_exception() {
-		if (exception == null) { exception = new Future(); }
-		return exception;
-	}
-	public var pos(default,null)	: PosInfos;
-	public var msg(default,null) 	: String;
-	public var cde(default,null) 	: String;
-
-	public function new(msg:String,?pos:PosInfos,?cde:String) {
-		this.msg 				= msg;
-		this.pos 				= pos;
-		this.cde 				= cde;
-	}
-	public function except(){
-		exception.deliver( this );
-		return this;
-	}
-	public function toString():String{
-		return "ERROR:\t(" + this.msg + " at " + Positions.toString(pos) + ")";
-	}
-	public function equals(e:Error){
-		return cde = e.cde;
-	}
-	@:noUsing public static function create(msg:String,?pos:PosInfos){
-		return new Error(msg, pos);
-	}
-	@:noUsing static public function build(?pos:PosInfos):String->Error{
-		return toError.p2(pos);
-	}
-	static public function toError(msg:String,?pos:PosInfos){
-		return Error.create(msg,pos);
-	}
-	static public function err(message:String,?pos:PosInfos){
-		return new Error(message,pos);
+	static public function err(?cde:EnumValue){
+		return new Error(cde);
 	}
 	static public inline function asError<E:Error>(e:E):Error{
 		return e;
 	}
-}
-class Positions {
-	public static function toString(pos:PosInfos){
-		if (pos == null) return 'nil';
-		var type                = pos.className.split(".");
-		return type[type.length-1] + "::" + pos.methodName + "#" + pos.lineNumber;
+
+	public var cde(default,null) 	: EnumValue;
+
+	public function new(cde:EnumValue) {
+		this.cde 				= cde;
 	}
-	public static function here(?pos:PosInfos) {
-		return pos;
+	public function msg():String{
+		var prm = cde.params().foldl('',
+			function(memo,next){
+				return '$memo,${Std.string(next)}';
+			}
+		);
+		return prm;
+	}
+	public function toString():String{
+		var enm = cde.toEnum().key();
+		var val = cde.value();
+		return '$enm:$val:${msg()}';
+	}
+	public function equals(e:Error){
+		return Enums.alike(cde,e.cde);
+	}
+	public function append(e:Error):Error{
+		return err(switch ([cde,e.cde]) {
+			case [ErrorStack(errs),ErrorStack(errs0)] 	: ErrorStack(errs.append(errs0));
+			case [ErrorStack(errs),er] 									: ErrorStack(errs.add(err(er)));
+			case [er,ErrorStack(errs)]									: ErrorStack([err(er)].append(errs));
+			case [er0,er1] 															: ErrorStack([err(er0),err(er1)]);
+		});
 	}
 }

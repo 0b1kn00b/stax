@@ -35,7 +35,7 @@ class Headers {
   static var HeaderLinesPattern = ~/[\r\n]+/;
   
   public static function toHttpHeader(str: String): Option<HttpHeader> {
-    return if (HeaderPattern.match(str)) Some(HeaderPattern.matched(1).trim().entuple(HeaderPattern.matched(2).trim())); else None;
+    return if (HeaderPattern.match(str)) Some(tuple2(HeaderPattern.matched(1).trim(),HeaderPattern.matched(2).trim())); else None;
   }
   
   public static function toHttpHeaders(str: String): HttpHeaders {

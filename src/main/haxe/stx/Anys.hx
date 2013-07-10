@@ -167,6 +167,12 @@ class Anys {
     public static function isClass<T>(value : T) : Bool return isTypeOf(value, 'class');
     public static function isBoolean<T>(value : T) : Bool return isTypeOf(value, 'bool');
 
+    public static function isPrimitive<T>(v:T):Bool{
+        return switch (Type.typeof(v)) {
+            case TInt, TFloat, TBool : true;
+            default                  : false;
+        }
+    }
     public static function asInstanceOf<T : AnyRef, R>(value : T, possible : Class<R>) : R {
         // Runtime cast, rather than a compile type cast.
         return isInstanceOf(value, possible) ? cast value : throw 'Cannot cast $value to $possible';

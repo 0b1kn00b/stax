@@ -17,6 +17,8 @@ package stx.reactive;
 
 import stx.reactive.Reactive;
 
+using stx.Tuples;
+
 class SignalInt {
     private function new() { }
     

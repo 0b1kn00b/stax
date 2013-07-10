@@ -5,7 +5,7 @@ import Type;
 using Std;
 
 import stx.Maths;
-import stx.Tuples.*;
+import stx.Tuples;
 
 using stx.Tuples;
 using stx.Prelude;
@@ -66,8 +66,7 @@ class Order {
       case "stx.Tuple2" , "stx.Tuple3" , "stx.Tuple4" , "stx.Tuple5" :
           __order__(ProductOrder.compare);
       default:
-        if(Meta._hasMetaDataClass(c)) {
-          
+        if(Meta._hasMetaDataClass(cast c)) {
           var i = 0;
           var fields = Type.getInstanceFields(c).map(function(v){
             var fieldMeta = Meta._getMetaDataField(c, v);

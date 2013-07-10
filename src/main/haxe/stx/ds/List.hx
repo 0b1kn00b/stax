@@ -2,9 +2,7 @@ package stx.ds;
 
 import stx.Prelude;
 
-import stx.Tuples.*;
-
-
+import stx.Tuples;
 
 import stx.functional.Foldable;
 import stx.ds.Collection;
@@ -70,7 +68,7 @@ class List<T> implements Collection<List<T>, T> {
       }
   }  
 
-  public var hash(get_hash, null) : MapFunction<T>;
+  public var hash(get_hash, null) : HashFunction<T>;
   function get_hash(){
     return 
       if (hash == null || hash == Hasher.nil ){
@@ -96,7 +94,7 @@ class List<T> implements Collection<List<T>, T> {
 	public static function toList<T>(i: Iterable<T>) {
     return stx.ds.List.create().append(i);
   }
-  public static function nil<T>(?order : OrderFunction<T>, ?tools : CollectionTools<T>): List<T> {
+  public static function nil<T>(?tools : CollectionTools<T>): List<T> {
     return new Nil(tools);
   }
   
@@ -132,13 +130,8 @@ class List<T> implements Collection<List<T>, T> {
   public function cons(head: T): List<T> {
     return new Cons(Prelude.tool(order,equal,hash,show), head, this);
   }
-
-  /** Synonym for cons. */
-  public function prepend(head: T): List<T> {
-    return cons(head);
-  }
-
-  public function prependAll(iterable: Iterable<T>): List<T> {
+  
+  public function prepend(iterable: Iterable<T>): List<T> {
     var result = this;
 
     var array = iterable.toArray();
@@ -150,7 +143,7 @@ class List<T> implements Collection<List<T>, T> {
     return result;
   }
 
-  public function prependAllR(iterable: Iterable<T>): List<T> {
+  public function prependR(iterable: Iterable<T>): List<T> {
     var result = this;
 
     for (e in iterable) result = result.cons(e);
@@ -302,7 +295,7 @@ class List<T> implements Collection<List<T>, T> {
 
   /** Override Foldable to provide higher performance: */
   public function flatMap<B>(f: T -> Iterable<B>): List<B> {
-    return foldr(create(), function(e, list) return list.prependAll(f(e)));
+    return foldr(create(), function(e, list) return list.prepend(f(e)));
   }
 
   /** Override Foldable to provide higher performance: */
@@ -367,7 +360,7 @@ class List<T> implements Collection<List<T>, T> {
     return create(Prelude.tool(order, equal, hash, show)).append(this);
   }
   
-  public function withMapFunction(hash : MapFunction<T>) {
+  public function withHashFunction(hash : HashFunction<T>) {
     return create(Prelude.tool(order, equal, hash, show)).append(this);
   }
   

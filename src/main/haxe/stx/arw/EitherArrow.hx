@@ -1,6 +1,6 @@
 package stx.arw;
 
-import stx.Tuples.*;
+import stx.Tuples;
 import stx.Continuation.*;
 
 using stx.arw.Arrows;
@@ -11,14 +11,14 @@ abstract EitherArrow<I,O>(Arrow<I,O>) from Arrow<I,O> to Arrow<I,O>{
 		this = new Arrow(
 			inline function(?i:I,cnt : O->Void){
 				var done = false;
-				var a_0 :Future<O>	= null;
-				var b_0 :Future<O>	= null;
+				var a_0 :Eventual<O>	= null;
+				var b_0 :Eventual<O>	= null;
 
-				var a_1 :Future<Tuple2<Future<O>,O>>= null;
-				var b_1 :Future<Tuple2<Future<O>,O>>= null;
+				var a_1 :Eventual<Tuple2<Eventual<O>,O>>= null;
+				var b_1 :Eventual<Tuple2<Eventual<O>,O>>= null;
 
 				var handler 
-					= function(f:Future<O>,o:O):Void{
+					= function(f:Eventual<O>,o:O):Void{
 							if(!done){
 								if(f==a_0){
 									b_0.cancel();

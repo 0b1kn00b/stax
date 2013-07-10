@@ -21,30 +21,25 @@ enum Unit {
   Unit;
 }
 
-typedef CodeBlock = Void -> Void
-
-typedef Function0<R> = Void -> R
-typedef Function1<P1, R> = P1 -> R
-typedef Function2<P1, P2, R> = P1 -> P2 -> R
-typedef Function3<P1, P2, P3, R> = P1 -> P2 -> P3 -> R
-typedef Function4<P1, P2, P3, P4, R> = P1 -> P2 -> P3 -> P4 -> R
-typedef Function5<P1, P2, P3, P4, P5, R> = P1 -> P2 -> P3 -> P4 -> P5 -> R
-typedef Function6<P1, P2, P3, P4, P5, P6, R> = P1 -> P2 -> P3 -> P4 -> P5 -> P6 -> R
-typedef Function7<P1, P2, P3, P4, P5, P6, P7, R> = P1 -> P2 -> P3 -> P4 -> P5 -> P6 -> P7 -> R
-typedef Function8<P1, P2, P3, P4, P5, P6, P7, P8, R> = P1 -> P2 -> P3 -> P4 -> P5 -> P6 -> P7 -> P8 -> R
-typedef Function9<P1, P2, P3, P4, P5, P6, P7, P8, P9, R> = P1 -> P2 -> P3 -> P4 -> P5 -> P6 -> P7 -> P8 -> P9 -> R
-typedef Function10<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, R> = P1 -> P2 -> P3 -> P4 -> P5 -> P6 -> P7 -> P8 -> P9 -> P10 -> R
-
-typedef Reducer<T>    = T -> T -> T
-typedef Factory<T>    = Void -> T
-typedef RC<R,A>       = (A -> R) -> R
+typedef Thunk<R>                                                = Void -> R
+typedef NiladicType                                             = Void -> Void
+typedef Function0<R>                                            = Void -> R
+typedef Function1<P1, R>                                        = P1 -> R
+typedef Function2<P1, P2, R>                                    = P1 -> P2 -> R
+typedef Function3<P1, P2, P3, R>                                = P1 -> P2 -> P3 -> R
+typedef Function4<P1, P2, P3, P4, R>                            = P1 -> P2 -> P3 -> P4 -> R
+typedef Function5<P1, P2, P3, P4, P5, R>                        = P1 -> P2 -> P3 -> P4 -> P5 -> R
+typedef Function6<P1, P2, P3, P4, P5, P6, R>                    = P1 -> P2 -> P3 -> P4 -> P5 -> P6 -> R
+typedef Function7<P1, P2, P3, P4, P5, P6, P7, R>                = P1 -> P2 -> P3 -> P4 -> P5 -> P6 -> P7 -> R
+typedef Function8<P1, P2, P3, P4, P5, P6, P7, P8, R>            = P1 -> P2 -> P3 -> P4 -> P5 -> P6 -> P7 -> P8 -> R
+typedef Function9<P1, P2, P3, P4, P5, P6, P7, P8, P9, R>        = P1 -> P2 -> P3 -> P4 -> P5 -> P6 -> P7 -> P8 -> P9 -> R
+typedef Function10<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, R>  = P1 -> P2 -> P3 -> P4 -> P5 -> P6 -> P7 -> P8 -> P9 -> P10 -> R
+typedef Reducer<T>                                              = T -> T -> T
+typedef Factory<T>                                              = Void -> T
+typedef RC<R,A>                                                 = (A -> R) -> R
 /*typedef Receive<A>    = RC<Void,A>
 typedef ReceiveE<A,B> = Receive<Either<A,B>>;*/
-typedef Modify<T>     = T -> T;
-/**
- A function which takes no parameter and returns a result.
- */
-typedef Thunk<T>    = Void -> T
+
 
 /** 
 		An option represents an optional value -- the value may or may not be
@@ -75,11 +70,10 @@ enum FreeM<A, B>{
   Done(v:B);
 }
 typedef Outcome<A>              = Either<Error,A>
-
 typedef OrderFunction<T>  			= Function2<T, T, Int>;
 typedef EqualFunction<T>  			= Function2<T, T, Bool>;
 typedef ShowFunction<T>   			= Function1<T, String>;
-typedef MapFunction<T> 				= Function1<T, Int>;   
+typedef HashFunction<T> 				= Function1<T, Int>;   
 
 typedef Lense<A, B> = {
   get : A -> B,
@@ -87,10 +81,10 @@ typedef Lense<A, B> = {
 }
 @:todo('0b1kn00b','Would perhaps prefer the collection tools to be interfaces.')
 typedef CollectionTools<T> = {
-		order : Null<OrderFunction<T>>,
-		equal	: Null<EqualFunction<T>>,
-		show	: Null<ShowFunction<T>>,
-		hash	: Null<MapFunction<T>>,
+	order : OrderFunction<T>,
+	equal	: EqualFunction<T>,
+	show	: ShowFunction<T>,
+	hash	: HashFunction<T>,
 }
 class FieldOrder {
   public static inline var Ascending	 	= 1;
@@ -105,11 +99,11 @@ class Prelude{
   public static function here(?pos:haxe.PosInfos) {
     return pos;
   }
-  inline static public  function tool<A>(?order:OrderFunction<A>,?equal:EqualFunction<A>,?hash:MapFunction<A>,?show:ShowFunction<A>):CollectionTools<A>{
+  inline static public  function tool<A>(?order:OrderFunction<A>,?equal:EqualFunction<A>,?hash:HashFunction<A>,?show:ShowFunction<A>):CollectionTools<A>{
     return { order : order , equal : equal , show : show , hash : hash };
   }
   
-  static public function unfold<T, R>(initial: T, unfolder: T -> Option<Tuple2<T, R>>): Iterable<R> {
+  static public inline function unfold<T, R>(initial: T, unfolder: T -> Option<Tuple2<T, R>>): Iterable<R> {
     return {
       iterator: function(): Iterator<R> {
         var _next: Option<R> = None;

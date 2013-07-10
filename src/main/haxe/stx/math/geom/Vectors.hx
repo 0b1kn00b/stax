@@ -74,7 +74,7 @@ class Vectors{
   }
   
   public static inline function toTuple(v: Vector2d<Int>): Tuple2<Int, Int> {
-    return v.dx.entuple(v.dy);
+    return tuple2(v.dx,v.dy);
   }
 }
 
@@ -126,6 +126,6 @@ class Vector2dFloatExtensions {
   }
   
   public static inline function toTuple(v: Vector2d<Float>): Tuple2<Float, Float> {
-    return v.dx.entuple(v.dy);
+    return tuple2(v.dx,v.dy);
   }
 }

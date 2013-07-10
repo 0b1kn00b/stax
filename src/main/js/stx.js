@@ -4392,7 +4392,7 @@ stx.Functions5.toEffect = function(f) {
 stx.Functions5.equals = function(a,b) {
 	return Reflect.compareMethods(a,b);
 }
-stx.Future = $hxClasses["stx.Future"] = function() {
+stx.Eventual = $hxClasses["stx.Eventual"] = function() {
 	this._listeners = [];
 	this._result = null;
 	this._isSet = false;
@@ -4400,22 +4400,22 @@ stx.Future = $hxClasses["stx.Future"] = function() {
 	this._cancelers = [];
 	this._canceled = [];
 };
-stx.Future.__name__ = ["stx","Future"];
-stx.Future.dead = function() {
-	return stx.Anys.withEffect(new stx.Future(),function(future) {
+stx.Eventual.__name__ = ["stx","Eventual"];
+stx.Eventual.dead = function() {
+	return stx.Anys.withEffect(new stx.Eventual(),function(future) {
 		future.cancel();
 	});
 }
-stx.Future.create = function() {
-	return new stx.Future();
+stx.Eventual.create = function() {
+	return new stx.Eventual();
 }
-stx.Future.toFuture = function(t) {
-	return stx.Future.create().deliver(t,{ fileName : "Future.hx", lineNumber : 273, className : "stx.Future", methodName : "toFuture"});
+stx.Eventual.toEventual = function(t) {
+	return stx.Eventual.create().deliver(t,{ fileName : "Eventual.hx", lineNumber : 273, className : "stx.Eventual", methodName : "toEventual"});
 }
-stx.Future.waitFor = function(toJoin) {
-	var joinLen = ArrayLambda.size(toJoin), myprm = stx.Future.create(), combined = [], sequence = 0;
+stx.Eventual.waitFor = function(toJoin) {
+	var joinLen = ArrayLambda.size(toJoin), myprm = stx.Eventual.create(), combined = [], sequence = 0;
 	ArrayLambda.foreach(toJoin,function(xprm) {
-		if(!js.Boot.__instanceof(xprm,stx.Future)) throw "not a promise:" + Std.string(xprm);
+		if(!js.Boot.__instanceof(xprm,stx.Eventual)) throw "not a promise:" + Std.string(xprm);
 		xprm.sequence = sequence++;
 		xprm.deliverMe(function(r) {
 			combined.push({ seq : r.sequence, val : r._result});
@@ -4425,13 +4425,13 @@ stx.Future.waitFor = function(toJoin) {
 				});
 				myprm.deliver(ArrayLambda.map(combined,function(el) {
 					return el.val;
-				}),{ fileName : "Future.hx", lineNumber : 302, className : "stx.Future", methodName : "waitFor"});
+				}),{ fileName : "Eventual.hx", lineNumber : 302, className : "stx.Eventual", methodName : "waitFor"});
 			}
 		});
 	});
 	return myprm;
 }
-stx.Future.prototype = {
+stx.Eventual.prototype = {
 	deliverMe: function(f) {
 		var _g = this;
 		if(this.isCanceled()) return this; else if(this.isDelivered()) f(this); else this._listeners.push(function(g) {
@@ -4461,10 +4461,10 @@ stx.Future.prototype = {
 		return this._isSet?stx.Option.Some(this._result):stx.Option.None;
 	}
 	,zip: function(f2) {
-		var zipped = new stx.Future();
+		var zipped = new stx.Eventual();
 		var f1 = this;
 		var deliverZip = function() {
-			if(f1.isDelivered() && f2.isDelivered()) zipped.deliver(new stx.Tuple2(stx.Options.get(f1.value()),stx.Options.get(f2.value())),{ fileName : "Future.hx", lineNumber : 228, className : "stx.Future", methodName : "zip"});
+			if(f1.isDelivered() && f2.isDelivered()) zipped.deliver(new stx.Tuple2(stx.Options.get(f1.value()),stx.Options.get(f2.value())),{ fileName : "Eventual.hx", lineNumber : 228, className : "stx.Eventual", methodName : "zip"});
 		};
 		f1.deliverTo(function(v) {
 			deliverZip();
@@ -4484,9 +4484,9 @@ stx.Future.prototype = {
 		return zipped;
 	}
 	,filter: function(f) {
-		var fut = new stx.Future();
+		var fut = new stx.Eventual();
 		this.deliverTo(function(t) {
-			if(f(t)) fut.deliver(t,{ fileName : "Future.hx", lineNumber : 209, className : "stx.Future", methodName : "filter"}); else fut.forceCancel();
+			if(f(t)) fut.deliver(t,{ fileName : "Eventual.hx", lineNumber : 209, className : "stx.Eventual", methodName : "filter"}); else fut.forceCancel();
 		});
 		this.ifCanceled(function() {
 			fut.forceCancel();
@@ -4494,10 +4494,10 @@ stx.Future.prototype = {
 		return fut;
 	}
 	,flatMap: function(f) {
-		var fut = new stx.Future();
+		var fut = new stx.Eventual();
 		this.deliverTo(function(t) {
 			f(t).deliverTo(function(s) {
-				fut.deliver(s,{ fileName : "Future.hx", lineNumber : 191, className : "stx.Future", methodName : "flatMap"});
+				fut.deliver(s,{ fileName : "Eventual.hx", lineNumber : 191, className : "stx.Eventual", methodName : "flatMap"});
 			}).ifCanceled(function() {
 				fut.forceCancel();
 			});
@@ -4511,9 +4511,9 @@ stx.Future.prototype = {
 		return f;
 	}
 	,map: function(f) {
-		var fut = new stx.Future();
+		var fut = new stx.Eventual();
 		this.deliverTo(function(t) {
-			fut.deliver(f(t),{ fileName : "Future.hx", lineNumber : 162, className : "stx.Future", methodName : "map"});
+			fut.deliver(f(t),{ fileName : "Eventual.hx", lineNumber : 162, className : "stx.Eventual", methodName : "map"});
 		});
 		this.ifCanceled(function() {
 			fut.forceCancel();
@@ -4562,7 +4562,7 @@ stx.Future.prototype = {
 		return this;
 	}
 	,deliver: function(t,pos) {
-		return this._isCanceled?this:this._isSet?SCore.error("Future :" + Std.string(this.value()) + " already delivered at " + stx.err.Positions.toString(pos),{ fileName : "Future.hx", lineNumber : 57, className : "stx.Future", methodName : "deliver"}):(function($this) {
+		return this._isCanceled?this:this._isSet?SCore.error("Eventual :" + Std.string(this.value()) + " already delivered at " + stx.err.Positions.toString(pos),{ fileName : "Eventual.hx", lineNumber : 57, className : "stx.Eventual", methodName : "deliver"}):(function($this) {
 			var $r;
 			$this._result = t;
 			$this._isSet = true;
@@ -4588,7 +4588,7 @@ stx.Future.prototype = {
 	,_isSet: null
 	,_result: null
 	,_listeners: null
-	,__class__: stx.Future
+	,__class__: stx.Eventual
 }
 stx.Mapes = $hxClasses["stx.Mapes"] = function() { }
 stx.Mapes.__name__ = ["stx","Mapes"];
@@ -6308,7 +6308,7 @@ stx.FieldOrder = $hxClasses["stx.FieldOrder"] = function() { }
 stx.FieldOrder.__name__ = ["stx","FieldOrder"];
 stx.Promise = $hxClasses["stx.Promise"] = function(cancel) {
 	this.done = false;
-	this.fut = new stx.Future();
+	this.fut = new stx.Eventual();
 	this.err = stx.Option.None;
 	if(cancel != null) this.onError(cancel);
 };
@@ -6337,7 +6337,7 @@ stx.Promise.waitFor = function(toJoin) {
 			return x1;
 		}));
 	});
-	stx.Future.waitFor(ArrayLambda.map(toJoin,function(promise) {
+	stx.Eventual.waitFor(ArrayLambda.map(toJoin,function(promise) {
 		return promise.future();
 	})).deliverTo(function(aoc) {
 		var failed = false;
@@ -7591,7 +7591,7 @@ stx.ds.List.prototype = {
 	,withShowFunction: function(show) {
 		return stx.ds.List.create({ order : this._order, equal : this._equal, show : show, hash : this._hash}).addAll(this);
 	}
-	,withMapFunction: function(hash) {
+	,withHashFunction: function(hash) {
 		return stx.ds.List.create({ order : this._order, equal : this._equal, show : this._show, hash : hash}).addAll(this);
 	}
 	,withEqualFunction: function(equal) {
@@ -8073,7 +8073,7 @@ stx.ds.Map.prototype = {
 	,withValueShowFunction: function(show) {
 		return stx.ds.Map.create(this._keyOrder,this._keyEqual,this._keyMap,this._keyShow,this._valueOrder,this._valueEqual,this._valueMap,show).addAll(this);
 	}
-	,withValueMapFunction: function(hash) {
+	,withValueHashFunction: function(hash) {
 		return stx.ds.Map.create(this._keyOrder,this._keyEqual,this._keyMap,this._keyShow,this._valueOrder,this._valueEqual,hash,this._valueShow).addAll(this);
 	}
 	,withValueEqualFunction: function(equal) {
@@ -8085,7 +8085,7 @@ stx.ds.Map.prototype = {
 	,withKeyShowFunction: function(show) {
 		return stx.ds.Map.create(this._keyOrder,this._keyEqual,this._keyMap,show,this._valueOrder,this._valueEqual,this._valueMap,this._valueShow).addAll(this);
 	}
-	,withKeyMapFunction: function(hash) {
+	,withKeyHashFunction: function(hash) {
 		return stx.ds.Map.create(this._keyOrder,this._keyEqual,hash,this._keyShow,this._valueOrder,this._valueEqual,this._valueMap,this._valueShow).addAll(this);
 	}
 	,withKeyEqualFunction: function(equal) {
@@ -8466,7 +8466,7 @@ stx.ds.Set.prototype = {
 		var m = this._map;
 		return stx.ds.Set.create(m._keyOrder,m._keyEqual,m._keyMap,show).addAll(this);
 	}
-	,withMapFunction: function(hash) {
+	,withHashFunction: function(hash) {
 		var m = this._map;
 		return stx.ds.Set.create(m._keyOrder,m._keyEqual,hash,m._keyShow).addAll(this);
 	}
@@ -9347,7 +9347,7 @@ stx.Error.__name__ = ["stx","error","Error"];
 stx.Error.__properties__ = {get_exception:"get_exception"}
 stx.Error.exception = null;
 stx.Error.get_exception = function() {
-	if(stx.Error.exception == null) stx.Error.exception = new stx.Future();
+	if(stx.Error.exception == null) stx.Error.exception = new stx.Eventual();
 	return stx.Error.exception;
 }
 stx.Error.toError = function(msg,pos) {
@@ -10395,7 +10395,7 @@ stx.io.http.HttpJValueJsonp.prototype = {
 		return SCore.error("JSONP does not support POST",{ fileName : "HttpJValue.hx", lineNumber : 130, className : "stx.io.http.HttpJValueJsonp", methodName : "post"});
 	}
 	,get: function(url_,params_,headers) {
-		var future = new stx.Future();
+		var future = new stx.Eventual();
 		var requestId = Math.round(stx.io.http.HttpJValueJsonp.RequestMod * ++stx.io.http.HttpJValueJsonp.RequestCount);
 		var callbackName = "stx_jsonp_callback_" + requestId;
 		var callbackFullName = "stx.io.http.HttpJValueJsonp.Responders." + callbackName;
@@ -10443,7 +10443,7 @@ stx.io.http.HttpStringAsync.prototype = {
 	}
 	,custom: function(method,_url,data,_params,_headers) {
 		var url = _params != null?stx.net.UrlExtensions.addQueryParameters(_url,stx.Options.getOrElseC(stx.Options.toOption(_params),stx.ds.Map.create())):_url;
-		var future = new stx.Future();
+		var future = new stx.Eventual();
 		var request = stx.js.dom.Quirks.createXMLHttpRequest();
 		future.ifCanceled(function() {
 			try {
@@ -13948,7 +13948,7 @@ stx.js.io.AbstractIFrameIO.__interfaces__ = [stx.js.io.IFrameIO];
 stx.js.io.AbstractIFrameIO.prototype = {
 	request: function(requestData,targetUrl,targetWindow) {
 		var requestId = ++this.requestCounter;
-		var future = new stx.Future();
+		var future = new stx.Eventual();
 		this.receiveWhile(function(message) {
 			return message.__responseId != null && message.__responseId == requestId?(function($this) {
 				var $r;
@@ -14084,8 +14084,8 @@ stx.js.io.IFrameIOPollingMaptag = $hxClasses["stx.js.io.IFrameIOPollingMaptag"] 
 	this.fragmentsReceived = stx.ds.Map.create();
 	this.receivers = new Map();
 	this.originUrlToWindow = new Map();
-	this.senderFuture = stx.Option.None;
-	this.receiverFuture = stx.Option.None;
+	this.senderEventual = stx.Option.None;
+	this.receiverEventual = stx.Option.None;
 };
 stx.js.io.IFrameIOPollingMaptag.__name__ = ["stx","js","io","IFrameIOPollingMaptag"];
 stx.js.io.IFrameIOPollingMaptag.__interfaces__ = [stx.js.io.IFrameIO];
@@ -14103,24 +14103,24 @@ stx.js.io.IFrameIOPollingMaptag.messageKeyFrom = function(o) {
 stx.js.io.IFrameIOPollingMaptag.__super__ = stx.js.io.AbstractIFrameIO;
 stx.js.io.IFrameIOPollingMaptag.prototype = $extend(stx.js.io.AbstractIFrameIO.prototype,{
 	stopReceiver: function() {
-		stx.Options.map(this.receiverFuture,function(r) {
+		stx.Options.map(this.receiverEventual,function(r) {
 			r.cancel();
 			return stx.Unit.Unit;
 		});
-		this.receiverFuture = stx.Option.None;
+		this.receiverEventual = stx.Option.None;
 	}
 	,startReceiver: function() {
-		if(stx.Options.isEmpty(this.receiverFuture)) this.receiverFuture = stx.Option.Some(this.executor.forever($bind(this,this.receiver),10));
+		if(stx.Options.isEmpty(this.receiverEventual)) this.receiverEventual = stx.Option.Some(this.executor.forever($bind(this,this.receiver),10));
 	}
 	,stopSender: function() {
-		stx.Options.map(this.senderFuture,function(s) {
+		stx.Options.map(this.senderEventual,function(s) {
 			s.cancel();
 			return stx.Unit.Unit;
 		});
-		this.senderFuture = stx.Option.None;
+		this.senderEventual = stx.Option.None;
 	}
 	,startSender: function() {
-		if(stx.Options.isEmpty(this.senderFuture)) this.senderFuture = stx.Option.Some(this.executor.forever($bind(this,this.sender),20));
+		if(stx.Options.isEmpty(this.senderEventual)) this.senderEventual = stx.Option.Some(this.executor.forever($bind(this,this.sender),20));
 	}
 	,fragmentsReceivedFor: function(messageKey) {
 		if(!this.fragmentsReceived.containsKey(messageKey)) this.fragmentsReceived = this.fragmentsReceived.set(messageKey,[]);
@@ -14266,8 +14266,8 @@ stx.js.io.IFrameIOPollingMaptag.prototype = $extend(stx.js.io.AbstractIFrameIO.p
 			});
 		},originUrl,originWindow);
 	}
-	,receiverFuture: null
-	,senderFuture: null
+	,receiverEventual: null
+	,senderEventual: null
 	,bindTarget: null
 	,originUrlToWindow: null
 	,receivers: null
@@ -19781,14 +19781,14 @@ stx.time.ScheduledExecutorSystem.__name__ = ["stx","time","ScheduledExecutorSyst
 stx.time.ScheduledExecutorSystem.__interfaces__ = [stx.time.ScheduledExecutor];
 stx.time.ScheduledExecutorSystem.prototype = {
 	forever: function(f,ms) {
-		var future = new stx.Future();
+		var future = new stx.Eventual();
 		var timer = new haxe.Timer(ms);
 		future.ifCanceled($bind(timer,timer.stop));
 		timer.run = f;
 		return future;
 	}
 	,repeatWhile: function(seed,f,ms,pred) {
-		var future = new stx.Future();
+		var future = new stx.Eventual();
 		return pred(seed)?(function($this) {
 			var $r;
 			var result = seed;
@@ -19806,7 +19806,7 @@ stx.time.ScheduledExecutorSystem.prototype = {
 		}(this)):future.deliver(seed,{ fileName : "ScheduledExecutor.hx", lineNumber : 136, className : "stx.time.ScheduledExecutorSystem", methodName : "repeatWhile"});
 	}
 	,repeat: function(seed,f,ms,times) {
-		var future = new stx.Future();
+		var future = new stx.Eventual();
 		return times > 0?(function($this) {
 			var $r;
 			var result = seed;
@@ -19826,7 +19826,7 @@ stx.time.ScheduledExecutorSystem.prototype = {
 	}
 	,once: function(f,ms) {
 		var run = false;
-		var future = new stx.Future();
+		var future = new stx.Eventual();
 		var timer = haxe.Timer.delay(function() {
 			run = true;
 			future.deliver(f(),{ fileName : "ScheduledExecutor.hx", lineNumber : 70, className : "stx.time.ScheduledExecutorSystem", methodName : "once"});

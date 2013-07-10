@@ -1,5 +1,6 @@
 package stx.arw;
 
+import stx.StaxError;
 import stx.Tuples;
 import stx.Error.*;
 import stx.Eithers;
@@ -18,7 +19,7 @@ abstract OutcomeArrow<I,O>(ArrowOutcome<I,O>) from ArrowOutcome<I,O> to ArrowOut
   public function new(?v:ArrowOutcome<I,O>){
     this = Options.orDefault(v,
       function(x){
-        return cast( x == null ? Left(err('null input')) : x);
+        return cast( x == null ? Left(err(NullReferenceError('unknown'))) : x);
       }
     );
   }
@@ -30,7 +31,7 @@ class OutcomeArrows{
   static public function edit<I,O,N>(arw0:ArrowOutcome<I,O>,arw1:Arrow<O,N>):OutcomeArrow<I,N>{
     return arw0.then(arw1.right());
   }
-  static public function split<I,O,N>(arw0:ArrowOutcome<I,O>,arw1:OutcomeArrow<I,N>):OutcomeArrow<I,Tup2<O,N>>{
+  static public function split<I,O,N>(arw0:ArrowOutcome<I,O>,arw1:OutcomeArrow<I,N>):OutcomeArrow<I,Tuple2<O,N>>{
     return arw0.split(arw1).then(Eithers.unzip);
   }
   static public function imply<I,O>(arw0:ArrowOutcome<I,O>,v:I){

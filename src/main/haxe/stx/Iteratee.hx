@@ -3,12 +3,12 @@ package stx;
 import stx.ifs.Apply;
 import stx.Prelude;
 import stx.Error;
-import stx.Future;
+import stx.Eventual;
 
 using stx.arw.Arrows;
 using stx.Iteratee;
 using stx.Promise;
-using stx.Functions;
+using stx.Functions;  
 
 typedef Iterate<E,A> 						= Input<E>    -> Iteratee<E,A>;
 private typedef Folder<E,A,B>  	= (Step<E,A>  -> Promise<B>) -> Promise<B>;
@@ -139,8 +139,7 @@ class Iteratees{
     return it.fold(folder);
   }
 	static public function flatten<E,A>(i: Promise<Iteratee<E, A>>): Iteratee<E, A> {
-    return 
-			Iteratee.unit(
+    return Iteratee.unit(
         function(folder){
           return i.flatMap(folds.p2(folder));
         }

@@ -1,5 +1,6 @@
 package stx.plus;
 
+import stx.StaxError;
 import stx.Tuples;
 import Type;
 
@@ -37,13 +38,13 @@ class Equal{
       case TClass( c ) if ( c == Array  )                               : __equals__(ArrayEqual.equals);
       case TClass( c ) if ( c == Date   )                               : __equals__(stx.Dates.equals);
       case TClass( c ) if ( c == String )                               : __equals__(stx.Strings.equals);
-      case TClass( c ) if (stx.Types.hasSuperClass(c,AbstractProduct))  : __equals__(ProductEquals.equals);
+      //case TClass( c ) if (stx.Types.hasSuperClass(c,AbstractProduct))  : __equals__(ProductEquals.equals);
       case TEnum(_)                                                     : __equals__(EnumEqual.equals);
       case TClass( c )                                                  :
         if(Type.getInstanceFields(c).remove("equals")){
           __equals__(EqualsEquals.equals);
         }else{
-          throw new stx.err.NullReferenceError('equals'); __equals__(function(x,y){return false;});
+          throw NullReferenceError('equals'); __equals__(function(x,y){return false;});
         }
       case TObject      : __equals__(ObjectEquals.equals);
       case TUnknown     : __equals__(
@@ -83,7 +84,7 @@ class ObjectEquals{
   }
 }
 class ProductEquals{
-  static public inline function equals(a:AbstractProduct,b:AbstractProduct){
+  static public inline function equals(a:Product,b:Product){
     var els0  = a.elements();
     var els1  = b.elements();
     var o     = true;

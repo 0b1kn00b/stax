@@ -16,7 +16,7 @@
 */
 package stx.functional;
 
-import stx.Tuples.*;
+import stx.Tuples;
 import stx.Prelude;
 
 import stx.plus.Show;

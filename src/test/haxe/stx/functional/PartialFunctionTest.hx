@@ -16,7 +16,7 @@
 */
 package stx.functional;
 
-import stx.Tuples.*;
+import stx.Tuples;
 import stx.Prelude;
 import stx.test.TestCase;
 import stx.functional.PartialFunction;
@@ -24,7 +24,7 @@ import stx.functional.PartialFunction;
 using stx.Tuples;
 using stx.Anys;
 
-using stx.PartialFunctions;
+using stx.PartialFunction;
 
 class PartialFunctionTest extends TestCase {
     public function testIsDefinedAtForPartialFunction1() {

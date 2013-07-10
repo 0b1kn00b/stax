@@ -2,7 +2,7 @@ package stx.arw;
 
 import stx.Prelude;
 import stx.Continuation.*;
-import stx.Tuples.*;
+import stx.Tuples;
 
 using stx.Tuples;
 using stx.arw.Arrows;
@@ -44,6 +44,14 @@ class StateArrows<S,A>{
   static public function draw<S,A,B>(arw0:ArrowState<S,A>,arw1:Arrow<S,B>):ArrowState<S,Tuple2<A,B>>{
     return drawWith(arw0,arw1,tuple2);
   }
+  public function exchange<S,A,B>(arw0:ArrowState<S,A>,a:Arrow<S,B>):ArrowState<S,B>{
+    return access(
+      arw0,
+      function(v:A,s:S):Eventual<B>{
+        return a.apply(s);
+      }
+    );
+  }
   static public function access<S,A,B>(arw0:ArrowState<S,A>,arw1:Arrow<Tuple2<A,S>,B>):ArrowState<S,B>{
     return arw0.join(arw1)
       .then(
@@ -78,9 +86,14 @@ class StateArrows<S,A>{
       arw1.first()
     );
   }
-  static public function put<S,A,B>(arw0:ArrowState<S,A>,v:S):ArrowState<S,A>{
+  static public function put<S,A>(arw0:ArrowState<S,A>,v:A):ArrowState<S,A>{
     return arw0.then(
-      v.pure().second()
+      Compose.pure(v).first()
+    );
+  }
+  static public function putState<S,A,B>(arw0:ArrowState<S,A>,v:S):ArrowState<S,A>{
+    return arw0.then(
+      Compose.pure(v).second()
     );
   }
   static public function ret<S,A>(arw0:ArrowState<S,A>):ArrowState<S,S>{
@@ -91,10 +104,10 @@ class StateArrows<S,A>{
     );
   }
   static public function request<S,A>(arw0:ArrowState<S,A>,i:S){
-    return arw0.apply(i).map(T2s.fst);
+    return arw0.apply(i).map(Tuples2.fst);
   }
   static public function resolve<S,A>(arw0:ArrowState<S,A>,i:S){
-    return arw0.apply(i).map(T2s.snd);
+    return arw0.apply(i).map(Tuples2.snd);
   }
   static public function breakout<S,A>(arw:ArrowState<S,A>):Arrow<S,A>{
     return arw.then(

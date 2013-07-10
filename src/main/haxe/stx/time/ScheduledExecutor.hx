@@ -21,7 +21,7 @@ import haxe.Timer;
 #end
 
 import stx.Prelude;
-import stx.Future;
+import stx.Eventual;
 /** A scheduled executor service, which can be used to execute tasks at 
  * specified times in the future.
  */
@@ -30,12 +30,12 @@ interface ScheduledExecutor {
   /** Executes the function a single time the specified number of milliseconds 
    * into the future, returning a future of the return value of the function.
    */
-  public function once<T>(f: Void -> T, ms: Int): Future<T>;
+  public function once<T>(f: Void -> T, ms: Int): Eventual<T>;
   
   /** Executes the reducer a fixed number of times, each separated by the specified
    * number of milliseconds, returning a future of the completed reduction.
    */
-  public function repeat<T>(seed: T, f: T -> T, ms: Int, times: Int): Future<T>;
+  public function repeat<T>(seed: T, f: T -> T, ms: Int, times: Int): Eventual<T>;
   
   /** Executes the reducer while a predicate holds true for the reduction, each 
    * invocation separated by the specified number of milliseconds, returning a
@@ -44,13 +44,13 @@ interface ScheduledExecutor {
    * The result of the future is always the first reduction for which the 
    * predicate holds false.
    */
-  public function repeatWhile<T>(seed: T, f: T -> T, ms: Int, pred: T -> Bool): Future<T>;
+  public function repeatWhile<T>(seed: T, f: T -> T, ms: Int, pred: T -> Bool): Eventual<T>;
   
   /** Executes the function an infinite number of times, each invocation 
    * separated by the specified number of milliseconds. The future will not 
    * return anything, but may be canceled in order to terminate the schedule.
    */
-  public function forever(f: Void -> Void, ms: Int): Future<Void>;
+  public function forever(f: Void -> Void, ms: Int): Eventual<Void>;
 }
 
 #if !(neko || php || cpp)
@@ -59,10 +59,10 @@ class ScheduledExecutorSystem implements ScheduledExecutor {
   public function new() {
   }
   
-  public function once<T>(f: Void -> T, ms: Int): Future<T> {
+  public function once<T>(f: Void -> T, ms: Int): Eventual<T> {
     var run = false;
     
-    var future = new Future();
+    var future = new Eventual();
     
     var timer = Timer.delay(function() {
       run = true;
@@ -84,8 +84,8 @@ class ScheduledExecutorSystem implements ScheduledExecutor {
     return future;
   }
   
-  public function repeat<T>(seed: T, f: T -> T, ms: Int, times: Int): Future<T> {
-    var future = new Future();
+  public function repeat<T>(seed: T, f: T -> T, ms: Int, times: Int): Eventual<T> {
+    var future = new Eventual();
 
     return if (times > 0) {
       var result = seed;
@@ -111,8 +111,8 @@ class ScheduledExecutorSystem implements ScheduledExecutor {
     else future.deliver(seed);
   }
   
-  public function repeatWhile<T>(seed: T, f: T -> T, ms: Int, pred: T -> Bool): Future<T> {
-    var future = new Future();
+  public function repeatWhile<T>(seed: T, f: T -> T, ms: Int, pred: T -> Bool): Eventual<T> {
+    var future = new Eventual();
 
     return if (pred(seed)) {
       var result = seed;
@@ -136,8 +136,8 @@ class ScheduledExecutorSystem implements ScheduledExecutor {
     else future.deliver(seed);
   }
   
-  public function forever(f: Void -> Void, ms: Int): Future<Void> {
-    var future: Future<Void> = new Future();
+  public function forever(f: Void -> Void, ms: Int): Eventual<Void> {
+    var future: Eventual<Void> = new Eventual();
       
     var timer = new Timer(ms);
     

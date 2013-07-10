@@ -17,7 +17,7 @@ class Predicates {
   /**
     Produces a predicate that succeeds on any input
   */
-  static public function isAny<A>() : Predicate<A>{
+  @:noUsing static public function unit<A>() : Predicate<A>{
     return function(value){
         return true;
       }
@@ -137,11 +137,10 @@ class Predicates {
   /**
     Produces a predicate that succeeds if the input predicate fails.
   */
-  static public function not<T>(p1: Predicate<T>):Predicate<T>{
-    return 
-      function(value:T){
-        return !p1(value);
-      }
+  static public inline function not<T>(p1: Predicate<T>):Predicate<T>{
+    return function(value:T){
+      return !p1(value);
+    }
   }  
   /**
     Produces a predicate that succeeds if any of the input predicates succeeds.
@@ -160,7 +159,12 @@ class Predicates {
     }
   }
 }
-class Predcates2{
+class Predicates2{
+  @:noUsing static public function unit<A>() : Predicate2<A,A>{
+    return function(value:A,value0:A){
+      return true;
+    }
+  }
   public static function and<T1, T2>(p0 : Predicate2<T1, T2>, p1 : Predicate2<T1, T2>) : Predicate2<T1, T2> {
       return function(value0, value1) return p0(value0, value1) && p1(value0, value1);
   }

@@ -48,7 +48,7 @@ class ArrayToSet {
 class Set<T> implements Collection<Set<T>, T> {
   public var equal (get_equal, null): EqualFunction<T>;
   public var order (get_order, null) : OrderFunction<T>;
-  public var hash (get_hash, null) : MapFunction<T>;
+  public var hash (get_hash, null) : HashFunction<T>;
   public var show (get_show, null) : ShowFunction<T>;
   
   var _map: Map<T,T>;
@@ -56,12 +56,12 @@ class Set<T> implements Collection<Set<T>, T> {
 	public static function toSet<T>(i: Iterable<T>) {
     return stx.ds.Set.create().append(i);
   }
-  public static function create<T>(?order: OrderFunction<T>, ?equal: EqualFunction<T>, ?hash: MapFunction<T>, ?show: ShowFunction<T>): Set<T> {  
+  public static function create<T>(?order: OrderFunction<T>, ?equal: EqualFunction<T>, ?hash: HashFunction<T>, ?show: ShowFunction<T>): Set<T> {  
     return new Set<T>(Map.create(order, equal, hash, show));
   }
   
   /** Creates a factory for sets of the specified type. */
-  public static function factory<T>(?order: OrderFunction<T>, ?equal: EqualFunction<T>, ?hash: MapFunction<T>, ?show: ShowFunction<T>): Factory<Set<T>> {
+  public static function factory<T>(?order: OrderFunction<T>, ?equal: EqualFunction<T>, ?hash: HashFunction<T>, ?show: ShowFunction<T>): Factory<Set<T>> {
     return function() {
       return Set.create(order, equal, hash, show);
     }
@@ -144,7 +144,7 @@ class Set<T> implements Collection<Set<T>, T> {
     return create(m.keyOrder, equal, m.keyMap, m.keyShow).append(this);
   }
   
-  public function withMapFunction(hash : MapFunction<T>) {
+  public function withHashFunction(hash : HashFunction<T>) {
     var m : FriendMap<T> = cast _map;
     return create(m.keyOrder, m.keyEqual, hash, m.keyShow).append(this);
   }
@@ -185,6 +185,6 @@ class Set<T> implements Collection<Set<T>, T> {
 private typedef FriendMap<K> = {
   private var keyEqual  : EqualFunction<K>;
   private var keyOrder  : OrderFunction<K>;
-  private var keyMap : MapFunction<K>;
+  private var keyMap : HashFunction<K>;
   private var keyShow   : ShowFunction<K>;
 }

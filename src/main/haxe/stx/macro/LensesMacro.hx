@@ -15,7 +15,7 @@ using Lambda;
 
 #if macro
 
-class Helper {
+class LenseMacroHelper {
   static function classFieldsForClassType(c : ClassType) return
     c.fields.get();
   
@@ -71,7 +71,7 @@ class Helper {
     
     var exprString = '
       { 
-        get : function (___obj : $typeName) return ___obj!=null ? ___obj.$cname : null,
+        get : function (___obj : $typeName):$cTypeName{ return ___obj!=null ? ___obj.$cname : null; } ,
         set : function ($cname : $cTypeName, ___obj : $typeName) {
           var ___cp = Reflect.copy(___obj);
           if (___cp != null) ___cp.$cname = $cname;
@@ -106,7 +106,7 @@ class LensesMacro<T> {
     var clazz : ClassType = tp.get();
     var extensionType     =  clazz.interfaces.filter(isExtension).array()[0].params[0];
     var pos               = Context.currentPos();
-    var classFields       = Helper.classFieldsFor(extensionType);
+    var classFields       = LenseMacroHelper.classFieldsFor(extensionType);
     //trace(classFields); 
     classFields = classFields.filter(
       function(x){
@@ -116,7 +116,7 @@ class LensesMacro<T> {
         }
       }
     );
-    var lenses = classFields.map(function (cf) return Helper.lenseForClassField(extensionType, cf, pos)).filter(function (x) return x!=null).array();
+    var lenses = classFields.map(function (cf) return LenseMacroHelper.lenseForClassField(extensionType, cf, pos)).filter(function (x) return x!=null).array();
     return lenses;
   }
 }

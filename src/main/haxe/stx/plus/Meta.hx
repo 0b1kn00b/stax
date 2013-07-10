@@ -1,6 +1,6 @@
 package stx.plus;
 
-import stx.Tuples.*;
+import stx.Tuples;
 
 using stx.Tuples;
 

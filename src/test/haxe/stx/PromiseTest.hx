@@ -9,7 +9,7 @@ using stx.Prelude;
 import stx.test.TestCase;
 import stx.test.Assert;             using stx.test.Assert;
 
-using stx.Future;
+using stx.Eventual;
 using stx.Promise;
 using stx.Error;
 using stx.Maths;
@@ -20,7 +20,7 @@ class PromiseTest extends TestCase{
     super();
   }
   /**
-  * Resolve Right of Future (success)
+  * Resolve Right of Eventual (success)
   */
   public function testRight() {
     var a = new Promise();
@@ -65,7 +65,7 @@ class PromiseTest extends TestCase{
   /**
   * Test Parallel execution
   */
-  public function testFutures(){
+  public function testEventuals(){
     0.until(10)
         .map(
             function(int:Int) {
@@ -90,7 +90,7 @@ class PromiseTest extends TestCase{
   /**
   * Test simple error handler
   */
-  public function testFutureFailure() {
+  public function testEventualFailure() {
     var outcome2 = 'notok'.breach()
         .success(
             function(x) {
@@ -102,7 +102,7 @@ class PromiseTest extends TestCase{
   /**
   * Test asynchronous failure
   */
-  public function testFuturesFailure0() {
+  public function testEventualsFailure0() {
     var async   = Assert.createAsync( function() { } , 200);
     var outcome2 = new Promise();
     
@@ -124,7 +124,7 @@ class PromiseTest extends TestCase{
   /**
   * Test error flow through map
   */
-  public function testFuturesFailure2() {
+  public function testEventualsFailure2() {
     var async   = Assert.createAsync( function() { } , 200);
     var outcome = new Promise();
     
@@ -152,7 +152,7 @@ class PromiseTest extends TestCase{
   /**
   * Test error flow through flatmap
   */
-  public function testFuturesFailure3() {
+  public function testEventualsFailure3() {
     var async   = Assert.createAsync( function() { } , 200);
     var outcome = new Promise();
     
@@ -180,7 +180,7 @@ class PromiseTest extends TestCase{
   /**
   * Test error flow through flatmap and map failing on flatmap
   */
-  public function testFuturesFailure4() {
+  public function testEventualsFailure4() {
     var async   = Assert.createAsync( function() { } , 200);
     var outcome = 'ok1'.intact();
   
@@ -250,7 +250,7 @@ class PromiseTest extends TestCase{
   /**
   * Test parallel initial success with failure after a flatmap-
   */
-  public function testFuturesFailure7() {
+  public function testEventualsFailure7() {
     var async   = Assert.createAsync( function() { } ,200);
     var outcome0 = 'ok0'.intact();
     var outcome1 = 'ok1'.intact();
@@ -287,7 +287,7 @@ class PromiseTest extends TestCase{
   /**
   * Test error handler flow to callback.
   */
-  public function testFuturesFailure8() {
+  public function testEventualsFailure8() {
     var async     = Assert.createAsync( function() { } ,200);
 
     var outcome0  = new Promise();
@@ -344,7 +344,7 @@ class PromiseTest extends TestCase{
   /**
   * More mixed mode parallel tests
   */
-  public function testFuturesFailure6() {
+  public function testEventualsFailure6() {
     var async   = Assert.createAsync( function() { } ,200);
     var outcome1 = 'ok1'.intact();
     var outcome2 = 'notok'.breach();
@@ -380,7 +380,7 @@ class PromiseTest extends TestCase{
   /**
   * Test complex error handling conditions
   */
-  public function testFuturesFailure9() {
+  public function testEventualsFailure9() {
     var async   = Assert.createAsync( function() { } , 200);
     var outcome1 = 'ok1'.intact();
     var outcome2 = 'notok'.breach();
@@ -443,7 +443,7 @@ class PromiseTest extends TestCase{
   /**
   * Test complex error handling conditions
   */
-  public function testFuturesFailure10() {
+  public function testEventualsFailure10() {
     var async   = Assert.createAsync( function() { } , 200);
     var outcome1 = 'ok1'.intact();
     var outcome4 = new Promise();

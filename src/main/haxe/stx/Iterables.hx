@@ -2,13 +2,86 @@ package stx;
 
 using stx.Prelude;
 
-import stx.Tuples.*;
+import stx.Tuples;
 
 using stx.Tuples;
-																using stx.Functions;
+using stx.Functions;
 using stx.Iterables;
+using stx.ds.Generator;
 
 class Iterables {
+  /**
+    Creates an Array from an Iterable
+  */
+  static public function toArray<T>(i: Iterable<T>) {
+    var a = [];
+    for (e in i) a.push(e);
+    return a;
+  }
+  /**
+    Creates an Iterable from an Iterator
+  */
+  static public function toIterable<T>(it:Iterator<T>):Iterable<T> {
+    return {
+      iterator : function () {
+        return {
+            next      : it.next,
+            hasNext   : it.hasNext
+        }
+      }
+    }
+  }
+  /**
+    Applies function f to each element in iter, returning the results
+  */
+  static public function map<T, Z>(iter: Iterable<T>, f: T -> Z): Iterable<Z> {
+    return foldl(iter, [], function(a, b) {
+      a.push(f(b));
+      return a;
+    });
+  }
+  /**
+    Applies function f to each element in iter, appending and returning the results.
+  */
+  static public function flatMap<T, Z>(iter: Iterable<T>, f: T -> Iterable<Z>): Iterable<Z> {
+    return foldl(iter, [], function(a, b) {
+      for (e in f(b)) a.push(e);
+      return a;
+    });
+  }
+  /**
+    Using starting var z, run f on each element, storing the result, and passing that result 
+    into the next call.
+      [1,2,3,4,5].foldl( 100, function(init,v) return init + v ));//(((((100 + 1) + 2) + 3) + 4) + 5)
+  */
+  static public function foldl<T, Z>(iter: Iterable<T>, seed: Z, mapper: Z -> T -> Z): Z {
+    var folded = seed;
+    for (e in iter) { folded = mapper(folded, e); }
+    return folded;
+  }   
+  /**
+    Call f on each element in iter, returning a collection where f(e) = true
+  */
+  static public function filter<T>(iter: Iterable<T>, f: T -> Bool): Iterable<T> {
+    return SArrays.filter(iter.toArray(), f);
+  }
+  /**
+    Returns the size of iter
+  */
+  static public function size<T>(iterable: Iterable<T>): Int {
+    var size = 0;
+    
+    for (e in iterable) ++size;
+    
+    return size;
+  }
+  /**
+    Apply f to each element in iter.
+  */
+  static public function foreach<T>(iter : Iterable<T>, f : T-> Void ):Iterable<T> {
+    for (e in iter) f(e);
+    return iter;
+  }
   /**
     Preforms a foldl, using the first value as the init value
   */
@@ -514,15 +587,6 @@ class Iterables {
         return Options.create(val);
       }.yield();
   }
-  /**
-    Creates an Iterable by calling fn until it returns None, caching the results.
-  */
-  static public function yield<A>(fn : Void -> Option<A>):Iterable<A>{
-    var stack = [];    
-    return cast {
-      iterator : function() return stx.Iterators.LazyIterator.create(cast fn,stack).iterator()
-    }
-  }
   static public function patch<A>(iter:Iterable<A>,start:Int,iter2:Iterable<A>,?length:Int = 0):Iterable<A>{
     var na      = [];
     var nums    = 0.until(iter.size());
@@ -538,5 +602,11 @@ class Iterables {
       }
     }
     return na;
+  }
+}
+class Lists{
+  static public function toArray<T>(lst:List<T>){
+    var itr : Iterable<T> = lst;
+    return SIterables.toArray(itr);
   }
 }

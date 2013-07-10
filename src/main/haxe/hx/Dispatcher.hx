@@ -18,10 +18,6 @@ package hx;
 private enum EventException {
   StopPropagation;
 }
-
-/**
-* @:todo add documentation
-*/
 class Dispatcher<T> {
 
   @:isVar private var handlers(get_handlers,null) : Array<T -> Void>;

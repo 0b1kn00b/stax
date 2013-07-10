@@ -1,6 +1,6 @@
 package hx.ds;
 
-import stx.Tuples.*;
+import stx.Tuples;
 
 using stx.Functions;
 using stx.Compose;
@@ -14,9 +14,11 @@ class MultiMap<V>{
 	private var impl : OrderedMap<Array<V>>;
 
 	public function new() {
-		this.impl = new OrderedMap();
+		
 	}
 	public function put(key:String,val:V){
+		if(impl == null) impl = new OrderedMap();
+
 		if(!impl.exists(key)){
 			impl.put(key,[val]);
 		}else{
@@ -25,24 +27,27 @@ class MultiMap<V>{
 		return this;
 	}
 	public function get(key:String):Array<V>{
+		if(impl == null) return [];
 		return impl.get(key);
 	}
-	public function del(key:String){
+	public function del(key:String):Void{
+		if(impl == null) return;
 		impl.del(key);
-		return this;
 	}
-	public function set(t:Tuple2<String,V>){
+	public function set(t:Tuple2<String,V>):Void{
+		if(impl == null) impl = new OrderedMap();
 		this.put(t.fst(),t.snd());
-		return this;
 	}
 	public function iterator(){
 		return impl.iterator();
 	}
 	public function sort():Void{
+		if(impl == null) return;
 		this.impl.sort();
 		untyped this.impl.impl = ArrayOrder.sort( (this.impl.impl) );
 	}
-	public function toArray():Array<Tup2<String,V>>{
+	public function toArray():Array<Tuple2<String,V>>{
+		if(impl == null) return[];
 		return impl.toArray().map(
 				function(k:String,v:Array<V>){
 					return v.map(tuple2.bind(k));
@@ -50,10 +55,11 @@ class MultiMap<V>{
 			).flatten();
 	}
 	public function toString():String{
+		if(impl == null) return '';
 		return impl.toString();		
 	}
 	@:noUsing
-	static public function fromArray<A>(v:Array<Tuple2<String,A>>){
+	static public function fromArray<A>(v:Array<Tuple2<String,A>>):MultiMap<A>{
 		var hash =  new MultiMap();
 		v.foreach(
 			hash.set.effectOf()

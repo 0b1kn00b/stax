@@ -1,6 +1,6 @@
 package stx;
 
-import stx.Tuples.*;
+import stx.Tuples;
 
 using stx.Compose;
 using stx.Tuples;
@@ -104,11 +104,11 @@ class Compose0{
 */
 class Compose{
   
-  static public function fstOf<A,B,C,D>(a:Tuple2<A,B>->Tuple2<C,D>):Tuple2<A,B>->C{
-    return a.then( T2s.fst );
+  static public function fst<A,B,C,D>(a:Tuple2<A,B>->Tuple2<C,D>):Tuple2<A,B>->C{
+    return a.then( Tuples2.fst );
   }
-  static public function sndOf<A,B,C,D>(a:Tuple2<A,B>->Tuple2<C,D>):Tuple2<A,B>->D{
-    return a.then( T2s.snd );
+  static public function snd<A,B,C,D>(a:Tuple2<A,B>->Tuple2<C,D>):Tuple2<A,B>->D{
+    return a.then( Tuples2.snd );
   }
   /**
     Returns a function that applies fn1 then fn2 on the input
@@ -209,7 +209,7 @@ class Compose{
   /**
     Returns a function that produces `v`.
   */
-  static public function pure<A,B>(v:B):A->B{
+  @:noUsing static public function pure<A,B>(v:B):A->B{
     return function(x:A){ return v; }
   }
   static public function split<A,B,C>(split_:A->B,_split:A->C):A->Tuple2<B,C>{ 

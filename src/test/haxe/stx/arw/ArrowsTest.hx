@@ -2,38 +2,60 @@ package stx.arw;
 
 import haxe.Timer;
 
+import stx.Log.*;
 import stx.Prelude;
-import stx.test.TestCase;
-import stx.Tuples.*;
+import stx.Muster;
+import stx.Muster.Test.*;
+import stx.Niladic;
+import stx.Future;
 
 using stx.Tuples;
-using stx.Future;
+using stx.Eventual;
 using stx.test.Assert;
 using stx.arw.Arrows;
 using stx.Log;
 using stx.Functions;
 
-using stx.Method;
+//using stx.Method;
 import stx.arw.Arrows.Arrow.*;
 using stx.arw.Arrows;
 import stx.arw.*;
 
-class ArrowsTest extends TestCase{
+typedef Niladic = Void->Void;
+typedef Continuation<Z,A> = (A -> Z) -> Z;
+typedef CallbackType<A> = Continuation<Niladic,A>;
 
-  public function new() {
-    super();
+/*abstract Callback<A>(CallbackType<A>) from CallbackType<A> to CallbackType<A>{
+  public function new(v:(A->Niladic)->Niladic){
+    this = v;
+  } 
+}*/
+class ArrowsTest extends TestCase implements tink.lang.Cls{
+  public function testSomething(u:UnitArrow):UnitArrow{
+    
+    return u;
   }
-  public function testLift() {  
-      arr().then(
-        function(x:Tuple2<String,String>){
-          return x;
-        }
-      ).then(autoLiftMultipleArguments).apply(tuple2('hello','world'));
-  }
-  public function autoLiftMultipleArguments(a:String,b:String):String{
-    return '$a $b';
-  }
-  public function autoLiftMultipleArgumentsToFuture(a:String,b:String):Future<String>{
-    return Future.pure('$a $b');
+  public function testLift(u:UnitArrow):UnitArrow{
+    var a = function(x:Int):Int{
+      return x +1;
+    }
+    /*
+    var b : Arrow<Int,Int> = function(x:Int):Int{
+      return x *2;
+    }
+    a.withInput(10,
+      function(x){
+        trace('fst');
+      }
+    );*/
+    $type(a.apply);
+    var c = a;
+    $type(c);
+    c.withInput(11,
+      function(x){
+        trace('snd');
+      }
+    );
+    return u;
   }
 }

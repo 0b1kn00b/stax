@@ -1,7 +1,7 @@
 package stx.functional;
 
 
-import stx.Tuples.*;
+import stx.Tuples;
 
 using stx.ds.List; 
 

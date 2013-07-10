@@ -1,14 +1,14 @@
 package stx.plus;
 
 import stx.Tuples;
-import stx.Tuples.*;
+import stx.Tuples;
 import stx.Prelude;
 import stx.test.TestCase;
 
 class HashTest extends TestCase{
    @:todo('#0b1kn00b: the typer is now ignoring casts')
   public function testTupleMapCode() {    
-    var tests : Array<MapFunction<Product>> = cast [
+    var tests : Array<HashFunction<Product>> = cast [
       cast Hasher.getHashFor(tuple2("b",0)),
       cast Hasher.getHashFor(tuple2("a",1)), 
       cast Hasher.getHashFor(tuple3("a",0,0.1)),

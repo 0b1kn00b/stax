@@ -1,5 +1,7 @@
 using stx.Prelude;
 
+import stx.plus.Meta;
+
 import stx.test.TestCase;
 import stx.test.Runner;
 import stx.test.ui.Report;
@@ -42,9 +44,10 @@ class StaxTestSuite {
         #if development
           var tests   : Array<TestCase> = 
           [ 
-            new stx.macro.LensesMacroTest(),
+            new stx.ds.ListTest(),
+            
 /*          
-            new stx.arw.ArrowsTest(), 
+            new stx.macro.LensesMacroTest(),
             new stx.plus.HashTest(), 
             new stx.ds.MapTest(), 
             new stx.plus.OrderTest(),
@@ -68,7 +71,6 @@ class StaxTestSuite {
         #else 
           var tests =
           [
-            new stx.arw.ArrowsTest(),
             new stx.ArraysTest(),
             new stx.ds.MapTest(),
             new stx.ds.SetTest(),

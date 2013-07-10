@@ -5,8 +5,11 @@ package stx.parse;
  * @author 0b1kn00b
  */
 import Type;
+
 import stx.ds.List;
 import stx.parse.Parser;
+
+import stx.plus.Equal;
 
 class Tools {
 	public static function enumerable < C, T > (v:C):Enumerable < C, T > {
@@ -61,6 +64,10 @@ class Enumerable<C,T> extends Indexable	<C,T> {
 		throw "abstract function";
 		return null;
 	}
+	public function until(v:T):C{
+		throw "abstract function";
+		return null;
+	}
 }
 class NullEnumerable extends Enumerable<Dynamic,Dynamic>{
 	public function new(v, ?i){
@@ -78,6 +85,9 @@ class NullEnumerable extends Enumerable<Dynamic,Dynamic>{
 	override public function range(loc:Int,?len:Null<Int>):Dynamic {
 		return null;
 	}
+	override public function until(v:Dynamic):Dynamic{
+		return null;
+	}	
 }
 class StringEnumerable extends Enumerable<String,String>{
 	public function new(v, ?i) {
@@ -98,6 +108,15 @@ class StringEnumerable extends Enumerable<String,String>{
 	override public function range(loc:Int, ?len:Null<Int>):String {
 		if (len == null ) len = this.length - loc;
 		return data.substr(loc, len);
+	}
+	override public function until(v:String):String{
+		var eq = Equal.getEqualFor(v);
+		var next = '';
+		while (!eq(at(index),v)){
+			next+= at(index);
+			index++;
+		}
+		return next;
 	}
 }
 class ArrayEnumerable<T> extends Enumerable < Array<T>, T > {
@@ -129,6 +148,15 @@ class ArrayEnumerable<T> extends Enumerable < Array<T>, T > {
       lrStack 				: List.nil(),
     }
   }
+  override public function until(v:T):Array<T>{
+		var eq = Equal.getEqualFor(v);
+		var next = [];
+		while (!eq(at(index),v)){
+			next.push(at(index));
+			index++;
+		}
+		return next;
+	}
 }
 
 class Indexable<C,T>{

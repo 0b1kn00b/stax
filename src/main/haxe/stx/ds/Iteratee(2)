@@ -10,13 +10,13 @@ enum Input<E> {
 	EOF;
 }
 typedef TEnumerator<E,A> ={
-	apply : Iteratee<E,A> -> Future<Iteratee<E,A>>
+	apply : Iteratee<E,A> -> Eventual<Iteratee<E,A>>
 }
 class Enumerator<E,A>{
 	public function new(){
 
 	}
-	public dynamic function apply(i:Iteratee<E,A>):Future<Iteratee<E,A>>{
+	public dynamic function apply(i:Iteratee<E,A>):Eventual<Iteratee<E,A>>{
 		return null;
 	}
 }
@@ -49,7 +49,7 @@ enum Step<E,A> {
 }
 typedef TIteratee<E,A,B> = {
 	state 		: Step<E,A>,
-	?fold 		: (Step<E,A>->Future<B>)->Future<B>
+	?fold 		: (Step<E,A>->Eventual<B>)->Eventual<B>
 }
 class Iteratee<E,A>{
 	public static function iterateeOf<E,A>(s:Step<E,A>){
@@ -61,18 +61,18 @@ class Iteratee<E,A>{
 	}
 	public var state(default,null):Step<E,A>;
 
-	public dynamic function fold<B>(folder: Step<E,A>->Future<B>):Future<B>{
+	public dynamic function fold<B>(folder: Step<E,A>->Eventual<B>):Eventual<B>{
 		return folder(state);
 	}
-	public function run():Future<A>{
+	public function run():Eventual<A>{
 		return
 			switch(state){
-				case Step.Done(a,_) 	: Future.pure(a);
+				case Step.Done(a,_) 	: Eventual.pure(a);
 				case Step.Cont(k)  	:
 					k(Input.EOF).fold(
 						function(x){
 							return switch (x) {
-								case Step.Done(a1,_) 		: Future.pure(a1);
+								case Step.Done(a1,_) 		: Eventual.pure(a1);
 								case Step.Cont(_) 			: throw("diverging iteratee after Input.EOF");null;
 								case Step.Error(msg,e) 	: throw(msg);null;
 							}
@@ -83,9 +83,9 @@ class Iteratee<E,A>{
 			}
 	}
 	public function fold1<B>(
-		done 	:	A -> Input<E> -> Future<B>,
-		cont 	: (Input<E> -> Iteratee<E,A>) -> Future<B>,
-		err  	: String -> Input<E> -> Future<B>
+		done 	:	A -> Input<E> -> Eventual<B>,
+		cont 	: (Input<E> -> Iteratee<E,A>) -> Eventual<B>,
+		err  	: String -> Input<E> -> Eventual<B>
 		)
 	{
 		return 
@@ -99,24 +99,24 @@ class Iteratee<E,A>{
 				}
 			);
 	}
-	public function pureFold<B>(folder:Step<E,A>->B):Future<B>{
+	public function pureFold<B>(folder:Step<E,A>->B):Eventual<B>{
 		return 
 			fold(
 				function(s){
-					return Future.pure(folder(s));
+					return Eventual.pure(folder(s));
 				}
 			);
 	}
 }
 class Iteratees{
-	static public function folds<E,A,B>(it:Iteratee<E,A>,folder:(Step<E,A>->Future<B>)):Future<B>{
+	static public function folds<E,A,B>(it:Iteratee<E,A>,folder:(Step<E,A>->Eventual<B>)):Eventual<B>{
 		return it.fold(folder);
 	}
-	static public function flatten<E,A,B>(it:Iteratee<E,A>,i:Future<Iteratee<E,A>>):Iteratee<E,B>{
+	static public function flatten<E,A,B>(it:Iteratee<E,A>,i:Eventual<Iteratee<E,A>>):Iteratee<E,B>{
 		return new Iteratee(
 			cast{
 				fold 		: 
-					function(folder:Step<E,A>->Future<B>):Future<B>{
+					function(folder:Step<E,A>->Eventual<B>):Eventual<B>{
 						return i.flatMap(folds.p2(folder));
 					},
 				state 	: it.state
@@ -159,9 +159,9 @@ class Iteratees{
 			}
 	}
 	static public function foldStep<A,B,E>(
-		done 	:	A -> Input<E> -> Future<B>,
-		cont 	: Input<E> -> Iteratee<E,A> -> Future<B>,
-		err  	: String -> Input<E> -> Future<B>
+		done 	:	A -> Input<E> -> Eventual<B>,
+		cont 	: Input<E> -> Iteratee<E,A> -> Eventual<B>,
+		err  	: String -> Input<E> -> Eventual<B>
 		)
 	{
 		return 
@@ -187,7 +187,7 @@ class Iteratees{
     
 	static public function fold1<E,A,B>(state:A){
 		return 
-			function(f:A->E->Future<A>){
+			function(f:A->E->Eventual<A>){
 				var step = null;
 				step = 
 					function(s:A){

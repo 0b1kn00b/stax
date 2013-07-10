@@ -64,7 +64,7 @@ class Streams {
     }
     
 
-    static public function toStream<T>(f:Future<T>):Stream<T>{
+    static public function toStream<T>(f:Eventual<T>):Stream<T>{
         var s = Streams.create(
                 function(pulse:Pulse<Dynamic>){
                     return Propagation.propagate(pulse.value);
@@ -303,8 +303,8 @@ class Streams {
         return s.shift(v);
     }
 }
-class StreamFutures{
-    static public function toStream<A,B>(fn:A->Future<B>,stream:Stream<A>){
+class StreamEventuals{
+    static public function toStream<A,B>(fn:A->Eventual<B>,stream:Stream<A>){
       return 
         stream.flatMap(
           function(a:A){

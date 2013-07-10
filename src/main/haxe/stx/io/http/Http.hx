@@ -1,7 +1,7 @@
 package stx.io.http;
 
 import stx.Prelude;
-import stx.Future;
+import stx.Eventual;
 import stx.ds.Map;
 import stx.net.Url;
 import stx.net.HttpResponseCode;
@@ -21,13 +21,13 @@ typedef HttpResponse<T> = {
   certain kinds of data.
  */
 interface Http<T> {
-  public function get(url: Url, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<T>>;
+  public function get(url: Url, ?params: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<T>>;
     
-  public function post(url: Url, data: T, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<T>>;
+  public function post(url: Url, data: T, ?params: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<T>>;
     
-  public function put(url: Url, data: T, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<T>>;
+  public function put(url: Url, data: T, ?params: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<T>>;
     
-  public function delete(url: Url, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<T>>;
+  public function delete(url: Url, ?params: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<T>>;
   
-  public function custom(request: String, url: Url, data: T, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<T>>;
+  public function custom(request: String, url: Url, data: T, ?params: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<T>>;
 }

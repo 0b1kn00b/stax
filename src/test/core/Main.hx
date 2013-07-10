@@ -1,7 +1,7 @@
 
 using stx.Prelude;
 using stx.macro.F;
-using stx.Future;
+using stx.Eventual;
 using stx.Log;
 using stx.plus.Equal;
 using stx.plus.Order;
@@ -19,7 +19,7 @@ class Main{
 
 		[1,2,3]
 			.map(F.n(a,return a+1))
-			.map(stx.Future.pure)
+			.map(stx.Eventual.pure)
 			.waitFor()
 			.foreach(Log.printer());
 

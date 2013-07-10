@@ -1,6 +1,6 @@
 package stx.arw;
 
-import stx.Tuples.*;
+import stx.Tuples;
 import stx.Prelude;
 using stx.arw.Arrows;
 
@@ -12,7 +12,7 @@ abstract RightChoiceArrow<B,C,D>(ArrowRightChoice<B,C,D>) from ArrowRightChoice<
 			function (?i:Either<D,B>, cont : Function1<Either<D,C>, Void>){
 				switch (i) {
 					case Right(v) 	:
-						new ApplicationArrow().withInput( tuple2(a,v) ,
+						new ApplyArrow().withInput( tuple2(a,v) ,
 							function(x){
 								cont( Right(x) );
 							}

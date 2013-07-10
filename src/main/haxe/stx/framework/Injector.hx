@@ -1,6 +1,6 @@
 package stx.framework;
 
-import stx.Tuples.*;
+import stx.Tuples;
 
 using stx.Tuples;
 using stx.Prelude;

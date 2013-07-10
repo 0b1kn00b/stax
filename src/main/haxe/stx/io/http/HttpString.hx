@@ -16,12 +16,14 @@
 package stx.io.http;
 
 import stx.Prelude;
-import stx.Future;
+import stx.Eventual;
 import stx.io.http.Http;
 import stx.net.Url;
 import stx.net.HttpResponseCode;
 import stx.ds.Map;
 import stx.Options;
+
+using stx.Tuples;
 using stx.Options;
 
 #if js
@@ -47,25 +49,25 @@ interface HttpString extends Http<String> {
 class HttpStringAsync implements HttpString {
   public function new() { }
   
-  public function get(url: Url, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<String>> {
+  public function get(url: Url, ?params: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<String>> {
     return custom('GET', url, null, params, headers);
   }
   
-  public function post(url: Url, data: String, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<String>> {
+  public function post(url: Url, data: String, ?params: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<String>> {
     return custom('POST', url, data, params, makeHeader(headers, "application/x-www-form-urlencoded"));
   }
   
-  public function put(url: Url, data: String, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<String>> {
+  public function put(url: Url, data: String, ?params: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<String>> {
     return custom('PUT', url, data, params, makeHeader(headers, "application/x-www-form-urlencoded"));
   }
   
-  public function delete(url: Url, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<String>> {
+  public function delete(url: Url, ?params: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<String>> {
     return custom('DELETE', url, null, params, headers);
   }
   
-  public function custom(method: String, _url: Url, data: String, ?_params: QueryParameters, ?_headers: Map<String, String>): Future<HttpResponse<String>> {
+  public function custom(method: String, _url: Url, data: String, ?_params: QueryParameters, ?_headers: Map<String, String>): Eventual<HttpResponse<String>> {
     var url = if (_params != null) _url.addQueryParameters(Options.create(_params).getOrElseC(Map.create())); else _url;
-    var future: Future<HttpResponse<String>> = new Future();
+    var future: Eventual<HttpResponse<String>> = new Eventual();
     
     var request = Quirks.createXMLHttpRequest();
 

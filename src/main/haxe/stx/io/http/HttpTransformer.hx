@@ -20,7 +20,7 @@ import stx.ds.Map;
 import stx.net.Url;
 import stx.net.HttpResponseCode;
 import stx.io.http.Http;
-import stx.Future;
+import stx.Eventual;
 using stx.Options;
 
 // Transforms an Http<S> into an Http<T> given encoder/decoder functions.
@@ -37,23 +37,23 @@ class HttpTransformer<S, T> implements Http<T> {
     this.mimeType = mimeType;
   }
   
-  public function get(url: Url, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<T>> {
+  public function get(url: Url, ?params: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<T>> {
     return http.get(url, params, addMimeType(headers)).map(transformResponse);
   }
   
-  public function post(url: Url, data: T, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<T>> {
+  public function post(url: Url, data: T, ?params: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<T>> {
     return http.post(url, encoder(data), params, addMimeType(headers)).map(transformResponse);
   }
   
-  public function put(url: Url, data: T, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<T>> {
+  public function put(url: Url, data: T, ?params: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<T>> {
     return http.put(url, encoder(data), params, addMimeType(headers)).map(transformResponse);
   }
   
-  public function delete(url: Url, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<T>> {
+  public function delete(url: Url, ?params: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<T>> {
     return http.delete(url, params, addMimeType(headers)).map(transformResponse);
   }
   
-  public function custom(method: String, url: Url, data: T, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<T>> {
+  public function custom(method: String, url: Url, data: T, ?params: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<T>> {
     return http.custom(method, url, encoder(data), params, addMimeType(headers)).map(transformResponse);
   }
   

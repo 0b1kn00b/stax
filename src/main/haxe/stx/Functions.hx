@@ -2,18 +2,19 @@ package stx;
 
 import stx.Prelude;
 import stx.Error;
+import stx.StaxError;
 using stx.Eithers;
 
 using stx.Functions;
 using stx.Anys;
 
-class CodeBlocks {
+class NiladicTypes {
 	/**
     Takes a Void->Void and returns a Void->Dynamic.
 	  @param	c
     @return
 	 */
-  public static function returningC<A>(c:Void->Void,?val:A):Thunk<A>{
+  public static function returningC<A>(c:NiladicType,?val:A):Thunk<A>{
     return function(){
       c();
       return val;
@@ -31,7 +32,7 @@ class CodeBlocks {
           }catch(e:Error){
             o = Left(e);
           }catch(e:Dynamic){
-            o = Left(new Error(Std.string(e)));
+            o = Left(new Error(NativeError(Std.string(e))));
           }
         return o;
       }
@@ -39,7 +40,7 @@ class CodeBlocks {
   /**
     Compare function identity
   */
-  public static function equals(a:CodeBlock,b:CodeBlock){
+  public static function equals(a:NiladicType,b:NiladicType){
     return Reflect.compareMethods(a,b);
   }
 }	
@@ -50,7 +51,7 @@ class Functions0 {
 	/**
 	 Takes a function that returns a result, and produces one that ignores that result.
 	 */
-	public static function enclose<R>(f:Thunk<R>):CodeBlock{
+	public static function enclose<R>(f:Thunk<R>):NiladicType{
 		return
 			function():Void{
 				f();
@@ -153,7 +154,7 @@ class Functions1 {
           }catch(e:Error){
             o = Left(e);
           }catch(e:Dynamic){
-            o = Left(new Error(Std.string(e)));
+            o = Left(new Error(NativeError(Std.string(e))));
           }
         return o;
       }
@@ -168,7 +169,7 @@ class Functions1 {
     @param f    
   */
   public static function curry<P1, R>(f: Function1<P1, R>) {     
-    return function() {
+    return function() { 
       return function(p1: P1) { 
         return f(p1);       
       }

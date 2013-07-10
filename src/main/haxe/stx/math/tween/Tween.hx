@@ -33,7 +33,7 @@ class Tween {
       var start: Float = Options.create(Reflect.field(state1, name)).getOrElseC(def);
       var end:   Float = Options.create(Reflect.field(state2, name)).getOrElseC(def);
       
-      return name.entuple({
+      return tuple2(name,{
         start:  start,
         delta:  end - start
       });

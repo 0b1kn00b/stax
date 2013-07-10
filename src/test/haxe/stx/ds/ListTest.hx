@@ -167,7 +167,7 @@ class ListTest extends TestCase {
     var i1 = 0, i2 = 1;
 
     for (z in l) {
-      assertEquals(z, i1.entuple(i2));
+      assertEquals(z, tuple2(i1,i2));
       
       ++i1; ++i2;
     }

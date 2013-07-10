@@ -1,6 +1,6 @@
 package stx;
 
-import stx.Tuples.*;
+import stx.Tuples;
 
 using stx.Options;
 using stx.Tuples;
@@ -11,20 +11,20 @@ typedef Tfs3 	= Transformers3;
 typedef Tfs4 	= Transformers4;
 
 class Transformers{
-	static public function adjoin<A,B,C,D>(f0:A->B,f1:C->D):Tuple2<A,C>->Tuple2<B,D>{
-		return 
-			function(t:Tuple2<A,C>){
-				return tuple2(f0(t.fst()),f1(t.snd()));
-			}
+	@:noUsing static public inline function trans2<A,B,C,D>(?f0:A->B,?f1:C->D){
+		return Transformers2.create(f0,f1);
+	}
+	@:noUsing static public inline function trans3<A,B,C,D,E,F>(?f0:A->B,?f1:C->D,?f2:E->F):Tuple3<A,C,E>->Tuple3<B,D,F>{
+		return Transformers3.create(f0,f1,f2);
 	}
 }
 class Transformers2{
-	@:noUsing
-	static public function create<A,B,C,D>(f0:A->B,f1:C->D):Tuple2<A,C>->Tuple2<B,D>{
-		return 
-			function(t:Tuple2<A,C>){
-				return tuple2(f0(t.fst()),f1(t.snd()));
-			}
+	@:noUsing static public inline function create<A,B,C,D>(?f0:A->B,?f1:C->D):Tuple2<A,C>->Tuple2<B,D>{
+		f0 = Options.create(f0).getOrElse(cast Compose.pure);
+		f1 = Options.create(f1).getOrElse(cast Compose.pure);
+		return function(t:Tuple2<A,C>){
+			return tuple2(f0(t.fst()),f1(t.snd()));
+		}
 	}
 	static public function adjoin<A,B,C,D,E,F>(f0:Tuple2<A,C>->Tuple2<B,D>,f1:E->F){
 		return 
@@ -35,8 +35,7 @@ class Transformers2{
 	}
 }
 class Transformers3{
-	@:noUsing
-	static public function create<A,B,C,D,E,F>(?f0:A->B,?f1:C->D,?f2:E->F):Tuple3<A,C,E>->Tuple3<B,D,F>{
+	@:noUsing static public inline function create<A,B,C,D,E,F>(?f0:A->B,?f1:C->D,?f2:E->F):Tuple3<A,C,E>->Tuple3<B,D,F>{
 		f0 = Options.create(f0).getOrElse(cast Compose.pure);
 		f1 = Options.create(f1).getOrElse(cast Compose.pure);
 		f2 = Options.create(f2).getOrElse(cast Compose.pure);

@@ -1,6 +1,6 @@
 package stx.ds;
 
-import stx.Tuples.*;
+import stx.Tuples;
 import stx.Prelude;
 
 import stx.functional.Foldable;

@@ -1,125 +1,171 @@
 package stx;
 
-using stx.Prelude;
+import stx.Error.*;
+import stx.err.*;
+import stx.Prelude;
+import stx.plus.Equal;
+import stx.plus.Show;
+
 using stx.Tuples;
+using stx.Predicates;
 
 typedef Tups            = Tuples;
 
-typedef T2<A,B>         = Tup2<A,B>
-typedef Tup2<A,B>       = Tuple2<A,B>;
+typedef KV<V>           = Tuple2<String,V>;
 
-typedef T3<A,B,C>       = Tup3<A,B,C>
-typedef Tup3<A,B,C>     = Tuple3<A,B,C>;
-
-typedef T4<A,B,C,D>     = Tup4<A,B,C,D>
-typedef Tup4<A,B,C,D>   = Tuple4<A,B,C,D>;
-
-typedef T5<A,B,C,D,E>   = Tup5<A,B,C,D,E>
-typedef Tup5<A,B,C,D,E> = Tuple5<A,B,C,D,E>;
-
-typedef KV<V>           = Tup2<String,V>;
-
-class Entuple{
-  static public function entuple<A,B>(a:A,b:B){
-    return Tuples.tuple2(a,b);
-  }
+@:noUsing class Tuples {    
+    @:noUsing static public inline function t2<A,B>(_1:A,_2:B):stx.Tuple2<A,B>{
+        return tuple2(_1, _2);
+    }
+    @:noUsing static public inline function t3<A,B,C>(_1:A,_2:B,_3:C):stx.Tuple3<A,B,C>{
+        return tuple3(_1, _2, _3);
+    }
+    @:noUsing static public inline function t4<A,B,C,D>(_1:A,_2:B,_3:C,_4:D):stx.Tuple4<A,B,C,D>{
+        return tuple4(_1, _2, _3, _4);
+    }
+    @:noUsing static public inline function t5<A,B,C,D,E>(_1:A,_2:B,_3:C,_4:D,_5:E):stx.Tuple5<A,B,C,D,E>{
+        return tuple5(_1, _2, _3, _4, _5);
+    }
 }
-@:noUsing class Tuples {	
-	@:noUsing static public function tuple2<A,B>(_1:A,_2:B):stx.Tuple2<A,B>{
-		return new Tuple2(_1, _2);
-	}
-	@:noUsing static public function tuple3<A,B,C>(_1:A,_2:B,_3:C):stx.Tuple3<A,B,C>{
-		return new Tuple3(_1, _2, _3);
-	}
-	@:noUsing static public function tuple4<A,B,C,D>(_1:A,_2:B,_3:C,_4:D):stx.Tuple4<A,B,C,D>{
-		return new Tuple4(_1, _2, _3, _4);
-	}
-	@:noUsing static public function tuple5<A,B,C,D,E>(_1:A,_2:B,_3:C,_4:D,_5:E):stx.Tuple5<A,B,C,D,E>{
-		return new Tuple5(_1, _2, _3, _4, _5);
-	}
-}
-class Elements{
-  static public inline function elements(p:Product):Array<Dynamic>{
-    return p.elements();
+abstract Product(Array<Dynamic>) to Array<Dynamic>{
+  public function new(v){
+    this = v;
   }
-}
-interface Product {
-  public var prefix(get_prefix, null): String;
-
-  public var length(get_length,null) : Int;
-
-  public function element(n: Int): Dynamic;
-  public function elements():Array<Dynamic>;
-
-  public function flatten():Array<Dynamic>;
-}
-
-class AbstractProduct implements Product {
-	@:note('0b1kn00b', 'As these values are used and set privately, the chances of error are slight')
-	private var tools : Array<Function1<Dynamic,Dynamic>>;
-	
-  public var prefix (get_prefix, null): String;
-
-  public var length(get_length, null): Int;
-
-  public var _elements: Array<Dynamic>;
-
-  public function new(elements: Array<Dynamic>) {
-    _elements = elements;
-  }
-
-  public function element(n: Int): Dynamic {
-    return _elements[n];
-  }
-
-  public function toString(): String {
-    var s = prefix + "(" + stx.plus.Show.getShowFor(element(0))(element(0));
-    for(i in 1...length)
-      s += ", " + stx.plus.Show.getShowFor(element(i))(element(i));
-    return s + ")";
-  }
-  private function get_prefix(): String {
-    return Prelude.error()("Not implemented");
-  }
-
-  private function get_length(): Int {
-    return Prelude.error()("Not implemented");
-  }
-  
-  public function elements():Array<Dynamic> {
-    return switch (length) {
-      case 5  : 
-          var p : Tuple5<Dynamic,Dynamic,Dynamic,Dynamic,Dynamic> = cast(this);
-          [ p.fst() , p.snd() , p.thd() , p.frt(), p.fth() ];
-      case 4  :
-          var p : Tuple4<Dynamic,Dynamic,Dynamic,Dynamic> = cast(this);
-          [ p.fst() , p.snd() , p.thd() , p.frt() ];
-      case 3  :
-          var p : Tuple3<Dynamic,Dynamic,Dynamic> = cast(this);
-          [ p.fst() , p.snd() , p.thd() ];
-      case 2  :
-          var p : Tuple2<Dynamic,Dynamic> = cast(this);
-          [ p.fst() , p.snd() ];
-      default : [];
+  @:from public static inline function fromTuple1<T1>(a:Tuple1<T1>):Product{
+    return switch (a) {
+      case tuple1(a) : new Product([a]);
     }
   }
-  public function flatten():Array<Dynamic> {
-    var flatn : Product -> Array<Dynamic> = null;
-
-    flatn = function(p:Product){
-          return 
-            p.elements().flatMap(
-              function(v){
-                return if( Std.is(v,Product) ){
-                   flatn(v).flatMap(  Compose.unit() );
-                }else{
-                  [v];
-                }
-              }
-            );
-          }
-    return flatn(this);
+  @:from public static inline function fromTuple2<T1,T2>(v:Tuple2<T1,T2>):Product{
+    return switch (v) {
+      case tuple2(a,b) : new Product([a,b]);
+    }
   }
+  @:from public static inline function fromTuple3<T1,T2,T3>(v:Tuple3<T1,T2,T3>):Product{
+    return switch (v) {
+      case tuple3(a,b,c) : new Product([a,b,c]);
+    }
+  }
+  @:from public static inline function fromTuple4<T1,T2,T3,T4>(v:Tuple4<T1,T2,T3,T4>):Product{
+    return switch (v) {
+      case tuple4(a,b,c,d) : new Product([a,b,c,d]);
+    }
+  }
+  @:from public static inline function fromTuple5<T1,T2,T3,T4,T5>(v:Tuple5<T1,T2,T3,T4,T5>):Product{
+    return switch (v) {
+      case tuple5(a,b,c,d,e) : new Product([a,b,c,d,e]);
+    }
+  }
+  public function elements(){
+    return this;
+  }
+  public function element(n:Int){
+    return this[n];
+  }
+  public var length(get,never):Int;
+  public function get_length():Int{
+    return this.length;
+  }
+}
+enum Tuple1<T1> {
+    tuple1(t1 : T1);
+}
+/*abstract Tuple1<T1>(Tuple1Type<T1>) from Tuple1Type<T1> to Tuple1Type<T1> {
+    inline function new(tuple : Tuple1Type<T1>) {
+        this = tuple;
+    }
+    inline public function fst() : T1 {
+        return Tuples1.fst(this);
+    }
+    @:to inline public static function toString<T1>(tuple : Tuple1Type<T1>) : String {
+        return Tuples1.toString(tuple);
+    }
+}
+*/class Tuples1 {
+    public static function fst<T1>(tuple : Tuple1<T1>) : T1 {
+        return switch (tuple){
+            case tuple1(a)      : a;
+        }
+    }
+    public static function equals<T1>(a : Tuple1<T1>, b : Tuple1<T1>) : Bool {
+        return switch (a) {
+            case tuple1(t1_0):
+                switch (b) {
+                    case tuple1(t1fst): Equal.getEqualFor(t1_0)(t1_0,t1fst);
+                }
+        }
+    }
+    public static function toString<T1>(tuple : Tuple1<T1>) : String {
+        return '${Show.show(fst(tuple))}';
+    }
+    public static function toArray<T1>(tuple : Tuple1<T1>) : Array<Dynamic> {
+        return switch (tuple){
+            case tuple1(a)    : [a];
+        }
+    }
+}
+enum Tuple2<T1, T2> {
+    tuple2(t1 : T1, t2 : T2);
+}
+/*abstract Tuple2<T1, T2>(Tuple2Type<T1, T2>) from Tuple2Type<T1, T2> to Tuple2Type<T1, T2> {
+    inline function new(tuple : Tuple2Type<T1, T2>) {
+        this = tuple;
+    }
+    inline public function fst() : T1 {
+        return Tuples2.fst(this);
+    }
+    inline public function snd() : T2 {
+        return Tuples2.snd(this);
+    }
+    @:to inline public static function toString<T1, T2>(tuple : Tuple2Type<T1, T2>) : String {
+        return Tuples2.toString(tuple);
+    }
+}*/
+class Tuples2 {
+    public static function fst<T1, T2>(tuple : Tuple2<T1, T2>) : T1 {
+        return switch (tuple){
+            case tuple2(a,_)    : a;
+        }
+    }
+    public static function snd<T1, T2>(tuple : Tuple2<T1, T2>) : T2 {
+        return switch (tuple){
+            case tuple2(_,b)    : b;
+        }
+    }
+    public static function swap<T1, T2>(tuple : Tuple2<T1, T2>) : Tuple2<T2, T1> {
+        return switch (tuple) {
+            case tuple2(a, b): tuple2(b, a);
+        }
+    }
+    public static function equals<T1, T2>(  a : Tuple2<T1, T2>,
+                                            b : Tuple2<T1, T2>
+                                            ) : Bool {
+        return switch (a) { 
+            case tuple2(t1_0, t2_0):
+                switch (b) {
+                    case tuple2(t1fst, t2fst): Equal.getEqualFor(t1_0)(t1_0,t1fst) && Equal.getEqualFor(t2_0)(t2_0,t2fst);
+                }
+        }
+    }
+    public static function toString<T1, T2>(tuple : Tuple2<T1, T2>) : String {
+        return '${Show.show(fst(tuple))}${Show.show(snd(tuple))}';
+    }
+    public static function toArray<T1, T2>(tuple : Tuple2<T1, T2>) : Array<Dynamic> {
+        return switch (tuple){
+            case tuple2(a,b)    : [a,b];
+        }
+    }
+    public inline static function entuple<A, B, C>(t:Tuple2<A,B>,c:C): Tuple3<A, B, C> {
+        return tuple3(t.fst(), t.snd(), c);
+    }
+    public static function into<A,B,C>(t:Tuple2<A,B>,f:A->B->C):C {
+        return switch(t){
+            case tuple2(a,b)    : f(a,b);
+        }
+    }
+    public inline static function spread<A,B,C>(f : A -> B -> C){
+        return into.bind(_,f);
+    }
 }
 typedef Pair<A> = Tuple2<A,A>;
 
@@ -128,242 +174,232 @@ class Pairs{
     return 
       tp.fst() == null ? tp.snd() : red(tp.fst(),tp.snd());
   }
-  static public function map<A,B>(tpl:Tuple2<A,A>,fn:A->B):Tuple2<B,B>{
-    return Tuple2.fromArray( tpl.elements().map(fn) );
-  }
 }
-class Tuple2<A, B> extends AbstractProduct {
-  @:noUsing
-  static public inline function create<A, B>(_1: A, _2: B): stx.Tuple2<A, B> {
-    return Tuples.tuple2(_1, _2);
-  }
-  public var _1 (default, null): A;
-  public var _2 (default, null): B;
-
-	public function new (_1:A, _2:B) {
-		this._1 = _1;
-		this._2 = _2;
-		super([_1,_2]);
-	}
-  @:noUsing static public function fromArray(a:Array<Dynamic>){
-    return new Tuple2(a[0],a[1]);
-  }
-  @:noUsing static public function unit(){
-    return new Tuple2(null,null);
-  }
-	static public function entuple<A, B, C>(t:stx.Tuple2<A,B>,c:C): stx.Tuple3<A, B, C> {
-    return new Tuple3(t.fst(), t.snd(), c);
-  }
-  static inline public function spread<A,B,C>(f : A -> B -> C){
-    return function(t:Tuple2<A,B>){
-        return into(t,f);
+enum Tuple3<T1, T2, T3> {
+    tuple3(t1 : T1, t2 : T2, t3 : T3);
+}
+/*abstract Tuple3<T1, T2, T3>(Tuple3Type<T1, T2, T3>) from Tuple3Type<T1, T2, T3> to Tuple3Type<T1, T2, T3> {
+    inline function new(tuple : Tuple3Type<T1, T2, T3>) {
+        this = tuple;
     }
-  }
-	static inline public function into<A,B,C>(t:Tuple2<A,B>, f : A -> B -> C ) : C{
-    return f(t.fst(), t.snd());
-  }
-  public inline function fst():A { return _1; }
-  public inline function snd():B { return _2; }
-
-  static public function map<A,B,C,D>(t:Tuple2<A,B>,f1: A -> C, f2: B -> D):Tuple2<C,D>{
-    return f1(t.fst()).entuple(f2(t.snd()));
-  }
-  static public function swap<A,B>(t:Tuple2<A,B>):Tuple2<B,A>{
-    return Tuples.tuple2(t.snd(),t.fst());
-  }
-  override private function get_prefix(): String {
-    return "stx.Tuple2";
-  }
-  override private function get_length(): Int {
-    return 2;
-  }
-}
-class Tuple3<A, B, C> extends AbstractProduct {
-  @:noUsing
-  static public function create<A, B, C>(_1: A, _2: B, _3: C): stx.Tuple3<A, B, C> {
-    return Tuples.tuple3(_1, _2, _3);
-  }
-  public var _1 (default, null) : A;
-  public var _2 (default, null) : B;
-	public var _3	(default, null) : C;
-	
-	public function new (_1:A, _2:B, _3:C) {
-		this._1 = _1;
-		this._2 = _2;
-		this._3 = _3;
-		super([_1, _2, _3]);
-	}
-	static public function into<A,B,C,D>(t:Tuple3<A,B,C>,f : A -> B -> C -> D) : D {
-		return f(t._1, t._2, t._3);
-	}
-  static public inline function spread<A,B,C,D>(f : A -> B -> C -> D){
-    return 
-      function(t:Tuple3<A,B,C>){
-        return into(t,f);
-      }
-  }
-  public inline function fst():A { return _1; }
-  public inline function snd():B { return _2; }
-  public inline function thd():C { return _3; }
-
-  @:noUsing
-  static public function fromArray<A>(a:Array<A>):Tuple3<A,A,A>{
-    return new Tuple3(a[0],a[1],a[2]);
-  }
-  static public function map<A,B,C,D,E,F>(t:Tuple3<A,B,C>,f1: A -> D, f2: B -> E, f3 : C -> F):Tuple3<D,E,F>{
-    return Tuples.tuple3(f1(t.fst()),f2(t.snd()),f3(t.thd()));
-  }
-	static public function entuple<A, B, C, D>(t:stx.Tuple3<A,B,C>,d:D): stx.Tuple4<A, B, C, D> {
-    return new Tuple4(t._1, t._2, t._3, d);
-  }
-	
-  override private function get_prefix(): String {
-    return "stx.Tuple3";
-  }
-
-  override private function get_length(): Int {
-    return 3;
-  }
-}
-class Tuple4< A, B, C, D> extends AbstractProduct {
-  @:noUsing
-  static public function create<A, B, C, D>(_1: A, _2: B, _3: C, _4: D): stx.Tuple4<A, B, C, D> {
-    return Tuples.tuple4(_1, _2, _3, _4);
-  }
-  public var _1 (default, null): A;
-  public var _2 (default, null): B;
-  public var _3 (default, null): C;
-  public var _4 (default, null): D;
-
-  public function new(first: A, second: B, third: C, fourth: D) {
-    super([first, second, third, fourth]);
-
-    this._1 = first; this._2 = second; this._3 = third; this._4 = fourth;
-  }
-
-  public inline function fst():A { return _1; }
-  public inline function snd():B { return _2; }
-  public inline function thd():C { return _3; }
-  public inline function frt():D { return _4; }
-
-	@:noUsing
-  static public function fromArray<A>(a:Array<A>):Tuple4<A,A,A,A>{
-    return new Tuple4(a[0],a[1],a[2],a[3]);
-  }
-	static public function into<A,B,C,D,E>(t:Tuple4<A,B,C,D>,f : A -> B -> C -> D -> E) : E
-		return f(t.fst(), t.snd(), t.thd(), t.frt());
-
-  inline static public function spread<A,B,C,D,E>(f : A -> B -> C -> D -> E){
-    return 
-      function(t:Tuple4<A,B,C,D>){
-        return into(t,f);
-      }
-  }
-	
-  override private function get_prefix(): String {
-    return "stx.Tuple4";
-  }
-
-  override private function get_length	(): Int {
-    return 4;
-  }
-
-  public function entuple<E>(_5: E): stx.Tuple5<A, B, C, D, E> {
-    return stx.Tuples.tuple5(_1, _2, _3, _4, _5);
-  }
+    inline public function fst() : T1 {
+        return Tuples3.fst(this);
+    }
+    inline public function snd() : T2 {
+        return Tuples3.snd(this);
+    }
+    inline public function thd() : T3 {
+        return Tuples3.thd(this);
+    }
+    @:to inline public static function toString<T1, T2, T3>(tuple : Tuple3Type<T1, T2, T3>) : String {
+        return Tuples3.toString(tuple);
+    }
 }
 
-class Tuple5< A, B, C, D, E> extends AbstractProduct {
-  @:noUsing
-  static public function create<A, B, C, D, E>(_1: A, _2: B, _3: C, _4: D, _5: E): stx.Tuple5<A, B, C, D, E> {
-    return Tups.tuple5(_1, _2, _3, _4, _5);
-  }
-  public var _1 (default, null): A;
-  public var _2 (default, null): B;
-  public var _3 (default, null): C;
-  public var _4 (default, null): D;
-  public var _5 (default, null): E;
-
-  public function new(first: A, second: B, third: C, fourth: D, fifth: E) {
-    super([first, second, third, fourth, fifth]);
-
-    this._1 = first; this._2 = second; this._3 = third; this._4 = fourth; this._5 = fifth;
-  }
-  public inline function fst():A { return _1; }
-  public inline function snd():B { return _2; }
-  public inline function thd():C { return _3; }
-  public inline function frt():D { return _4; }
-  public inline function fth():E { return _5; }
-
-
-  @:noUsing
-  static public function fromArray(a:Array<Dynamic>){
-    return new Tuple5(a[0],a[1],a[2],a[3],a[4]);
-  }
-  inline static public function spread<A,B,C,D,E,F>(f : A -> B -> C -> D -> E -> F){
-    return 
-      function(t:Tuple5<A,B,C,D,E>){
-        return into(t,f);
-      }
-  }
-	static public function into<A,B,C,D,E,F>(t:Tuple5<A,B,C,D,E>,f : A -> B -> C -> D -> E -> F) : F
-		return f(t.fst(), t.snd(), t.thd(), t.frt(), t.fth());
-	
-  override public function get_prefix(): String {
-    return "stx.Tuple5";
-  }
-
-  override private function get_length(): Int {
-    return 5;
-  }
+*/class Tuples3 {
+    public static function fst<T1, T2, T3>(tuple : Tuple3<T1, T2, T3>) : T1 {
+        return switch (tuple){
+            case tuple3(a,_,_)  : a;
+        }
+    }
+    public static function snd<T1, T2, T3>(tuple : Tuple3<T1, T2, T3>) : T2 {
+        return switch (tuple){
+            case tuple3(_,b,_)  : b;
+        }
+    }
+    public static function thd<T1, T2, T3>(tuple : Tuple3<T1, T2, T3>) : T3 {
+        return switch (tuple){
+            case tuple3(_,_,c)  : c;
+        }
+    }
+    public static function equals<T1, T2, T3>(    a : Tuple3<T1, T2, T3>,
+                                                b : Tuple3<T1, T2, T3>
+                                                ) : Bool {
+        return switch (a) {
+            case tuple3(t1_0, t2_0, t3_0):
+                switch (b) {
+                    case tuple3(t1fst, t2fst, t3fst):
+                        Equal.getEqualFor(t1_0)(t1_0,t1fst) && Equal.getEqualFor(t2_0)(t2_0,t2fst) &&
+                            Equal.getEqualFor(t3_0)(t3_0,t3fst);
+                }
+        }
+    }
+    public static function toString<T1, T2, T3>(tuple : Tuple3<T1, T2, T3>) : String {
+        return '${Show.show(fst(tuple))}${Show.show(snd(tuple))}${Show.show(thd(tuple))}';
+    }
+    public static function toArray<T1, T2, T3>(tuple : Tuple3<T1, T2, T3>) : Array<Dynamic> {
+        return switch (tuple){
+            case tuple3(a,b,c)      : [a,b,c];
+        }
+    }
+    static public function entuple<A, B, C, D>(t:stx.Tuple3<A,B,C>,d:D): stx.Tuple4<A, B, C, D> {
+        return tuple4(t.fst(), t.snd(), t.thd(), d);
+    }
+    static public function into<A,B,C,D>(t:Tuple3<A,B,C>,f : A -> B -> C -> D):D{
+        return switch (t){
+            case tuple3(a,b,c)  : f(a,b,c);
+        }
+    }
+    static public function spread<A,B,C,D>(fn:A->B->C->D){
+      return into.bind(_,fn);
+    }
 }
-class T2s{
-  static public inline function first<A, B>(t : Tuple2<A, B>):A return t._1;
-  static public inline function second<A, B>(t : Tuple2<A, B>):B return t._2;
-  
-  static public inline function fst<A, B>(t : Tuple2<A, B>):A return t._1;
-  static public inline function snd<A, B>(t : Tuple2<A, B>):B return t._2;
+enum Tuple4<T1, T2, T3, T4> {
+    tuple4(t1 : T1, t2 : T2, t3 : T3, t4 : T4);
+}
+/*abstract Tuple4<T1, T2, T3, T4>(Tuple4Type<T1, T2, T3, T4>) from Tuple4Type<T1, T2, T3, T4> to Tuple4Type<T1, T2, T3, T4>{
+    inline function new(tuple : Tuple4Type<T1, T2, T3, T4>) {
+        this = tuple;
+    }
+    inline public function fst() : T1 {
+        return Tuples4.fst(this);
+    }
+    inline public function snd() : T2 {
+        return Tuples4.snd(this);
+    }
+    inline public function thd() : T3 {
+        return Tuples4.thd(this);
+    }
+    inline public function frt() : T4 {
+        return Tuples4.frt(this);
+    }
+    @:to inline public static function toString<T1, T2, T3, T4>(tuple : Tuple4Type<T1, T2, T3, T4>) : String {
+        return Tuples4.toString(tuple);
+    }
+}*/
+class Tuples4 {
+    public static function fst<T1, T2, T3, T4>(tuple : Tuple4<T1, T2, T3, T4>) : T1 {
+        return switch (tuple){
+            case tuple4(a,_,_,_)    : a;
+        }
+    }
+    public static function snd<T1, T2, T3, T4>(tuple : Tuple4<T1, T2, T3, T4>) : T2 {
+        return switch (tuple){
+            case tuple4(_,b,_,_)    : b;
+        }
+    }
+    public static function thd<T1, T2, T3, T4>(tuple : Tuple4<T1, T2, T3, T4>) : T3 {
+        return switch (tuple){
+            case tuple4(_,_,c,_)    : c;
+        }
+    }
+    public static function frt<T1, T2, T3, T4>(tuple : Tuple4<T1, T2, T3, T4>) : T4 {
+        return switch (tuple){
+            case tuple4(_,_,_,d)    : d;
+        }
+    }
+    public static function equals<T1, T2, T3, T4>(    a : Tuple4<T1, T2, T3, T4>,
+                                                    b : Tuple4<T1, T2, T3, T4>
+                                                    ) : Bool {
+        return switch (a) {
+            case tuple4(t1_0, t2_0, t3_0, t4_0):
+                switch (b) {
+                    case tuple4(t1fst, t2fst, t3fst, t4fst):
+                        Equal.getEqualFor(t1_0)(t1_0,t1fst) && Equal.getEqualFor(t2_0)(t2_0,t2fst) &&
+                            Equal.getEqualFor(t3_0)(t3_0,t3fst) && Equal.getEqualFor(t4_0)(t4_0,t4fst);
+                }
+        }
+    }
+    public static function toString<T1,T2,T3,T4>(tuple : Tuple4<T1,T2,T3,T4>) : String {
+        return '${Show.show(fst(tuple))}${Show.show(snd(tuple))}${Show.show(thd(tuple))}${Show.show(frt(tuple))}';
+    }
+    public static function toArray<T1,T2,T3,T4>(tuple : Tuple4<T1,T2,T3,T4>) : Array<Dynamic> {
+        return switch (tuple){
+            case tuple4(a,b,c,d)    : [a,b,c,d];
+        }
+    }
+    static public function entuple<A,B,C,D,E>(tp:Tuple4<A,B,C,D>,e:E):stx.Tuple5<A,B,C,D,E>{
+        return stx.Tuples.t5(tp.fst(), tp.snd(), tp.thd(), tp.frt(), e);
+    }
+    static public function into<A,B,C,D,E>(t:Tuple4<A,B,C,D>,f : A -> B -> C -> D -> E) : E {
+        return switch (t){
+            case tuple4(a,b,c,d)    : f(a,b,c,d);
+        }
+    }
+    static public function spread<A,B,C,D,E>(f : A -> B -> C -> D -> E){
+        return into.bind(_,f);
+    }
+}
+enum Tuple5<T1, T2, T3, T4, T5> {
+    tuple5(t1 : T1, t2 : T2, t3 : T3, t4 : T4, t5 : T5);
+}
 
-  //static public inline function bothOrNone<A,B>(t : Tuple2<A,Option<B>):Option<
-  static inline public function into<A,B,C>(t:Tuple2<A,B>, f : A -> B -> C ) : C{
-    return f(t.fst(), t.snd());
-  }
-}
-class T3s{
-  static public inline function fst<A, B, C>(t : Tuple3<A, B, C>) return t._1;
-  static public inline function snd<A, B, C>(t : Tuple3<A, B, C>) return t._2;
-  static public inline function thd<A, B, C>(t : Tuple3<A, B, C>) return t._3;
-  static public inline function first<A, B>(t : Tuple2<A, B>):A return t._1;
-  static public inline function second<A, B>(t : Tuple2<A, B>):B return t._2;
-  static public inline function third<A, B, C>(t : stx.Tuple3<A, B, C>):C return t._3;
-
-  static public inline function tag<A,B,C>(t:Tup3<A,B,C>,a,b,c):Dynamic{
-    var o = {};
-    Reflect.setField(o,a,t.fst());
-    Reflect.setField(o,b,t.snd());
-    Reflect.setField(o,c,t.thd());
-    return o;
-  }
-}
-class T4s{
-  static public inline function fst<A, B, C, D>(t : Tuple4<A, B, C, D>):A return t._1;
-  static public inline function snd<A, B, C, D>(t : Tuple4<A, B, C, D>):B return t._2;
-  static public inline function thd<A, B, C, D>(t : Tuple4<A, B, C, D>):C return t._3;
-  static public inline function frt<A, B, C, D>(t : Tuple4<A, B, C, D>):D return t._4;
-  static public inline function first<A, B, C, D>(t : stx.Tuple4<A, B, C, D>):A   return t._1;
-  static public inline function second<A, B, C, D>(t : stx.Tuple4<A, B, C, D>):B  return t._2;
-  static public inline function third<A, B, C, D>(t : stx.Tuple4<A, B, C, D>):C   return t._3;
-  static public inline function fourth<A, B, C, D>(t : stx.Tuple4<A, B, C, D>):D  return t._4;
-}
-class T5s{
-  static public inline function fst<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>):A return t._1;
-  static public inline function snd<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>):B return t._2;
-  static public inline function thd<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>):C return t._3;
-  static public inline function frt<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>):D return t._4;
-  static public inline function fth<A, B, C, D, E>(t : Tuple5<A, B, C, D, E>):E return t._5;
-  static public inline function first<A, B, C, D, E>(t : stx.Tuple5<A, B, C, D, E>)   return t._1;
-  static public inline function second<A, B, C, D, E>(t : stx.Tuple5<A, B, C, D, E>)  return t._2;
-  static public inline function third<A, B, C, D, E>(t : stx.Tuple5<A, B, C, D, E>)   return t._3;
-  static public inline function fourth<A, B, C, D, E>(t : stx.Tuple5<A, B, C, D, E>)  return t._4;
-  static public inline function fifth<A, B, C, D, E>(t : stx.Tuple5<A, B, C, D, E>)   return t._5;
+/*abstract Tuple5<T1, T2, T3, T4, T5>(Tuple5Type<T1, T2, T3, T4, T5>) from Tuple5Type<T1, T2, T3, T4, T5> to Tuple5Type<T1, T2, T3, T4, T5>{
+    inline function new(tuple : Tuple5Type<T1, T2, T3, T4, T5>) {
+        this = tuple;
+    }
+    inline public function fst() : T1 {
+        return Tuples5.fst(this);
+    }
+    inline public function snd() : T2 {
+        return Tuples5.snd(this);
+    }
+    inline public function thd() : T3 {
+        return Tuples5.thd(this);
+    }
+    inline public function frt() : T4 {
+        return Tuples5.frt(this);
+    }
+    inline public function fth() : T5 {
+        return Tuples5.fth(this);
+    }
+    @:to inline public static function toString<T1, T2, T3, T4, T5>(tuple : Tuple5Type<T1, T2, T3, T4, T5>) : String {
+        return Tuples5.toString(tuple);
+    }
+}*/
+class Tuples5 {
+    public static function fst<T1, T2, T3, T4, T5>(tuple : Tuple5<T1, T2, T3, T4, T5>) : T1 {
+        return switch (tuple){
+            case tuple5(a,_,_,_,_)  : a;
+        }
+    }
+    public static function snd<T1, T2, T3, T4, T5>(tuple : Tuple5<T1, T2, T3, T4, T5>) : T2 {
+        return switch (tuple){
+            case tuple5(_,b,_,_,_)  : b;
+        }
+    }
+    public static function thd<T1, T2, T3, T4, T5>(tuple : Tuple5<T1, T2, T3, T4, T5>) : T3 {
+        return switch (tuple){
+            case tuple5(_,_,c,_,_)  : c;
+        }
+    }
+    public static function frt<T1, T2, T3, T4, T5>(tuple : Tuple5<T1, T2, T3, T4, T5>) : T4 {
+        return switch (tuple){
+            case tuple5(_,_,_,d,_)  : d;
+        }
+    }
+    public static function fth<T1, T2, T3, T4, T5>(tuple : Tuple5<T1, T2, T3, T4, T5>) : T5 {
+        return switch (tuple){
+            case tuple5(_,_,_,_,e)  : e;
+        }
+    }
+    public static function equals<T1, T2, T3, T4, T5>(    a : Tuple5<T1, T2, T3, T4, T5>,
+                                                        b : Tuple5<T1, T2, T3, T4, T5>
+                                                        ) : Bool {
+        return switch (a) {
+            case tuple5(t1_0, t2_0, t3_0, t4_0, t5_0):
+                switch (b) {
+                    case tuple5(t1fst, t2fst, t3fst, t4fst, t5fst):
+                        Equal.getEqualFor(t1_0)(t1_0,t1fst) && Equal.getEqualFor(t2_0)(t2_0,t2fst) &&
+                            Equal.getEqualFor(t3_0)(t3_0,t3fst) && Equal.getEqualFor(t4_0)(t4_0,t4fst) &&
+                                Equal.getEqualFor(t5_0)(t5_0,t5fst);
+                }
+        }
+    }
+    public static function toString<T1, T2, T3, T4, T5>(tuple : Tuple5<T1, T2, T3, T4, T5>) : String {
+        return '${Show.show(fst(tuple))}${Show.show(snd(tuple))}${Show.show(thd(tuple))}${Show.show(frt(tuple))}${Show.show(fth(tuple))}';
+    }
+    public static function toArray<T1, T2, T3, T4, T5>(tuple : Tuple5<T1, T2, T3, T4, T5>) : Array<Dynamic> {
+        return switch (tuple){
+            case tuple5(a,b,c,d,e)  : [a,b,c,d,e];
+        }
+    }
+    static public function into<A,B,C,D,E,F>(t:Tuple5<A,B,C,D,E>,f : A -> B -> C -> D -> E -> F) : F {
+        return switch (t){
+            case tuple5(a,b,c,d,e)  : f(a,b,c,d,e);
+        }
+    }
+    static public function spread<A,B,C,D,E,F>(f : A -> B -> C -> D -> E -> F){
+        return into.bind(_,f);
+    }
 }

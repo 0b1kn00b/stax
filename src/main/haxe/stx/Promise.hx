@@ -1,10 +1,12 @@
 package stx;
 
-import stx.Tuples.*;
+import stx.StaxError;
+import stx.Error.*;
+import stx.Tuples;
 
 using stx.Prelude;
 using stx.Tuples;
-using stx.Future;
+using stx.Eventual;
 using stx.Promise;
 using stx.Options;
 using stx.Eithers;
@@ -12,7 +14,7 @@ using stx.Arrays;
 using stx.Functions;
 using stx.Compose;
 
-abstract Promise<A>(Future<Outcome<A>>) from Future<Outcome<A>> to Future<Outcome<A>>{
+abstract Promise<A>(Eventual<Outcome<A>>) from Eventual<Outcome<A>> to Eventual<Outcome<A>>{
   @:noUsing
   static public function pure<A>(e:Outcome<A>):Promise<A>{
     return new Promise().deliver(e);
@@ -31,7 +33,7 @@ abstract Promise<A>(Future<Outcome<A>>) from Future<Outcome<A>> to Future<Outcom
     return this.deliver(Left(err));
   }
   public function new(?p){
-    this = Options.orDefault(p,Future.create());
+    this = Options.orDefault(p,Eventual.unit());
   }
   public function recover<B>(fn:Error->Outcome<A>):Promise<A>{
     return this.map(
@@ -93,15 +95,14 @@ abstract Promise<A>(Future<Outcome<A>>) from Future<Outcome<A>> to Future<Outcom
       }
     );
   }
-  public function mapL<C>(fn:Error->C):Future<Either<C,A>>{
+  public function mapL<C>(fn:Error->C):Eventual<Either<C,A>>{
     return this.mapL(fn);
   }
   /**
     Zips the right hand value with function `fn`
   */
   public function zipWith<A,B,C>(f1:Promise<B>,fn : A -> B -> C):Promise<C>{
-    return 
-      this.zipWith(f1,
+    return this.zipWith(f1,
         function(a,b){
           return 
             switch (a) {
@@ -118,7 +119,7 @@ abstract Promise<A>(Future<Outcome<A>>) from Future<Outcome<A>> to Future<Outcom
   /**
     Zips the right hand value.
   */
-  public function zip<A,B>(f1:Promise<B>):Promise<Tup2<A,B>>{
+  public function zip<A,B>(f1:Promise<B>):Promise<Tuple2<A,B>>{
     return zipWith(f1,tuple2);
   }
   /**
@@ -142,17 +143,7 @@ abstract Promise<A>(Future<Outcome<A>>) from Future<Outcome<A>> to Future<Outcom
   public function foreach(f:Outcome<A>->Void):Promise<A>{
     return this.foreach(f);
   }
-  public function onSuccess(f:A->Void):Promise<A>{
-   return this.foreach(
-      Eithers.right.then( Options.foreach.p2( f ) ).effectOf()
-    );
-  }
-  public function onFailure(f:Error->Void):Promise<A>{
-    return this.foreach(
-      Eithers.left.then( Options.foreach.p2( f ) ).effectOf()
-    );
-  }
-  public function future():Future<Outcome<A>>{
+  public function asEventual():Eventual<Outcome<A>>{
     return this;
   }
   public function isDelivered(){
@@ -168,7 +159,7 @@ class Promises{
   }
     /**
     Use this with a flatmap fold to wait for parallel futures.
-    vals.map( function_returning_future ).foldl( Future.pure(Right([])), Promises.waitfold )
+    vals.map( function_returning_future ).foldl( Eventual.pure(Right([])), Promises.waitfold )
     This op stops when there is a single failure
   */
   static public function waitfold<A>(init:Promise<Array<A>>,ft:Promise<A>):Promise<Array<A>>{
@@ -193,10 +184,10 @@ class Promises{
       , waitfold
     );
   }
-  static public function bindFold<A,B>(iter:Iterable<A>,start:Promise<B>,fm:B->A->Promise<B>):Promise<B>{
-    return stx.Futures.bindFold(
+  static public function bindFold<A,B>(iter:Iterable<A>,start:B,fm:B->A->Promise<B>):Promise<B>{
+    return stx.Eventuals.bindFold(
       iter,
-      start,
+      Right(start),
       function(memo:Outcome<B>,next:A){
         //trace('$memo $next');
         return 
@@ -207,7 +198,7 @@ class Promises{
       }
     );
   }
-  static public function unzip<A,B,C>(tp:Tup2<Promise<A>,Promise<B>>):Promise<Tup2<A,B>>{
+  static public function unzip<A,B,C>(tp:Tuple2<Promise<A>,Promise<B>>):Promise<Tuple2<A,B>>{
     return 
       tp.fst().flatMap(
         function(b:A){
@@ -225,6 +216,9 @@ class Promises{
         }
     );
   }
+  static public function asPromise<T>(evt:Eventual<Outcome<T>>):Promise<T>{
+    return evt;
+  }
 }
 class Promises1{
   /**
@@ -232,11 +226,11 @@ class Promises1{
     where no Error is found.
   */
   static public function promiseOf<A>(f:(String->Void)->Void,success:Void->A):Promise<A>{
-    var fut = new Future();
+    var fut = Eventual.unit();
     f(
-      function(err){
-        if(err!=null){
-          fut.deliver(Left(Error.create(err)));
+      function(er){
+        if(er!=null){
+          fut.deliver(Left(err(NativeError(er))));
         }else{
           fut.deliver(Right(success()));
         }
@@ -255,12 +249,12 @@ class Promises2{
   /**
     Creates a Promise from a callback of function (err,res).
   */  
-  static public function promiseOf<A>(f:(String->A->Void)->Void):Promise<A>{
+  static public function promiseOf<A>(f:(Dynamic->A->Void)->Void):Promise<A>{
     var ft = new Promise();
     f( 
       function(a,b){
         if(a!=null){
-          ft.deliver(Left(Error.create(a)));
+          ft.deliver(Left(err(NativeError(a))));
         }else{
           ft.deliver(Right(b));
         }
@@ -275,7 +269,7 @@ class Promises3{
     f(
       function(a,b,c){
         if(a!=null){
-          ft.deliver(Left(Error.create(a)));
+          ft.deliver(Left(err(NativeError(a))));
         }else{
           ft.deliver(Right(tuple2(b,c)));
         }
@@ -286,24 +280,16 @@ class Promises3{
 }
 class Promises4{
   static public function promiseOf<A,B,C>(f:(String->A->B->C->Void)->Void):Promise<Tuple3<A,B,C>>{
-    var ft = new Future();
+    var ft = new Eventual();
     f(
       function(e,a,b,c){
         if(e!=null){
-          ft.deliver(Left(Error.create(e)));
+          ft.deliver(Left(err(NativeError(e))));
         }else{
           ft.deliver(Right(tuple3(a,b,c)));
         }
       }
     );
     return ft;
-  }
-}
-class PromisesError{
-  static public function breach<A>(v:String,?pos):Promise<A>{
-    return Promise.pure(Left(Error.create(v,pos)));
-  } 
-  static public function no<A>(p:Promise<A>,str:String,?pos){
-    return p.no(Error.create(str,pos));
   }
 }

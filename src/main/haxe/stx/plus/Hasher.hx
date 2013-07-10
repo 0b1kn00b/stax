@@ -1,20 +1,22 @@
 package stx.plus;
 
-using stx.Prelude;
-
 
 import Type;
-using stx.Strings;
-
 import stx.plus.Show;
-using stx.Tuples;										using stx.Tuples;
+
+using stx.Prelude;
+using stx.Strings;
+using stx.Tuples;
 using stx.plus.Hasher;
 
 typedef HashFunction<T>         = Function1<T, Int>; 
 
 class Hasher {
-	static function _createHashImpl<T>(impl : HashFunction<Dynamic>) return function(v : T) if(null == v) return 0 else return impl(v);
-
+	static function __hash__<T>(impl : HashFunction<Dynamic>) {
+    return function(v : T) {
+      return null == v ? 0 : impl(v);
+    }
+  }
   /** 
     Returns a HashFunction (T -> Int). It works for any type. For Custom Classes you must provide a hashCode()
     method, otherwise the full class name is returned.
@@ -24,61 +26,41 @@ class Hasher {
   }
   public static function getHashForType<T>(v: ValueType) : HashFunction<T> {
     return switch(v) {
-      case TBool:
-        _createHashImpl(BoolHasher.hashCode);
-      case TInt:
-        _createHashImpl(IntHasher.hashCode);
-      case TFloat:
-        _createHashImpl(FloatHasher.hashCode);
-      case TUnknown:
-      _createHashImpl(function(v : T) return Prelude.error()("can't retrieve hascode for TUnknown: " + v));
-      case TObject:
-        _createHashImpl(function(v){
+      case TBool            : __hash__(BoolHasher.hashCode);
+      case TInt             : __hash__(IntHasher.hashCode);
+      case TFloat           : __hash__(FloatHasher.hashCode);
+      case TUnknown         : __hash__(function(v: T) return Prelude.error()("can't retrieve hashcode for TUnknown: " + v));
+      case TObject          :
+        __hash__(function(v){
         var s = Show.getShowFor(v)(v);
         return getHashFor(s)(s);
         });
-      case TClass(c):
-        switch(Type.getClassName(c)) {
-        case "String":
-          _createHashImpl(StringHasher.hashCode);
-        case "Date":
-          _createHashImpl(DateHasher.hashCode);
-        case "Array":
-          _createHashImpl(ArrayHasher.hashCode);
-        case "stx.Tuple2" , "stx.Tuple3" , "stx.Tuple4" , "stx.Tuple5" :
-          _createHashImpl(ProductHasher.hashCode);
-        default:
-          var fields = Type.getInstanceFields(c);
-          if(Meta._hasMetaDataClass(c)) {       
-            var fields = Meta._fieldsWithMeta(c, "equalHash");
-            _createHashImpl(function(v : T) {
-              var className = Type.getClassName(c);
-              var values    = fields.map(function(f){return Reflect.field(v, f);}).filter(function(v) return !Reflect.isFunction(v));
-              return values.foldl(9901 * StringHasher.hashCode(className), function(v, e){return v + (333667 * (Hasher.getHashFor(e)(e) + 197192));});
-            });
-          } else if(Type.getInstanceFields(c).remove("hashCode")) {
-            _createHashImpl(function(v) return Reflect.callMethod(v, Reflect.field(v, "hashCode"), []));
-          } else {
+      case TClass(String)   : __hash__(StringHasher.hashCode);
+      case TClass(Date)     : __hash__(DateHasher.hashCode);
+      case TClass(Array)    : __hash__(ArrayHasher.hashCode);
+      case TClass(c)        :
+          if(Type.getInstanceFields(c).remove("hashCode")) {
+            __hash__(function(v) return Reflect.callMethod(v, Reflect.field(v, "hashCode"), []));
+          }else{
             Prelude.error()("class does not have a hashCode method");
           }
-        }
-      case TEnum(_):
-        _createHashImpl(function(v : T) { 
-        var hash = Type.enumConstructor(cast v).hashCode() * 6151;
-        for(i in Type.enumParameters(cast v))
-          hash += Hasher.getHashFor(i)(i) * 6151;
-        return hash;
-      });
-      case TFunction:
-        _createHashImpl(function(v : T) return Prelude.error()("function can't provide a hash code"));
-      case TNull:
-        nil;
-      /*_ :
-      function(v : T) return -1;*/
+      case TEnum(Tuple2)    : __hash__(ProductHasher.hashCode);
+      case TEnum(Tuple3)    : __hash__(ProductHasher.hashCode);
+      case TEnum(Tuple4)    : __hash__(ProductHasher.hashCode);
+      case TEnum(Tuple5)    : __hash__(ProductHasher.hashCode);
+      case TEnum(_)         :
+        __hash__(
+          function(v : T) { 
+            var hash = Type.enumConstructor(cast v).hashCode() * 6151;
+            for(i in Type.enumParameters(cast v))
+              hash += Hasher.getHashFor(i)(i) * 6151;
+            return hash;
+        });
+      case TFunction        : __hash__(function(v : T) return Prelude.error()("function can't provide a hash code"));
+      case TNull            : nil;
     }
 	}
-  @:noUsing
-  static public function nil<A>(v:A):Int { return 0;}
+  @:noUsing static public function nil<A>(v:A):Int { return 0;}
 }
 class ArrayHasher {
 	public static function hashCode<T>(v: Array<T>) {
@@ -90,7 +72,6 @@ class ArrayHasher {
     for (i in 0...v.length) {
       h += hash(v[i]) * 12289;
     }
-    
     return h;
   }  
 }

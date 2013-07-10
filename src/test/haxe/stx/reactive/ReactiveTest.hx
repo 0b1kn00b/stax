@@ -2,7 +2,7 @@ package stx.reactive;
 
 using stx.Prelude;
 
-import stx.Tuples.*;
+import stx.Tuples;
 using stx.Tuples;
 import stx.Prelude;
 import stx.test.TestCase;

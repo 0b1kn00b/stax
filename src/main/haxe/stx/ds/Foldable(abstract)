@@ -1,0 +1,26 @@
+package stx.ds;
+
+import stx.Prelude;
+import stx.Functions;
+
+using stx.Options;
+
+typedef FoldableType<T> = {
+    function foldl(value : T, func : Function2<T, T, T>) : Option<T>;
+    function foldRight(value : T, func : Function2<T, T, T>) : Option<T>;
+}
+
+abstract Foldable<T>(FoldableType<T>) from FoldableType<T> to FoldableType<T> {
+
+    inline function new(foldable : FoldableType<T>) {
+        this = foldable;
+    }
+
+    inline public function foldl(value : T, func : Function2<T, T, T>) : Option<T> {
+        return this.foldl(value, func);
+    }
+
+    inline public function foldRight(value : T, func : Function2<T, T, T>) : Option<T> {
+        return this.foldRight(value, func);
+    }
+}

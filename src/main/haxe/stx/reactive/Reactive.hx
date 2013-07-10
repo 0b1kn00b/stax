@@ -18,7 +18,7 @@ package stx.reactive;
 import stx.Options;
 import stx.Prelude;
 import stx.plus.Equal;
-import stx.Tuples.*;
+import stx.Tuples;
 import stx.reactive.Streams;
 
 using stx.Tuples;
@@ -491,7 +491,8 @@ class Stream<T> {
             this,
             init,
             function(pulse: Pulse<Dynamic>): Propagation<T> {
-                return propagate(cast pulse);
+                var p : Pulse<T> = cast pulse;
+                return propagate(p);
             }
         );
     }
@@ -656,8 +657,9 @@ class Stream<T> {
         
         return Streams.create(
             function(pulse: Pulse<Dynamic>): Propagation<T> {
-                return if (count > 0) { 
-                    --count; propagate(cast pulse); 
+                return if (count > 0) {
+                    var p : Pulse<T> = cast pulse; 
+                    --count; propagate(p); 
                 }
                 else {
                     
@@ -685,7 +687,8 @@ class Stream<T> {
             function(pulse: Pulse<Dynamic>): Propagation<T> {
                 return if (stillChecking) {
                     if (filter(pulse.value)) {
-                        propagate(cast  pulse);
+                        var p : Pulse<T> = cast pulse;
+                        propagate(p);
                     }
                     else {
                         stillChecking = false;
@@ -877,7 +880,8 @@ class Stream<T> {
             function(pulse: Pulse<Dynamic>): Propagation<T> {
                 return if (checking) {
                     if (pred(pulse.value)) {
-                        propagate(cast pulse);
+                        var p : Pulse<T> = cast pulse;
+                        propagate(p);
                     }
                     else {
                         checking = false;
@@ -1146,7 +1150,7 @@ class Stream<T> {
         // XXX Change so that we won't propagate more than one value per time step???
         var queue = new PriorityQueue<{stream: Stream<Dynamic>, pulse: Pulse<Dynamic>}>();
         
-        var self = cast(this, Stream<Dynamic>);
+        var self : Stream<Dynamic> = this;
 
         queue.insert({k: _rank, v: {stream: self, pulse: pulse}});
         
@@ -1164,12 +1168,12 @@ class Stream<T> {
                     
                     for (recipient in stream._sendsTo) {
                         weaklyHeld = weaklyHeld && recipient.weaklyHeld;
-                    
+                        var st : Stream<Dynamic> = cast(recipient);
                         queue.insert(
                             {
                                 k: recipient._rank,
                                 v: {
-                                    stream: cast(recipient, Stream<Dynamic>),
+                                    stream: st,
                                     pulse:  nextPulse
                                 }
                             }
@@ -1216,7 +1220,7 @@ class Signal<T> {
     public function new(stream: Stream<Dynamic>, ?init: T,? updater: Pulse<Dynamic> -> Propagation<T>) {
         this._last          = init;        
         this._underlyingRaw = stream;
-        this._updater       = Opt.orDefault( updater, function(x) return propagate(x) );
+        this._updater       = Options.orDefault( updater, function(x) return propagate(x) );
         
         var self = this;
         

@@ -2,7 +2,7 @@ package stx;
 
 import haxe.PosInfos;
 
-import stx.Tuples.*;
+import stx.Tuples;
 import stx.Prelude;
 
 import stx.plus.Equal;
@@ -40,7 +40,7 @@ class Assert{
 		return optionOf(equalsWith.p1(val).p2(eq),msg).then(Options.map.p2(error.p1(pos)));
 	}
 	static public function areEqualToWith<A>(eq, ?pos):(Tuple2<A,A> -> Option<Error> ){
-		return optionOf(T2s.into.p2(equalsWith.p3(eq))).then(Options.map.p2(error.p1(pos)));
+		return optionOf(Tuples2.into.p2(equalsWith.p3(eq))).then(Options.map.p2(error.p1(pos)));
 	}
 	static public function areEqualTo<A>(?pos){
 		return areEqualToWith(null,pos);

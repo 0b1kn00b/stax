@@ -1,13 +1,13 @@
 package stx;
 
-import stx.Options;
 import stx.Future;
+import stx.Options;
+import stx.Eventual;
 import stx.Prelude;
 using stx.Tuples;
 
 typedef ContinuationType<R,A>   = (A -> R) -> R;
 typedef Cont<R,A>               = Continuation<R,A>;
-typedef Callback<A>             = Cont<Void,A>;
 
 abstract Continuation<R,A>(ContinuationType<R,A>) from ContinuationType<R,A> to ContinuationType<R,A>{
   static public function cont<R,A>(def:ContinuationType<R,A>):Cont<R,A>{
@@ -15,8 +15,8 @@ abstract Continuation<R,A>(ContinuationType<R,A>) from ContinuationType<R,A> to 
   }
   @:noUsing static public function pure<R,A>(r:R):Continuation<R,A>{
     return function(x:A->R){
-        return r;
-      }
+      return r;
+    }
   }
   @:noUsing static public function unit<R,A>():Continuation<R,A>{
     return function(x:A->R):R{
@@ -26,7 +26,7 @@ abstract Continuation<R,A>(ContinuationType<R,A>) from ContinuationType<R,A> to 
   public function new(v){
     this = v;
   }
-  public function apply(?fn:A->R):R{
+  public function apply(fn:A->R):R{
     fn = Options.orDefault(fn,function(x){ trace('continuation result dropped'); return null; });
     return (this)(fn);
   }
@@ -38,6 +38,14 @@ abstract Continuation<R,A>(ContinuationType<R,A>) from ContinuationType<R,A> to 
         }
       );
     }
+  }
+  public function foreach(k:A->Void):Continuation<R,A>{
+    return map(
+      function(x){
+        k(x);
+        return x;
+      }
+    );
   }
   public function flatMap<B>(k:A -> Continuation<R,B>):Continuation<R,B>{
     return new Continuation(
@@ -64,11 +72,14 @@ abstract Continuation<R,A>(ContinuationType<R,A>) from ContinuationType<R,A> to 
   public function asFunction():ContinuationType<R,A>{
     return this;
   }
-  static public function future<A>(cont:Callback<A>):Future<A>{
-    var ft = Future.create();
-    cont.apply(
-      function(x) ft.deliver(x)
+  static public inline function toEventual<A>(cont:ContinuationType<Void,A>):Eventual<A>{
+    var ft = Eventual.create();
+    cont(
+      ft.deliver
     );
     return ft;
+  }
+  static public inline function toFuture<A>(cont:ContinuationType<Void,A>):Future<A>{
+    return Future.ofArrow(cont);
   }
 }

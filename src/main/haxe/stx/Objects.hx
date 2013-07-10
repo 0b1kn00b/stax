@@ -1,6 +1,6 @@
 package stx;
 
-import stx.Tuples.*;
+import stx.Tuples;
 
 using stx.Tuples;
 using stx.Functions;
@@ -177,14 +177,14 @@ class Objects {
     return 
       extractAll(d)
         .filter(
-          Predicates.isOneOf(fieldnames).first().fstOf()
+          Predicates.isOneOf(fieldnames).first().fst()
         );
   }
-  static public function extractAllAny(d: Object): Array < Tuple2 < String, Dynamic >> {
+  static public function extractAllAny(d:Object):Array<Tuple2<String,Dynamic>> {
     return extractAll(d);
   }
   
-  static public function extractValuesAny(d: Object, names: Iterable<String>, def: Dynamic): Array<Dynamic> {
+  static public function extractValuesAny(d: Object, names:Iterable<String>, def:Dynamic):Array<Dynamic> {
     return extractValues(d, names, def);
   }
   static public function extractValues<T>(d: Dynamic<T>, names: Iterable<String>, def: T): Array<T> {
@@ -213,7 +213,7 @@ class Objects {
   }
   static public function hasFields(d:Object,fields:Array<String>):Bool{
     var vals   = extractAllAny(d);
-    var names  = vals.map( T2s.fst );
+    var names  = vals.map( Tuples2.fst );
 
     return 
       fields.forAll(

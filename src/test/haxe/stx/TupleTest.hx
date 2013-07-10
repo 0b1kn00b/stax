@@ -4,7 +4,6 @@ package stx;
  * ...
  * @author 0b1kn00b
  */
-import stx.Tuples.*;
 using stx.Tuples;
 import stx.test.TestCase;
 import stx.test.Assert;		using stx.test.Assert;
@@ -26,14 +25,17 @@ class TupleTest extends TestCase{
 	 */
 	public function testArity() {
 		var a = tuple5( null , null , null , null , null );
-		Assert.equals( 5 , a.length );
+		var b : Product = a;
+		Assert.equals( 5 , b.length );
 	}
 	public function testElement() {
 		var a = tuple2( 1 , 2 );
-		2.equals( a.element(1) );
+		var b : Product = a;
+		2.equals( b.element(1) );
 	}
 	public function testElements() {
 		var a = tuple2( 1, 2);
-		[1, 2].equals(cast a.elements());
+		var b : Product = a;
+		[1, 2].equals(cast b.elements());
 	}
 }

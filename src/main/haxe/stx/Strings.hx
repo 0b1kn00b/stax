@@ -1,6 +1,7 @@
 package stx;
 
-import stx.Errors.*;
+import stx.Error.*;
+import stx.StaxError;
 import stx.Prelude;
 
 using stx.Maths;
@@ -9,6 +10,9 @@ using stx.Options;
 using StringTools;
 
 class Strings {
+  @:noUsing static public function unit():String{
+    return '';
+  }
   static var SepAlphaPattern        = ~/(-|_)([a-z])/g;
   static var AlphaUpperAlphaPattern = ~/-([a-z])([A-Z])/g;
 
@@ -208,10 +212,24 @@ class Strings {
             return if (index < value.length) {
                 value.substr(index++, 1);
             } else {
-                Prelude.err()(out_of_bounds_error());
+                Prelude.err()(err(OutOfBoundsError()));
             }
         }
     };
+  }
+  public static function camelCaseToDashes(value : String) : String {
+    var regexp = new EReg("([a-zA-Z])(?=[A-Z])", "g");
+    return regexp.replace(value, "$1-");
+  }
+
+  public static function camelCaseToLowerCase(value : String, ?separator : String = "_") : String {
+    var reg = new EReg("([^\\A])([A-Z])", "g");
+    return reg.replace(value, "$1${separator}$2").toLowerCase();
+  }
+
+  public static function camelCaseToUpperCase(value : String, ?separator : String = "_") : String {
+    var reg = new EReg("([^\\A])([A-Z])", "g");
+    return reg.replace(value, "$1${separator}$2").toUpperCase();
   }
 }
 class ERegs{

@@ -1,17 +1,15 @@
 package stx;
 
-/**
- * ...
- * @author 0b1kn00b
- */
-import stx.test.TestCase;
-import stx.test.Assert;						using stx.test.Assert;
-import stx.Error;						using stx.Error;
+using stx.Error;
+
+import stx.Muster;
+import stx.Muster.Test.*;
+import stx.Log.*;
 
 class ErrorTest extends TestCase{
-
-	public function new() {
-		super();
-	}
-	
+  public function testError(u:UnitArrow):UnitArrow{
+    return u;
+  }
 }
+
+    

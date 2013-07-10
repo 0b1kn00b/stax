@@ -16,7 +16,7 @@ class Enums {
 	  @param	index
 	  @return
 	 */
-	public static inline function ofIndex( e : Enum<Dynamic>, index : Int):String {
+	public static inline function byIndex( e : Enum<Dynamic>, index : Int):String {
 		return constructors(e)[index];
 	}
 	/**
@@ -24,7 +24,7 @@ class Enums {
 	  @param	e
 	  @return
 	 */
-	public static function indexOf( e : EnumValue ):Int {
+	public static function toIndex( e : EnumValue ):Int {
 		return Type.enumIndex(e);
 	}
 	/**
@@ -32,7 +32,7 @@ class Enums {
 	  @param	e
 	  @return
 	 */
-	public static function name(value:EnumValue) : String {
+	public static function value(value:EnumValue) : String {
 		return Type.enumConstructor(value);
 	}
 	/**
@@ -54,7 +54,7 @@ class Enums {
 	  @param	o
 	  @return
 	 */
-	public static function ofValue( value : EnumValue ) : Enum<Dynamic> {
+	public static function toEnum( value : EnumValue ) : Enum<Dynamic> {
 		return Type.getEnum(value);
 	}
 	/**
@@ -70,7 +70,7 @@ class Enums {
 	  @param	e
 	  @return
 	 */
-	public static function nameOf( e : Enum<Dynamic> ) : String {
+	public static function key( e : Enum<Dynamic> ) : String {
 		return Type.getEnumName(e);
 	}
 	/**

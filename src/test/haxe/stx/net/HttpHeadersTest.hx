@@ -33,7 +33,7 @@ class HttpHeadersTest extends TestCase {
   
   public function testThatValidHeaderCanBeParsed() {
     var header  = " Mime-type : text/html ";
-    var headerP = "Mime-type".entuple("text/html");
+    var headerP = tuple2("Mime-type","text/html");
     
     Assert.equals(headerP, header.toHttpHeader().get());
   }

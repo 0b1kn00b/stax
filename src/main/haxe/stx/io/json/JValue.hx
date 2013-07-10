@@ -16,7 +16,7 @@
 */
 package stx.io.json;
 
-import stx.Tuples.*;
+import stx.Tuples;
 using stx.Prelude;
 using stx.Tuples;
 

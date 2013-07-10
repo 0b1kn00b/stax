@@ -21,7 +21,7 @@ import stx.ifs.Apply;
 
 typedef PartialFunction<A, Z> = PartialFunction1<A, Z>
 
-interface PartialFunction1<A, Z> extends IApply<A,Z>{
+interface PartialFunction1<A, Z> extends Apply<A,Z>{
   public function isDefinedAt(a: A): Bool;
   
   public function orElse(that: PartialFunction1<A, Z>): PartialFunction1<A, Z>;

@@ -7,8 +7,7 @@ using funk.types.Option;
 using funk.types.Any;
 using funk.types.extensions.Bools;
 
-@:final
-class Inject {
+@:final class Inject {
 
     @:noUsing
     public static function as<T>(type : Class<T>) : Option<T> {
@@ -44,5 +43,10 @@ class Inject {
             case Some(mod): mod.getInstance(type);
             case _: None;
         }
+    }
+    @:noUsing
+    public static function unsafe<T>(type:Class<T>,?module:IModule) : T {
+        var t = Type.getType(module);
+        return ((module == null ? as(type) : withIn(type,t)).getOrElse(function() return null));
     }
 }

@@ -10,7 +10,7 @@ import stx.io.json.JValue;
 import stx.io.json.Json;
 import stx.ds.Map;
 
-import stx.Future;
+import stx.Eventual;
 
 import stx.Options;
 using stx.Options;
@@ -52,9 +52,9 @@ class HttpJValueJsonp implements HttpJValue {
     this.callbackParameterName = callbackParameterName;
   }
   
-  public function get(url_: Url, ?params_: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<JValue>> {
+  public function get(url_: Url, ?params_: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<JValue>> {
     // Ignore headers or throw exception???
-    var future: Future<HttpResponse<JValue>> = new Future();
+    var future: Eventual<HttpResponse<JValue>> = new Eventual();
     
     // Request id must be globally unique even if this source is included twice
     // (hence the need for randomness):
@@ -111,19 +111,19 @@ class HttpJValueJsonp implements HttpJValue {
     return future;
   }
   
-  public function post(url: Url, data: JValue, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<JValue>> {
+  public function post(url: Url, data: JValue, ?params: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<JValue>> {
     return Prelude.error()('JSONP does not support POST');
   }
   
-  public function put(url: Url, data: JValue, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<JValue>> {
+  public function put(url: Url, data: JValue, ?params: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<JValue>> {
     return Prelude.error()('JSONP does not support PUT');
   }
   
-  public function delete(url: Url, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<JValue>> {
+  public function delete(url: Url, ?params: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<JValue>> {
     return Prelude.error()('JSONP does not support DELETE');
   }
   
-  public function custom(request: String, url: Url, data: JValue, ?params: QueryParameters, ?headers: Map<String, String>): Future<HttpResponse<JValue>> {
+  public function custom(request: String, url: Url, data: JValue, ?params: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<JValue>> {
     return Prelude.error()('JSONP does not support custom request: ' + request);
   }
 }

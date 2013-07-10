@@ -19,7 +19,7 @@ import stx.Prelude;
 import stx.test.Assert;
 import stx.test.MustMatchers;
 import haxe.PosInfos;
-import stx.Future;
+import stx.Eventual;
 
 class TestCase {
   public function new() {
@@ -114,15 +114,15 @@ class TestCase {
     Assert.stringSequence(sequence, value, msg, pos);
   }
   
-  public function assertDelivered<T>(future: Future<T>, assertions: T -> Void, ?timeout : Int) {
+  public function assertDelivered<T>(future: Eventual<T>, assertions: T -> Void, ?timeout : Int) {
     return Assert.delivered(future, assertions, timeout);
   }
   
-  public function assertCanceled<T>(future: Future<T>, assertions: Void -> Void, ?timeout : Int) {
+  public function assertCanceled<T>(future: Eventual<T>, assertions: Void -> Void, ?timeout : Int) {
     return Assert.canceled(future, assertions, timeout);
   }
   
-  public function assertNotDelivered<T>(future: Future<T>, ?timeout : Int, ?pos : PosInfos) {
+  public function assertNotDelivered<T>(future: Eventual<T>, ?timeout : Int, ?pos : PosInfos) {
     return Assert.notDelivered(future, timeout, pos);
   }
   

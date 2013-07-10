@@ -1,7 +1,7 @@
 package stx;
 
 import stx.Prelude;
-import stx.Tuples.*;
+import stx.Tuples;
 
 using stx.Tuples;
 
@@ -10,17 +10,17 @@ abstract Method<A,B>(A->B) from A->B to A->B{
 	public function new(v:A->B){
 		this = v;
 	}
-	@:from static public inline function fromFunction2<A,B,C>(f:A->B->C):Method<Tup2<A,B>,C>{
-		return T2.spread(f);
+	@:from static public inline function fromFunction2<A,B,C>(f:A->B->C):Method<Tuple2<A,B>,C>{
+		return Tuples2.spread(f);
 	}
-	@:from static public inline function fromFunction3<A,B,C,D>(f:A->B->C->D):Method<Tup3<A,B,C>,D>{
-		return T3.spread(f);	
+	@:from static public inline function fromFunction3<A,B,C,D>(f:A->B->C->D):Method<Tuple3<A,B,C>,D>{
+		return Tuples3.spread(f);	
 	}
-	@:from static public inline function fromFunction4<A,B,C,D,E>(f:A->B->C->D->E):Method<Tup4<A,B,C,D>,E>{
-		return T4.spread(f);		
+	@:from static public inline function fromFunction4<A,B,C,D,E>(f:A->B->C->D->E):Method<Tuple4<A,B,C,D>,E>{
+		return Tuples4.spread(f);		
 	}
-	@:from static public inline function fromFunction5<A,B,C,D,E,F>(f:A->B->C->D->E->F):Method<Tup5<A,B,C,D,E>,F>{
-		return T5.spread(f);			
+	@:from static public inline function fromFunction5<A,B,C,D,E,F>(f:A->B->C->D->E->F):Method<Tuple5<A,B,C,D,E>,F>{
+		return Tuples5.spread(f);			
 	}
 	@:noUsing static public inline function unit<A>():Method<A,A>{
 		return cast function(x) return x;
@@ -28,17 +28,28 @@ abstract Method<A,B>(A->B) from A->B to A->B{
 	public function apply(v:A):B{
 		return (this)(v);
 	}
+  public function call(args:Array<Dynamic>){
+    var arg : Dynamic = switch (args.length) {
+      case 5  : tuple5(args[0],args[1],args[2],args[3],args[4]);
+      case 4  : tuple4(args[0],args[1],args[2],args[3]);
+      case 3  : tuple3(args[0],args[1],args[2]);
+      case 2  : tuple2(args[0],args[1]);
+      case 1  : args[0];
+      default : throw ('args length unhandled: is ${args.length} ');
+    }
+    return apply(arg);
+  }
 	public function then<C>(f:Method<B,C>):Method<A,C>{
 		return function(a:A):C{
 			return f.apply(apply(this,a));
 		}
 	}
-	public function first<C>():Method<Tup2<A,C>,Tup2<B,C>>{
+	public function first<C>():Method<Tuple2<A,C>,Tuple2<B,C>>{
 		return function(t:Tuple2<A,C>){
       return tuple2(apply(this,t.fst()),t.snd());
     }
 	}
-	public function second<C>():Method<Tup2<C,A>,Tup2<C,B>>{
+	public function second<C>():Method<Tuple2<C,A>,Tuple2<C,B>>{
 		return function(t:Tuple2<C,A>){
       return tuple2(t.fst(),apply(this,t.snd()));
     }
@@ -59,7 +70,7 @@ abstract Method<A,B>(A->B) from A->B to A->B{
       }
   	}
 	}
-	public function bind<C>(bindr:Tuple2<A,B>->C):Method<A,C> {
+	public function tie<C>(bindr:Tuple2<A,B>->C):Method<A,C> {
 		return unit().split(this).then( bindr );
 	}
 	public function split<C>(_split:A->C):Method<A,Tuple2<B,C>>{ 

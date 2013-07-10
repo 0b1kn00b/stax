@@ -1,7 +1,11 @@
 package stx;
 
-using stx.Predicates;
+import stx.StaxError;
 import stx.Prelude;
+import stx.Error.*;
+
+using stx.Predicates;
+
 using stx.Tuples;
 import stx.Options;
 
@@ -9,17 +13,40 @@ using stx.Options;
 using stx.Objects;
 using stx.Arrays;
 using stx.Prelude;
+using stx.Eithers;
 using stx.Compose;
 using stx.Functions;
 
-typedef Field = Tup2<Dynamic,String>;
-
 class Reflects{
-	static public function setFieldTp<A,B>(v:A,t:Tuple2<String,B>):A{
+	static public function callFunction<A>(v:A,key:String,?args:Array<Dynamic>):Dynamic{
+		args = args == null ? [] : args;
+		return Reflect.callMethod(v,Reflect.field(v,key),args);
+	}
+	static public function callMethod<A>(v:A,func:Dynamic,?args:Array<Dynamic>):Dynamic{
+		args = args == null ? [] : args;
+		return Reflect.callMethod(v,func,args);
+	}
+	static public function callSafe<A>(v:A,key:String,?args:Array<Dynamic>):Option<Dynamic>{
+    return getFieldOption(v,key).map(callMethod.bind(v,_,args));
+  }
+  static public function callSecure<A>(v:A,key:String,?args:Array<Dynamic>):Outcome<Dynamic>{
+    return getFieldOption(v,key).orEitherC(err(OutOfBoundsError())).flatMapR(
+      function(x){
+        return try{
+          Right(callMethod(v,x,args));
+        }catch(e:Error){
+          Left(e);
+        }catch(e:Dynamic){
+          Left(err(e));
+        }
+      }
+    );
+  }
+	static public function setFieldTuple<A,B>(v:A,t:Tuple2<String,B>):A{
 		Reflect.setField(v,t.fst(),t.snd());
 		return v;
 	}
-	static public function getFieldO<A,B>(v:A,key:String):Option<B>{
+	static public function getFieldOption<A,B>(v:A,key:String):Option<B>{
 		return Options.create( Reflect.field(v,key) );
 	}
 	static public function getField<A,B>(v:A,key:String):Null<B>{
@@ -29,27 +56,21 @@ class Reflects{
 		Reflect.setField(o,key,v);
 		return o;
 	}
-	static public function getterO<A,B>(fieldname:String):A->Option<B>{
+	static public function getterOption<A,B>(fieldname:String):A->Option<B>{
 		return getField.p2(fieldname);
 	}
 	static public function getter<A,B>(fieldname:String):A->B{
 		return Reflect.field.p2(fieldname);
 	}
-	static public function extractObjectFromAny<A>(v:A):Object{
-		return switch(Type.typeof(v)){
-			case TClass(v) 	: Types.extractObjectFromType(v);
-			default 				:	Objects.extractAll(cast v);
-		}
-	}
-	static public function extractFieldsFromAny<A>(v:A):Array<Tup2<String,Dynamic>>{
-		return Types.extractAllAnyFromType(v)
+	static public function extractFieldsFromAny<A>(v:A):Array<Tuple2<String,Dynamic>>{
+		return Types.extractAllAnyFromTypeOption(v)
 			.getOrElse(
 				Objects.extractAllAny.lazy(cast v)
 			);	
 	}
-	static public function extractProperties<A>(v:A):Array<Tup2<String,Dynamic>>{
+	static public function extractProperties<A>(v:A):Array<Tuple2<String,Dynamic>>{
 		return extractFieldsFromAny(v).filter(
-			Reflect.isFunction.not().second().sndOf()
+			Reflect.isFunction.not().second().snd()
 		);
 	}
 }

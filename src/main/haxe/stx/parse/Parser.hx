@@ -2,8 +2,9 @@ package stx.parse;
 
 import stx.Prelude;
 import stx.ds.List;
-import stx.Tuples.*;
+import stx.Tuples;
 
+using stx.Arrays;
 using stx.Tuples;
 using stx.Options;
 										
@@ -37,7 +38,9 @@ enum MemoEntry {
 
 typedef MemoKey = String
 
-typedef FailureStack = stx.ds.List<FailureMsg>
+enum ParseError{
+  ParseFailure(msgs:Array<FailureMsg>);
+}
 typedef FailureMsg = {
   msg : String,
   pos : Int
@@ -45,7 +48,7 @@ typedef FailureMsg = {
 
 enum ParseResult<I,T> {
   Success(match : T, rest : Input<I>);
-  Failure(errorStack : FailureStack, rest : Input<I>, isError : Bool);
+  Failure(errorStack : ParseError, rest : Input<I>, isError : Bool);
 }
 
 typedef Parser<I,T> = Input<I> -> ParseResult<I,T>
@@ -170,9 +173,8 @@ class ReaderObj {
 }
 
 class FailureObj {
-  inline public static function newStack(failure : FailureMsg) : FailureStack {
-    var newStack = FailureStack.nil();
-    return newStack.cons(failure);
+  inline public static function newStack(failure : FailureMsg) : ParseError {
+    return ParseFailure([failure]);
   }
   inline public static function errorAt<I>(msg : String, pos : Input<I>) : FailureMsg {
     return {
@@ -180,8 +182,10 @@ class FailureObj {
       pos : pos.offset      
     };
   }
-  inline public static function report(stack : FailureStack, msg : FailureMsg) : FailureStack {
-    return stack.cons(msg);
+  inline public static function report(stack : ParseError, msg : FailureMsg) : ParseError {
+    return switch (stack) {
+      case ParseFailure(stk) : ParseFailure(stk.add(msg));
+    }
   }
 }
 
@@ -453,7 +457,10 @@ class FailureObj {
         return switch(res) {
           case Success(_, _): res;
           case Failure(err, rest, isError) :
-            (isError || (err.last.msg == baseFailure))  ? res : Failure(err, rest, true);
+            switch (err) {
+              case ParseFailure(msgs) :
+                (isError || (msgs.last().msg == baseFailure))  ? res : Failure(err, rest, true);
+            }
         }
       }
     });
@@ -554,8 +561,7 @@ class FailureObj {
 				return switch(p()(input)) {
 					case Success(_, _)								: 
 							var f : FailureMsg = { msg : "Parser succeeded rather than failed" , pos : input.position() };
-						var o = List.nil().add(f);
-						Failure( o , input , false);
+						Failure( ParseFailure([f]) , input , false);
 					case Failure(errorStack, rest, isError)	: 
 							if (isError) {
 								Failure(errorStack, rest, isError);
@@ -639,7 +645,10 @@ class FailureObj {
     return stx.Anys.toThunk(function (input : Input<I>) {
       var r = p()(input);
       switch(r) {
-        case Failure(err, input, isError): return Failure(err.report((f(err.head.msg)).errorAt(input)), input, isError);
+        case Failure(err, input, isError): 
+          return switch (err) {
+            case ParseFailure(msgs) : return Failure(err.report((f(msgs.first().msg)).errorAt(input)), input, isError);
+          }
         default: return r;
       }
     });

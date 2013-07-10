@@ -4,9 +4,9 @@ package ;
  * ...
  * @author 0b1kn00b
  */
-import stx.Future;
+import stx.Eventual;
 
-class FutureLoader {
+class EventualLoader {
 	public static function main(){
 		
 	}

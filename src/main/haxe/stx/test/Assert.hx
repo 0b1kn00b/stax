@@ -18,7 +18,7 @@ package stx.test;
 import haxe.ds.IntMap;
 
 import stx.Prelude;
-import stx.Future;
+import stx.Eventual;
 
 import stx.plus.Equal;
 
@@ -705,7 +705,7 @@ class Assert {
    * assertions relating to the deliverable should be contained within the 
    * passed in function.
    */
-  public static function delivered<T>(future: Future<T>, assertions: T -> Void, ?timeout: Int) {
+  public static function delivered<T>(future: Eventual<T>, assertions: T -> Void, ?timeout: Int) {
     var f = createAsync(function() {
       if (future.isCanceled()) {
         fail('expected delivery of future ' + q(future) + ', but it was canceled');
@@ -723,13 +723,13 @@ class Assert {
   /** Asserts the future is canceled within the specified time frame. All 
    * assertions should be contained within the passed in function.
    */
-  public static function canceled<T>(future: Future<T>, assertions: Void -> Void, ?timeout: Int) {
+  public static function canceled<T>(future: Eventual<T>, assertions: Void -> Void, ?timeout: Int) {
     future.ifCanceled(createAsync(assertions, timeout));
   }
   
   /** Asserts the future is not delivered within the specified time frame.
    */
-  public static function notDelivered<T>(future: Future<T>, ?timeout: Int, ?pos: PosInfos) {
+  public static function notDelivered<T>(future: Eventual<T>, ?timeout: Int, ?pos: PosInfos) {
     var f = createAsync(function() {
       if (future.isDelivered()) {
         Assert.fail('Did not expect delivery of: ' + future.valueO().get(), pos);

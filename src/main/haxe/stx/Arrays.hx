@@ -1,7 +1,7 @@
 package stx;
 
 import stx.plus.Equal;
-import stx.Tuples.*;
+import stx.Tuples;
 
 using stx.Tuples;
 using stx.Prelude;
@@ -13,6 +13,14 @@ using stx.Arrays;
 
 class Arrays {
   /**
+    Apply f to each element in a.
+  */
+  static public function foreach<T>(a: Array<T>, f: T -> Void): Array<T> {
+    for (e in a) f(e);
+    
+    return a;
+  }
+  /**
     Applies function f to each element in a, returning the results
   */
   inline static public function map<T, S>(a: Array<T>, f: T -> S): Array<S> {
@@ -21,6 +29,13 @@ class Arrays {
     for (e in a) n.push(f(e));
       
     return n;
+  }
+  static public function foldl<T, Z>(a: Array<T>, z: Z, f: Z -> T -> Z): Z {
+    var r = z;
+    
+    for (e in a) { r = f(r, e); }
+    
+    return r;
   }
   @:noUsing static public function create<A>():Array<A>{
     return [];
@@ -363,7 +378,7 @@ class Arrays {
     
     return -1;
   } 
-  static public function withIndex<A>(a:Array<A>):Array<Tup2<A,Int>>{
+  static public function withIndex<A>(a:Array<A>):Array<Tuple2<A,Int>>{
     var o = [];
     for(i in 0...a.length){
       o.push( tuple2( a[i] , i ) );
@@ -518,7 +533,7 @@ class Arrays {
   /**
     Produces an Array from `a[n]` to the last element of `a`.
   */
-  static public function drop<T>(a: Array<T>, n: Int): Array<T> {
+  static public function dropLeft<T>(a: Array<T>, n: Int): Array<T> {
     return if (n >= a.length) [] else a.slice(n);
   }
   /**
@@ -563,7 +578,7 @@ class Arrays {
       hash.keys()
         .toIterable()
         .map(
-          function(x) return x.entuple(hash.get(x))
+          function(x) return tuple2(x,hash.get(x))
         ).toArray();
   }
 }

@@ -2,7 +2,7 @@ package stx.arw;
 import haxe.Timer;
 
 using stx.Tuples;
-using stx.Future;
+using stx.Eventual;
 using stx.test.Assert;
 using stx.arw.Arrows;
 using stx.Log;

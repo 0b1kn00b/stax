@@ -70,11 +70,12 @@ class StringReader {
       indicator : indicator
     };
   }
-	public static function errorMessage(r : Input<String>, msg: FailureStack){
+	public static function errorMessage(r : Input<String>, msg: ParseError){
     var x = r.textAround();
 
+    var itr : Array<FailureMsg> = Type.enumParameters(msg)[0];
     var r = "";
-    for (err in msg){
+    for (err in itr){
       r += "Error at " + err.pos + " : " + err.msg+"\n";
     }
 

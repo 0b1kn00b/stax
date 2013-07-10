@@ -60,14 +60,14 @@ class Viaz<I,O> implements Arrow<I,O>{
 	static public function retCps<O>(a:Arrow<Unit,O>):RC<Void,O>{
 		return a.withInput.p1(Unit);
 	}
-	static public function retFt<O>(a:Arrow<Unit,O>):Future<O>{
+	static public function retFt<O>(a:Arrow<Unit,O>):Eventual<O>{
 		return appFt(a,Unit);
 	}
 	static public function appCps<I,O>(a:Arrow<I,O>,i:I):RC<Void,O>{
 		return a.withInput.p1(i);
 	}
-	static public function appFt<I,O>(a:Arrow<I,O>,i:I):Future<O>{
-		var f = Future.create();
+	static public function appFt<I,O>(a:Arrow<I,O>,i:I):Eventual<O>{
+		var f = Eventual.create();
 		a.appCps(i)(f.deliver.effectOf()()());
 		return f;
 	}
@@ -75,8 +75,8 @@ class Viaz<I,O> implements Arrow<I,O>{
 	public static function applyA<I,O>():Arrow<Pair<Arrow<I,O>,I>,O>{
 		return new ArrowApply();
 	}
-	static public function futureA<A>():Arrow<Future<A>,A>{
-		return new FutureArrow();
+	static public function futureA<A>():Arrow<Eventual<A>,A>{
+		return new EventualArrow();
 	}
 }
 
@@ -441,14 +441,14 @@ class ProcessArrow {
 }
 #end
 
-class FutureArrow<O> implements Arrow<Future<O>,O>{
+class EventualArrow<O> implements Arrow<Eventual<O>,O>{
 	public function new(){
 
 	}
-	inline public function withInput(?i:Future<O>,cont:Function<O,Void>){
+	inline public function withInput(?i:Eventual<O>,cont:Function<O,Void>){
 		i.foreach( cont );
 	}
-	static public function arrowOf<I,O>(fn:I->Future<O>):Arrow<I,O>{
+	static public function arrowOf<I,O>(fn:I->Eventual<O>):Arrow<I,O>{
 		return fn.lift().then( Viaz.futureA() );
 	}
 }

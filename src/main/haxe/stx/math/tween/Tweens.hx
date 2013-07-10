@@ -20,7 +20,7 @@ import stx.math.tween.Tween;
 import stx.math.tween.Easing;
 import stx.time.ScheduledExecutor;
 
-import stx.Future;
+import stx.Eventual;
 using stx.Maths;
 
 using stx.framework.Injector;
@@ -49,7 +49,7 @@ class Tweens {
    *   trace(intermediate.x);
    * });
    */
-  public static function animate(tweener: Tweener, duration: Int, ?frequency_ = 0, cb: Dynamic<Float> -> Void): Future<Int> {
+  public static function animate(tweener: Tweener, duration: Int, ?frequency_ = 0, cb: Dynamic<Float> -> Void): Eventual<Int> {
     var executor = ScheduledExecutor.inject();
     
     var frequency = if (frequency_ > 0) frequency_ else DefaultFrequency;

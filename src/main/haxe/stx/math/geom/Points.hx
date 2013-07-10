@@ -62,7 +62,7 @@ class Points {
   }
   
   public static inline function toTuple(p: Point2d<Int>): Tuple2<Int, Int> {
-    return p.x.entuple(p.y);
+    return tuple2(p.x,p.y);
   }
 }
 
@@ -103,6 +103,6 @@ class Point2dFloatExtensions {
   }
   
   public static inline function toTuple(p: Point2d<Float>): Tuple2<Float, Float> {
-    return p.x.entuple(p.y);
+    return tuple2(p.x,p.y);
   }
 }

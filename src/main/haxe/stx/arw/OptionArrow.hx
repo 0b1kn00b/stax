@@ -1,7 +1,8 @@
 package stx.arw;
 
-import stx.Tuples.*;
+import stx.Tuples;
 import stx.Prelude;
+import stx.Callback;
 
 using stx.Options;
 using stx.arw.Arrows;
@@ -26,10 +27,10 @@ abstract OptionArrow<I,O>(ArrowOption<I,O>) from ArrowOption<I,O> to ArrowOption
 	}*/
 	public function new(a:Arrow<I,O>):OptionArrow<I,O>{
 		this = new Arrow(
-			inline function (?i:Option<I>,cont:Function1<Option<O>,Void>){
+			inline function (?i:Option<I>,cont:Option<O>->Void){
 				switch (i) {
-					case Some(v) : Arrows.application().withInput( tuple2(a,v) , Some.then(cont) );
-					case None 	 : cont(None);
+					case Some(v) : Arrows.application().withInput( tuple2(a,v) , Some.then(cont.apply) );
+					case None 	 : cont.apply(None);
 				}
 			}
 		);

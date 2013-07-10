@@ -17,7 +17,7 @@
 																	using stx.Prelude;
 import stx.Prelude;
 using stx.Tuples;
-using stx.Future;
+using stx.Eventual;
 
 using stx.plus.Equal;
 using stx.plus.Order;

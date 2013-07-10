@@ -16,7 +16,7 @@
 ****/
 package stx.js.io;
 
-import stx.Tuples.*;
+import stx.Tuples;
 import stx.js.Dom;
 import stx.Prelude;
 
@@ -29,7 +29,7 @@ import stx.io.json.Json;
 import stx.net.Url;
 import stx.Log;								using stx.Log;
 
-import stx.Future;
+import stx.Eventual;
 using stx.Tuples;
 
 using stx.Prelude;
@@ -92,7 +92,7 @@ interface IFrameIO {
    *
    * @param window  The window of the target/source window.
    */
-  public function receiveRequests(f: Dynamic -> Future<Dynamic>, url: String, window: Window): IFrameIO;
+  public function receiveRequests(f: Dynamic -> Eventual<Dynamic>, url: String, window: Window): IFrameIO;
 
   /** Posts a message to the specified iframe, which should be located at the 
    * exact URL specified.
@@ -117,7 +117,7 @@ interface IFrameIO {
     * @param targetWindow  The window that will receive the message.
     *
     */
-  public function request(request: Dynamic, targetUrl: String, targetWindow: Window): Future<Dynamic>;
+  public function request(request: Dynamic, targetUrl: String, targetWindow: Window): Eventual<Dynamic>;
 }
 
 class AbstractIFrameIO implements IFrameIO {
@@ -135,7 +135,7 @@ class AbstractIFrameIO implements IFrameIO {
     return Prelude.error()('Not implemented');
   }
   
-  public function receiveRequests(f: Dynamic -> Future<Dynamic>, url, window: Window): IFrameIO {
+  public function receiveRequests(f: Dynamic -> Eventual<Dynamic>, url, window: Window): IFrameIO {
     var self = this;
     
     return receive(function(message) {
@@ -154,10 +154,10 @@ class AbstractIFrameIO implements IFrameIO {
     return Prelude.error()('Not implemented');
   }
   
-  public function request(requestData: Dynamic, targetUrl: String, targetWindow: Window): Future<Dynamic> {
+  public function request(requestData: Dynamic, targetUrl: String, targetWindow: Window): Eventual<Dynamic> {
     var requestId = ++requestCounter;
     
-    var future: Future<Dynamic> = new Future();
+    var future: Eventual<Dynamic> = new Eventual();
     
     receiveWhile(function(message) {
       return if (message.__responseId != null && message.__responseId == requestId) {
@@ -199,7 +199,7 @@ class IFrameIOAutoDetect implements IFrameIO {
     return this;
   }
   
-  public function receiveRequests(f: Dynamic -> Future<Dynamic>, url, window: Window): IFrameIO {
+  public function receiveRequests(f: Dynamic -> Eventual<Dynamic>, url, window: Window): IFrameIO {
     underlying.receiveRequests(f, url, window);
     
     return this;
@@ -211,7 +211,7 @@ class IFrameIOAutoDetect implements IFrameIO {
     return this;
   }  
   
-  public function request(data: Dynamic, targetUrl: String, targetWindow: Window): Future<Dynamic> {
+  public function request(data: Dynamic, targetUrl: String, targetWindow: Window): Eventual<Dynamic> {
     return underlying.request(data, targetUrl, targetWindow);
   }
 }
@@ -310,8 +310,8 @@ class IFrameIOPollingMaptag extends AbstractIFrameIO implements IFrameIO {
   var receivers:          std.Map<String,Array<Dynamic -> Void>>;
   var originUrlToWindow:  std.Map<String,Window>;
   var bindTarget:         Window;
-  var senderFuture:       Option<Future<Void>>;
-  var receiverFuture:     Option<Future<Void>>;
+  var senderEventual:       Option<Eventual<Void>>;
+  var receiverEventual:     Option<Eventual<Void>>;
   
   
   public function new(w: Window) {
@@ -324,8 +324,8 @@ class IFrameIOPollingMaptag extends AbstractIFrameIO implements IFrameIO {
     this.receivers          = new std.Map();
     this.originUrlToWindow  = new std.Map();
     
-    senderFuture   = None;
-    receiverFuture = None;
+    senderEventual   = None;
+    receiverEventual = None;
   }
   
   override public function receive(f: Dynamic -> Void, originUrl: String, ?originWindow: Window): IFrameIO {
@@ -362,7 +362,7 @@ class IFrameIOPollingMaptag extends AbstractIFrameIO implements IFrameIO {
     var fragmentId  = 1;
     var fragments   = Json.encodeObject(data).chunk(maxFragSize).toList();
     
-    var encoded = fragments.mapTo(newFragmentsList(), function(chunk): Tuple2<Window, AddressableFragment> return iframe.entuple(cast {
+    var encoded = fragments.mapTo(newFragmentsList(), function(chunk): Tuple2<Window, AddressableFragment> return tuple2(iframe,cast {
       type:           'delivery',
       from:           from,
       to:             to,
@@ -466,7 +466,7 @@ class IFrameIOPollingMaptag extends AbstractIFrameIO implements IFrameIO {
           var win = self.originUrlToWindow.get(request.to);
         
           return if (win != null) {
-            List.nil().cons(win.entuple(request));
+            List.nil().cons(tuple2(win,request));
           }
           else {
             List.nil();
@@ -550,27 +550,27 @@ class IFrameIOPollingMaptag extends AbstractIFrameIO implements IFrameIO {
   }
   
   private function startSender(): Void {
-    if (senderFuture.isEmpty()) {    
-      senderFuture = Some(executor.forever(sender, 20));
+    if (senderEventual.isEmpty()) {    
+      senderEventual = Some(executor.forever(sender, 20));
     }
   }
   
   private function stopSender(): Void {
-    senderFuture.map(function(s) { s.cancel(); return Unit; });
+    senderEventual.map(function(s) { s.cancel(); return Unit; });
     
-    senderFuture = None;
+    senderEventual = None;
   }
   
   private function startReceiver(): Void {
-    if (receiverFuture.isEmpty()) {    
-      receiverFuture = Some(executor.forever(receiver, 10));
+    if (receiverEventual.isEmpty()) {    
+      receiverEventual = Some(executor.forever(receiver, 10));
     }
   }
   
   private function stopReceiver(): Void {
-    receiverFuture.map(function(r) { r.cancel(); return Unit; });
+    receiverEventual.map(function(r) { r.cancel(); return Unit; });
     
-    receiverFuture = None;
+    receiverEventual = None;
   }
 }
 

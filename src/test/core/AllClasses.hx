@@ -27,7 +27,7 @@ import stx.Enums;
 import stx.Error;
 import stx.framework.Injector;
 import stx.Functions;
-import stx.Future;
+import stx.Eventual;
 import stx.Mapes;
 import stx.Iterables;
 import stx.Iterators;

@@ -23,13 +23,13 @@ class StaxTest extends TestCase{
 		var c = [1,2,3].map(mapper);*/
 		//trace(c);//[4,5,6]
 
-	/*	var a = Future.pure('a');
-		var b = Future.pure('b');
-		var c = Future.pure('c');
+	/*	var a = Eventual.pure('a');
+		var b = Eventual.pure('b');
+		var c = Eventual.pure('c');
 
 		[a,b,c].map(def(v,return v.map(Right)))
 		.foldl(
-			Future.pure(Right([])),
+			Eventual.pure(Right([])),
 			stx.Promises.waitfold
 		).foreach( Log.printer() );
 

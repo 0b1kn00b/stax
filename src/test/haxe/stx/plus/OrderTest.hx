@@ -3,7 +3,7 @@ package stx.plus;
 import haxe.ds.HashMap;
 
 import stx.Prelude;
-import stx.Tuples.*;
+import stx.Tuples;
 import stx.test.TestCase;
 import stx.test.Assert;
 
@@ -118,8 +118,8 @@ class OrderTest extends TestCase{
     this.assertThrowsException(function() Order.getOrderFor(function() trace("hello world")));
   }  
 
-  public function testTupleOrder() {    
-    var tests : Array<Tuple2<Product,Product>>= cast( 
+  /*public function testTupleOrder() {    
+    var tests : Array<Dynamic>= cast( 
       [
        tuple2(tuple2("b",0), tuple2("a",0)),
        tuple2(tuple2("a",1), tuple2("a",0)), 
@@ -137,7 +137,7 @@ class OrderTest extends TestCase{
 						assertTrue(l.compare(r) > 0, "failed to compare " + test.fst() + " to " + test.snd());  
 				}
 		);
-  }
+  }*/
    public function testOrderForEnum() { 
     var o1 = None;
     var o2 = Some("a");
@@ -153,8 +153,8 @@ class OrderTest extends TestCase{
     assertTrue(order(o1, o1) == 0);
     assertTrue(order(o2, o4) == 0);
   }    
-  public function testTupleEqual() {    
-    var tests : Array<Tuple2<Tuple2<Dynamic,Dynamic>,Tuple2<Dynamic,Dynamic>>> = cast ([
+/*  public function testTupleEqual() {    
+    var tests : Array<Dynamic> = cast ([
       tuple2(tuple2("b",0), tuple2("b",0)),
       tuple2(tuple2("a",1), tuple2("a",1)), 
       tuple2(tuple3("a",0,0.1), tuple3("a",0,0.1)),
@@ -167,7 +167,7 @@ class OrderTest extends TestCase{
       assertTrue(test.fst().equals(test.snd())); 
 
     } 
-  }
+  }*/
   public function testGreaterThan() {
     assertTrue (Ints.compare.greaterThan()(2, 1));
     assertFalse(Ints.compare.greaterThan()(1, 1));

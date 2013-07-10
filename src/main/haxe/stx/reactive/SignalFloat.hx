@@ -15,6 +15,7 @@
 */
 package stx.reactive;
 
+using stx.Tuples;
 import stx.reactive.Reactive;
 
 class SignalFloat {

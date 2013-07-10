@@ -2,7 +2,7 @@ package hx.ds;
 
 import stx.plus.Show;
 
-import stx.Tuples.*;
+import stx.Tuples;
 
 using stx.Compose;
 using stx.Functions;
@@ -46,7 +46,7 @@ class OrderedMap<V>{
 		return findAtKey(key).isDefined();
 	}
 	public function get(key:String):V{
-		return findAtKey(key).map(T2s.snd).getOrElseC(null);
+		return findAtKey(key).map(Tuples2.snd).getOrElseC(null);
 	}
 	public function del(key:String){
 		findAtKey(key)
@@ -71,7 +71,7 @@ class OrderedMap<V>{
 		return impl.iterator();
 	}
 	public function vals():Iterator<V>{
-		return impl.map( T2s.snd ).iterator();
+		return impl.map( Tuples2.snd ).iterator();
 	}
 	private function findAtKey(key:String):Option<Tuple2<String,V>>{
 		return impl.find(function(t){ return t.fst() == key; });
@@ -92,4 +92,4 @@ class OrderedMap<V>{
 			}
 		);
 	}
-}
+}	

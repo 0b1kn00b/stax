@@ -16,7 +16,7 @@
 package stx.concurrent;
 
 import stx.Prelude;
-import stx.Future;
+import stx.Eventual;
 using stx.Tuples;
 
 enum ActorStatus {
@@ -32,16 +32,16 @@ interface Actor<T, S> {
   public function status(): ActorStatus;
   
   /** Starts the actor, if it is not already running. */
-  public function start(): Future<Actor<T, S>>;
+  public function start(): Eventual<Actor<T, S>>;
   
   /** Stops the actor, if it is not already running. */
-  public function stop(): Future<Actor<T, S>>;
+  public function stop(): Eventual<Actor<T, S>>;
   
   /** Returns a number from 0 to 1 indicating load on the actor. */
   public function load(): Float;
   
   /** Sends data to the actor, and returns a future of the response. */
-  public function send(data: T): Future<S>;
+  public function send(data: T): Eventual<S>;
 }
 
 typedef Coalescer<T> = {
@@ -64,10 +64,10 @@ interface ActorFactory<T, S> {
    * @param coalescer An optional function to coalesce adjacent messages in 
    *                  the actor's queue.
    */
-  public function create<X>(handler: X -> T -> Tuple2<X, Future<S>>, ?coalescer: Coalescer<T>): Actor<T, S>;
+  public function create<X>(handler: X -> T -> Tuple2<X, Eventual<S>>, ?coalescer: Coalescer<T>): Actor<T, S>;
   
   /** Creates a stateless actor (an actor that requires no initial state, and 
    * does not produce any state.
    */
-  public function createStateless(loop: T -> Future<S>, ?coalescer: Coalescer<T>): Actor<T, S>;
+  public function createStateless(loop: T -> Eventual<S>, ?coalescer: Coalescer<T>): Actor<T, S>;
 }

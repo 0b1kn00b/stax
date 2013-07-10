@@ -1,6 +1,6 @@
 package stx;
 
-import stx.Tuples.*;
+import stx.Tuples;
 import stx.Prelude;
 import stx.ifs.Apply;
 
@@ -12,7 +12,7 @@ using stx.Tuples;
 
 class State<S,R>{
   @:noUsing 
-  static public function create<A,B>( opts : TApply<A,Tup2<B,A>> ):State<A,B>{
+  static public function create<A,B>( opts : ApplyType<A,Tuple2<B,A>> ):State<A,B>{
     return new State(opts);
   }
   @:noUsing
@@ -40,8 +40,8 @@ class State<S,R>{
           }
       });
   }
-  dynamic public function apply(s:S):Tup2<R,S>{return null;}
-  public function new(opts:TApply<S,Tup2<R,S>>){
+  dynamic public function apply(s:S):Tuple2<R,S>{return null;}
+  public function new(opts:ApplyType<S,Tuple2<R,S>>){
     this.apply = opts.apply;
   }
   /**
@@ -62,7 +62,7 @@ class State<S,R>{
       State.pure(
         function(s:S){
           var o = this.apply(s);
-          return fn(o.fst()).entuple(o.snd());
+          return tuple2(fn(o.fst()),o.snd());
         }
       );
   }

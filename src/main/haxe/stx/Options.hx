@@ -1,26 +1,21 @@
 package stx;
 
 import stx.Prelude;
-import stx.Tuples.*;
+import stx.Tuples;
 
 using stx.Functions;
 using stx.Options;
 using stx.Eithers;
 using stx.Anys;
 
-typedef Opt = Options;
 
 class Options {
   /**
     Produces Option.Some(t) if 't' is not null, Option.None otherwise. 
     n.b Not safe to use with 'using'
    */
-  @:noUsing
-  static public function create<T>(t: T): Option<T> {
+  @:noUsing static public inline function create<T>(t: T): Option<T> {
     return if (t == null) None; else Some(t);
-  }
-  static public function n<T>(t:T):Option<T>{
-    return create(t);
   }
   static public function toOption<A>(v:A):Option<A>{
     return create(v);
@@ -29,15 +24,15 @@ class Options {
   static public function orDefault<A>(p0:A,p1:A){
     return create(p0).getOrElseC(p1);
   }
-  static public function dflt<A>(def:A,possibly:A){
-    return orDefault(possibly,def);
+  static public function dflt<A>(def:Void->A,possibly:A){
+    return Options.create(possibly).getOrElse(def);
   }
   /**
     Performs 'f' on the contents of 'o' if o != None
    */
   static public function map<T, S>(o: Option<T>, f: T -> S): Option<S> {
     return switch (o) {
-      case None: None;
+      case None   : None;
       case Some(v): Some(f(v));
     }
   }
@@ -184,7 +179,7 @@ class Options {
     }
   }
   /**
-    Produces an Either where 'o1' is on the left, or if None, the result of 'thunk' on the right.
+    Produces an Either where 'o1' is on the right, or if None, the result of 'thunk' on the left.
    */
   static public function orEither<T, S>(o1: Option<T>, thunk: Thunk<S>): Either<S, T> {
     return switch (o1) {
