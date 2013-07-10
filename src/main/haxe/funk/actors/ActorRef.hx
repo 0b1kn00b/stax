@@ -112,8 +112,10 @@ class LocalActorRef implements InternalActorRef {
 
     inline public function context() : ActorContext return _actorContext;
 
-    // FIXME (Simon) : This needs fixing.
-    inline public function isTerminated() : Bool return false;
+    @:todo("#Simon: This needs fixing.")
+    inline public function isTerminated() : Bool {
+        return false
+    };
 
     inline public function getParent() : InternalActorRef return _actorCell.parent();
 
@@ -198,7 +200,7 @@ class EmptyActorRef implements InternalActorRef {
 
     inline public function context() : ActorContext return null;
 
-    // FIXME (Simon) : This needs fixing.
+    @:todo("#Simon: This needs fixing.")
     inline public function isTerminated() : Bool return false;
 
     inline public function getParent() : InternalActorRef return null;

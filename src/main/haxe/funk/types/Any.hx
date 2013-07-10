@@ -99,8 +99,8 @@ class AnyTypes {
         // Runtime cast, rather than a compile type cast.
         return isInstanceOf(value, possible) ? cast value : throw 'Cannot cast $value to $possible';
     }
-
-    inline public static function isInstanceOf<T : AnyRef>(value : T, possible : AnyRef) : Bool {
+    @:note("0b1kn00b: constraint error after #8a1c8c26893bb7aad6082cde44491787caa76bda")
+    inline public static function isInstanceOf(value : AnyRef, possible : AnyRef) : Bool {
         return Std.is(value, possible);
     }
 
