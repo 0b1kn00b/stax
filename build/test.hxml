@@ -1,0 +1,8 @@
+build/test/build-test-as3.hxml
+--next
+build/test/build-test-js.hxml
+--next
+build/test/build-test-neko.hxml
+--next
+build/test/build-test-node-js.hxml
+#build/test/build-test-cpp.hxml

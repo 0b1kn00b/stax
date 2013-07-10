@@ -1,0 +1,13 @@
+# js
+
+-js bin/node_js_test.js
+-main TestMain
+-cp src/main/haxe
+-cp src/test/haxe
+-debug
+-lib munit
+-lib hamcrest
+-D test
+-D nodejs
+#-D parallel
+#-D net
