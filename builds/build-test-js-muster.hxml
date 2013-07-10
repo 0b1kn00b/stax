@@ -6,6 +6,11 @@
 -js test/test.js
 
 -lib muster
+-lib tink
+-lib hxquery
+
 -main Test
+
+-D nodejs
 
 --connect 2331
