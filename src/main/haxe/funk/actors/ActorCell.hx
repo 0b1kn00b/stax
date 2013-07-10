@@ -110,12 +110,12 @@ class ActorCell implements Cell implements ActorContext {
         _mailbox = _dispatcher.createMailbox(this);
     }
 
+    @:todo("#Simon: Because we don't have async executions we can't send a NullMessage.")
     public function init(uid : String, ?sendSupervise : Bool = true) : Void {
         _mailbox.systemEnqueue(_self, Create(uid));
 
         if (sendSupervise) {
             _parent.sendSystemMessage(Supervise(_self, false, uid));
-            // TODO (Simon) : Because we don't have async executions we can't send this.
             //_parent.send(NullMessage);
         }
     }
