@@ -40,7 +40,7 @@ class Arrays {
   @:noUsing static public function create<A>():Array<A>{
     return [];
   }
-  static public function unit<A>(c:Class<Array<Dynamic>>):Array<A>{
+  static public function unit<A>():Array<A>{
     return [];
   }
   @:noUsing static public function one<A>(v:A):Array<A>{
