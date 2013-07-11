@@ -1,6 +1,6 @@
 package stx.rct.events;
 
-import funk.types.Any;
+import stx.Anys;
 import stx.rct.events.Events;
 import stx.rct.Stream;
 

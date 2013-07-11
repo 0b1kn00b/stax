@@ -23,5 +23,5 @@ class StreamValues<T> {
 
     public function size() : Int return getList().size();
 
-    inline private function getList() : List<T> return _lazyOption.getOrElse(function() return function() return new Nil())();
+    inline private function getList() : List<T> return _lazyOption.getOrElse(function() return function() return List.create())();
 }

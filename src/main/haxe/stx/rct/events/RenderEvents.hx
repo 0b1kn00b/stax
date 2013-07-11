@@ -1,10 +1,10 @@
 package stx.rct.events;
 
 import stx.rct.events.Events;
-import funk.types.Function0;
-import funk.types.Function1;
-import funk.types.Any;
-import funk.types.Option;
+import stx.Prelude;
+import stx.Functions;
+import stx.Anys;
+import stx.Options;
 
 #if js
 import js.Browser;

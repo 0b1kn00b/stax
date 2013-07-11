@@ -9,7 +9,7 @@ import stx.rct.Propagation;
 import stx.rct.Pulse;
 
 using stx.rct.Pulse;
-using stx.rct.Stream;
+using stx.rct.Streams;
 
 using stx.Tuples;
 
@@ -25,9 +25,9 @@ class Behaviour<T> {
         _value = value;
         _pulse = pulse;
 
-        var collection : Collection<Stream<T>> = [stream.steps()].toCollection();
+        var collection : Array<Stream<T>> = [stream.steps()];
 
-        _stream = StreamTypes.create(function(pulse : Pulse<T>) : Propagation<T> {
+        _stream = Streams.create(function(pulse : Pulse<T>) : Propagation<T> {
             var prop = _pulse(pulse);
             switch(prop) {
                 case Propagate(value): _value = value.value();
@@ -44,7 +44,7 @@ class Behaviour<T> {
 
 class BehaviourTypes {
 
-    public static function constant<T>(value: T): Behaviour<T> return StreamTypes.identity(None).startsWith(value);
+    public static function constant<T>(value: T): Behaviour<T> return Streams.identity(None).startsWith(value);
 
     public static function dispatch<T>(behaviour : Behaviour<T>, value : T) : Void behaviour.stream().dispatch(value);
 
@@ -60,23 +60,23 @@ class BehaviourTypes {
     }
 
     public static function sample(behaviour : Behaviour<Float>) : Behaviour<Float> {
-        return StreamTypes.timer(behaviour).startsWith(Process.stamp());
+        return Streams.timer(behaviour).startsWith(Process.stamp());
     }
 
-    public static function values<T>(behaviour : Behaviour<T>) : Collection<T> return behaviour.stream().values();
+    public static function values<T>(behaviour : Behaviour<T>) : Array<T> return behaviour.stream().values();
 
     public static function zip<T1, T2>(behaviour : Behaviour<T1>, that : Behaviour<T2>) : Behaviour<Tuple2<T1, T2>> {
         return zipWith(behaviour, that, function(a, b) return tuple2(a, b));
     }
 
-    public static function zipIterable<T>(    behaviours: Collection<Behaviour<T>>
-                                            ) : Behaviour<Collection<T>>  {
-        function mapToValue(): Collection<T> {
+    public static function zipIterable<T>(    behaviours: Array<Behaviour<T>>
+                                            ) : Behaviour<Array<T>>  {
+        function mapToValue(): Array<T> {
             return behaviours.map(function(behaviour) return behaviour.value());
         }
 
-        var sources : Collection<Stream<T>> = behaviours.map(function(behaviour) return behaviour.stream());
-        var stream = StreamTypes.create(function(pulse) return Propagate(pulse.withValue(mapToValue())), sources);
+        var sources : Array<Stream<T>> = behaviours.map(function(behaviour) return behaviour.stream());
+        var stream = Streams.create(function(pulse) return Propagate(pulse.withValue(mapToValue())), sources);
 
         return stream.startsWith(mapToValue());
     }
@@ -87,11 +87,11 @@ class BehaviourTypes {
                                                 ) : Behaviour<E2> {
 
         var array : Array<Behaviour<Dynamic>> = [behaviour, that];
-        var behaviours : Collection<Behaviour<Dynamic>> = array.toCollection();
+        var behaviours : Array<Behaviour<Dynamic>> = array;
 
-        var sources : Collection<Stream<Dynamic>> = behaviours.map(function(behaviour) return behaviour.stream());
+        var sources : Array<Stream<Dynamic>> = behaviours.map(function(behaviour) return behaviour.stream());
 
-        var stream = StreamTypes.create(function(pulse : Pulse<E1>) : Propagation<E2> {
+        var stream = Streams.create(function(pulse : Pulse<E1>) : Propagation<E2> {
             var result = func(behaviour.value(), that.value());
             return Propagate(pulse.withValue(result));
         }, cast sources);

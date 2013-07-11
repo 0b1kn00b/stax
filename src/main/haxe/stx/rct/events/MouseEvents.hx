@@ -3,7 +3,7 @@ package stx.rct.events;
 import stx.rct.events.Events;
 import stx.rct.Stream;
 import stx.rct.Stream;
-import funk.types.Any;
+import stx.Anys;
 
 #if js
 import js.Browser;

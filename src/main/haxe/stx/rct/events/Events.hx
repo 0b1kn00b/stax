@@ -1,9 +1,9 @@
 package stx.rct.events;
 
+import stx.Prelude;
+import stx.Functions
 import stx.rct.Propagation;
 import stx.rct.Stream;
-import funk.types.Function1;
-import funk.types.Option;
 
 #if js
 import js.Browser;
@@ -24,7 +24,7 @@ class Events {
                                                 type : String,
                                                 ?useCapture : Bool = false
                                                 ) : Stream<T> {
-        var stream = StreamTypes.identity(None);
+        var stream = Streams.identity(None);
         var method = function(event) stream.dispatch(event);
 
         stream.whenFinishedDo(function() target.removeEventListener(type, method, useCapture));
