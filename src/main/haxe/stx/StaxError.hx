@@ -15,4 +15,5 @@ enum StaxError{
   OutOfBoundsError(?pos:PosInfos);
   NativeError(msg:String);
   FrameworkError(flag:EnumValue,?pos:PosInfos);
+  IllegalOperationError(msg:String,?pos:PosInfos);
 }
