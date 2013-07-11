@@ -8,13 +8,19 @@ using stx.Eithers;
 using stx.Functions;
 using stx.Anys;
 
-class NiladicTypes {
+class CodeBlocks {
+  static public function trampoline(func : CodeBlock, ?bounce : Int = 0) : CodeBlock {
+    return function() : Void {
+      if (bounce < 1) func();
+      else stx.rct.Process.start(function() : Void func(), bounce);
+    };
+  }
 	/**
     Takes a Void->Void and returns a Void->Dynamic.
 	  @param	c
     @return
 	 */
-  public static function returningC<A>(c:NiladicType,?val:A):Thunk<A>{
+  public static function returningC<A>(c:CodeBlock,?val:A):Thunk<A>{
     return function(){
       c();
       return val;
@@ -40,7 +46,7 @@ class NiladicTypes {
   /**
     Compare function identity
   */
-  public static function equals(a:NiladicType,b:NiladicType){
+  public static function equals(a:CodeBlock,b:CodeBlock){
     return Reflect.compareMethods(a,b);
   }
 }	
@@ -51,7 +57,7 @@ class Functions0 {
 	/**
 	 Takes a function that returns a result, and produces one that ignores that result.
 	 */
-	public static function enclose<R>(f:Thunk<R>):NiladicType{
+	public static function enclose<R>(f:Thunk<R>):CodeBlock{
 		return
 			function():Void{
 				f();

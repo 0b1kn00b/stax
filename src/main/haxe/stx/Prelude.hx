@@ -23,6 +23,7 @@ enum Unit {
 
 typedef Thunk<R>                                                = Void -> R
 typedef NiladicType                                             = Void -> Void
+typedef CodeBlock                                               = Void -> Void
 typedef Function0<R>                                            = Void -> R
 typedef Function1<P1, R>                                        = P1 -> R
 typedef Function2<P1, P2, R>                                    = P1 -> P2 -> R
