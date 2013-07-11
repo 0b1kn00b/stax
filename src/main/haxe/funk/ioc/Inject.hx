@@ -1,4 +1,3 @@
-
 package funk.ioc;
 
 import funk.Funk;
@@ -8,8 +7,7 @@ using funk.types.Option;
 using funk.types.Any;
 using funk.types.extensions.Bools;
 
-@:final
-class Inject {
+@:final class Inject {
 
     @:noUsing
     public static function as<T>(type : Class<T>) : Option<T> {
@@ -48,7 +46,7 @@ class Inject {
     }
     @:noUsing
     public static function unsafe<T>(type:Class<T>,?module:IModule) : T {
-        var t = Type.getType(module);
+        var t = Type.getClass(module);
         return ((module == null ? as(type) : withIn(type,t)).getOrElse(function() return null));
     }
 }
