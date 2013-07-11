@@ -85,6 +85,10 @@ class Enums {
 		Top level enum comparison, doesn't compare contents
 	*/
 	public static function alike(e1:EnumValue,e2:EnumValue):Bool{
-		return Enums.indexOf(e1) == Enums.indexOf(e2);
+		return Enums.toIndex(e1) == Enums.toIndex(e2);
+	}
+
+	public static function param(e:EnumValue,i:Int):Dynamic{
+		return params(e)[i];
 	}
 }
