@@ -13,9 +13,9 @@ import flash.events.KeyboardEvent;
 #end
 
 #if js
-private typedef Event = js.html.Event;
-private typedef KeyboardEvent = js.html.KeyboardEvent;
-private typedef EventDispatcher = js.html.EventTarget;
+private typedef Event               = js.html.Event;
+private typedef KeyboardEvent       = js.html.KeyboardEvent;
+private typedef EventDispatcher     = js.html.EventTarget;
 #end
 
 enum KeyboardEventType {

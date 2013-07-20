@@ -1,6 +1,6 @@
 package stx.rct;
 
-import stx.StaxError;
+import stx.Errors;
 import stx.Error.*;
 import stx.Prelude;
 
@@ -24,13 +24,13 @@ class Streams {
     private static function toArray<T>(stream : Stream<T>) : Array<Stream<T>> return [stream];
 
     static public function fromAny<T>(any : T) : Stream<T> {
-        var stream = identity(None);
+        var stream = pure(None);
         CodeBlocks.trampoline(function() stream.dispatch(any), 1)();
         return stream;
     }
 
     static public function fromFunction<T>(func : Function0<T>) : Stream<T> {
-        var stream = identity(None);
+        var stream = pure(None);
         CodeBlocks.trampoline(function() stream.dispatch(func()), 1)();
         return stream;
     }
@@ -38,7 +38,7 @@ class Streams {
     static public function fromIterable<T>(iterable : Iterable<T>) : Stream<T> return fromIterator(iterable.iterator());
 
     static public function fromIterator<T>(iterator : Iterator<T>) : Stream<T> {
-        var stream = identity(None);
+        var stream = pure(None);
         CodeBlocks.trampoline(function() {
             while(iterator.hasNext()) {
                 stream.dispatch(iterator.next());
@@ -53,7 +53,7 @@ class Streams {
     }
 
     static public function calm<T>(stream : Stream<T>, behaviour : Behaviour<Int>) : Stream<T> {
-        var out : Stream<T> = identity(None);
+        var out : Stream<T> = pure(None);
 
         var task : Option<Task> = None;
         create(function(pulse : Pulse<T>) : Propagation<T> {
@@ -88,7 +88,7 @@ class Streams {
     }
 
     static public function delay<T>(stream : Stream<T>, behaviour : Behaviour<Int>) : Stream<T> {
-        var out : Stream<T> = identity(None);
+        var out : Stream<T> = pure(None);
 
         create(function(pulse : Pulse<T>) : Propagation<T> {
             Streams.dispatchWithDelay(out, pulse.value(), behaviour.value());
@@ -104,9 +104,13 @@ class Streams {
         return stream;
     }
 
+    static public function dispatchLater<T>(stream : Stream<T>, value : T):Stream<T>{
+        Process.start(function() stream.dispatch(value), 1);
+        return stream;   
+    }
     static public function flatMap<T1, T2>(stream : Stream<T1>, func : Function1<T1, Stream<T2>>) : Stream<T2> {
         var previous : Option<Stream<T2>> = None;
-        var out = identity(None);
+        var out = pure(None);
 
         create(function(pulse : Pulse<T1>) : Propagation<T2> {
             previous.foreach(function(s) s.detach(out));
@@ -130,10 +134,13 @@ class Streams {
         return stream;
     }
 
-    static public function identity<T>(sources: Option<Array<Stream<T>>>) : Stream<T> {
+    static public function pure<T>(sources: Option<Array<Stream<T>>>) : Stream<T> {
         return create(  function(pulse) return Propagate(pulse), 
                         sources.getOrElse(function() return Arrays.unit())
                         );
+    }
+    static public function unit<T>() : Stream<T> {
+        return pure(None);
     }
 
     static public function map<T1, T2>(stream : Stream<T1>, func : Function1<T1, T2>) : Stream<T2> {
@@ -143,7 +150,7 @@ class Streams {
     }
 
     static public function merge<T>(streams : Array<Stream<T>>) : Stream<T> {
-        return streams.size() == 0 ? unit() : identity(Some(streams));
+        return streams.size() == 0 ? zero() : pure(Some(streams));
     }
 
     static public function once<T>(value : T) : Stream<T> {
@@ -211,7 +218,7 @@ class Streams {
     }
 
     static public function timer(time : Behaviour<Float>) : Stream<Float> {
-        var stream : Stream<Float> = identity(None);
+        var stream : Stream<Float> = pure(None);
         var task : Option<Task> = None;
 
         stream.whenFinishedDo(function() task = Process.stop(task));
@@ -240,7 +247,7 @@ class Streams {
         return collection;
     }
 
-    static public function unit<T>() : Stream<T> {
+    static public function zero<T>() : Stream<T> {
         return create(function(pulse : Pulse<T>) : Propagation<T> {
                 err(IllegalOperationError("Received a value that wasn't expected " + pulse.value()));
                 return Negate;

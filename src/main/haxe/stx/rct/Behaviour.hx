@@ -44,7 +44,7 @@ class Behaviour<T> {
 
 class BehaviourTypes {
 
-    public static function constant<T>(value: T): Behaviour<T> return Streams.identity(None).startsWith(value);
+    public static function constant<T>(value: T): Behaviour<T> return Streams.pure(None).startsWith(value);
 
     public static function dispatch<T>(behaviour : Behaviour<T>, value : T) : Void behaviour.stream().dispatch(value);
 

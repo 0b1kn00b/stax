@@ -6,20 +6,20 @@ import stx.Functions;
 import stx.Anys;
 import stx.Options;
 
+using stx.rct.Streams;
+
 #if js
-import js.Browser;
+    import js.Browser;
 #elseif flash9
-import flash.display.Stage;
-import flash.events.Event;
-import flash.events.EventDispatcher;
-import flash.events.KeyboardEvent;
+    import flash.display.Stage;
+    import flash.events.Event;
+    import flash.events.EventDispatcher;
+    import flash.events.KeyboardEvent;
 #end
 
-using stx.rct.Stream;
-
 #if js
-private typedef Event = js.html.Event;
-private typedef EventDispatcher = js.html.EventTarget;
+  private typedef Event           = js.html.Event;
+  private typedef EventDispatcher = js.html.EventTarget;
 #end
 
 enum RenderEventType {
@@ -29,7 +29,7 @@ enum RenderEventType {
 
 class RenderEvents {
 
-    #if flash9
+  #if flash9
     public static function enterFrame(target : EventDispatcher) : Stream<Event> {
         return Events.event(target, RenderEventTypes.toString(EnterFrame));
     }
@@ -37,7 +37,7 @@ class RenderEvents {
     public static function render(stage : Stage) : Stream<Event> {
         return Events.event(stage, RenderEventTypes.toString(Render));
     }
-    #elseif js
+  #elseif js
     public static function enterFrame(target : RenderTarget) : Stream<Event> {
         return Events.event(cast target, RenderEventTypes.toString(EnterFrame));
     }
@@ -45,24 +45,21 @@ class RenderEvents {
     public static function render(target : RenderTarget) : Stream<Event> {
         return Events.event(cast target, RenderEventTypes.toString(Render));
     }
-    #end
+  #end
 }
 
 #if js 
-class RenderTarget {
-
-    private var _tick : Function1<Float, Bool>;
-
-    private var _listeners : Map<String, Array<Function1<Event, Void>>>;
-
-    private var _running : Bool;
+  class RenderTarget {
+    private var _tick       : Function1<Float, Bool>;
+    private var _listeners  : Map<String, Array<Function1<Event, Void>>>;
+    private var _running    : Bool;
 
     public function new(type : String) {
-        _listeners = new Map();
-        _running = false;
+        _listeners    = new Map();
+        _running      = false;
 
-        var win = Browser.window;
-        var document = win.document;
+        var win       = Browser.window;
+        var document  = win.document;
 
         _tick = function(value) {
             var event = document.createEvent('Event');
@@ -115,17 +112,16 @@ class RenderTarget {
             false;
         }
     }
-}
+  }
 #end
 
 class RenderEventTypes {
-
     public static function toString(type : RenderEventType) : String {
         #if flash9
-            var type = AnyTypes.toString(type);
+            var type = Anys.toString(type);
             return type.substr(0, 1).toLowerCase() + type.substr(1);
         #else
-            return AnyTypes.toString(type).toLowerCase();
+            return Anys.toString(type).toLowerCase();
         #end
     }
 }

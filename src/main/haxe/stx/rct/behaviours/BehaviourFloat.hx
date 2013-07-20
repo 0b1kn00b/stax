@@ -4,8 +4,9 @@ import funk.Funk;
 import stx.rct.Behaviour;
 import stx.rct.Propagation;
 import stx.rct.streams.StreamBool;
-import funk.types.Tuple1;
 
+
+using stx.Tuples;
 using stx.rct.Stream;
 using stx.rct.Behaviour;
 using stx.rct.streams.StreamBool;

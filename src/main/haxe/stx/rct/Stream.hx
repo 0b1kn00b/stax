@@ -1,6 +1,6 @@
 package stx.rct;
 
-import stx.StaxError;
+import stx.Errors;
 import stx.Error.*;
 import stx.Prelude;
 

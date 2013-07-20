@@ -14,8 +14,8 @@ import flash.events.MouseEvent;
 #end
 
 #if js
-private typedef Event = js.html.Event;
-private typedef MouseEvent = js.html.MouseEvent;
+private typedef Event           = js.html.Event;
+private typedef MouseEvent      = js.html.MouseEvent;
 private typedef EventDispatcher = js.html.EventTarget;
 #end
 

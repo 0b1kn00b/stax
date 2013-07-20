@@ -2,6 +2,7 @@ package stx.rct;
 
 import stx.Prelude;
 
+@:note("#Simon: Should use externs for this")
 class Task {
     #if (neko||cpp)
         private var id:Thread;
@@ -35,8 +36,6 @@ class Task {
                 stop();
                 _func();
             };
-
-            // Note (Simon) : Should use externs for this.
             var scope = this;
             #if flash9
                 id = untyped __global__["flash.utils.setInterval"](function() scope._run(), time);
@@ -55,7 +54,7 @@ class Task {
 
         _run = function() {};
 
-        // Note (Simon) : Should use externs for this.
+        // 
         #if flash9
             untyped __global__["flash.utils.clearInterval"](id);
         #elseif js
@@ -89,6 +88,5 @@ class Task {
     #end
 
     private function get_time() : Float return _time;
-
     private function get_func() : CodeBlock return _func;
 }
