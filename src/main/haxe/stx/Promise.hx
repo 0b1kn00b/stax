@@ -1,6 +1,6 @@
 package stx;
 
-import stx.StaxError;
+import stx.Errors;
 import stx.Error.*;
 import stx.Tuples;
 
@@ -95,8 +95,8 @@ abstract Promise<A>(Eventual<Outcome<A>>) from Eventual<Outcome<A>> to Eventual<
       }
     );
   }
-  public function mapL<C>(fn:Error->C):Eventual<Either<C,A>>{
-    return this.mapL(fn);
+  public function mapLeft<C>(fn:Error->C):Eventual<Either<C,A>>{
+    return this.mapLeft(fn);
   }
   /**
     Zips the right hand value with function `fn`

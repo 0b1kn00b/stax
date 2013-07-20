@@ -33,11 +33,11 @@ class Eventual<T> implements Value<T> {
   function set_value(value:T):T {
     return this.value = value;
   }
-  var _listeners: Array<T -> Void>;
-  var _isSet: Bool;
-  var _isCanceled: Bool;
-  var _cancelers: Array<Void -> Bool>;
-  var _canceled: Array<Void -> Void>;
+  var _listeners  : Array<T -> Void>;
+  var _isSet      : Bool;
+  var _isCanceled : Bool;
+  var _cancelers  : Array<Void -> Bool>;
+  var _canceled   : Array<Void -> Void>;
 
   public function new(?v:T) {
     _listeners  = [];
@@ -126,7 +126,6 @@ class Eventual<T> implements Value<T> {
       var r = true;
 
       for (canceller in _cancelers) r = r && canceller();
-
       if (r) {
         // Everyone's OK with canceling, mark state & notify:
         forceCancel();
@@ -330,7 +329,7 @@ class Eventuals{
   static public function foreach<A>(f:Eventual<A>,fn:A->Void):Eventual<A>{
     return f.foreach(fn);
   }
-  static public function mapL<A,B,C>(f:Eventual<Either<A,B>>,fn:A->C):Eventual<Either<C,B>>{
+  static public function mapLeft<A,B,C>(f:Eventual<Either<A,B>>,fn:A->C):Eventual<Either<C,B>>{
     return f.map(
       function(x){
         return switch (x){
@@ -431,12 +430,15 @@ class Eventuals{
     return ft;
   }
   #end
+  static public function either<A>(evt:Eventual<Either<A,A>>):Eventual<A>{
+    return evt.map(Eithers.either);
+  }
 }
 class Eventuals1{
   /**
     One parameter callback handler, where callback is called exactly once.
   */
-  static public function futureOf<A>(f:(A->Void)->Void):Eventual<A>{
+  static public function eventualOf<A>(f:(A->Void)->Void):Eventual<A>{
     var fut = new Eventual();
     f(
       function(res){
@@ -450,7 +452,7 @@ class Eventuals2{
   /**
     Creates a Eventual of Tuple2<A,B> from a callback function(a:A,b:B)
   */
-  static public function futureOf<A,B>(f:(A->B->Void)->Void):Eventual<Tuple2<A,B>>{
+  static public function eventualOf<A,B>(f:(A->B->Void)->Void):Eventual<Tuple2<A,B>>{
     var ft = new Eventual();
     f(
       function(a,b){
@@ -464,7 +466,7 @@ class Eventuals3{
   /**
     Creates a Eventual of Tuple2<A,B,C> from a callback function(a:A,b:B,c:C)
   */
-  static public function futureOf<A,B,C>(f:(A->B->C->Void)->Void):Eventual<Tuple3<A,B,C>>{
+  static public function eventualOf<A,B,C>(f:(A->B->C->Void)->Void):Eventual<Tuple3<A,B,C>>{
     var ft = new Eventual();
     f(
       function(a,b,c){

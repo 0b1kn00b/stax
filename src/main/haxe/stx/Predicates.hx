@@ -22,6 +22,11 @@ class Predicates {
         return true;
       }
   }
+  @:noUsing static public function zero<A>() : Predicate<A>{
+    return function(value){
+        return false;
+      }
+  }
   /**
     Produces a predicate that succeeds on a null input
   */

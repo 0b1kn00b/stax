@@ -1,5 +1,9 @@
 package stx;
 
+import stx.Errors;
+import stx.Error.*;
+import stx.Prelude;
+
 class Enums {
 
 	public function new() { }
@@ -47,7 +51,11 @@ class Enums {
 	  @return
 	 */
 	public static function params( value : EnumValue ) : Array<Dynamic> {
-		return Type.enumParameters(value);
+		return try{
+		 	Type.enumParameters(value); 
+		}catch(e:Dynamic){
+			[];
+		}
 	}
 	/**
 	  Produces the Enum of the given 'value'
@@ -70,8 +78,12 @@ class Enums {
 	  @param	e
 	  @return
 	 */
-	public static function key( e : Enum<Dynamic> ) : String {
-		return Type.getEnumName(e);
+	public static function key( e : Enum<Dynamic> ) : Outcome<String> {
+		return try{
+		  Right(Type.getEnumName(e));
+		}catch(e:Dynamic){
+			Left(err(NativeError(e)));
+		}
 	}
 	/**
 	  Produces an Enum from the given 'name'.

@@ -1,9 +1,9 @@
-package stx.parse;
+package stx.prs;
 
-import stx.parse.InputStream;
+import stx.prs.InputStream;
 
-using stx.parse.Parser;
-using stx.parse.StringParsers;
+using stx.prs.Parser;
+using stx.prs.StringParsers;
 
 using stx.Iterables;
 

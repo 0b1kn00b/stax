@@ -4,6 +4,7 @@ using stx.Tuples;
 
 import stx.ifs.Reply;
 
+import stx.Log.*;
 import stx.Tuples;
 import stx.Prelude;
 import stx.arw.OptionArrow;
@@ -119,11 +120,6 @@ abstract Arrow<I,O>(ArrowType<I,O>) from ArrowType<I,O>{
     return inline function(a:A,b:B->Void):Void{
       //trace('called fromFunction');
       b(fn(a));
-      /*untyped process.nextTick(
-        function(){
-          
-        }
-      );*/
     }
   }
   @:from static inline public function fromFunction2<A,B,C>(fn:A->B->C):Arrow<Tuple2<A,B>,C>{
@@ -175,6 +171,12 @@ class Arrows{
   }
   static public inline function apply<I,O>(arw:Arrow<I,O>,i:I):Eventual<O>{
     return Continuation.toEventual(withInput.bind(arw,i));
+  }
+  static public inline function resolve<I,O>(arw:Arrow<I,O>,i:I):Eventual<O>{
+    return Continuation.toEventual(withInput.bind(arw,i));
+  }
+  static public inline function partial<I,O>(arw:Arrow<I,O>,i:I):Future<O>{
+    return withInput.bind(arw,i);
   }
   static public inline function reply<A>(arw:Arrow<Unit,A>):Eventual<A>{
     return apply(arw,Unit);
@@ -335,16 +337,17 @@ class Arrows{
   }
   static public function lazy<T>(arw:Arrow<Unit,T>):Arrow<Unit,T>{
     var evt : Eventual<T> = null;
-    return function(x:Unit){
+    return Arrow.fromEventualConstructor( function(x:Unit):Eventual<T>{
       if(evt!=null){
         return evt;
       }
-      return evt = apply(arw,Unit);
-    }
+      evt = Arrows.apply(arw,Unit);
+      return evt;
+    });
   }
 }
 class EventualArrows{
-  public static function arrow<I>(p:Eventual<I>):Arrow<Unit,I>{
+  public static function toArrow<I>(p:Eventual<I>):Arrow<Unit,I>{
     return function(u:Unit){ return p; }
   }
 }

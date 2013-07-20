@@ -1,6 +1,6 @@
 package stx.arw;
 
-import stx.StaxError;
+import stx.Errors;
 import stx.Tuples;
 import stx.Error.*;
 import stx.Eithers;

@@ -5,8 +5,15 @@ using stx.Prelude;
 using stx.Tuples;
 using stx.Compose;
 
-typedef PartialFunction<A,Z> = Array<Tuple2<Method<A,Bool>,Method<A,Z>>>;
-private typedef PF<A,Z> = PartialFunction<A,Z>;
+        typedef PredicateMethod<A,Z>  = Tuple2<Method<A,Bool>,Method<A,Z>>;
+        typedef PartialFunction<A,Z>  = Array<PredicateMethod<A,Z>>;
+private typedef PF<A,Z>               = PartialFunction<A,Z>;
+
+class PredicateMethods{
+  static public function unit<A>():PredicateMethod<A,A>{
+    return tuple2(Predicates.zero(),Compose.unit());
+  }
+}
 class PartialFunctions<A, Z>{
   @:noUsing static public function unit<A,Z>():PartialFunction<A,Z>{
     return create([tuple2(Compose.pure(false),null)]);

@@ -1,4 +1,4 @@
-package stx.parse;
+package stx.prs;
 
 import stx.Prelude;
 import stx.ds.List;
@@ -8,9 +8,9 @@ using stx.Arrays;
 using stx.Tuples;
 using stx.Options;
 										
-import stx.parse.InputStream;
+import stx.prs.InputStream;
 
-using stx.parse.Parser; 
+using stx.prs.Parser; 
 using Lambda;
 
 /**

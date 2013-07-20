@@ -1,9 +1,12 @@
 package stx.plus;
 
-import stx.StaxError;
-import stx.Tuples;
+import haxe.ds.StringMap;
+import stx.Errors;
 import Type;
 
+using stx.Tuples;
+using stx.Options;
+using stx.Iterators;
 using stx.Prelude;
 using stx.Arrays;
 
@@ -35,6 +38,7 @@ class Equal{
       case TNull                                                        : NullEqual.equals;
       case TInt,TFloat,TBool                                            : __equals__(inline function(x,y) return x == y);
       case TFunction                                                    : __equals__(Reflect.compareMethods); 
+      case TClass( c ) if ( c == StringMap  )                           : __equals__(StringMapEqual.equals);
       case TClass( c ) if ( c == Array  )                               : __equals__(ArrayEqual.equals);
       case TClass( c ) if ( c == Date   )                               : __equals__(stx.Dates.equals);
       case TClass( c ) if ( c == String )                               : __equals__(stx.Strings.equals);
@@ -44,7 +48,7 @@ class Equal{
         if(Type.getInstanceFields(c).remove("equals")){
           __equals__(EqualsEquals.equals);
         }else{
-          throw NullReferenceError('equals'); __equals__(function(x,y){return false;});
+          throw NullReferenceError('equals on $v'); __equals__(function(x,y){return false;});
         }
       case TObject      : __equals__(ObjectEquals.equals);
       case TUnknown     : __equals__(
@@ -83,6 +87,19 @@ class ObjectEquals{
     return o;
   }
 }
+class OptionEqual{
+  static public inline function equals<A>(op0:Option<A>,op1:Option<A>):Bool{
+    return op0.zip(op1).map(
+      function(l:A,r:A){
+        return Equal.getEqualFor(l)(l,r);
+      }.spread()
+    ).getOrElse(
+      function(){
+        return op0.isEmpty() && op1.isEmpty();
+      }
+    );
+  }
+}
 class ProductEquals{
   static public inline function equals(a:Product,b:Product){
     var els0  = a.elements();
@@ -100,6 +117,11 @@ class ProductEquals{
       }
     }
     return o;
+  }
+}
+class StringMapEqual{
+  static public inline function equals<A>(a:StringMap<A>,b:StringMap<A>){
+    return ArrayEqual.equals( a.keys().zip(a.iterator()).toArray(), b.keys().zip(b.iterator()).toArray() );
   }
 }
 class EqualsEquals{

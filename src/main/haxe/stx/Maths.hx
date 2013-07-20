@@ -1,6 +1,7 @@
 package stx;
 
-											using stx.Maths;
+using stx.Maths;
+
 class Maths {	
 	/**
 	  Produces either a zero or a one randomly, influenced by ´weight´
@@ -92,6 +93,7 @@ class Floats {
 	static public inline function sgn(n:Float) {
 		return (n == 0 ? 0 : Math.abs(n) / n);
 	}
+
 	/**
 		Produce the larger of ´v1´ and ´v2´.
 	*/
@@ -154,6 +156,8 @@ class Floats {
 	}
 }
 class Ints {
+	static public inline var ZERO : Int = 0;
+	static public inline var ONE  : Int = 1;
 	/**
 	  Produces whichever is the greater.
 	  @param	v1
@@ -333,11 +337,71 @@ class Ints {
 	/**
 	 Mod ´a´ by ´b´
 	*/
-	static public inline function mod(a:Int,b:Int):Float{
+	static public inline function mod(a:Int,b:Int):Int{
 		return a % b;
 	}
 	static public inline function inv(n:Int):Int{
 		return -n;
+	}
+	static public inline function and(a : Int, b : Int) : Int{
+		return a & b;
+	}
+	/**
+	*	Returns true if a == b
+	**/
+	static public inline function eq(a:Int, b:Int) : Bool{
+		return (a == b);
+	}
+	/**
+	*	Returns true if a > b
+	**/
+	static public inline function gt(a:Int, b:Int){
+		return (a > b);
+	}
+	/**
+	*	Returns true if a >= b
+	**/
+	static public inline function gteq(a:Int, b:Int){
+		return (a >= b);
+	}
+	/**
+	*	Returns true if a < b
+	**/
+	static public inline function lt(a:Int, b:Int) : Bool{
+		return (a < b);
+	}
+	/**
+	*	Returns true if a <= b
+	**/
+	static public inline function lteq(a:Int, b:Int){
+		return (a <= b);
+	}
+	/**
+	* Returns v >>> bits (unsigned shift)
+	*/
+	static public inline function ushr(v : Int, bits:Int) : Int{
+		return v >>> bits;
+	}
+	/**
+	* Returns a ^ b
+	*/
+	static public inline function xor(a : Int, b : Int) : Int{
+		return a ^ b;
+	}
+	/**
+	* Returns v << bits
+	*/
+	public static inline function shl(v : Int, bits:Int) : Int{
+		return v << bits;
+	}
+	/**
+	* Returns v >> bits (signed shift)
+	*/
+	public static inline function shr(v : Int, bits:Int) : Int{
+		return v >> bits;
+	}
+	static public inline function abs(v : Int) : Int{
+		return Std.int(Math.abs(v));
 	}
 	static public inline function toString(a:Int):String{
 		return '$a';

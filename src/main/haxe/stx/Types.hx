@@ -4,7 +4,7 @@ using stx.Prelude;
 using stx.Arrays;
 
 import stx.Error.*;
-import stx.StaxError;
+import stx.Errors;
 
 import stx.Objects;
 import stx.Prelude;
@@ -21,10 +21,10 @@ class Types{
   static public function resolve(name:String):Class<Dynamic>{
     return Type.resolveClass(name);
   }
-  static public function resolveClassOption(s:String):Option<Class<Dynamic>>{
-    return Options.create(Type.resolveClass(s));
+  static public function resolveClassOption<T>(s:String):Option<Class<T>>{
+    return Options.create(cast Type.resolveClass(s));
   }
-  static public function resolveClassEither(s:String):Outcome<Class<Dynamic>>{
+  static public function resolveClassEither<T>(s:String):Outcome<Class<T>>{
     return resolveClassOption(s).orEitherC(err(NullReferenceError('$s')));
   }
   static public function getClassOption<A>(c:A):Option<Class<A>>{
@@ -65,6 +65,14 @@ class Types{
     }
     return Right(v);
   }
+  static public function createInstanceOption<A>(type:Class<A>,?args:Array<Dynamic>):Option<A>{
+    args = if(args == null) [] else args;
+    return try{
+      Some(Type.createInstance(type,args));  
+    }catch(e:Dynamic){
+      None;
+    }
+  }
   static public function resolveCreateOutcome<A>(name:String,?args:Array<Dynamic>):Outcome<A>{
     return Types.resolveClassOption.first().pinch().then(
       function(l:Option<Class<Dynamic>>,r:String){
@@ -101,6 +109,13 @@ class Types{
    @:thx
    static public inline function of<T>(type : Class<T>, value : Dynamic) : Null<T>{
       return (Std.is(value, type) ? cast value : null);
+   }
+   static public inline function ofOutcome<T>(type:Class<T>, value: Dynamic):Outcome<T>{
+     return try{
+       Right(of(type,value));
+     }catch(e:Dynamic){
+        Left(err(NativeError(e)));
+     }
    }
    static public function extractAllAnyFromTypeOption<A>(v:A):Option<Array<Tuple2<String,Dynamic>>>{
     return
@@ -146,6 +161,13 @@ class Types{
       case TEnum(e) : Type.getEnumName(e);
       case TObject  : "Object";
       case TUnknown : "Unknown";
+    }
+  }
+  static public function pack(o:Dynamic):String{
+    return switch (Type.typeof(o)) {
+      case TNull, TInt, TFloat, TBool, TFunction, TObject, TUnknown : 'std';
+      case TClass(c)  : Type.getClassName(c).split('.').dropRight(1).join('.');
+      case TEnum(c)   : Type.getEnumName(c).split('.').dropRight(1).join('.');
     }
   }
 }

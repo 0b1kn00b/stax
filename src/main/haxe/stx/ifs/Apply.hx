@@ -1,7 +1,7 @@
 package stx.ifs;
 
 import stx.Error.*;
-import stx.StaxError;
+import stx.Errors;
 
 import stx.Prelude;
 

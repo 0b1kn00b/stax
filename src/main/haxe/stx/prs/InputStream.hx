@@ -1,4 +1,4 @@
-package stx.parse;
+package stx.prs;
 
 /**
  * ...
@@ -7,7 +7,7 @@ package stx.parse;
 import Type;
 
 import stx.ds.List;
-import stx.parse.Parser;
+import stx.prs.Parser;
 
 import stx.plus.Equal;
 

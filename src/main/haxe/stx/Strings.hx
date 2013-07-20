@@ -1,7 +1,7 @@
 package stx;
 
 import stx.Error.*;
-import stx.StaxError;
+import stx.Errors;
 import stx.Prelude;
 
 using stx.Maths;
@@ -84,7 +84,7 @@ class Strings {
   static public function trim(v: String): String {
     return StringTools.trim(v);
   }
-  static public function drop(v:String,n:Int):String{
+  static public function dropLeft(v:String,n:Int):String{
     return v.substr(n);
   }
   static public function take(v:String,n:Int):String {
@@ -179,22 +179,54 @@ class Strings {
   static public function split(st:String,sep:String):Array<String>{
     return st.split(sep);
   }
-  public static function isEmpty(value : String):Bool{
+  static public function isEmpty(value : String):Bool{
     return value == null || value.length < 1;
   }
-  public static function isNotEmpty(value : String) : Bool {
+  static public function isNotEmpty(value : String) : Bool {
     return !isEmpty(value);
   }
-  public static function isEmptyOrBlank(value : String) : Bool {
+  static public function isEmptyOrBlank(value : String) : Bool {
     return isEmpty(StringTools.trim(value));
   }
-  public static function isNotEmptyOrBlank(value : String) : Bool {
+  static public function isNotEmptyOrBlank(value : String) : Bool {
     return isNotEmpty(StringTools.trim(value));
   }
-  public static function pure() : String {
+  static public function pure() : String {
     return "";
   }
-  public static function uuid(value : String = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx') : String {
+  /**
+    Strip whitespace out of a string
+  **/
+  static public function stripWhite( s : String ) : String {
+    var l = s.length;
+    var i = 0;
+    var sb = new StringBuf();
+    while( i < l ) {
+      if(!isSpace(s, i))
+        sb.add(s.charAt(i));
+      i++;
+    }
+    return sb.toString();
+  }
+  /**
+    Continues to replace [sub] with [by] until no more instances of [sub] exist.
+  **/
+  static public function replaceRecurse( s : String, sub : String, by : String ) : String {
+    if(sub.length == 0)
+      return replace(s, sub, by);
+    if(by.indexOf(sub) >= 0)
+      throw "Infinite recursion";
+    var ns : String = s.toString();
+    var olen = 0;
+    var nlen = ns.length;
+    while(olen != nlen) {
+      olen = ns.length;
+      replace( ns, sub, by );
+      nlen = ns.length;
+    }
+    return ns;
+  }
+  static public function uuid(value : String = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx') : String {
     var reg = ~/[xy]/g;
     return reg.map(value, function(reg) {
         var r = Std.int(Math.random() * 16) | 0;
@@ -202,7 +234,7 @@ class Strings {
         return v.hex();
     }).toLowerCase();
   }
-  public static function iterator(value : String) : Iterator<String> {
+  static public function iterator(value : String) : Iterator<String> {
     var index = 0;
     return {
         hasNext: function() {
@@ -217,19 +249,25 @@ class Strings {
         }
     };
   }
-  public static function camelCaseToDashes(value : String) : String {
+  static public function camelCaseToDashes(value : String) : String {
     var regexp = new EReg("([a-zA-Z])(?=[A-Z])", "g");
     return regexp.replace(value, "$1-");
   }
 
-  public static function camelCaseToLowerCase(value : String, ?separator : String = "_") : String {
+  static public function camelCaseToLowerCase(value : String, ?separator : String = "_") : String {
     var reg = new EReg("([^\\A])([A-Z])", "g");
     return reg.replace(value, "$1${separator}$2").toLowerCase();
   }
-
-  public static function camelCaseToUpperCase(value : String, ?separator : String = "_") : String {
+  static public function camelCaseToUpperCase(value : String, ?separator : String = "_") : String {
     var reg = new EReg("([^\\A])([A-Z])", "g");
     return reg.replace(value, "$1${separator}$2").toUpperCase();
+  }
+  static public function isSpace( s : String, pos : Int ) : Bool {
+    var c = s.charCodeAt( pos );
+    return (c >= 9 && c <= 13) || c == 32;
+  }
+  static public function chr(i:Int){
+    return String.fromCharCode(i);
   }
 }
 class ERegs{

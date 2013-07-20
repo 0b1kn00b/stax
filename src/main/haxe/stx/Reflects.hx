@@ -1,6 +1,6 @@
 package stx;
 
-import stx.StaxError;
+import stx.Errors;
 import stx.Prelude;
 import stx.Error.*;
 
@@ -63,9 +63,10 @@ class Reflects{
 		return Reflect.field.p2(fieldname);
 	}
 	static public function extractFieldsFromAny<A>(v:A):Array<Tuple2<String,Dynamic>>{
+    var u : Object = cast v;
 		return Types.extractAllAnyFromTypeOption(v)
 			.getOrElse(
-				Objects.extractAllAny.lazy(cast v)
+				Objects.extractAllAny.lazy(u)
 			);	
 	}
 	static public function extractProperties<A>(v:A):Array<Tuple2<String,Dynamic>>{

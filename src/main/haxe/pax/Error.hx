@@ -2,7 +2,7 @@ package pax;
 
 import funk.Funk.Errors in FunkError;
 
-import stx.StaxError;
+import stx.Errors;
 import stx.Error.*;
 
 import stx.Error in StaxErrorType;

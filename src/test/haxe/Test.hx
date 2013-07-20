@@ -6,11 +6,16 @@ class Test{
   function new(){
     var rig                     = new TestRig();
     var tests : Array<TestCase> = [
-      new stx.rtti.IntrospectTest(),
+      new stx.ObjectsTest(),
       /*
+      new stx.LogTest(),
+      new stx.ContinuationTest(),
+      new stx.ReturnTest(),
+      new stx.MethodTest(),
+      new stx.rtti.IntrospectTest(),
       new stx.ErrorTest(),
       new stx.arw.ArrowsTest(),
-      new stx.LogTest(),
+      new stx.ifs.MonadTest(),
       new stx.rtti.RTypeTest(),
       new stx.PartialFunctionTest()
       new stx.ds.ListNewTest()

@@ -2,7 +2,7 @@ package stx;
 
 import stx.Prelude;
 import stx.Error;
-import stx.StaxError;
+import stx.Errors;
 using stx.Eithers;
 
 using stx.Functions;

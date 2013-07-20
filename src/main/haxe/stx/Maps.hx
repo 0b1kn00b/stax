@@ -9,7 +9,7 @@ class Maps {
 	/**
 		Creates an Iterable of Tuple2<Key,Value> from a Map.
 	*/
-	static public function fromMap<K,V>(h:Map<K,V>):Iterable<Tuple2<K,V>>{
+	static public function toIterable<K,V>(h:Map<K,V>):Iterable<Tuple2<K,V>>{
 		return
 			h.keys().toIterable().map(
 				function(x:K){

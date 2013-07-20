@@ -18,6 +18,12 @@ abstract Callback<T>(CallbackType<T>) from CallbackType<T> to CallbackType<T>{
     v.foreach(handler);
     return handler;
   }
+  @:from static public inline function fromNativeCallback<T>(fn:T->Void){
+    return function(v:T){
+      fn(v);
+      return Niladic.unit();
+    }
+  }
   public inline function invoke(v:T):Niladic{
     return this(v);
   }

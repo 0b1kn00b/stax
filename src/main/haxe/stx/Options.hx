@@ -181,7 +181,7 @@ class Options {
   /**
     Produces an Either where 'o1' is on the right, or if None, the result of 'thunk' on the left.
    */
-  static public function orEither<T, S>(o1: Option<T>, thunk: Thunk<S>): Either<S, T> {
+  static public function orEither<T, S>(o1: Option<S>, thunk: Thunk<T>): Either<T, S> {
     return switch (o1) {
       case None: Eithers.toLeft(thunk());
       case Some(v): Eithers.toRight(v);

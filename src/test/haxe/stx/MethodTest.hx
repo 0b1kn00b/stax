@@ -1,12 +1,25 @@
 package stx;
 
-import stx.test.TestCase;
-import stx.test.Assert;
+import stx.Log.*;
+import stx.Muster;
+import stx.Muster.Test.*;
 
-import stx.Method;
+using stx.Method;
 
 class MethodTest extends TestCase{
-  public function test(){
+  public function testConstruct(u:UnitArrow):UnitArrow{
+    var a : Method<Int,Int> = function(x:Int):Int {
+      trace(x);
+      return x;
+    }
+    $type(a);
+    var b = function(x:Int):Int{ 
+      trace(x);
+      return x + 3;
+    };
+    trace( a.apply(2) );
+    trace( a.then(b).apply(1) );
 
+    return u;
   }
 }

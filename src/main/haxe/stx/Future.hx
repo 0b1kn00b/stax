@@ -8,19 +8,31 @@ using stx.Tuples;
 using stx.Functions;
 using stx.Compose;
 
-//(T->Niladic)->Niladic
+@:stability('0')
 abstract Future<T>(Continuation<Niladic,T>) from Continuation<Niladic,T>{
-  static public inline function unit<T>():Future<T>{
-    return new Future(function(x:T->Void){
+  @:from static public function fromNativeCallback<T>(cb:(T->Void)->Void){
+   return function(x:T->Void){
+      var fn = function(y:T){
+        x(y);
+      };
+      cb(fn);
       return Niladic.unit();
-    });
+    }
   }
-  public inline function invoke(t:T):Niladic{
-    return this.apply(
-      function(x:T):Niladic{
-        return null;
+  @:to public function toNativeCallback():(T->Void)->Void{
+    return function(f0:T->Void){
+      var f1 = function(x){
+        f0(x);
+        return Niladic.unit();
       }
-    );
+      this.apply(f1);
+    }
+  }
+  @:noUsing static public function pure<A>(v:A):Future<A> {
+    return new Future(function (callback:Callback<A>) { return callback.invoke(v); } );
+  }
+  static public inline function unit<T>():Future<T>{
+    return new Future(function(x:T->Void){ return Niladic.unit(); });
   }
   public inline function apply(f:Callback<T>):Niladic{
     return this.apply(f);
@@ -53,9 +65,6 @@ abstract Future<T>(Continuation<Niladic,T>) from Continuation<Niladic,T>{
       return this.apply(function(a:T):Niladic{ return next(a).apply(cont); });
     }
   }
-  @:noUsing static public function pure<A>(v:A):Future<A> {
-    return new Future(function (callback:Callback<A>) { callback.invoke(v); return null; } );
-  }
   @:noUsing static public function ofArrow<A>(f:(A->Void)->Void):Future<A> {
     var op : Future<A> = unit();
     var f0 = function(x:A):Void{
@@ -67,7 +76,7 @@ abstract Future<T>(Continuation<Niladic,T>) from Continuation<Niladic,T>{
     f(f0);
     return op;
   }
-  public function asFunction():Continuation<Niladic,T>{
+  public function native():Continuation<Niladic,T>{
     return this;
   }
 }
@@ -116,24 +125,23 @@ class Futures{
   }
   static public function bindFold<A,B>(iter:Iterable<A>,start:Future<B>,fm:B->A->Future<B>):Future<B>{
     return iter.foldl(
-        start ,
-        function(memo : Future<B>, next : A){
-          return 
-            memo.flatMap(
-              function(b: B){
-                return fm(b,next);
-              }
-            );
-        }
-      );
+      start,
+      function(memo : Future<B>, next : A){
+        return memo.flatMap(
+          function(b: B){
+            return fm(b,next);
+          }
+        );
+      }
+    );
   }
 
   #if (js || flash)
-  static public function delayC<A>(s:Int,c:A):Future<A>{
+  static public function delayC<A>(cb:Callback<A>,s:Int):Future<A>{
     var ft = Future.unit();
     haxe.Timer.delay(
       function(){
-        ft.invoke(c);
+        ft.apply(cb);
       },s
     );
     return ft;
@@ -145,13 +153,8 @@ class Futures1{
     One parameter callback handler, where callback is called exactly once.
   */
   static public function futureOf<A>(f:(A->Void)->Void):Future<A>{
-    var fut = Future.unit();
-    f(
-      function(res){
-        fut.invoke(res);
-      }
-    );
-    return fut;
+    var ft = Future.fromNativeCallback(f);
+    return ft;
   }
 }
 class Futures2{
@@ -159,13 +162,13 @@ class Futures2{
     Creates a Future of Tuple2<A,B> from a callback function(a:A,b:B)
   */
   static public function futureOf<A,B>(f:(A->B->Void)->Void):Future<Tuple2<A,B>>{
-    var ft = Future.unit();
-    f(
-      function(a,b){
-        ft.invoke( tuple2(a,b) );
-      }
-    );
-    return ft;
+    return function(x:Tuple2<A,B>->Void){
+      var fn = function(l:A,r:B){
+        x(tuple2(l,r));
+      };
+      f(fn);
+      return Niladic.unit();
+    }
   }
 }
 class Futures3{
@@ -173,12 +176,12 @@ class Futures3{
     Creates a Future of Tuple2<A,B,C> from a callback function(a:A,b:B,c:C)
   */
   static public function futureOf<A,B,C>(f:(A->B->C->Void)->Void):Future<Tuple3<A,B,C>>{
-    var ft = Future.unit();
-    f(
-      function(a,b,c){
-        ft.invoke( tuple3(a,b,c) );
-      }
-    );
-    return ft;
+    return function(x:Tuple3<A,B,C>->Void){
+      var fn = function(a:A,b:B,c:C){
+        x(tuple3(a,b,c));
+      };
+      f(fn);
+      return Niladic.unit();
+    }
   }
 }

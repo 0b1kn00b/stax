@@ -9,7 +9,7 @@ import stx.rtti.*;
 
 using stx.rtti.RTypes;
 
-@:rtti class Introspect{
+@:rtti @:keepSub class Introspect{
   public function new(){}
 
   public function introspect():RClass<Dynamic>{

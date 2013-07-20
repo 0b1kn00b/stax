@@ -6,6 +6,7 @@ import stx.Tuples;
 
 using stx.Tuples;
 using stx.Eithers;
+using stx.Options;
 using stx.Functions;
 
 class Eithers {
@@ -201,5 +202,13 @@ class Eithers {
       case Right(_): true;
       case _: false;
     }
+  }
+  public static function success<L,R>(e:Either<L,R>,fn:R->Void):Either<L,R>{
+    e.right().foreach(fn);
+    return e;
+  }
+  public static function failure<L,R>(e:Either<L,R>,fn:L->Void):Either<L,R>{
+    e.left().foreach(fn);
+    return e;
   }
 }

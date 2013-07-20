@@ -15,7 +15,7 @@ typedef Object = {};
 /**
   Object defined as {} is different from Dynamic in that it does not allow closures.
 */
-@:note('0b1kn00b','reference loops')
+@:note('0b1kn00b: reference loops')
 class Objects {
   @:noUsing
   @:note('#0b1kn00b: could throw an error')
@@ -47,13 +47,17 @@ class Objects {
   inline static public function copyTyped<T>(d: T, shallow: Bool = true): T return
     cast copy(untyped d, shallow);
   
-  static public function copyTo(src: Object, dest: Object, shallow: Bool = true): Object {
-    function safecopy(d: Dynamic): Dynamic
+  static public function copyTo(src: Object, dest: Object, shallow: Bool = true,?refs : Array<Dynamic>): Object {
+    refs = refs == null ? [] : refs;
+    function safecopy(d: Dynamic): Dynamic{
+      if(refs.forAny(function(x){return d == x;})){return d;}
+      refs.push(d);
       return switch (Type.typeof(d)) {
-        case TObject: copy(d, shallow);
-        
-        default: d;
+        case TObject  : 
+          copyTo(d, {}, shallow, refs);
+        default       : d;
       }
+    }
     
     for (field in Reflect.fields(src)) {
       var value = Reflect.field(src, field);

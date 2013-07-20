@@ -10,8 +10,10 @@ using stx.Options;
 using stx.Functions;
 using stx.Arrays;
 
-
 class Arrays {
+  static public function isDefined<T>(a:Array<T>):Bool{
+    return a.length > 0;
+  }
   /**
     Apply f to each element in a.
   */
@@ -535,6 +537,9 @@ class Arrays {
   */
   static public function dropLeft<T>(a: Array<T>, n: Int): Array<T> {
     return if (n >= a.length) [] else a.slice(n);
+  }
+  static public function dropRight<T>(a: Array<T>, n: Int): Array<T> {
+    return if (n >= a.length) [] else a.slice(0,a.length - n);
   }
   /**
     Drops values from Array `a` while the predicate returns true.

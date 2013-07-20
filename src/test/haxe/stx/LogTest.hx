@@ -8,7 +8,6 @@ import stx.log.*;
 import stx.log.Listing;
 import stx.log.Listing.Listings.*;
 
-import stx.Arrow;
 
 class LogTest extends TestCase{
   public function testLog(u:UnitArrow):UnitArrow{

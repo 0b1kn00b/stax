@@ -17,7 +17,7 @@ class Listings{
   static public function format(p: PosInfos) {
     return p.fileName + ":" + p.lineNumber + " (" + p.className + ":" + p.methodName + "): ";
   }
-  static public function create(cls:Class<Dynamic>,?method:String){
-    return 
-  }
+  /*static public function create(cls:Class<Dynamic>,?method:String){
+    
+  }*/
 }

@@ -8,7 +8,7 @@ using stx.Error;
 enum StaxError{
   AbstractMethodError(?pos:PosInfos);
   ArgumentError(field:String,?pos:PosInfos);
-  AssertionError(?should:String,butis:String);
+  AssertionError(is:String,?should:String);
   ErrorStack(arr:Array<Error>);
   TypeError(msg:String,?pos:PosInfos);
   NullReferenceError(field:String,?pos:PosInfos);
