@@ -3,8 +3,8 @@ package stx.rtti;
 import haxe.rtti.CType;
 
 import stx.Prelude;
-import stx.Error;
-import stx.Error.*;
+import stx.Fail;
+import stx.Fail.*;
 
 using stx.Compose;
 using stx.Eithers;
@@ -14,6 +14,9 @@ using stx.rtti.RTypes;
 using stx.Tuples;
 using stx.Reflects;
 
+/**
+  Binding of a value and it's TypeTree.
+*/
 abstract RType<T>(Tuple2<T,TypeTree>) from Tuple2<T,TypeTree> to Tuple2<T,TypeTree>{
   public function new(v){
     this = v;

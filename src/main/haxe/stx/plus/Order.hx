@@ -15,7 +15,7 @@ typedef OrderFunction<T>        = Function2<T, T, Int>;
 
 class Order {
 
-	static function __order__<T>(impl : OrderFunction<Dynamic>) : OrderFunction<T> {
+	static function __order__<T>(impl : OrderFunction<T>) : OrderFunction<T> {
     return function(a, b) {
     return if(a == b || (a == null && b == null)) 0;
       else if(a == null) -1;
@@ -37,11 +37,11 @@ class Order {
   static public function getOrderForType<T>(v: ValueType) : OrderFunction<T> {
     return switch(v) {
     case TBool:
-      __order__(Bools.compare);
+      __order__(cast Bools.compare);
     case TInt:
-      __order__(Ints.compare);
+      __order__(cast Ints.compare);
     case TFloat:
-      __order__(Floats.compare);
+      __order__(cast Floats.compare);
     case TUnknown:
       function(a : T, b : T) return (a == b) ? 0 : ((cast a) > (cast b) ? 1 : -1);
     case TObject:
@@ -58,13 +58,13 @@ class Order {
     case TClass(c):
       switch(Type.getClassName(c)) {
       case "String":
-        __order__(Strings.compare);
+        __order__(cast Strings.compare);
       case "Date":
-        __order__(Dates.compare);
+        __order__(cast Dates.compare);
       case "Array":
-        __order__(ArrayOrder.compare);
+        __order__(cast ArrayOrder.compare);
       case "stx.Tuple2" , "stx.Tuple3" , "stx.Tuple4" , "stx.Tuple5" :
-          __order__(ProductOrder.compare);
+          __order__(cast ProductOrder.compare);
       default:
         if(Meta._hasMetaDataClass(cast c)) {
           var i = 0;
@@ -97,7 +97,7 @@ class Order {
         }
       }
     case TEnum(_):
-        __order__(function(a, b) {
+        __order__(cast function(a, b) {
       var v = Type.enumIndex(a) - Type.enumIndex(b);
       if(0 != v)
         return v;

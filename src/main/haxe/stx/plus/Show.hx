@@ -73,6 +73,9 @@ class EnumShow{
 }
 class ObjectShow {
   static public function toString(v:Dynamic):String{
+    if(Reflect.fields(v).length == 0){
+      return Std.string(v); // fix : Haxe mistypes nodejs native error
+    }
     var buf = [];
     for(k in Reflect.fields(v)) {
       var i = Reflect.field(v, k);
@@ -144,7 +147,7 @@ class StackItemShow{
         case Module( m )                    : m;
         case FilePos( si , _ , line )       : toString(si) + ':$line';
         case Method( classname , method )   : '$classname.$method';
-        case Lambda( v )                    : '@$v';
+        case LocalFunction( v )             : '@$v';
       }
   }
 }

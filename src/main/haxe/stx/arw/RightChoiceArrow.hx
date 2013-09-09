@@ -2,7 +2,7 @@ package stx.arw;
 
 import stx.Tuples;
 import stx.Prelude;
-using stx.arw.Arrows;
+using stx.Arrows;
 
 typedef ArrowRightChoice<B,C,D> = Arrow<Either<D,B>,Either<D,C>>;
 

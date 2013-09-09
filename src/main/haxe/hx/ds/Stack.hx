@@ -105,7 +105,7 @@ class Stack<T> implements Collection<T>{
         return Lambda.array(list);
     }
     
-    /**
+       /**
         Iterates from top to bottom.
     **/
     public function iterator() : Iterator<Null<T>> {

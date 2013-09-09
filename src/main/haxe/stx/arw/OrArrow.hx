@@ -1,7 +1,7 @@
 package stx.arw;
 
 import stx.Prelude;
-using stx.arw.Arrows;
+using stx.Arrows;
 
 abstract OrArrow<L, R, R0>(Arrow<Either<L,R>, R0>) from Arrow<Either<L,R>, R0> to Arrow<Either<L,R>, R0>{
 	public function new(l:Arrow<L,R0>, r:Arrow<R,R0>) {

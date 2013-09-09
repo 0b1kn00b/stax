@@ -1353,8 +1353,8 @@ haxe.StackItem.Lambda = function(v) { var $x = ["Lambda",4,v]; $x.__enum__ = hax
 haxe.Stack = $hxClasses["haxe.Stack"] = function() { }
 haxe.Stack.__name__ = ["haxe","Stack"];
 haxe.Stack.callStack = function() {
-	var oldValue = Error.prepareStackTrace;
-	Error.prepareStackTrace = function(error,callsites) {
+	var oldValue = Failure.prepareStackTrace;
+	Failure.prepareStackTrace = function(error,callsites) {
 		var stack = [];
 		var _g = 0;
 		while(_g < callsites.length) {
@@ -1374,9 +1374,9 @@ haxe.Stack.callStack = function() {
 		}
 		return stack;
 	};
-	var a = haxe.Stack.makeStack(new Error().stack);
+	var a = haxe.Stack.makeStack(new Failure().stack);
 	a.shift();
-	Error.prepareStackTrace = oldValue;
+	Failure.prepareStackTrace = oldValue;
 	return a;
 }
 haxe.Stack.exceptionStack = function() {
@@ -1542,7 +1542,7 @@ haxe.io.Bytes.prototype = {
 		return this.readString(0,this.length);
 	}
 	,readString: function(pos,len) {
-		if(pos < 0 || len < 0 || pos + len > this.length) throw haxe.io.Error.OutsideBounds;
+		if(pos < 0 || len < 0 || pos + len > this.length) throw haxe.io.Failure.OutsideBounds;
 		var s = "";
 		var b = this.b;
 		var fcc = String.fromCharCode;
@@ -1576,11 +1576,11 @@ haxe.io.Bytes.prototype = {
 		return this.length - other.length;
 	}
 	,sub: function(pos,len) {
-		if(pos < 0 || len < 0 || pos + len > this.length) throw haxe.io.Error.OutsideBounds;
+		if(pos < 0 || len < 0 || pos + len > this.length) throw haxe.io.Failure.OutsideBounds;
 		return new haxe.io.Bytes(len,this.b.slice(pos,pos + len));
 	}
 	,blit: function(pos,src,srcpos,len) {
-		if(pos < 0 || srcpos < 0 || len < 0 || pos + len > this.length || srcpos + len > src.length) throw haxe.io.Error.OutsideBounds;
+		if(pos < 0 || srcpos < 0 || len < 0 || pos + len > this.length || srcpos + len > src.length) throw haxe.io.Failure.OutsideBounds;
 		var b1 = this.b;
 		var b2 = src.b;
 		if(b1 == b2 && pos > srcpos) {
@@ -1607,17 +1607,17 @@ haxe.io.Bytes.prototype = {
 	,length: null
 	,__class__: haxe.io.Bytes
 }
-haxe.io.Error = $hxClasses["haxe.io.Error"] = { __ename__ : ["haxe","io","Error"], __constructs__ : ["Blocked","Overflow","OutsideBounds","Custom"] }
-haxe.io.Error.Blocked = ["Blocked",0];
-haxe.io.Error.Blocked.toString = $estr;
-haxe.io.Error.Blocked.__enum__ = haxe.io.Error;
-haxe.io.Error.Overflow = ["Overflow",1];
-haxe.io.Error.Overflow.toString = $estr;
-haxe.io.Error.Overflow.__enum__ = haxe.io.Error;
-haxe.io.Error.OutsideBounds = ["OutsideBounds",2];
-haxe.io.Error.OutsideBounds.toString = $estr;
-haxe.io.Error.OutsideBounds.__enum__ = haxe.io.Error;
-haxe.io.Error.Custom = function(e) { var $x = ["Custom",3,e]; $x.__enum__ = haxe.io.Error; $x.toString = $estr; return $x; }
+haxe.io.Failure = $hxClasses["haxe.io.Failure"] = { __ename__ : ["haxe","io","Failure"], __constructs__ : ["Blocked","Overflow","OutsideBounds","Custom"] }
+haxe.io.Failure.Blocked = ["Blocked",0];
+haxe.io.Failure.Blocked.toString = $estr;
+haxe.io.Failure.Blocked.__enum__ = haxe.io.Failure;
+haxe.io.Failure.Overflow = ["Overflow",1];
+haxe.io.Failure.Overflow.toString = $estr;
+haxe.io.Failure.Overflow.__enum__ = haxe.io.Failure;
+haxe.io.Failure.OutsideBounds = ["OutsideBounds",2];
+haxe.io.Failure.OutsideBounds.toString = $estr;
+haxe.io.Failure.OutsideBounds.__enum__ = haxe.io.Failure;
+haxe.io.Failure.Custom = function(e) { var $x = ["Custom",3,e]; $x.__enum__ = haxe.io.Failure; $x.toString = $estr; return $x; }
 if(!haxe.macro) haxe.macro = {}
 haxe.macro.Context = $hxClasses["haxe.macro.Context"] = function() { }
 haxe.macro.Context.__name__ = ["haxe","macro","Context"];
@@ -1785,15 +1785,15 @@ haxe.macro.TypeDefKind.TDStructure = ["TDStructure",1];
 haxe.macro.TypeDefKind.TDStructure.toString = $estr;
 haxe.macro.TypeDefKind.TDStructure.__enum__ = haxe.macro.TypeDefKind;
 haxe.macro.TypeDefKind.TDClass = function(extend,implement,isInterface) { var $x = ["TDClass",2,extend,implement,isInterface]; $x.__enum__ = haxe.macro.TypeDefKind; $x.toString = $estr; return $x; }
-haxe.macro.Error = $hxClasses["haxe.macro.Error"] = function(m,p) {
+haxe.macro.Failure = $hxClasses["haxe.macro.Failure"] = function(m,p) {
 	this.message = m;
 	this.pos = p;
 };
-haxe.macro.Error.__name__ = ["haxe","macro","Error"];
-haxe.macro.Error.prototype = {
+haxe.macro.Failure.__name__ = ["haxe","macro","Failure"];
+haxe.macro.Failure.prototype = {
 	pos: null
 	,message: null
-	,__class__: haxe.macro.Error
+	,__class__: haxe.macro.Failure
 }
 haxe.macro.Type = $hxClasses["haxe.macro.Type"] = { __ename__ : ["haxe","macro","Type"], __constructs__ : ["TMono","TEnum","TInst","TType","TFun","TAnonymous","TDynamic","TLazy"] }
 haxe.macro.Type.TMono = function(t) { var $x = ["TMono",0,t]; $x.__enum__ = haxe.macro.Type; $x.toString = $estr; return $x; }
@@ -3091,7 +3091,7 @@ js.Lib.alert = function(v) {
 js.Lib.eval = function(code) {
 	return eval(code);
 }
-js.Lib.setErrorHandler = function(f) {
+js.Lib.setFailureHandler = function(f) {
 	js.Lib.onerror = f;
 }
 var sf = sf || {}
@@ -5042,7 +5042,7 @@ stx.LazyIterator.prototype = {
 }
 stx.Lenses = $hxClasses["stx.Lenses"] = function() { }
 stx.Lenses.__name__ = ["stx","Lenses"];
-stx.LogLevel = $hxClasses["stx.LogLevel"] = { __ename__ : ["stx","LogLevel"], __constructs__ : ["Debug","Info","Warning","Error","Fatal"] }
+stx.LogLevel = $hxClasses["stx.LogLevel"] = { __ename__ : ["stx","LogLevel"], __constructs__ : ["Debug","Info","Warning","Failure","Fatal"] }
 stx.LogLevel.Debug = ["Debug",0];
 stx.LogLevel.Debug.toString = $estr;
 stx.LogLevel.Debug.__enum__ = stx.LogLevel;
@@ -5052,9 +5052,9 @@ stx.LogLevel.Info.__enum__ = stx.LogLevel;
 stx.LogLevel.Warning = ["Warning",2];
 stx.LogLevel.Warning.toString = $estr;
 stx.LogLevel.Warning.__enum__ = stx.LogLevel;
-stx.LogLevel.Error = ["Error",3];
-stx.LogLevel.Error.toString = $estr;
-stx.LogLevel.Error.__enum__ = stx.LogLevel;
+stx.LogLevel.Failure = ["Failure",3];
+stx.LogLevel.Failure.toString = $estr;
+stx.LogLevel.Failure.__enum__ = stx.LogLevel;
 stx.LogLevel.Fatal = ["Fatal",4];
 stx.LogLevel.Fatal.toString = $estr;
 stx.LogLevel.Fatal.__enum__ = stx.LogLevel;
@@ -5086,7 +5086,7 @@ stx.Log.warning = function(v) {
 	return new stx.LogItem(stx.LogLevel.Warning,v);
 }
 stx.Log.error = function(v) {
-	return new stx.LogItem(stx.LogLevel.Error,v);
+	return new stx.LogItem(stx.LogLevel.Failure,v);
 }
 stx.Log.fatal = function(v) {
 	return new stx.LogItem(stx.LogLevel.Fatal,v);
@@ -5397,19 +5397,19 @@ stx.Method.prototype = {
 		return Reflect.compareMethods(this.fn,m.fn);
 	}
 	,replaceAt: function(i,v) {
-		throw new stx.err.AbstractMethodError({ fileName : "Methods.hx", lineNumber : 66, className : "stx.Method", methodName : "replaceAt"});
+		throw new stx.err.AbstractMethodFailure({ fileName : "Methods.hx", lineNumber : 66, className : "stx.Method", methodName : "replaceAt"});
 		return null;
 	}
 	,patch: function(args) {
-		throw new stx.err.AbstractMethodError({ fileName : "Methods.hx", lineNumber : 62, className : "stx.Method", methodName : "patch"});
+		throw new stx.err.AbstractMethodFailure({ fileName : "Methods.hx", lineNumber : 62, className : "stx.Method", methodName : "patch"});
 		return null;
 	}
 	,execute: function(v,pos) {
-		if(this.isEmpty()) throw new stx.err.AbstractMethodError({ fileName : "Methods.hx", lineNumber : 58, className : "stx.Method", methodName : "execute"});
+		if(this.isEmpty()) throw new stx.err.AbstractMethodFailure({ fileName : "Methods.hx", lineNumber : 58, className : "stx.Method", methodName : "execute"});
 		return null;
 	}
 	,get_length: function() {
-		throw new stx.err.AbstractMethodError({ fileName : "Methods.hx", lineNumber : 45, className : "stx.Method", methodName : "get_length"});
+		throw new stx.err.AbstractMethodFailure({ fileName : "Methods.hx", lineNumber : 45, className : "stx.Method", methodName : "get_length"});
 		return -1;
 	}
 	,length: null
@@ -5450,7 +5450,7 @@ stx.Method1.toMethod = function(v,name,pos) {
 stx.Method1.__super__ = stx.Method;
 stx.Method1.prototype = $extend(stx.Method.prototype,{
 	replaceAt: function(i,v) {
-		if(i != 0) throw new stx.err.OutOfBoundsError({ fileName : "Methods.hx", lineNumber : 128, className : "stx.Method1", methodName : "replaceAt"});
+		if(i != 0) throw new stx.err.OutOfBoundsFailure({ fileName : "Methods.hx", lineNumber : 128, className : "stx.Method1", methodName : "replaceAt"});
 		this.args = v;
 		return this;
 	}
@@ -5459,7 +5459,7 @@ stx.Method1.prototype = $extend(stx.Method.prototype,{
 		return this;
 	}
 	,execute: function(v,pos) {
-		if(this.fn == null || this.isEmpty()) throw new stx.err.AbstractMethodError({ fileName : "Methods.hx", lineNumber : 104, className : "stx.Method1", methodName : "execute"});
+		if(this.fn == null || this.isEmpty()) throw new stx.err.AbstractMethodFailure({ fileName : "Methods.hx", lineNumber : 104, className : "stx.Method1", methodName : "execute"});
 		var o = null;
 		try {
 			o = (function($this) {
@@ -5495,7 +5495,7 @@ stx.Method2.toMethod = function(v,name) {
 stx.Method2.__super__ = stx.Method;
 stx.Method2.prototype = $extend(stx.Method.prototype,{
 	replaceAt: function(i,v) {
-		if(i > 1) throw new stx.err.OutOfBoundsError({ fileName : "Methods.hx", lineNumber : 157, className : "stx.Method2", methodName : "replaceAt"}); else switch(i) {
+		if(i > 1) throw new stx.err.OutOfBoundsFailure({ fileName : "Methods.hx", lineNumber : 157, className : "stx.Method2", methodName : "replaceAt"}); else switch(i) {
 		case 0:
 			this.args.fst() = v;
 			break;
@@ -5536,7 +5536,7 @@ stx.Method3.toMethod = function(v,name) {
 stx.Method3.__super__ = stx.Method;
 stx.Method3.prototype = $extend(stx.Method.prototype,{
 	replaceAt: function(i,v) {
-		if(i > 2) throw new stx.err.OutOfBoundsError({ fileName : "Methods.hx", lineNumber : 198, className : "stx.Method3", methodName : "replaceAt"}); else switch(i) {
+		if(i > 2) throw new stx.err.OutOfBoundsFailure({ fileName : "Methods.hx", lineNumber : 198, className : "stx.Method3", methodName : "replaceAt"}); else switch(i) {
 		case 0:
 			this.args.fst() = v;
 			break;
@@ -5580,7 +5580,7 @@ stx.Method4.toMethod = function(v,name) {
 stx.Method4.__super__ = stx.Method;
 stx.Method4.prototype = $extend(stx.Method.prototype,{
 	replaceAt: function(i,v) {
-		if(i > 3) throw new stx.err.OutOfBoundsError({ fileName : "Methods.hx", lineNumber : 238, className : "stx.Method4", methodName : "replaceAt"}); else switch(i) {
+		if(i > 3) throw new stx.err.OutOfBoundsFailure({ fileName : "Methods.hx", lineNumber : 238, className : "stx.Method4", methodName : "replaceAt"}); else switch(i) {
 		case 0:
 			this.args.fst() = v;
 			break;
@@ -5627,7 +5627,7 @@ stx.Method5.toMethod = function(v,name) {
 stx.Method5.__super__ = stx.Method;
 stx.Method5.prototype = $extend(stx.Method.prototype,{
 	replaceAt: function(i,v) {
-		if(i > 4) throw new stx.err.OutOfBoundsError({ fileName : "Methods.hx", lineNumber : 279, className : "stx.Method5", methodName : "replaceAt"}); else switch(i) {
+		if(i > 4) throw new stx.err.OutOfBoundsFailure({ fileName : "Methods.hx", lineNumber : 279, className : "stx.Method5", methodName : "replaceAt"}); else switch(i) {
 		case 0:
 			this.args.fst() = v;
 			break;
@@ -6019,7 +6019,7 @@ stx.Options.get = function(o) {
 		case 0:
 			$r = (function($this) {
 				var $r;
-				SCore.error("Error: Option is empty",{ fileName : "Options.hx", lineNumber : 104, className : "stx.Options", methodName : "get"});
+				SCore.error("Failure: Option is empty",{ fileName : "Options.hx", lineNumber : 104, className : "stx.Options", methodName : "get"});
 				$r = null;
 				return $r;
 			}($this));
@@ -6310,7 +6310,7 @@ stx.Promise = $hxClasses["stx.Promise"] = function(cancel) {
 	this.done = false;
 	this.fut = new stx.Eventual();
 	this.err = stx.Option.None;
-	if(cancel != null) this.onError(cancel);
+	if(cancel != null) this.onFailure(cancel);
 };
 stx.Promise.__name__ = ["stx","Promise"];
 stx.Promise.success = function(value) {
@@ -6332,7 +6332,7 @@ stx.Promise.waitFor = function(toJoin) {
 	var f0 = false;
 	var oc = new stx.Promise(), results = [];
 	ArrayLambda.foreach(toJoin,function(x) {
-		x.onError(stx.reactive.F1A.lift(function(x1) {
+		x.onFailure(stx.reactive.F1A.lift(function(x1) {
 			if(oc.userCancel != null && !f0) f0 = true;
 			return x1;
 		}));
@@ -6357,11 +6357,11 @@ stx.Promise.waitFor = function(toJoin) {
 }
 stx.Promise.prototype = {
 	toCallback: function(cb) {
-		if(cb == null) throw new stx.err.NullReferenceError("cb",{ fileName : "Promise.hx", lineNumber : 256, className : "stx.Promise", methodName : "toCallback"});
+		if(cb == null) throw new stx.err.NullReferenceFailure("cb",{ fileName : "Promise.hx", lineNumber : 256, className : "stx.Promise", methodName : "toCallback"});
 		this.deliverTo(function(b) {
 			cb(null,b);
 		});
-		this.onError(stx.reactive.F1A.lift(function(x) {
+		this.onFailure(stx.reactive.F1A.lift(function(x) {
 			cb(x,null);
 			return x;
 		}));
@@ -6373,7 +6373,7 @@ stx.Promise.prototype = {
 	,flatMap: function(f) {
 		var nf = new stx.Promise();
 		nf.err = this.err;
-		this.onError(stx.reactive.F1A.lift(function(x) {
+		this.onFailure(stx.reactive.F1A.lift(function(x) {
 			nf.onCancel(x);
 			return x;
 		}));
@@ -6383,7 +6383,7 @@ stx.Promise.prototype = {
 			case 1:
 				var result = $e[2];
 				var op = f(result);
-				op.onError(stx.reactive.F1A.lift(function(x) {
+				op.onFailure(stx.reactive.F1A.lift(function(x) {
 					nf.onCancel(x);
 					return x;
 				}));
@@ -6403,7 +6403,7 @@ stx.Promise.prototype = {
 		var nf = new stx.Promise();
 		var uc = this.userCancel;
 		nf.err = this.err;
-		this.onError(stx.reactive.F1A.lift(function(x) {
+		this.onFailure(stx.reactive.F1A.lift(function(x) {
 			nf.onCancel(x);
 			return x;
 		}));
@@ -6461,8 +6461,8 @@ stx.Promise.prototype = {
 	,error: function() {
 		return this.err;
 	}
-	,onError: function(cb) {
-		if(cb == null) throw new stx.err.NullReferenceError("cb",{ fileName : "Promise.hx", lineNumber : 89, className : "stx.Promise", methodName : "onError"});
+	,onFailure: function(cb) {
+		if(cb == null) throw new stx.err.NullReferenceFailure("cb",{ fileName : "Promise.hx", lineNumber : 89, className : "stx.Promise", methodName : "onFailure"});
 		if(this.userCancel == null) this.userCancel = cb; else this.userCancel = stx.reactive.Then.then(this.userCancel,cb);
 		var $e = (this.err);
 		switch( $e[1] ) {
@@ -7275,17 +7275,17 @@ stx.ds.BinaryTrees.height = function(t) {
 	}(this));
 }
 if(!stx.functional) stx.functional = {}
-stx.functional.Foldable = $hxClasses["stx.functional.Foldable"] = function() { }
-stx.functional.Foldable.__name__ = ["stx","functional","Foldable"];
-stx.functional.Foldable.prototype = {
+stx.ds.ifs.Foldable = $hxClasses["stx.ds.ifs.Foldable"] = function() { }
+stx.ds.ifs.Foldable.__name__ = ["stx","functional","Foldable"];
+stx.ds.ifs.Foldable.prototype = {
 	foldl: null
 	,append: null
 	,empty: null
-	,__class__: stx.functional.Foldable
+	,__class__: stx.ds.ifs.Foldable
 }
 stx.ds.Collection = $hxClasses["stx.ds.Collection"] = function() { }
 stx.ds.Collection.__name__ = ["stx","ds","Collection"];
-stx.ds.Collection.__interfaces__ = [stx.functional.Foldable];
+stx.ds.Collection.__interfaces__ = [stx.ds.ifs.Foldable];
 stx.ds.Collection.prototype = {
 	removeAll: null
 	,remove: null
@@ -7601,7 +7601,7 @@ stx.ds.List.prototype = {
 		return stx.ds.List.create({ order : order, equal : this._equal, show : this._show, hash : this._hash}).addAll(this);
 	}
 	,iterator: function() {
-		return $iterator(stx.functional.FoldableExtensions)(this);
+		return $iterator(stx.ds.ifs.FoldableExtensions)(this);
 	}
 	,sort: function() {
 		var a = IterableLambda.toArray(this);
@@ -7615,7 +7615,7 @@ stx.ds.List.prototype = {
 		return result;
 	}
 	,gaps: function(f,equal) {
-		return stx.functional.FoldableExtensions.flatMapTo(this.zip(this.drop(1)),stx.ds.List.nil(null,{ order : null, equal : equal, show : null, hash : null}),function(tuple) {
+		return stx.ds.ifs.FoldableExtensions.flatMapTo(this.zip(this.drop(1)),stx.ds.List.nil(null,{ order : null, equal : equal, show : null, hash : null}),function(tuple) {
 			return f(tuple.fst(),tuple.snd());
 		});
 	}
@@ -8139,7 +8139,7 @@ stx.ds.Map.prototype = {
 		return stx.ds.plus.ArrayOrder.compare(a1,a2);
 	}
 	,iterator: function() {
-		return $iterator(stx.functional.FoldableExtensions)(this);
+		return $iterator(stx.ds.ifs.FoldableExtensions)(this);
 	}
 	,values: function() {
 		var self = this;
@@ -8491,11 +8491,11 @@ stx.ds.Set.prototype = {
 		return stx.ds.plus.ArrayOrder.compareWith(IterableLambda.toArray(this),IterableLambda.toArray(other),this.getOrder());
 	}
 	,equals: function(other) {
-		var all = stx.functional.FoldableExtensions.concat(this,other);
+		var all = stx.ds.ifs.FoldableExtensions.concat(this,other);
 		return all.size() == this.size() && all.size() == other.size();
 	}
 	,iterator: function() {
-		return $iterator(stx.functional.FoldableExtensions)(this);
+		return $iterator(stx.ds.ifs.FoldableExtensions)(this);
 	}
 	,removeAll: function(it) {
 		var set = this;
@@ -9339,21 +9339,21 @@ stx.ds.plus.ProductShow.toString = function(p) {
 	return s + ")";
 }
 if(!stx.err) stx.err = {}
-stx.Error = $hxClasses["stx.Error"] = function(msg,pos) {
+stx.Failure = $hxClasses["stx.Failure"] = function(msg,pos) {
 	this.msg = msg;
 	this.pos = pos;
 };
-stx.Error.__name__ = ["stx","error","Error"];
-stx.Error.__properties__ = {get_exception:"get_exception"}
-stx.Error.exception = null;
-stx.Error.get_exception = function() {
-	if(stx.Error.exception == null) stx.Error.exception = new stx.Eventual();
-	return stx.Error.exception;
+stx.Failure.__name__ = ["stx","error","Failure"];
+stx.Failure.__properties__ = {get_exception:"get_exception"}
+stx.Failure.exception = null;
+stx.Failure.get_exception = function() {
+	if(stx.Failure.exception == null) stx.Failure.exception = new stx.Eventual();
+	return stx.Failure.exception;
 }
-stx.Error.toError = function(msg,pos) {
-	return new stx.Error(msg,pos);
+stx.Failure.toFailure = function(msg,pos) {
+	return new stx.Failure(msg,pos);
 }
-stx.Error.printf = function(a,str) {
+stx.Failure.printf = function(a,str) {
 	var out = "";
 	var reg = new EReg("(\\$\\{[0-9]\\})+","");
 	var ms = str;
@@ -9371,33 +9371,33 @@ stx.Error.printf = function(a,str) {
 	out += ms;
 	return out;
 }
-stx.Error.prototype = {
+stx.Failure.prototype = {
 	toString: function() {
-		return "Error: (" + this.msg + " at " + stx.err.Positions.toString(this.pos) + ")";
+		return "Failure: (" + this.msg + " at " + stx.err.Positions.toString(this.pos) + ")";
 	}
 	,except: function() {
-		stx.Error.get_exception().deliver(this,{ fileName : "Error.hx", lineNumber : 27, className : "stx.Error", methodName : "except"});
+		stx.Failure.get_exception().deliver(this,{ fileName : "Failure.hx", lineNumber : 27, className : "stx.Failure", methodName : "except"});
 		return this;
 	}
 	,pos: null
 	,msg: null
-	,__class__: stx.Error
+	,__class__: stx.Failure
 }
-stx.err.AbstractMethodError = $hxClasses["stx.err.AbstractMethodError"] = function(pos) {
-	stx.Error.call(this,"Called abstract method",pos);
+stx.err.AbstractMethodFailure = $hxClasses["stx.err.AbstractMethodFailure"] = function(pos) {
+	stx.Failure.call(this,"Called abstract method",pos);
 };
-stx.err.AbstractMethodError.__name__ = ["stx","error","AbstractMethodError"];
-stx.err.AbstractMethodError.__super__ = stx.Error;
-stx.err.AbstractMethodError.prototype = $extend(stx.Error.prototype,{
-	__class__: stx.err.AbstractMethodError
+stx.err.AbstractMethodFailure.__name__ = ["stx","error","AbstractMethodFailure"];
+stx.err.AbstractMethodFailure.__super__ = stx.Failure;
+stx.err.AbstractMethodFailure.prototype = $extend(stx.Failure.prototype,{
+	__class__: stx.err.AbstractMethodFailure
 });
-stx.err.AssertionError = $hxClasses["stx.err.AssertionError"] = function(msg,pos) {
-	stx.Error.call(this,msg,pos);
+stx.err.AssertionFailure = $hxClasses["stx.err.AssertionFailure"] = function(msg,pos) {
+	stx.Failure.call(this,msg,pos);
 };
-stx.err.AssertionError.__name__ = ["stx","error","AssertionError"];
-stx.err.AssertionError.__super__ = stx.Error;
-stx.err.AssertionError.prototype = $extend(stx.Error.prototype,{
-	__class__: stx.err.AssertionError
+stx.err.AssertionFailure.__name__ = ["stx","error","AssertionFailure"];
+stx.err.AssertionFailure.__super__ = stx.Failure;
+stx.err.AssertionFailure.prototype = $extend(stx.Failure.prototype,{
+	__class__: stx.err.AssertionFailure
 });
 stx.err.Positions = $hxClasses["stx.err.Positions"] = function() { }
 stx.err.Positions.__name__ = ["stx","error","Positions"];
@@ -9409,29 +9409,29 @@ stx.err.Positions.toString = function(pos) {
 stx.err.Positions.here = function(pos) {
 	return pos;
 }
-stx.err.IllegalOverrideError = $hxClasses["stx.err.IllegalOverrideError"] = function(of,pos) {
-	stx.Error.call(this,stx.Error.printf([of],"Attempting illegal override of ${0}"),pos);
+stx.err.IllegalOverrideFailure = $hxClasses["stx.err.IllegalOverrideFailure"] = function(of,pos) {
+	stx.Failure.call(this,stx.Failure.printf([of],"Attempting illegal override of ${0}"),pos);
 };
-stx.err.IllegalOverrideError.__name__ = ["stx","error","IllegalOverrideError"];
-stx.err.IllegalOverrideError.__super__ = stx.Error;
-stx.err.IllegalOverrideError.prototype = $extend(stx.Error.prototype,{
-	__class__: stx.err.IllegalOverrideError
+stx.err.IllegalOverrideFailure.__name__ = ["stx","error","IllegalOverrideFailure"];
+stx.err.IllegalOverrideFailure.__super__ = stx.Failure;
+stx.err.IllegalOverrideFailure.prototype = $extend(stx.Failure.prototype,{
+	__class__: stx.err.IllegalOverrideFailure
 });
-stx.err.NullReferenceError = $hxClasses["stx.err.NullReferenceError"] = function(fieldname,pos) {
-	stx.Error.call(this,stx.Error.printf([fieldname]," \"${0}\" is null"),pos);
+stx.err.NullReferenceFailure = $hxClasses["stx.err.NullReferenceFailure"] = function(fieldname,pos) {
+	stx.Failure.call(this,stx.Failure.printf([fieldname]," \"${0}\" is null"),pos);
 };
-stx.err.NullReferenceError.__name__ = ["stx","error","NullReferenceError"];
-stx.err.NullReferenceError.__super__ = stx.Error;
-stx.err.NullReferenceError.prototype = $extend(stx.Error.prototype,{
-	__class__: stx.err.NullReferenceError
+stx.err.NullReferenceFailure.__name__ = ["stx","error","NullReferenceFailure"];
+stx.err.NullReferenceFailure.__super__ = stx.Failure;
+stx.err.NullReferenceFailure.prototype = $extend(stx.Failure.prototype,{
+	__class__: stx.err.NullReferenceFailure
 });
-stx.err.OutOfBoundsError = $hxClasses["stx.err.OutOfBoundsError"] = function(pos) {
-	stx.Error.call(this,"Index out of bounds at " + Std.string(pos),pos);
+stx.err.OutOfBoundsFailure = $hxClasses["stx.err.OutOfBoundsFailure"] = function(pos) {
+	stx.Failure.call(this,"Index out of bounds at " + Std.string(pos),pos);
 };
-stx.err.OutOfBoundsError.__name__ = ["stx","error","OutOfBoundsError"];
-stx.err.OutOfBoundsError.__super__ = stx.Error;
-stx.err.OutOfBoundsError.prototype = $extend(stx.Error.prototype,{
-	__class__: stx.err.OutOfBoundsError
+stx.err.OutOfBoundsFailure.__name__ = ["stx","error","OutOfBoundsFailure"];
+stx.err.OutOfBoundsFailure.__super__ = stx.Failure;
+stx.err.OutOfBoundsFailure.prototype = $extend(stx.Failure.prototype,{
+	__class__: stx.err.OutOfBoundsFailure
 });
 if(!stx.framework) stx.framework = {}
 stx.framework.BindingType = $hxClasses["stx.framework.BindingType"] = { __ename__ : ["stx","framework","BindingType"], __constructs__ : ["OneToOne","OneToMany"] }
@@ -9690,10 +9690,10 @@ stx.framework._Injector.InjectorConfigImpl.prototype = {
 	}
 	,__class__: stx.framework._Injector.InjectorConfigImpl
 }
-stx.functional.FoldableExtensions = $hxClasses["stx.functional.FoldableExtensions"] = function() { }
-stx.functional.FoldableExtensions.__name__ = ["stx","functional","FoldableExtensions"];
-stx.functional.FoldableExtensions.foldr = function(foldable,z,f) {
-	var a = stx.functional.FoldableExtensions.toArray(foldable);
+stx.ds.ifs.FoldableExtensions = $hxClasses["stx.ds.ifs.FoldableExtensions"] = function() { }
+stx.ds.ifs.FoldableExtensions.__name__ = ["stx","functional","FoldableExtensions"];
+stx.ds.ifs.FoldableExtensions.foldr = function(foldable,z,f) {
+	var a = stx.ds.ifs.FoldableExtensions.toArray(foldable);
 	a.reverse();
 	var acc = z;
 	var _g = 0;
@@ -9704,17 +9704,17 @@ stx.functional.FoldableExtensions.foldr = function(foldable,z,f) {
 	}
 	return acc;
 }
-stx.functional.FoldableExtensions.filter = function(foldable,f) {
+stx.ds.ifs.FoldableExtensions.filter = function(foldable,f) {
 	return foldable.foldl(foldable.empty(),function(a,b) {
 		return f(b)?a.add(b):a;
 	});
 }
-stx.functional.FoldableExtensions.partition = function(foldable,f) {
+stx.ds.ifs.FoldableExtensions.partition = function(foldable,f) {
 	return foldable.foldl(new stx.Tuple2(foldable.empty(),foldable.empty()),function(a,b) {
 		return f(b)?new stx.Tuple2(a.fst().add(b),a.snd()):new stx.Tuple2(a.fst(),a.snd().add(b));
 	});
 }
-stx.functional.FoldableExtensions.partitionWhile = function(foldable,f) {
+stx.ds.ifs.FoldableExtensions.partitionWhile = function(foldable,f) {
 	var partitioning = true;
 	return foldable.foldl(new stx.Tuple2(foldable.empty(),foldable.empty()),function(a,b) {
 		return partitioning?f(b)?new stx.Tuple2(a.fst().add(b),a.snd()):(function($this) {
@@ -9725,30 +9725,30 @@ stx.functional.FoldableExtensions.partitionWhile = function(foldable,f) {
 		}(this)):new stx.Tuple2(a.fst(),a.snd().add(b));
 	});
 }
-stx.functional.FoldableExtensions.map = function(src,f) {
-	return stx.functional.FoldableExtensions.mapTo(src,src.empty(),f);
+stx.ds.ifs.FoldableExtensions.map = function(src,f) {
+	return stx.ds.ifs.FoldableExtensions.mapTo(src,src.empty(),f);
 }
-stx.functional.FoldableExtensions.mapTo = function(src,dest,f) {
+stx.ds.ifs.FoldableExtensions.mapTo = function(src,dest,f) {
 	return src.foldl(dest,function(a,b) {
 		return a.add(f(b));
 	});
 }
-stx.functional.FoldableExtensions.flatMap = function(src,f) {
-	return stx.functional.FoldableExtensions.flatMapTo(src,src.empty(),f);
+stx.ds.ifs.FoldableExtensions.flatMap = function(src,f) {
+	return stx.ds.ifs.FoldableExtensions.flatMapTo(src,src.empty(),f);
 }
-stx.functional.FoldableExtensions.flatMapTo = function(src,dest,f) {
+stx.ds.ifs.FoldableExtensions.flatMapTo = function(src,dest,f) {
 	return src.foldl(dest,function(a,b) {
 		return f(b).foldl(a,function(a1,b1) {
 			return a1.add(b1);
 		});
 	});
 }
-stx.functional.FoldableExtensions.take = function(foldable,n) {
+stx.ds.ifs.FoldableExtensions.take = function(foldable,n) {
 	return foldable.foldl(foldable.empty(),function(a,b) {
 		return n-- > 0?a.add(b):a;
 	});
 }
-stx.functional.FoldableExtensions.takeWhile = function(foldable,f) {
+stx.ds.ifs.FoldableExtensions.takeWhile = function(foldable,f) {
 	var taking = true;
 	return foldable.foldl(foldable.empty(),function(a,b) {
 		return taking?f(b)?a.add(b):(function($this) {
@@ -9759,12 +9759,12 @@ stx.functional.FoldableExtensions.takeWhile = function(foldable,f) {
 		}(this)):a;
 	});
 }
-stx.functional.FoldableExtensions.drop = function(foldable,n) {
+stx.ds.ifs.FoldableExtensions.drop = function(foldable,n) {
 	return foldable.foldl(foldable.empty(),function(a,b) {
 		return n-- > 0?a:a.add(b);
 	});
 }
-stx.functional.FoldableExtensions.dropWhile = function(foldable,f) {
+stx.ds.ifs.FoldableExtensions.dropWhile = function(foldable,f) {
 	var dropping = true;
 	return foldable.foldl(foldable.empty(),function(a,b) {
 		return dropping?f(b)?a:(function($this) {
@@ -9775,12 +9775,12 @@ stx.functional.FoldableExtensions.dropWhile = function(foldable,f) {
 		}(this)):a.add(b);
 	});
 }
-stx.functional.FoldableExtensions.count = function(foldable,f) {
+stx.ds.ifs.FoldableExtensions.count = function(foldable,f) {
 	return foldable.foldl(0,function(a,b) {
 		return a + (f(b)?1:0);
 	});
 }
-stx.functional.FoldableExtensions.countWhile = function(foldable,f) {
+stx.ds.ifs.FoldableExtensions.countWhile = function(foldable,f) {
 	var counting = true;
 	return foldable.foldl(0,function(a,b) {
 		return !counting?a:f(b)?a + 1:(function($this) {
@@ -9791,8 +9791,8 @@ stx.functional.FoldableExtensions.countWhile = function(foldable,f) {
 		}(this));
 	});
 }
-stx.functional.FoldableExtensions.scanl = function(foldable,init,f) {
-	var a = stx.functional.FoldableExtensions.toArray(foldable);
+stx.ds.ifs.FoldableExtensions.scanl = function(foldable,init,f) {
+	var a = stx.ds.ifs.FoldableExtensions.toArray(foldable);
 	var result = foldable.empty().add(init);
 	var _g = 0;
 	while(_g < a.length) {
@@ -9802,8 +9802,8 @@ stx.functional.FoldableExtensions.scanl = function(foldable,init,f) {
 	}
 	return result;
 }
-stx.functional.FoldableExtensions.scanr = function(foldable,init,f) {
-	var a = stx.functional.FoldableExtensions.toArray(foldable);
+stx.ds.ifs.FoldableExtensions.scanr = function(foldable,init,f) {
+	var a = stx.ds.ifs.FoldableExtensions.toArray(foldable);
 	a.reverse();
 	var result = foldable.empty().add(init);
 	var _g = 0;
@@ -9814,8 +9814,8 @@ stx.functional.FoldableExtensions.scanr = function(foldable,init,f) {
 	}
 	return result;
 }
-stx.functional.FoldableExtensions.scanl1 = function(foldable,f) {
-	var iterator = HxOverrides.iter(stx.functional.FoldableExtensions.toArray(foldable));
+stx.ds.ifs.FoldableExtensions.scanl1 = function(foldable,f) {
+	var iterator = HxOverrides.iter(stx.ds.ifs.FoldableExtensions.toArray(foldable));
 	var result = foldable.empty();
 	if(!iterator.hasNext()) return result;
 	var accum = iterator.next();
@@ -9823,8 +9823,8 @@ stx.functional.FoldableExtensions.scanl1 = function(foldable,f) {
 	while(iterator.hasNext()) result = result.add(f(iterator.next(),accum));
 	return result;
 }
-stx.functional.FoldableExtensions.scanr1 = function(foldable,f) {
-	var a = stx.functional.FoldableExtensions.toArray(foldable);
+stx.ds.ifs.FoldableExtensions.scanr1 = function(foldable,f) {
+	var a = stx.ds.ifs.FoldableExtensions.toArray(foldable);
 	a.reverse();
 	var iterator = HxOverrides.iter(a);
 	var result = foldable.empty();
@@ -9834,18 +9834,18 @@ stx.functional.FoldableExtensions.scanr1 = function(foldable,f) {
 	while(iterator.hasNext()) result = result.add(f(iterator.next(),accum));
 	return result;
 }
-stx.functional.FoldableExtensions.elements = function(foldable) {
-	return stx.functional.FoldableExtensions.toArray(foldable);
+stx.ds.ifs.FoldableExtensions.elements = function(foldable) {
+	return stx.ds.ifs.FoldableExtensions.toArray(foldable);
 }
-stx.functional.FoldableExtensions.concat = function(foldable,rest) {
+stx.ds.ifs.FoldableExtensions.concat = function(foldable,rest) {
 	return rest.foldl(foldable,function(a,b) {
 		return a.add(b);
 	});
 }
-stx.functional.FoldableExtensions.append = function(foldable,e) {
+stx.ds.ifs.FoldableExtensions.append = function(foldable,e) {
 	return foldable.add(e);
 }
-stx.functional.FoldableExtensions.appendAll = function(foldable,i) {
+stx.ds.ifs.FoldableExtensions.appendAll = function(foldable,i) {
 	var acc = foldable;
 	var $it0 = $iterator(i)();
 	while( $it0.hasNext() ) {
@@ -9854,20 +9854,20 @@ stx.functional.FoldableExtensions.appendAll = function(foldable,i) {
 	}
 	return acc;
 }
-stx.functional.FoldableExtensions.iterator = function(foldable) {
-	return $iterator(stx.functional.FoldableExtensions.elements(foldable))();
+stx.ds.ifs.FoldableExtensions.iterator = function(foldable) {
+	return $iterator(stx.ds.ifs.FoldableExtensions.elements(foldable))();
 }
-stx.functional.FoldableExtensions.isEmpty = function(foldable) {
-	return !$iterator(stx.functional.FoldableExtensions)(foldable).hasNext();
+stx.ds.ifs.FoldableExtensions.isEmpty = function(foldable) {
+	return !$iterator(stx.ds.ifs.FoldableExtensions)(foldable).hasNext();
 }
-stx.functional.FoldableExtensions.foreach = function(foldable,f) {
+stx.ds.ifs.FoldableExtensions.foreach = function(foldable,f) {
 	foldable.foldl(1,function(a,b) {
 		f(b);
 		return a;
 	});
 	return foldable;
 }
-stx.functional.FoldableExtensions.find = function(foldable,f) {
+stx.ds.ifs.FoldableExtensions.find = function(foldable,f) {
 	return foldable.foldl(stx.Option.None,function(a,b) {
 		return (function($this) {
 			var $r;
@@ -9882,7 +9882,7 @@ stx.functional.FoldableExtensions.find = function(foldable,f) {
 		}(this));
 	});
 }
-stx.functional.FoldableExtensions.forAll = function(foldable,f) {
+stx.ds.ifs.FoldableExtensions.forAll = function(foldable,f) {
 	return foldable.foldl(true,function(a,b) {
 		return (function($this) {
 			var $r;
@@ -9898,7 +9898,7 @@ stx.functional.FoldableExtensions.forAll = function(foldable,f) {
 		}(this));
 	});
 }
-stx.functional.FoldableExtensions.forAny = function(foldable,f) {
+stx.ds.ifs.FoldableExtensions.forAny = function(foldable,f) {
 	return foldable.foldl(false,function(a,b) {
 		return (function($this) {
 			var $r;
@@ -9914,10 +9914,10 @@ stx.functional.FoldableExtensions.forAny = function(foldable,f) {
 		}(this));
 	});
 }
-stx.functional.FoldableExtensions.exists = function(foldable,f) {
+stx.ds.ifs.FoldableExtensions.exists = function(foldable,f) {
 	return (function($this) {
 		var $r;
-		var $e = (stx.functional.FoldableExtensions.find(foldable,f));
+		var $e = (stx.ds.ifs.FoldableExtensions.find(foldable,f));
 		switch( $e[1] ) {
 		case 1:
 			var v = $e[2];
@@ -9930,9 +9930,9 @@ stx.functional.FoldableExtensions.exists = function(foldable,f) {
 		return $r;
 	}(this));
 }
-stx.functional.FoldableExtensions.existsP = function(foldable,ref,f) {
+stx.ds.ifs.FoldableExtensions.existsP = function(foldable,ref,f) {
 	var result = false;
-	var a = stx.functional.FoldableExtensions.toArray(foldable);
+	var a = stx.ds.ifs.FoldableExtensions.toArray(foldable);
 	var _g = 0;
 	while(_g < a.length) {
 		var e = a[_g];
@@ -9941,32 +9941,32 @@ stx.functional.FoldableExtensions.existsP = function(foldable,ref,f) {
 	}
 	return result;
 }
-stx.functional.FoldableExtensions.contains = function(foldable,member) {
-	return stx.functional.FoldableExtensions.exists(foldable,function(e) {
+stx.ds.ifs.FoldableExtensions.contains = function(foldable,member) {
+	return stx.ds.ifs.FoldableExtensions.exists(foldable,function(e) {
 		return e == member;
 	});
 }
-stx.functional.FoldableExtensions.nubBy = function(foldable,f) {
+stx.ds.ifs.FoldableExtensions.nubBy = function(foldable,f) {
 	return foldable.foldl(foldable.empty(),function(a,b) {
-		return stx.functional.FoldableExtensions.existsP(a,b,f)?a:a.add(b);
+		return stx.ds.ifs.FoldableExtensions.existsP(a,b,f)?a:a.add(b);
 	});
 }
-stx.functional.FoldableExtensions.nub = function(foldable) {
-	var it = $iterator(stx.functional.FoldableExtensions)(foldable);
+stx.ds.ifs.FoldableExtensions.nub = function(foldable) {
+	var it = $iterator(stx.ds.ifs.FoldableExtensions)(foldable);
 	var first = it.hasNext()?it.next():null;
-	return stx.functional.FoldableExtensions.nubBy(foldable,stx.ds.plus.Equal.getEqualFor(first));
+	return stx.ds.ifs.FoldableExtensions.nubBy(foldable,stx.ds.plus.Equal.getEqualFor(first));
 }
-stx.functional.FoldableExtensions.intersectBy = function(foldable1,foldable2,f) {
+stx.ds.ifs.FoldableExtensions.intersectBy = function(foldable1,foldable2,f) {
 	return foldable1.foldl(foldable1.empty(),function(a,b) {
-		return stx.functional.FoldableExtensions.existsP(foldable2,b,f)?a.add(b):a;
+		return stx.ds.ifs.FoldableExtensions.existsP(foldable2,b,f)?a.add(b):a;
 	});
 }
-stx.functional.FoldableExtensions.intersect = function(foldable1,foldable2) {
-	var it = $iterator(stx.functional.FoldableExtensions)(foldable1);
+stx.ds.ifs.FoldableExtensions.intersect = function(foldable1,foldable2) {
+	var it = $iterator(stx.ds.ifs.FoldableExtensions)(foldable1);
 	var first = it.hasNext()?it.next():null;
-	return stx.functional.FoldableExtensions.intersectBy(foldable1,foldable2,stx.ds.plus.Equal.getEqualFor(first));
+	return stx.ds.ifs.FoldableExtensions.intersectBy(foldable1,foldable2,stx.ds.plus.Equal.getEqualFor(first));
 }
-stx.functional.FoldableExtensions.mkString = function(foldable,sep,show) {
+stx.ds.ifs.FoldableExtensions.mkString = function(foldable,sep,show) {
 	if(sep == null) sep = ", ";
 	var isFirst = true;
 	return foldable.foldl("",function(a,b) {
@@ -9980,7 +9980,7 @@ stx.functional.FoldableExtensions.mkString = function(foldable,sep,show) {
 		return a + prefix + show(b);
 	});
 }
-stx.functional.FoldableExtensions.toArray = function(foldable) {
+stx.ds.ifs.FoldableExtensions.toArray = function(foldable) {
 	var es = [];
 	foldable.foldl(foldable.empty(),function(a,b) {
 		es.push(b);
@@ -10466,7 +10466,7 @@ stx.io.http.HttpStringAsync.prototype = {
 			future.cancel();
 		}
 		stx.Options.map(stx.Options.toOption(_headers),function(headers) {
-			stx.functional.FoldableExtensions.foreach(headers,function(header) {
+			stx.ds.ifs.FoldableExtensions.foreach(headers,function(header) {
 				request.setRequestHeader(header.fst(),header.snd());
 			});
 		});
@@ -11949,8 +11949,8 @@ stx.js.DerivationMethod = $hxClasses["stx.js.DerivationMethod"] = function() { }
 stx.js.DerivationMethod.__name__ = ["stx","js","DerivationMethod"];
 stx.js.OperationType = $hxClasses["stx.js.OperationType"] = function() { }
 stx.js.OperationType.__name__ = ["stx","js","OperationType"];
-stx.js.ErrorState = $hxClasses["stx.js.ErrorState"] = function() { }
-stx.js.ErrorState.__name__ = ["stx","js","ErrorState"];
+stx.js.FailureState = $hxClasses["stx.js.FailureState"] = function() { }
+stx.js.FailureState.__name__ = ["stx","js","FailureState"];
 stx.js.ReadyState = $hxClasses["stx.js.ReadyState"] = function() { }
 stx.js.ReadyState.__name__ = ["stx","js","ReadyState"];
 stx.js.EventExceptionCode = $hxClasses["stx.js.EventExceptionCode"] = function() { }
@@ -11981,8 +11981,8 @@ stx.js.PrimitiveType = $hxClasses["stx.js.PrimitiveType"] = function() { }
 stx.js.PrimitiveType.__name__ = ["stx","js","PrimitiveType"];
 stx.js.UpdateStatus = $hxClasses["stx.js.UpdateStatus"] = function() { }
 stx.js.UpdateStatus.__name__ = ["stx","js","UpdateStatus"];
-stx.js.ErrorSeverity = $hxClasses["stx.js.ErrorSeverity"] = function() { }
-stx.js.ErrorSeverity.__name__ = ["stx","js","ErrorSeverity"];
+stx.js.FailureSeverity = $hxClasses["stx.js.FailureSeverity"] = function() { }
+stx.js.FailureSeverity.__name__ = ["stx","js","FailureSeverity"];
 if(!stx.js.detect) stx.js.detect = {}
 stx.js.detect.BrowserSupport = $hxClasses["stx.js.detect.BrowserSupport"] = function() { }
 stx.js.detect.BrowserSupport.__name__ = ["stx","js","detect","BrowserSupport"];
@@ -14049,7 +14049,7 @@ stx.js.io.IFrameIOPostMessage.prototype = $extend(stx.js.io.AbstractIFrameIO.pro
 		try {
 			targetWindow.postMessage(stx.io.json.Json.encodeObject(data),targetUrl);
 		} catch( e ) {
-			haxe.Log.trace(stx.Log.fatal("Error while posting message to " + targetUrl + " (originally " + targetUrl_ + "): " + Std.string(e.message)),{ fileName : "IFrameIO.hx", lineNumber : 265, className : "stx.js.io.IFrameIOPostMessage", methodName : "send"});
+			haxe.Log.trace(stx.Log.fatal("Failure while posting message to " + targetUrl + " (originally " + targetUrl_ + "): " + Std.string(e.message)),{ fileName : "IFrameIO.hx", lineNumber : 265, className : "stx.js.io.IFrameIOPostMessage", methodName : "send"});
 		}
 		return this;
 	}
@@ -14202,7 +14202,7 @@ stx.js.io.IFrameIOPollingMaptag.prototype = $extend(stx.js.io.AbstractIFrameIO.p
 			var self = this;
 			var fragmentRequests = this.findMissingFragments();
 			if(fragmentRequests.size() > 0) {
-				var encoded = stx.functional.FoldableExtensions.flatMapTo(fragmentRequests,stx.ds.List.nil(),function(request) {
+				var encoded = stx.ds.ifs.FoldableExtensions.flatMapTo(fragmentRequests,stx.ds.List.nil(),function(request) {
 					var win = self.originUrlToWindow.get(request.to);
 					return win != null?stx.ds.List.nil().cons(stx.Entuple.entuple(win,request)):stx.ds.List.nil();
 				});
@@ -14236,7 +14236,7 @@ stx.js.io.IFrameIOPollingMaptag.prototype = $extend(stx.js.io.AbstractIFrameIO.p
 		var maxFragSize = 1500 - to.length;
 		var fragmentId = 1;
 		var fragments = stx.ds.ArrayToList.toList(stx.Strings.chunk(stx.io.json.Json.encodeObject(data),maxFragSize));
-		var encoded = stx.functional.FoldableExtensions.mapTo(fragments,stx.js.io.IFrameIOPollingMaptag.newFragmentsList(),function(chunk) {
+		var encoded = stx.ds.ifs.FoldableExtensions.mapTo(fragments,stx.js.io.IFrameIOPollingMaptag.newFragmentsList(),function(chunk) {
 			return stx.Entuple.entuple(iframe,{ type : "delivery", from : from, to : to, messageId : stx.Floats.toString(stx.js.io.IFrameIOPollingMaptag.lastMessageId), fragmentId : stx.Floats.toString(fragmentId++), fragmentCount : stx.Floats.toString(fragments.size()), data : chunk});
 		});
 		this.fragmentsToSend = this.fragmentsToSend.concat(encoded);
@@ -14482,7 +14482,7 @@ stx.math.tween.Tween.__name__ = ["stx","math","tween","Tween"];
 stx.math.tween.Tween.linear = function(state1,state2,def) {
 	if(def == null) def = 0.0;
 	var combinedFields = stx.ds.ArrayToSet.toSet(Reflect.fields(state1)).addAll(Reflect.fields(state2));
-	var data = stx.ds.FoldableToMap.toMap(stx.functional.FoldableExtensions.map(combinedFields,function(name) {
+	var data = stx.ds.FoldableToMap.toMap(stx.ds.ifs.FoldableExtensions.map(combinedFields,function(name) {
 		var start = stx.Options.getOrElseC(stx.Options.toOption(Reflect.field(state1,name)),def);
 		var end = stx.Options.getOrElseC(stx.Options.toOption(Reflect.field(state2,name)),def);
 		return stx.Entuple.entuple(name,{ start : start, delta : end - start});
@@ -14587,126 +14587,126 @@ stx.net.HttpRedirection.UseProxy.__enum__ = stx.net.HttpRedirection;
 stx.net.HttpRedirection.TemporaryRedirect = ["TemporaryRedirect",6];
 stx.net.HttpRedirection.TemporaryRedirect.toString = $estr;
 stx.net.HttpRedirection.TemporaryRedirect.__enum__ = stx.net.HttpRedirection;
-stx.net.HttpClientError = $hxClasses["stx.net.HttpClientError"] = { __ename__ : ["stx","net","HttpClientError"], __constructs__ : ["BadRequest","Unauthorized","PaymentRequired","Forbidden","NotFound","MethodNotAllowed","NotAcceptable","ProxyAuthenticationRequired","RequestTimeout","Conflict","Gone","LengthRequired","PreconditionFailed","RequestEntityTooLarge","Request","UnsupportedMediaType","RequestedRangeNotSatisfiable","ExpectationFailed","TooManyConnections","UnprocessableEntity","Locked","FailedDependency","UnorderedCollection","UpgradeRequired","RetryWith"] }
-stx.net.HttpClientError.BadRequest = ["BadRequest",0];
-stx.net.HttpClientError.BadRequest.toString = $estr;
-stx.net.HttpClientError.BadRequest.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.Unauthorized = ["Unauthorized",1];
-stx.net.HttpClientError.Unauthorized.toString = $estr;
-stx.net.HttpClientError.Unauthorized.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.PaymentRequired = ["PaymentRequired",2];
-stx.net.HttpClientError.PaymentRequired.toString = $estr;
-stx.net.HttpClientError.PaymentRequired.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.Forbidden = ["Forbidden",3];
-stx.net.HttpClientError.Forbidden.toString = $estr;
-stx.net.HttpClientError.Forbidden.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.NotFound = ["NotFound",4];
-stx.net.HttpClientError.NotFound.toString = $estr;
-stx.net.HttpClientError.NotFound.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.MethodNotAllowed = ["MethodNotAllowed",5];
-stx.net.HttpClientError.MethodNotAllowed.toString = $estr;
-stx.net.HttpClientError.MethodNotAllowed.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.NotAcceptable = ["NotAcceptable",6];
-stx.net.HttpClientError.NotAcceptable.toString = $estr;
-stx.net.HttpClientError.NotAcceptable.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.ProxyAuthenticationRequired = ["ProxyAuthenticationRequired",7];
-stx.net.HttpClientError.ProxyAuthenticationRequired.toString = $estr;
-stx.net.HttpClientError.ProxyAuthenticationRequired.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.RequestTimeout = ["RequestTimeout",8];
-stx.net.HttpClientError.RequestTimeout.toString = $estr;
-stx.net.HttpClientError.RequestTimeout.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.Conflict = ["Conflict",9];
-stx.net.HttpClientError.Conflict.toString = $estr;
-stx.net.HttpClientError.Conflict.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.Gone = ["Gone",10];
-stx.net.HttpClientError.Gone.toString = $estr;
-stx.net.HttpClientError.Gone.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.LengthRequired = ["LengthRequired",11];
-stx.net.HttpClientError.LengthRequired.toString = $estr;
-stx.net.HttpClientError.LengthRequired.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.PreconditionFailed = ["PreconditionFailed",12];
-stx.net.HttpClientError.PreconditionFailed.toString = $estr;
-stx.net.HttpClientError.PreconditionFailed.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.RequestEntityTooLarge = ["RequestEntityTooLarge",13];
-stx.net.HttpClientError.RequestEntityTooLarge.toString = $estr;
-stx.net.HttpClientError.RequestEntityTooLarge.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.Request = ["Request",14];
-stx.net.HttpClientError.Request.toString = $estr;
-stx.net.HttpClientError.Request.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.UnsupportedMediaType = ["UnsupportedMediaType",15];
-stx.net.HttpClientError.UnsupportedMediaType.toString = $estr;
-stx.net.HttpClientError.UnsupportedMediaType.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.RequestedRangeNotSatisfiable = ["RequestedRangeNotSatisfiable",16];
-stx.net.HttpClientError.RequestedRangeNotSatisfiable.toString = $estr;
-stx.net.HttpClientError.RequestedRangeNotSatisfiable.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.ExpectationFailed = ["ExpectationFailed",17];
-stx.net.HttpClientError.ExpectationFailed.toString = $estr;
-stx.net.HttpClientError.ExpectationFailed.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.TooManyConnections = ["TooManyConnections",18];
-stx.net.HttpClientError.TooManyConnections.toString = $estr;
-stx.net.HttpClientError.TooManyConnections.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.UnprocessableEntity = ["UnprocessableEntity",19];
-stx.net.HttpClientError.UnprocessableEntity.toString = $estr;
-stx.net.HttpClientError.UnprocessableEntity.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.Locked = ["Locked",20];
-stx.net.HttpClientError.Locked.toString = $estr;
-stx.net.HttpClientError.Locked.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.FailedDependency = ["FailedDependency",21];
-stx.net.HttpClientError.FailedDependency.toString = $estr;
-stx.net.HttpClientError.FailedDependency.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.UnorderedCollection = ["UnorderedCollection",22];
-stx.net.HttpClientError.UnorderedCollection.toString = $estr;
-stx.net.HttpClientError.UnorderedCollection.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.UpgradeRequired = ["UpgradeRequired",23];
-stx.net.HttpClientError.UpgradeRequired.toString = $estr;
-stx.net.HttpClientError.UpgradeRequired.__enum__ = stx.net.HttpClientError;
-stx.net.HttpClientError.RetryWith = ["RetryWith",24];
-stx.net.HttpClientError.RetryWith.toString = $estr;
-stx.net.HttpClientError.RetryWith.__enum__ = stx.net.HttpClientError;
-stx.net.HttpServerError = $hxClasses["stx.net.HttpServerError"] = { __ename__ : ["stx","net","HttpServerError"], __constructs__ : ["InternalServerError","NotImplemented","BadGateway","ServiceUnavailable","GatewayTimeout","HTTPVersionNotSupported","VariantAlsoNegotiates","InsufficientStorage","BandwidthLimitExceeded","NotExtended","UserAccessDenied"] }
-stx.net.HttpServerError.InternalServerError = ["InternalServerError",0];
-stx.net.HttpServerError.InternalServerError.toString = $estr;
-stx.net.HttpServerError.InternalServerError.__enum__ = stx.net.HttpServerError;
-stx.net.HttpServerError.NotImplemented = ["NotImplemented",1];
-stx.net.HttpServerError.NotImplemented.toString = $estr;
-stx.net.HttpServerError.NotImplemented.__enum__ = stx.net.HttpServerError;
-stx.net.HttpServerError.BadGateway = ["BadGateway",2];
-stx.net.HttpServerError.BadGateway.toString = $estr;
-stx.net.HttpServerError.BadGateway.__enum__ = stx.net.HttpServerError;
-stx.net.HttpServerError.ServiceUnavailable = ["ServiceUnavailable",3];
-stx.net.HttpServerError.ServiceUnavailable.toString = $estr;
-stx.net.HttpServerError.ServiceUnavailable.__enum__ = stx.net.HttpServerError;
-stx.net.HttpServerError.GatewayTimeout = ["GatewayTimeout",4];
-stx.net.HttpServerError.GatewayTimeout.toString = $estr;
-stx.net.HttpServerError.GatewayTimeout.__enum__ = stx.net.HttpServerError;
-stx.net.HttpServerError.HTTPVersionNotSupported = ["HTTPVersionNotSupported",5];
-stx.net.HttpServerError.HTTPVersionNotSupported.toString = $estr;
-stx.net.HttpServerError.HTTPVersionNotSupported.__enum__ = stx.net.HttpServerError;
-stx.net.HttpServerError.VariantAlsoNegotiates = ["VariantAlsoNegotiates",6];
-stx.net.HttpServerError.VariantAlsoNegotiates.toString = $estr;
-stx.net.HttpServerError.VariantAlsoNegotiates.__enum__ = stx.net.HttpServerError;
-stx.net.HttpServerError.InsufficientStorage = ["InsufficientStorage",7];
-stx.net.HttpServerError.InsufficientStorage.toString = $estr;
-stx.net.HttpServerError.InsufficientStorage.__enum__ = stx.net.HttpServerError;
-stx.net.HttpServerError.BandwidthLimitExceeded = ["BandwidthLimitExceeded",8];
-stx.net.HttpServerError.BandwidthLimitExceeded.toString = $estr;
-stx.net.HttpServerError.BandwidthLimitExceeded.__enum__ = stx.net.HttpServerError;
-stx.net.HttpServerError.NotExtended = ["NotExtended",9];
-stx.net.HttpServerError.NotExtended.toString = $estr;
-stx.net.HttpServerError.NotExtended.__enum__ = stx.net.HttpServerError;
-stx.net.HttpServerError.UserAccessDenied = ["UserAccessDenied",10];
-stx.net.HttpServerError.UserAccessDenied.toString = $estr;
-stx.net.HttpServerError.UserAccessDenied.__enum__ = stx.net.HttpServerError;
+stx.net.HttpClientFailure = $hxClasses["stx.net.HttpClientFailure"] = { __ename__ : ["stx","net","HttpClientFailure"], __constructs__ : ["BadRequest","Unauthorized","PaymentRequired","Forbidden","NotFound","MethodNotAllowed","NotAcceptable","ProxyAuthenticationRequired","RequestTimeout","Conflict","Gone","LengthRequired","PreconditionFailed","RequestEntityTooLarge","Request","UnsupportedMediaType","RequestedRangeNotSatisfiable","ExpectationFailed","TooManyConnections","UnprocessableEntity","Locked","FailedDependency","UnorderedCollection","UpgradeRequired","RetryWith"] }
+stx.net.HttpClientFailure.BadRequest = ["BadRequest",0];
+stx.net.HttpClientFailure.BadRequest.toString = $estr;
+stx.net.HttpClientFailure.BadRequest.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.Unauthorized = ["Unauthorized",1];
+stx.net.HttpClientFailure.Unauthorized.toString = $estr;
+stx.net.HttpClientFailure.Unauthorized.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.PaymentRequired = ["PaymentRequired",2];
+stx.net.HttpClientFailure.PaymentRequired.toString = $estr;
+stx.net.HttpClientFailure.PaymentRequired.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.Forbidden = ["Forbidden",3];
+stx.net.HttpClientFailure.Forbidden.toString = $estr;
+stx.net.HttpClientFailure.Forbidden.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.NotFound = ["NotFound",4];
+stx.net.HttpClientFailure.NotFound.toString = $estr;
+stx.net.HttpClientFailure.NotFound.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.MethodNotAllowed = ["MethodNotAllowed",5];
+stx.net.HttpClientFailure.MethodNotAllowed.toString = $estr;
+stx.net.HttpClientFailure.MethodNotAllowed.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.NotAcceptable = ["NotAcceptable",6];
+stx.net.HttpClientFailure.NotAcceptable.toString = $estr;
+stx.net.HttpClientFailure.NotAcceptable.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.ProxyAuthenticationRequired = ["ProxyAuthenticationRequired",7];
+stx.net.HttpClientFailure.ProxyAuthenticationRequired.toString = $estr;
+stx.net.HttpClientFailure.ProxyAuthenticationRequired.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.RequestTimeout = ["RequestTimeout",8];
+stx.net.HttpClientFailure.RequestTimeout.toString = $estr;
+stx.net.HttpClientFailure.RequestTimeout.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.Conflict = ["Conflict",9];
+stx.net.HttpClientFailure.Conflict.toString = $estr;
+stx.net.HttpClientFailure.Conflict.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.Gone = ["Gone",10];
+stx.net.HttpClientFailure.Gone.toString = $estr;
+stx.net.HttpClientFailure.Gone.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.LengthRequired = ["LengthRequired",11];
+stx.net.HttpClientFailure.LengthRequired.toString = $estr;
+stx.net.HttpClientFailure.LengthRequired.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.PreconditionFailed = ["PreconditionFailed",12];
+stx.net.HttpClientFailure.PreconditionFailed.toString = $estr;
+stx.net.HttpClientFailure.PreconditionFailed.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.RequestEntityTooLarge = ["RequestEntityTooLarge",13];
+stx.net.HttpClientFailure.RequestEntityTooLarge.toString = $estr;
+stx.net.HttpClientFailure.RequestEntityTooLarge.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.Request = ["Request",14];
+stx.net.HttpClientFailure.Request.toString = $estr;
+stx.net.HttpClientFailure.Request.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.UnsupportedMediaType = ["UnsupportedMediaType",15];
+stx.net.HttpClientFailure.UnsupportedMediaType.toString = $estr;
+stx.net.HttpClientFailure.UnsupportedMediaType.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.RequestedRangeNotSatisfiable = ["RequestedRangeNotSatisfiable",16];
+stx.net.HttpClientFailure.RequestedRangeNotSatisfiable.toString = $estr;
+stx.net.HttpClientFailure.RequestedRangeNotSatisfiable.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.ExpectationFailed = ["ExpectationFailed",17];
+stx.net.HttpClientFailure.ExpectationFailed.toString = $estr;
+stx.net.HttpClientFailure.ExpectationFailed.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.TooManyConnections = ["TooManyConnections",18];
+stx.net.HttpClientFailure.TooManyConnections.toString = $estr;
+stx.net.HttpClientFailure.TooManyConnections.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.UnprocessableEntity = ["UnprocessableEntity",19];
+stx.net.HttpClientFailure.UnprocessableEntity.toString = $estr;
+stx.net.HttpClientFailure.UnprocessableEntity.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.Locked = ["Locked",20];
+stx.net.HttpClientFailure.Locked.toString = $estr;
+stx.net.HttpClientFailure.Locked.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.FailedDependency = ["FailedDependency",21];
+stx.net.HttpClientFailure.FailedDependency.toString = $estr;
+stx.net.HttpClientFailure.FailedDependency.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.UnorderedCollection = ["UnorderedCollection",22];
+stx.net.HttpClientFailure.UnorderedCollection.toString = $estr;
+stx.net.HttpClientFailure.UnorderedCollection.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.UpgradeRequired = ["UpgradeRequired",23];
+stx.net.HttpClientFailure.UpgradeRequired.toString = $estr;
+stx.net.HttpClientFailure.UpgradeRequired.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpClientFailure.RetryWith = ["RetryWith",24];
+stx.net.HttpClientFailure.RetryWith.toString = $estr;
+stx.net.HttpClientFailure.RetryWith.__enum__ = stx.net.HttpClientFailure;
+stx.net.HttpServerFailure = $hxClasses["stx.net.HttpServerFailure"] = { __ename__ : ["stx","net","HttpServerFailure"], __constructs__ : ["InternalServerFailure","NotImplemented","BadGateway","ServiceUnavailable","GatewayTimeout","HTTPVersionNotSupported","VariantAlsoNegotiates","InsufficientStorage","BandwidthLimitExceeded","NotExtended","UserAccessDenied"] }
+stx.net.HttpServerFailure.InternalServerFailure = ["InternalServerFailure",0];
+stx.net.HttpServerFailure.InternalServerFailure.toString = $estr;
+stx.net.HttpServerFailure.InternalServerFailure.__enum__ = stx.net.HttpServerFailure;
+stx.net.HttpServerFailure.NotImplemented = ["NotImplemented",1];
+stx.net.HttpServerFailure.NotImplemented.toString = $estr;
+stx.net.HttpServerFailure.NotImplemented.__enum__ = stx.net.HttpServerFailure;
+stx.net.HttpServerFailure.BadGateway = ["BadGateway",2];
+stx.net.HttpServerFailure.BadGateway.toString = $estr;
+stx.net.HttpServerFailure.BadGateway.__enum__ = stx.net.HttpServerFailure;
+stx.net.HttpServerFailure.ServiceUnavailable = ["ServiceUnavailable",3];
+stx.net.HttpServerFailure.ServiceUnavailable.toString = $estr;
+stx.net.HttpServerFailure.ServiceUnavailable.__enum__ = stx.net.HttpServerFailure;
+stx.net.HttpServerFailure.GatewayTimeout = ["GatewayTimeout",4];
+stx.net.HttpServerFailure.GatewayTimeout.toString = $estr;
+stx.net.HttpServerFailure.GatewayTimeout.__enum__ = stx.net.HttpServerFailure;
+stx.net.HttpServerFailure.HTTPVersionNotSupported = ["HTTPVersionNotSupported",5];
+stx.net.HttpServerFailure.HTTPVersionNotSupported.toString = $estr;
+stx.net.HttpServerFailure.HTTPVersionNotSupported.__enum__ = stx.net.HttpServerFailure;
+stx.net.HttpServerFailure.VariantAlsoNegotiates = ["VariantAlsoNegotiates",6];
+stx.net.HttpServerFailure.VariantAlsoNegotiates.toString = $estr;
+stx.net.HttpServerFailure.VariantAlsoNegotiates.__enum__ = stx.net.HttpServerFailure;
+stx.net.HttpServerFailure.InsufficientStorage = ["InsufficientStorage",7];
+stx.net.HttpServerFailure.InsufficientStorage.toString = $estr;
+stx.net.HttpServerFailure.InsufficientStorage.__enum__ = stx.net.HttpServerFailure;
+stx.net.HttpServerFailure.BandwidthLimitExceeded = ["BandwidthLimitExceeded",8];
+stx.net.HttpServerFailure.BandwidthLimitExceeded.toString = $estr;
+stx.net.HttpServerFailure.BandwidthLimitExceeded.__enum__ = stx.net.HttpServerFailure;
+stx.net.HttpServerFailure.NotExtended = ["NotExtended",9];
+stx.net.HttpServerFailure.NotExtended.toString = $estr;
+stx.net.HttpServerFailure.NotExtended.__enum__ = stx.net.HttpServerFailure;
+stx.net.HttpServerFailure.UserAccessDenied = ["UserAccessDenied",10];
+stx.net.HttpServerFailure.UserAccessDenied.toString = $estr;
+stx.net.HttpServerFailure.UserAccessDenied.__enum__ = stx.net.HttpServerFailure;
 stx.net.HttpNormal = $hxClasses["stx.net.HttpNormal"] = { __ename__ : ["stx","net","HttpNormal"], __constructs__ : ["Informational","Success","Redirection"] }
 stx.net.HttpNormal.Informational = function(v) { var $x = ["Informational",0,v]; $x.__enum__ = stx.net.HttpNormal; $x.toString = $estr; return $x; }
 stx.net.HttpNormal.Success = function(v) { var $x = ["Success",1,v]; $x.__enum__ = stx.net.HttpNormal; $x.toString = $estr; return $x; }
 stx.net.HttpNormal.Redirection = function(v) { var $x = ["Redirection",2,v]; $x.__enum__ = stx.net.HttpNormal; $x.toString = $estr; return $x; }
-stx.net.HttpError = $hxClasses["stx.net.HttpError"] = { __ename__ : ["stx","net","HttpError"], __constructs__ : ["Client","Server"] }
-stx.net.HttpError.Client = function(v) { var $x = ["Client",0,v]; $x.__enum__ = stx.net.HttpError; $x.toString = $estr; return $x; }
-stx.net.HttpError.Server = function(v) { var $x = ["Server",1,v]; $x.__enum__ = stx.net.HttpError; $x.toString = $estr; return $x; }
-stx.net.HttpResponseCode = $hxClasses["stx.net.HttpResponseCode"] = { __ename__ : ["stx","net","HttpResponseCode"], __constructs__ : ["Normal","Error"] }
+stx.net.HttpFailure = $hxClasses["stx.net.HttpFailure"] = { __ename__ : ["stx","net","HttpFailure"], __constructs__ : ["Client","Server"] }
+stx.net.HttpFailure.Client = function(v) { var $x = ["Client",0,v]; $x.__enum__ = stx.net.HttpFailure; $x.toString = $estr; return $x; }
+stx.net.HttpFailure.Server = function(v) { var $x = ["Server",1,v]; $x.__enum__ = stx.net.HttpFailure; $x.toString = $estr; return $x; }
+stx.net.HttpResponseCode = $hxClasses["stx.net.HttpResponseCode"] = { __ename__ : ["stx","net","HttpResponseCode"], __constructs__ : ["Normal","Failure"] }
 stx.net.HttpResponseCode.Normal = function(v) { var $x = ["Normal",0,v]; $x.__enum__ = stx.net.HttpResponseCode; $x.toString = $estr; return $x; }
-stx.net.HttpResponseCode.Error = function(v) { var $x = ["Error",1,v]; $x.__enum__ = stx.net.HttpResponseCode; $x.toString = $estr; return $x; }
+stx.net.HttpResponseCode.Failure = function(v) { var $x = ["Failure",1,v]; $x.__enum__ = stx.net.HttpResponseCode; $x.toString = $estr; return $x; }
 stx.net.HttpResponseCodeExtensions = $hxClasses["stx.net.HttpResponseCodeExtensions"] = function() { }
 stx.net.HttpResponseCodeExtensions.__name__ = ["stx","net","HttpResponseCodeExtensions"];
 stx.net.HttpResponseCodeExtensions.toHttpResponseCode = function(code) {
@@ -14768,112 +14768,112 @@ stx.net.HttpResponseCodeExtensions.toHttpResponseCode = function(code) {
 			$r = stx.net.HttpResponseCode.Normal(stx.net.HttpNormal.Redirection(stx.net.HttpRedirection.TemporaryRedirect));
 			break;
 		case 400:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.BadRequest));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.BadRequest));
 			break;
 		case 401:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.Unauthorized));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.Unauthorized));
 			break;
 		case 402:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.PaymentRequired));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.PaymentRequired));
 			break;
 		case 403:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.Forbidden));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.Forbidden));
 			break;
 		case 404:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.NotFound));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.NotFound));
 			break;
 		case 405:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.MethodNotAllowed));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.MethodNotAllowed));
 			break;
 		case 406:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.NotAcceptable));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.NotAcceptable));
 			break;
 		case 407:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.ProxyAuthenticationRequired));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.ProxyAuthenticationRequired));
 			break;
 		case 408:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.RequestTimeout));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.RequestTimeout));
 			break;
 		case 409:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.Conflict));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.Conflict));
 			break;
 		case 410:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.Gone));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.Gone));
 			break;
 		case 411:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.LengthRequired));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.LengthRequired));
 			break;
 		case 412:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.PreconditionFailed));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.PreconditionFailed));
 			break;
 		case 413:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.RequestEntityTooLarge));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.RequestEntityTooLarge));
 			break;
 		case 414:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.Request));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.Request));
 			break;
 		case 415:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.UnsupportedMediaType));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.UnsupportedMediaType));
 			break;
 		case 416:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.RequestedRangeNotSatisfiable));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.RequestedRangeNotSatisfiable));
 			break;
 		case 417:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.ExpectationFailed));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.ExpectationFailed));
 			break;
 		case 421:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.TooManyConnections));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.TooManyConnections));
 			break;
 		case 422:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.UnprocessableEntity));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.UnprocessableEntity));
 			break;
 		case 423:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.Locked));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.Locked));
 			break;
 		case 424:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.FailedDependency));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.FailedDependency));
 			break;
 		case 425:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.UnorderedCollection));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.UnorderedCollection));
 			break;
 		case 426:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.UpgradeRequired));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.UpgradeRequired));
 			break;
 		case 449:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Client(stx.net.HttpClientError.RetryWith));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Client(stx.net.HttpClientFailure.RetryWith));
 			break;
 		case 500:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Server(stx.net.HttpServerError.InternalServerError));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Server(stx.net.HttpServerFailure.InternalServerFailure));
 			break;
 		case 501:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Server(stx.net.HttpServerError.NotImplemented));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Server(stx.net.HttpServerFailure.NotImplemented));
 			break;
 		case 502:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Server(stx.net.HttpServerError.BadGateway));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Server(stx.net.HttpServerFailure.BadGateway));
 			break;
 		case 503:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Server(stx.net.HttpServerError.ServiceUnavailable));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Server(stx.net.HttpServerFailure.ServiceUnavailable));
 			break;
 		case 504:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Server(stx.net.HttpServerError.GatewayTimeout));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Server(stx.net.HttpServerFailure.GatewayTimeout));
 			break;
 		case 505:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Server(stx.net.HttpServerError.HTTPVersionNotSupported));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Server(stx.net.HttpServerFailure.HTTPVersionNotSupported));
 			break;
 		case 506:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Server(stx.net.HttpServerError.VariantAlsoNegotiates));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Server(stx.net.HttpServerFailure.VariantAlsoNegotiates));
 			break;
 		case 507:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Server(stx.net.HttpServerError.InsufficientStorage));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Server(stx.net.HttpServerFailure.InsufficientStorage));
 			break;
 		case 509:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Server(stx.net.HttpServerError.BandwidthLimitExceeded));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Server(stx.net.HttpServerFailure.BandwidthLimitExceeded));
 			break;
 		case 510:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Server(stx.net.HttpServerError.NotExtended));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Server(stx.net.HttpServerFailure.NotExtended));
 			break;
 		case 530:
-			$r = stx.net.HttpResponseCode.Error(stx.net.HttpError.Server(stx.net.HttpServerError.UserAccessDenied));
+			$r = stx.net.HttpResponseCode.Failure(stx.net.HttpFailure.Server(stx.net.HttpServerFailure.UserAccessDenied));
 			break;
 		default:
 			$r = stx.net.HttpResponseCode.Normal(stx.net.HttpNormal.Success(stx.net.HttpSuccess.OK));
@@ -14977,7 +14977,7 @@ stx.net.HttpResponseCodeExtensions.isRedirection = function(response) {
 		return $r;
 	}(this));
 }
-stx.net.HttpResponseCodeExtensions.isError = function(response) {
+stx.net.HttpResponseCodeExtensions.isFailure = function(response) {
 	return (function($this) {
 		var $r;
 		var $e = (response);
@@ -14992,7 +14992,7 @@ stx.net.HttpResponseCodeExtensions.isError = function(response) {
 		return $r;
 	}(this));
 }
-stx.net.HttpResponseCodeExtensions.isClientError = function(response) {
+stx.net.HttpResponseCodeExtensions.isClientFailure = function(response) {
 	return (function($this) {
 		var $r;
 		var $e = (response);
@@ -15019,7 +15019,7 @@ stx.net.HttpResponseCodeExtensions.isClientError = function(response) {
 		return $r;
 	}(this));
 }
-stx.net.HttpResponseCodeExtensions.isServerError = function(response) {
+stx.net.HttpResponseCodeExtensions.isServerFailure = function(response) {
 	return (function($this) {
 		var $r;
 		var $e = (response);
@@ -16735,12 +16735,12 @@ stx.reactive.SignalCollection = $hxClasses["stx.reactive.SignalCollection"] = fu
 stx.reactive.SignalCollection.__name__ = ["stx","reactive","SignalCollection"];
 stx.reactive.SignalCollection.concatS = function(b1,b2) {
 	return b1.zip(b2).map(function(c) {
-		return stx.functional.FoldableExtensions.concat(c.fst(),c.snd());
+		return stx.ds.ifs.FoldableExtensions.concat(c.fst(),c.snd());
 	});
 }
 stx.reactive.SignalCollection.join = function(b,$char) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.mkString(c,$char);
+		return stx.ds.ifs.FoldableExtensions.mkString(c,$char);
 	});
 }
 stx.reactive.SignalCollection.size = function(b) {
@@ -16760,62 +16760,62 @@ stx.reactive.SignalCollection.append = function(b,element) {
 }
 stx.reactive.SignalCollection.count = function(b,predicate) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.count(c,predicate);
+		return stx.ds.ifs.FoldableExtensions.count(c,predicate);
 	});
 }
 stx.reactive.SignalCollection.all = function(b,tester) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.forAll(c,tester);
+		return stx.ds.ifs.FoldableExtensions.forAll(c,tester);
 	});
 }
 stx.reactive.SignalCollection.any = function(b,tester) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.forAny(c,tester);
+		return stx.ds.ifs.FoldableExtensions.forAny(c,tester);
 	});
 }
 stx.reactive.SignalCollection.foreach = function(b,f) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.foreach(c,f);
+		return stx.ds.ifs.FoldableExtensions.foreach(c,f);
 	});
 }
 stx.reactive.SignalCollection.each = function(b,f) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.foreach(c,f);
+		return stx.ds.ifs.FoldableExtensions.foreach(c,f);
 	});
 }
 stx.reactive.SignalCollection.map = function(b,f) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.map(c,f);
+		return stx.ds.ifs.FoldableExtensions.map(c,f);
 	});
 }
 stx.reactive.SignalCollection.mapTo = function(b,t,f) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.mapTo(c,t,f);
+		return stx.ds.ifs.FoldableExtensions.mapTo(c,t,f);
 	});
 }
 stx.reactive.SignalCollection.partition = function(b,filter) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.partition(c,filter);
+		return stx.ds.ifs.FoldableExtensions.partition(c,filter);
 	});
 }
 stx.reactive.SignalCollection.filter = function(b,f) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.filter(c,f);
+		return stx.ds.ifs.FoldableExtensions.filter(c,f);
 	});
 }
 stx.reactive.SignalCollection.flatMap = function(b,f) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.flatMap(c,f);
+		return stx.ds.ifs.FoldableExtensions.flatMap(c,f);
 	});
 }
 stx.reactive.SignalCollection.toArray = function(b) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.toArray(c);
+		return stx.ds.ifs.FoldableExtensions.toArray(c);
 	});
 }
 stx.reactive.SignalCollection.foldr = function(b,initial,f) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.foldr(c,initial,f);
+		return stx.ds.ifs.FoldableExtensions.foldr(c,initial,f);
 	});
 }
 stx.reactive.SignalCollection.foldl = function(b,initial,f) {
@@ -16831,12 +16831,12 @@ stx.reactive.SignalCollectionExtensions = $hxClasses["stx.reactive.SignalCollect
 stx.reactive.SignalCollectionExtensions.__name__ = ["stx","reactive","SignalCollectionExtensions"];
 stx.reactive.SignalCollectionExtensions.concatS = function(b1,b2) {
 	return b1.zip(b2).map(function(c) {
-		return stx.functional.FoldableExtensions.concat(c.fst(),c.snd());
+		return stx.ds.ifs.FoldableExtensions.concat(c.fst(),c.snd());
 	});
 }
 stx.reactive.SignalCollectionExtensions.join = function(b,$char) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.mkString(c,$char);
+		return stx.ds.ifs.FoldableExtensions.mkString(c,$char);
 	});
 }
 stx.reactive.SignalCollectionExtensions.size = function(b) {
@@ -16856,62 +16856,62 @@ stx.reactive.SignalCollectionExtensions.append = function(b,element) {
 }
 stx.reactive.SignalCollectionExtensions.count = function(b,predicate) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.count(c,predicate);
+		return stx.ds.ifs.FoldableExtensions.count(c,predicate);
 	});
 }
 stx.reactive.SignalCollectionExtensions.all = function(b,tester) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.forAll(c,tester);
+		return stx.ds.ifs.FoldableExtensions.forAll(c,tester);
 	});
 }
 stx.reactive.SignalCollectionExtensions.any = function(b,tester) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.forAny(c,tester);
+		return stx.ds.ifs.FoldableExtensions.forAny(c,tester);
 	});
 }
 stx.reactive.SignalCollectionExtensions.foreach = function(b,f) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.foreach(c,f);
+		return stx.ds.ifs.FoldableExtensions.foreach(c,f);
 	});
 }
 stx.reactive.SignalCollectionExtensions.each = function(b,f) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.foreach(c,f);
+		return stx.ds.ifs.FoldableExtensions.foreach(c,f);
 	});
 }
 stx.reactive.SignalCollectionExtensions.map = function(b,f) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.map(c,f);
+		return stx.ds.ifs.FoldableExtensions.map(c,f);
 	});
 }
 stx.reactive.SignalCollectionExtensions.mapTo = function(b,t,f) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.mapTo(c,t,f);
+		return stx.ds.ifs.FoldableExtensions.mapTo(c,t,f);
 	});
 }
 stx.reactive.SignalCollectionExtensions.partition = function(b,filter) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.partition(c,filter);
+		return stx.ds.ifs.FoldableExtensions.partition(c,filter);
 	});
 }
 stx.reactive.SignalCollectionExtensions.filter = function(b,f) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.filter(c,f);
+		return stx.ds.ifs.FoldableExtensions.filter(c,f);
 	});
 }
 stx.reactive.SignalCollectionExtensions.flatMap = function(b,f) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.flatMap(c,f);
+		return stx.ds.ifs.FoldableExtensions.flatMap(c,f);
 	});
 }
 stx.reactive.SignalCollectionExtensions.toArray = function(b) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.toArray(c);
+		return stx.ds.ifs.FoldableExtensions.toArray(c);
 	});
 }
 stx.reactive.SignalCollectionExtensions.foldr = function(b,initial,f) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.foldr(c,initial,f);
+		return stx.ds.ifs.FoldableExtensions.foldr(c,initial,f);
 	});
 }
 stx.reactive.SignalCollectionExtensions.foldl = function(b,initial,f) {
@@ -16921,12 +16921,12 @@ stx.reactive.SignalCollectionExtensions.foldl = function(b,initial,f) {
 }
 stx.reactive.SignalCollectionExtensions.scanl = function(b,initial,f) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.scanl(c,initial,f);
+		return stx.ds.ifs.FoldableExtensions.scanl(c,initial,f);
 	});
 }
 stx.reactive.SignalCollectionExtensions.scanr = function(b,initial,f) {
 	return b.map(function(c) {
-		return stx.functional.FoldableExtensions.scanr(c,initial,f);
+		return stx.ds.ifs.FoldableExtensions.scanr(c,initial,f);
 	});
 }
 stx.reactive.SignalCollectionExtensions.prototype = {
@@ -17447,7 +17447,7 @@ stx.test.Assert.isTrue = function(cond,msg,pos) {
 	if(null == msg) msg = "expected true";
 	if(stx.test.Assert.results == null) {
 		if(cond) {
-		} else throw new stx.err.AssertionError(msg,{ fileName : "Assert.hx", lineNumber : 77, className : "stx.test.Assert", methodName : "isTrue"});
+		} else throw new stx.err.AssertionFailure(msg,{ fileName : "Assert.hx", lineNumber : 77, className : "stx.test.Assert", methodName : "isTrue"});
 	} else if(cond) stx.test.Assert.results.add(stx.test.Assertation.Success(pos)); else stx.test.Assert.results.add(stx.test.Assertation.Failure(msg,pos));
 	return cond;
 }
@@ -17934,14 +17934,14 @@ stx.test.Assert.typeToString = function(t) {
 	}
 	return "<unable to retrieve type name>";
 }
-stx.test.Assertation = $hxClasses["stx.test.Assertation"] = { __ename__ : ["stx","test","Assertation"], __constructs__ : ["Success","Failure","Error","SetupError","TeardownError","TimeoutError","AsyncError","Warning"] }
+stx.test.Assertation = $hxClasses["stx.test.Assertation"] = { __ename__ : ["stx","test","Assertation"], __constructs__ : ["Success","Failure","Failure","SetupFailure","TeardownFailure","TimeoutFailure","AsyncFailure","Warning"] }
 stx.test.Assertation.Success = function(pos) { var $x = ["Success",0,pos]; $x.__enum__ = stx.test.Assertation; $x.toString = $estr; return $x; }
 stx.test.Assertation.Failure = function(msg,pos) { var $x = ["Failure",1,msg,pos]; $x.__enum__ = stx.test.Assertation; $x.toString = $estr; return $x; }
-stx.test.Assertation.Error = function(e,stack) { var $x = ["Error",2,e,stack]; $x.__enum__ = stx.test.Assertation; $x.toString = $estr; return $x; }
-stx.test.Assertation.SetupError = function(e,stack) { var $x = ["SetupError",3,e,stack]; $x.__enum__ = stx.test.Assertation; $x.toString = $estr; return $x; }
-stx.test.Assertation.TeardownError = function(e,stack) { var $x = ["TeardownError",4,e,stack]; $x.__enum__ = stx.test.Assertation; $x.toString = $estr; return $x; }
-stx.test.Assertation.TimeoutError = function(missedAsyncs,stack) { var $x = ["TimeoutError",5,missedAsyncs,stack]; $x.__enum__ = stx.test.Assertation; $x.toString = $estr; return $x; }
-stx.test.Assertation.AsyncError = function(e,stack) { var $x = ["AsyncError",6,e,stack]; $x.__enum__ = stx.test.Assertation; $x.toString = $estr; return $x; }
+stx.test.Assertation.Failure = function(e,stack) { var $x = ["Failure",2,e,stack]; $x.__enum__ = stx.test.Assertation; $x.toString = $estr; return $x; }
+stx.test.Assertation.SetupFailure = function(e,stack) { var $x = ["SetupFailure",3,e,stack]; $x.__enum__ = stx.test.Assertation; $x.toString = $estr; return $x; }
+stx.test.Assertation.TeardownFailure = function(e,stack) { var $x = ["TeardownFailure",4,e,stack]; $x.__enum__ = stx.test.Assertation; $x.toString = $estr; return $x; }
+stx.test.Assertation.TimeoutFailure = function(missedAsyncs,stack) { var $x = ["TimeoutFailure",5,missedAsyncs,stack]; $x.__enum__ = stx.test.Assertation; $x.toString = $estr; return $x; }
+stx.test.Assertation.AsyncFailure = function(e,stack) { var $x = ["AsyncFailure",6,e,stack]; $x.__enum__ = stx.test.Assertation; $x.toString = $estr; return $x; }
 stx.test.Assertation.Warning = function(msg) { var $x = ["Warning",7,msg]; $x.__enum__ = stx.test.Assertation; $x.toString = $estr; return $x; }
 if(!stx.test._Dispatcher) stx.test._Dispatcher = {}
 stx.test._Dispatcher.EventException = $hxClasses["stx.test._Dispatcher.EventException"] = { __ename__ : ["stx","test","_Dispatcher","EventException"], __constructs__ : ["StopPropagation"] }
@@ -18431,13 +18431,13 @@ stx.test.TestHandler.prototype = {
 		try {
 			this.executeMethodByName(this.fixture.teardown);
 		} catch( e ) {
-			this.results.add(stx.test.Assertation.TeardownError(e,stx.test.TestHandler.exceptionStack(2)));
+			this.results.add(stx.test.Assertation.TeardownFailure(e,stx.test.TestHandler.exceptionStack(2)));
 		}
 		this.unbindHandler();
 		this.onComplete.dispatch(this);
 	}
 	,timeout: function() {
-		this.results.add(stx.test.Assertation.TimeoutError(this.asyncStack.length,[]));
+		this.results.add(stx.test.Assertation.TimeoutFailure(this.asyncStack.length,[]));
 		this.onTimeout.dispatch(this);
 		this.completed();
 	}
@@ -18467,14 +18467,14 @@ stx.test.TestHandler.prototype = {
 		this.setTimeout(timeout);
 		return function(e) {
 			if(!handler.asyncStack.remove(f)) {
-				handler.results.add(stx.test.Assertation.AsyncError("event already executed",[]));
+				handler.results.add(stx.test.Assertation.AsyncFailure("event already executed",[]));
 				return;
 			}
 			try {
 				handler.bindHandler();
 				f(e);
 			} catch( e1 ) {
-				handler.results.add(stx.test.Assertation.AsyncError(e1,stx.test.TestHandler.exceptionStack(0)));
+				handler.results.add(stx.test.Assertation.AsyncFailure(e1,stx.test.TestHandler.exceptionStack(0)));
 			}
 		};
 	}
@@ -18485,14 +18485,14 @@ stx.test.TestHandler.prototype = {
 		this.setTimeout(timeout);
 		return function() {
 			if(!handler.asyncStack.remove(f)) {
-				handler.results.add(stx.test.Assertation.AsyncError("method already executed",[]));
+				handler.results.add(stx.test.Assertation.AsyncFailure("method already executed",[]));
 				return;
 			}
 			try {
 				handler.bindHandler();
 				f();
 			} catch( e ) {
-				handler.results.add(stx.test.Assertation.AsyncError(e,stx.test.TestHandler.exceptionStack(0)));
+				handler.results.add(stx.test.Assertation.AsyncFailure(e,stx.test.TestHandler.exceptionStack(0)));
 			}
 		};
 	}
@@ -18526,10 +18526,10 @@ stx.test.TestHandler.prototype = {
 			try {
 				this.executeMethod(this.fixture.method);
 			} catch( e ) {
-				this.results.add(stx.test.Assertation.Error(e,stx.test.TestHandler.exceptionStack()));
+				this.results.add(stx.test.Assertation.Failure(e,stx.test.TestHandler.exceptionStack()));
 			}
 		} catch( e ) {
-			this.results.add(stx.test.Assertation.SetupError(e,stx.test.TestHandler.exceptionStack()));
+			this.results.add(stx.test.Assertation.SetupFailure(e,stx.test.TestHandler.exceptionStack()));
 		}
 		this.checkTested();
 	}
@@ -18841,7 +18841,7 @@ stx.test.ui.Report.__name__ = ["stx","test","ui","Report"];
 stx.test.ui.Report.create = function(runner,displaySuccessResults,headerDisplayMode) {
 	var report;
 	report = new stx.test.ui.text.HtmlReport(runner,null,true);
-	if(null == displaySuccessResults) report.displaySuccessResults = stx.test.ui.common.SuccessResultsDisplayMode.ShowSuccessResultsWithNoErrors; else report.displaySuccessResults = displaySuccessResults;
+	if(null == displaySuccessResults) report.displaySuccessResults = stx.test.ui.common.SuccessResultsDisplayMode.ShowSuccessResultsWithNoFailures; else report.displaySuccessResults = displaySuccessResults;
 	if(null == headerDisplayMode) report.displayHeader = stx.test.ui.common.HeaderDisplayMode.ShowHeaderWithResults; else report.displayHeader = headerDisplayMode;
 	return report;
 }
@@ -18871,7 +18871,7 @@ stx.test.ui.common.ClassResult.prototype = {
 			names.sort(function(a,b) {
 				var $as = me.get(a).stats;
 				var bs = me.get(b).stats;
-				if($as.hasErrors) return !bs.hasErrors?-1:$as.errors == bs.errors?Reflect.compare(a,b):Reflect.compare($as.errors,bs.errors); else if(bs.hasErrors) return 1; else if($as.hasFailures) return !bs.hasFailures?-1:$as.failures == bs.failures?Reflect.compare(a,b):Reflect.compare($as.failures,bs.failures); else if(bs.hasFailures) return 1; else if($as.hasWarnings) return !bs.hasWarnings?-1:$as.warnings == bs.warnings?Reflect.compare(a,b):Reflect.compare($as.warnings,bs.warnings); else if(bs.hasWarnings) return 1; else return Reflect.compare(a,b);
+				if($as.hasFailures) return !bs.hasFailures?-1:$as.errors == bs.errors?Reflect.compare(a,b):Reflect.compare($as.errors,bs.errors); else if(bs.hasFailures) return 1; else if($as.hasFailures) return !bs.hasFailures?-1:$as.failures == bs.failures?Reflect.compare(a,b):Reflect.compare($as.failures,bs.failures); else if(bs.hasFailures) return 1; else if($as.hasWarnings) return !bs.hasWarnings?-1:$as.warnings == bs.warnings?Reflect.compare(a,b):Reflect.compare($as.warnings,bs.warnings); else if(bs.hasWarnings) return 1; else return Reflect.compare(a,b);
 			});
 		} else names.sort(function(a,b) {
 			return Reflect.compare(a,b);
@@ -18903,11 +18903,11 @@ stx.test.ui.common.ClassResult.prototype = {
 stx.test.ui.common.FixtureResult = $hxClasses["stx.test.ui.common.FixtureResult"] = function(methodName) {
 	this.methodName = methodName;
 	this.list = new List();
-	this.hasTestError = false;
-	this.hasSetupError = false;
-	this.hasTeardownError = false;
-	this.hasTimeoutError = false;
-	this.hasAsyncError = false;
+	this.hasTestFailure = false;
+	this.hasSetupFailure = false;
+	this.hasTeardownFailure = false;
+	this.hasTimeoutFailure = false;
+	this.hasAsyncFailure = false;
 	this.stats = new stx.test.ui.common.ResultStats();
 };
 stx.test.ui.common.FixtureResult.__name__ = ["stx","test","ui","common","FixtureResult"];
@@ -18922,23 +18922,23 @@ stx.test.ui.common.FixtureResult.prototype = {
 			this.stats.addFailures(1);
 			break;
 		case 2:
-			this.stats.addErrors(1);
+			this.stats.addFailures(1);
 			break;
 		case 3:
-			this.stats.addErrors(1);
-			this.hasSetupError = true;
+			this.stats.addFailures(1);
+			this.hasSetupFailure = true;
 			break;
 		case 4:
-			this.stats.addErrors(1);
-			this.hasTeardownError = true;
+			this.stats.addFailures(1);
+			this.hasTeardownFailure = true;
 			break;
 		case 5:
-			this.stats.addErrors(1);
-			this.hasTimeoutError = true;
+			this.stats.addFailures(1);
+			this.hasTimeoutFailure = true;
 			break;
 		case 6:
-			this.stats.addErrors(1);
-			this.hasAsyncError = true;
+			this.stats.addFailures(1);
+			this.hasAsyncFailure = true;
 			break;
 		case 7:
 			this.stats.addWarnings(1);
@@ -18950,11 +18950,11 @@ stx.test.ui.common.FixtureResult.prototype = {
 	}
 	,list: null
 	,stats: null
-	,hasAsyncError: null
-	,hasTimeoutError: null
-	,hasTeardownError: null
-	,hasSetupError: null
-	,hasTestError: null
+	,hasAsyncFailure: null
+	,hasTimeoutFailure: null
+	,hasTeardownFailure: null
+	,hasSetupFailure: null
+	,hasTestFailure: null
 	,methodName: null
 	,__class__: stx.test.ui.common.FixtureResult
 }
@@ -18968,16 +18968,16 @@ stx.test.ui.common.HeaderDisplayMode.NeverShowHeader.__enum__ = stx.test.ui.comm
 stx.test.ui.common.HeaderDisplayMode.ShowHeaderWithResults = ["ShowHeaderWithResults",2];
 stx.test.ui.common.HeaderDisplayMode.ShowHeaderWithResults.toString = $estr;
 stx.test.ui.common.HeaderDisplayMode.ShowHeaderWithResults.__enum__ = stx.test.ui.common.HeaderDisplayMode;
-stx.test.ui.common.SuccessResultsDisplayMode = $hxClasses["stx.test.ui.common.SuccessResultsDisplayMode"] = { __ename__ : ["stx","test","ui","common","SuccessResultsDisplayMode"], __constructs__ : ["AlwaysShowSuccessResults","NeverShowSuccessResults","ShowSuccessResultsWithNoErrors"] }
+stx.test.ui.common.SuccessResultsDisplayMode = $hxClasses["stx.test.ui.common.SuccessResultsDisplayMode"] = { __ename__ : ["stx","test","ui","common","SuccessResultsDisplayMode"], __constructs__ : ["AlwaysShowSuccessResults","NeverShowSuccessResults","ShowSuccessResultsWithNoFailures"] }
 stx.test.ui.common.SuccessResultsDisplayMode.AlwaysShowSuccessResults = ["AlwaysShowSuccessResults",0];
 stx.test.ui.common.SuccessResultsDisplayMode.AlwaysShowSuccessResults.toString = $estr;
 stx.test.ui.common.SuccessResultsDisplayMode.AlwaysShowSuccessResults.__enum__ = stx.test.ui.common.SuccessResultsDisplayMode;
 stx.test.ui.common.SuccessResultsDisplayMode.NeverShowSuccessResults = ["NeverShowSuccessResults",1];
 stx.test.ui.common.SuccessResultsDisplayMode.NeverShowSuccessResults.toString = $estr;
 stx.test.ui.common.SuccessResultsDisplayMode.NeverShowSuccessResults.__enum__ = stx.test.ui.common.SuccessResultsDisplayMode;
-stx.test.ui.common.SuccessResultsDisplayMode.ShowSuccessResultsWithNoErrors = ["ShowSuccessResultsWithNoErrors",2];
-stx.test.ui.common.SuccessResultsDisplayMode.ShowSuccessResultsWithNoErrors.toString = $estr;
-stx.test.ui.common.SuccessResultsDisplayMode.ShowSuccessResultsWithNoErrors.__enum__ = stx.test.ui.common.SuccessResultsDisplayMode;
+stx.test.ui.common.SuccessResultsDisplayMode.ShowSuccessResultsWithNoFailures = ["ShowSuccessResultsWithNoFailures",2];
+stx.test.ui.common.SuccessResultsDisplayMode.ShowSuccessResultsWithNoFailures.toString = $estr;
+stx.test.ui.common.SuccessResultsDisplayMode.ShowSuccessResultsWithNoFailures.__enum__ = stx.test.ui.common.SuccessResultsDisplayMode;
 stx.test.ui.common.IReport = $hxClasses["stx.test.ui.common.IReport"] = function() { }
 stx.test.ui.common.IReport.__name__ = ["stx","test","ui","common","IReport"];
 stx.test.ui.common.IReport.prototype = {
@@ -19041,7 +19041,7 @@ stx.test.ui.common.PackageResult.prototype = {
 			names.sort(function(a,b) {
 				var $as = me.getPackage(a).stats;
 				var bs = me.getPackage(b).stats;
-				if($as.hasErrors) return !bs.hasErrors?-1:$as.errors == bs.errors?Reflect.compare(a,b):Reflect.compare($as.errors,bs.errors); else if(bs.hasErrors) return 1; else if($as.hasFailures) return !bs.hasFailures?-1:$as.failures == bs.failures?Reflect.compare(a,b):Reflect.compare($as.failures,bs.failures); else if(bs.hasFailures) return 1; else if($as.hasWarnings) return !bs.hasWarnings?-1:$as.warnings == bs.warnings?Reflect.compare(a,b):Reflect.compare($as.warnings,bs.warnings); else if(bs.hasWarnings) return 1; else return Reflect.compare(a,b);
+				if($as.hasFailures) return !bs.hasFailures?-1:$as.errors == bs.errors?Reflect.compare(a,b):Reflect.compare($as.errors,bs.errors); else if(bs.hasFailures) return 1; else if($as.hasFailures) return !bs.hasFailures?-1:$as.failures == bs.failures?Reflect.compare(a,b):Reflect.compare($as.failures,bs.failures); else if(bs.hasFailures) return 1; else if($as.hasWarnings) return !bs.hasWarnings?-1:$as.warnings == bs.warnings?Reflect.compare(a,b):Reflect.compare($as.warnings,bs.warnings); else if(bs.hasWarnings) return 1; else return Reflect.compare(a,b);
 			});
 		} else names.sort(function(a,b) {
 			return Reflect.compare(a,b);
@@ -19061,7 +19061,7 @@ stx.test.ui.common.PackageResult.prototype = {
 			names.sort(function(a,b) {
 				var $as = me.getClass(a).stats;
 				var bs = me.getClass(b).stats;
-				if($as.hasErrors) return !bs.hasErrors?-1:$as.errors == bs.errors?Reflect.compare(a,b):Reflect.compare($as.errors,bs.errors); else if(bs.hasErrors) return 1; else if($as.hasFailures) return !bs.hasFailures?-1:$as.failures == bs.failures?Reflect.compare(a,b):Reflect.compare($as.failures,bs.failures); else if(bs.hasFailures) return 1; else if($as.hasWarnings) return !bs.hasWarnings?-1:$as.warnings == bs.warnings?Reflect.compare(a,b):Reflect.compare($as.warnings,bs.warnings); else if(bs.hasWarnings) return 1; else return Reflect.compare(a,b);
+				if($as.hasFailures) return !bs.hasFailures?-1:$as.errors == bs.errors?Reflect.compare(a,b):Reflect.compare($as.errors,bs.errors); else if(bs.hasFailures) return 1; else if($as.hasFailures) return !bs.hasFailures?-1:$as.failures == bs.failures?Reflect.compare(a,b):Reflect.compare($as.failures,bs.failures); else if(bs.hasFailures) return 1; else if($as.hasWarnings) return !bs.hasWarnings?-1:$as.warnings == bs.warnings?Reflect.compare(a,b):Reflect.compare($as.warnings,bs.warnings); else if(bs.hasWarnings) return 1; else return Reflect.compare(a,b);
 			});
 		} else names.sort(function(a,b) {
 			return Reflect.compare(a,b);
@@ -19218,11 +19218,11 @@ stx.test.ui.common.ResultStats = $hxClasses["stx.test.ui.common.ResultStats"] = 
 	this.warnings = 0;
 	this.isOk = true;
 	this.hasFailures = false;
-	this.hasErrors = false;
+	this.hasFailures = false;
 	this.hasWarnings = false;
 	this.onAddSuccesses = new stx.test.Dispatcher();
 	this.onAddFailures = new stx.test.Dispatcher();
-	this.onAddErrors = new stx.test.Dispatcher();
+	this.onAddFailures = new stx.test.Dispatcher();
 	this.onAddWarnings = new stx.test.Dispatcher();
 };
 stx.test.ui.common.ResultStats.__name__ = ["stx","test","ui","common","ResultStats"];
@@ -19230,27 +19230,27 @@ stx.test.ui.common.ResultStats.prototype = {
 	unwire: function(dependant) {
 		dependant.onAddSuccesses.remove($bind(this,this.addSuccesses));
 		dependant.onAddFailures.remove($bind(this,this.addFailures));
-		dependant.onAddErrors.remove($bind(this,this.addErrors));
+		dependant.onAddFailures.remove($bind(this,this.addFailures));
 		dependant.onAddWarnings.remove($bind(this,this.addWarnings));
 		this.subtract(dependant);
 	}
 	,wire: function(dependant) {
 		dependant.onAddSuccesses.add($bind(this,this.addSuccesses));
 		dependant.onAddFailures.add($bind(this,this.addFailures));
-		dependant.onAddErrors.add($bind(this,this.addErrors));
+		dependant.onAddFailures.add($bind(this,this.addFailures));
 		dependant.onAddWarnings.add($bind(this,this.addWarnings));
 		this.sum(dependant);
 	}
 	,subtract: function(other) {
 		this.addSuccesses(-other.successes);
 		this.addFailures(-other.failures);
-		this.addErrors(-other.errors);
+		this.addFailures(-other.errors);
 		this.addWarnings(-other.warnings);
 	}
 	,sum: function(other) {
 		this.addSuccesses(other.successes);
 		this.addFailures(other.failures);
-		this.addErrors(other.errors);
+		this.addFailures(other.errors);
 		this.addWarnings(other.warnings);
 	}
 	,addWarnings: function(v) {
@@ -19258,23 +19258,23 @@ stx.test.ui.common.ResultStats.prototype = {
 		this.assertations += v;
 		this.warnings += v;
 		this.hasWarnings = this.warnings > 0;
-		this.isOk = !(this.hasFailures || this.hasErrors || this.hasWarnings);
+		this.isOk = !(this.hasFailures || this.hasFailures || this.hasWarnings);
 		this.onAddWarnings.dispatch(v);
 	}
-	,addErrors: function(v) {
+	,addFailures: function(v) {
 		if(v == 0) return;
 		this.assertations += v;
 		this.errors += v;
-		this.hasErrors = this.errors > 0;
-		this.isOk = !(this.hasFailures || this.hasErrors || this.hasWarnings);
-		this.onAddErrors.dispatch(v);
+		this.hasFailures = this.errors > 0;
+		this.isOk = !(this.hasFailures || this.hasFailures || this.hasWarnings);
+		this.onAddFailures.dispatch(v);
 	}
 	,addFailures: function(v) {
 		if(v == 0) return;
 		this.assertations += v;
 		this.failures += v;
 		this.hasFailures = this.failures > 0;
-		this.isOk = !(this.hasFailures || this.hasErrors || this.hasWarnings);
+		this.isOk = !(this.hasFailures || this.hasFailures || this.hasWarnings);
 		this.onAddFailures.dispatch(v);
 	}
 	,addSuccesses: function(v) {
@@ -19284,11 +19284,11 @@ stx.test.ui.common.ResultStats.prototype = {
 		this.onAddSuccesses.dispatch(v);
 	}
 	,hasWarnings: null
-	,hasErrors: null
+	,hasFailures: null
 	,hasFailures: null
 	,isOk: null
 	,onAddWarnings: null
-	,onAddErrors: null
+	,onAddFailures: null
 	,onAddFailures: null
 	,onAddSuccesses: null
 	,warnings: null
@@ -19395,7 +19395,7 @@ stx.test.ui.text.HtmlReport.prototype = {
 		var end = haxe.Timer.stamp();
 		var time = ((end - this.startTime) * 1000 | 0) / 1000;
 		var msg = "TEST OK";
-		if(this.result.stats.hasErrors) msg = "TEST ERRORS"; else if(this.result.stats.hasFailures) msg = "TEST FAILED"; else if(this.result.stats.hasWarnings) msg = "WARNING REPORTED";
+		if(this.result.stats.hasFailures) msg = "TEST ERRORS"; else if(this.result.stats.hasFailures) msg = "TEST FAILED"; else if(this.result.stats.hasWarnings) msg = "WARNING REPORTED";
 		buf.b += Std.string("<h1 class=\"" + this.cls(this.result.stats) + "bg header\">" + msg + "</h1>\n");
 		buf.b += Std.string("<div class=\"headerinfo\">");
 		this.resultNumbers(buf,this.result.stats);
@@ -19448,7 +19448,7 @@ stx.test.ui.text.HtmlReport.prototype = {
 		if(stx.test.ui.common.ReportTools.skipResult(this,result.stats,isOk)) return;
 		buf.b += Std.string("<li class=\"fixture\"><div class=\"li\">");
 		buf.b += Std.string("<span class=\"" + this.cls(result.stats) + "bg fixtureresult\">");
-		if(result.stats.isOk) buf.b += Std.string("OK "); else if(result.stats.hasErrors) buf.b += Std.string("ERROR "); else if(result.stats.hasFailures) buf.b += Std.string("FAILURE "); else if(result.stats.hasWarnings) buf.b += Std.string("WARNING ");
+		if(result.stats.isOk) buf.b += Std.string("OK "); else if(result.stats.hasFailures) buf.b += Std.string("ERROR "); else if(result.stats.hasFailures) buf.b += Std.string("FAILURE "); else if(result.stats.hasWarnings) buf.b += Std.string("WARNING ");
 		buf.b += Std.string("</span>");
 		buf.b += Std.string("<div class=\"fixturedetails\">");
 		buf.b += Std.string("<strong>" + name + "</strong>");
@@ -19533,7 +19533,7 @@ stx.test.ui.text.HtmlReport.prototype = {
 		buf.b += Std.string(numbers.join(", "));
 	}
 	,cls: function(stats) {
-		if(stats.hasErrors) return "error"; else if(stats.hasFailures) return "failure"; else if(stats.hasWarnings) return "warn"; else return "ok";
+		if(stats.hasFailures) return "error"; else if(stats.hasFailures) return "failure"; else if(stats.hasWarnings) return "warn"; else return "ok";
 	}
 	,start: function(e) {
 		this.startTime = haxe.Timer.stamp();
@@ -19606,7 +19606,7 @@ stx.test.ui.text.PlainTextReport.prototype = {
 					var fix = cls.get(mname);
 					if(stx.test.ui.common.ReportTools.skipResult(this,fix.stats,this.result.stats.isOk)) continue;
 					buf.b += Std.string(this.indents(1) + mname + ": ");
-					if(fix.stats.isOk) buf.b += Std.string("OK "); else if(fix.stats.hasErrors) buf.b += Std.string("ERROR "); else if(fix.stats.hasFailures) buf.b += Std.string("FAILURE "); else if(fix.stats.hasWarnings) buf.b += Std.string("WARNING ");
+					if(fix.stats.isOk) buf.b += Std.string("OK "); else if(fix.stats.hasFailures) buf.b += Std.string("ERROR "); else if(fix.stats.hasFailures) buf.b += Std.string("FAILURE "); else if(fix.stats.hasWarnings) buf.b += Std.string("WARNING ");
 					var messages = "";
 					var $it0 = fix.iterator();
 					while( $it0.hasNext() ) {
@@ -20028,10 +20028,10 @@ stx.js.OperationType.NODE_IMPORTED = 2;
 stx.js.OperationType.NODE_DELETED = 3;
 stx.js.OperationType.NODE_RENAMED = 4;
 stx.js.OperationType.NODE_ADOPTED = 5;
-stx.js.ErrorState.NETWORK_EMPTY = 0;
-stx.js.ErrorState.NETWORK_IDLE = 1;
-stx.js.ErrorState.NETWORK_LOADING = 2;
-stx.js.ErrorState.NETWORK_NO_SOURCE = 3;
+stx.js.FailureState.NETWORK_EMPTY = 0;
+stx.js.FailureState.NETWORK_IDLE = 1;
+stx.js.FailureState.NETWORK_LOADING = 2;
+stx.js.FailureState.NETWORK_NO_SOURCE = 3;
 stx.js.ReadyState.CONNECTING = 0;
 stx.js.ReadyState.OPEN = 1;
 stx.js.ReadyState.CLOSED = 2;
@@ -20125,9 +20125,9 @@ stx.js.UpdateStatus.IDLE = 1;
 stx.js.UpdateStatus.CHECKING = 2;
 stx.js.UpdateStatus.DOWNLOADING = 3;
 stx.js.UpdateStatus.UPDATEREADY = 4;
-stx.js.ErrorSeverity.SEVERITY_WARNING = 1;
-stx.js.ErrorSeverity.SEVERITY_ERROR = 2;
-stx.js.ErrorSeverity.SEVERITY_FATAL_ERROR = 3;
+stx.js.FailureSeverity.SEVERITY_WARNING = 1;
+stx.js.FailureSeverity.SEVERITY_ERROR = 2;
+stx.js.FailureSeverity.SEVERITY_FATAL_ERROR = 3;
 stx.js.detect.BrowserSupport.memorized = stx.ds.Map.create();
 stx.js.detect.Host.Environment = stx.js.detect.Host.detectEnvironment();
 stx.js.detect.Host.OS = stx.js.detect.Host.detectOS();

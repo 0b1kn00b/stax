@@ -2,7 +2,7 @@ package stx;
 
 import stx.Log.*;
 import stx.Muster;
-import stx.Muster.Test.*;
+import stx.Muster.*;
 
 using stx.Method;
 

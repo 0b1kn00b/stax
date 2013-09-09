@@ -22,11 +22,11 @@ import stx.test.Assertation;
 */
 class FixtureResult {
   public var methodName(default, null) : String;
-  public var hasTestError(default, null) : Bool;
-  public var hasSetupError(default, null) : Bool;
-  public var hasTeardownError(default, null) : Bool;
-  public var hasTimeoutError(default, null) : Bool;
-  public var hasAsyncError(default, null) : Bool;
+  public var hasTestFail(default, null) : Bool;
+  public var hasSetupFail(default, null) : Bool;
+  public var hasTeardownFail(default, null) : Bool;
+  public var hasTimeoutFail(default, null) : Bool;
+  public var hasAsyncFail(default, null) : Bool;
 
   public var stats(default, null) : ResultStats;
 
@@ -34,11 +34,11 @@ class FixtureResult {
   public function new(methodName : String) {
     this.methodName = methodName;
     this.list = new List();
-    hasTestError = false;
-    hasSetupError = false;
-    hasTeardownError = false;
-    hasTimeoutError = false;
-    hasAsyncError = false;
+    hasTestFail = false;
+    hasSetupFail = false;
+    hasTeardownFail = false;
+    hasTimeoutFail = false;
+    hasAsyncFail = false;
 
     stats = new ResultStats();
   }
@@ -52,22 +52,22 @@ class FixtureResult {
     switch(assertation) {
       case Success(_):
         stats.addSuccesses(1);
-      case Failure(_, _):
-        stats.addFailures(1);
-      case Error(_, _):
-        stats.addErrors(1);
-      case SetupError(_, _):
-        stats.addErrors(1);
-        hasSetupError = true;
-      case TeardownError(_, _):
-        stats.addErrors(1);
-        hasTeardownError = true;
-      case TimeoutError(_, _):
-        stats.addErrors(1);
-        hasTimeoutError = true;
-      case AsyncError(_, _):
-        stats.addErrors(1);
-        hasAsyncError = true;
+      case Fail(_, _):
+        stats.addFails(1);
+      case Fail(_, _):
+        stats.addFails(1);
+      case SetupFail(_, _):
+        stats.addFails(1);
+        hasSetupFail = true;
+      case TeardownFail(_, _):
+        stats.addFails(1);
+        hasTeardownFail = true;
+      case TimeoutFail(_, _):
+        stats.addFails(1);
+        hasTimeoutFail = true;
+      case AsyncFail(_, _):
+        stats.addFails(1);
+        hasAsyncFail = true;
       case Warning(_):
         stats.addWarnings(1);
     }

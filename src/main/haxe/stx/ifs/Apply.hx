@@ -1,7 +1,7 @@
 package stx.ifs;
 
-import stx.Error.*;
-import stx.Errors;
+import Stax.*;
+import stx.Fail;
 
 import stx.Prelude;
 
@@ -20,6 +20,6 @@ class DefaultApply<E,A> implements Apply<E,A>{
 
 	}
 	public function apply(v:E):A{
-		return Prelude.err()(err(AbstractMethodError()));
+		return except()(fail(AbstractMethodFail()));
 	}
 }

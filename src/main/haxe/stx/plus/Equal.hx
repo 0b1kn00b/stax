@@ -1,7 +1,7 @@
 package stx.plus;
 
 import haxe.ds.StringMap;
-import stx.Errors;
+ 
 import Type;
 
 using stx.Tuples;
@@ -42,13 +42,13 @@ class Equal{
       case TClass( c ) if ( c == Array  )                               : __equals__(ArrayEqual.equals);
       case TClass( c ) if ( c == Date   )                               : __equals__(stx.Dates.equals);
       case TClass( c ) if ( c == String )                               : __equals__(stx.Strings.equals);
-      //case TClass( c ) if (stx.Types.hasSuperClass(c,AbstractProduct))  : __equals__(ProductEquals.equals);
+      //case TClass( c ) if (stx.Types.descended(c,AbstractProduct))  : __equals__(ProductEquals.equals);
       case TEnum(_)                                                     : __equals__(EnumEqual.equals);
       case TClass( c )                                                  :
         if(Type.getInstanceFields(c).remove("equals")){
           __equals__(EqualsEquals.equals);
         }else{
-          throw NullReferenceError('equals on $v'); __equals__(function(x,y){return false;});
+          __equals__(UnsupportedClassEqual.equals);
         }
       case TObject      : __equals__(ObjectEquals.equals);
       case TUnknown     : __equals__(
@@ -68,6 +68,11 @@ class Equal{
         else if(a == null || b == null) false;
         else impl(a, b);
     };
+  }
+}
+class UnsupportedClassEqual{
+  @:noUsing static public inline function equals<T>(a:T,b:T):Bool{
+    return ObjectEquals.equals(a,b) && (Type.getClass(a) == Type.getClass(b));
   }
 }
 class NullEqual{
@@ -145,17 +150,19 @@ class EnumEqual{
     }
   }
 }
-@:note('#0b1kn00b: this assumes no subtyping, and that [0] is defined. Faster but incorrect.')
 class ArrayEqual {
   public static inline function equals<T>(v1: Array<T>, v2: Array<T>) {
     return equalsWith(v1, v2, Equal.getEqualFor(v1[0]));
   }
   public static inline function equalsWith<T>(v1: Array<T>, v2: Array<T>, equal : EqualFunction<T>) { 
-    var o = true;
-    if (v1.length != v2.length) {
-      o = false;
+    var o = (equal != null);
+
+    return if(!o){
+      o;
+    }else if (v1.length != v2.length) {
+      false;
     }else if (v1.length == 0) { 
-      o = true;
+      true;
     }else{
       for (i in 0...v1.length) {
         if (!equal(v1[i], v2[i])) {
@@ -163,7 +170,7 @@ class ArrayEqual {
           break;
         }
       }
+      o;
     }
-    return o;
   }
 }

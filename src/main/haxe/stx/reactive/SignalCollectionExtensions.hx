@@ -22,7 +22,7 @@ import stx.ds.Collection;
 import stx.ds.List;
 
 
-using stx.functional.Foldables;
+using stx.ds.Foldables;
 
 class SignalCollectionExtensions {
     private function new() { }

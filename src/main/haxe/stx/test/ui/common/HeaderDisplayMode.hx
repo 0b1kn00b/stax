@@ -24,5 +24,5 @@ enum HeaderDisplayMode {
 enum SuccessResultsDisplayMode {
   AlwaysShowSuccessResults;
   NeverShowSuccessResults;
-  ShowSuccessResultsWithNoErrors;
+  ShowSuccessResultsWithNoFails;
 }

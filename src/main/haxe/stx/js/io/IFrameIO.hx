@@ -46,7 +46,7 @@ using stx.plus.Hasher;
 using stx.ds.Map;
 using stx.ds.List;
 
-using stx.functional.Foldables;
+using stx.ds.Foldables;
 using stx.Strings;
 
 using stx.net.Urls;
@@ -263,7 +263,7 @@ class IFrameIOPostMessage extends AbstractIFrameIO implements IFrameIO {
       targetWindow.postMessage(Json.encodeObject(data), targetUrl);
     }
     catch (e: Dynamic) {
-      trace(('Error while posting message to ' + targetUrl + ' (originally ' + targetUrl_ + '): ' + e.message).fatal());
+      trace(('Fail while posting message to ' + targetUrl + ' (originally ' + targetUrl_ + '): ' + e.message).fatal());
     }
     
     return this;

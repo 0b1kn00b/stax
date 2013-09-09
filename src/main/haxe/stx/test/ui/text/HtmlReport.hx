@@ -113,9 +113,9 @@ class HtmlReport implements IReport < HtmlReport > {
   }
   
   function cls(stats : ResultStats) {
-    if (stats.hasErrors)
+    if (stats.hasFails)
       return 'error';
-    else if (stats.hasFailures)
+    else if (stats.hasFails)
       return 'failure';
     else if (stats.hasWarnings)
       return 'warn';
@@ -188,9 +188,9 @@ class HtmlReport implements IReport < HtmlReport > {
     buf.add('<span class="' + cls(result.stats) + 'bg fixtureresult">');
     if(result.stats.isOk) {
       buf.add("OK ");
-    } else if(result.stats.hasErrors) {
+    } else if(result.stats.hasFails) {
       buf.add("ERROR ");
-    } else if(result.stats.hasFailures) {
+    } else if(result.stats.hasFails) {
       buf.add("FAILURE ");
     } else if(result.stats.hasWarnings) {
       buf.add("WARNING ");
@@ -204,17 +204,17 @@ class HtmlReport implements IReport < HtmlReport > {
     for(assertation in result.iterator()) {
       switch(assertation) {
         case Success(_):
-        case Failure(msg, pos):
+        case Fail(msg, pos):
           messages.push("<strong>line " + pos.lineNumber + "</strong>: <em>" + StringTools.htmlEscape(msg) + "</em>");
-        case Error(e, s):
+        case Fail(e, s):
           messages.push("<strong>error</strong>: <em>" + StringTools.htmlEscape(Std.string(e)) + "</em>\n" + formatStack(s));
-        case SetupError(e, s):
+        case SetupFail(e, s):
           messages.push("<strong>setup error</strong>: " + StringTools.htmlEscape(Std.string(e)) + "\n" + formatStack(s));
-        case TeardownError(e, s):
+        case TeardownFail(e, s):
           messages.push("<strong>tear-down error</strong>: " + StringTools.htmlEscape(Std.string(e)) + "\n" + formatStack(s));
-        case TimeoutError(missedAsyncs, _):
+        case TimeoutFail(missedAsyncs, _):
           messages.push("<strong>missed async call(s)</strong>: " + missedAsyncs);
-        case AsyncError(e, s):
+        case AsyncFail(e, s):
           messages.push("<strong>async error</strong>: " + StringTools.htmlEscape(Std.string(e)) + "\n" + formatStack(s));
         case Warning(msg):
           messages.push(StringTools.htmlEscape(msg));
@@ -272,9 +272,9 @@ class HtmlReport implements IReport < HtmlReport > {
     var end = haxe.Timer.stamp();
     var time = Std.int((end-startTime)*1000)/1000;
     var msg = 'TEST OK';
-    if (result.stats.hasErrors)
+    if (result.stats.hasFails)
       msg = 'TEST ERRORS';
-    else if (result.stats.hasFailures)
+    else if (result.stats.hasFails)
       msg = 'TEST FAILED';
     else if (result.stats.hasWarnings)
       msg = 'WARNING REPORTED';

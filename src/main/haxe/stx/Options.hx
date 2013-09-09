@@ -17,16 +17,6 @@ class Options {
   @:noUsing static public inline function create<T>(t: T): Option<T> {
     return if (t == null) None; else Some(t);
   }
-  static public function toOption<A>(v:A):Option<A>{
-    return create(v);
-  }
-  @:noUsing
-  static public function orDefault<A>(p0:A,p1:A){
-    return create(p0).getOrElseC(p1);
-  }
-  static public function dflt<A>(def:Void->A,possibly:A){
-    return Options.create(possibly).getOrElse(def);
-  }
   /**
     Performs 'f' on the contents of 'o' if o != None
    */
@@ -56,7 +46,7 @@ class Options {
   */
   static public function get<T>(o: Option<T>): T {
     return switch (o) {
-      case None   : Prelude.error()("Error: Option is empty");
+      case None   : Prelude.error()("Fail: Option is empty");
       case Some(v): v;
     }
   }
@@ -145,10 +135,10 @@ class Options {
   /**
    Produces a Tuple2 of ´o1´ and ´o2´.
    */
-  static public function zip<T, S>(o1: Option<T>, o2: Option<S>) {
+  static public function zip<T, S>(o1: Option<T>, o2: Option<S>):Option<Tuple2<T,S>> {
     return switch (o1) {
-      case None: None;
-      case Some(v1): o2.map(tuple2.p1(v1));
+      case None     : None;
+      case Some(v1) : o2.map(tuple2.bind(v1));
     }
   }
   /**

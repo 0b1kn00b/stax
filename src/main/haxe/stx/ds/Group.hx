@@ -4,7 +4,7 @@ package stx.ds;
  * ...
  * @author 0b1kn00b
  */
-import stx.functional.Foldable;
+import stx.ds.ifs.Foldable;
 
 
 using stx.Prelude;

@@ -1,10 +1,10 @@
 package stx.ds;
 
-import stx.Errors.*;
+import stx.Fails.*;
 import stx.Tuples;
 import stx.Prelude;
 import stx.Functions;
-import stx.Predicates;
+import stx.Compare;
 import stx.Tuples;
 
 using stx.ds.CollectionUtil;
@@ -122,7 +122,7 @@ class CollectionTypes {
 
     inline public static function dropLeft<T>(collection : Collection<T>, amount : Int) : Collection<T> {
         if (amount < 0) {
-            Prelude.err()(argument_error('Amount must be positive'));
+            Prelude.fail()(argument_error('Amount must be positive'));
         }
 
         var col = collection;
@@ -152,7 +152,7 @@ class CollectionTypes {
         var col = collection;
 
         return if (amount < 0) {
-            Prelude.err()(argument_error('Amount must be positive'));
+            Prelude.fail()(argument_error('Amount must be positive'));
         } else if (amount == 0) {
             col;
         } else {
@@ -454,7 +454,7 @@ class CollectionTypes {
     inline public static function takeLeft<T>(collection : Collection<T>, amount : Int) : Collection<T> {
         var col = collection;
         return if (amount < 0) {
-            Prelude.err()(argument_error('Amount must be positive'));
+            Prelude.fail()(argument_error('Amount must be positive'));
         } else if (amount == 0) {
             CollectionUtil.zero();
         } else if (amount > size(col)) {
@@ -474,7 +474,7 @@ class CollectionTypes {
     inline public static function takeRight<T>(collection : Collection<T>, amount : Int) : Collection<T> {
         var col = collection;
         return if (amount < 0) {
-            Prelude.err()(argument_error('Amount must be positive'));
+            Prelude.fail()(argument_error('Amount must be positive'));
         } else if (amount == 0) {
             CollectionUtil.zero();
         } else if (amount > size(col)) {

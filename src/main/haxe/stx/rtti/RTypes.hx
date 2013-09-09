@@ -3,9 +3,13 @@ package stx.rtti;
 import Type;
 
 import haxe.rtti.CType;
+
+import Stax.*;
+
 import stx.Enums;
 import stx.Reflects;
 
+using stx.Compose;
 using stx.Strings;
 using stx.Tuples;
 using stx.Options;
@@ -38,7 +42,7 @@ class Classdefs{
 					if(v.superClass == null) return Some(a);
 					return Options.create(v.superClass)
 						.map(function(x) return x.path)
-						.flatMap(Types.resolveClassOption)
+						.flatMap(Types.classify.then(option))
 						.flatMap(RTypes.typetree)
 						.flatMap(TypeTrees.classdef)
 						.flatMap(_ancestors.bind(_,a));
@@ -50,8 +54,8 @@ class CTypes{
 	static public function toValueType(ct:CType):ValueType{
     return switch (ct) {
       case CUnknown               : TUnknown;
-      case CEnum(name, _)         : TEnum(Enums.resolve(name));
-      case CClass(name ,_ )       : TClass(Types.resolve(name));
+      case CEnum(name, _)         : TEnum(Enums.enumerify(name));
+      case CClass(name ,_ )       : TClass(Types.classify(name));
       case CTypedef(_)            : TObject;
       case CFunction(_, _)        : TFunction;
       case CAnonymous(_)          : TObject;

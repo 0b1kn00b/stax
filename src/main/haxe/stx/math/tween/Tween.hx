@@ -21,7 +21,7 @@ using stx.ds.Map;
 using stx.Options;
 using stx.Tuples;
 
-using stx.functional.Foldables;
+using stx.ds.Foldables;
 
 typedef Tweener = Float -> Dynamic<Float>
 

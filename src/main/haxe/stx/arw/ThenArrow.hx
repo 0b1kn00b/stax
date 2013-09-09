@@ -2,7 +2,7 @@ package stx.arw;
 
 import stx.Prelude;
 
-using stx.arw.Arrows;
+using stx.Arrows;
 
 abstract ThenArrow<I,O,NO>(Arrow<I, NO>) from Arrow<I, NO> to Arrow<I, NO>{
 	public function new(a:Arrow<I,O>,b:Arrow<O,NO>){

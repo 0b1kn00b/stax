@@ -9,14 +9,14 @@ import stx.Tuples;
 import stx.arw.CallbackArrow;
 
 using stx.Options;
-using stx.arw.Arrows;
+using stx.Arrows;
 using stx.Functions;
 
 
 class BrowserArrows{
   static public function windowSize():Arrow<Unit,Tuple2<Int,Int>>{
     var jqr                          = new JQuery(Browser.window).resize;
-    var evt : CallbackArrow<Dynamic> = jqr.effectOf();
+    var evt : CallbackArrow<Dynamic> = jqr.enclose();
     
     return evt.then(
         function(x){

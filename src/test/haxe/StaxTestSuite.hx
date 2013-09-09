@@ -78,7 +78,7 @@ class StaxTestSuite {
 
             new stx.plus.OrderTest(),
             
-            new stx.functional.FoldablesTest(),
+            new stx.ds.FoldablesTest(),
             new stx.functional.PartialFunctionTest(),   
 
             new stx.math.tween.TweensTest(),

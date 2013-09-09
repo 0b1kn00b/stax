@@ -4,7 +4,7 @@ import stx.Tuples;
 
 using stx.Tuples;
 import stx.Prelude;
-using stx.arw.Arrows;
+using stx.Arrows;
 
 typedef ArrowPair<A,B,C,D> = Arrow<Tuple2<A,C>,Tuple2<B,D>>; 
 

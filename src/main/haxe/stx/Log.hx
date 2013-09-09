@@ -1,39 +1,40 @@
 package stx;
 
+import Stax.*;
+
 import haxe.PosInfos;
 
+import stx.ioc.Inject.*;
 import stx.log.*;
 
 using stx.Options;
 
 import funk.ioc.*;
 
-using pax.Option;
-
 class Log{
-	public static function printer<A>(?p:PosInfos):Dynamic->A{
+	static public function printer<A>(?p:PosInfos):A->A{
 		return function(x:A){
-				haxe.Log.trace(x,p);
-				return x;
-			}
+			haxe.Log.trace(x,p);
+			return x;
+		}
 	}
-	public static function debug(v:Dynamic) {
+	@:noUsing static public function debug(v:Dynamic) {
     return new LogItem(LogLevel.Debug, v);
   }
-  public static function info(v:Dynamic) {
+  @:noUsing static public function info(v:Dynamic) {
     return new LogItem(LogLevel.Info, v);
   }
-  public static function warning(v:Dynamic) {
+  @:noUsing static public function warning(v:Dynamic) {
     return new LogItem(LogLevel.Warning, v);
   }
-  public static function error(v:Dynamic) {
-    return new LogItem(LogLevel.Error, v);
+  @:noUsing static public function error(v:Dynamic) {
+    return new LogItem(LogLevel.Fail, v);
   }
-  public static function fatal(v:Dynamic) {
+  @:noUsing static public function fatal(v:Dynamic) {
     return new LogItem(LogLevel.Fatal, v);
   }
-  public static function trace(d:Dynamic,p:PosInfos){
-  	var tracer = Inject.as(Logger).toStaxOption().map(function(x) {return x.apply;}).getOrElseC(haxe.Log.trace);
+  static public function trace(d:Dynamic,p:PosInfos){
+  	var tracer = option(inject(Logger)).map(function(x) {return x.apply;}).getOrElseC(haxe.Log.trace);
   			tracer(d,p);
   }
 }

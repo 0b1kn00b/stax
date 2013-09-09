@@ -1,15 +1,13 @@
 package stx;
 
-import stx.Error.*;
+import stx.Fail.*;
 import stx.err.*;
 import stx.Prelude;
 import stx.plus.Equal;
 import stx.plus.Show;
 
 using stx.Tuples;
-using stx.Predicates;
-
-typedef Tups            = Tuples;
+using stx.Compare;
 
 typedef KV<V>           = Tuple2<String,V>;
 
@@ -31,27 +29,27 @@ abstract Product(Array<Dynamic>) to Array<Dynamic>{
   public function new(v){
     this = v;
   }
-  @:from public static inline function fromTuple1<T1>(a:Tuple1<T1>):Product{
+  @:from public static function fromTuple1<T1>(a:Tuple1<T1>):Product{
     return switch (a) {
       case tuple1(a) : new Product([a]);
     }
   }
-  @:from public static inline function fromTuple2<T1,T2>(v:Tuple2<T1,T2>):Product{
+  @:from public static function fromTuple2<T1,T2>(v:Tuple2<T1,T2>):Product{
     return switch (v) {
       case tuple2(a,b) : new Product([a,b]);
     }
   }
-  @:from public static inline function fromTuple3<T1,T2,T3>(v:Tuple3<T1,T2,T3>):Product{
+  @:from public static function fromTuple3<T1,T2,T3>(v:Tuple3<T1,T2,T3>):Product{
     return switch (v) {
       case tuple3(a,b,c) : new Product([a,b,c]);
     }
   }
-  @:from public static inline function fromTuple4<T1,T2,T3,T4>(v:Tuple4<T1,T2,T3,T4>):Product{
+  @:from public static function fromTuple4<T1,T2,T3,T4>(v:Tuple4<T1,T2,T3,T4>):Product{
     return switch (v) {
       case tuple4(a,b,c,d) : new Product([a,b,c,d]);
     }
   }
-  @:from public static inline function fromTuple5<T1,T2,T3,T4,T5>(v:Tuple5<T1,T2,T3,T4,T5>):Product{
+  @:from public static function fromTuple5<T1,T2,T3,T4,T5>(v:Tuple5<T1,T2,T3,T4,T5>):Product{
     return switch (v) {
       case tuple5(a,b,c,d,e) : new Product([a,b,c,d,e]);
     }
@@ -70,18 +68,7 @@ abstract Product(Array<Dynamic>) to Array<Dynamic>{
 enum Tuple1<T1> {
     tuple1(t1 : T1);
 }
-/*abstract Tuple1<T1>(Tuple1Type<T1>) from Tuple1Type<T1> to Tuple1Type<T1> {
-    inline function new(tuple : Tuple1Type<T1>) {
-        this = tuple;
-    }
-    inline public function fst() : T1 {
-        return Tuples1.fst(this);
-    }
-    @:to inline public static function toString<T1>(tuple : Tuple1Type<T1>) : String {
-        return Tuples1.toString(tuple);
-    }
-}
-*/class Tuples1 {
+class Tuples1 {
     public static function fst<T1>(tuple : Tuple1<T1>) : T1 {
         return switch (tuple){
             case tuple1(a)      : a;
@@ -103,24 +90,13 @@ enum Tuple1<T1> {
             case tuple1(a)    : [a];
         }
     }
+    public static function toProduct<T1>(tp:Tuple1<T1>) : Product{
+        return new Product(toArray(tp));
+    }
 }
 enum Tuple2<T1, T2> {
     tuple2(t1 : T1, t2 : T2);
 }
-/*abstract Tuple2<T1, T2>(Tuple2Type<T1, T2>) from Tuple2Type<T1, T2> to Tuple2Type<T1, T2> {
-    inline function new(tuple : Tuple2Type<T1, T2>) {
-        this = tuple;
-    }
-    inline public function fst() : T1 {
-        return Tuples2.fst(this);
-    }
-    inline public function snd() : T2 {
-        return Tuples2.snd(this);
-    }
-    @:to inline public static function toString<T1, T2>(tuple : Tuple2Type<T1, T2>) : String {
-        return Tuples2.toString(tuple);
-    }
-}*/
 class Tuples2 {
     public static function fst<T1, T2>(tuple : Tuple2<T1, T2>) : T1 {
         return switch (tuple){
@@ -155,6 +131,9 @@ class Tuples2 {
             case tuple2(a,b)    : [a,b];
         }
     }
+    public static function toProduct<T1,T2>(tp:Tuple2<T1,T2>) : Product{
+        return new Product(toArray(tp));
+    }
     public inline static function entuple<A, B, C>(t:Tuple2<A,B>,c:C): Tuple3<A, B, C> {
         return tuple3(t.fst(), t.snd(), c);
     }
@@ -178,25 +157,7 @@ class Pairs{
 enum Tuple3<T1, T2, T3> {
     tuple3(t1 : T1, t2 : T2, t3 : T3);
 }
-/*abstract Tuple3<T1, T2, T3>(Tuple3Type<T1, T2, T3>) from Tuple3Type<T1, T2, T3> to Tuple3Type<T1, T2, T3> {
-    inline function new(tuple : Tuple3Type<T1, T2, T3>) {
-        this = tuple;
-    }
-    inline public function fst() : T1 {
-        return Tuples3.fst(this);
-    }
-    inline public function snd() : T2 {
-        return Tuples3.snd(this);
-    }
-    inline public function thd() : T3 {
-        return Tuples3.thd(this);
-    }
-    @:to inline public static function toString<T1, T2, T3>(tuple : Tuple3Type<T1, T2, T3>) : String {
-        return Tuples3.toString(tuple);
-    }
-}
-
-*/class Tuples3 {
+class Tuples3 {
     public static function fst<T1, T2, T3>(tuple : Tuple3<T1, T2, T3>) : T1 {
         return switch (tuple){
             case tuple3(a,_,_)  : a;
@@ -232,6 +193,9 @@ enum Tuple3<T1, T2, T3> {
             case tuple3(a,b,c)      : [a,b,c];
         }
     }
+    public static function toProduct<T1,T2,T3>(tp:Tuple3<T1,T2,T3>) : Product{
+        return new Product(toArray(tp));
+    }
     static public function entuple<A, B, C, D>(t:stx.Tuple3<A,B,C>,d:D): stx.Tuple4<A, B, C, D> {
         return tuple4(t.fst(), t.snd(), t.thd(), d);
     }
@@ -247,26 +211,6 @@ enum Tuple3<T1, T2, T3> {
 enum Tuple4<T1, T2, T3, T4> {
     tuple4(t1 : T1, t2 : T2, t3 : T3, t4 : T4);
 }
-/*abstract Tuple4<T1, T2, T3, T4>(Tuple4Type<T1, T2, T3, T4>) from Tuple4Type<T1, T2, T3, T4> to Tuple4Type<T1, T2, T3, T4>{
-    inline function new(tuple : Tuple4Type<T1, T2, T3, T4>) {
-        this = tuple;
-    }
-    inline public function fst() : T1 {
-        return Tuples4.fst(this);
-    }
-    inline public function snd() : T2 {
-        return Tuples4.snd(this);
-    }
-    inline public function thd() : T3 {
-        return Tuples4.thd(this);
-    }
-    inline public function frt() : T4 {
-        return Tuples4.frt(this);
-    }
-    @:to inline public static function toString<T1, T2, T3, T4>(tuple : Tuple4Type<T1, T2, T3, T4>) : String {
-        return Tuples4.toString(tuple);
-    }
-}*/
 class Tuples4 {
     public static function fst<T1, T2, T3, T4>(tuple : Tuple4<T1, T2, T3, T4>) : T1 {
         return switch (tuple){
@@ -308,6 +252,9 @@ class Tuples4 {
             case tuple4(a,b,c,d)    : [a,b,c,d];
         }
     }
+    public static function toProduct<T1,T2,T3,T4>(tp:Tuple4<T1,T2,T3,T4>) : Product{
+        return new Product(toArray(tp));
+    }
     static public function entuple<A,B,C,D,E>(tp:Tuple4<A,B,C,D>,e:E):stx.Tuple5<A,B,C,D,E>{
         return stx.Tuples.t5(tp.fst(), tp.snd(), tp.thd(), tp.frt(), e);
     }
@@ -323,30 +270,6 @@ class Tuples4 {
 enum Tuple5<T1, T2, T3, T4, T5> {
     tuple5(t1 : T1, t2 : T2, t3 : T3, t4 : T4, t5 : T5);
 }
-
-/*abstract Tuple5<T1, T2, T3, T4, T5>(Tuple5Type<T1, T2, T3, T4, T5>) from Tuple5Type<T1, T2, T3, T4, T5> to Tuple5Type<T1, T2, T3, T4, T5>{
-    inline function new(tuple : Tuple5Type<T1, T2, T3, T4, T5>) {
-        this = tuple;
-    }
-    inline public function fst() : T1 {
-        return Tuples5.fst(this);
-    }
-    inline public function snd() : T2 {
-        return Tuples5.snd(this);
-    }
-    inline public function thd() : T3 {
-        return Tuples5.thd(this);
-    }
-    inline public function frt() : T4 {
-        return Tuples5.frt(this);
-    }
-    inline public function fth() : T5 {
-        return Tuples5.fth(this);
-    }
-    @:to inline public static function toString<T1, T2, T3, T4, T5>(tuple : Tuple5Type<T1, T2, T3, T4, T5>) : String {
-        return Tuples5.toString(tuple);
-    }
-}*/
 class Tuples5 {
     public static function fst<T1, T2, T3, T4, T5>(tuple : Tuple5<T1, T2, T3, T4, T5>) : T1 {
         return switch (tuple){
@@ -393,6 +316,9 @@ class Tuples5 {
         return switch (tuple){
             case tuple5(a,b,c,d,e)  : [a,b,c,d,e];
         }
+    }
+    public static function toProduct<T1,T2,T3,T4,T5>(tp:Tuple5<T1,T2,T3,T4,T5>) : Product{
+        return new Product(toArray(tp));
     }
     static public function into<A,B,C,D,E,F>(t:Tuple5<A,B,C,D,E>,f : A -> B -> C -> D -> E -> F) : F {
         return switch (t){

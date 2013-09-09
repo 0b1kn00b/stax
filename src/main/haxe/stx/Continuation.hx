@@ -1,6 +1,5 @@
 package stx;
 
-import stx.Future;
 import stx.Options;
 import stx.Eventual;
 import stx.Prelude;
@@ -96,9 +95,9 @@ abstract Continuation<R,A>(ContinuationType<R,A>) from ContinuationType<R,A> to 
     );
     return ft;
   }
-  static public inline function toFuture<A>(cont:ContinuationType<Void,A>):Future<A>{
+  /*static public inline function toFuture<A>(cont:ContinuationType<Void,A>):Future<A>{
     return Future.ofArrow(cont);
-  }
+  }*/
 }
 /*class Function2Continuations{
   public function cont<A,B,C>(f:A->B->C){

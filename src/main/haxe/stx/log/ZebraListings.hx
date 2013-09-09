@@ -20,7 +20,7 @@ class ZebraListings{
    */
   public function check(v:Dynamic, pos:PosInfos):Bool{
     return switch(Type.typeof(v)){
-      case TClass(c) if (Types.hasSuperClass(c,cast LogItem)) : 
+      case TClass(c) if (Types.descended(c,cast LogItem)) : 
         trace(v);
       default                                             : false;
     }

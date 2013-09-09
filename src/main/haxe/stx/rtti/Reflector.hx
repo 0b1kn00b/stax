@@ -3,8 +3,8 @@ package stx.rtti;
 import haxe.ds.StringMap;
 import haxe.rtti.CType;
 
-import stx.Error;
-import stx.Error.*;
+import stx.Fail;
+import stx.Fail.*;
 
 using stx.Prelude;
 using stx.Compose;
@@ -16,14 +16,14 @@ using stx.Tuples;
 using stx.Reflects;
 
 /**
-  Like reflection, but carries the ClassField and the value
+  Reflector uses the rtti types rather than Reflect for operations.
 */
 abstract Reflector<C,T>(Tuple2<C,Array<Tuple2<ClassField,T>>>) from Tuple2<C,Array<Tuple2<ClassField,T>>> to Tuple2<C,Array<Tuple2<ClassField,T>>>{
   public function new(v){
     this = v;
   }
   public function get(v:String):Option<T>{
-    return this.snd().find(function(x) return x.fst().name == v).map(function(x) return x.snd());
+    return this.snd().search(function(x) return x.fst().name == v).map(function(x) return x.snd());
   }
   public function transform(fn:ClassField->Option<T->T>):Reflector<C,T>{
     return tuple2(this.fst(),
@@ -59,11 +59,11 @@ abstract Reflector<C,T>(Tuple2<C,Array<Tuple2<ClassField,T>>>) from Tuple2<C,Arr
   public function filter(fn:ClassField->Bool):Reflector<C,T>{
     return tuple2(this.fst(),
       this.snd().filter(
-        fn.first().fst()
+        Tuples2.fst.then(fn)
       )
     );
   }
-  public function fields(){
+  public function fields():Array<ClassField>{
     return this.snd().map(Tuples2.fst);
   }
 }

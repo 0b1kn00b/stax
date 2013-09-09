@@ -3,14 +3,14 @@ package stx.ds;
 import stx.plus.Order;
 import stx.plus.Hasher;
 
-import stx.Errors.*;
+import stx.Fails.*;
 import stx.Tuples;
 import stx.Prelude;
 import stx.ds.Collection;
 import stx.ds.ListUtil;
 import stx.Anys;
 import stx.Functions;
-import stx.Predicates;
+import stx.Compare;
 import haxe.ds.IntMap;
 
 using stx.Iterators;
@@ -272,7 +272,7 @@ class MapTypes {
 
     private static function nativeGet<K,V>(map : Map<K, V>, key : K) : V {
         var v = map.get(Hasher.getHashFor(key)(key));
-        Anys.toBool(v) ? v.snd() : Prelude.err()(out_of_bounds_error());
+        Anys.toBool(v) ? v.snd() : Prelude.fail()(out_of_bounds_error());
     }
 
     private static function nativeMap<K,V>(     map : Map<K, V>,

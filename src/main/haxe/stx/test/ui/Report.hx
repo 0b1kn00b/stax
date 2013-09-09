@@ -48,7 +48,7 @@ class Report {
     report = new PrintReport(runner);
 #end
     if (null == displaySuccessResults)
-      report.displaySuccessResults = ShowSuccessResultsWithNoErrors;
+      report.displaySuccessResults = ShowSuccessResultsWithNoFails;
     else
       report.displaySuccessResults = displaySuccessResults;
       

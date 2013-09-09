@@ -1,8 +1,12 @@
 package stx;
 
-import stx.Errors;
-import stx.Error.*;
+import Stax.*;
+import stx.Compare.*;
+import stx.Fail.*;
+
+import stx.Fail;
 import stx.Tuples;
+
 
 using stx.Prelude;
 using stx.Tuples;
@@ -29,13 +33,13 @@ abstract Promise<A>(Eventual<Outcome<A>>) from Eventual<Outcome<A>> to Eventual<
   public function ok(val:A):Promise<A>{
     return this.deliver(Right(val));
   }
-  public function no(err:Error):Promise<A>{
+  public function no(err:Fail):Promise<A>{
     return this.deliver(Left(err));
   }
   public function new(?p){
-    this = Options.orDefault(p,Eventual.unit());
+    this = nl().apply(p) ? Eventual.unit() : p;
   }
-  public function recover<B>(fn:Error->Outcome<A>):Promise<A>{
+  public function recover<B>(fn:Fail->Outcome<A>):Promise<A>{
     return this.map(
       function(e:Outcome<A>):Outcome<A>{
         return switch (e){
@@ -56,10 +60,10 @@ abstract Promise<A>(Eventual<Outcome<A>>) from Eventual<Outcome<A>> to Eventual<
     );
   }
   public function success(fn:A->Void):Promise<A>{
-    return this.foreach(fn.right().effectOf());
+    return this.foreach(fn.right().enclose());
   }
-  public function failure(fn:Error->Void):Promise<A>{
-    return this.foreach(fn.left().effectOf());
+  public function failure(fn:Fail->Void):Promise<A>{
+    return this.foreach(fn.left().enclose());
   }
   public function value(){
     return this.value;
@@ -70,7 +74,7 @@ abstract Promise<A>(Eventual<Outcome<A>>) from Eventual<Outcome<A>> to Eventual<
   /**
     Calls callback, placing a left value in the first parameter or a right in the second.
   */
-  public function callback(fn:Error->A->Void):Promise<A>{
+  public function callback(fn:Fail->A->Void):Promise<A>{
     return this.foreach(
       function(x){
         switch (x){
@@ -95,7 +99,7 @@ abstract Promise<A>(Eventual<Outcome<A>>) from Eventual<Outcome<A>> to Eventual<
       }
     );
   }
-  public function mapLeft<C>(fn:Error->C):Eventual<Either<C,A>>{
+  public function mapLeft<C>(fn:Fail->C):Eventual<Either<C,A>>{
     return this.mapLeft(fn);
   }
   /**
@@ -154,7 +158,7 @@ class Promises{
   static public function intact<A>(v:A):Promise<A>{
     return Promise.pure(Right(v)); 
   }
-  static public function breach<A>(v:Error):Promise<A>{
+  static public function breach<A>(v:Fail):Promise<A>{
     return Promise.pure(Left(v));
   }
     /**
@@ -176,7 +180,7 @@ class Promises{
       );
   }
   /**
-    Returns a single future with an Array of the results, or an Error.
+    Returns a single future with an Array of the results, or an Fail.
   */
   static public function wait<A>(a:Array<Promise<A>>):Promise<Array<A>>{
     return a.foldl(
@@ -202,7 +206,7 @@ class Promises{
     return 
       tp.fst().flatMap(
         function(b:A){
-          return tp.snd().map( tuple2.p1(b) );
+          return tp.snd().map( tuple2.bind(b) );
         }
       );
   }
@@ -222,15 +226,15 @@ class Promises{
 }
 class Promises1{
   /**
-    Returns a Promise where the only result of a function may be an Error, returning the result of ´success´
-    where no Error is found.
+    Returns a Promise where the only result of a function may be an Fail, returning the result of ´success´
+    where no Fail is found.
   */
   static public function promiseOf<A>(f:(String->Void)->Void,success:Void->A):Promise<A>{
     var fut = Eventual.unit();
     f(
       function(er){
         if(er!=null){
-          fut.deliver(Left(err(NativeError(er))));
+          fut.deliver(Left(fail(NativeFail(er))));
         }else{
           fut.deliver(Right(success()));
         }
@@ -254,7 +258,7 @@ class Promises2{
     f( 
       function(a,b){
         if(a!=null){
-          ft.deliver(Left(err(NativeError(a))));
+          ft.deliver(Left(fail(NativeFail(a))));
         }else{
           ft.deliver(Right(b));
         }
@@ -269,7 +273,7 @@ class Promises3{
     f(
       function(a,b,c){
         if(a!=null){
-          ft.deliver(Left(err(NativeError(a))));
+          ft.deliver(Left(fail(NativeFail(a))));
         }else{
           ft.deliver(Right(tuple2(b,c)));
         }
@@ -284,7 +288,7 @@ class Promises4{
     f(
       function(e,a,b,c){
         if(e!=null){
-          ft.deliver(Left(err(NativeError(e))));
+          ft.deliver(Left(fail(NativeFail(e))));
         }else{
           ft.deliver(Right(tuple3(a,b,c)));
         }

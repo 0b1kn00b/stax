@@ -2,8 +2,8 @@ package stx.rtti;
 
 import haxe.rtti.CType;
 
-import stx.Error;
-import stx.Error.*;
+import stx.Fail;
+import stx.Fail.*;
 
 using stx.Arrays;
 using stx.Prelude;
@@ -15,6 +15,9 @@ using stx.rtti.RTypes;
 using stx.Tuples;
 using stx.Reflects;
 
+/**
+  A binding of a source object and its rtti.
+*/
 abstract RClass<T>(Tuple2<T,Classdef>) from Tuple2<T,Classdef> to Tuple2<T,Classdef>{
   public function new(v){
     this = v;
@@ -26,8 +29,9 @@ abstract RClass<T>(Tuple2<T,Classdef>) from Tuple2<T,Classdef> to Tuple2<T,Class
     );
   }
   /**
-    recursive returns flattened list compared by name to avoid duplicates.
+    recursive returns flattened list of fields from the type hierarchy compared by name to avoid duplicates.
   */
+  @:test('#0b1kn00b: make sure duplicates are the most recent in hierarchy')
   public function reflector(?recursive:Bool):Reflector<T,Dynamic>{
     return tuple2(this.fst(),
       recursive ? {
@@ -56,7 +60,7 @@ abstract RClass<T>(Tuple2<T,Classdef>) from Tuple2<T,Classdef> to Tuple2<T,Class
     );
   }
   public function constructor(){
-    return this.snd().fields.find(
+    return this.snd().fields.search(
       function(x){
         return x.name == 'new';
       }

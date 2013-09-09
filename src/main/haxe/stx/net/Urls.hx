@@ -25,7 +25,7 @@ import stx.ds.Map;
 using stx.Tuples;
 using stx.Strings;
 using stx.Options;
-using stx.functional.Foldable;
+using stx.ds.ifs.Foldable;
 
 class Urls {
   // http://domain.com:80/path?foo=bar#body

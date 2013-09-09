@@ -1,7 +1,9 @@
 package stx;
 
-import stx.Error.*;
-import stx.Errors;
+import Stax.*;
+
+import stx.Fail;
+ 
 import stx.Prelude;
 
 using stx.Maths;
@@ -10,6 +12,9 @@ using stx.Options;
 using StringTools;
 
 class Strings {
+  /**
+    Unit function.
+  */
   @:noUsing static public function unit():String{
     return '';
   }
@@ -17,7 +22,7 @@ class Strings {
   static var AlphaUpperAlphaPattern = ~/-([a-z])([A-Z])/g;
 
   /**
-  * Returns true if v is 'true' or '1', false if 'false' or '0' and d otherwise.
+    Returns `true` if `v` is `"true"` or `"1"`, `false` if `"false"` or `"0"` and `d` otherwise.
   */
   static public function toBool(v: String, ?d: Bool): Bool {
     if (v == null) return d;
@@ -26,60 +31,60 @@ class Strings {
     
     return (if (vLower == 'false' || v == '0') Some(false) else if (vLower == 'true' || v == '1') Some(true) else None).getOrElseC(d);
   }
-  /**
-  * Returns an Int from String format, defaulting to d
+  /*
+    Returns an Int from String format, defaulting to `d`
   */
   static public function int(v: String, ?d: Null<Int>): Int {
     if (v == null) return d;
     
-    return Std.parseInt(v).toOption().filter(function(i) return !Math.isNaN(i)).getOrElseC(d);
+    return option(Std.parseInt(v)).filter(function(i) return !Math.isNaN(i)).getOrElseC(d);
   }
-  /**
-  * Returns a Float from String format, defaulting to d
+  /*
+    Returns a Float from String format, defaulting to `d`
   */
   static public function toFloat(v: String, ?d: Null<Float>): Float { 
     if (v == null) return d;
     
-    return Std.parseFloat(v).toOption().filter(function(i) return !Math.isNaN(i)).getOrElseC(d);
+    return option(Std.parseFloat(v)).filter(function(i) return !Math.isNaN(i)).getOrElseC(d);
   }
-  /**
-  * Returns true if frag is at the beginning of String v, false otherwise.
+  /*
+    Returns `true` if `frag` is at the beginning of `v`, `false` otherwise.
   */
   static public function startsWith(v: String, frag: String): Bool {
     return if (v.length >= frag.length && frag == v.substr(0, frag.length)) true else false;
   }
-  /**
-  * Returns truw if frag is at the end of String v, false otherwise
+  /*
+    Returns `true` if `frag` is at the end of `v`, `false` otherwise.
   */
   static public function endsWith(v: String, frag: String): Bool {
     return if (v.length >= frag.length && frag == v.substr(v.length - frag.length)) true else false;
   }
   /*
-  * Returns v as a url encoded String.
+    Returns `v` as a url encoded String.
   */
   static public function urlEncode(v: String): String {
     return StringTools.urlEncode(v);
   }
   /*
-  * Decodes a url encoded String.
+    Decodes a url encoded String.
   */
   static public function urlDecode(v: String): String {
     return StringTools.urlDecode(v);
   } 
   /*
-  * Escapes an html encoded String.
+    Escapes an html encoded String.
   */
   static public function htmlEscape(v: String): String {
     return StringTools.htmlEscape(v);
   }
   /*
-  * Unescapes an html encoded String.
+    Unescapes an html encoded String.
   */
   static public function htmlUnescape(v: String): String {
     return StringTools.htmlUnescape(v);
   }
   /*
-  * Removes spaces either side of the String s.
+    Removes spaces either side of the `s`.
   */
   static public function trim(v: String): String {
     return StringTools.trim(v);
@@ -90,57 +95,63 @@ class Strings {
   static public function take(v:String,n:Int):String {
     return v.substr(0,n);
   }
-  /**
-  * Returns true if v contains s, false otherwise.
+  /*
+    Returns true if v contains s, false otherwise.
   */
   static public function contains(v: String, s: String): Bool {
     return v.indexOf(s) != -1;
   }
   /*
-  * Returns a String where sub is replaced by by in s
+    Returns a String where sub is replaced by by in s
   */
   static public function replace( s : String, sub : String, by : String ) : String {
     return StringTools.replace(s, sub, by);
   }
   /*
-  * Returns 0 if v1 equals v2, 1 if v1 is bigger than v2, or .1 if v1 is smaller than v2
+    Returns 0 if v1 equals v2, 1 if v1 is bigger than v2, or .1 if v1 is smaller than v2
   */
   static public function compare(v1: String, v2: String) { 
   return (v1 == v2) ? 0 : (v1 > v2 ? 1 : -1);
   }
   /**
-  * Returns true if v1 equals v2, flase otherwise.
+    Returns true if v1 equals v2, flase otherwise.
   */
   static public function equals(v1: String, v2: String) {
     return v1 == v2;
   }
   /**
-  * Identity function.
+    Identity function.
   */
   static public function toString(v: String): String {
     return v;
   }
-  static public function surround(l:String,r:String){
-    return 
-      function(v:String){
-        return '$l$v$r';
-      }
+  /**
+    Surrounds `v`, prepending `l` and appending `r`.
+  */
+  static public function surrounder(l:String,r:String,v:String){
+    return '$l$v$r';
   }
-  static public function join(with:String){
-    return 
-      function(before:String,after:String){
-        return before + with + after;
-      }
-  }
+  /**
+    prepend `before` on `str`
+  */
   static public function prepend(str:String,before:String){
     return before + str;
   }
+  /**
+    append `before` on `str`
+  */
   static public function append(str:String,after:String){
     return str + after;
   }
+  /**
+    Get character code from `str` at index `i`.
+  */
   static public function cca(str:String,i:Int){
     return str.charCodeAt(i);
   }
+  /*
+    Returns an Array of `str` divided into sections of length `len`.
+  */
   static public function chunk(str: String, len: Int): Array<String> {
     var start = 0;
     var end   = (start + len).min(str.length);
@@ -153,6 +164,9 @@ class Strings {
        [prefix].concat(chunk(rest, len));
      }
   }
+  /**
+    Returns an Array of the characters of `str`.
+  */
   static public function chars(str: String): Array<String> {
     var a = [];
     
@@ -162,6 +176,9 @@ class Strings {
     
     return a;
   }
+  /**
+    Returns a seamless joined string of `l`.
+  */
   static public function string(l: Iterable<String>): String {
     var o = '';
     for ( val in l) {
@@ -169,30 +186,47 @@ class Strings {
     }
     return o;
   }
-  
+  /**
+    Turns a slugged or underscored string into a camelCase string
+  */
   static public function toCamelCase(str: String): String {
     return SepAlphaPattern.map(str, function(e) { return e.matched(2).toUpperCase(); });
   }
+  /**
+    Replaces uppercased letters with prefix `sep` + lowercase.
+  */
   static public function fromCamelCase(str: String, sep: String): String {
     return AlphaUpperAlphaPattern.map(str, function(e) { return e.matched(1) + sep + e.matched(2).toLowerCase(); });
   }
+  /**
+    Split `st` at `sep`.
+  */
   static public function split(st:String,sep:String):Array<String>{
     return st.split(sep);
   }
+  /**
+    Determines empty string.
+  */
   static public function isEmpty(value : String):Bool{
     return value == null || value.length < 1;
   }
+  /**
+    Determines empty string.
+  */
   static public function isNotEmpty(value : String) : Bool {
     return !isEmpty(value);
   }
+  /**
+    Determines empty string, or string with only spaces.
+  */
   static public function isEmptyOrBlank(value : String) : Bool {
     return isEmpty(StringTools.trim(value));
   }
+  /**
+    Does what it says on the tin.
+  */
   static public function isNotEmptyOrBlank(value : String) : Bool {
     return isNotEmpty(StringTools.trim(value));
-  }
-  static public function pure() : String {
-    return "";
   }
   /**
     Strip whitespace out of a string
@@ -226,6 +260,9 @@ class Strings {
     }
     return ns;
   }
+  /**
+    Returns a unique identifier, each `x` replaced with a hex character.
+  */
   static public function uuid(value : String = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx') : String {
     var reg = ~/[xy]/g;
     return reg.map(value, function(reg) {
@@ -234,6 +271,9 @@ class Strings {
         return v.hex();
     }).toLowerCase();
   }
+  /**
+    Returns an iterator of `value`.
+  */
   static public function iterator(value : String) : Iterator<String> {
     var index = 0;
     return {
@@ -244,7 +284,7 @@ class Strings {
             return if (index < value.length) {
                 value.substr(index++, 1);
             } else {
-                Prelude.err()(err(OutOfBoundsError()));
+                except()(fail(OutOfBoundsFail()));
             }
         }
     };

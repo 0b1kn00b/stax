@@ -16,13 +16,13 @@
 */
 package stx.ds;
 
-import stx.functional.Foldable;
+import stx.ds.ifs.Foldable;
 
 /** A collection is a foldable data structure with additional methods to add 
  * and remove elements, determine the size of the collection, and evaluate 
  * equality predicates on elements in the collection.
  */
-interface Collection<C, T> extends Foldable<C, T> {
+interface Collection<C,T> extends Foldable<C,T> {
   public function size(): Int;
   
   public function contains(t: T): Bool;
@@ -33,5 +33,5 @@ interface Collection<C, T> extends Foldable<C, T> {
   
   public function remove(t: T): C;
   
-  public function removeAll(t: Iterable<T>): C;       
+  public function removeAll(t: Iterable<T>): C;
 }

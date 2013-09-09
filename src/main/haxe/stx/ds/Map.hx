@@ -17,7 +17,7 @@
 package stx.ds;
 
 import stx.Tuples;
-import stx.functional.Foldable;
+import stx.ds.ifs.Foldable;
 import stx.ds.Collection;
 
 import stx.plus.Order; 
@@ -32,7 +32,7 @@ using stx.PartialFunction;
 using stx.Options;
 using stx.Functions;
 using stx.Iterables;
-using stx.functional.Foldables;
+using stx.ds.Foldables;
 
 private typedef NativeMap<K,V> = std.Map<K,V>;
 

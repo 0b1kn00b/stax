@@ -26,7 +26,7 @@ using stx.Iterables;
 using stx.Functions;
 
 
-using stx.functional.Foldables;
+using stx.ds.Foldables;
 
 class Streams {
     private function new() { }
@@ -309,7 +309,7 @@ class StreamEventuals{
         stream.flatMap(
           function(a:A){
             var o = Streams.pure();
-            fn(a).foreach( o.sendEvent.effectOf() );
+            fn(a).foreach( o.sendEvent.enclose() );
             return o;
           }
         );

@@ -2,7 +2,7 @@ package stx.arw;
 
 import stx.Prelude;
 
-using stx.arw.Arrows;
+using stx.Arrows;
 
 typedef ArrowEventual<O> = Arrow<Eventual<O>,O>;
 

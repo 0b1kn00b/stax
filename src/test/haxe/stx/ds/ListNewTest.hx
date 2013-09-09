@@ -1,11 +1,13 @@
 package stx.ds;
 
-import stx.Muster;
-import stx.Muster.Test.*;
-import stx.Log.*;
+import Stax.*;
 
-import stx.ds.Size;
-import stx.ds.Enumerable;
+import hx.ds.ifs.Enumerator;
+
+import stx.Muster;
+import stx.Muster.*;
+import stx.Log.*;
+import stx.Fail;
 
 import stx.plus.Plus;
 
@@ -114,7 +116,7 @@ abstract List<T>(ListInstance<T>) from ListInstance<T> to ListInstance<T>{
     return this.asEnumerable();
   }
 }
-class ListEnumerator<T>{
+class ListEnumerator<T> implements Enumerator<T>{
   private var memo : ListType<T>;
 
   public function new(lst:ListType<T>){
@@ -122,7 +124,7 @@ class ListEnumerator<T>{
   }
   public function next(){
     return switch (memo) {
-      case Nil          : throw new stx.err.OutOfBoundsError();
+      case Nil          : except()(fail(OutOfBoundsFail()));
       case Cons(x,xs)   : 
         memo = xs;
         x;
@@ -164,10 +166,8 @@ class ListInstance<T>{
     }
   }
   public function iterator():Iterator<T>{
-    return new ListEnumerator(value);
-  }
-  public function asEnumerable():Enumerable<T>{
-    return this;
+    var itr : Iterator<T> = new ListEnumerator(value);
+    return itr;
   }
   public function cons(v:T):List<T>{
     return new ListInstance(ListFromListType(Cons(v,value),size+1,val_tool));
@@ -191,7 +191,7 @@ class ListInstance<T>{
     return value.head();
   }
   public function append(xs:List<T>):ListInstance<T>{
-    var lst : List<T> = asEnumerable().append(xs);
+    var lst : List<T> = xs.append(xs);
     return lst.setValTool(val_tool);
   }
   public function add(x:T):ListInstance<T>{
@@ -207,7 +207,7 @@ class ListInstance<T>{
     return l;
   }
   public function flatMap<U>(fn:T->List<U>):ListInstance<U>{
-    var l : List<U>  = asEnumerable().flatMap(fn.then(function(x) return x.asEnumerable()));
+    var l : List<U>  = xs.flatMap(fn.then(function(x) return x.asEnumerable()));
     return l;
   }
   public function toString(){
@@ -296,7 +296,7 @@ class ListTypes {
     return o;
   }
   static public function foldr<Z,T>(lst:ListType<T>,memo:Z,fn:T->Z->Z):Z{
-    var ls : Enumerator<T>  = new ListEnumerator(lst);
+    var ls : Enumerates<T>  = new ListEnumerator(lst);
     var a   = ls.toArray();
     var acc = memo;
 

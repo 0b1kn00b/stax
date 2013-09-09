@@ -5,7 +5,7 @@ import stx.Continuation.*;
 import stx.Tuples;
 
 using stx.Tuples;
-using stx.arw.Arrows;
+using stx.Arrows;
 using stx.Compose;
 using stx.Continuation;
 using stx.arw.StateArrow;

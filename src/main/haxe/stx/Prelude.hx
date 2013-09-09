@@ -1,5 +1,6 @@
 package stx;
 
+import haxe.Constraints;
 import stx.Prelude;
 
 import Type;
@@ -38,8 +39,11 @@ typedef Function10<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, R>  = P1 -> P2 -> P3
 typedef Reducer<T>                                              = T -> T -> T
 typedef Factory<T>                                              = Void -> T
 typedef RC<R,A>                                                 = (A -> R) -> R
-/*typedef Receive<A>    = RC<Void,A>
-typedef ReceiveE<A,B> = Receive<Either<A,B>>;*/
+
+/*enum FieldAccess{
+  IntKey(i:Int);
+  StrKey(k:String);
+}*/
 
 
 /** 
@@ -70,7 +74,7 @@ enum FreeM<A, B>{
   Cont(v:A);
   Done(v:B);
 }
-typedef Outcome<A>              = Either<Error,A>
+typedef Outcome<A>              = Either<Fail,A>
 typedef OrderFunction<T>  			= Function2<T, T, Int>;
 typedef EqualFunction<T>  			= Function2<T, T, Bool>;
 typedef ShowFunction<T>   			= Function1<T, String>;
@@ -147,9 +151,9 @@ class Prelude{
         throw '$msg at $pos';  return null;
       }
   }
-  static public function err<T>(?pos:haxe.PosInfos): Error->T{
+  static public function err<T>(?pos:haxe.PosInfos): Fail->T{
     return 
-      function(err:Error):T{
+      function(err:Fail):T{
         throw(err);
         return null;
       }

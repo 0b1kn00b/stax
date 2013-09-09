@@ -838,7 +838,7 @@ typedef UserDataHandler = {
 }
 
 //Unable to Test
-typedef DOMError = {
+typedef DOMFail = {
     public var severity         (default,null): Int;
     public var message          (default,null): DOMString;
     public var type             (default,null): DOMString;
@@ -847,8 +847,8 @@ typedef DOMError = {
     public var location         (default,null): DOMLocator;
 }
 //Unable to Test
-typedef DOMErrorHandler = {
-    public function handleError(error: DOMError): Bool;
+typedef DOMFailHandler = {
+    public function handleFail(error: DOMFail): Bool;
 }
 //Unable to Test
 typedef DOMLocator = {
@@ -1693,7 +1693,7 @@ typedef Document = {
     
     public var xmlStandalone:           Bool;
     public var xmlVersion:              DOMString;
-    public var strictErrorChecking:     Bool;
+    public var strictFailChecking:     Bool;
     public var documentURI:             DOMString;
     
     public var styleSheets:             DomCollection<StyleSheet>;
@@ -1835,7 +1835,7 @@ extern interface HTMLCollection<T> implements ArrayAccess<T> implements Dynamic<
     public function namedItem(name: DOMString): Node;
 }
 
-typedef MediaError = {
+typedef MediaFail = {
     public var code                     (default, null): Int;
 }
 
@@ -1902,7 +1902,7 @@ typedef TimedTrackCue = {
 
 typedef HTMLVideoElement = {
   public var tracks                   (default, null): TimedTrack;
-  public var error                    (default, null): MediaError;
+  public var error                    (default, null): MediaFail;
   public var src                      : DOMString;
   public var currentSrc               (default, null): DOMString;
   public var controls                 : Bool;
@@ -2157,7 +2157,7 @@ typedef HTMLVideoElement = {
 
 typedef HTMLAudioElement = {
   public var tracks                   (default, null): TimedTrack;
-  public var error                    (default, null): MediaError;
+  public var error                    (default, null): MediaFail;
   public var src                      : DOMString;
   public var currentSrc               (default, null): DOMString;
   public var controls                 : Bool;
@@ -2413,7 +2413,7 @@ typedef HTMLAudioElement = {
 
 typedef HTMLMediaElement = {
     public var tracks                   (default, null): TimedTrack;
-    public var error                    (default, null): MediaError;
+    public var error                    (default, null): MediaFail;
     public var src                      : DOMString;
     public var currentSrc               (default, null): DOMString;
     public var controls                 : Bool;
@@ -2846,7 +2846,7 @@ typedef HTMLDocument = {
     
     public var xmlStandalone:           Bool;
     public var xmlVersion:              DOMString;
-    public var strictErrorChecking:     Bool;
+    public var strictFailChecking:     Bool;
     public var documentURI:             DOMString;
     
     public var styleSheets:             DomCollection<StyleSheet>;

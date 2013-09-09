@@ -23,7 +23,7 @@ import stx.reactive.Collections;
 
 using stx.ds.List;
 
-using stx.functional.Foldables;
+using stx.ds.Foldables;
 
 class TimeoutBundle {
   public var func    (default, null): Void -> Void;

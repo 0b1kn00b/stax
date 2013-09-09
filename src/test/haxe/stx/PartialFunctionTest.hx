@@ -1,7 +1,7 @@
 package stx;
 
 import stx.Muster;
-import stx.Muster.Test.*;
+import stx.Muster.*;
 import stx.Log.*;
 
 using stx.PartialFunction;

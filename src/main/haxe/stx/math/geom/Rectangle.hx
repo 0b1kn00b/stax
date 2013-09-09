@@ -1,12 +1,12 @@
 package stx.math.geom;
 
-typedef TRectangle<T:Float> = {
+typedef RectangleType<T:Float> = {
   x : T,
   y : T,
   w : T,
   h : T,
 }
-abstract Rectangle<T:Float>(TRectangle<T>) from TRectangle<T> to TRectangle<T<{
+abstract Rectangle<T:Float>(RectangleType<T>) from RectangleType<T> to RectangleType<T<{
   public function new(v){
     this = v;
   }

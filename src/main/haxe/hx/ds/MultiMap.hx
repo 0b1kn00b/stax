@@ -1,5 +1,7 @@
 package hx.ds;
 
+import stx.Compare.*;
+
 import stx.Tuples;
 
 using stx.Functions;
@@ -10,60 +12,111 @@ using stx.Prelude;
 using stx.Arrays;
 
 @:stability(0)
-class MultiMap<V>{
-	private var impl : OrderedMap<Array<V>>;
+class MultiMap<K,V>{
+	private var impl : OrderedMap<K,Array<V>>;
 
 	public function new() {
-		
+		impl = new OrderedMap();
 	}
-	public function put(key:String,val:V){
-		if(impl == null) impl = new OrderedMap();
-
-		if(!impl.exists(key)){
-			impl.put(key,[val]);
+	public function set(key:K,val:V){
+		if(!impl.has(key)){
+			impl.set(key,[val]);
 		}else{
 			impl.get(key).push(val);
 		}
 		return this;
 	}
-	public function get(key:String):Array<V>{
-		if(impl == null) return [];
+	public function at(key:Int):Array<V>{
+		return impl.at(key);
+	}
+	public function get(key:K):Array<V>{
 		return impl.get(key);
 	}
-	public function del(key:String):Void{
-		if(impl == null) return;
-		impl.del(key);
+	public function del(key:K){
+		return impl.del(key);
 	}
-	public function set(t:Tuple2<String,V>):Void{
-		if(impl == null) impl = new OrderedMap();
-		this.put(t.fst(),t.snd());
+	public function rem(val:V){
+		for( arr in impl.vals() ){
+			if( arr.remove(val) ){
+				return true;
+			}
+		}
+		return false;
+	}
+	public function has(key:K){
+		return impl.has(key);
+	}
+	public function put(t:Tuple2<K,V>){
+		this.set(t.fst(),t.snd());
 	}
 	public function iterator(){
 		return impl.iterator();
 	}
-	public function sort():Void{
-		if(impl == null) return;
-		this.impl.sort();
-		untyped this.impl.impl = ArrayOrder.sort( (this.impl.impl) );
-	}
-	public function toArray():Array<Tuple2<String,V>>{
-		if(impl == null) return[];
-		return impl.toArray().map(
-				function(k:String,v:Array<V>){
-					return v.map(tuple2.bind(k));
-				}.spread()
-			).flatten();
+	public function toArray(){
+		return impl.toArray();
 	}
 	public function toString():String{
-		if(impl == null) return '';
 		return impl.toString();		
 	}
-	@:noUsing
-	static public function fromArray<A>(v:Array<Tuple2<String,A>>):MultiMap<A>{
-		var hash =  new MultiMap();
-		v.foreach(
-			hash.set.effectOf()
+	public function search(fn:V->Bool):Option<Tuple2<Int,Tuple2<K,Array<V>>>>{
+		return impl.search(
+			function(x){
+				return x.exists(fn);
+			}
 		);
+	}
+	public function vals():Iterator<V>{
+		var idx 		: Int 			= 0;
+		var current : Array<V>  = at(idx);
+		var idx0 		: Int 			= 0;
+
+		return {
+			next : function(){
+				if(idx0 == current.length){
+					idx0 = 0;
+					idx  +=1;
+					current = at(idx);
+				}
+				var o = current[idx0];
+				idx0+=1;
+				return o;
+			},
+			hasNext : function(){
+				return if(nl().apply(current)){
+					false;
+				}else{
+					if(idx0 == current.length){
+						if(nl().apply(at(idx+1))){
+							false;
+						}else{
+							true;
+						}
+					}else{
+						true;
+					}
+				}
+			}
+		}
+	}
+	public function find(v:V):Option<Tuple2<Int,Tuple2<K,Array<V>>>>{
+		var eq = eq(v);
+		return this.search(eq.apply);
+	}
+	public function sort(){
+		impl.sort();
+	}
+	public function sortOnKey(){
+		impl.sortOnKey();
+	}
+	public function sortOnKeyWith(fn:OrderFunction<K>){
+		impl.sortOnKeyWith(fn);
+	}
+	public function size(){
+		return impl.size();		
+	}
+	@:noUsing static public function fromArray<A,B>(v:Array<Tuple2<A,B>>):MultiMap<A,B>{
+		var hash = new MultiMap();
+		v.foreach(hash.put.enclose());
 		return hash;
 	}
 }

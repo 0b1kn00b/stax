@@ -1,12 +1,11 @@
 package stx;
 
-import stx.ifs.Value;
 import stx.Tuples;
 
 using stx.ifs.Identity;
 using stx.ifs.Pure;
 using stx.Tuples;
-using stx.Error;            
+using stx.Fail;            
 using stx.Prelude;
 using stx.Arrays;
 using stx.Options;
@@ -24,7 +23,7 @@ using stx.Eithers;
   flatMap().
   <p>
  */
-class Eventual<T> implements Value<T> {
+class Eventual<T> {
   @:isVar public var value(get, set):T;
   
   function get_value():T { 
@@ -55,7 +54,7 @@ class Eventual<T> implements Value<T> {
     Creates a "dead" future that is canceled and will never be delivered.
    */
   public static function dead<T>(): Eventual<T> {
-    return new Eventual().withEffect(function(future) {
+    return new Eventual().affect(function(future) {
       future.cancel();
     });
   }

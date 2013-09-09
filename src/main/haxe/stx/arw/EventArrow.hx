@@ -3,7 +3,7 @@ package stx.arw;
 import js.html.*;
 
 import stx.Prelude;
-import stx.arw.Arrows;
+import stx.Arrows;
 
 abstract EventArrow0(Arrow<EventTarget,Unit>){
   public function new(event:String){

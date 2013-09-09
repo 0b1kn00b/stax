@@ -14,7 +14,7 @@ class StringParsers {
       if (input.startsWith(x)) {
         return Success(x, input.drop(x.length));
       } else {
-        return Failure((x + " expected and not found").errorAt(input).newStack(), input, false);
+        return Fail((x + " expected and not found").errorAt(input).newStack(), input, false);
       }
     );
 
@@ -25,10 +25,10 @@ class StringParsers {
         if (pos.pos == 0) {
           Success(input.take(pos.len), input.drop(pos.len));
         } else {
-          Failure((Std.string(r) + "not matched at position " + input.offset ).errorAt(input).newStack(), input, false);
+          Fail((Std.string(r) + "not matched at position " + input.offset ).errorAt(input).newStack(), input, false);
         }
       } else {
-        Failure((Std.string(r) + " not matched").errorAt(input).newStack(), input, false);
+        Fail((Std.string(r) + " not matched").errorAt(input).newStack(), input, false);
       }
     );
 	
@@ -70,13 +70,13 @@ class StringReader {
       indicator : indicator
     };
   }
-	public static function errorMessage(r : Input<String>, msg: ParseError){
+	public static function errorMessage(r : Input<String>, msg: ParseFail){
     var x = r.textAround();
 
-    var itr : Array<FailureMsg> = Type.enumParameters(msg)[0];
+    var itr : Array<FailMsg> = Type.enumParameters(msg)[0];
     var r = "";
     for (err in itr){
-      r += "Error at " + err.pos + " : " + err.msg+"\n";
+      r += "Fail at " + err.pos + " : " + err.msg+"\n";
     }
 
     return r + " "+x.text+"\n"+x.indicator;

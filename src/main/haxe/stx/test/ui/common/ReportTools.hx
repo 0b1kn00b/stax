@@ -30,7 +30,7 @@ class ReportTools
         {
           case NeverShowSuccessResults:
             return false;
-          case AlwaysShowSuccessResults, ShowSuccessResultsWithNoErrors:
+          case AlwaysShowSuccessResults, ShowSuccessResultsWithNoFails:
             return true;
         }
       case AlwaysShowHeader:
@@ -43,7 +43,7 @@ class ReportTools
     return switch(report.displaySuccessResults) {
       case NeverShowSuccessResults: true;
       case AlwaysShowSuccessResults: false;
-      case ShowSuccessResultsWithNoErrors: !isOk;
+      case ShowSuccessResultsWithNoFails: !isOk;
     };
   }
   

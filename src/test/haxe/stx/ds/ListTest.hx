@@ -16,17 +16,20 @@
 */
 package stx.ds;
 
+import stx.Muster;
+import stx.Muster.*;
+import stx.Log.*;
+
 import stx.Prelude;
 
 import stx.plus.Equal;
 
-import stx.functional.Foldable;
-import stx.test.TestCase;
+import stx.ds.ifs.Foldable;
+
 import stx.ds.List;
 
-using stx.functional.Foldables;
+using stx.ds.Foldables;
 
-using stx.Tuples;
 using stx.Tuples;
 using stx.Maths;
 

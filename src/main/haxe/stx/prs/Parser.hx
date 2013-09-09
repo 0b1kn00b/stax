@@ -38,17 +38,17 @@ enum MemoEntry {
 
 typedef MemoKey = String
 
-enum ParseError{
-  ParseFailure(msgs:Array<FailureMsg>);
+enum ParseFail{
+  ParseFail(msgs:Array<FailMsg>);
 }
-typedef FailureMsg = {
+typedef FailMsg = {
   msg : String,
   pos : Int
 }
 
 enum ParseResult<I,T> {
   Success(match : T, rest : Input<I>);
-  Failure(errorStack : ParseError, rest : Input<I>, isError : Bool);
+  Fail(errorStack : ParseFail, rest : Input<I>, isFail : Bool);
 }
 
 typedef Parser<I,T> = Input<I> -> ParseResult<I,T>
@@ -78,38 +78,38 @@ class ResultObj {
   public static function posFromResult<I,T>(p : ParseResult<I,T>) : Input<I>
     return switch (p) {
       case Success(_, rest)     :   rest;
-      case Failure(_, rest, _)  :   rest;
+      case Fail(_, rest, _)  :   rest;
     };
     
   public static function matchFromResult<I,T>(p : ParseResult<I,T>) 
     return switch (p) {
       case Success(x, _)    : Std.string(x);
-      case Failure(_, _, _) : "";
+      case Fail(_, _, _) : "";
     };
 	
 	public static function ok<I,T>(p:ParseResult<I,T>):Bool{
 		return switch(p) {
 			case Success(_, _) 		: true;
-			case Failure(_, _, _) : false;
+			case Fail(_, _, _) : false;
 		};
 	}
   public static function allOk<I,T>(p:ParseResult<I,T>):Bool{
     return switch (p) {
       case Success(_, rest) :
         rest.content.length == rest.offset;
-      case Failure(_, _, _) : false;
+      case Fail(_, _, _) : false;
     };
   }
 	public static function matched<I,T>(p:ParseResult<I,T>):T{
 		return switch(p) {
 			case Success(match, _)	: match;
-			case Failure(_, _, _) 	: null;
+			case Fail(_, _, _) 	: null;
 		};
 	}
 	public static function toString<I,T>(p:ParseResult<I,T>):String{
 		return switch (p) {
 			case Success(match, _) : '\n Success \n' + Std.string(match);
-			case Failure(error, rest, _) :
+			case Fail(error, rest, _) :
 					"\n" + Std.string(error) + "\n\n" + rest + "\n\n" + Std.string( untyped ReaderObj.take(rest) );
   	}
 	}
@@ -172,19 +172,19 @@ class ReaderObj {
   }
 }
 
-class FailureObj {
-  inline public static function newStack(failure : FailureMsg) : ParseError {
-    return ParseFailure([failure]);
+class FailObj {
+  inline public static function newStack(failure : FailMsg) : ParseFail {
+    return ParseFail([failure]);
   }
-  inline public static function errorAt<I>(msg : String, pos : Input<I>) : FailureMsg {
+  inline public static function errorAt<I>(msg : String, pos : Input<I>) : FailMsg {
     return {
       msg : msg,
       pos : pos.offset      
     };
   }
-  inline public static function report(stack : ParseError, msg : FailureMsg) : ParseError {
+  inline public static function report(stack : ParseFail, msg : FailMsg) : ParseFail {
     return switch (stack) {
-      case ParseFailure(stk) : ParseFailure(stk.add(msg));
+      case ParseFail(stk) : ParseFail(stk.add(msg));
     }
   }
 }
@@ -206,7 +206,7 @@ class FailureObj {
   public static function getPos<I>(lr : LR) : Input<I> return 
     switch(lr.seed) {
       case Success(_, rest): rest;
-      case Failure(_, rest, _): rest;
+      case Fail(_, rest, _): rest;
     }
 
   public static function getHead<I,T>(hd : Head) : Parser<I,T> return 
@@ -231,7 +231,7 @@ class FailureObj {
         } else {
           input.updateCacheAndGet(genKey, MemoParsed(growable.seed));
           switch (growable.seed) {
-            case Failure(_, _, _) :
+            case Fail(_, _, _) :
               return cast( growable.seed );
             case Success(_, _) :
               return grow(p, genKey, input, head); /*growing*/ 
@@ -246,7 +246,7 @@ class FailureObj {
       case None: return cached;
       case Some(head):
         if (cached == None && !(head.involvedSet.cons(head.headParser).contains(p))) {
-          return Some(MemoParsed(Failure("dummy ".errorAt(input).newStack(), input, false)));
+          return Some(MemoParsed(Fail("dummy ".errorAt(input).newStack(), input, false)));
         }          
         if (head.evalSet.contains(p)) {
           head.evalSet = head.evalSet.filter(function (x) return x != p);
@@ -300,8 +300,8 @@ class FailureObj {
             default: throw "impossible match";
           }
         }
-      case Failure(_, _, isError):
-        if (isError) { // the error must be propagated  and not discarded by the grower!
+      case Fail(_, _, isFail):
+        if (isFail) { // the error must be propagated  and not discarded by the grower!
           
           rest.updateCacheAndGet(genKey, MemoParsed(res));
           rest.removeRecursionHead();
@@ -315,7 +315,7 @@ class FailureObj {
     }
   }
 
-  inline public static var baseFailure = "Base Failure";
+  inline public static var baseFail = "Base Fail";
 
   /**
    * Lift a parser to a packrat parser (memo is derived from scala's library)
@@ -329,7 +329,7 @@ class FailureObj {
         
         switch (recall(_p(), genKey, input)) {
           case None :
-            var base = Failure(baseFailure.errorAt(input).newStack(), input, false).mkLR(_p(), None);
+            var base = Fail(baseFail.errorAt(input).newStack(), input, false).mkLR(_p(), None);
             
             input.memo.lrStack  = input.memo.lrStack.cons(base);
             input.updateCacheAndGet(genKey, MemoLR(base));
@@ -360,8 +360,8 @@ class FailureObj {
       };
     });
   
-  public static function fail<I,T>(error : String, isError : Bool) : Void -> Parser <I,T>
-    return stx.Anys.toThunk(function (input :Input<I>) return Failure(error.errorAt(input).newStack(), input, isError));
+  public static function fail<I,T>(error : String, isFail : Bool) : Void -> Parser <I,T>
+    return stx.Anys.toThunk(function (input :Input<I>) return Fail(error.errorAt(input).newStack(), input, isFail));
 
   public static function success<I,T>(v : T) : Void -> Parser <I,T>
     return stx.Anys.toThunk(function (input) return Success(v, input));
@@ -377,9 +377,9 @@ class FailureObj {
             var res = p2()(r);
             switch (res) {
               case Success(m2, r) : return Success(f(m1, m2), r);
-              case Failure(_, _, _): return cast(res);
+              case Fail(_, _, _): return cast(res);
             }
-          case Failure(_, _, _): return cast(res);
+          case Fail(_, _, _): return cast(res);
         }
       }
     });
@@ -404,7 +404,7 @@ class FailureObj {
         var res = p1()(input);
         switch (res) {
           case Success(m, r): return fp2(m)()(r);
-          case Failure(_, _, _): return cast(res);
+          case Fail(_, _, _): return cast(res);
         }
       }
     });
@@ -416,7 +416,7 @@ class FailureObj {
         var res = p1()(input);
         switch (res) {
           case Success(m, r): return Success(f(m), r);
-          case Failure(_, _, _): return cast(res);
+          case Fail(_, _, _): return cast(res);
         };
       }
     });
@@ -442,7 +442,7 @@ class FailureObj {
 					if ( res && !x.isEnd() ) {
 						Success( x.take(1) , x.drop(1) );
 					}else {
-						Failure( ("predicate failed".errorAt(x).newStack()),x,false ); 
+						Fail( ("predicate failed".errorAt(x).newStack()),x,false ); 
 					}
 			}
 		);
@@ -456,10 +456,10 @@ class FailureObj {
         var res = p1()(input);
         return switch(res) {
           case Success(_, _): res;
-          case Failure(err, rest, isError) :
+          case Fail(err, rest, isFail) :
             switch (err) {
-              case ParseFailure(msgs) :
-                (isError || (msgs.last().msg == baseFailure))  ? res : Failure(err, rest, true);
+              case ParseFail(msgs) :
+                (isFail || (msgs.last().msg == baseFail))  ? res : Fail(err, rest, true);
             }
         }
       }
@@ -471,7 +471,7 @@ class FailureObj {
         var res = p1()(input);
         switch (res) {
           case Success(_, _) : return res;
-          case Failure(_, _, isError) : return isError ? res : p2()(input); // isError means that we commited to a parser that failed; this reports to the top..
+          case Fail(_, _, isFail) : return isFail ? res : p2()(input); // isFail means that we commited to a parser that failed; this reports to the top..
         };
       }
     });
@@ -490,11 +490,11 @@ class FailureObj {
           var res = ps[pIndex]()(input);
           switch (res) {
             case Success(_, _) : return res;
-            case Failure(_, _, isError) :
-              if (isError || (++pIndex == ps.length)) return res; // isError means that we commited to a parser that failed; this reports to the top..
+            case Fail(_, _, isFail) :
+              if (isFail || (++pIndex == ps.length)) return res; // isFail means that we commited to a parser that failed; this reports to the top..
           };
         }
-        return Failure("none match".errorAt(input).newStack(), input, false);
+        return Fail("none match".errorAt(input).newStack(), input, false);
       }
     });
     
@@ -511,8 +511,8 @@ class FailureObj {
           var res = parser(input);
           switch (res) {
             case Success(m, r): arr.push(m); input = r;
-            case Failure(_, _, isError):
-              if (isError)
+            case Fail(_, _, isFail):
+              if (isFail)
                 return cast(res);
               else 
                 matches = false;
@@ -547,7 +547,7 @@ class FailureObj {
 			function(input:Input<I>) {
 				return switch(p0()(input)) {
 					case Success(_, _)								: Success( null , input );
-					case Failure(errorStack, rest, isError)	: Failure(errorStack, rest, isError);
+					case Fail(errorStack, rest, isFail)	: Fail(errorStack, rest, isFail);
 				}
 			}
 		);
@@ -560,11 +560,11 @@ class FailureObj {
 			function(input:Input<I>) {
 				return switch(p()(input)) {
 					case Success(_, _)								: 
-							var f : FailureMsg = { msg : "Parser succeeded rather than failed" , pos : input.position() };
-						Failure( ParseFailure([f]) , input , false);
-					case Failure(errorStack, rest, isError)	: 
-							if (isError) {
-								Failure(errorStack, rest, isError);
+							var f : FailMsg = { msg : "Parser succeeded rather than failed" , pos : input.position() };
+						Fail( ParseFail([f]) , input , false);
+					case Fail(errorStack, rest, isFail)	: 
+							if (isFail) {
+								Fail(errorStack, rest, isFail);
 							}
 						Success( null , input );
 				}
@@ -580,7 +580,7 @@ class FailureObj {
 				return if ( !input.isEnd() ) {
 					Success( input.take(1) , input.drop(1) );
 				}else {
-					Failure( 'Reached end of input'.errorAt(input).newStack() , input , false );
+					Fail( 'Reached end of input'.errorAt(input).newStack() , input , false );
 				}
 			}
 		);
@@ -588,7 +588,7 @@ class FailureObj {
 	/**
 	 * Takes a transform and creates a Parser.
 	 */
-	public static function parser < I, O > (f:I->O, ?isError:Bool = false ):Void-> Parser<I,O>{
+	public static function parser < I, O > (f:I->O, ?isFail:Bool = false ):Void-> Parser<I,O>{
 		return 
 				available()._and(
 						stx.Anys.toThunk(
@@ -597,7 +597,7 @@ class FailureObj {
 									try {
 										o = f(input.one());
 										}catch (e:Dynamic) {
-											return Failure(Std.string(e).errorAt(input).newStack(), input, isError);
+											return Fail(Std.string(e).errorAt(input).newStack(), input, isFail);
 										}
 										return Success(o, input.drop(1));
 									}
@@ -616,7 +616,7 @@ class FailureObj {
 				return if ( x.offset == x.content.length ) {
 					Success( null , x );
 				}else {
-					Failure( ('not the end'.errorAt(x).newStack()), x, false );
+					Fail( ('not the end'.errorAt(x).newStack()), x, false );
 				}
 			}
 	}
@@ -641,19 +641,19 @@ class FailureObj {
   public static function trace<I,T>(p : Void -> Parser<I,T>, f : T -> String) : Void -> Parser<I,T> return
     then(p, function (x) { trace(f(x)); return x;} );
 
-  public static function withError<I,T>(p : Void -> Parser<I,T>, f : String -> String ) : Void -> Parser<I,T>
+  public static function withFail<I,T>(p : Void -> Parser<I,T>, f : String -> String ) : Void -> Parser<I,T>
     return stx.Anys.toThunk(function (input : Input<I>) {
       var r = p()(input);
       switch(r) {
-        case Failure(err, input, isError): 
+        case Fail(err, input, isFail): 
           return switch (err) {
-            case ParseFailure(msgs) : return Failure(err.report((f(msgs.first().msg)).errorAt(input)), input, isError);
+            case ParseFail(msgs) : return Fail(err.report((f(msgs.first().msg)).errorAt(input)), input, isFail);
           }
         default: return r;
       }
     });
     
   public static function tag<I,T>(p : Void -> Parser<I,T>, tag : String) : Void -> Parser<I,T> return  
-    withError(p, function (_) return tag +" expected");
+    withFail(p, function (_) return tag +" expected");
   
 }

@@ -27,7 +27,6 @@ class CollectionTester extends TestCase {
   }
   
   public function testThatTraceWorks(): Void {
-    trace("Trace is working");
     assertTrue(true);
   }
   

@@ -5,7 +5,7 @@ package stx.reactive;
  */
 import stx.Prelude;
 
-														using stx.arw.Arrows;
+														using stx.Arrows;
 using stx.Tuples; 					using stx.Tuples;
 														using stx.Functions;
 
@@ -68,7 +68,7 @@ class Viaz<I,O> implements Arrow<I,O>{
 	}
 	static public function appFt<I,O>(a:Arrow<I,O>,i:I):Eventual<O>{
 		var f = Eventual.create();
-		a.appCps(i)(f.deliver.effectOf()()());
+		a.appCps(i)(f.deliver.enclose()()());
 		return f;
 	}
 	@:noUsing

@@ -5,3 +5,4 @@
 #builds/build-as3.hxml
 #builds/build-test-js-haxe3.hxml
 builds/build-test-js-muster.hxml
+#builds/build-bootstrap.hxml

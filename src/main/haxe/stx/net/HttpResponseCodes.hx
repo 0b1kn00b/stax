@@ -43,43 +43,43 @@ class HttpResponseCodes {
       case 305: Normal(Redirection(UseProxy));
       case 307: Normal(Redirection(TemporaryRedirect));
       
-      case 400: Error(Client(BadRequest));
-      case 401: Error(Client(Unauthorized));
-      case 402: Error(Client(PaymentRequired));
-      case 403: Error(Client(Forbidden));
-      case 404: Error(Client(NotFound));
-      case 405: Error(Client(MethodNotAllowed));
-      case 406: Error(Client(NotAcceptable));
-      case 407: Error(Client(ProxyAuthenticationRequired));
-      case 408: Error(Client(RequestTimeout));
-      case 409: Error(Client(Conflict));
-      case 410: Error(Client(Gone));
-      case 411: Error(Client(LengthRequired));
-      case 412: Error(Client(PreconditionFailed));
-      case 413: Error(Client(RequestEntityTooLarge));
-      case 414: Error(Client(Request));
-      case 415: Error(Client(UnsupportedMediaType));
-      case 416: Error(Client(RequestedRangeNotSatisfiable));
-      case 417: Error(Client(ExpectationFailed));
-      case 421: Error(Client(TooManyConnections));
-      case 422: Error(Client(UnprocessableEntity));
-      case 423: Error(Client(Locked));
-      case 424: Error(Client(FailedDependency));
-      case 425: Error(Client(UnorderedCollection));
-      case 426: Error(Client(UpgradeRequired));
-      case 449: Error(Client(RetryWith));
+      case 400: Fail(Client(BadRequest));
+      case 401: Fail(Client(Unauthorized));
+      case 402: Fail(Client(PaymentRequired));
+      case 403: Fail(Client(Forbidden));
+      case 404: Fail(Client(NotFound));
+      case 405: Fail(Client(MethodNotAllowed));
+      case 406: Fail(Client(NotAcceptable));
+      case 407: Fail(Client(ProxyAuthenticationRequired));
+      case 408: Fail(Client(RequestTimeout));
+      case 409: Fail(Client(Conflict));
+      case 410: Fail(Client(Gone));
+      case 411: Fail(Client(LengthRequired));
+      case 412: Fail(Client(PreconditionFailed));
+      case 413: Fail(Client(RequestEntityTooLarge));
+      case 414: Fail(Client(Request));
+      case 415: Fail(Client(UnsupportedMediaType));
+      case 416: Fail(Client(RequestedRangeNotSatisfiable));
+      case 417: Fail(Client(ExpectationFailed));
+      case 421: Fail(Client(TooManyConnections));
+      case 422: Fail(Client(UnprocessableEntity));
+      case 423: Fail(Client(Locked));
+      case 424: Fail(Client(FailedDependency));
+      case 425: Fail(Client(UnorderedCollection));
+      case 426: Fail(Client(UpgradeRequired));
+      case 449: Fail(Client(RetryWith));
       
-      case 500: Error(Server(InternalServerError));
-      case 501: Error(Server(NotImplemented));
-      case 502: Error(Server(BadGateway));
-      case 503: Error(Server(ServiceUnavailable));
-      case 504: Error(Server(GatewayTimeout));
-      case 505: Error(Server(HTTPVersionNotSupported));
-      case 506: Error(Server(VariantAlsoNegotiates));
-      case 507: Error(Server(InsufficientStorage));
-      case 509: Error(Server(BandwidthLimitExceeded));
-      case 510: Error(Server(NotExtended));
-      case 530: Error(Server(UserAccessDenied));
+      case 500: Fail(Server(InternalServerFail));
+      case 501: Fail(Server(NotImplemented));
+      case 502: Fail(Server(BadGateway));
+      case 503: Fail(Server(ServiceUnavailable));
+      case 504: Fail(Server(GatewayTimeout));
+      case 505: Fail(Server(HTTPVersionNotSupported));
+      case 506: Fail(Server(VariantAlsoNegotiates));
+      case 507: Fail(Server(InsufficientStorage));
+      case 509: Fail(Server(BandwidthLimitExceeded));
+      case 510: Fail(Server(NotExtended));
+      case 530: Fail(Server(UserAccessDenied));
       
       default: Normal(Success(OK));
     }
@@ -129,17 +129,17 @@ class HttpResponseCodes {
     }
   }
   
-  public static function isError(response: HttpResponseCode): Bool {
+  public static function isFail(response: HttpResponseCode): Bool {
     return switch(response) { 
-      case Error(_): true;
+      case Fail(_): true;
       
       default: false;
     }
   }
   
-  public static function isClientError(response: HttpResponseCode): Bool {
+  public static function isClientFail(response: HttpResponseCode): Bool {
     return switch(response) { 
-      case Error(v): switch (v) {
+      case Fail(v): switch (v) {
         case Client(_): true;
         
         default: false;
@@ -149,9 +149,9 @@ class HttpResponseCodes {
     }
   }
   
-  public static function isServerError(response: HttpResponseCode): Bool {
+  public static function isServerFail(response: HttpResponseCode): Bool {
     return switch(response) { 
-      case Error(v): switch (v) {
+      case Fail(v): switch (v) {
         case Server(_): true;
         
         default: false;
@@ -192,7 +192,7 @@ class HttpResponseCodes {
         }
       }
       
-      case Error(v): switch(v) {
+      case Fail(v): switch(v) {
         case Client(v): switch(v) {
           case BadRequest: 400;
           case Unauthorized: 401;
@@ -222,7 +222,7 @@ class HttpResponseCodes {
         }
         
         case Server(v): switch(v) {
-          case InternalServerError: 500;
+          case InternalServerFail: 500;
           case NotImplemented: 501;
           case BadGateway: 502;
           case ServiceUnavailable: 503;

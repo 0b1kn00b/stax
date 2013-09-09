@@ -4,9 +4,9 @@ import stx.Prelude;
 
 import stx.Tuples;
 
-import stx.functional.Foldable;
+import stx.ds.ifs.Foldable;
 import stx.ds.Collection;
-import stx.functional.Foldables;
+import stx.ds.Foldables;
 
 using stx.Maths;
 using stx.Options;
@@ -18,7 +18,7 @@ using stx.plus.Hasher;
 using stx.plus.Show; 
 using stx.plus.Equal;
 
-using stx.functional.Foldables;
+using stx.ds.Foldables;
 
 class ArrayToList {
   public static function toList<T>(arr : Array<T>) {
@@ -26,7 +26,7 @@ class ArrayToList {
   }	
 }
 class FoldableToList {
-  public static function toList<A, B>(foldable : Foldable<A, B>) : List<B> {  
+  public static function toList<A, B>(foldable : Foldable<A,B>) : List<B> {  
     var dest = List.create();
     return foldable.foldl(dest, function(a, b) {
       return a.add(b);
@@ -34,7 +34,7 @@ class FoldableToList {
   }	
 }
 /** A classic immutable list built from cons and nil elements. */
-class List<T> implements Collection<List<T>, T> {
+class List<T> implements Collection<List<T>,T> {
   public var head (get_head, null): T;
   public var tail (get_tail, null): List<T>;
 
@@ -98,8 +98,7 @@ class List<T> implements Collection<List<T>, T> {
     return new Nil(tools);
   }
   
-  @:noUsing
-  public static function create<T>(?tools:CollectionTools<T>): List<T> {
+  @:noUsing public static function create<T>(?tools:CollectionTools<T>): List<T> {
     return nil(tools);
   }
 
@@ -119,7 +118,7 @@ class List<T> implements Collection<List<T>, T> {
 		}
   }
 
-  public function unit<C, D>(): Foldable<C, D> {
+  public function unit<C,T>(): Foldable<C,T> {
     return cast nil();
   }
 
@@ -330,7 +329,9 @@ class List<T> implements Collection<List<T>, T> {
    * @param f Called with every two consecutive elements to retrieve a list of gaps.
    */
   public function gaps<G>(f: T -> T -> List<G>, ?equal: EqualFunction<G>): List<G> {
-    return zip(drop(1)).flatMapTo(List.nil(Prelude.tool(null,equal)), function(tuple) return f(tuple.fst(), tuple.snd()));
+    var l : List<G> 
+      = zip(drop(1)).flatMapTo(List.nil(Prelude.tool(null,equal)), function(tuple) return f(tuple.fst(), tuple.snd()));
+    return l;
   }
 
   /** Returns a list that contains all the elements of this list, sorted by

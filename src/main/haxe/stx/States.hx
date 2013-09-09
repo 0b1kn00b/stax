@@ -5,18 +5,16 @@ import stx.Prelude;
 import stx.ifs.Apply;
 
 using stx.Tuples;
-                      using stx.Functions;
-                      using stx.Compose;
-                      using stx.Anys;
-                      using stx.States;
+using stx.Functions;
+using stx.Compose;
+using stx.Anys;
+using stx.States;
 
 class State<S,R>{
-  @:noUsing 
-  static public function create<A,B>( opts : ApplyType<A,Tuple2<B,A>> ):State<A,B>{
+  @:noUsing static public function create<A,B>( opts : ApplyType<A,Tuple2<B,A>> ):State<A,B>{
     return new State(opts);
   }
-  @:noUsing
-  static public function toState<S,A>(value:A):State<S,A>{
+  @:noUsing static public function toState<S,A>(value:A):State<S,A>{
     return State.pure(
         function(s:S):Tuple2<A,S>{
           return tuple2(value,s);

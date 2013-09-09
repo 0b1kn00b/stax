@@ -544,8 +544,8 @@ class Iterables {
    Produces an Option Some(element) the first time the predicate returns true,
    None otherwise.
   */
-  public static function find<T>(iter: Iterable<T>, f: T -> Bool): Option<T> {
-    return Arrays.find(iter.toArray(),f);
+  public static function search<T>(iter: Iterable<T>, f: T -> Bool): Option<T> {
+    return Arrays.search(iter.toArray(),f);
   }
   /**
     Produces true if the predicate returns true for all elements, false otherwise.

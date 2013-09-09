@@ -1,5 +1,7 @@
 package stx;
 
+import stx.Compare.*;
+
 using stx.PartialFunction;
 using stx.Prelude;
 using stx.Tuples;
@@ -11,7 +13,7 @@ private typedef PF<A,Z>               = PartialFunction<A,Z>;
 
 class PredicateMethods{
   static public function unit<A>():PredicateMethod<A,A>{
-    return tuple2(Predicates.zero(),Compose.unit());
+    return tuple2(never(),Compose.unit());
   }
 }
 class PartialFunctions<A, Z>{

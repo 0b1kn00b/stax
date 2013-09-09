@@ -15,9 +15,10 @@
 */
 package stx.test;
 
+import stx.Muster.*;
+import stx.Compare.*;
+
 import stx.Prelude;
-import stx.test.Assert;
-import stx.test.MustMatchers;
 import haxe.PosInfos;
 import stx.Eventual;
 

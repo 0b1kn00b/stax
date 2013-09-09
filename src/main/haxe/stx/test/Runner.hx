@@ -10,7 +10,7 @@ using stx.Functions;
 using stx.Prelude;
 
 
-using stx.Predicates;
+using stx.Compare
 
 /**
 * The Runner class performs a set of tests. The tests can be added using add or addFixtures.

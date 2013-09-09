@@ -22,7 +22,7 @@ import stx.reactive.Streams;
 import stx.reactive.Collections;
 
 
-using stx.functional.Foldables;
+using stx.ds.Foldables;
 
 /*class TimeoutBundle {
     public var func    (default, null): Void -> Void;

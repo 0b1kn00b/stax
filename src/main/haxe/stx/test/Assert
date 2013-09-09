@@ -26,7 +26,7 @@ import haxe.io.Bytes;
 import stx.test.Assertation;
 import stx.test.MustMatchers;
 import haxe.PosInfos;
-import stx.err.AssertionError;
+import stx.err.AssertionFail;
 
 using stx.Options;
 
@@ -82,13 +82,13 @@ class Assert {
         if (cond) {
           
         }else {
-            throw new AssertionError(msg);
+            throw new AssertionFail(msg);
         }
     }else {
       if(cond)
         results.add(Success(pos));
       else
-        results.add(Failure(msg, pos));
+        results.add(Fail(msg, pos));
     }
     return cond;
     //if (results == null) throw "Assert.results is not currently bound to any assert context";
@@ -542,7 +542,7 @@ class Assert {
   * react throwing an error. This assert guarantees that the error is of the
   * correct type (or Dynamic if non is specified).
   * <pre>
-  * Assert.throwsException(function() { throw "Error!"; }, String);
+  * Assert.throwsException(function() { throw "Fail!"; }, String);
   * </pre>
   * @param method: A method that generates the exception.
   * @param type: The type of the expected error. Defaults to Dynamic (catch all).

@@ -42,7 +42,7 @@ enum HttpRedirection {
   TemporaryRedirect;
 }
   
-enum HttpClientError {
+enum HttpClientFail {
   BadRequest;
   Unauthorized;
   PaymentRequired;
@@ -70,8 +70,8 @@ enum HttpClientError {
   RetryWith;
 }
   
-enum HttpServerError {
-  InternalServerError;
+enum HttpServerFail {
+  InternalServerFail;
   NotImplemented;
   BadGateway;
   ServiceUnavailable;
@@ -90,12 +90,12 @@ enum HttpNormal {
   Redirection(v: HttpRedirection);
 }
 
-enum HttpError {
-  Client(v: HttpClientError);
-  Server(v: HttpServerError);
+enum HttpFail {
+  Client(v: HttpClientFail);
+  Server(v: HttpServerFail);
 }
 
 enum HttpResponseCode {
   Normal(v: HttpNormal);
-  Error(v: HttpError);
+  Fail(v: HttpFail);
 }

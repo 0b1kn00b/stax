@@ -1,6 +1,6 @@
 package stx.arw;
 
-using stx.arw.Arrows;
+using stx.Arrows;
 
 import stx.arw.StateArrow;
 //Arrow<S,Tuple2<A,S>>;

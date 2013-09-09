@@ -1,12 +1,12 @@
 package stx.ds;
 
 import stx.Tuples;
-import stx.Errors.*;
+import stx.Fails.*;
 import stx.Prelude;
 import stx.ds.Collection;
 import stx.Functions;
 import stx.Options;
-import stx.Predicates;
+import stx.Compare;
 import stx.Tuples;
 import stx.Anys;
 
@@ -127,7 +127,7 @@ class ListTypes {
 
     public static function dropLeft<T>(list : List<T>, amount : Int) : List<T> {
         if (amount < 0) {
-            Prelude.err()(argument_error('Amount must be positive'));
+            Prelude.fail()(argument_error('Amount must be positive'));
         }
 
         var p = list;
@@ -151,7 +151,7 @@ class ListTypes {
         var p = list;
 
         return if (amount < 0) {
-            Prelude.err()(argument_error('Amount must be positive'));
+            Prelude.fail()(argument_error('Amount must be positive'));
         } else if (amount == 0) {
             p;
         } else {
@@ -451,7 +451,7 @@ class ListTypes {
 
     public static function takeLeft<T>(list : List<T>, amount : Int) : List<T> {
         var p = list;
-        return if (amount < 0) Prelude.err()(argument_error('Amount must be positive'));
+        return if (amount < 0) Prelude.fail()(argument_error('Amount must be positive'));
         else if (amount == 0) Nil;
         else if (amount > size(p)) p;
         else {
@@ -468,7 +468,7 @@ class ListTypes {
 
     public static function takeRight<T>(list : List<T>, amount : Int) : List<T> {
         var p = list;
-        return if (amount < 0) Prelude.err()(argument_error('Amount must be positive'));
+        return if (amount < 0) Prelude.fail()(argument_error('Amount must be positive'));
         else if (amount == 0) Nil;
         else if (amount > size(p)) p;
         else {
@@ -731,7 +731,7 @@ private class ListInstanceImpl<T> {
                     var value = ListTypes.head(list);
                     list = ListTypes.tail(list);
                     value;
-                } else Prelude.err()(out_of_bounds_error());
+                } else Prelude.fail()(out_of_bounds_error());
             }
         };
     }

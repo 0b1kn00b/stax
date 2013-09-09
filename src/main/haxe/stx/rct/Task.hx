@@ -2,6 +2,11 @@ package stx.rct;
 
 import stx.Prelude;
 
+#if neko
+    import neko.vm.Thread;
+#elseif cpp
+    import cpp.vm.Thread;
+#end
 @:note("#Simon: Should use externs for this")
 class Task {
     #if (neko||cpp)

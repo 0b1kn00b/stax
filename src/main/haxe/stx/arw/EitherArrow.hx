@@ -3,7 +3,7 @@ package stx.arw;
 import stx.Tuples;
 import stx.Continuation.*;
 
-using stx.arw.Arrows;
+using stx.Arrows;
 using stx.Tuples;
 
 abstract EitherArrow<I,O>(Arrow<I,O>) from Arrow<I,O> to Arrow<I,O>{

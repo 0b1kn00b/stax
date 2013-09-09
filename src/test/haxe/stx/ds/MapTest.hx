@@ -3,11 +3,11 @@ package stx.ds;
 import stx.Tuples;
 import stx.Prelude;
 
-import stx.functional.Foldable;
+import stx.ds.ifs.Foldable;
 import stx.test.TestCase;
 import stx.ds.Map;
 
-using stx.functional.Foldables;
+using stx.ds.Foldables;
 using stx.ds.Map;
 using stx.Tuples;
 using stx.Options;

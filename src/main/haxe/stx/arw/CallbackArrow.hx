@@ -1,7 +1,7 @@
 package stx.arw;
 
 import stx.Prelude;
-import stx.arw.Arrows;
+import stx.Arrows;
 
 abstract ObserverArrow(Arrow<Unit,Unit>) from Arrow<Unit,Unit> {
   @:from static public function fromFunction0<V>(fn:(Void->Void)->Void):ObserverArrow{

@@ -295,7 +295,7 @@ class OperationType {
   public static var NODE_ADOPTED                   :Int = 5;
 }
 
-class ErrorState {
+class FailState {
   public static var NETWORK_EMPTY                  :Int = 0;
   public static var NETWORK_IDLE                   :Int = 1;
   public static var NETWORK_LOADING                :Int = 2;
@@ -442,7 +442,7 @@ class UpdateStatus {
   public static var UPDATEREADY                    :Int = 4;    
 }
 
-class ErrorSeverity {
+class FailSeverity {
   public static var SEVERITY_WARNING               :Int = 1;
   public static var SEVERITY_ERROR                 :Int = 2;
   public static var SEVERITY_FATAL_ERROR           :Int = 3;

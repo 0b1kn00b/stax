@@ -1,6 +1,6 @@
 package stx.rtti;
 import stx.Muster;
-import stx.Muster.Test.*;
+import stx.Muster.*;
 import stx.Log.*;
 
 import stx.rtti.Introspect;

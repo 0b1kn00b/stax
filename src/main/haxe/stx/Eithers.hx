@@ -165,7 +165,7 @@ class Eithers {
     return 
       tp.fst().flatMapR(
         function(b:B){
-          return tp.snd().mapR( tuple2.p1(b) );
+          return tp.snd().mapR( tuple2.bind(b) );
         }
       );
   }

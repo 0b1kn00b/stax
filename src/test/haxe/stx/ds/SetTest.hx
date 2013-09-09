@@ -18,11 +18,11 @@ package stx.ds;
 
 import stx.Prelude;
 
-import stx.functional.Foldable;
+import stx.ds.ifs.Foldable;
 import stx.test.TestCase;
 import stx.ds.Set;
 
-using stx.functional.Foldables;
+using stx.ds.Foldables;
 
 class SetTest extends TestCase {
   public function testSizeGrowsWhenAddingUniqueElements(): Void {

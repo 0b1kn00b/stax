@@ -3,7 +3,7 @@ package stx;
 using stx.Error;
 
 import stx.Muster;
-import stx.Muster.Test.*;
+import stx.Muster.*;
 import stx.Log.*;
 
 class ErrorTest extends TestCase{

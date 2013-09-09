@@ -103,12 +103,8 @@ class Compose0{
   Arrow class for Functions.
 */
 class Compose{
-  
-  static public function fst<A,B,C,D>(a:Tuple2<A,B>->Tuple2<C,D>):Tuple2<A,B>->C{
-    return a.then( Tuples2.fst );
-  }
-  static public function snd<A,B,C,D>(a:Tuple2<A,B>->Tuple2<C,D>):Tuple2<A,B>->D{
-    return a.then( Tuples2.snd );
+  @:noUsing static public function apply<I,O>(fn:I->O,v:I):O{
+    return fn(v);
   }
   /**
     Returns a function that applies fn1 then fn2 on the input
@@ -146,7 +142,7 @@ class Compose{
   /**
     Returns a function that applies a function on the lhs of a tuple to the value on the rhs.
   */
-  static public function apply<A,I,O>(fn:A->Tuple2<I->O,I>):A->O{
+  static public function application<A,I,O>(fn:A->Tuple2<I->O,I>):A->O{
     return 
       function(v:A):O{
         var t = fn(v);
@@ -188,8 +184,8 @@ class Compose{
     }
   }
   /**
-    Pure function.
-    [[1,2],[3,4]].flatMap( Compose.pure() );//[1,2,3,4]
+    Unit function.
+    [[1,2],[3,4]].flatMap( Compose.unit() );//[1,2,3,4]
   */
   @:noUsing
   static public function unit<A,B>():A->A{
@@ -217,18 +213,16 @@ class Compose{
         return tuple2( split_(x), _split(x) );
       }
   }
-  static public function binds<A,B,C>(bindl:A->C,bindr:Tuple2<A,C>->B):A->B{
+  static public function tie<A,B,C>(bindl:A->C,bindr:Tuple2<A,C>->B):A->B{
     return unit().split(bindl).then( bindr );
   }
   static public function pinch<A,B,C>(fn0:Tuple2<A,A>->Tuple2<B,C>):A->Tuple2<B,C>{
-    return 
-      function(x:A){
+    return function(x:A){
         return fn0(tuple2(x,x));
       }
   }
   static public function both<A,B>(fn:A->B):Pair<A>->Pair<B>{
-    return 
-      function(t){
+    return function(t){
         return tuple2(fn(t.fst()),fn(t.snd()));
       }
   }
@@ -245,8 +239,21 @@ class Compose{
   static public function option<A,B>(fn:A->B):Option<A>->Option<B>{
     return Options.map.bind(_,fn);
   }
-  static public function fromMbe<A,B>(fn:A->Option<B>):Option<A>->Option<B>{
+  static public function fromOption<A,B>(fn:A->Option<B>):Option<A>->Option<B>{
     return Options.map.bind(_,fn).then(Options.flatten);
+  }
+  static public function repeat<I,O>(fn:I -> FreeM<I,O>):I->O{
+    return function(v:I){
+      var i : I = null;
+      var o : O = null;
+      while(true){
+        switch (fn(i)) {
+          case Cont(v) : i = v;
+          case Done(v) : o = v; break;
+        }
+      }
+      return o;
+    }
   }
 }
 class Compose2{

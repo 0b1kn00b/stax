@@ -120,9 +120,9 @@ class PlainTextReport implements IReport<PlainTextReport> {
           buf.add(indents(1)+mname+": ");
           if(fix.stats.isOk) {
             buf.add("OK ");
-          } else if(fix.stats.hasErrors) {
+          } else if(fix.stats.hasFails) {
             buf.add("ERROR ");
-          } else if(fix.stats.hasFailures) {
+          } else if(fix.stats.hasFails) {
             buf.add("FAILURE ");
           } else if(fix.stats.hasWarnings) {
             buf.add("WARNING ");
@@ -132,22 +132,22 @@ class PlainTextReport implements IReport<PlainTextReport> {
             switch(assertation) {
               case Success(_):
                 buf.add('.');
-              case Failure(msg, pos):
+              case Fail(msg, pos):
                 buf.add('F');
                 messages += indents(2)+"line: " + pos.lineNumber + ", " + msg + newline;
-              case Error(e, s):
+              case Fail(e, s):
                 buf.add('E');
                 messages += indents(2)+ Std.string(e) + dumpStack(s) + newline ;
-              case SetupError(e, s):
+              case SetupFail(e, s):
                 buf.add('S');
                 messages += indents(2)+ Std.string(e) + dumpStack(s) + newline;
-              case TeardownError(e, s):
+              case TeardownFail(e, s):
                 buf.add('T');
                 messages += indents(2)+ Std.string(e) + dumpStack(s) + newline;
-              case TimeoutError(missedAsyncs, s):
+              case TimeoutFail(missedAsyncs, s):
                 buf.add('O');
                 messages += indents(2)+ "missed async calls: " + missedAsyncs + dumpStack(s) + newline;
-              case AsyncError(e, s):
+              case AsyncFail(e, s):
                 buf.add('A');
                 messages += indents(2)+ Std.string(e) + dumpStack(s) + newline;
               case Warning(msg):

@@ -21,7 +21,7 @@ import stx.plus.Equal;
 using stx.Strings;
 using stx.Eithers;
 
-using stx.functional.Foldables;
+using stx.ds.Foldables;
 using stx.ds.Collection;
 
 typedef MatchResult = { assertion: String, negation: String }

@@ -42,7 +42,7 @@ import stx.plus.Hasher;
 import stx.plus.Meta;
 import stx.plus.Order;
 import stx.plus.Show;
-import stx.Predicates;
+import stx.Compare;
 import stx.Prelude;
 import stx.Promises;
 import stx.Strings;

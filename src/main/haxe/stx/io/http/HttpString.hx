@@ -33,7 +33,7 @@ import stx.js.dom.Quirks;
 #end
 
 
-using stx.functional.Foldables;
+using stx.ds.Foldables;
 using stx.net.HttpResponseCodes;
 using stx.net.Urls;
 using stx.net.HttpHeaders;

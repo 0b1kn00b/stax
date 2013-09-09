@@ -1,6 +1,6 @@
 package stx.ds;
 
-import stx.Predicates;
+import stx.Compare;
 
 
 typedef DropableType<T> = {

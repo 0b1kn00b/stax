@@ -1,69 +1,85 @@
 package stx.plus;
 
-import stx.Tuples;
-import stx.Tuples;
+import stx.ds.Map;
+
 import stx.Prelude;
-import stx.test.TestCase;
+import stx.Muster;
+import stx.Muster.*;
+import stx.Compare.*;
+import stx.Log.*;
+
+using stx.Tuples;
+
 
 class HashTest extends TestCase{
-   @:todo('#0b1kn00b: the typer is now ignoring casts')
-  public function testTupleMapCode() {    
-    var tests : Array<HashFunction<Product>> = cast [
-      cast Hasher.getHashFor(tuple2("b",0)),
-      cast Hasher.getHashFor(tuple2("a",1)), 
-      cast Hasher.getHashFor(tuple3("a",0,0.1)),
-      cast Hasher.getHashFor(tuple4("a",0,0.1,"b")),
-      cast Hasher.getHashFor(tuple5("a",0,0.1,"a",1)), 
+  public function testTupleMapCode(u:UnitArrow):UnitArrow {    
+    //var p /*: Product */= tuple5("a",0,0.1,"a",1);
+    var tests : Array<Int> = [
+      Hasher.getHashFor(tuple2("b",0))(tuple2("b",0)),
+      Hasher.getHashFor(tuple2("a",1))(tuple2("a",1)),
+      Hasher.getHashFor(tuple3("a",0,1.1))(tuple3("a",0,1.1)),
+      Hasher.getHashFor(tuple4("a",0,0.1,"b"))(tuple4("a",0,0.1,"b")),
+      Hasher.getHashFor(tuple5("a",0,0.1,"a",1))(tuple5("a",0,0.1,"a",1)),
     ];
-   
-    while(tests.length > 0)
-    {
+    while(tests.length > 0){
       var value = tests.pop();
-      // check is unique        
-        assertFalse(tests.remove(value), "value is not unique hash: " + value);
-      
-      // check is different from zero
-      assertNotEquals(0, value);
-    } 
+      var tst   = tests.remove(value);
+      u = u.add(
+        it(
+          "should be a unique hash",
+          no(),
+          tst
+        )
+      ).add(
+        it(
+          "should not be 0",
+          eq(0).not(),
+          value
+        )
+      );
+    }
+    return u;
   }
-  public function testMap() {
-    assertMapCodeForIsZero(null);
-    assertMapCodeForIsZero(0);
-       
-    assertMapCodeForIsNotZero(true);
-    assertMapCodeForIsNotZero(false);
-    assertMapCodeForIsNotZero("");
-    assertMapCodeForIsNotZero("a");
-    assertMapCodeForIsNotZero(1);
-    assertMapCodeForIsNotZero(0.1);
-    assertMapCodeForIsNotZero([]);
-    assertMapCodeForIsNotZero([1]);
-    assertMapCodeForIsNotZero({});
-    assertMapCodeForIsNotZero({n:"a"});
-    assertMapCodeForIsNotZero(new HasMap(1));
-    assertMapCodeForIsNotZero(Date.fromString("2000-01-01"));       
-    assertMapCodeForIsNotZero(None);
-    assertMapCodeForIsNotZero(Some("a"));
+  public function assertMapCodeForIsZero<T>(v : T):Bool{
+    return eq(0).apply(Hasher.getHashFor(v)(v));
   }
+  public function assertMapCodeForIsNotZero<T>(v : T) {
+    return eq(0).not().apply(Hasher.getHashFor(v)(v));
+  }
+  public function testMap(u:UnitArrow):UnitArrow {
+    var msg = function(x) return 'it should not produce 0 for $x';
 
-  public function testReflectiveHasher(){
+    return u.append([
+      it('should produce 0 for null'           , assertMapCodeForIsZero),
+      it('should produce 0 for 0'              , assertMapCodeForIsZero),  
+      it(msg('true')                           , assertMapCodeForIsNotZero,true),
+      it(msg('false')                          , assertMapCodeForIsNotZero,false),
+      it(msg('""')                             , assertMapCodeForIsNotZero,""),
+      it(msg('"a"')                            , assertMapCodeForIsNotZero,"a"),
+      it(msg('1')                              , assertMapCodeForIsNotZero,1),
+      it(msg('0.1')                            , assertMapCodeForIsNotZero,0.1),
+      it(msg('[]')                             , assertMapCodeForIsNotZero,[]),
+      it(msg('[1]')                            , assertMapCodeForIsNotZero,[1]),
+      it(msg('{}')                             , assertMapCodeForIsNotZero,{}),
+      it(msg('{n:"a"}')                        , assertMapCodeForIsNotZero,{n:"a"}),
+      it(msg('Map.create()')                   , assertMapCodeForIsNotZero,Map.create()),
+      it(msg('Data.fromString("2000-01-01")')  , assertMapCodeForIsNotZero,Date.fromString("2000-01-01")),
+      it(msg('None')                           , assertMapCodeForIsNotZero,None),
+      it(msg('Some("a")')                      , assertMapCodeForIsNotZero,Some("a")),
+    ]);
+  }
+  
+  /*public function testReflectiveHasher(u:UnitArrow):UnitArrow{
     var zerocodes : Array<Dynamic> = [null, 0];
     for(z in zerocodes)
-      assertEquals(0, Hasher.getHashFor(z)(z));
+      u = u.add(it('should be zero',eq(0), Hasher.getHashFor(z)(z)));
 
-    var nonzerocodes : Array<Dynamic> = [true, false, "", "a", 1, 0.1, [],[1], {}, {n:"a"}, new HasNoMapAndShow(1), new HasMap(1), Date.fromString("2000-01-01"), None, Some("a")];
+    var nonzerocodes : Array<Dynamic> = [true, false, "", "a", 1, 0.1, [],[1], {}, {n:"a"}, new HasNoMapAndShow(1), new HasHash(1), Date.fromString("2000-01-01"), None, Some("a")];
     for(n in nonzerocodes)
-      this.assertNotEquals(0, Hasher.getHashFor(n)(n));
-  }
+      u = u.add(it('should not be zero',eq(0).not(), Hasher.getHashFor(n)(n)));
 
-  public function assertMapCodeForIsZero<T>(v : T) {
-    assertEquals(0, Hasher.getHashFor(v)(v));
-  }
-
-  public function assertMapCodeForIsNotZero<T>(v : T) {
-    assertNotEquals(0, Hasher.getHashFor(v)(v));
-  }
-
+    return u;
+  }*/
 }
 @DataClass private class HasNoMapAndShow
 { 
@@ -71,7 +87,7 @@ class HashTest extends TestCase{
   var v : Int;
   public function new(v : Int) this.v = v;
 }
-private class HasMap
+private class HasHash
 {
   var v : Int;
   public function new(v : Int) this.v = v;

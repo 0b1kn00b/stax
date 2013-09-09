@@ -1,11 +1,13 @@
 package stx.arw;
 
-import stx.Errors;
+import Stax.*;
+import stx.Fail;
+import stx.Compare.*;
+
 import stx.Tuples;
-import stx.Error.*;
 import stx.Eithers;
 import stx.Prelude;
-using stx.arw.Arrows;
+using stx.Arrows;
 
 typedef ArrowOutcome<I,O> = Arrow<Outcome<I>,Outcome<O>>
 
@@ -17,11 +19,10 @@ abstract OutcomeArrow<I,O>(ArrowOutcome<I,O>) from ArrowOutcome<I,O> to ArrowOut
     return new OutcomeArrow();
   }
   public function new(?v:ArrowOutcome<I,O>){
-    this = Options.orDefault(v,
-      function(x){
-        return cast( x == null ? Left(err(NullReferenceError('unknown'))) : x);
-      }
-    );
+    this = ntnl().apply(v) ? v : 
+    function(x){
+        return cast( x == null ? Left(fail(NullReferenceFail('unknown'))) : x);
+    } 
   }
 }
 class OutcomeArrows{

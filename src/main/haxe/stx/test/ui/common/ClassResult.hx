@@ -69,13 +69,13 @@ class ClassResult {
       names.sort(function(a, b) {
         var as = me.get(a).stats;
         var bs = me.get(b).stats;
-        if(as.hasErrors) {
-          return (!bs.hasErrors) ? -1 : (as.errors == bs.errors ? Reflect.compare(a, b) : Reflect.compare(as.errors, bs.errors));
-        } else if(bs.hasErrors) {
+        if(as.hasFails) {
+          return (!bs.hasFails) ? -1 : (as.errors == bs.errors ? Reflect.compare(a, b) : Reflect.compare(as.errors, bs.errors));
+        } else if(bs.hasFails) {
           return 1;
-        } else if(as.hasFailures) {
-          return (!bs.hasFailures) ? -1 : (as.failures == bs.failures ? Reflect.compare(a, b) : Reflect.compare(as.failures, bs.failures));
-        } else if(bs.hasFailures) {
+        } else if(as.hasFails) {
+          return (!bs.hasFails) ? -1 : (as.failures == bs.failures ? Reflect.compare(a, b) : Reflect.compare(as.failures, bs.failures));
+        } else if(bs.hasFails) {
           return 1;
         } else if(as.hasWarnings) {
           return (!bs.hasWarnings) ? -1 : (as.warnings == bs.warnings ? Reflect.compare(a, b) : Reflect.compare(as.warnings, bs.warnings));

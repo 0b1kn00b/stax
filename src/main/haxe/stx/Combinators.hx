@@ -2,9 +2,9 @@ package stx;
 
 import stx.Tuples;
 import stx.Prelude;
-import stx.Error;
+import stx.Fail;
 
-import stx.Error;
+import stx.Fail;
 
 using stx.Tuples;
 using stx.Eithers;

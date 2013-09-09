@@ -1,7 +1,7 @@
 package stx.rct;
 
-import stx.Errors;
-import stx.Error.*;
+ 
+import stx.Fail.*;
 import stx.Prelude;
 
 import stx.rct.Propagation;
@@ -10,7 +10,7 @@ import stx.rct.Process;
 
 import stx.Anys;
 import stx.Functions;
-import stx.Predicates;
+import stx.Compare;
 
 using stx.Arrays;
 using stx.Iterables;

@@ -48,7 +48,7 @@ class Arrays {
   @:noUsing static public function one<A>(v:A):Array<A>{
     return [v];
   }
-  static public function put<A>(arr:Array<A>,i:Int,v:A):Array<A>{
+  static public function set<A>(arr:Array<A>,i:Int,v:A):Array<A>{
     arr     = arr.copy();
     arr[i]  = v;
     return arr;
@@ -254,14 +254,14 @@ class Arrays {
   /**
     Produces `true` if the Array is empty, `false` otherwise
    */
-  static public function hasValues<T>(arr: Array<T>): Bool {
+  static public function containsValues<T>(arr: Array<T>): Bool {
     return arr.length > 0;
   }
   /**
     Produces an `Option.Some(element)` the first time the predicate returns `true`,
     `None` otherwise.
    */
-  static public function find<T>(arr: Array<T>, f: T -> Bool): Option<T>{
+  static public function search<T>(arr: Array<T>, f: T -> Bool): Option<T>{
     return arr.foldl(
 		None,
 		function(a, b) {
@@ -272,6 +272,10 @@ class Arrays {
 		    }
       }
     );
+  }
+  static public function find<T>(arr: Array<T>,v : T) : Option<T>{
+    var _eq = Equal.getEqualFor(v);
+    return search(arr,_eq.bind(v));
   }
   /**
     Returns an `Option.Some(index)` if an object reference is contain in `arr`
@@ -308,7 +312,7 @@ class Arrays {
     Determines if a value is contained in `arr` using a predicate.
    */
   static public function exists<T>(arr: Array<T>, f: T -> Bool): Bool {
-    return switch (find(arr, f)) {
+    return switch (search(arr, f)) {
       case Some(_): true;
       case None:    false;
     }
@@ -500,7 +504,7 @@ class Arrays {
 	  @param t a value which may be in the array.
 	  @return bool 
 	 */
-  static public function has<T>(a: Array<T>, t: T): Bool {
+  static public function contains<T>(a: Array<T>, t: T): Bool {
     for (e in a) if (t == e) return true;
     
     return false;
@@ -577,13 +581,27 @@ class Arrays {
 		}
 		slices;
 	}
-  @:todo('#0b1kn00b: optimise')
-  static public function fromMap<T>(hash:Map<String,T>):Array<Tuple2<String,T>>{
-    return
-      hash.keys()
-        .toIterable()
-        .map(
-          function(x) return tuple2(x,hash.get(x))
-        ).toArray();
+  static public function toMap<V>(arr:Array<Tuple2<String,V>>):Map<String,V>{
+    var mp = new haxe.ds.StringMap();
+    arr.foreach(function(l,r){mp.set(l,r);}.spread());
+    return mp;
+  }
+  /**
+    Pads out to len, ignores if len is less than Array length.
+  */
+  static public function pad<T>(arr:Array<T>,len:Int):Array<T>{
+    var len0 = len - arr.length;
+    var arr0 = [];
+    for (i in 0...len0){
+      arr0.push(null);
+    }
+    return arr.append(arr0);
+  }
+  static public function fill<T>(arr:Array<T>,def:T):Array<T>{
+    return arr.map(
+      function(x){
+        return x == null ? def : x;
+      }
+    );
   }
 }

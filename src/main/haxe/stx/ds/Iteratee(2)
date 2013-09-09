@@ -45,7 +45,7 @@ typedef FIteratee<E,A>  = Input<E> -> Iteratee<E, A>;
 enum Step<E,A> {
   Done(a:A, remaining:Input<E>);
   Cont(k: FIteratee<E,A>);
-  Error(msg:String, input:Input<E>);
+  Fail(msg:String, input:Input<E>);
 }
 typedef TIteratee<E,A,B> = {
 	state 		: Step<E,A>,
@@ -74,11 +74,11 @@ class Iteratee<E,A>{
 							return switch (x) {
 								case Step.Done(a1,_) 		: Eventual.pure(a1);
 								case Step.Cont(_) 			: throw("diverging iteratee after Input.EOF");null;
-								case Step.Error(msg,e) 	: throw(msg);null;
+								case Step.Fail(msg,e) 	: throw(msg);null;
 							}
 						}
 					);
-				case Step.Error(msg,e) :
+				case Step.Fail(msg,e) :
 					throw(msg);null;
 			}
 	}
@@ -94,7 +94,7 @@ class Iteratee<E,A>{
 					return switch(x){
 						case Step.Done(a,e) 			: done(a,e);
 						case Step.Cont(k) 				: cont(k);
-						case Step.Error(msg,e) 		: err(msg,e);
+						case Step.Fail(msg,e) 		: fail(msg,e);
 					}
 				}
 			);
@@ -170,7 +170,7 @@ class Iteratees{
 					return switch(x){
 						case Step.Done(a,e) 			: done(a,e);
 						case Step.Cont(k) 				: cont(k);
-						case Step.Error(msg,e) 		: err(msg,e);
+						case Step.Fail(msg,e) 		: fail(msg,e);
 					}
 				}
 			);
@@ -182,7 +182,7 @@ class Iteratees{
     error: (String, Input[E]) => Promise[B]): Promise[B] = fold({
       case Step.Done(a,e) => done(a,e)
       case Step.Cont(k) => cont(k)
-      case Step.Error(msg,e) => error(msg,e)
+      case Step.Fail(msg,e) => error(msg,e)
     })
     
 	static public function fold1<E,A,B>(state:A){

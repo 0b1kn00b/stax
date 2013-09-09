@@ -3,8 +3,8 @@ package stx.rtti;
 import haxe.rtti.CType;
 
 import stx.Prelude;
-import stx.Error;
-import stx.Error.*;
+import stx.Fail;
+import stx.Fail.*;
 
 using stx.Compose;
 using stx.Eithers;
@@ -14,6 +14,9 @@ using stx.rtti.RTypes;
 using stx.Tuples;
 using stx.Reflects;
 
+/**
+  Wrapper for reflected functions.
+*/
 abstract Routine<T>(Tuple2<T,String>) from Tuple2<T,String>{
   public function new(v){
     this = v;
@@ -22,7 +25,7 @@ abstract Routine<T>(Tuple2<T,String>) from Tuple2<T,String>{
     return Reflects.callFunction(this.fst(),this.snd(),args);
   }
   public function applySafe(?args:Array<Dynamic>):Option<Dynamic>{
-    return Reflects.callSafe(this.fst(),this.snd(),args);
+    return Reflects.callSafe(this.fst(),Reflect.field(this.fst(),this.snd()),args);
   }
   public function applySecure(?args:Array<Dynamic>):Outcome<Dynamic>{
     return Reflects.callSecure(this.fst(),this.snd(),args);

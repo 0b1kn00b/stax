@@ -11,6 +11,8 @@ using stx.plus.Hasher;
 
 typedef HashFunction<T>         = Function1<T, Int>; 
 
+
+@:note("#0b1kn00b: This is a real magnet for Int overflows, maybe a Hash should be a String, but slow")
 class Hasher {
 	static function __hash__<T>(impl : HashFunction<Dynamic>) {
     return function(v : T) {
@@ -18,8 +20,7 @@ class Hasher {
     }
   }
   /** 
-    Returns a HashFunction (T -> Int). It works for any type. For Custom Classes you must provide a hashCode()
-    method, otherwise the full class name is returned.
+    Returns a HashFunction (T -> Int). It works for any type. For Custom Classes you should provide a hashCode()
    */
   public static function getHashFor<T>(t : T) : HashFunction<T> {
     return getHashForType(Type.typeof(t));
@@ -32,7 +33,8 @@ class Hasher {
       case TUnknown         : __hash__(function(v: T) return Prelude.error()("can't retrieve hashcode for TUnknown: " + v));
       case TObject          :
         __hash__(function(v){
-        var s = Show.getShowFor(v)(v);
+        //var s = Show.getShowFor(v)(v);
+        var s = haxe.Serializer.run(v);
         return getHashFor(s)(s);
         });
       case TClass(String)   : __hash__(StringHasher.hashCode);
@@ -42,7 +44,7 @@ class Hasher {
           if(Type.getInstanceFields(c).remove("hashCode")) {
             __hash__(function(v) return Reflect.callMethod(v, Reflect.field(v, "hashCode"), []));
           }else{
-            Prelude.error()("class does not have a hashCode method");
+            __hash__(function(v) return StringHasher.hashCode(haxe.Serializer.run(v)));
           }
       case TEnum(Tuple2)    : __hash__(ProductHasher.hashCode);
       case TEnum(Tuple3)    : __hash__(ProductHasher.hashCode);
@@ -111,7 +113,7 @@ class BoolHasher {
 }
 class ProductHasher {
   static function __init__(){
-    _baseHashes 
+    _baseHashes__ 
       = [
           [786433, 24593],
           [196613, 3079, 389],
@@ -122,12 +124,14 @@ class ProductHasher {
 	static public function getHash(p:Product, i : Int) {
     return Hasher.getHashFor(p.element(i));
   }
-  static var _baseHashes : Array<Array<Int>>;
+  static var _baseHashes__ : Array<Array<Int>>;
 
+  @:bug("#0b1kn00b: Really not sure why the (-4) needs to be except that the abstract cast is not constructing properly")
   public static function hashCode(p:Product) : Int {
-    var h = 0;
+    var h         = 0;
+    var __hash__  = ProductHasher._baseHashes__[p.length-4];
     for(i in 0...p.length){
-      h += ProductHasher._baseHashes[p.length-2][i] * getHash(p,i)(p.element(i));
+      h += __hash__[i] * getHash(p,i)(p.element(i));
     }
     return h;
   }

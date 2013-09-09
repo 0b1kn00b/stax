@@ -2,10 +2,9 @@ package stx.arw;
 
 import stx.Tuples;
 import stx.Prelude;
-import stx.Callback;
 
 using stx.Options;
-using stx.arw.Arrows;
+using stx.Arrows;
 using stx.Compose;
 using stx.Tuples;
 using stx.Functions;

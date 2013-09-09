@@ -33,7 +33,7 @@ interface LoggerFacade {
   public function fatal(s: String, ?p: PosInfos): Void;
 }
 
-enum LogLevel { All; Debug; Info; Warning; Error; Fatal; None; }
+enum LogLevel { All; Debug; Info; Warning; Fail; Fatal; None; }
 
 class Logger {
   /** The default handlers used for all loggers created using get() */
@@ -105,7 +105,7 @@ class LoggerBridge implements LoggerFacade {
   
   public function warning(s: String, ?p: PosInfos) { _handler(Warning, s, p); }
   
-  public function error(s: String, ?p: PosInfos) { _handler(Error, s, p); }
+  public function error(s: String, ?p: PosInfos) { _handler(Fail, s, p); }
   
   public function fatal(s: String, ?p: PosInfos) { _handler(Fatal, s, p); }
 }
@@ -126,7 +126,7 @@ class LogHandlers {
           case All, Debug:          if (c.debug != null) c.debug(text);
           case Info:                if (c.info != null) c.info(text);
           case Warning:             if (c.warn != null) c.warn(text);
-          case Error, Fatal, None:  if (c.error != null) c.error(text);
+          case Fail, Fatal, None:  if (c.error != null) c.error(text);
         }
       }
     })(format(text, p));
@@ -140,7 +140,7 @@ class LogHandlers {
           case All, Debug:          flash.external.ExternalInterface.call('(function(text){if (typeof console != "undefined" && console.debug) console.debug(text);})', text);
           case Info:                flash.external.ExternalInterface.call('(function(text){if (typeof console != "undefined" && console.warn) console.warn(text);})', text);
           case Warning:             flash.external.ExternalInterface.call('(function(text){if (typeof console != "undefined" && console.warn) console.warn(text);})', text);
-          case Error, Fatal, None:  flash.external.ExternalInterface.call('(function(text){if (typeof console != "undefined" && console.error) console.error(text);})', text);
+          case Fail, Fatal, None:  flash.external.ExternalInterface.call('(function(text){if (typeof console != "undefined" && console.error) console.error(text);})', text);
         }
       }
     })(format(text, p));
@@ -170,7 +170,7 @@ class LogHandlers {
       case Debug: "Debug";
       case Info: "Info";
       case Warning: "Warning";
-      case Error: "Error";
+      case Fail: "Fail";
       case Fatal: "Fatal";
       case None: "None";
     }
@@ -182,7 +182,7 @@ class LogHandlers {
       case Debug: 1;
       case Info: 2;
       case Warning: 3;
-      case Error: 4;
+      case Fail: 4;
       case Fatal: 5;
       case None: 6;
     }

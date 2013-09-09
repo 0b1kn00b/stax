@@ -20,16 +20,16 @@ using stx.Tuples;
 using stx.Prelude;
 
 
-import stx.functional.Foldable;
+import stx.ds.ifs.Foldable;
 import stx.ds.Collection;
-import stx.functional.Foldables;
+import stx.ds.Foldables;
 
 using stx.plus.Order; 
 using stx.plus.Hasher;
 using stx.plus.Show;
 using stx.plus.Equal;
 
-using stx.functional.Foldables;
+using stx.ds.Foldables;
 
 class FoldableToSet {
 	public static function toSet<A, B>(foldable : Foldable<A, B>) : Set<B> {  

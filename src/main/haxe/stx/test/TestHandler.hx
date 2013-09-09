@@ -47,10 +47,10 @@ class TestHandler<T> {
       try {
         executeMethod(fixture.method);
       } catch (e : Dynamic) {
-        results.add(Error(e, exceptionStack()));
+        results.add(Fail(e, exceptionStack()));
       }
     } catch(e : Dynamic) {
-      results.add(SetupError(e, exceptionStack()));
+      results.add(SetupFail(e, exceptionStack()));
     }
     checkTested();
   }
@@ -130,14 +130,14 @@ class TestHandler<T> {
     setTimeout(timeout);
     return function() {
       if(!handler.asyncStack.remove(f)) {
-        handler.results.add(AsyncError("method already executed", []));
+        handler.results.add(AsyncFail("method already executed", []));
         return;
       }
       try {
         handler.bindHandler();
         f();
       } catch(e : Dynamic) {
-        handler.results.add(AsyncError(e, exceptionStack(0))); // TODO check the correct number of functions is popped from the stack
+        handler.results.add(AsyncFail(e, exceptionStack(0))); // TODO check the correct number of functions is popped from the stack
       }
     };
   }
@@ -148,14 +148,14 @@ class TestHandler<T> {
     setTimeout(timeout);
     return function(e : EventArg) {
       if(!handler.asyncStack.remove(f)) {
-        handler.results.add(AsyncError("event already executed", []));
+        handler.results.add(AsyncFail("event already executed", []));
         return;
       }
       try {
         handler.bindHandler();
         f(e);
       } catch(e : Dynamic) {
-        handler.results.add(AsyncError(e, exceptionStack(0))); // TODO check the correct number of functions is popped from the stack
+        handler.results.add(AsyncFail(e, exceptionStack(0))); // TODO check the correct number of functions is popped from the stack
       }
     };
   }
@@ -184,7 +184,7 @@ class TestHandler<T> {
   }
 
   function timeout() {
-    results.add(TimeoutError(asyncStack.length, []));
+    results.add(TimeoutFail(asyncStack.length, []));
     onTimeout.dispatch(this);
     completed();
   }
@@ -193,7 +193,7 @@ class TestHandler<T> {
     try {
       executeMethodByName(fixture.teardown);
     } catch(e : Dynamic) {
-      results.add(TeardownError(e, exceptionStack(2))); // TODO check the correct number of functions is popped from the stack
+      results.add(TeardownFail(e, exceptionStack(2))); // TODO check the correct number of functions is popped from the stack
     }
     unbindHandler();
     onComplete.dispatch(this);

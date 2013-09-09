@@ -22,7 +22,7 @@ using stx.Prelude;
 import stx.js.Dom;
 import stx.js.Env;
 import stx.js.detect.BrowserSupport;
-import stx.Predicates;
+import stx.Compare;
 import stx.ds.Map;
 using stx.Arrays;
 

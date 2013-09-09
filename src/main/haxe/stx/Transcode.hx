@@ -2,7 +2,7 @@ package stx;
 
 import stx.Prelude;
 
-using stx.Error;
+using stx.Fail;
 using stx.Functions;
 using stx.Compose;
 using stx.Eithers;
@@ -20,7 +20,7 @@ class Transcode{
       case TObject,TClass(_)        :
         o = encodeSafe(v);
       case TFunction                :
-        o = encodeSafe(Left(new Error('Cannot transcode a function')));
+        o = encodeSafe(Left(new Fail('Cannot transcode a function')));
       case TEnum( e ) if ( Type.enumEq(e,Either) ) : //can only assume this is an Outcome, no other way to check.
         var m : Outcome<Dynamic> = cast v;
         switch (m){
