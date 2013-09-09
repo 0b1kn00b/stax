@@ -1,0 +1,335 @@
+package stx.ds;
+
+import stx.Muster;
+import stx.Muster.*;
+import stx.Log.*;
+
+import stx.ds.Size;
+import stx.ds.Enumerable;
+
+import stx.plus.Plus;
+
+using stx.Compose;
+using stx.Options;
+using stx.Prelude;
+using stx.Iterables;
+
+using stx.ds.ListNewTest;
+
+class ListNewTest extends TestCase{
+  public function testListNew(u:UnitArrow):UnitArrow{
+    var itr                         = 0.until(3);
+    var l  : List<Int>              = itr;//constructor
+    var l2 : List<Int>              = 3.until(5);
+    var l3                          = l.append(l2);
+    var l4                          = l3.flatMap(function(x) return Nil.add(x).add(x+10));
+    return u;
+  }
+}
+enum ListType<T>{
+  Nil;
+  Cons(x:T,xs:ListType<T>);
+}
+enum ListConstructorOptions<T>{
+  EmptyList(?tool:Plus<T>);
+  ListFromIterable(it:Iterable<T>,?tool:Plus<T>);
+  ListFromListType(l:ListType<T>,?size:Int,?tool:Plus<T>);
+}
+abstract List<T>(ListInstance<T>) from ListInstance<T> to ListInstance<T>{
+  public function new(v){
+    this = v;
+  }
+  @:from static public function fromIterable<T>(itr:Iterable<T>):List<T>{
+    return new ListInstance(ListFromIterable(itr));
+  }
+  @:from static public function fromArray<T>(arr:Array<T>):List<T>{
+    return new ListInstance(ListFromIterable(arr));
+  }
+  @:from static public function fromListType<T>(lst:ListType<T>):List<T>{
+    return new ListInstance(ListFromListType(lst));
+  }
+  @:from static public function fromListConstructorOptions<T>(opt:ListConstructorOptions<T>):List<T>{
+    return new ListInstance(opt);
+  } 
+  public function cons(v:T):List<T>{
+    return this.cons(v);
+  }
+  public function foldl<Z>(memo:Z,fn:Z->T->Z):Z{
+    return this.foldl(memo,fn);
+  }
+  public function reverse():List<T>{
+    return this.reverse();
+  }
+  public function foldr<Z>(memo:Z,fn:T->Z->Z):Z{
+    return this.foldr(memo,fn);
+  }
+  public function hasValues():Bool{
+    return this.hasValues();
+  }
+  public function headOption():Option<T>{
+    return this.headOption();
+  }
+  public function head():Null<T>{
+    return this.head();
+  }
+  public function append(xs:List<T>):List<T>{
+    return this.append(xs).setValTool(val_tool);
+  }
+  public function add(x:T):ListInstance<T>{
+    return this.add(x).setValTool(val_tool);
+  }
+  public function prepend(ls:List<T>):List<T>{
+    return this.prepend(ls.value).setValTool(val_tool);
+  }
+  public function map<U>(fn:T->U):List<U>{
+    return this.map(fn);
+  }
+  public function flatMap<U>(fn:T->List<U>):List<U>{
+    return this.flatMap(fn);
+  }
+  public function toString(){
+    return this.toString();
+  }
+  @:allow(stx.ds)
+  private var val_tool(get,set):Plus<T>;
+  private function get_val_tool():Plus<T>{
+    return this.val_tool;
+  }
+  private function set_val_tool(pls:Plus<T>):Plus<T>{
+    return this.val_tool = pls;
+  }
+  @:allow(stx.ds)
+  private function setValTool(pls:Plus<T>):List<T>{
+    return this.setValTool(pls);
+  }
+  @:allow(stx.ds)
+  private var value(get,set):ListType<T>;
+  private function get_value():ListType<T>{
+    return this.value;
+  }
+  private function set_value(pls:ListType<T>):ListType<T>{
+    return this.value = pls;
+  }
+  public function asEnumerable(){
+    return this.asEnumerable();
+  }
+}
+class ListEnumerator<T>{
+  private var memo : ListType<T>;
+
+  public function new(lst:ListType<T>){
+    memo = lst;
+  }
+  public function next(){
+    return switch (memo) {
+      case Nil          : throw new stx.err.OutOfBoundsError();
+      case Cons(x,xs)   : 
+        memo = xs;
+        x;
+    }
+  }
+  public function hasNext(){
+    return switch (memo) {
+      case Nil  : false;
+      default   : true;
+    }
+  }
+}
+class ListInstance<T>{
+  static public function unit<T>():ListInstance<T>{
+    return new ListInstance(EmptyList());
+  }
+  @:isVar public var size(default,null) : Int;
+
+  public function new(opts:ListConstructorOptions<T>){
+    var tl = Options.create.then( Options.getOrElse.bind(_,function()return new Plus()));
+    switch (opts) {
+      case EmptyList(tool)              :
+        this.size     = 0;
+        this.val_tool = tl(tool);
+        this.value    = Nil;
+      case ListFromIterable(it,tool)    :
+        this.size     = it.size();
+        this.val_tool = tl(tool);
+        this.value    = 
+          it.reversed().foldl(new ListInstance(EmptyList(tool)),
+            function(memo,next){
+              return memo.cons(next);
+            }
+          ).value;
+      case ListFromListType(ls,size,tool)   :
+        this.val_tool = tl(tool);
+        this.size     = size;
+        this.value    = ls;
+    }
+  }
+  public function iterator():Iterator<T>{
+    return new ListEnumerator(value);
+  }
+  public function asEnumerable():Enumerable<T>{
+    return this;
+  }
+  public function cons(v:T):List<T>{
+    return new ListInstance(ListFromListType(Cons(v,value),size+1,val_tool));
+  }
+  public function foldl<Z>(memo:Z,fn:Z->T->Z):Z{
+    return value.foldl(memo,fn);
+  }
+  public function reverse():List<T>{
+    return new ListInstance(ListFromListType(value.reverse()));
+  }
+  public function foldr<Z>(memo:Z,fn:T->Z->Z):Z{
+    return value.foldr(memo,fn);
+  }
+  public function hasValues():Bool{
+    return value.hasValues();
+  }
+  public function headOption():Option<T>{
+    return value.headOption();
+  }
+  public function head():Null<T>{
+    return value.head();
+  }
+  public function append(xs:List<T>):ListInstance<T>{
+    var lst : List<T> = asEnumerable().append(xs);
+    return lst.setValTool(val_tool);
+  }
+  public function add(x:T):ListInstance<T>{
+    var l : List<T>  = asEnumerable().add(x);
+    return l.setValTool(val_tool);
+  }
+  public function prepend(ls:List<T>):ListInstance<T>{
+    var l : List<T>  = value.prepend(ls.value);
+    return l.setValTool(val_tool);
+  }
+  public function map<U>(fn:T->U):ListInstance<U>{
+    var l : List<U>  = value.map(fn);
+    return l;
+  }
+  public function flatMap<U>(fn:T->List<U>):ListInstance<U>{
+    var l : List<U>  = asEnumerable().flatMap(fn.then(function(x) return x.asEnumerable()));
+    return l;
+  }
+  public function toString(){
+    var shw = null;
+    switch (value) {
+      case Cons(x,_) : shw = val_tool.getShow(x);
+      case Nil       : shw = val_tool.getShow(null);
+    }
+    return value.show(shw);
+  }
+  @:allow(stx.ds)
+  private var value     : ListType<T>;
+  @:allow(stx.ds)
+  private var val_tool  : Plus<T>;
+
+  @:allow(stx.ds)
+  private function setValTool(vlt:Plus<T>):List<T>{
+    return ListFromListType(value,size,vlt);
+  }
+}    
+class ListTypes {
+  static public inline function hasValues<T>(lst:ListType<T>):Bool{
+    return switch (lst) {
+      case Nil  : false;
+      default   : true;
+    }
+  }
+  static public inline function reverse<T>(lst:ListType<T>):ListType<T>{
+    function recursive(p:ListType<T>, stack) {
+      return switch(p) {
+          case Cons(head, tail): recursive(tail, Cons(head, stack));
+          case _: stack;
+      }
+    }
+    return recursive(lst, Nil);
+  }
+  static public inline function headOption<T>(lst:ListType<T>):Option<T>{
+    return switch (lst) {
+      case Nil        : None;
+      case Cons(x,_)  : Some(x);
+    }
+  }
+  static public inline function head<T>(lst:ListType<T>):Null<T>{
+    return headOption(lst).getOrElseC(null);
+  }
+  static public inline function tail<T>(lst:ListType<T>):ListType<T>{
+    return switch (lst) {
+      case Cons(_,xs)   : xs;
+      default           : Nil;
+    }
+  }
+  static public function append<T>(lst : ListType<T>, xs : ListType<T>) : ListType<T> {
+    var result  = xs;
+    var p       = lst;
+
+    var stack   = p.reverse();
+    while(stack.hasValues()) {
+        result  = Cons(head(stack), result);
+        stack   = tail(stack);
+    }
+    return result;
+  }
+  static public function prepend<T>(lst : ListType<T>,xs : ListType<T>) : ListType<T> {
+    var p       = lst;
+    var result  = p;
+
+    while(xs.hasValues()) {
+      result = Cons(head(xs), result);
+      xs = xs.tail();
+    }
+
+    return result;
+  }
+  static public function add<T>(lst:ListType<T>,x:T):ListType<T>{
+    return lst.append(Cons(x,Nil));
+  }
+  static public function foldl<Z,T>(lst:ListType<T>,memo:Z,fn:Z->T->Z):Z{
+    var accum = lst;
+    var o     = memo;
+    while(true){
+      switch (accum) {
+        case Cons(x,xs) : o = fn(o,x); accum = xs;
+        case Nil        : break;
+      }
+    }
+    return o;
+  }
+  static public function foldr<Z,T>(lst:ListType<T>,memo:Z,fn:T->Z->Z):Z{
+    var ls : Enumerator<T>  = new ListEnumerator(lst);
+    var a   = ls.toArray();
+    var acc = memo;
+
+    for (i in 0...ls.size()) {
+      var e = a[a.size() - 1 - i];
+      acc = fn(e, acc);
+    }
+
+    return acc;
+  }
+  static public function map<T,U>(lst:ListType<T>,fn:T->U):ListType<U>{
+    return lst.foldr(
+      Nil,
+      function(next,memo){
+        return Cons(fn(next),memo);
+      }
+    );
+  }
+  static public function flatMap<T,U>(lst:ListType<T>,fn:T->ListType<U>):ListType<U>{
+    var memo = Nil;
+    var p    = lst;
+    while (hasValues(p)) {
+      memo = prepend(memo, fn(head(p)));
+      p = tail(p);
+    }
+    return reverse(memo);
+  }
+  static public function show<T>(lst:ListType<T>,fn:T->String):String{
+    return lst.foldl(
+      '',
+      function(memo,next){
+        return '$memo ${fn(next)}';
+      }
+    );
+  }
+}
