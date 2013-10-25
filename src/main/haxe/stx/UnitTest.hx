@@ -35,6 +35,9 @@ class UnitTest{
   static public function rig(){
     return new TestRig();
   }
+  static public function isAlike(val0:EnumValue,val1:EnumValue,?pos:PosInfos):TestArrow{
+    return it('should be alike',alike(val0),val1,pos);
+  }
   static public function isTrue(val,?pos:PosInfos):TestArrow{
     return it('should be true',ok(),val,pos);
   }
@@ -122,6 +125,9 @@ class Printers{
 }
 class TestCase extends Introspect{
   public function new(){super();}
+  public function isAlike(val0,val1,?pos:PosInfos):TestArrow{
+    return UnitTest.isAlike(val0,val1,pos);
+  }
   public function isTrue(val,?pos:PosInfos):TestArrow{
     return UnitTest.isTrue(val,pos);
   }
