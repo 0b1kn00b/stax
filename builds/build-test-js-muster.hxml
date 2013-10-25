@@ -8,7 +8,7 @@
 -lib muster
 -lib tink
 -lib traits
-
+-resource zebra.txt@zebra
 -main Test
 
 -D nodejs

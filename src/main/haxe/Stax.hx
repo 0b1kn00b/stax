@@ -11,7 +11,16 @@ import stx.Fail;
 import stx.Options;
 import stx.Compare;
 
+import stx.ioc.Inject.*;
+import stx.log.Logger;
+import stx.log.DefaultLogger;
+
 class Stax{
+  @:bug('#0b1kn00b: making __init__ causes BASE64 in Unserializer to be null @25/10/2013')
+  public static function init(){
+    injector().bind(Logger,new DefaultLogger());
+    haxe.Log.trace = inject(Logger).apply;
+  }
   @:noUsing static public inline function option<T>(v:Null<T>):Option<T>{
     return Options.create(v);
   }

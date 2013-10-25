@@ -1,13 +1,12 @@
 package stx.log;
 
-class LogItem {
+import stx.utl.TaggedValue;
+
+class LogItem extends TaggedValue<LogLevel,Dynamic>{
   public function new(level, value) {
-    this.level = level;
-    this.value = value;
+    super(level,value);
   }
   public function toString() {
-    return level + '[ ' + value + ' ]';
+    return tag + '[ ' + val + ' ]';
   }
-  public var level : LogLevel;
-  public var value : Dynamic;
 }

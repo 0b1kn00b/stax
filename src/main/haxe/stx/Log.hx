@@ -7,6 +7,7 @@ import haxe.PosInfos;
 import stx.ioc.Inject.*;
 import stx.log.*;
 
+using stx.Functions;
 using stx.Options;
 
 import funk.ioc.*;
@@ -28,13 +29,9 @@ class Log{
     return new LogItem(LogLevel.Warning, v);
   }
   @:noUsing static public function error(v:Dynamic) {
-    return new LogItem(LogLevel.Fail, v);
+    return new LogItem(LogLevel.Error, v);
   }
   @:noUsing static public function fatal(v:Dynamic) {
     return new LogItem(LogLevel.Fatal, v);
-  }
-  static public function trace(d:Dynamic,p:PosInfos){
-  	var tracer = option(inject(Logger)).map(function(x) {return x.apply;}).getOrElseC(haxe.Log.trace);
-  			tracer(d,p);
   }
 }

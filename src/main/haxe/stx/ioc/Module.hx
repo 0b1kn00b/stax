@@ -19,8 +19,17 @@ using stx.ValueTypes;
   Represents a collection of Interface -> Instance bindings
 */
 interface Module{
+  /**
+    @see stx.ioc.Scope
+  */
   public var scope(default,null) : Scope;
+  /**
+    Is interface `cls` bound in context `pos`
+  */
   public function bound(cls:Class<Dynamic>,pos:PosInfos):Bool;
+  /**
+    Returns implementation of `cls`
+  */
   public function injection<T>(cls:Class<T>):Null<T>;
 }
 /**
