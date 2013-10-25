@@ -32,6 +32,11 @@ abstract RType<T>(Tuple2<T,TypeTree>) from Tuple2<T,TypeTree> to Tuple2<T,TypeTr
     return (switch(this.snd()){
       case TClassdecl(c)  : Some(c);
       default             : None;
-    }).map(tuple2.bind(this.fst()));
+    }).map(tuple2.bind(this.fst()))
+    .map(
+      function(x){
+        return new RClass(x);
+      }
+    );
   }
 }

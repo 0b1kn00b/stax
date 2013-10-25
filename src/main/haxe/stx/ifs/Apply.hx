@@ -23,3 +23,12 @@ class DefaultApply<E,A> implements Apply<E,A>{
 		return except()(fail(AbstractMethodFail()));
 	}
 }
+class ApplyDelegate<E,A> implements Apply<E,A>{
+  private var __apply__ : E -> A;
+  public function new(__apply__){
+    this.__apply__ = __apply__;
+  }
+  public function apply(e:E):A{
+    return __apply__(e);
+  }
+}

@@ -4,9 +4,11 @@ import haxe.ds.HashMap;
 
 import stx.Prelude;
 import stx.Tuples;
-import stx.test.TestCase;
-import stx.test.Assert;
 
+import stx.Muster;
+import stx.Muster.*;
+import stx.Log.*;
+import stx.Compare.*;
 
 using stx.Prelude;
 using stx.Tuples;
@@ -16,109 +18,120 @@ using stx.plus.Order;
 using stx.plus.Equal;
 
 class OrderTest extends TestCase{
-	public function testOrderForInt() {
+	public function testOrderForInt(u:UnitArrow):UnitArrow {
     var order = Order.getOrderFor(1);
-    assertTrue(order(2, 1)  > 0);
-    assertTrue(order(1, 2)  < 0);
-    assertTrue(order(1, 1) == 0);
+    u = u.add(isTrue(order(2, 1)  > 0));
+    u = u.add(isTrue(order(1, 2)  < 0));
+    u = u.add(isTrue(order(1, 1) == 0));
+    return u;
   }
 
-  public function testOrderForFloat() {
+  public function testOrderForFloat(u:UnitArrow):UnitArrow {
     var order = Order.getOrderFor(1.0);
-    assertTrue(order(1.2, 1.1)  > 0);
-    assertTrue(order(1.1, 1.2)  < 0);
-    assertTrue(order(0.1, 0.1) == 0);
+    u = u.add(isTrue(order(1.2, 1.1)  > 0));
+    u = u.add(isTrue(order(1.1, 1.2)  < 0));
+    u = u.add(isTrue(order(0.1, 0.1) == 0));
+    return u;
   }
 
-  public function testOrderForBool() {
+  public function testOrderForBool(u:UnitArrow):UnitArrow {
     var order = Order.getOrderFor(true);
-    assertTrue(order(true,  false)  > 0);
-    assertTrue(order(false, true)   < 0);
-    assertTrue(order(true,  true)  == 0);
-    assertTrue(order(false, false) == 0);
+    u = u.add(isTrue(order(true,  false)  > 0));
+    u = u.add(isTrue(order(false, true)   < 0));
+    u = u.add(isTrue(order(true,  true)  == 0));
+    u = u.add(isTrue(order(false, false) == 0));
+    return u;
   }
 
-  public function testOrderForNull() {   
+  public function testOrderForNull(u:UnitArrow):UnitArrow {   
     var order = Order.getOrderFor(null);
-    assertTrue(order("s", null)   > 0);
-    assertTrue(order(null, "s")   < 0);
-    assertTrue(order(null, null) == 0);
+    u = u.add(isTrue(order("s", null)   > 0));
+    u = u.add(isTrue(order(null, "s")   < 0));
+    u = u.add(isTrue(order(null, null) == 0));
+    return u;
   }  
 
-  public function testOrderForString() {
+  public function testOrderForString(u:UnitArrow):UnitArrow {
     var order = Order.getOrderFor("s");
-    assertTrue(order("b", "a")  > 0);
-    assertTrue(order("a", "b")  < 0);
-    assertTrue(order("a", null) > 0);
-    assertTrue(order(null, "a") < 0);
-    assertTrue(order("a", "a") == 0);
+    u = u.add(isTrue(order("b", "a")  > 0));
+    u = u.add(isTrue(order("a", "b")  < 0));
+    u = u.add(isTrue(order("a", null) > 0));
+    u = u.add(isTrue(order(null, "a") < 0));
+    u = u.add(isTrue(order("a", "a") == 0));
+    return u;
   }             
 
-  public function testOrderForDate() {
+  public function testOrderForDate(u:UnitArrow):UnitArrow {
     var a = Date.fromString("1999-12-31");
     var b = Date.fromString("2000-01-01");  
     var c = Date.fromString("1999-12-31");
     var order = Order.getOrderFor(b);
-    assertTrue(order(b, a)    > 0);
-    assertTrue(order(a, b)    < 0); 
-    assertTrue(order(a, null) > 0);
-    assertTrue(order(null, a) < 0);
-    assertTrue(order(a, c)   == 0);
+    u = u.add(isTrue(order(b, a)    > 0));
+    u = u.add(isTrue(order(a, b)    < 0)); 
+    u = u.add(isTrue(order(a, null) > 0));
+    u = u.add(isTrue(order(null, a) < 0));
+    u = u.add(isTrue(order(a, c)   == 0));
+    return u;
   }   
 
-  public function testOrderForArray() {
+  public function testOrderForArray(u:UnitArrow):UnitArrow {
     var a1 = [1,2,3];
     var a2 = [4];
     var a3 = [2,2,3];
     var a4 = [4]; 
     var order = Order.getOrderFor(a1);
-    assertTrue(order(a1, a2)  > 0);
-    assertTrue(order(a3, a1)  > 0); 
-    assertTrue(order(a2, a1)  < 0);
-    assertTrue(order(a1, a3)  < 0);  
-    assertTrue(order(a2, a4) == 0); 
-    assertTrue(order([], []) == 0);
+    u = u.add(isTrue(order(a1, a2)  > 0));
+    u = u.add(isTrue(order(a3, a1)  > 0)); 
+    u = u.add(isTrue(order(a2, a1)  < 0));
+    u = u.add(isTrue(order(a1, a3)  < 0)); 
+    u = u.add(isTrue(order(a2, a4) == 0));
+    u = u.add(isTrue(order([], []) == 0));
+    return u;
   }
 
-  public function testOrderForComparableClass() {   
+  /*public function testOrderForComparableClass(u:UnitArrow):UnitArrow {   
     var c1 = new Comparable(1);
     var c2 = new Comparable(2);  
     var c3 = new Comparable(1);
     var order = Order.getOrderFor(c1);
-    assertTrue(order(c2, c1)  > 0);
-    assertTrue(order(c1, c2)  < 0);
-    assertTrue(order(c1, c3) == 0);
+    u = u.add(isTrue(order(c2, c1)  > 0));
+    u = u.add(isTrue(order(c1, c2)  < 0));
+    u = u.add(isTrue(order(c1, c3) == 0));
+    return u;
   } 
 
-  public function testOrderForNotComparableClass() {                 
-    this.assertThrowsException(function() Order.getOrderFor(new NotComparable()));
-  }
+  public function testOrderForNotComparableClass(u:UnitArrow):UnitArrow {                 
+    u = u.add(hasFail(function() Order.getOrderFor(new NotComparable())));
+    return u;
+  }*/
 
-  public function testReflectiveOrderForDynamicComparableClass() {
+  public function testReflectiveOrderForDynamicComparableClass(u:UnitArrow):UnitArrow {
     var c1 = new DynamicComparable(1);
     var c2 = new DynamicComparable(2);
     var c3 = new DynamicComparable(1);
     var order = Order.getOrderFor(c1);
-    assertTrue(order(c2, c1)  > 0);
-    assertTrue(order(c1, c2)  < 0);
-    assertTrue(order(c1, c3) == 0);
+    u = u.add(isTrue(order(c2, c1)  > 0));
+    u = u.add(isTrue(order(c1, c2)  < 0));
+    u = u.add(isTrue(order(c1, c3) == 0));
+    return u;
   }
 
-  public function testReflectiveOrderForDynamicComparableDescendingClass() {
+  public function testReflectiveOrderForDynamicComparableDescendingClass(u:UnitArrow):UnitArrow {
     var c1 = new DynamicComparableDescending(1);
     var c2 = new DynamicComparableDescending(2);
     var c3 = new DynamicComparableDescending(1);
     var order = Order.getOrderFor(c1);
-    assertTrue(order(c2, c1)  < 0);    
-    assertTrue(order(c1, c2)  > 0);
-    assertTrue(order(c1, c3) == 0);
+    u = u.add(isTrue(order(c2, c1)  < 0)); 
+    u = u.add(isTrue(order(c1, c2)  > 0));
+    u = u.add(isTrue(order(c1, c3) == 0));
+    return u;
   }
 
-  public function testOrderForFunction() {                 
-    this.assertThrowsException(function() Order.getOrderFor(function() trace("hello world")));
-  }  
-
-  /*public function testTupleOrder() {    
+  public function testOrderForFunction(u:UnitArrow):UnitArrow {                 
+    u = u.add(hasFail(function() Order.getOrderFor(function() trace("hello world"))));
+    return u;
+  }
+  /*public function testTupleOrder(u:UnitArrow):UnitArrow {    
     var tests : Array<Dynamic>= cast( 
       [
        tuple2(tuple2("b",0), tuple2("a",0)),
@@ -133,27 +146,28 @@ class OrderTest extends TestCase{
 				function(test:Tuple2 < Product, Product > ) {
 					var l : Product = test.fst();
 					var r = test.snd();
-						assertTrue(Order.getOrderFor(l)(l, r) > 0, "failed to compare " + test.fst() + " to " + test.snd());
-						assertTrue(l.compare(r) > 0, "failed to compare " + test.fst() + " to " + test.snd());  
+						u = u.add(isTrue(Order.getOrderFor(l)(l, r) > 0, "failed to compare " + test.fst() + " to " + test.snd()));
+						u = u.add(isTrue(l.compare(r) > 0, "failed to compare " + test.fst() + " to " + test.snd()); ) 
 				}
 		);
   }*/
-   public function testOrderForEnum() { 
+   public function testOrderForEnum(u:UnitArrow):UnitArrow { 
     var o1 = None;
     var o2 = Some("a");
     var o3 = Some("b"); 
     var o4 = Some("a");
     var order = Order.getOrderFor(o1);
-    assertTrue(order(o2, o1)  > 0);
-    assertTrue(order(o3, o1)  > 0);
-    assertTrue(order(o3, o2)  > 0);
-    assertTrue(order(o1, o2)  < 0);
-    assertTrue(order(o1, o3)  < 0);
-    assertTrue(order(o2, o3)  < 0); 
-    assertTrue(order(o1, o1) == 0);
-    assertTrue(order(o2, o4) == 0);
+    u = u.add(isTrue(order(o2, o1)  > 0));
+    u = u.add(isTrue(order(o3, o1)  > 0));
+    u = u.add(isTrue(order(o3, o2)  > 0));
+    u = u.add(isTrue(order(o1, o2)  < 0));
+    u = u.add(isTrue(order(o1, o3)  < 0));
+    u = u.add(isTrue(order(o2, o3)  < 0)); 
+    u = u.add(isTrue(order(o1, o1) == 0));
+    u = u.add(isTrue(order(o2, o4) == 0));
+    return u;
   }    
-/*  public function testTupleEqual() {    
+/*  public function testTupleEqual(u:UnitArrow):UnitArrow {    
     var tests : Array<Dynamic> = cast ([
       tuple2(tuple2("b",0), tuple2("b",0)),
       tuple2(tuple2("a",1), tuple2("a",1)), 
@@ -163,45 +177,47 @@ class OrderTest extends TestCase{
     ] );
     
     for(test in tests) {
-      assertTrue(Equal.getEqualFor(test.fst())(test.fst(), test.snd()));
-      assertTrue(test.fst().equals(test.snd())); 
+      u = u.add(isTrue(Equal.getEqualFor(test.fst())(test.fst(), test.snd())));
+      u = u.add(isTrue(test.fst().equals(test.snd()));) 
 
     } 
   }*/
-  public function testGreaterThan() {
-    assertTrue (Ints.compare.greaterThan()(2, 1));
-    assertFalse(Ints.compare.greaterThan()(1, 1));
+  public function testGreaterThan(u:UnitArrow):UnitArrow {
+    u = u.add(isTrue (Ints.compare.greaterThan()(2, 1)));
+    u = u.add(isFalse(Ints.compare.greaterThan()(1, 1)));
 
-    assertTrue (Ints.compare.greaterThanOrEqual()(2, 1));
-    assertTrue (Ints.compare.greaterThanOrEqual()(1, 1));
-    assertFalse(Ints.compare.greaterThanOrEqual()(1, 2));
+    u = u.add(isTrue (Ints.compare.greaterThanOrEqual()(2, 1)));
+    u = u.add(isTrue (Ints.compare.greaterThanOrEqual()(1, 1)));
+    u = u.add(isFalse(Ints.compare.greaterThanOrEqual()(1, 2)));
 
-    assertTrue (Ints.compare.lessThan()(1, 2));
-    assertFalse(Ints.compare.lessThan()(1, 1));
+    u = u.add(isTrue (Ints.compare.lessThan()(1, 2)));
+    u = u.add(isFalse(Ints.compare.lessThan()(1, 1)));
 
-    assertTrue (Ints.compare.lessThanOrEqual()(1, 2));
-    assertTrue (Ints.compare.lessThanOrEqual()(1, 1));
-    assertFalse(Ints.compare.lessThanOrEqual()(2, 1));
+    u = u.add(isTrue (Ints.compare.lessThanOrEqual()(1, 2)));
+    u = u.add(isTrue (Ints.compare.lessThanOrEqual()(1, 1)));
+    u = u.add(isFalse(Ints.compare.lessThanOrEqual()(2, 1)));
 
-    assertTrue (Ints.compare.notEqual()(2, 1));
-    assertTrue (Ints.compare.notEqual()(1, 2));
-    assertFalse(Ints.compare.notEqual()(1, 1));
+    u = u.add(isTrue (Ints.compare.notEqual()(2, 1)));
+    u = u.add(isTrue (Ints.compare.notEqual()(1, 2)));
+    u = u.add(isFalse(Ints.compare.notEqual()(1, 1)));
 
-    assertTrue (Ints.compare.equal()(1, 1));
-    assertFalse(Ints.compare.equal()(1, 2));
+    u = u.add(isTrue (Ints.compare.equal()(1, 1)));
+    u = u.add(isFalse(Ints.compare.equal()(1, 2)));
+    return u;
   }
   
-  public function testOrderForAnonymousTyped() {
+  public function testOrderForAnonymousTyped(u:UnitArrow):UnitArrow {
     var o1 = { name : "haxe"};                      
     var o2 = { name : "stx"};
     var o3 = { name : "haxe"};
     var order = Order.getOrderFor(o1);
-    assertTrue(order(o2, o1)      > 0);
-    assertTrue(order(o1, o2)      < 0);
-    assertTrue(order(o1, o3)     == 0); 
-    assertTrue(order(o1, null)    > 0);
-    assertTrue(order(null, o1)    < 0);
-    assertTrue(order(null, null) == 0);
+    u = u.add(isTrue(order(o2, o1)      > 0));
+    u = u.add(isTrue(order(o1, o2)      < 0));
+    u = u.add(isTrue(order(o1, o3)     == 0)); 
+    u = u.add(isTrue(order(o1, null)    > 0));
+    u = u.add(isTrue(order(null, o1)    < 0));
+    u = u.add(isTrue(order(null, null) == 0));
+    return u;
   }       
 }
 private class NotComparable{

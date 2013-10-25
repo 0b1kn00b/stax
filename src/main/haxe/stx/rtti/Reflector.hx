@@ -43,7 +43,7 @@ abstract Reflector<C,T>(Tuple2<C,Array<Tuple2<ClassField,T>>>) from Tuple2<C,Arr
     this.snd().foreach(
       function(l:ClassField,r:T){
         m.set(l.name,r);
-      }.spread()
+      }.tupled()
     );
     return m;
   }

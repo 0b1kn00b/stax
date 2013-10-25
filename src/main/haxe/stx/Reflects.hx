@@ -10,6 +10,7 @@ using stx.Compare;
 using stx.Tuples;
 import stx.Options;
 
+using stx.Outcome;
 using stx.Anys;
 using stx.Types;
 using stx.Options;
@@ -24,43 +25,41 @@ class Reflects{
   /**
     No error handling, Gets the value of field key as a reference before calling it on `v`
   */
-	static public function callFunction<A>(v:A,key:String,?args:Array<Dynamic>):Dynamic{
+	static public function callFunction<A,B>(v:A,key:String,?args:Array<Dynamic>):B{
 		args = args == null ? [] : args;
 		return Reflect.callMethod(v,Reflect.field(v,key),args);
 	}
   /**
     No error handling, `func` is a function reference.
   */
-	static public function callMethod<A>(v:A,func:Dynamic,?args:Array<Dynamic>):Dynamic{
+	static public function callMethod<A,B>(v:A,func:Dynamic,?args:Array<Dynamic>):B{
 		args = args == null ? [] : args;
 		return Reflect.callMethod(v,func,args);
 	}
   /**
     Partial error handling. If the method raises an error, it will propagate
   */
-	static public function callSafe<A>(v:A,key:String,?args:Array<Dynamic>):Option<Dynamic>{
+	static public function callSafe<A,B>(v:A,key:String,?args:Array<Dynamic>):Option<B>{
     return option(getValue(v,key)).map(callMethod.bind(v,_,args));
   }
   /**
     Full error handling, any errors raised will be passed back on the left hand side.
   */
   @:bug('#0b1kn00b: issue with __instanceof in nodejs')
-  static public function callSecure<A>(v:A,key:String,?args:Array<Dynamic>):Outcome<Dynamic>{
-    return option(getValue(v,key)).orEitherC(fail(OutOfBoundsFail())).flatMapR(
+  static public function callSecure<A,B>(v:A,key:String,?args:Array<Dynamic>):Outcome<B>{
+    return option(getValue(v,key)).orFailureC(fail(OutOfBoundsFail())).flatMap(
       function(x){
-        /*return try{
-          Right(callMethod(v,x,args));
-        }catch(e:Fail){
-          Left(e);
-        }catch(e:Dynamic){
-          Left(fail(e));
-        }*/
         return try{
-          Right(callMethod(v,x,args));
+          Success(callMethod(v,x,args));
         }catch(d:Dynamic){
-          Left(switch(Type.typeof(d)){
+          trace(d);
+          #if debug
+            trace('CALLSTACK  :\n' + haxe.CallStack.callStack().map(stx.CallStacks.toString).map(stx.Strings.append.bind(_,'\n')));
+            trace('ERRORSTACK :\n' + haxe.CallStack.exceptionStack().map(stx.CallStacks.toString).map(stx.Strings.append.bind(_,'\n')));
+          #end
+          Failure(switch(Type.typeof(d)){
             case TClass(c) if (c.descended(Fail))  : d;
-            default                                 : fail(NativeFail(d));
+            default                                : fail(NativeFail(d));
           });
         }
       }

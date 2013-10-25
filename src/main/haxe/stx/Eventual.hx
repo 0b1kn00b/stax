@@ -2,6 +2,7 @@ package stx;
 
 import stx.Tuples;
 
+using stx.Outcome;
 using stx.ifs.Identity;
 using stx.ifs.Pure;
 using stx.Tuples;
@@ -365,12 +366,12 @@ class Eventuals{
 
     return fut;
   }
-  static public function flatMapR<A,B>(f:Eventual<Outcome<A>>,fn:A->Eventual<Outcome<B>>):Eventual<Outcome<B>>{
+  static public function flatMapR<A,B,C>(f:Eventual<Either<A,B>>,fn:B->Eventual<Either<A,C>>):Eventual<Either<A,C>>{
     return flatMap(f,
       function(x){
         return switch (x){
-          case Left(l)      : Eventual.pure(Left(l));
-          case Right(r)     : fn(r);
+          case Left(l)     : Eventual.pure(Left(l));
+          case Right(r)    : fn(r);
         }
       }
     );
@@ -404,18 +405,16 @@ class Eventuals{
     return myprm;
   }
   static public function bindFold<A,B>(iter:Iterable<A>,start:B,fm:B->A->Eventual<B>):Eventual<B>{
-    return 
-      iter.foldl(
-        Eventual.pure(start) ,
-        function(memo : Eventual<B>, next : A){
-          return 
-            memo.flatMap(
-              function(b: B){
-                return fm(b,next);
-              }
-            );
-        }
-      );
+    return iter.foldl(
+      Eventual.pure(start) ,
+      function(memo : Eventual<B>, next : A){
+        return memo.flatMap(
+            function(b: B){
+              return fm(b,next);
+            }
+          );
+      }
+    );
   }
 
   #if (js || flash)

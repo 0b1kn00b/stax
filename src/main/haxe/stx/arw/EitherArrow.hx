@@ -3,7 +3,7 @@ package stx.arw;
 import stx.Tuples;
 import stx.Continuation.*;
 
-using stx.Arrows;
+using stx.Arrow;
 using stx.Tuples;
 
 abstract EitherArrow<I,O>(Arrow<I,O>) from Arrow<I,O> to Arrow<I,O>{
@@ -31,7 +31,7 @@ abstract EitherArrow<I,O>(Arrow<I,O>) from Arrow<I,O> to Arrow<I,O>{
 								//trace('either done');
 								cnt(o);
 							}
-						}.spread();
+						}.tupled();
 
 				a_0 = a.apply(i);
 				b_0 = b.apply(i);

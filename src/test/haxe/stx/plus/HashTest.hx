@@ -68,28 +68,4 @@ class HashTest extends TestCase{
       it(msg('Some("a")')                      , assertMapCodeForIsNotZero,Some("a")),
     ]);
   }
-  
-  /*public function testReflectiveHasher(u:UnitArrow):UnitArrow{
-    var zerocodes : Array<Dynamic> = [null, 0];
-    for(z in zerocodes)
-      u = u.add(it('should be zero',eq(0), Hasher.getHashFor(z)(z)));
-
-    var nonzerocodes : Array<Dynamic> = [true, false, "", "a", 1, 0.1, [],[1], {}, {n:"a"}, new HasNoMapAndShow(1), new HasHash(1), Date.fromString("2000-01-01"), None, Some("a")];
-    for(n in nonzerocodes)
-      u = u.add(it('should not be zero',eq(0).not(), Hasher.getHashFor(n)(n)));
-
-    return u;
-  }*/
-}
-@DataClass private class HasNoMapAndShow
-{ 
-  @DataField({show:false})   
-  var v : Int;
-  public function new(v : Int) this.v = v;
-}
-private class HasHash
-{
-  var v : Int;
-  public function new(v : Int) this.v = v;
-  public function hashCode() return v;
 }

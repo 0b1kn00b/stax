@@ -28,8 +28,9 @@ class Behaviour<T> {
       this.stream = Streams.create(function(pulse : Pulse<T>) : Propagation<T> {
         var prop = this.pulse(pulse);
           switch(prop) {
-            case Propagate(bhv): this.value = bhv.value;
-            case _:
+            case Propagate(bhv): 
+            this.value = bhv.value();
+            case _: 
           }
           return prop;
       }, collection);
@@ -41,7 +42,7 @@ class BehaviourTypes {
 
     static public function constant<T>(value: T): Behaviour<T> return Streams.pure(None).startsWith(value);
 
-    static public function dispatch<T>(behaviour : Behaviour<T>, value : T) : Void behaviour.stream().dispatch(value);
+    static public function dispatch<T>(behaviour : Behaviour<T>, value : T) : Void behaviour.stream.dispatch(value);
 
     static public function lift<T, R>(behaviour : Behaviour<T>, func : Function1<T, R>) : Behaviour<R> {
         return behaviour.stream.map(func).startsWith(func(behaviour.value));

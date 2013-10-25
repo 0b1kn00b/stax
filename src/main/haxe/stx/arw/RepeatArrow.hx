@@ -2,7 +2,7 @@ package stx.arw;
 
 import stx.Prelude;
 
-using stx.Arrows;
+using stx.Arrow;
 using stx.arw.RepeatArrow;
 using stx.Compose;
 

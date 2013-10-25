@@ -27,7 +27,7 @@ abstract Routine<T>(Tuple2<T,String>) from Tuple2<T,String>{
   public function applySafe(?args:Array<Dynamic>):Option<Dynamic>{
     return Reflects.callSafe(this.fst(),Reflect.field(this.fst(),this.snd()),args);
   }
-  public function applySecure(?args:Array<Dynamic>):Outcome<Dynamic>{
+  public function applySecure<T>(?args:Array<Dynamic>):Outcome<T>{
     return Reflects.callSecure(this.fst(),this.snd(),args);
   }
 }

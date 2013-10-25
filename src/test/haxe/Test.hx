@@ -1,24 +1,41 @@
-import stx.Muster;
+using stx.UnitTest;
+
 import stx.Log.*;
 
 import stx.ds.Foldables;
 
 class Test{
   function new(){
-    var rig                     = new TestRig();
+    var rig                     = UnitTest.rig();
     var tests : Array<TestCase> = [
+      new stx.ds.LispListTest(),
+      //new stx.ObjectsTest(),
+
+      //new stx.plus.MetaTest(),
+      /*
+      new stx.OutcomeTest(),
+      new stx.ArrowTest(),
+      new stx.ds.MapTest(),
+      new stx.ds.SetTest(),
+      new stx.PartialFunctionTest(),
+      new stx.plus.OrderTest(),
+      new stx.ds.LispListTest(),
+      new stx.MapsTest(),
+      new hx.ds.PriorityQueueTest(),
+      
+      
+      new stx.TimeTest(),
       new stx.ioc.IocTest(),
       new stx.ReflectsTest(),
       new stx.TypesTest(),
-      //new stx.ds.ListNewTest(),
-      new stx.mcr.SelfTest(),
-      /*new SubclassTest(),
+      new stx.ds.ListNewTest(),
+      new stx.mcr.SelfTest(),new SubclassTest(),
       new stx.math.geom.Point2dTest(),
       new stx.ds.ZipperTest(),
       new stx.plus.HashTest(),
       new stx.ArraysTest(),
       new stx.plus.CloneTest(),
-      new stx.ObjectsTest(),
+      
       */
 /*      
       new stx.PredicatesTest(),*/
@@ -28,7 +45,6 @@ class Test{
       /*
 
       new stx.mcr.MacrosTest(),
-      new stx.ArrowsTest(),
       new stx.LogTest(),
       new stx.ContinuationTest(),
       new stx.ReturnTest(),
@@ -38,7 +54,6 @@ class Test{
       
       new stx.ifs.MonadTest(),
       new stx.rtti.RTypeTest(),
-      new stx.PartialFunctionTest()
       new stx.ifs.IdentityTest(),
       new stx.ifs.PureTest(),
       new stx.ifs.SemiGroupTest()*/

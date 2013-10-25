@@ -5,7 +5,7 @@ import stx.Continuation.*;
 import stx.Tuples;
 
 using stx.Tuples;
-using stx.Arrows;
+using stx.Arrow;
 using stx.Compose;
 using stx.Continuation;
 using stx.arw.StateArrow;
@@ -24,7 +24,7 @@ class StateArrows<S,A>{
       .then(
         function(l:Tuple2<A,S>,r:S){
           return tuple2(l.fst(),r);
-        }.spread()
+        }.tupled()
       );
   }
   static public function use<S,A>(arw0:ArrowState<S,A>,arw1:Arrow<S,S>):ArrowState<S,A>{
@@ -32,13 +32,13 @@ class StateArrows<S,A>{
       arw1.second().then(
         function(a:A,s:S){
           return s;
-        }.spread()
+        }.tupled()
       )
     );
   }
   static public function drawWith<S,A,B,C>(arw0:ArrowState<S,A>,arw1:Arrow<S,B>,fn:A->B->C):ArrowState<S,C>{
     return arw0.access(
-      arw1.second().then(fn.spread())
+      arw1.second().then(fn.tupled())
     );
   }
   static public function draw<S,A,B>(arw0:ArrowState<S,A>,arw1:Arrow<S,B>):ArrowState<S,Tuple2<A,B>>{
@@ -57,7 +57,7 @@ class StateArrows<S,A>{
       .then(
         function(l:Tuple2<A,S>,r:B){
           return tuple2(r,l.snd());
-        }.spread()
+        }.tupled()
       );
   }
   static public function nextWith<S,A,B,C>(arw0:ArrowState<S,A>,arw1:ArrowState<S,B>,fn:A->B->C):ArrowState<S,C>{
@@ -66,9 +66,9 @@ class StateArrows<S,A>{
         return arw1.then(
           function(v0:B,st:S){
             return tuple2(fn(v,v0),st);
-          }.spread()
+          }.tupled()
         ).apply(st);
-      }.spread()
+      }.tupled()
     );
   }
   static public function next<S,A,B>(arw0:ArrowState<S,A>,arw1:ArrowState<S,B>):ArrowState<S,Tuple2<A,B>>{
@@ -78,7 +78,7 @@ class StateArrows<S,A>{
     return Arrows.split(arw0,arw1).then(
       function(l:Tuple2<A,S>,r:Tuple2<B,S>):Tuple2<Tuple2<A,B>,S>{
         return tuple2(tuple2(l.fst(),r.fst()),r.snd());
-      }.spread()
+      }.tupled()
     );
   }
   static public function edit<S,A,B>(arw0:ArrowState<S,A>,arw1:Arrow<A,B>):ArrowState<S,B>{

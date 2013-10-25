@@ -2,6 +2,7 @@ package stx;
 
 import stx.Prelude;
 
+import stx.Tuples;
 import stx.Muster;
 import stx.Muster.*;
 import stx.Compare.*;
@@ -77,4 +78,37 @@ class ObjectsTest extends TestCase {
     */
     return u.add(it('wins',always()));
   }
+  public function testOnly(u:UnitArrow):UnitArrow{
+    var a = {
+      a : 1,
+      b : true,
+      c : 'b00p'
+    };
+    return u.append([
+      it('should be equal',
+        ok(),
+        Objects.only(a,['a','b','c'])
+      ),
+      it('should not be equal',
+        no(),
+        Objects.only(a,['a','b'])
+      ),
+      it('should not be equal',
+        no(),
+        Objects.only(a,['a','b','c','d'])
+      )
+    ]);
+  }
+  public function testObjectTyping(u:UnitArrow):UnitArrow{
+    var a = {
+      b : 1
+    }
+    return u.add(
+      it(
+        'should be equal',
+        eq(cast [tuple2('b',1)]),
+        a.fields()
+      )
+    );
+  }  
 }

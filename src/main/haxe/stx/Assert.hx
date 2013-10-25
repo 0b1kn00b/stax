@@ -19,6 +19,9 @@ using stx.Options;
 using stx.Tuples;
 using stx.Assert;
 
+/**
+  Use in conjunction with stx.Compare for generating arbitrary assertions.
+*/
 class Assert{
 	@:noUsing static public function assert<T>(prd:Predicate<T>,?v:T,?er:Fail,?pos:PosInfos){
 		er = er == null ? fail(AssertionFail(Std.string(v),'assert failed',pos)) : er;

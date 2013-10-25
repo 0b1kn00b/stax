@@ -4,6 +4,8 @@ import stx.Prelude;
 
 import haxe.PosInfos;
 
+import stx.plus.Meta;
+import stx.Method;
 import stx.Types;
 import stx.Fail;
 import stx.Options;
@@ -31,7 +33,19 @@ class Stax{
   @:noUsing static public inline function assert<T>(prd:Predicate<T>,?v:T,?er:Fail,?pos:PosInfos){
     return stx.Assert.assert(prd,v,er,pos);
   }
-  @:noUsing static public inline function type<T>(v:Dynamic):ValueType{
-    return Types.type(v);
+  @:noUsing static public inline function vtype<T>(v:Dynamic):ValueType{
+    return Types.vtype(v);
   }
+  @:noUsing static public inline function method1<A,B>(fn:A->B):Method<A,B>{
+    return new Method(fn);
+  }
+  @:noUsing static public inline function here(?p:PosInfos):PosInfos{
+    return p;
+  }
+  @:noUsing static public inline function printer(?p:PosInfos){
+    return stx.Log.printer(p);
+  }
+  /*@:noUsing static public inline function metadata<T>(v:T):MetaObjectContainer{
+    return stx.plus.Meta.metadata(v);
+  }*/
 }

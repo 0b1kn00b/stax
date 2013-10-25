@@ -1,0 +1,6 @@
+-js test/bootstrap.js
+
+-cp src/main/haxe
+-cp src/test/haxe
+
+-main Bootstrap

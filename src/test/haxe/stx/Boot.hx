@@ -1,7 +1,7 @@
 package stx;
 
 using stx.Functions;
-using stx.Arrows;
+using stx.Arrow;
 
 class Boot{
   @:noUsing static public function boot(main:CodeBlock,?algo:Arrow<Unit,Unit>):Void{

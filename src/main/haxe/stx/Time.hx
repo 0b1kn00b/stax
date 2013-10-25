@@ -4,7 +4,7 @@ using Math;
 
 class Time {
 
-	public var raw (default,null): Float;
+	private var raw (default,null): Float;
 	
 	public function new() {
 		this.ready 	= false;
@@ -131,5 +131,8 @@ class Time {
 	}
 	public function toString() {
 		return '$days:$hours:$minutes:$seconds:$milliseconds';
+	}
+	public function toDate(){
+		return Date.fromTime(this.raw);
 	}
 }

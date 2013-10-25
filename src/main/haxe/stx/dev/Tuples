@@ -154,7 +154,7 @@ class Tuple2<A, B> extends AbstractProduct {
 	static public function entuple<A, B, C>(t:stx.Tuple2<A,B>,c:C): stx.Tuple3<A, B, C> {
     return new Tuple3(t.fst(), t.snd(), c);
   }
-  static inline public function spread<A,B,C>(f : A -> B -> C){
+  static inline public function tupled<A,B,C>(f : A -> B -> C){
     return function(t:Tuple2<A,B>){
         return into(t,f);
     }
@@ -196,7 +196,7 @@ class Tuple3<A, B, C> extends AbstractProduct {
 	static public function into<A,B,C,D>(t:Tuple3<A,B,C>,f : A -> B -> C -> D) : D {
 		return f(t._1, t._2, t._3);
 	}
-  static public inline function spread<A,B,C,D>(f : A -> B -> C -> D){
+  static public inline function tupled<A,B,C,D>(f : A -> B -> C -> D){
     return 
       function(t:Tuple3<A,B,C>){
         return into(t,f);
@@ -253,7 +253,7 @@ class Tuple4< A, B, C, D> extends AbstractProduct {
 	static public function into<A,B,C,D,E>(t:Tuple4<A,B,C,D>,f : A -> B -> C -> D -> E) : E
 		return f(t.fst(), t.snd(), t.thd(), t.frt());
 
-  inline static public function spread<A,B,C,D,E>(f : A -> B -> C -> D -> E){
+  inline static public function tupled<A,B,C,D,E>(f : A -> B -> C -> D -> E){
     return 
       function(t:Tuple4<A,B,C,D>){
         return into(t,f);
@@ -300,7 +300,7 @@ class Tuple5< A, B, C, D, E> extends AbstractProduct {
   static public function fromArray(a:Array<Dynamic>){
     return new Tuple5(a[0],a[1],a[2],a[3],a[4]);
   }
-  inline static public function spread<A,B,C,D,E,F>(f : A -> B -> C -> D -> E -> F){
+  inline static public function tupled<A,B,C,D,E,F>(f : A -> B -> C -> D -> E -> F){
     return 
       function(t:Tuple5<A,B,C,D,E>){
         return into(t,f);

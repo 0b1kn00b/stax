@@ -1,0 +1,68 @@
+package stx.ds;
+
+import Stax.*;
+
+typedef MapType<K,V>{
+  function set(k:K,v:V):MapType<K,V>
+  function get(k:K):V;
+  function put(tp:Tuple2<K,V>):MapType<K,V>;
+  function search(fn:V->Bool):Option<V>;
+  function iterator():Iterator<V>;
+  function keys():Iterator<K>;
+  function vals():Iterator<V>;
+  function fields():Iterator<Tuple2<K,V>>
+  function sort():MapType<K,V>;
+  function sortWith(fn:OrderFunction<Tuple2<K,V>>):MapType<K,V>;
+  function equals(v:Dynamic):Bool;
+}
+class Maps{
+  
+}
+abstract Map(BaseType) from BaseType to BaseType{
+  public function new(v){
+    this = v;
+  }
+}
+class HashedMap<T>{
+  var __key_order__ : OrderFunction<String>;
+  var __val_order__ : OrderFunction<T>;
+  
+  var __key_equal__ : EqualFunction<String>;
+  var __val_equal__ : EqualFunction<T>;
+
+  var data : Table<T>;
+  public function new(?v:Table<T>){
+    this.data = nl().apply(v) ? {} : v;s
+  }
+  public function set(k:String,v:T){
+    var nw = data.copy().setField(k,v);
+    return new HashedMap(nw);
+  }
+  public function get(k:String):T{
+    return data.getField(k);
+  }
+  public function put(tp:Tuple2<String,T>):HashedMap<T>{
+    var nw = data.setFieldTuple(tp);
+    return new HashedMap(data);
+  }
+  public function search(fn:V->Bool):Option<V>{
+    return this.toArray().search(
+      Tuple2s.snd.then(fn)
+    );
+  }
+  public function iterator():Iterator<V>{
+    return this.fields().iterator();
+  }
+  public function keys():Iterator<K>{
+    return this.keys();
+  }
+  public function vals():Iterator<V>{
+    return this.vals();
+  }
+  public function fields():Iterator<Tuple2<String,V>>{
+    return this.fields();
+  }
+  public function sort():HashedMap<T>{
+
+  }
+}

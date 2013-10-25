@@ -4,7 +4,7 @@ import stx.Muster;
 import stx.Muster.*;
 import stx.Log.*;
 
-using stx.Arrows;
+using stx.Arrow;
 using stx.Future;
 using stx.Continuation;
 using stx.Functions;

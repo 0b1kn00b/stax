@@ -42,8 +42,8 @@ class Returns{
   static public function zipWith<A,B,C>(rt0:Return<A>,rt1:Return<B>,fn:A->B->C):Return<C>{
     return switch ([rt0,rt1]) {
       case [Now(a),Now(b)]      : Now(fn(a,b));
-      case [Now(a),Later(b)]    : Later(b.map(tuple2.bind(a)).map(fn.spread()));
-      case [Later(a),Now(b)]    : Later(a.map(tuple2.bind(_,b)).map(fn.spread()));
+      case [Now(a),Later(b)]    : Later(b.map(tuple2.bind(a)).map(fn.tupled()));
+      case [Later(a),Now(b)]    : Later(a.map(tuple2.bind(_,b)).map(fn.tupled()));
       case [Later(a),Later(b)]  : Later(a.zipWith(b,fn));
     }
   }

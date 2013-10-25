@@ -1,5 +1,6 @@
 package stx;
 
+import stx.Method;
 import stx.Prelude;
 import stx.plus.Equal;
 import stx.plus.Order;
@@ -158,6 +159,12 @@ abstract Predicate<T>(PredicateType<T>) from PredicateType<T> to PredicateType<T
   */
   public inline function orAny(ps: Iterable<Predicate<T>>): Predicate<T> {
     return PredicateLogic.orAny(this,ps);
+  }
+  /*
+    Produces a Method from a Predicate.
+  */
+  public function toMethod():Method<T,Bool>{
+    return new Method(this);
   }
 }
 /**

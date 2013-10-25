@@ -74,7 +74,7 @@ enum FreeM<A, B>{
   Cont(v:A);
   Done(v:B);
 }
-typedef Outcome<A>              = Either<Fail,A>
+//typedef Outcome<A>              = Either<Fail,A>
 typedef OrderFunction<T>  			= Function2<T, T, Int>;
 typedef EqualFunction<T>  			= Function2<T, T, Bool>;
 typedef ShowFunction<T>   			= Function1<T, String>;
@@ -84,13 +84,7 @@ typedef Lense<A, B> = {
   get : A -> B,
   set : B -> A -> A
 }
-@:todo('0b1kn00b','Would perhaps prefer the collection tools to be interfaces.')
-typedef CollectionTools<T> = {
-	order : OrderFunction<T>,
-	equal	: EqualFunction<T>,
-	show	: ShowFunction<T>,
-	hash	: HashFunction<T>,
-}
+
 class FieldOrder {
   public static inline var Ascending	 	= 1;
   public static inline var Descending 	= -1;
@@ -103,9 +97,6 @@ class Prelude{
   */
   public static function here(?pos:haxe.PosInfos) {
     return pos;
-  }
-  inline static public  function tool<A>(?order:OrderFunction<A>,?equal:EqualFunction<A>,?hash:HashFunction<A>,?show:ShowFunction<A>):CollectionTools<A>{
-    return { order : order , equal : equal , show : show , hash : hash };
   }
   
   static public inline function unfold<T, R>(initial: T, unfolder: T -> Option<Tuple2<T, R>>): Iterable<R> {
@@ -300,28 +291,5 @@ class SArrays {
     for (e in a) f(e);
     
     return a;
-  }
-}
-class IntIterators {
-  /**
-    Creates an Iterable 0...n
-  */
-  static public function to(start: Int, end: Int): Iterable<Int> {
-    return {
-      iterator: function() {
-        var cur = start;
-    
-        return {
-          hasNext: function(): Bool { return cur <= end; },      
-          next:    function(): Int  { var next = cur; ++cur; return next; }
-        }
-      }
-    }
-  }
-  /**
-    Creates an Iterable 0...(n-1)
-  */
-  static public function until(start: Int, end: Int): Iterable<Int> {
-    return to(start, end - 1);
   }
 }

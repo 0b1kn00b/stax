@@ -1,5 +1,6 @@
 package stx;
 
+import stx.Outcome;
 import stx.Prelude;
 import stx.Fail;
  
@@ -137,11 +138,11 @@ class Functions1 {
     return function(a){
         var o = null;
           try{
-            o = Right(fn(a));
+            o = Success(fn(a));
           }catch(e:Fail){
-            o = Left(e);
+            o = Failure(e);
           }catch(e:Dynamic){
-            o = Left(new Fail(NativeFail(Std.string(e))));
+            o = Failure(new Fail(NativeFail(Std.string(e))));
           }
         return o;
       }

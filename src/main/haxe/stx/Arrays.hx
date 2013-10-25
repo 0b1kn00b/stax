@@ -11,6 +11,17 @@ using stx.Functions;
 using stx.Arrays;
 
 class Arrays {
+  /*static public function fold<A,Z>(arr:Array<A>,zero:Thunk<Z>,unit:A->Z,plus:Z->Z->Z):Z{
+    return arr.foldl(
+      zero,
+      function(memo,next){
+        return plus(memo,unit(next));
+      }
+    );
+  }*/
+  /**
+    Return true if lenght is greater than 1.
+  */
   static public function isDefined<T>(a:Array<T>):Bool{
     return a.length > 0;
   }
@@ -350,6 +361,12 @@ class Arrays {
   static public function nub<T>(arr:Array<T>): Array<T> {
     return nubBy(arr, Equal.getEqualFor(arr[0]));
   }
+  /*static public function union<T>(arr0:Array<T>,arr1:Array<T>):Array<T>{
+    return arr0.append(arr1).nub();
+  }
+  static public function unionBy<T>(arr0:Array<T>,arr1:Array<T>,f:T->T->T):Array<T>{
+    return arr0.append(arr1).nubBy(f);
+  }*/
   /**
     Intersects two Arrays, determining equality by `f`
    */  
@@ -583,7 +600,7 @@ class Arrays {
 	}
   static public function toMap<V>(arr:Array<Tuple2<String,V>>):Map<String,V>{
     var mp = new haxe.ds.StringMap();
-    arr.foreach(function(l,r){mp.set(l,r);}.spread());
+    arr.foreach(function(l,r){mp.set(l,r);}.tupled());
     return mp;
   }
   /**
@@ -597,10 +614,22 @@ class Arrays {
     }
     return arr.append(arr0);
   }
+  /**
+    Fills `null`values in `arr` with `def`.
+  */
   static public function fill<T>(arr:Array<T>,def:T):Array<T>{
     return arr.map(
       function(x){
         return x == null ? def : x;
+      }
+    );
+  }
+  static public function and<A>(arr0:Array<A>,arr1:Array<A>):Bool{
+    var eq = null;
+    var geq = function(x:A,y:A){ return eq == null ? Equal.getEqualFor(x == null ? y : x ) : eq; }
+    return arr0.zip(arr1).foldl(true,
+      function(memo:Bool,next:Tuple2<A,A>){
+        return memo ? geq(next.fst(),next.snd())(next.fst(),next.snd()) : memo;
       }
     );
   }

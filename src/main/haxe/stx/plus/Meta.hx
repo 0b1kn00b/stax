@@ -1,12 +1,20 @@
 package stx.plus;
 
+import haxe.ds.StringMap;
+
+import Stax.*;
 import stx.Tuples;
 
 using stx.Tuples;
 
+using stx.Maps;
+using stx.Options;
 using stx.Prelude;
 using stx.Objects;
 using stx.plus.Order;
+using stx.Reflects;
+
+import haxe.rtti.Meta in HaxeMeta;
 
 class Meta {
 	public static function _hasMetaDataClass(c : Class<Dynamic>) {
@@ -38,6 +46,27 @@ class Meta {
     }).map(function(v) {
       return v.fst();
     });
+  }	
+/*  @:noUsing static public function metadata<T>(v:T):MetaObjectContainer{
+    return Maps.merge(
+      Reflects.fields(HaxeMeta.getStatics(v)).toMap(),
+      Reflects.fields(HaxeMeta.getFields(v)).toMap()
+    ).mapVals(
+      function(v:Table<Array<Dynamic>>):StringMap<Array<Dynamic>>{
+        var o : StringMap<Array<Dynamic>> = cast Tables.toMap(v);
+        return o;
+      }
+    );
+  }*/
+}
+typedef MetaObjectContainer = Map<String,MetaObject>;
+typedef MetaObject          = StringMap<Array<Dynamic>>;
+class ClassMeta{
+  static public function metadata(k:Kind):MetaObject{
+    return null;
+    /*return switch (k) {
+      case KClass(v,_), KEnum(v)     : HaxeMeta.getType(v).fields().toMap();
+      default                        : new StringMap();
+    }*/
   }
-	
 }

@@ -94,3 +94,17 @@ class Iterators {
     return result.iterator();
   }
 }
+class DirIntIterator {
+    var num:Int;
+    var step:Int;
+    var limit:Int;
+    public inline function new(num:Int, limit:Int, step:Int=1):Void {
+        this.num = num;
+        this.step = step;
+        this.limit = limit;
+    }
+    public inline function next():Int
+        return num += step;
+    public inline function hasNext():Bool
+        return step > 0 ? num + step < limit : num + step > limit;
+} 

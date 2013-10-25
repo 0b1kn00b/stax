@@ -1,7 +1,6 @@
 package stx;
 
-import stx.Muster;
-import stx.Muster.*;
+using stx.UnitTest;
 import stx.Log.*;
 
 using stx.PartialFunction;

@@ -21,16 +21,14 @@ class State<S,R>{
         }
       );
   }
-  @:noUsing
-  static public function unit<S>():State<S,Unit>{
+  @:noUsing static public function unit<S>():State<S,Unit>{
     return State.pure(
         function(s:S){
           return tuple2(Unit,s);
         }
       );
   }
-  @:noUsing
-  static public function pure<A,B>(fn:A->Tuple2<B,A>):State<A,B>{
+  @:noUsing static public function pure<A,B>(fn:A->Tuple2<B,A>):State<A,B>{
     return State.create({
         apply : 
           function(a:A){
@@ -94,8 +92,7 @@ class State<S,R>{
       );
   }
   public function getSt():State<S,S>{
-    return 
-      State.pure(
+    return State.pure(
         function(s:S):Tuple2<S,S>{
           var o = apply(s);
           return tuple2(o.snd(),o.snd());
@@ -103,8 +100,7 @@ class State<S,R>{
       );
   }
   public function putSt<S,R>(n:S):State<S,R>{
-    return 
-      State.pure(
+    return State.pure(
         function (s:S){
           return tuple2(null,n);
         }

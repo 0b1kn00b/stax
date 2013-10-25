@@ -19,57 +19,60 @@ package stx.ds;
 import stx.Prelude;
 
 import stx.ds.ifs.Foldable;
-import stx.test.TestCase;
+
+using stx.UnitTest;
+import Stax.*;
+import stx.Compare.*;
+
 import stx.ds.Set;
 
 using stx.ds.Foldables;
 
 class SetTest extends TestCase {
-  public function testSizeGrowsWhenAddingUniqueElements(): Void {
+  public function testSizeGrowsWhenAddingUniqueElements(u:UnitArrow):UnitArrow {
     var s = set();
     
     for (i in 0...100) {
-      assertEquals(i, s.size());
+      u = u.add(isEqual(i, s.size()));
       
       s = s.add(i);
-    }
-    
-    assertEquals(100, s.size());
+    }    
+    u = u.add(isEqual(100, s.size()));
+    return u;
   }
-  
-  public function testSizeDoesNotGrowWhenAddingDuplicateElements(): Void {
+  public function testSizeDoesNotGrowWhenAddingDuplicateElements(u:UnitArrow):UnitArrow {
     var s = set().add(0);
     
     for (i in 0...100) s = s.add(0);
     
-    assertEquals(1, s.size());
+    u = u.add(isEqual(1, s.size()));
+    return u;
   }
-  
-  public function testSizeShrinksWhenRemovingElements(): Void {
+  public function testSizeShrinksWhenRemovingElements(u:UnitArrow):UnitArrow {
     var s = defaultSet();
     
     for (i in 0...100) {
-      assertEquals(100 - i, s.size());
+      u = u.add(isEqual(100 - i, s.size()));
       
       s = s.remove(i);
     }
     
-    assertEquals(0, s.size());
+    u = u.add(isEqual(0, s.size()));
+    return u;
   }
-  
-  public function testContainsElements(): Void {
+  public function testContainsElements(u:UnitArrow):UnitArrow {
     var s = set();
     
     for (i in 0...100) {
-      assertFalse(s.contains(i));
+      u = u.add(isFalse(s.contains(i)));
       
       s = s.add(i);
       
-      assertTrue(s.contains(i));
+      u = u.add(isTrue(s.contains(i)));
     }
+    return u;
   }
-  
-  public function testAddingSameElementDoesNotChangeSet(): Void {
+  public function testAddingSameElementDoesNotChangeSet(u:UnitArrow):UnitArrow {
     var s = defaultSet();
     
     for (i in 0...100) {
@@ -77,12 +80,12 @@ class SetTest extends TestCase {
       
       s = s.add(i);
       
-      assertEquals(oldM, s);
-      assertEquals(100, s.size());
+      u = u.add(isEqual(oldM, s));
+      u = u.add(isEqual(100, s.size()));
     }
+    return u;
   }
-  
-  public function testCanIterateThroughElements(): Void {
+  public function testCanIterateThroughElements(u:UnitArrow):UnitArrow {
     var s = defaultSet();
     
     var count = 4950;
@@ -94,41 +97,48 @@ class SetTest extends TestCase {
       ++iterated;
     }
 
-    assertEquals(100, iterated);
-    assertEquals(0,   count);
+    u = u.add(isEqual(100, iterated));
+    u = u.add(isEqual(0,   count));
+    return u;
   }
   
-  public function testFilter(): Void {
+  public function testFilter(u:UnitArrow):UnitArrow {
     var s = defaultSet().filter(function(e) { return e < 50; });
     
-    assertEquals(50, s.size());
+    u = u.add(isEqual(50, s.size()));
+    return u;
   } 
 
-  public function testEquals() {  
-  assertTrue (set().equals(set()));
-  assertTrue (set([1,2,3]).equals(set([1,2,3])));
-  assertTrue (set([2,1]).equals(set([1,2])));    
-  assertFalse(set().equals(set([1])));
-  assertFalse(set([2]).equals(set([1])));
-  assertFalse(set([1,2]).equals(set([1,3])));
+  public function testEquals(u:UnitArrow):UnitArrow {  
+    u = u.add(isTrue(set().equals(set())));
+    u = u.add(isTrue(set([1,2,3]).equals(set([1,2,3]))));
+    u = u.add(isTrue(set([2,1]).equals(set([1,2]))));
+    u = u.add(isFalse(set().equals(set([1]))));
+    u = u.add(isFalse(set([2]).equals(set([1]))));
+    u = u.add(isFalse(set([1,2]).equals(set([1,3]))));
+    return u;
   }
 
-  public function testCompare() {                
-  assertTrue(set().compare(set()) == 0);
-  assertTrue(set([1,2,3]).compare(set([1,2,3])) == 0);
-  assertTrue(set().compare(set([1])) < 0);
-  assertTrue(set([2]).compare(set([1])) > 0);
-  assertTrue(set([1,2]).compare(set([1,3])) < 0);          
+  public function testCompare(u:UnitArrow):UnitArrow {                
+    u = u.add(isTrue(set().compare(set()) == 0));
+    u = u.add(isTrue(set([1,2,3]).compare(set([1,2,3])) == 0));
+    u = u.add(isTrue(set().compare(set([1])) < 0));
+    u = u.add(isTrue(set([2]).compare(set([1])) > 0));
+    u = u.add(isTrue(set([1,2]).compare(set([1,3])) < 0));
+    return u;
   }
 
-  public function testToString() {           
-  assertEquals("Set []", set().toString());
-  assertEquals("Set [1, 2, 3]", set([1,2,3]).toString()); 
+  public function testToString(u:UnitArrow):UnitArrow {           
+    trace(set());
+    u = u.add(isEqual("Set ()", set().toString()));
+    u = u.add(isEqual("Set (1, 2, 3)", set([1,2,3]).toString())); 
+    return u;
   }     
 
-  public function testMapCode() {       
-  assertNotEquals(0, set().hashCode());
-  assertNotEquals(0, set([1,2]).hashCode());            
+  public function testMapCode(u:UnitArrow):UnitArrow {       
+    u = u.add(isNotEqual(0, set().hashCode()));
+    u = u.add(isNotEqual(0, set([1,2]).hashCode())) ;
+    return u;
   }
     
   function defaultSet(): Set<Int> {
@@ -145,4 +155,4 @@ class SetTest extends TestCase {
       s = s.append(values);
     return s;
   }
-}
+} 

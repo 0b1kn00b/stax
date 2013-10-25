@@ -27,9 +27,9 @@ class Hasher {
   }
   public static function getHashForType<T>(v: ValueType) : HashFunction<T> {
     return switch(v) {
-      case TBool            : __hash__(BoolHasher.hashCode);
-      case TInt             : __hash__(IntHasher.hashCode);
-      case TFloat           : __hash__(FloatHasher.hashCode);
+      case TBool            : __hash__(BoolHash.hashCode);
+      case TInt             : __hash__(IntHash.hashCode);
+      case TFloat           : __hash__(FloatHash.hashCode);
       case TUnknown         : __hash__(function(v: T) return Prelude.error()("can't retrieve hashcode for TUnknown: " + v));
       case TObject          :
         __hash__(function(v){
@@ -37,25 +37,26 @@ class Hasher {
         var s = haxe.Serializer.run(v);
         return getHashFor(s)(s);
         });
-      case TClass(String)   : __hash__(StringHasher.hashCode);
-      case TClass(Date)     : __hash__(DateHasher.hashCode);
-      case TClass(Array)    : __hash__(ArrayHasher.hashCode);
+      case TClass(String)   : __hash__(StringHash.hashCode);
+      case TClass(Date)     : __hash__(DateHash.hashCode);
+      case TClass(Array)    : __hash__(ArrayHash.hashCode);
       case TClass(c)        :
           if(Type.getInstanceFields(c).remove("hashCode")) {
             __hash__(function(v) return Reflect.callMethod(v, Reflect.field(v, "hashCode"), []));
           }else{
-            __hash__(function(v) return StringHasher.hashCode(haxe.Serializer.run(v)));
+            __hash__(function(v) return StringHash.hashCode(haxe.Serializer.run(v)));
           }
-      case TEnum(Tuple2)    : __hash__(ProductHasher.hashCode);
-      case TEnum(Tuple3)    : __hash__(ProductHasher.hashCode);
-      case TEnum(Tuple4)    : __hash__(ProductHasher.hashCode);
-      case TEnum(Tuple5)    : __hash__(ProductHasher.hashCode);
+      case TEnum(Tuple2)    : __hash__(ProductHash.hashCode);
+      case TEnum(Tuple3)    : __hash__(ProductHash.hashCode);
+      case TEnum(Tuple4)    : __hash__(ProductHash.hashCode);
+      case TEnum(Tuple5)    : __hash__(ProductHash.hashCode);
       case TEnum(_)         :
         __hash__(
           function(v : T) { 
             var hash = Type.enumConstructor(cast v).hashCode() * 6151;
-            for(i in Type.enumParameters(cast v))
+            for(i in Type.enumParameters(cast v)){
               hash += Hasher.getHashFor(i)(i) * 6151;
+            }
             return hash;
         });
       case TFunction        : __hash__(function(v : T) return Prelude.error()("function can't provide a hash code"));
@@ -64,7 +65,7 @@ class Hasher {
 	}
   @:noUsing static public function nil<A>(v:A):Int { return 0;}
 }
-class ArrayHasher {
+class ArrayHash {
 	public static function hashCode<T>(v: Array<T>) {
     return hashCodeWith(v, Hasher.getHashFor(v[0]));
   }
@@ -77,7 +78,7 @@ class ArrayHasher {
     return h;
   }  
 }
-class StringHasher {
+class StringHash {
 	  public static function hashCode(v: String) {
     var hash = 49157;
     
@@ -91,29 +92,29 @@ class StringHasher {
     return hash;
   }
 }
-class DateHasher {
+class DateHash {
 	  public static function hashCode(v: Date) {
     return Math.round(v.getTime() * 49157);
   }
 }
-class FloatHasher {
+class FloatHash {
 	public static function hashCode(v: Float) {
     return Std.int(v * 98317); 
 	}
 }
-class IntHasher {
+class IntHash {
 	public static function hashCode(v: Int) : Int {
     return v * 196613;
   }
 }
-class BoolHasher {
+class BoolHash {
 	public static function hashCode(v : Bool) : Int {
     return if (v) 786433 else 393241;  
   }
 }
-class ProductHasher {
+class ProductHash {
   static function __init__(){
-    _baseHashes__ 
+    __baseHashes__ 
       = [
           [786433, 24593],
           [196613, 3079, 389],
@@ -124,12 +125,13 @@ class ProductHasher {
 	static public function getHash(p:Product, i : Int) {
     return Hasher.getHashFor(p.element(i));
   }
-  static var _baseHashes__ : Array<Array<Int>>;
+  static var __baseHashes__ : Array<Array<Int>>;
 
   @:bug("#0b1kn00b: Really not sure why the (-4) needs to be except that the abstract cast is not constructing properly")
+  @:bugger("#0b1kn00b: Really confused now, works under some circumstances")
   public static function hashCode(p:Product) : Int {
     var h         = 0;
-    var __hash__  = ProductHasher._baseHashes__[p.length-4];
+    var __hash__  = ProductHash.__baseHashes__[p.length-1];
     for(i in 0...p.length){
       h += __hash__[i] * getHash(p,i)(p.element(i));
     }

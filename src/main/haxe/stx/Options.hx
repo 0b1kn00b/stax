@@ -1,5 +1,7 @@
 package stx;
 
+import Stax.*;
+import stx.Outcome;
 import stx.Prelude;
 import stx.Tuples;
 
@@ -177,13 +179,30 @@ class Options {
       case Some(v): Eithers.toRight(v);
     }
   }
+  static public function orSuccess<T>(o1:Option<Fail>,thunk:Thunk<T>):Outcome<T>{
+    return switch (o1) {
+      case None     : Success(thunk());
+      case Some(v)  : Failure(v);
+    }
+  }
+  static public function orFailure<T>(o1:Option<T>,thunk:Thunk<Fail>):Outcome<T>{
+    return switch (o1) {
+      case None     : Failure(thunk());
+      case Some(v)  : Success(v);
+    } 
+  }
   /**
     Produces an Either where 'o1' is on the left, or if None, 'c'.
    */
   static public function orEitherC<T, S>(o1: Option<T>, c: S): Either<S, T> {
     return Options.orEither(o1, c.toThunk());
   }
-
+  static public function orSuccessC<T>(o0:Option<Fail>,v:T):Outcome<T>{
+    return orSuccess(o0,thunk(v));
+  }
+  static public function orFailureC<T>(o0:Option<T>,v:Fail):Outcome<T>{
+    return orFailure(o0,thunk(v));
+  }
   public static function toBool<T>(option : Option<T>) : Bool {
     return switch (option) {
       case Some(_): true;

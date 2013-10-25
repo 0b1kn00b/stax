@@ -72,7 +72,7 @@ class OrderedHashMap<V>{
 		var val = impl.search(
 			function(l:Int,r:V){
 				return __val_equal__(v,r);
-			}.spread()
+			}.tupled()
 		);
 		return impl.remove(val.getOrElse(thunk(null)));
 	}
@@ -147,7 +147,7 @@ class OrderedHashMap<V>{
 			impl.map(
 				function(key:Int,val:V){
 					return '$key : ${gsh(val)(val)}';
-				}.spread()
+				}.tupled()
 			);
 		return vals.foldl('',
 			function(memo:String,next:String){

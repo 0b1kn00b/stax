@@ -11,9 +11,7 @@ using stx.ds.List;
 using Lambda;
 
 class CollectionUtil {
-
     inline private static var NAME : String = 'Collection';
-
     inline private static var REFLECT_NAME : String = '__reflect__';
 
     inline public static function zero<T>() : CollectionType<T> {

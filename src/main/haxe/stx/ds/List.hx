@@ -1,5 +1,6 @@
 package stx.ds;
 
+import stx.plus.Plus;
 import stx.Prelude;
 
 import stx.Tuples;
@@ -7,6 +8,7 @@ import stx.Tuples;
 import stx.ds.ifs.Foldable;
 import stx.ds.Collection;
 import stx.ds.Foldables;
+import stx.plus.Plus.*;
 
 using stx.Maths;
 using stx.Options;
@@ -94,22 +96,22 @@ class List<T> implements Collection<List<T>,T> {
 	public static function toList<T>(i: Iterable<T>) {
     return stx.ds.List.create().append(i);
   }
-  public static function nil<T>(?tools : CollectionTools<T>): List<T> {
+  public static function nil<T>(?tools : Tool<T>): List<T> {
     return new Nil(tools);
   }
   
-  @:noUsing public static function create<T>(?tools:CollectionTools<T>): List<T> {
+  @:noUsing public static function create<T>(?tools:Tool<T>): List<T> {
     return nil(tools);
   }
 
   /** Creates a factory for lists of the specified type. */
-  public static function factory<T>(?tools:CollectionTools<T> ): Factory<List<T>> {
+  public static function factory<T>(?tools:Tool<T> ): Factory<List<T>> {
     return function() {
       return List.create(tools);
     }
   }
 
-  private function new(?tools:CollectionTools<T>) {
+  private function new(?tools:Tool<T>) {
 		if(tools!=null){
 				order   = tools.order;
 				equal   = tools.equal;  
@@ -127,7 +129,7 @@ class List<T> implements Collection<List<T>,T> {
    * construct lists by prepending, and then reverse at the end if necessary.
    */
   public function cons(head: T): List<T> {
-    return new Cons(Prelude.tool(order,equal,hash,show), head, this);
+    return new Cons(tool(order,equal,hash,show), head, this);
   }
   
   public function prepend(iterable: Iterable<T>): List<T> {
@@ -195,7 +197,7 @@ class List<T> implements Collection<List<T>,T> {
    * the cons() method should be used to grow the list.
    */
   public function add(t: T): List<T> {
-    return foldr(create(Prelude.tool(order, equal, hash, show)).cons(t), function(b, a) {
+    return foldr(create(tool(order, equal, hash, show)).cons(t), function(b, a) {
       return a.cons(b);
     });
   }
@@ -207,7 +209,7 @@ class List<T> implements Collection<List<T>,T> {
 
     a.reverse();
 
-    var r = create( Prelude.tool(order, equal, hash, show) );
+    var r = create( tool(order, equal, hash, show) );
 
     for (e in a) r = r.cons(e);
 
@@ -218,7 +220,7 @@ class List<T> implements Collection<List<T>,T> {
 
   public function remove(t: T): List<T> {
     var pre: Array<T> = [];
-    var post: List<T> = nil(Prelude.tool(order, equal, hash, show));
+    var post: List<T> = nil(tool(order, equal, hash, show));
     var cur = this;      
     var eq = equal;
     for (i in 0...size()) {
@@ -299,13 +301,13 @@ class List<T> implements Collection<List<T>,T> {
 
   /** Override Foldable to provide higher performance: */
   public function filter(f: T -> Bool): List<T> {
-    return foldr(create(Prelude.tool(order, equal, hash, show)), function(e, list) return if (f(e)) list.cons(e) else list);
+    return foldr(create(tool(order, equal, hash, show)), function(e, list) return if (f(e)) list.cons(e) else list);
   }
 
   /** Returns a list that contains all the elements of this list in reverse
    * order */
   public function reverse(): List<T> {
-    return foldl(create(Prelude.tool(order, equal, hash, show)), function(a, b) return a.cons(b));
+    return foldl(create(tool(order, equal, hash, show)), function(a, b) return a.cons(b));
   }
 
   /** Zips this list and the specified list into a list of tuples. */
@@ -330,7 +332,7 @@ class List<T> implements Collection<List<T>,T> {
    */
   public function gaps<G>(f: T -> T -> List<G>, ?equal: EqualFunction<G>): List<G> {
     var l : List<G> 
-      = zip(drop(1)).flatMapTo(List.nil(Prelude.tool(null,equal)), function(tuple) return f(tuple.fst(), tuple.snd()));
+      = zip(drop(1)).flatMapTo(List.nil(tool(null,equal)), function(tuple) return f(tuple.fst(), tuple.snd()));
     return l;
   }
 
@@ -340,7 +342,7 @@ class List<T> implements Collection<List<T>,T> {
   public function sort(): List<T> {
     var a = this.toArray();
     a.sort(order);
-    var result = create(Prelude.tool(order, equal, hash, show));
+    var result = create(tool(order, equal, hash, show));
 
     for (i in 0...a.length) {
       result = result.cons(a[a.length - 1 - i]);
@@ -354,19 +356,19 @@ class List<T> implements Collection<List<T>,T> {
   }
   
   public function withOrderFunction(order : OrderFunction<T>) {
-    return create(Prelude.tool(order,equal,hash,show)).append(this);
+    return create(tool(order,equal,hash,show)).append(this);
   }
   
   public function withEqualFunction(equal : EqualFunction<T>) {
-    return create(Prelude.tool(order, equal, hash, show)).append(this);
+    return create(tool(order, equal, hash, show)).append(this);
   }
   
   public function withHashFunction(hash : HashFunction<T>) {
-    return create(Prelude.tool(order, equal, hash, show)).append(this);
+    return create(tool(order, equal, hash, show)).append(this);
   }
   
   public function withShowFunction(show : ShowFunction<T>) {
-    return create(Prelude.tool(order, equal, hash, show)).append(this);
+    return create(tool(order, equal, hash, show)).append(this);
   }
 
   public function equals(other : List<T>) {     
@@ -421,7 +423,7 @@ private class Cons<T> extends List<T> {
   var _tail: List<T>;
   var _size: Int;
 
-  public function new(tools:CollectionTools<T>, head: T, tail: List<T>) {
+  public function new(tools:Tool<T>, head: T, tail: List<T>) {
     super(tools);
     _head = head;
     _tail = tail;
@@ -464,7 +466,7 @@ private class Cons<T> extends List<T> {
 }
 
 private class Nil<T> extends List<T> {
-  public function new(tools:CollectionTools<T>) {
+  public function new(tools:Tool<T>) {
     super(tools);
   }
 }

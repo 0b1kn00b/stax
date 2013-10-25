@@ -3,9 +3,13 @@ package stx;
 import Type;
 import haxe.Constraints;
 
+import Stax.*;
+import stx.Objects;
+
 using Stax;
 using stx.Types;
 using stx.Compose;
+using stx.Options;
 
 enum Kind{
   KNull;
@@ -20,20 +24,16 @@ enum Kind{
 }
 class Kinds{
   static public function kind(v:Dynamic):Kind{
-    return option(v).flatMap(type.then(option)).map(
-      function(x){
-        return switch (x) {
-            case TNull     : KNull;
-            case TInt      : KInt(v);
-            case TFloat    : KFloat(v);
-            case TBool     : KBool(v)
-            case TObject   : KObject(v);
-            case TFunction : KFunction(v);
-            case TClass(c) : KClass(v,c);
-            case TEnum(_)  : KEnum(v);
-            case TUnknown  : KUnknown(v);
-        }
-      }
-    );
+    return switch (vtype(v)) {
+      case TNull     : KNull;
+      case TInt      : KInt(v);
+      case TFloat    : KFloat(v);
+      case TBool     : KBool(v);
+      case TObject   : KObject(v);
+      case TFunction : KFunction(v);
+      case TClass(c) : KClass(v,c);
+      case TEnum(_)  : KEnum(v);
+      case TUnknown  : KUnknown(v);
+    }
   }
 }

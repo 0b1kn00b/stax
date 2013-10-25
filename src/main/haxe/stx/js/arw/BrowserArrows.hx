@@ -9,7 +9,7 @@ import stx.Tuples;
 import stx.arw.CallbackArrow;
 
 using stx.Options;
-using stx.Arrows;
+using stx.Arrow;
 using stx.Functions;
 
 

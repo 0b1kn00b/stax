@@ -1,7 +1,8 @@
 package stx.rct;
 
- 
-import stx.Fail.*;
+import Stax.*;
+
+import stx.Fail;
 import stx.Prelude;
 
 import stx.rct.Propagation;
@@ -58,7 +59,7 @@ class Streams {
       var task:Option<Task> = None;
       create(function(pulse:Pulse<T>):Propagation<T> {
         task = Process.stop(task);
-        task = Process.start(function() stream.dispatch(pulse.value()), behaviour.value());
+        task = Process.start(function() stream.dispatch(pulse.value()), behaviour.value);
 
         return Negate;
       }, toArray(stream));
@@ -75,7 +76,7 @@ class Streams {
       var stream = new Stream<T2>(cast pulse);
 
       sources.foreach(function (source:Stream<T1>) {
-        switch(source.toOption()) {
+        switch(option(source)){
             case Some(val): val.attach(cast stream);
               case _:
           }
@@ -88,7 +89,7 @@ class Streams {
       var out:Stream<T> = pure(None);
 
       create(function(pulse:Pulse<T>):Propagation<T> {
-        Streams.dispatchWithDelay(out, pulse.value(), behaviour.value());
+        Streams.dispatchWithDelay(out, pulse.value(), behaviour.value);
 
           return Negate;
       }, toArray(stream));
@@ -112,7 +113,7 @@ class Streams {
       create(function(pulse:Pulse<T1>):Propagation<T2> {
         previous.foreach(function(s) s.detach(out));
 
-          previous = func(pulse.value()).toOption();
+          previous = option(func(pulse.value()));
           previous.foreach(function(s) s.attach(out));
 
           return Negate;
@@ -226,10 +227,10 @@ class Streams {
 
           task = Process.stop(task);
 
-          if(!stream.weakRef()) task = Process.start(pulser, time.value());
+          if(!stream.weakRef()) task = Process.start(pulser, time.value);
       };
 
-      task = Process.start(pulser, time.value());
+      task = Process.start(pulser, time.value);
 
       return stream;
     }
@@ -268,7 +269,7 @@ class Streams {
     static public function zipWith<T1, T2, R>(stream0:Stream<T1>,
                                               stream1:Stream<T2>,
                                               func:Function2<T1, T2, R>,
-                                              ?guard:Predicate2<Float, Float> = null
+                                              ?guard:Float -> Float -> Bool = null
                                               ):Stream<R> {
       var time = -1.0;
       var value:Option<T1> = None;
@@ -277,7 +278,7 @@ class Streams {
 
       create(function(pulse:Pulse<T1>):Propagation<T1> {
         time = pulse.time();
-          value = pulse.value().toOption();
+          value = option(pulse.value());
 
           return Negate;
       }, toArray(stream0));

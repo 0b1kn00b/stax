@@ -1,6 +1,9 @@
 import stx.test.TestCase;
+
 using stx.test.Assert;
+
 import haxe.Timer;
+
 using stx.Prelude;
 
 class OptimiseTest extends TestCase{

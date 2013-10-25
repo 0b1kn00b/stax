@@ -82,18 +82,6 @@ class Enums {
 		return Type.getEnumName(e);
 	}
 	/**
-	  Produces the name of the given Enum
-	  @param	e
-	  @return
-	 */
-	static public function keyOutcome( e : Enum<Dynamic> ) : Outcome<String> {
-		return try{
-		  Right(Type.getEnumName(e));
-		}catch(e:Dynamic){
-			Left(fail(NativeFail(e)));
-		}
-	}
-	/**
 	  Produces an Enum from the given `name`.
 	  @param	name
 	  @return

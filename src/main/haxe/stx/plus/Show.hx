@@ -20,17 +20,18 @@ class Show {
   static public function __show__<T>(impl : ShowFunction<Dynamic>) : ShowFunction<T> {
     return function(v) return null == v ? 'null' : impl(v);
   }
-  /** Returns a ShowFunction (T -> String). It works for any type. For Custom Classes you must provide a toString()
-   * method, otherwise the full class name is returned.
-   */
+  /** 
+    Returns a ShowFunction (T -> String). It works for any type. For Custom Classes you must provide a toString()
+    method, otherwise the full class name is returned.
+  */
   public static function getShowFor<T>(t : T) : ShowFunction<T> {
     return getShowForType(Type.typeof(t));
   }
   
   /**
-   *  @:todo Reflect.fields doesn't work consistenly across platforms so we may probably pass to use Type.getInstanceFields. The problem here
-   *  is that we must check if the fields are functions before grabbing the value.
-   */
+    @:todo Reflect.fields doesn't work consistenly across platforms so we may probably pass to use Type.getInstanceFields. The problem here
+    is that we must check if the fields are functions before grabbing the value.
+  */
   public static function getShowForType<T>(v : ValueType) : ShowFunction<T> {
     return switch(v) {
       case TBool                        : __show__(BoolShow.toString);
@@ -91,7 +92,6 @@ class ArrayShow {
   public static function toStringWith<T>(v: Array<T>, show : ShowFunction<T>) {
     return "[" + v.map(show).join(", ") + "]";  
   }
-
 	public static function mkString<T>(arr: Array<T>, ?sep: String = ', ', ?show: T -> String): String {
     var isFirst = true;
     
@@ -111,8 +111,7 @@ class IterableShow {
   public static function mkString<T>(i: Iterable<T>, ?show: T -> String, ?prefix: String = '(', ?suffix: String = ')', ?sep = ', ') {
     if (show == null) show = Std.string;
     
-    var s = prefix;
-    
+    var s = prefix;  
     var isFirst = true;
 
     for (t in i) {

@@ -61,7 +61,7 @@ abstract Reflection<T>(Tuple2<T,Array<String>>) from Tuple2<T,Array<String>>{
       }
     ).map(
       function(x){
-        return tuple2(this.fst(),x);
+        return new Field(tuple2(this.fst(),x));
       }
     );
   }
@@ -76,7 +76,7 @@ abstract Reflection<T>(Tuple2<T,Array<String>>) from Tuple2<T,Array<String>>{
       }
     ).map(
       function(x){
-        return tuple2(this.fst(),x);
+        return new Routine(tuple2(this.fst(),x));
       }
     ); 
   }

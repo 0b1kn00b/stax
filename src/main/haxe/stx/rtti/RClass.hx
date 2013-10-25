@@ -16,7 +16,7 @@ using stx.Tuples;
 using stx.Reflects;
 
 /**
-  A binding of a source object and its rtti.
+  A binding of a source object and it's rtti.
 */
 abstract RClass<T>(Tuple2<T,Classdef>) from Tuple2<T,Classdef> to Tuple2<T,Classdef>{
   public function new(v){

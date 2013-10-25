@@ -24,17 +24,20 @@ using stx.Types;
 
 class Types{
 
+  static public inline function type(v:Dynamic):Class<Dynamic>{
+    return Type.getClass(v);
+  }
   /**
     returns ValueType
   */
-  static public inline function type(v:Dynamic):ValueType{
+  static public inline function vtype(v:Dynamic):ValueType{
     return Type.typeof(v);
   }
   /**
     Returns Class of `name`
   */
   static public function classify(name:String):Class<Dynamic>{
-    return Type.resolveClass(name);
+    return cast Type.resolveClass(name);
   }
   @:note('#0b1kn00b: depends upon `until` actually being part of the hierarchy')
   @:unsafe
@@ -57,7 +60,7 @@ class Types{
   /**
     class name
   */
-  static public function name(cls:Class<Dynamic>):String{
+  static public function name<A>(cls:Class<A>):String{
     return Type.getClassName(cls);
   }
   /**

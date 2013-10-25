@@ -7,6 +7,7 @@ import stx.Compare.*;
 import stx.Prelude;
 import stx.plus.Order;
 import stx.plus.Show;
+import stx.plus.Hasher;
 
 using stx.Iterators;
 using stx.plus.Order;

@@ -18,6 +18,9 @@ abstract Many<T>(ManyType<T>) from ManyType<T> to ManyType<T>{
   @:from static public function fromT<T>(v:T){
     return [v];
   }
+  @:to public function toArray():Array<T>{
+    return stx.Iterables.toArray(this);
+  }
   public function iterator(){
     return this.iterator();
   }

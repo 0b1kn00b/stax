@@ -17,16 +17,16 @@ abstract Method<A,B>(A->B) from A->B to A->B{
     return new Method(function(x:A):B return f(x));
   }
 	@:from static public inline function fromFunction2<A,B,C>(f:A->B->C):Method<Tuple2<A,B>,C>{
-		return Tuples2.spread(f);
+		return Tuples2.tupled(f);
 	}
 	@:from static public inline function fromFunction3<A,B,C,D>(f:A->B->C->D):Method<Tuple3<A,B,C>,D>{
-		return Tuples3.spread(f);	
+		return Tuples3.tupled(f);	
 	}
 	@:from static public inline function fromFunction4<A,B,C,D,E>(f:A->B->C->D->E):Method<Tuple4<A,B,C,D>,E>{
-		return Tuples4.spread(f);		
+		return Tuples4.tupled(f);		
 	}
 	@:from static public inline function fromFunction5<A,B,C,D,E,F>(f:A->B->C->D->E->F):Method<Tuple5<A,B,C,D,E>,F>{
-		return Tuples5.spread(f);			
+		return Tuples5.tupled(f);			
 	}
 	@:noUsing static public inline function unit<A>():Method<A,A>{
 		return cast function(x) return x;

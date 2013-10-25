@@ -19,10 +19,10 @@ package stx.ds;
 using stx.Tuples;
 using stx.Prelude;
 
-
 import stx.ds.ifs.Foldable;
 import stx.ds.Collection;
 import stx.ds.Foldables;
+import stx.plus.Plus;
 
 using stx.plus.Order; 
 using stx.plus.Hasher;
@@ -46,53 +46,40 @@ class ArrayToSet {
 }
 /** A cross-platform, immutable Set built on Map. */
 class Set<T> implements Collection<Set<T>, T> {
-  public var equal (get_equal, null): EqualFunction<T>;
-  public var order (get_order, null) : OrderFunction<T>;
-  public var hash (get_hash, null) : HashFunction<T>;
-  public var show (get_show, null) : ShowFunction<T>;
   
   var _map: Map<T,T>;
   
 	public static function toSet<T>(i: Iterable<T>) {
     return stx.ds.Set.create().append(i);
   }
-  public static function create<T>(?order: OrderFunction<T>, ?equal: EqualFunction<T>, ?hash: HashFunction<T>, ?show: ShowFunction<T>): Set<T> {  
-    return new Set<T>(Map.create(order, equal, hash, show));
+  public static function create<T>(?val_tool:Plus<T>): Set<T> {  
+    return new Set<T>(Map.create(val_tool,val_tool));
   }
-  
   /** Creates a factory for sets of the specified type. */
-  public static function factory<T>(?order: OrderFunction<T>, ?equal: EqualFunction<T>, ?hash: HashFunction<T>, ?show: ShowFunction<T>): Factory<Set<T>> {
+  public static function factory<T>(val_tool): Factory<Set<T>> {
     return function() {
-      return Set.create(order, equal, hash, show);
+      return Set.create(val_tool);
     }
   }
-
   private function new(map: Map<T, T>) {
     _map = cast map;
   }
-  
   public function contains(e: T): Bool {
     return _map.containsKey(e);
   }
-  
   public function unit<C, D>(): Foldable<C, D> {
     return cast create();
   }
-  
   public function foldl<Z>(z: Z, f: Z -> T -> Z): Z {
-    var acc = z;
-    
+    var acc = z;    
     for (e in _map) {
       acc = f(acc, e.fst());
     }
-    
     return acc;
   }
-  
   public function add(t: T): Set<T> {
     return if (contains(t)) this; else copyWithMod(_map.set(t, t));
   }
-  
   public function append(it: Iterable<T>): Set<T> {
     var set = this;
     
@@ -100,11 +87,9 @@ class Set<T> implements Collection<Set<T>, T> {
     
     return set;
   }
-  
   public function remove(t: T): Set<T> {
     return copyWithMod(_map.removeByKey(t));
   }
-  
   public function removeAll(it: Iterable<T>): Set<T> {
     var set = this;
     
@@ -112,79 +97,47 @@ class Set<T> implements Collection<Set<T>, T> {
     
     return set;
   }
-  
   public function iterator(): Iterator<T> {
     return Foldables.iterator(this);
-  } 
-          
-  public function equals(other : Set<T>) {
+  }        
+  public function equals(other:Set<T>) {
     var all = concat(other);
     return all.size() == size() && all.size() == other.size();
   }
-
-  public function compare(other : Set<T>) {
-    return toArray().compareWith(other.toArray(), order);
+  public function compare(other:Set<T>) {
+    return _map.compare(other._map);
+  }
+  public function hashCode():Int{
+    var ha = _map.val_tool.getHash;
+    return foldl(393241, function(a, b) return a * (ha(b)(b) + 6151));
+  }
+  public function toString():String{    
+    return "Set " + 
+      IterableShow.toString(_map.entries(),
+        function(t:Tuple2<T,T>):String{ 
+          return _map.val_tool.getShow(t.snd())(t.snd()); 
+        }
+      );
   } 
-
-  public function hashCode() : Int {
-    var ha = hash;
-    return foldl(393241, function(a, b) return a * (ha(b) + 6151));
+  public function withOrder(order:OrderFunction<T>) {
+    return create(_map.val_tool.withOrder(order)).append(this);
   }
-  public function toString(): String {    
-    return "Set " + toArray().toStringWith(show);
-  } 
-  
-  public function withOrderFunction(order : OrderFunction<T>) {
-    var m : FriendMap<T> = cast _map;
-    return create(order, m.keyEqual, m.keyMap, m.keyShow).append(this);
+  public function withEqual(equal:EqualFunction<T>) {
+    return create(_map.val_tool.withEqual(equal)).append(this);
   }
-  
-  public function withEqualFunction(equal : EqualFunction<T>) {
-    var m : FriendMap<T> = cast _map;
-    return create(m.keyOrder, equal, m.keyMap, m.keyShow).append(this);
+  public function withHash(hash:HashFunction<T>) {
+    return create(_map.val_tool.withHash(hash)).append(this);
   }
-  
-  public function withHashFunction(hash : HashFunction<T>) {
-    var m : FriendMap<T> = cast _map;
-    return create(m.keyOrder, m.keyEqual, hash, m.keyShow).append(this);
+  public function withShow(show:ShowFunction<T>) {  
+    return create(_map.val_tool.withShow(show)).append(this);
   }
-  
-  public function withShowFunction(show : ShowFunction<T>) { 
-    var m : FriendMap<T> = cast _map;
-    return create(m.keyOrder, m.keyEqual, m.keyMap, show).append(this);
-  }
-  
   /**
    *  @:todo inject *Functions here?
    */ 
   private function copyWithMod(newMap: Map<T, T>): Set<T> {
     return new Set<T>(newMap);
   }
-  
   public function size(): Int {
     return _map.size();
-  } 
-
-  function get_order() {
-    return _map.keyOrder;     
-  }
-  
-  function get_equal() { 
-    return _map.keyEqual;
-  } 
-  
-  function get_hash() {
-    return _map.keyMap;
-  }
-  
-  function get_show() {    
-    return _map.keyShow;
   }
 }     
-
-private typedef FriendMap<K> = {
-  private var keyEqual  : EqualFunction<K>;
-  private var keyOrder  : OrderFunction<K>;
-  private var keyMap : HashFunction<K>;
-  private var keyShow   : ShowFunction<K>;
-}

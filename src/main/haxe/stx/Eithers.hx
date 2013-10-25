@@ -1,5 +1,6 @@
 package stx;
 
+import stx.Outcome;
 import stx.Tuples;
 import stx.Prelude;
 import stx.Tuples;
@@ -197,18 +198,24 @@ class Eithers {
       case Right(v) : v;
     }
   }
-  public static function toBool<T1, T2>(either : Either<T1, T2>) : Bool {
+  static public function toBool<T1, T2>(either : Either<T1, T2>) : Bool {
     return switch(either) {
       case Right(_): true;
       case _: false;
     }
   }
-  public static function success<L,R>(e:Either<L,R>,fn:R->Void):Either<L,R>{
+  static public function toOutcome<A>(either:Either<Fail,A>):Outcome<A>{
+    return switch (either) {
+      case Left(e)    : Failure(e);
+      case Right(v)   : Success(v);
+    }
+  }
+/*  static public function success<L,R>(e:Either<L,R>,fn:R->Void):Either<L,R>{
     e.right().foreach(fn);
     return e;
   }
-  public static function failure<L,R>(e:Either<L,R>,fn:L->Void):Either<L,R>{
+  static public function failure<L,R>(e:Either<L,R>,fn:L->Void):Either<L,R>{
     e.left().foreach(fn);
     return e;
-  }
+  }*/
 }

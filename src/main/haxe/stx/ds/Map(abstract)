@@ -56,7 +56,7 @@ abstract Map<K,V>(MapType<K, V>) from MapType<K, V> to MapType<K, V> {
     @:from
     inline public static function fromArray<K,V>(arr : Array<Tuple2<K,V>> ) : Map<K,V>{
         var m = new Map();
-        arr.foreach(MapTypes.add.bind(m).spread());
+        arr.foreach(MapTypes.add.bind(m).tupled());
         return m;
     }
 }

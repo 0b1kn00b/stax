@@ -1,5 +1,9 @@
 package stx;
 
+import haxe.ds.StringMap;
+
+import stx.plus.Order;
+import stx.plus.Equal;
 import stx.Prelude;
 
 using stx.Iterables;
@@ -21,6 +25,12 @@ class Tables{
     var keys = Reflect.fields(d);
     return keys.zip(keys).map(Reflect.field.bind(d).second());
   }
+  static public function vals<T>(d: Table<T>):Array<T>{
+    return Reflect.fields(d).map(Reflects.getValue.bind(d));
+  }
+  /**
+    Returns the values of the names
+  */
   static public function select<T>(d: Table<T>, names: Many<String>): Array<T> {
     var result: Array<T> = [];
     
@@ -50,6 +60,14 @@ class Tables{
   static public function has<T>(d:Table<T>,keys:Many<String>):Bool{
     return missing(d,keys).isEmpty();
   }
+  static public function only<T>(d:Table<T>,keys:Many<String>):Bool{
+    var fields  = Reflect.fields(d);
+        fields  = ArrayOrder.sort(fields);
+    var keys0 : Array<String> = keys;
+        keys0   = ArrayOrder.sort(keys0);
+
+    return Equal.getEqualFor(fields)(fields,keys0);
+  }
   static public function getOption<T>(d: Table<T>, k: String): Option<T> {
     return if (Reflect.hasField(d, k)) Some(Reflect.field(d, k)); else None;
   }
@@ -66,8 +84,13 @@ class Tables{
   static public function merge<T>(d0:Table<T>,d1:Table<T>):Table<T>{
     var o : Table<T> = {};
     var l = fields(d0);
-    var r = fields(d0);
+    var r = fields(d1);
         l.append(r).foreach(Reflects.setFieldTuple.bind(o));
     return o;
+  }
+  static public function toMap<T>(o:Table<T>):StringMap<T>{
+    var map = new StringMap();
+    fields(o).foreach(map.set.tupled());
+    return map;
   }
 }

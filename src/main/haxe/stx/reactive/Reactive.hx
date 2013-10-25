@@ -15,6 +15,8 @@
 */
 package stx.reactive;
 
+import stx.Compare.*;
+
 import stx.Options;
 import stx.Prelude;
 import stx.plus.Equal;
@@ -1220,7 +1222,7 @@ class Signal<T> {
     public function new(stream: Stream<Dynamic>, ?init: T,? updater: Pulse<Dynamic> -> Propagation<T>) {
         this._last          = init;        
         this._underlyingRaw = stream;
-        this._updater       = Options.orDefault( updater, function(x) return propagate(x) );
+        this._updater       = nl().apply(updater) ? function(x) return propagate(x) : updater;
         
         var self = this;
         

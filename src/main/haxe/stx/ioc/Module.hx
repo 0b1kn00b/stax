@@ -15,11 +15,17 @@ using stx.Types;
 using stx.Arrays;
 using stx.ValueTypes;
 
+/**
+  Represents a collection of Interface -> Instance bindings
+*/
 interface Module{
   public var scope(default,null) : Scope;
   public function bound(cls:Class<Dynamic>,pos:PosInfos):Bool;
   public function injection<T>(cls:Class<T>):Null<T>;
 }
+/**
+  Editable Module
+*/
 interface PublicModule extends Module{
   public function bind<T>(cls:Class<T>,imp:Binder<T>):Bool;
   public function unbind<T>(cls:Class<T>):Bool;

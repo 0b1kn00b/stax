@@ -20,7 +20,7 @@ import hx.ds.TreeNode;
 import stx.Accessors;
 import stx.Arrays;
 import stx.arw.ApplicationArrow;
-import stx.Arrows;
+import stx.Arrow;
 import stx.arw.CPSArrow;
 import stx.arw.EitherArrow;
 import stx.arw.EventualArrow;

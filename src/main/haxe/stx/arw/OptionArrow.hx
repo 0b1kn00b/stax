@@ -4,7 +4,7 @@ import stx.Tuples;
 import stx.Prelude;
 
 using stx.Options;
-using stx.Arrows;
+using stx.Arrow;
 using stx.Compose;
 using stx.Tuples;
 using stx.Functions;

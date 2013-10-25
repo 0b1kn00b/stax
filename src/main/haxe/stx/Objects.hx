@@ -36,6 +36,11 @@ class Objects {
       }
     );
   }
+  static public function copy(o:Object):Object{
+    var flds  = Reflects.fields(o);
+    var obj   = {}
+    return flds.foldl(obj,cast Reflects.setFieldTuple.bind(obj));
+  }
   /**
     Fills first level object keys with fields.
   */
@@ -52,7 +57,7 @@ class Objects {
     Return the fields of Object
   */
   static public function fields(o:Object):Array<KV<Dynamic>>{
-    return Tables.fields(cast o);
+    return Tables.fields(o);
   }
   /**
     Returns the values of the names
@@ -76,6 +81,12 @@ class Objects {
     return Tables.missing(d,flds);
   }
   /**
+    Reports true if the object contains only the supplied fields.
+  */
+  static public function only(d:Object,flds:Many<String>):Bool{
+    return Tables.only(d,flds);
+  }
+  /**
     The fields are non null.
   */
   static public function defined(d:Object,flds:Many<String>):Bool{
@@ -91,7 +102,7 @@ class Objects {
   }
   static public function toMap(o:Object):StringMap<Dynamic>{
     var map = new StringMap();
-    fields(o).foreach(map.set.spread());
+    fields(o).foreach(map.set.tupled());
     return map;
   }
   static public function setField(o:Object,k:String,v:Dynamic):Object{

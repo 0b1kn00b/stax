@@ -97,7 +97,7 @@ class OptionEqual{
     return op0.zip(op1).map(
       function(l:A,r:A){
         return Equal.getEqualFor(l)(l,r);
-      }.spread()
+      }.tupled()
     ).getOrElse(
       function(){
         return op0.isEmpty() && op1.isEmpty();

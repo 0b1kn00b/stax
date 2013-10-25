@@ -59,7 +59,7 @@ class UnsupportedClassClone{
             return Clone.getCloneFor(x)(x,stack);
           }.second()
         );
-    flds.foreach(Reflect.setField.bind(nw).spread());
+    flds.foreach(Reflect.setField.bind(nw).tupled());
     return nw;
   }
 }
@@ -86,7 +86,7 @@ class ObjectClone{
             return Clone.getCloneFor(x)(x,stack);
           }.second()
         );
-    flds.foreach(Reflect.setField.bind(nw).spread());
+    flds.foreach(Reflect.setField.bind(nw).tupled());
     return nw;
   }
 }

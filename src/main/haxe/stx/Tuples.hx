@@ -142,7 +142,7 @@ class Tuples2 {
             case tuple2(a,b)    : f(a,b);
         }
     }
-    public inline static function spread<A,B,C>(f : A -> B -> C){
+    public inline static function tupled<A,B,C>(f : A -> B -> C){
         return into.bind(_,f);
     }
 }
@@ -204,7 +204,7 @@ class Tuples3 {
             case tuple3(a,b,c)  : f(a,b,c);
         }
     }
-    static public function spread<A,B,C,D>(fn:A->B->C->D){
+    static public function tupled<A,B,C,D>(fn:A->B->C->D){
       return into.bind(_,fn);
     }
 }
@@ -263,7 +263,7 @@ class Tuples4 {
             case tuple4(a,b,c,d)    : f(a,b,c,d);
         }
     }
-    static public function spread<A,B,C,D,E>(f : A -> B -> C -> D -> E){
+    static public function tupled<A,B,C,D,E>(f : A -> B -> C -> D -> E){
         return into.bind(_,f);
     }
 }
@@ -325,7 +325,7 @@ class Tuples5 {
             case tuple5(a,b,c,d,e)  : f(a,b,c,d,e);
         }
     }
-    static public function spread<A,B,C,D,E,F>(f : A -> B -> C -> D -> E -> F){
+    static public function tupled<A,B,C,D,E,F>(f : A -> B -> C -> D -> E -> F){
         return into.bind(_,f);
     }
 }

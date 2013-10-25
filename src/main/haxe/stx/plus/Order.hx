@@ -36,85 +36,49 @@ class Order {
   }
   static public function getOrderForType<T>(v: ValueType) : OrderFunction<T> {
     return switch(v) {
-    case TBool:
-      __order__(cast Bools.compare);
-    case TInt:
-      __order__(cast Ints.compare);
-    case TFloat:
-      __order__(cast Floats.compare);
-    case TUnknown:
-      function(a : T, b : T) return (a == b) ? 0 : ((cast a) > (cast b) ? 1 : -1);
-    case TObject:
-      __order__(function(a, b) {
-        for(key in Reflect.fields(a)) {
-          var va = Reflect.field(a, key);
-					var vb = Reflect.field(b, key);
-          var v = getOrderFor(va)(va, vb);
-          if(0 != v)
-            return v;
-        }
-        return 0;
-      });
-    case TClass(c):
-      switch(Type.getClassName(c)) {
-      case "String":
-        __order__(cast Strings.compare);
-      case "Date":
-        __order__(cast Dates.compare);
-      case "Array":
-        __order__(cast ArrayOrder.compare);
-      case "stx.Tuple2" , "stx.Tuple3" , "stx.Tuple4" , "stx.Tuple5" :
-          __order__(cast ProductOrder.compare);
-      default:
-        if(Meta._hasMetaDataClass(cast c)) {
-          var i = 0;
-          var fields = Type.getInstanceFields(c).map(function(v){
-            var fieldMeta = Meta._getMetaDataField(c, v);
-            var weight = if (fieldMeta != null && Reflect.hasField(fieldMeta, "order"))
-              Reflect.field(fieldMeta, "order");
-            else
-              1;
-            return tuple3(v, weight, if(fieldMeta != null && Reflect.hasField(fieldMeta, "index")) Reflect.field(fieldMeta, "index"); else i++);                
-          }).filter(function(v){return v.snd() != 0;}).sortWith(function(a, b) {
-            var c = a.thd() - b.thd();
-            if(c != 0)
-              return c;
-            return Strings.compare(a.fst(), b.fst());
-          });
-		      __order__(function(a, b) {       
-            var values = fields.filter(function(v) return !Reflect.isFunction(Reflect.field(a, v.fst()))).map(function(v){return tuple3(Reflect.field(a, v.fst()), Reflect.field(b, v.fst()), v.snd());});
-            for (value in values) {
-              var c = getOrderFor(value.fst())(value.fst(), value.snd()) * value.thd();
-              if (c != 0) return c;
-            }
-
-            return 0;
-          });
-		    } else if(Type.getInstanceFields(c).remove("compare")) {
+      case TBool    : __order__(cast Bools.compare);
+      case TInt     : __order__(cast Ints.compare);
+      case TFloat   : __order__(cast Floats.compare);
+      case TUnknown : function(a : T, b : T) return (a == b) ? 0 : ((cast a) > (cast b) ? 1 : -1);
+      case TObject:
+        __order__(function(a, b) {
+          for(key in Reflect.fields(a)) {
+            var va = Reflect.field(a, key);
+  					var vb = Reflect.field(b, key);
+            var v = getOrderFor(va)(va, vb);
+            if(0 != v)
+              return v;
+          }
+          return 0;
+        });
+      case TClass(c) if (c == String) : __order__(cast Strings.compare);
+      case TClass(c) if (c == Date)   : __order__(cast Dates.compare);
+      case TClass(c) if (c == Array)  : __order__(cast ArrayOrder.compare);
+      case TClass(c) :
+        if(Type.getInstanceFields(c).remove("compare")) {
           __order__(function(a, b) return (cast a).compare(b));
    		  } else {
           Prelude.error()("class "+Type.getClassName(c)+" is not comparable");
         }
-      }
-    case TEnum(_):
-        __order__(cast function(a, b) {
-      var v = Type.enumIndex(a) - Type.enumIndex(b);
-      if(0 != v)
-        return v;
-      var pa = Type.enumParameters(a);
-      var pb = Type.enumParameters(b);
-      for(i in 0...pa.length) {
-        var v = Order.getOrderFor(pa[i])(pa[i], pb[i]);
-        if(v != 0)
-          return v;
-      }
-      return 0;
-    });
-    case TNull:
-      nil;
-    case TFunction:
-				Prelude.error()("unable to compare on a function");
+      case TEnum(_)   : __order__(cast EnumOrder.sort);
+      case TNull      :  nil;
+      case TFunction  : Prelude.error()("unable to compare on a function");
     }
+  }
+}
+class EnumOrder{
+  static public function sort(a : EnumValue, b: EnumValue) {
+    var v = Type.enumIndex(a) - Type.enumIndex(b);
+    if(0 != v)
+      return v;
+    var pa = Type.enumParameters(a);
+    var pb = Type.enumParameters(b);
+    for(i in 0...pa.length) {
+      var v = Order.getOrderFor(pa[i])(pa[i], pb[i]);
+      if(v != 0)
+        return v;
+    }
+    return 0;
   }
 }
 class ArrayOrder {
@@ -127,7 +91,7 @@ class ArrayOrder {
     r.sort(order);
     return r;
   }
-  static public function compare<T>(v1: Array<T>, v2: Array<T>) {
+  @:noUsing static public function compare<T>(v1: Array<T>, v2: Array<T>) {
       return compareWith(v1, v2, Order.getOrderFor(v1[0]));
   } 
   

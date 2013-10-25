@@ -4,83 +4,91 @@ import stx.Tuples;
 import stx.Prelude;
 
 import stx.ds.ifs.Foldable;
-import stx.test.TestCase;
+import Stax.*;
+import stx.Compare.*;
 import stx.ds.Map;
 
+using stx.UnitTest;
 using stx.ds.Foldables;
 using stx.ds.Map;
 using stx.Tuples;
 using stx.Options;
 
 class MapTest extends TestCase {
-  /*public function testAdd(){
+  /*public function testAdd(u:UnitArrow):UnitArrow{
     var m   = Map.create();
     var m2  = m.set( tuple2('a',1) );
     trace(m2);
   }*/
-  public function testSizeGrowsWhenAddingUniqueKeys(): Void {
+  public function testSizeGrowsWhenAddingUniqueKeys(u:UnitArrow):UnitArrow {
     var m = map();
     
     for (i in 0...100) {
-      assertEquals(i, m.size());
+      u = u.add(isEqual(i, m.size()));
       
       m = m.set(i, "foo");
     }
     
-    assertEquals(100, m.size());
+    u = u.add(isEqual(100, m.size()));
+    return u;
   }
   
-  public function testSizeGrowsWhenAddingDuplicateKeys(): Void {
+  public function testSizeGrowsWhenAddingDuplicateKeys(u:UnitArrow):UnitArrow {
     var m = map().set(0, "foo");
     
     for (i in 0...100) m = m.set(0, "foo");
     
-    assertEquals(1, m.size());
+    u = u.add(isEqual(1, m.size()));
+    return u;
   }
   
-  public function testCanRetrieveValuesForKeys(): Void {
+  public function testCanRetrieveValuesForKeys(u:UnitArrow):UnitArrow {
     var m = defaultMap();
     
     for (i in 0...100) {
-      assertEquals("foo", m.get(i).getOrElse(function() return "bar"));
+      u = u.add(isEqual("foo", m.get(i).getOrElse(function() return "bar")));
     }
+    return u;
   }
   
-  public function testSizeShrinksWhenRemovingKeys(): Void {
+  public function testSizeShrinksWhenRemovingKeys(u:UnitArrow):UnitArrow {
     var m = defaultMap();
     
     for (i in 0...100) {
-      assertEquals(100 - i, m.size());
+      u = u.add(isEqual(100 - i, m.size()));
       
       m = m.removeByKey(i);
     }
     
-    assertEquals(0, m.size());
+    u = u.add(isEqual(0, m.size()));
+    return u;
   }
   
-  /*public function testLoadNeverExceedsMax(): Void {
+  public function testLoadNeverExceedsMax(u:UnitArrow):UnitArrow {
     var m = map();
     
     for (i in 0...100) {
       m = m.set(i, "foo");
       
-      assertTrue(m.load() <= Map.MaxLoad);
+      u.add(isTrue(m.load() <= Map.MaxLoad));
     }
-  }*/
+    return u;
+  }
   
-  public function testContainsKeys(): Void {
+  public function testContainsKeys(u:UnitArrow):UnitArrow {
     var m = map();
     
     for (i in 0...100) {
-      assertFalse(m.containsKey(i));
+      u.add(isFalse(m.containsKey(i)));
       
       m = m.set(i, "foo");
       
-      assertTrue(m.containsKey(i));
+      u.add(isTrue(m.containsKey(i)));
     }
+    return u;
   }
   
-  public function devtestAddingSameKeysAndSameValueDoesNotChangeMap(): Void {
+  public function devtestAddingSameKeysAndSameValueDoesNotChangeMap(u:UnitArrow):UnitArrow {
     var m = defaultMap();
     
     for (i in 0...100) {
@@ -88,23 +96,25 @@ class MapTest extends TestCase {
       
       m = m.set(i, "foo");
       
-      this.assertEquals(oldM, m);
-      assertEquals(100, m.size());
+      u = u.add(isEqual(oldM, m));
+      u = u.add(isEqual(100, m.size()));
     }
+    return u;
   }
   
-  public function testAddingSameKeyButDifferentValueUpdatesMap(): Void {
+  public function testAddingSameKeyButDifferentValueUpdatesMap(u:UnitArrow):UnitArrow {
     var m = defaultMap();
     
     for (i in 0...100) {
       m = m.set(i, "bar");
 
-      assertEquals("bar", m.get(i).get());
-      assertEquals(100, m.size());
+      u = u.add(isEqual("bar", m.get(i).get()));
+      u = u.add(isEqual(100, m.size()));
     }
+    return u;
   }
   
-  public function testCanIterateThroughKeys(): Void {
+  public function testCanIterateThroughKeys(u:UnitArrow):UnitArrow {
     var m = defaultMap();
     
     var count = 4950;
@@ -116,52 +126,59 @@ class MapTest extends TestCase {
       ++iterated;
     }
 
-    assertEquals(100, iterated);
-    assertEquals(0,   count);
+    u = u.add(isEqual(100, iterated));
+    u = u.add(isEqual(0,   count));
+    return u;
   }
   
-  public function testCanIterateThroughValues(): Void {
+  public function testCanIterateThroughValues(u:UnitArrow):UnitArrow {
     var m = defaultMap();
     
     for (v in m.values()) {
-      assertEquals("foo", v);
+      u = u.add(isEqual("foo", v));
     }
+    return u;
   }
   
-  public function testFilter(): Void {
+  public function testFilter(u:UnitArrow):UnitArrow {
     var m = defaultMap().filter(function(t) { return t.fst() < 50; });
     
-    assertEquals(50, m.size());
+    u = u.add(isEqual(50, m.size()));
+    return u;
   }  
 
-  public function testEquals() { 
-    assertTrue (map().equals(map()));
-    assertTrue (map([tuple2(1, "a")]).equals(map([tuple2(1, "a")])));
-    assertFalse(map([tuple2(1, "a")]).equals(map([tuple2(2, "a")])));
-    assertFalse(map([tuple2(1, "a")]).equals(map([tuple2(1, "b")])));   
-    assertFalse(map([tuple2(1, "a")]).equals(map([tuple2(1, "a"), tuple2(2, "a")])));
+  public function testEquals(u:UnitArrow):UnitArrow { 
+    u.add(isTrue (map().equals(map())));
+    u.add(isTrue (map([tuple2(1, "a")]).equals(map([tuple2(1, "a")]))));
+    u.add(isFalse(map([tuple2(1, "a")]).equals(map([tuple2(2, "a")]))));
+    u.add(isFalse(map([tuple2(1, "a")]).equals(map([tuple2(1, "b")])))); 
+    u.add(isFalse(map([tuple2(1, "a")]).equals(map([tuple2(1, "a"), tuple2(2, "a")]))));
+    return u;
   }
 
-  public function testCompare() {  
-    assertTrue(map().compare(map()) == 0);
-    assertTrue(map([tuple2(1, "a")]).compare(map([tuple2(1, "a")])) == 0);   
-    assertTrue(map([tuple2(1, "a")]).compare(map([tuple2(2, "a")])) < 0);
-    assertTrue(map([tuple2(1, "a")]).compare(map([tuple2(1, "b")])) < 0);   
-    assertTrue(map([tuple2(1, "a")]).compare(map([tuple2(1, "a"), tuple2(2, "a")])) < 0);   
-    assertTrue(map([tuple2(2, "a")]).compare(map([tuple2(1, "b")])) > 0); 
+  public function testCompare(u:UnitArrow):UnitArrow {  
+    u.add(isTrue(map().compare(map()) == 0));
+    u.add(isTrue(map([tuple2(1, "a")]).compare(map([tuple2(1, "a")])) == 0)); 
+    u.add(isTrue(map([tuple2(1, "a")]).compare(map([tuple2(2, "a")])) < 0));
+    u.add(isTrue(map([tuple2(1, "a")]).compare(map([tuple2(1, "b")])) < 0));
+    u.add(isTrue(map([tuple2(1, "a")]).compare(map([tuple2(1, "a"), tuple2(2, "a")])) < 0));
+    u.add(isTrue(map([tuple2(2, "a")]).compare(map([tuple2(1, "b")])) > 0));
+    return u;
   }
 
-  public function testToString() {    
-    assertEquals("Map ()", map().toString());
-    assertEquals("Map (1 -> a, 2 -> a)", map([tuple2(1, "a"), tuple2(2, "a")]).toString());
+  public function testToString(u:UnitArrow):UnitArrow {    
+    u = u.add(isEqual("Map ()", map().toString()));
+    u = u.add(isEqual("Map (1 -> a, 2 -> a)", map([tuple2(1, "a"), tuple2(2, "a")]).toString()));
+    return u;
   }     
 
-  public function testMapCode() {     
-    assertNotEquals(0, map().hashCode());
-    assertNotEquals(0, map([tuple2(1, "a"), tuple2(2, "a")]).hashCode());              
+  public function testMapCode(u:UnitArrow):UnitArrow {     
+    u = u.add(isNotEqual(0, map().hashCode()));
+    u = u.add(isNotEqual(0, map([tuple2(1, "a"), tuple2(2, "a")]).hashCode()));
+    return u;
   }
     
-  function defaultMap(): Map<Int, String> {
+  function defaultMap():Map<Int, String> {
     var m = map();
     
     for (i in 0...100) m = m.set(i, "foo");

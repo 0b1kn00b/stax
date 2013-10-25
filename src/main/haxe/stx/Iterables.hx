@@ -327,7 +327,7 @@ class Iterables {
    */
   static public function zipWith<A, B, C>(a: Iterable<A>, b: Iterable<B>, f : A -> B -> C): Iterable<C> {
     var len = Math.floor(Math.min(a.size(), b.size()));    
-    return a.zip(b).map(f.spread());
+    return a.zip(b).map(f.tupled());
   }
   /**
     Performs a `zip` where the resulting `Tuple2` has the element on the left, and it's index on the right
@@ -340,7 +340,7 @@ class Iterables {
    */
   static public function zipWithIndexWith<A, B>(a: Iterable<A>, f : A -> Int -> B): Iterable<B> {
     var idx = 0.until(a.size());
-    return a.zip(idx).map(f.spread());
+    return a.zip(idx).map(f.tupled());
   }
   /**
     Append `e` to the end of `iter`.
@@ -608,5 +608,28 @@ class Lists{
   static public function toArray<T>(lst:List<T>){
     var itr : Iterable<T> = lst;
     return SIterables.toArray(itr);
+  }
+}
+class IntIterables {
+  /**
+    Creates an Iterable 0...n
+  */
+  static public function to(start: Int, end: Int): Iterable<Int> {
+    return {
+      iterator: function() {
+        var cur = start;
+    
+        return {
+          hasNext: function(): Bool { return cur <= end; },      
+          next:    function(): Int  { var next = cur; ++cur; return next; }
+        }
+      }
+    }
+  }
+  /**
+    Creates an Iterable 0...(n-1)
+  */
+  static public function until(start: Int, end: Int): Iterable<Int> {
+    return to(start, end - 1);
   }
 }
