@@ -44,7 +44,7 @@ import stx.core.Initializable;
 import stx.Create;
 import stx.Dates;
 import stx.ds.BinaryTree;
-import stx.ds.Collection;
+import stx.ds.ifs.Collection;
 import stx.ds.Group;
 import stx.ds.List;
 import stx.ds.Map;

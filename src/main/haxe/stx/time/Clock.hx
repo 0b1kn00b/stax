@@ -16,7 +16,6 @@
 */
 package stx.time;
 
-@DefaultImplementation("stx.time.SystemClock", "OneToMany")
 interface Clock {
   public function now(): Date;
 }

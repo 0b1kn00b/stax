@@ -20,7 +20,7 @@ using stx.Tuples;
 using stx.Prelude;
 
 import stx.ds.ifs.Foldable;
-import stx.ds.Collection;
+import stx.ds.ifs.Collection;
 import stx.ds.Foldables;
 import stx.plus.Plus;
 

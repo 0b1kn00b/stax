@@ -6,7 +6,7 @@ import stx.Prelude;
 import stx.Tuples;
 
 import stx.ds.ifs.Foldable;
-import stx.ds.Collection;
+import stx.ds.ifs.Collection;
 import stx.ds.Foldables;
 import stx.plus.Plus.*;
 

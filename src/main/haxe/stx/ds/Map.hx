@@ -21,7 +21,7 @@ import stx.Compare.*;
 
 import stx.Tuples;
 import stx.ds.ifs.Foldable;
-import stx.ds.Collection;
+import stx.ds.ifs.Collection;
 
 import stx.plus.Order; 
 import stx.plus.Hasher;

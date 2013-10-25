@@ -12,7 +12,7 @@ import stx.prs.Parser;
 import stx.plus.Equal;
 
 class Tools {
-	public static function enumerable < C, T > (v:C):Enumerable < C, T > {
+	public static function enumerable<C, T>(v:C):Enumerable < C, T > {
 		var o : Enumerable<C,T> = null;
 		cast( switch( Type.typeof(v) ) {
 				case 		TClass(c)	: switch (Type.getClassName(c)) {

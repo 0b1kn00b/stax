@@ -25,7 +25,6 @@ import stx.Eventual;
 /** A scheduled executor service, which can be used to execute tasks at 
  * specified times in the future.
  */
-@DefaultImplementation("stx.time.ScheduledExecutorSystem", "OneToMany")
 interface ScheduledExecutor {
   /** Executes the function a single time the specified number of milliseconds 
    * into the future, returning a future of the return value of the function.

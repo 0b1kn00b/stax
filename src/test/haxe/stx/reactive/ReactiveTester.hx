@@ -5,7 +5,7 @@ import stx.Prelude;
 
 import stx.test.TestCase;
 
-import stx.ds.Collection;
+import stx.ds.ifs.Collection;
 using stx.Tuples;
 import stx.reactive.Reactive;
 import stx.reactive.ReactiveTestCase;

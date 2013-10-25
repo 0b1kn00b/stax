@@ -8,7 +8,7 @@ import stx.Prelude;
 import stx.test.TestCase;
 import stx.reactive.Reactive;
 import stx.ds.List;
-import stx.ds.Collection;
+import stx.ds.ifs.Collection;
 import stx.reactive.SignalCollectionExtensions;
 import stx.reactive.SignalSignal;
 import stx.reactive.SignalFloat;
