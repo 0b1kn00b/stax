@@ -1,18 +1,23 @@
 using stx.UnitTest;
 
+import Stax.*;
 import stx.Log.*;
 
 import stx.ds.Foldables;
 
 class Test{
   function new(){
+    Stax.init();//bootstrap bug
     var rig                     = UnitTest.rig();
     var tests : Array<TestCase> = [
-      new stx.ds.LispListTest(),
+      new stx.PositionsTest(),
+      new stx.LogTest(),
+      new stx.log.prs.LogListingParserTest(),
       //new stx.ObjectsTest(),
 
       //new stx.plus.MetaTest(),
       /*
+      new stx.ds.LispListTest(),
       new stx.OutcomeTest(),
       new stx.ArrowTest(),
       new stx.ds.MapTest(),
@@ -45,7 +50,6 @@ class Test{
       /*
 
       new stx.mcr.MacrosTest(),
-      new stx.LogTest(),
       new stx.ContinuationTest(),
       new stx.ReturnTest(),
       new stx.MethodTest(),

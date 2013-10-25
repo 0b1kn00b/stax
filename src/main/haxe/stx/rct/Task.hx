@@ -15,13 +15,12 @@ class Task {
         private var id:Null<Int>;
     #end
 
-    public var time(get_time, never) : Float;
-    public var func(get_func, never) : CodeBlock;
+    public var time(get_time, never)  : Float;
+    public var func(get_func, never)  : CodeBlock;
 
-    private var _time : Float;
-
-    private var _run : CodeBlock;
-    private var _func : CodeBlock;
+    private var _time                 : Float;
+    private var _run                  : CodeBlock;
+    private var _func                 : CodeBlock;
 
     private var _isCancelled : Bool;
 
@@ -59,7 +58,6 @@ class Task {
 
         _run = function() {};
 
-        // 
         #if flash9
             untyped __global__["flash.utils.clearInterval"](id);
         #elseif js
