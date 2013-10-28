@@ -110,7 +110,7 @@ class Set<T> implements Collection<T> {
         Removes an item from the set.
         Returns true if the item was in the set and it was removed.
     **/
-    public function remove(obj : Null<T>) : Bool {
+    public function rem(obj : Null<T>) : Bool {
         return list.remove(obj);
     }
     
