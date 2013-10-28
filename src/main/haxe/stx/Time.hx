@@ -149,24 +149,26 @@ class TimeInstance {
 		if (!ready) determine();
 		return days;
 	}
-	
-	public static function day(m:Int = 1) {
-		return new Time().setRaw( 1. * 1000 * 60 * 60 * 24 * m);
+	static public function week(){
+		return day(7);
 	}
-	public static function hour(m:Int = 1) {
-		return new Time().setRaw( 1. * 1000 * 60 * 60 * m);
+	static public function day(m:Int = 1) {
+		return new TimeInstance().setRaw( 1. * 1000 * 60 * 60 * 24 * m);
 	}
-	public static function minute(m:Int = 1) {
-		return new Time().setRaw( 1. * 1000 * 60 * m);
+	static public function hour(m:Int = 1) {
+		return new TimeInstance().setRaw( 1. * 1000 * 60 * 60 * m);
 	}
-	public static function second(m:Int = 1) {
-		return new Time().setRaw( 1. * 1000 * m);
+	static public function minute(m:Int = 1) {
+		return new TimeInstance().setRaw( 1. * 1000 * 60 * m);
 	}
-	public static function millisecond(m:Int = 1) {
-		return new Time().setRaw( 1. * m);
+	static public function second(m:Int = 1) {
+		return new TimeInstance().setRaw( 1. * 1000 * m);
+	}
+	static public function millisecond(m:Int = 1) {
+		return new TimeInstance().setRaw( 1. * m);
 	}
 	public function toString() {
-		return '$days:$hours:$minutes:$seconds:$milliseconds';
+		return '$days#$hours:$minutes:$seconds.$milliseconds';
 	}
 	public function toDate(){
 		return Date.fromTime(this.raw);
