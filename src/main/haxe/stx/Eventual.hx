@@ -3,8 +3,6 @@ package stx;
 import stx.Tuples;
 
 using stx.Outcome;
-using stx.ifs.Identity;
-using stx.ifs.Pure;
 using stx.Tuples;
 using stx.Fail;            
 using stx.Prelude;

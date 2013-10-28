@@ -17,7 +17,6 @@ import stx.test.*;
 
 using stx.ValueTypes;
 using stx.Compare;
-using stx.ifs.Pure;
 using stx.Strings;
 using stx.Options;
 using stx.Reflects;

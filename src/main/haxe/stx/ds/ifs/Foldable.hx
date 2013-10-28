@@ -1,7 +1,5 @@
 package stx.ds.ifs;
 
-import stx.ifs.Identity;
-import stx.mcr.Self;
 
 /** 
   A structure that can be folded over. The type system cannot enforce it, but
