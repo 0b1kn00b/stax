@@ -1,20 +1,18 @@
-package stx.rct;
+package hx.rct;
 
-private enum EventException {
-  StopPropagation;
-}
+import stx.Prelude;
 
 class Notifier {
-  private var handlers : Array<Void -> Void>;
+  private var handlers : Array<CodeBlock>;
 
   public function new() {
     handlers = new Array();
   }
-  public function add(h : Void -> Void) : Void -> Void {
+  public function add(h : CodeBlock) : CodeBlock {
     handlers.push(h);
     return h;
   }
-  public function rem(h : Void -> Void) : Void -> Void {
+  public function rem(h : CodeBlock) : CodeBlock {
     for(i in 0...handlers.length)
       if(Reflect.compareMethods(handlers[i], h))
         return handlers.splice(i, 1)[0];

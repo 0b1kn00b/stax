@@ -1,21 +1,4 @@
-package stx.rct;
-
-import stx.reactive.Reactive;
-import stx.reactive.Streams;
-
-import stx.plus.Equal;
-
-using stx.Eventual;
-using stx.Arrow;
-using stx.Prelude;
-using stx.Arrays;
-using stx.Tuples;
-using stx.Options;
-using stx.Compose;
-using stx.Functions;
-
-import stx.rct.*;
-import stx.rct.Reactors;
+package hx.rct;
 
 /**
   The reactor makes use of Haxe's enumerations, typically building an Enum

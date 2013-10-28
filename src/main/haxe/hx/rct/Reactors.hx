@@ -1,6 +1,4 @@
-package stx.rct;
-
-import stx.rct.*;
+package hx.rct;
 
 using stx.Tuples;
 using stx.Arrow;
