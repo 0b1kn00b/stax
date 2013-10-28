@@ -3,26 +3,25 @@ package stx;
 import Type;
 
 using stx.Arrays;
-/**
+@doc("
+  ```
   using Type;
   using ValueTypes;
-  ...
-  v.typeof().name();
-*/
+  
+  class Test(){
+    static function main(){
+      v.typeof().name();
+    }
+  }
+  ```
+")
 class ValueTypes{
-  /**
-   Returns the local Class name of a ValueType.
-   @param o       A typed object.
-   @return        The objects typename.
- */
- @:thx inline public static function leaf(v : ValueType):String{
+  @doc("Returns the local Class name of a `ValueType`.")
+  @params("A typed object","The objects typename")
+  @:thx inline public static function leaf(v : ValueType):String{
     return name(v).split('.').pop();
   }
-  /**
-    Returns the type name of any ValueType
-    @param o
-    @return
-   */
+  @doc("Returns the type name of any `ValueType`.")
   @:thx public static function name(v : ValueType):String{
     return switch(v){
       case TNull    : "null";
@@ -43,9 +42,7 @@ class ValueTypes{
       case TEnum(c)   : Type.getEnumName(c).split('.').dropRight(1).join('.');
     }
   }
-  /**
-    Resolves typename to ValueType
-  */
+  @doc("Resolves typename to `ValueType`.")
   static public inline function resolve(str:String):ValueType{
     var o = TUnknown;
     try{

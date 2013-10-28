@@ -1,4 +1,4 @@
-/**
+/*
 * Copyright (c) 2008 Chase Kernan, Laurence Taylor
 * chase.kernan@gmail.com, polysemantic@gmail.com
 * Based off of Michael Baczynski's as3ds project, http://www.polygonal.de.
@@ -23,32 +23,30 @@
 * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 * OTHER DEALINGS IN THE SOFTWARE.
-**/
+*/
 
 package hx.ds;
 
-/**
+@doc("
     A Binary Search Tree (BST).
         
     A BST stores data in a recursive manner so that you can access it quickly
     by using a key. Therefore, a BST automatically sorts data as it is
     inserted. For a BST to be valid, every node has to follow two rules:
-    <ol><li>The data value in the left subtree must be less than the data
-    value in the current node.</li><li>The data value in the right subtree
-    must be greater than the data value in the current node.</li></ol> 
-**/
+    The data value in the left subtree must be less than the data
+    value in the current node. The data value in the right subtree
+    must be greater than the data value in the current node.
+")
 class BinarySearchTree<T> implements Collection<T> {
     
-    /**
-        The root node being referenced.
-    **/
+    @doc("The root node being referenced.")
     public var root : Node<Null<T>>;
     
     public var length(get_length, null) : Int;
                 
     private var compare : Null<T> -> Null<T> -> Int;
                 
-    /**
+    @doc("
         Initializes a BST tree with a given comparison function. The function
         should return -1 if the left is 'less than' the right, 0 if they are
         equal, and 1 if the left is 'greater than' the right. 
@@ -56,7 +54,7 @@ class BinarySearchTree<T> implements Collection<T> {
         If the function is omitted, the BST uses [Reflect.compare]. There is a
         danger to this however. If the type of the tree isn't a standard type
         or doesn't implement [__compare(other) : Int], then the tree will fail.
-    **/
+    ")
     public function new(?compareFunc : Null<T> -> Null<T> -> Int) {
         root = null;
                         
@@ -64,9 +62,7 @@ class BinarySearchTree<T> implements Collection<T> {
                   else                     compareFunc;
     }
     
-    /**
-        Inserts an item into the tree.
-    **/
+    @doc("Inserts an item into the tree.")
     public function insert(obj : Null<T>) {
         if (root == null) root = new Node(obj);
         else {
@@ -90,10 +86,10 @@ class BinarySearchTree<T> implements Collection<T> {
         }
     }
     
-    /**
+    @doc("
         Finds a piece of data in the tree and returns a reference to the node
         that contains a match, or null if no match is found.
-    **/
+    ")
     public function find(obj : Null<T> ) : Node<Null<T>> {
         var cur = root;
         
@@ -106,9 +102,7 @@ class BinarySearchTree<T> implements Collection<T> {
         return null;
     }
     
-    /**
-        Removes a node from the BST.
-    **/
+    @doc("Removes a node from the BST.")
     public function remove(node : Node<Null<T>>) {
         if (node.left != null && node.right != null) {
             var t = node;
@@ -160,9 +154,7 @@ class BinarySearchTree<T> implements Collection<T> {
         return find(obj) != null;
     }
                 
-    /**
-        The tree is cleared recursively, starting from the root.
-    **/
+    @doc("The tree is cleared recursively, starting from the root.")
     public function clear() {
         if (root != null) {
             root.destroy();
@@ -170,10 +162,10 @@ class BinarySearchTree<T> implements Collection<T> {
         }
     }
                 
-    /**
+    @doc("
         Returns an iterator based on an in order traversal of the tree.
         NOTE: This returns the data NOT the node.
-    **/
+    ")
     public function iterator() : Iterator<Null<T>> {
         var a = new Array<Null<T>>();
         traverse(root, InOrder, function (node : Node<Null<T>>) {
@@ -191,9 +183,7 @@ class BinarySearchTree<T> implements Collection<T> {
         return if (root == null) true else root.count() == 0; 
     }
     
-    /**
-        Returns the DATA of the nodes based off an in order traversal.
-    **/
+    @doc("Returns the DATA of the nodes based off an in order traversal.")
     public function toArray() : Array<Null<T>> {
         var a = new Array<Null<T>>();
         traverse(root, InOrder, function(node : Node<Null<T>>) {
@@ -203,17 +193,15 @@ class BinarySearchTree<T> implements Collection<T> {
         return a;
     }
                 
-    /**
+    @doc("
         Prints out a string representing the current object.
-        Example: "[BST, size=35]
-    **/
+        Example: [BST, size=35]
+    ")
     public function toString() : String {
         return "[BST, size=" + length + "]";
     }
                 
-    /**
-        Prints out all elements (for debug/demo purposes).
-    **/
+    @doc("Prints out all elements (for debug/demo purposes).")
     public function dump() : String {
         var s = "";
         
@@ -224,11 +212,8 @@ class BinarySearchTree<T> implements Collection<T> {
         return s;
     }
                 
-    /**
-        Performs a traversal (defined by [method]) on the node.   
-    **/
-    public static function traverse<U>(node : Node<U>, method : TraverseMethod, 
-                                       process : Node<U> -> Void) {
+    @doc("Performs a traversal (defined by [method]) on the node.   ")
+    public static function traverse<U>(node : Node<U>, method : TraverseMethod, process : Node<U> -> Void) {
         if (node != null) {
             switch(method) {
                 
@@ -251,59 +236,47 @@ class BinarySearchTree<T> implements Collection<T> {
     }
 }
 
-/**
+@doc("
     Method of traversing a binary tree.
     
     PreOrder: Vist root, left, right.
     InOrder: Vist left, root, right.
     PostOrder: Vist left, right, root.
-**/
+")
 enum TraverseMethod {
     PreOrder;
     InOrder;
     PostOrder;
 }
 
-/**
+@doc("
     A binary tree node from which you can build a binary tree.
     
     A Binary Tree is a simplified tree structure in which every node is only
     allowed to have up to two children nodes, which are called the left and
     right child.
-**/
+")
 class Node<T> {
     
-    /**
-        The left child node being referenced.
-    **/
+    @doc("The left child node being referenced.")
     public var left : Node<T>;
                 
-    /**
-        The right child node being referenced.
-    **/
+    @doc("The right child node being referenced.")
     public var right : Node<T>;
                 
-    /**
-        The parent node being referenced.
-    **/
+    @doc("The parent node being referenced.")
     public var parent : Node<T>;
                 
-    /**
-        The node's data.
-    **/
+    @doc("The node's data.")
     public var data : T;
                 
-    /**
-        Creates an empty node.
-    **/
+    @doc("Creates an empty node.")
     public function new(obj : T) {
         data = obj;
         parent = left = right = null;
     }
                 
-    /**
-        Writes data into the left child.
-    **/
+    @doc("Writes data into the left child.")
     public function setLeftData(obj : T) {
         if (left == null) {
             left = new Node(obj);
@@ -313,9 +286,7 @@ class Node<T> {
         }
     }
                 
-    /**
-        Writes data into the right child.
-    **/
+    @doc("Writes data into the right child.")
     public function setRightData(obj : T) {
         if (right == null) {
             right = new Node(obj);
@@ -325,23 +296,17 @@ class Node<T> {
         }
     }
     
-    /**
-        Checks if the node is a left node relative to its parent node.
-    **/
+    @doc("Checks if the node is a left node relative to its parent node.")
     public function isLeft() : Bool {
         return this == parent.left;
     }
                 
-    /**
-        Checks if the node is a right node relative to its parent node.
-    **/
+    @doc("Checks if the node is a right node relative to its parent node.")
     public function isRight() : Bool {
         return this == parent.right;
     }
                 
-    /**
-        Computes the depth of a tree.
-    **/
+    @doc("Computes the depth of a tree.")
     public function getDepth() : Int {
         var leftData = -1; 
         var rightData = -1;
@@ -353,9 +318,7 @@ class Node<T> {
         return ((if (leftData > rightData) leftData else rightData) + 1);
     }
                 
-    /**
-        Recursively counts the total number of nodes including this node.
-    **/
+    @doc("Recursively counts the total number of nodes including this node.")
     public function count() : Int {
         var c = 1;
                         
@@ -365,10 +328,7 @@ class Node<T> {
         return c;
     }
                 
-    /**
-        Recursively clears the tree by deleting all child nodes underneath
-        the node the method is called on.
-    **/
+    @doc("Recursively clears the tree by deleting all child nodes underneath the node the method is called on.")
     public function destroy() {
         if (left != null) left.destroy();
         left = null;
@@ -377,9 +337,7 @@ class Node<T> {
         right = null;
     }
                 
-    /**
-        Prints out a string representing the current object.
-    **/
+    @doc("Prints out a string representing the current object.")
     public function toString() : String {
         return "[BinaryTree-Node, data= " + Std.string(data) + "]";
     }

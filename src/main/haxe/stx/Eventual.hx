@@ -15,15 +15,14 @@ using stx.Iterables;
 using stx.Eventual;
 using stx.Eithers;
 
-/**
+@doc("
   An asynchronous operation that may complete in the future unless
   successfully canceled.
-  <p>
+  
   Eventuals can be combined and chained together to form complicated
-  asynchronous control flows. Often used operations are map() and
-  flatMap().
-  <p>
- */
+  asynchronous control flows. Often used operations are `map()` and
+  `flatMap()`.
+")
 class Eventual<T> {
   @:isVar public var value(get, set):T;
   
@@ -51,19 +50,17 @@ class Eventual<T> {
   public function isEmpty(){
     return _listeners.length == 0;
   }
-  /** 
-    Creates a "dead" future that is canceled and will never be delivered.
-   */
+  @doc("Creates a 'dead' future that is canceled and will never be delivered.")
   public static function dead<T>(): Eventual<T> {
     return new Eventual().affect(function(future) {
       future.cancel();
     });
   }
 
-  /** 
+  @doc("
     Delivers the value of the future to anyone awaiting it. If the value has
     already been delivered, this method will throw an exception.
-   */
+  ")
   public function deliver(t: T): Eventual<T> {
     return if (_isCanceled) this;
     //else if (_isSet) { Prelude.error()('Eventual already delivered'); }
@@ -80,30 +77,30 @@ class Eventual<T> {
     }
   }
 
-  /** 
+  @doc("
     Installs the specified canceler on the future. Under ordinary
     circumstances, the future will not be canceled unless all cancelers
     return true. If the future is already done, this method has no effect.
-    <p>
+    
     This method does not normally need to be called. It's provided primarily
     for the implementation of future primitives.
-   */
+  ")
   public function allowCancelOnlyIf(f: Void -> Bool): Eventual<T> {
     if (!isDone()) _cancelers.push(f);
 
     return this;
   }
 
-  /** 
+  @doc("
     Installs a handler that will be called if and only if the future is
     canceled.
-    <p>
+    
     This method does not normally need to be called, since there is no
     difference between a future being canceled and a future taking an
     arbitrarily long amount of time to evaluate. It's provided primarily
     for implementation of future primitives to save resources when it's
     explicitly known the result of a future will not be used.
-   */
+  ")
   public function ifCanceled(f: Void -> Void): Eventual<T> {
     if (isCanceled()) f();
     else if (!isDone()) _canceled.push(f);
@@ -111,14 +108,14 @@ class Eventual<T> {
     return this;
   }
 
-  /** 
+  @doc("
     Attempts to cancel the future. This may succeed only if the future is
     not already delivered, and if all cancel conditions are satisfied.
-    <p>
+    
     If a future is canceled, the result will never be delivered.
    
     @return true if the future is canceled, false otherwise.
-   */
+  ")
   public function cancel(): Bool {
     return if (isDone()) false;   // <-- Already done, can't be canceled
     else if (isCanceled()) true;  // <-- Already canceled, nothing to do
@@ -135,31 +132,22 @@ class Eventual<T> {
     }
   }
 
-  /** 
-    Determines if the future is "done" -- that is, delivered or canceled.
-   */
+  @doc("Determines if the future is 'done' -- that is, delivered or canceled.")
   public function isDone(): Bool {
     return isDelivered() || isCanceled();
   }
 
-  /** 
-    Determines if the future is delivered.
-   */
+  @doc("Determines if the future is delivered.")
   public function isDelivered(): Bool {
     return _isSet;
   }
 
-  /** 
-    Determines if the future is canceled.
-   */
+  @doc("Determines if the future is canceled.")
   public function isCanceled(): Bool {
     return _isCanceled;
   }
 
-  /** 
-    Delivers the result of the future to the specified handler as soon as it
-    is delivered.
-   */
+  @doc("Delivers the result of the future to the specified handler as soon as it is delivered.")
   public function deliverTo(f: T -> Void): Eventual<T> {
     if (isCanceled()) return this;
     else if (isDelivered()) f(value);
@@ -167,18 +155,16 @@ class Eventual<T> {
 
     return this;
   }
-  /**
-    Alias for deliverTo
-  */
+  @doc("Alias for deliverTo")
   public function foreach(f:T->Void):Eventual<T> {
     return deliverTo(f);
   }
-  /** 
+  @doc("
     Uses the specified function to transform the result of this future into
     a different value, returning a future of that value.
-    <p>
-    urlLoader.load("image.png").map(function(data) return new Image(data)).deliverTo(function(image) imageContainer.add(image));
-   */
+    
+    urlLoader.load('image.png').map(function(data) return new Image(data)).deliverTo(function(image) imageContainer.add(image));
+  ")
   public function map<S>(f: T -> S): Eventual<S> {
     var fut: Eventual<S> = new Eventual();
 
@@ -187,22 +173,19 @@ class Eventual<T> {
 
     return fut;
   }
-   /** 
+  @doc("
     Maps the result of this future to another future, and returns a future
     of the result of that future. Useful when chaining together multiple
     asynchronous operations that must be completed sequentia
     lly.
-    <p>
-    <pre>
-    <code>
-    urlLoader.load("config.xml").flatMap(function(xml){
+    ```
+    urlLoader.load('config.xml').flatMap(function(xml){
       return urlLoader.load(parse(xml).mediaUrl);
     }).deliverTo(function(loadedMedia){
       container.add(loadedMedia);
     });
-    </code>
-    </pre>
-   */
+    ```
+  ")
   public function flatMap<B>(fn:T->Eventual<B>):Eventual<B>{
     var fut: Eventual<B> = new Eventual();
     var f = this;
@@ -219,19 +202,17 @@ class Eventual<T> {
     return fut;
   }
 
-  /**
-    Drop this future, returning f.
-  */
+  @doc("Drop this future, returning `f`.")
   public function then<S>(f: Eventual<S>): Eventual<S> {
     return f;
   }
 
 
-  /** 
+  @doc("
     Returns a new future that will be delivered only if the result of this
     future is accepted by the specified filter (otherwise, the new future
     will be canceled).
-   */
+  ")
   public function filter(f: T -> Bool): Eventual<T> {
     var fut: Eventual<T> = new Eventual();
 
@@ -242,12 +223,12 @@ class Eventual<T> {
     return fut;
   }
 
-  /** 
+  @doc("
     Zips this future and the specified future into another future, whose
     result is a tuple of the individual results of the futures. Useful when
     an operation requires the result of two futures, but each future may
     execute independently of the other.
-   */
+  ")
   public function zip<A>(f2: Eventual<A>): Eventual<Tuple2<T, A>> {
     return zipWith( f2, tuple2 );
   }
@@ -275,9 +256,7 @@ class Eventual<T> {
 
     return zipped; 
   }
-  /** 
-    Retrieves the value of the future, as an option.
-   */
+  @doc("Retrieves the value of the future, as an `Option`.")
   public function valueO(): Option<T> {
     return if (_isSet) Some(value) else None;
   }
@@ -433,9 +412,7 @@ class Eventuals{
   }
 }
 class Eventuals1{
-  /**
-    One parameter callback handler, where callback is called exactly once.
-  */
+  @doc("One parameter callback handler, where callback is called exactly once.")
   static public function eventualOf<A>(f:(A->Void)->Void):Eventual<A>{
     var fut = new Eventual();
     f(
@@ -447,9 +424,7 @@ class Eventuals1{
   }
 }
 class Eventuals2{
-  /**
-    Creates a Eventual of Tuple2<A,B> from a callback function(a:A,b:B)
-  */
+  @doc("Creates a Eventual of Tuple2<A,B> from a callback function(a:A,b:B)")
   static public function eventualOf<A,B>(f:(A->B->Void)->Void):Eventual<Tuple2<A,B>>{
     var ft = new Eventual();
     f(
@@ -461,9 +436,7 @@ class Eventuals2{
   }
 }
 class Eventuals3{
-  /**
-    Creates a Eventual of Tuple2<A,B,C> from a callback function(a:A,b:B,c:C)
-  */
+  @doc("Creates a Eventual of Tuple2<A,B,C> from a callback function(a:A,b:B,c:C)")
   static public function eventualOf<A,B,C>(f:(A->B->C->Void)->Void):Eventual<Tuple3<A,B,C>>{
     var ft = new Eventual();
     f(

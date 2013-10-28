@@ -9,9 +9,9 @@ import stx.rtti.*;
 
 using stx.rtti.RTypes;
 
-/**
-  calling introspect on any subclass produces the RClass for this Type.
-*/
+@doc("
+  calling introspect on any subclass produces the `RClass` for this Type.
+")
 @:rtti @:keepSub class Introspect{
   public function new(){}
 

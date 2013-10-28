@@ -7,6 +7,14 @@ using stx.Options;
 using Std;
 
 class Iterators {
+  @doc("")
+  @:noUsing static public inline function create<T>(has:Void->Bool,nxt:Void->T):Iterator<T>{
+    return {
+      next      : nxt,
+      hasNext   : has
+    }
+  }
+  @doc("")
 	static public function toArray<T>(itr:Iterator<T>):Array<T>{
 		var o = [];
 		for(x in itr){
@@ -14,6 +22,7 @@ class Iterators {
 		}
 		return o;
 	}
+  @doc("")
 	static public function forAll<T>(itr:Iterator<T>,fn:T->Bool):Bool{
 		var ok = true;
 		while ( itr.hasNext() ){
@@ -22,12 +31,14 @@ class Iterators {
 		}
 		return ok;
 	}
+  @doc("")
 	static public function foreach<T>(itr:Iterator<T>,fn:T->Void):Iterator<T>{
 		for (o in itr){
 			fn(o);
 		}
 		return itr;
 	}
+  @doc("")
 	static public function size<T>(itr:Iterator<T>):Int{
 		var o = 0;
 		for( i in itr ){
@@ -35,6 +46,7 @@ class Iterators {
 		}
 		return o;
 	}
+  @doc("")
 	static public function map<T,U>(itr:Iterator<T>, fn:T->U):Iterator<U>{
 		var result = [];
 		for (v in itr){
@@ -52,6 +64,7 @@ class Iterators {
 		}
 		return result.iterator();
 	}
+  @doc("")
 	static public function flatMap<T,U>(itr: Iterator<T>, fn:T->Iterator<U>):Iterator<U>{
 		var result = [];
 		for (x in itr){
@@ -61,16 +74,19 @@ class Iterators {
 		}
 		return result.iterator();
 	}
+  @doc("")
 	static public function foldl<T, Z>(iter: Iterator<T>, seed: Z, mapper: Z -> T -> Z): Z {
     var folded = seed;
     for (e in iter) { folded = mapper(folded, e); }
     return folded;
   }
+  @doc("")
   static public function foldl1<T>(iter: Iterator<T>, mapper: T -> T -> T): T {
     var folded = iter.next();
     for (e in iter) { folded = mapper(folded, e); }
     return folded;
   }
+  @doc("")
   static public function foldr<T, Z>(itr: Iterator<T>, z: Z, f: T -> Z -> Z): Z {
   	var a 		= toArray(itr);
     var r 		= z;
@@ -81,6 +97,7 @@ class Iterators {
     }
     return r;
   }
+  @doc("")
   static public function zip<A,B>(itr0:Iterator<A>,itr1:Iterator<B>):Iterator<Tuple2<A,B>>{
     var result = [];
     

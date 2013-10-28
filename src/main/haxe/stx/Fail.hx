@@ -14,6 +14,9 @@ using stx.Compose;
 using stx.Positions;
 using stx.Functions;
 
+@doc("
+  Underlies all thrown values in Stax, extensible through the use of `FrameworkFail`.
+")
 enum StaxFail{
   AbstractMethodFail(?pos:PosInfos);
   ArgumentFail(field:String,?pos:PosInfos);
@@ -29,7 +32,11 @@ enum StaxFail{
   ConstructorFail(cls:Class<Dynamic>,?err:Fail);
 }
 
+@doc("
+  Stax's error class, is used to allow typed `try...catch` declarations. Fails can be accumulated through the `append` function.
+")
 class Fail{
+  @doc("Transforms any `EnumValue` into a Fail")
 	static public function fail(cde:EnumValue){
 		return new Fail(cde);
 	}
@@ -48,6 +55,7 @@ class Fail{
 				});
 		this.cde 				= cde;
 	}
+  @doc('returns the string representation of the parameters of the wrapped enum')
 	public function msg():String{
 		var prm = cde.params().foldl1(
 			function(memo,next){

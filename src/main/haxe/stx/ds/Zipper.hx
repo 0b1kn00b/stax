@@ -5,11 +5,11 @@ using Lambda;
 enum ZipperType<R,I,O,P>{
   Zipped(root:R,current:I->O,rest:P);
 }
-/**
+@doc("
   Typed navigation of arbitrary structures, calling `dn` with a function produces a Zipper holding a new value,
   calling `up` produces a Zipper holding the previous value. All historical type information is maintained in the 
-  type annotation P for each step. Immutable structure, supports pattern-matching.
-*/
+  type annotation `<P>` for each step. Immutable structure, supports pattern-matching.
+")
 abstract Zipper<R,I,O,P>(ZipperType<R,I,O,P>) from ZipperType<R,I,O,P> to ZipperType<R,I,O,P>{
   @:noUsing static public function pure<R,P>(v:R):Zipper<R,R,R,P>{
     return new Zipper(Zipped(v,function(r:R) return r,null));
@@ -42,6 +42,7 @@ abstract Zipper<R,I,O,P>(ZipperType<R,I,O,P>) from ZipperType<R,I,O,P> to Zipper
       case Zipped(_,_,rest) : rest;
     }
   }
+  @:bug("#0b1kn00b: cast throws an error in Js.")
   public function value():O{
     var l     : Dynamic                                          = up();
     var stack : Array<Zipper<Dynamic,Dynamic,Dynamic,Dynamic> >  = [this];
@@ -56,7 +57,6 @@ abstract Zipper<R,I,O,P>(ZipperType<R,I,O,P>) from ZipperType<R,I,O,P> to Zipper
         return o;
       }
     ,root);
-    //cast throws an error in Js.
     return untyped out;
   }
 }

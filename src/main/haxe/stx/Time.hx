@@ -2,60 +2,96 @@ package stx;
 
 using Math;
 
-class Time {
+abstract Time(TimeInstance) from TimeInstance to TimeInstance{
+  public function new(v){
+    this = v;
+  }
+  @:from static public function fromDate(dt:Date):Time{
+  	return new TimeInstance().setRaw(dt.getTime());
+  }
+  @:to public function toDate():Date{
+  	return this.toDate();
+  }
+  public function getRaw():Float{
+  	return this.getRaw();
+  }
+  public function add(t:Time):Time {
+		return this.add(t);
+	}
+	@doc("Subtracts Times.")
+	public function sub(t:Time):Time {
+		return this.sub(t);
+	}
+	@doc("Multiplies Times.")
+	public function mul(t:Time):Time {
+		return this.mul(t);
+	}
+	@doc("Divides Times.")
+	public function div(t:Time):Time {
+		return this.div(t);
+	}
+	public function mod(t:Time):Time {
+		return this.mod(t);
+	}
+	public function compare(t:Time):Int{
+		return stx.Maths.Floats.compare(getRaw(),t.getRaw());
+	}
+	static public function now():Time {
+		return TimeInstance.now();
+	}
+	static public function day(m:Int = 1):Time {
+		return TimeInstance.day(m);
+	}
+	static public function hour(m:Int = 1):Time {
+		return TimeInstance.hour(m);
+	}
+	static public function minute(m:Int = 1):Time {
+		return TimeInstance.minute(m);
+	}
+	static public function second(m:Int = 1):Time {
+		return TimeInstance.second(m);
+	}
+	static public function millisecond(m:Int = 1):Time {
+		return TimeInstance.millisecond(m);
+	}
+}
+class TimeInstance {
 
 	private var raw (default,null): Float;
 	
 	public function new() {
 		this.ready 	= false;
 	}
-	public static function now() {
-		return new Time().setRaw(haxe.Timer.stamp() * 1000 );
+	static public function now() {
+		return new TimeInstance().setRaw(haxe.Timer.stamp() * 1000 );
 	}
 	public function setRaw(v:Float) {
 		this.raw 		= v;
 		return this;
 	}
-	/**
-	 * Add Times together.
-	 * @param	t
-	 * @return
-	 */
-	public function add(t:Time):Time {
-		return new Time().setRaw( this.raw + t.raw );
+	public function getRaw(){
+		return this.raw;
 	}
-	/**
-	 * Subtracts Times.
-	 * @param	t
-	 * @return
-	 */
-	public function sub(t:Time):Time {
-		return new Time().setRaw( this.raw - t.raw );
+	@doc("Add Times together.")
+	public function add(t:TimeInstance):Time {
+		return new TimeInstance().setRaw( this.raw + t.raw );
 	}
-	/**
-	 * Multiplies Times.
-	 * @param	t
-	 * @return
-	 */
-	public function mul(t:Time):Time {
-		return new Time().setRaw( this.raw * t.raw );
+	@doc("Subtracts Times.")
+	public function sub(t:TimeInstance):Time {
+		return new TimeInstance().setRaw( this.raw - t.raw );
 	}
-	/**
-	 * Divides Times.
-	 * @param	t
-	 * @return
-	 */
-	public function div(t:Time):Time {
-		return new Time().setRaw( this.raw * t.raw );
+	@doc("Multiplies Times.")
+	public function mul(t:TimeInstance):Time {
+		return new TimeInstance().setRaw( this.raw * t.raw );
+	}
+	@doc("Divides Times.")
+	public function div(t:TimeInstance):Time {
+		return new TimeInstance().setRaw( this.raw * t.raw );
 	}
 	
-	/**
-	 * Returns the modulo of two Times.
-	 * @param	t
-	 * @return
-	 */
-	public function mod(t:Time):Time {
-		return new Time().setRaw( this.raw % t.raw );
+	@doc("Returns the modulo of two Times.")
+	public function mod(t:TimeInstance):Time {
+		return new TimeInstance().setRaw( this.raw % t.raw );
 	}
 	
 	private function determine() { 

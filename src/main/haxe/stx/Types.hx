@@ -23,19 +23,14 @@ using stx.Compose;
 using stx.Types;
 
 class Types{
-
   static public inline function type(v:Dynamic):Class<Dynamic>{
     return Type.getClass(v);
   }
-  /**
-    returns ValueType
-  */
+  @doc("returns `ValueType` of `v`.")
   static public inline function vtype(v:Dynamic):ValueType{
     return Type.typeof(v);
   }
-  /**
-    Returns Class of `name`
-  */
+  @doc("Returns `Class` of `name`")
   static public function classify(name:String):Class<Dynamic>{
     return cast Type.resolveClass(name);
   }
@@ -57,23 +52,17 @@ class Types{
     }
     return o;
   }
-  /**
-    class name
-  */
+  @doc("Produces class name.")
   static public function name<A>(cls:Class<A>):String{
     return Type.getClassName(cls);
   }
-  /**
-    package name
-  */
+  @doc("Produces package name")
   static public function pack(cls:Class<Dynamic>):String{
     var o = name(cls).split('.');
         o.pop();
     return o.join('.');
   }
-  /*
-    Construct `type` with optional args
-  */
+  @doc("Construct `type` with optional arguments.")
   static public function construct<A>(type:Class<A>,?args:Array<Dynamic>):Null<A>{
     args = args == null ? [] : args;
 
@@ -85,37 +74,26 @@ class Types{
       throw(fail(ConstructorFail(type,fail(NativeFail(e)))));
     }
   }
-  /**
-  */
-  @:note('#0b1kn00b: could generalise this for enums')
+  @doc("")
+  @:note('#0b1kn00b: could generalise this for enums.')
   static public function build<A>(name:String,?args:Array<Dynamic>):A{
     return option(classify(name)).flatMap(
       construct.bind(_,args).then(option)
     ).getOrElse(thunk(null));
   }
-  /**
-    Create type, bypassing constructor
-  */
+  @doc("Create `type`, bypassing constructor.")
   static public inline function instantiate<A>(type:Class<A>):A{
     return Type.createEmptyInstance(type);
   }
-  /**
-    Fieldnames for instance variables
-  */
+  @doc("Produces field names for instance variables.")
   static public inline function locals<A>(type:Class<A>):Array<String>{
     return Type.getInstanceFields(type);
   }
-  /**
-    Fieldnames for class statics
-  */
+  @doc("Produces fields names for class statics.")
   static public inline function statics<A>(type:Class<A>):Array<String>{
     return Type.getClassFields(type);
   }
-  /**
-    Does `type` exist in the Class hierarchy?
-    @param  type
-    @param  sup
-  */
+  @doc("Does `type` exist in the hierarchy of `type`?")
   @:thx
   static public inline function descended(type : Class<Dynamic>, sup : Class<Dynamic>):Bool{
     var o = false;
@@ -129,12 +107,9 @@ class Types{
     }
     return o;
   }
-  /**
-    @param type      A Type to cast to.
-    @param value     A value to cast.
-    @return          The casted value.
-   */
    @:thx
+   @params("A Type to cast to.","any class instance.")
+   @returns("The casted value.")
    static public inline function of<T>(type : Class<T>, value : Dynamic) : Null<T>{
       return try{
         (Std.is(value, type) ? cast value : null);
@@ -142,15 +117,12 @@ class Types{
         throw fail(TypeFail('could not cast value to ${name(type)}'));
       }
   }
-  /**
+  /*@doc("
     Do the fields of `obj` fit into the schema of `type`. 
     Specifically, are the fields in `obj` a match or subset of the fields found in `type`.
     This is still no guarantee that they are compatible because the field types may not match.
-  */
-  /*static public function fits(type:Class<T>,obj:Dynamic):Bool{
+  ")
+  static public function fits(type:Class<T>,obj:Dynamic):Bool{
 
   }*/
-  /**
-    Do the fields
-  */
 }

@@ -15,26 +15,18 @@ using stx.Types;
 using stx.Arrays;
 using stx.ValueTypes;
 
-/**
-  Represents a collection of Interface -> Instance bindings
-*/
+@doc("
+  Represents a collection of interface -> instance bindings
+")
 interface Module{
-  /**
-    @see stx.ioc.Scope
-  */
+  @doc("@see `stx.ioc.Scope`")
   public var scope(default,null) : Scope;
-  /**
-    Is interface `cls` bound in context `pos`
-  */
+  @doc("Is interface `cls` bound in context `pos`")
   public function bound(cls:Class<Dynamic>,pos:PosInfos):Bool;
-  /**
-    Returns implementation of `cls`
-  */
+  @doc("Returns implementation of `cls`")
   public function injection<T>(cls:Class<T>):Null<T>;
 }
-/**
-  Editable Module
-*/
+@doc("Editable Module")
 interface PublicModule extends Module{
   public function bind<T>(cls:Class<T>,imp:Binder<T>):Bool;
   public function unbind<T>(cls:Class<T>):Bool;

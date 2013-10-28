@@ -12,6 +12,19 @@ using stx.Options;
 
 import funk.ioc.*;
 
+@doc("
+  Transform any variable into a LogItem with:
+  ```
+  import stx.Log.*;
+
+  class Test{
+    static public function test(){
+      var a = 'str';
+      var b = error(a);//<--
+    }
+  }
+  ```
+")
 class Log{
 	static public function printer<A>(?p:PosInfos):A->A{
 		return function(x:A){

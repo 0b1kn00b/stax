@@ -26,7 +26,7 @@ class LogListings{
   public function type(type:Class<Dynamic>){
     return tuple2(LClassScope,Positions.create(null,type.name(),null,null));
   }
-  @:note("0b1kn00b: typesystem doesn't recognise function on abstract at compile time")
+  @:note("0b1kn00b: typesystem doesn't recognise function on abstract at compile time.")
   //<T:{classname : Void->String}>
   public function abstracted(name:String){
     return tuple2(LClassScope,Positions.create(null,name,null,null));

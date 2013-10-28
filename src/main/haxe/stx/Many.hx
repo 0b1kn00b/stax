@@ -4,10 +4,10 @@ using stx.Iterators;
 
 typedef ManyType<T> = Iterable<T>;
 
-/**
+@doc("
   Used for situations where one or many values may equally be used and when it is
   better to avoid the noise of having to wrap single items or remember two function names.
-*/
+")
 abstract Many<T>(ManyType<T>) from ManyType<T> to ManyType<T>{
   public function new(v){
     this = v;

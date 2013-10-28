@@ -3,11 +3,16 @@ package stx;
 import stx.Options;
 import stx.Eventual;
 import stx.Prelude;
+
+using stx.Options;
 using stx.Tuples;
 
 typedef ContinuationType<R,A>   = (A -> R) -> R;
 typedef Cont<R,A>               = Continuation<R,A>;
 
+@doc("
+  The mother of all Monads. Rumour has it that only a handful of acolytes understand the true functioning of `cc`.
+")
 abstract Continuation<R,A>(ContinuationType<R,A>) from ContinuationType<R,A> to ContinuationType<R,A>{
   static public function cont<R,A>(def:ContinuationType<R,A>):Cont<R,A>{
     return new Continuation(def);

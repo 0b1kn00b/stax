@@ -15,9 +15,9 @@ using stx.rtti.RTypes;
 using stx.Tuples;
 using stx.Reflects;
 
-/**
+@doc("
   A binding of a source object and it's rtti.
-*/
+")
 abstract RClass<T>(Tuple2<T,Classdef>) from Tuple2<T,Classdef> to Tuple2<T,Classdef>{
   public function new(v){
     this = v;
@@ -28,10 +28,8 @@ abstract RClass<T>(Tuple2<T,Classdef>) from Tuple2<T,Classdef> to Tuple2<T,Class
       this.snd().fields.filter(fn).toArray().map(function(x) return x.name)
     );
   }
-  /**
-    recursive returns flattened list of fields from the type hierarchy compared by name to avoid duplicates.
-  */
-  @:test('#0b1kn00b: make sure duplicates are the most recent in hierarchy')
+  @doc("Recursive returns flattened list of fields from the type hierarchy compared by name to avoid duplicates.")
+  @:todo('#0b1kn00b: make sure duplicates are the most recent in hierarchy.')
   public function reflector(?recursive:Bool):Reflector<T,Dynamic>{
     return tuple2(this.fst(),
       recursive ? {

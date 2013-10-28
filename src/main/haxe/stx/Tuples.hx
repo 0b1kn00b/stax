@@ -11,6 +11,7 @@ using stx.Compare;
 
 typedef KV<V>           = Tuple2<String,V>;
 
+@:note("#0b1kn00b: Tuples are not abstract types because of issues with pattern matching, this may change.")
 @:noUsing class Tuples {    
     @:noUsing static public inline function t2<A,B>(_1:A,_2:B):stx.Tuple2<A,B>{
         return tuple2(_1, _2);

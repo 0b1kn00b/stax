@@ -1,4 +1,4 @@
-/**
+/*
 * Copyright (c) 2008 Chase Kernan, Laurence Taylor
 * chase.kernan@gmail.com, polysemantic@gmail.com
 * Based off of Michael Baczynski's as3ds project, http://www.polygonal.de.
@@ -23,41 +23,30 @@
 * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 * OTHER DEALINGS IN THE SOFTWARE.
-**/
+*/
 
 package hx.ds;
 
-/**
-    A 'java-style' collection interface.
-**/
+@doc("A 'java-style' collection interface.")
 interface Collection<T> {
     
-    /**
-        The total number of items.
-    **/
+    @doc("The total number of items.")
     var length(get_length, null) : Int;
     
     private function get_length() : Int;
     
-    /**
-        Returns true if this collection contains the object given.
-    **/
+    @doc("Returns true if this collection contains the object given.")
     function contains(obj : Null<T>) : Bool;
     
-    /**
-        Clears all items
-    **/
+    @doc("Clears all items")
     function clear() : Void;
     
-    /**
-        Returns true if the collection is empty.
-    **/
+    @doc("Returns true if the collection is empty.")
     function isEmpty() : Bool;
     
-    /**
-        Converts the collection to an array.
-    **/
+    @doc("Converts the collection to an array.")
     function toArray() : Array<Null<T>>;
     
+    @doc("Returns an Iterator")
     function iterator() : Iterator<Null<T>>;
 }

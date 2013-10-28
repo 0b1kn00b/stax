@@ -10,6 +10,9 @@ using stx.Compose;
 
 typedef SelectorType<I> = Tuple2<I->I->Bool,I>;
 
+@doc("
+  Represents an equality function and it's first parameter used as a predicate.
+")
 abstract Selector<I>(SelectorType<I>) from SelectorType<I> to SelectorType<I>{
   public function pure(v){
     return new Selector(v);
