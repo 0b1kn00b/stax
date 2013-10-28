@@ -50,24 +50,6 @@ abstract Continuation<R,A>(ContinuationType<R,A>) from ContinuationType<R,A> to 
       }
     );
   }
-/*  public function zipWith(cnt:Continuation<R,B>,fn:A->B->C):Continuation<R,C>{
-    return function(fn:C->Void){
-      return fn(
-        function(c){
-          this(
-            function(a){
-
-            }
-          );
-          cnt.apply(
-            function(b){
-
-            }
-          );
-        }
-      );
-    }
-  }*/
   public function flatMap<B>(k:A -> Continuation<R,B>):Continuation<R,B>{
     return new Continuation(
       function(cont : B -> R):R{
@@ -104,10 +86,3 @@ abstract Continuation<R,A>(ContinuationType<R,A>) from ContinuationType<R,A> to 
     return Future.ofArrow(cont);
   }*/
 }
-/*class Function2Continuations{
-  public function cont<A,B,C>(f:A->B->C){
-    return function(a:A,cont:B->C){
-
-    }
-  }
-}*/
