@@ -6,7 +6,7 @@ import haxe.ds.StringMap;
 import stx.Compare;
 import stx.Tuples;
 
-using stx.Options;
+using stx.Option;
 using stx.Tuples;
 using stx.Functions;
 using stx.Compose;

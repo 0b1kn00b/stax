@@ -2,7 +2,7 @@ package hx;
 
 import stx.Prelude;
 
-using stx.Options;
+using stx.Option;
 using stx.Tuples;
 /*
 abstract Table<T>(Dynamic<T>) from Dynamic<T> to Dynamic<T>{

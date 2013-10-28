@@ -4,7 +4,7 @@ import stx.Outcome;
 import stx.Prelude;
 import stx.Fail;
  
-using stx.Eithers;
+using stx.Either;
 
 using stx.Functions;
 using stx.Anys;
@@ -13,7 +13,7 @@ class CodeBlocks {
   static public function trampoline(func : CodeBlock, ?bounce : Int = 0) : CodeBlock {
     return function() : Void {
       if (bounce < 1) func();
-      else stx.rct.Process.start(function() : Void func(), bounce);
+      else hx.sch.Process.start(function() : Void func(), bounce);
     };
   }
   @doc("Compare function identity.")

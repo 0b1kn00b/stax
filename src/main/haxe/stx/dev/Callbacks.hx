@@ -7,7 +7,7 @@ using stx.Prelude;
 using stx.Arrays;
 using stx.Callbacks;
 using stx.Tuples;
-using stx.Eithers;
+using stx.Either;
 using stx.Continuation;
 
 class Callbacks{

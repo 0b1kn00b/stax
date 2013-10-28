@@ -5,7 +5,7 @@ import stx.Fail;
 
 import stx.Prelude;
 
-using stx.Options;
+using stx.Option;
 using stx.Functions;
 using stx.Compose;
 

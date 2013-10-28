@@ -21,7 +21,7 @@ import stx.net.Url;
 import stx.net.HttpResponseCode;
 import stx.io.http.Http;
 import stx.Eventual;
-using stx.Options;
+using stx.Option;
 
 // Transforms an Http<S> into an Http<T> given encoder/decoder functions.
 class HttpTransformer<S, T> implements Http<T> {

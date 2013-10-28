@@ -8,7 +8,7 @@ using stx.Compose;
 using stx.Tuples;
 using stx.Iterators;
 using stx.Prelude;
-using stx.Options;
+using stx.Option;
 
 @:note('#0b1kn00b: bubcus')
 class Maps {

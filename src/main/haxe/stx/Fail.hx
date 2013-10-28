@@ -5,8 +5,8 @@ import haxe.PosInfos;
 
 import stx.plus.Show;
 
-using stx.Options;
-using stx.Eithers;
+using stx.Option;
+using stx.Either;
 using stx.Arrays;
 using stx.Prelude;
 using stx.Enums;

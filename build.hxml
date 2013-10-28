@@ -4,5 +4,6 @@
 #builds/build-swc.hxml
 #builds/build-as3.hxml
 #builds/build-test-js-haxe3.hxml
-builds/build-test-js-muster.hxml
+#builds/build-test-js-muster.hxml
+build/dev/neko.hxml
 #builds/build-bootstrap.hxml

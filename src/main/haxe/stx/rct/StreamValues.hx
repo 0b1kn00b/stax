@@ -7,7 +7,7 @@ import stx.rct.Stream;
 import stx.Functions;
 
 using stx.ds.List;
-using stx.Options;
+using stx.Option;
 
 class StreamValues<T> {
 

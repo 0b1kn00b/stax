@@ -1,9 +1,0 @@
--cp src/main/haxe
--cp funk/src/main/haxe
-
-#-lib scutsCore
-
--js test/classes.js
-
---no-output
--main AllClasses

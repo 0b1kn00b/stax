@@ -1,7 +1,0 @@
--cp src/main/haxe/
--cp funk/src/main/haxe
-
--cp src/test/haxe/
--js bin/test.js
--main StaxTestSuite
-

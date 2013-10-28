@@ -5,7 +5,7 @@ import Type;
 import stx.Maths;
 
 
-using stx.Options;
+using stx.Option;
 using stx.Prelude;
 using stx.Tuples;
 using stx.plus.Show;

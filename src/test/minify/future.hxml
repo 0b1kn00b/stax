@@ -1,3 +1,0 @@
--cp ../../main/haxe
--swf ../../../bin/test/future.swf
--main EventualLoader.hx

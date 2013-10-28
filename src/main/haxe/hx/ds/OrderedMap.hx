@@ -11,7 +11,7 @@ import stx.plus.Hasher;
 
 using stx.Iterators;
 using stx.plus.Order;
-using stx.Options;
+using stx.Option;
 using stx.Tuples;
 using stx.Compose;
 

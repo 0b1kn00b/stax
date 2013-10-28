@@ -81,7 +81,7 @@ class Core {
 			, 'stx/Bools.hx'
 			, 'stx/Dates.hx'
 			, 'stx/Dynamics.hx'
-			, 'stx/Eithers.hx'
+			, 'stx.Either.hx'
 			, 'stx/Enums.hx'
 			, 'stx/Functions.hx'
 			, 'stx/Future.hx'

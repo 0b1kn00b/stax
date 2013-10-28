@@ -8,7 +8,7 @@ import stx.ioc.Inject.*;
 import stx.log.*;
 
 using stx.Functions;
-using stx.Options;
+using stx.Option;
 
 import funk.ioc.*;
 

@@ -2,6 +2,7 @@ package hx.ds;
 
 import stx.Compare.*;
 
+import stx.Option;
 import stx.Tuples;
 
 using stx.Functions;

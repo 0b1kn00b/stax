@@ -21,7 +21,7 @@ import stx.js.Env;
 import stx.js.dom.Quirks;
 import stx.ds.Map;
 
-using stx.Options;
+using stx.Option;
 using stx.Arrays;
 
 using stx.Anys;

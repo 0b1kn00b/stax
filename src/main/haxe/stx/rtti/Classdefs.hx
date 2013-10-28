@@ -1,5 +1,12 @@
 package stx.rtti;
 
+import Stax.*;
+
+import haxe.rtti.CType;
+
+using stx.Option;
+using stx.Compose;
+
 class Classdefs{
   static public function ancestors(v:Classdef):Option<Array<Classdef>>{
     var _ancestors : Classdef -> Array<Classdef> -> Option<Array<Classdef>>= null;

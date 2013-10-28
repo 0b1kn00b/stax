@@ -9,7 +9,7 @@ import stx.Prelude;
 import stx.plus.Plus;
 import stx.plus.Equal;
 
-using stx.Options;
+using stx.Option;
 using stx.Compose;
 using stx.Iterables;
 using stx.Iterators;

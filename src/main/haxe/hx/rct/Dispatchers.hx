@@ -6,7 +6,7 @@ import stx.plus.Equal;
 using stx.Prelude;
 using stx.Arrays;
 using stx.Tuples;
-using stx.Options;
+using stx.Option;
 using stx.Compose;
 
 typedef Dispatch<I,O>           = Tuple2<Selector<I>,Array<O->Void>>;

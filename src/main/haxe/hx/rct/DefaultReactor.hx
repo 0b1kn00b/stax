@@ -9,7 +9,7 @@ using stx.Arrow;
 using stx.Prelude;
 using stx.Arrays;
 using stx.Tuples;
-using stx.Options;
+using stx.Option;
 using stx.Compose;
 using stx.Functions;
 

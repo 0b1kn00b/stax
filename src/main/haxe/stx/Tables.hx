@@ -8,7 +8,7 @@ import stx.Prelude;
 
 using stx.Iterables;
 using stx.Arrays;
-using stx.Options;
+using stx.Option;
 using stx.Compose;
 using stx.Tuples;
 

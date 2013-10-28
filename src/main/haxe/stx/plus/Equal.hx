@@ -5,7 +5,7 @@ import haxe.ds.StringMap;
 import Type;
 
 using stx.Tuples;
-using stx.Options;
+using stx.Option;
 using stx.Iterators;
 using stx.Prelude;
 using stx.Arrays;

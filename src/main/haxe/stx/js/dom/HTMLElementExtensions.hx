@@ -23,7 +23,7 @@ using stx.Arrays;
 using stx.js.dom.HTMLDocumentExtensions;
 using stx.js.dom.DomExtensions.DomCollectionExtensions;
 
-using stx.Options;
+using stx.Option;
 
 class HTMLElementExtensions {
   

@@ -7,7 +7,7 @@ import hx.ds.MultiMap;
 
 import stx.Compare.*;
 
-using stx.Options;
+using stx.Option;
 using stx.Iterables;
 using stx.Iterators;
 using stx.Arrays;

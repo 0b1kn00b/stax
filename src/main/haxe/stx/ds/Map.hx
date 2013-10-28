@@ -33,7 +33,7 @@ using stx.Tuples;
 using stx.Prelude;
 using stx.Bools;
 using stx.PartialFunction;
-using stx.Options;
+using stx.Option;
 using stx.Functions;
 using stx.Iterables;
 using stx.ds.Foldables;

@@ -4,7 +4,7 @@ import stx.Prelude;
 
 using stx.Functions;
 using stx.Maybes;
-using stx.Eithers;
+using stx.Either;
 using stx.Dynamics;
 
 typedef Opt = Maybes;

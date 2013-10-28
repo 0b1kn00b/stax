@@ -1,4 +1,4 @@
-package stx.rx;
+package rx;
 
 import stx.rct.DefaultReactor;
 
@@ -12,10 +12,10 @@ using stx.UnitTest;
 
 import stx.rct.*;
 
-using stx.rx.Observable;
+using rx.Observable;
 
-import stx.rx.Observers;
-import stx.rx.observable.BufferedObservable;
+import rx.Observers;
+import rx.observable.BufferedObservable;
 
 class RxTest extends TestCase{
   public function tstRx(u:UnitArrow):UnitArrow{

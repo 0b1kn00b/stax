@@ -8,7 +8,7 @@ import stx.Muster.*;
 import stx.Compare.*;
 import stx.Log.*;
 
-using stx.Options;
+using stx.Option;
 
 using stx.Objects;
 

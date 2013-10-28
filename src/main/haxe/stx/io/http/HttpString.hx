@@ -21,10 +21,10 @@ import stx.io.http.Http;
 import stx.net.Url;
 import stx.net.HttpResponseCode;
 import stx.ds.Map;
-import stx.Options;
+import stx.Option;
 
 using stx.Tuples;
-using stx.Options;
+using stx.Option;
 
 #if js
 import stx.js.Dom;

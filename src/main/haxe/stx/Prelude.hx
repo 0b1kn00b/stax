@@ -12,7 +12,7 @@ import stx.plus.Show;
 
 using stx.Tuples;
 using stx.Prelude;
-using stx.Options;
+using stx.Option;
 using stx.Strings;
 using stx.plus.Show;
 
@@ -45,25 +45,6 @@ typedef RC<R,A>                                                 = (A -> R) -> R
   StrKey(k:String);
 }*/
 
-
-/** 
-		An option represents an optional value -- the value may or may not be
- 		present. Option is a much safer alternative to null that often enables
-  	reduction in code size and increase in code clarity.
- */
-enum Option<T> {
-  None;
-  Some(v: T);
-}
-/** 
-  Either represents a type that is either a "left" value or a "right" value,
-  but not both. Either is often used to represent success/failure, where the
-  left side represents failure, and the right side represents success.
- */
-enum Either<A, B> {
-  Left(v: A);
-  Right(v: B);
-}
 enum TraversalOrder {
 	PreOrder;
 	InOrder;

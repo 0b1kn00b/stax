@@ -1,8 +1,0 @@
--cp src/main/haxe/
--cp src/test/haxe/
-
--cp funk/src/main/haxe
-
--neko ../bin/test.n
-
--main StaxTestSuite

@@ -1,3 +1,0 @@
--cp ../../main/haxe
--js ../../../bin/test/tuples.js
--main TuplesLoader.hx

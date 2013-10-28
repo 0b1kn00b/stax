@@ -3,7 +3,7 @@ package stx;
 import Stax.*;
 import haxe.Constraints;
 
-using stx.Tuples;
+
 
 import stx.ifs.Reply;
 
@@ -19,7 +19,10 @@ import stx.arw.OptionArrow;
 import stx.arw.StateArrow;
 import stx.arw.*;
 
-import stx.Eithers;
+import stx.Either;
+import stx.Option;
+
+using stx.Tuples;
 
 typedef Consume<A>      = A -> Void;
 typedef ArrowType<A,B>  = A -> (B->Void) -> Void;

@@ -1,3 +1,0 @@
--cp ../../main/haxe
--js ../../../bin/test/prelude.js
--main ListLoader.hx

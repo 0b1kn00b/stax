@@ -6,7 +6,7 @@ import stx.Tuples;
 
 using stx.Arrays;
 using stx.Tuples;
-using stx.Options;
+using stx.Option;
 										
 import stx.prs.InputStream;
 

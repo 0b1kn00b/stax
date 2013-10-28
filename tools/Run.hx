@@ -2,7 +2,7 @@ import stx.Prelude;
 using stx.Tuples;
 import haxe.io.Input;
 import stx.reactive.Arrows; 	using stx.reactive.Arrows;
-															using stx.Eithers;
+															using stx.Either;
 															using stx.Strings;
 class Run{
 

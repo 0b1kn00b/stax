@@ -24,7 +24,7 @@ import stx.ds.Map;
 
 using stx.Tuples;
 using stx.Strings;
-using stx.Options;
+using stx.Option;
 using stx.ds.ifs.Foldable;
 
 class Urls {

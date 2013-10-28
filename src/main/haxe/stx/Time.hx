@@ -12,6 +12,9 @@ abstract Time(TimeInstance) from TimeInstance to TimeInstance{
   @:to public function toDate():Date{
   	return this.toDate();
   }
+  @:to public function toFloat():Float{
+  	return this.getRaw();
+  }
   public function getRaw():Float{
   	return this.getRaw();
   }

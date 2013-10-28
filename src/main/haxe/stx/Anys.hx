@@ -1,9 +1,10 @@
 package stx;
 
+import stx.Either;
 import stx.Prelude;
 import stx.Compare;
 
-using stx.Options;
+using stx.Option;
 
 typedef Any = Dynamic;
 

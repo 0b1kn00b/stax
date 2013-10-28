@@ -15,7 +15,7 @@ using stx.Functions;
 using stx.Compose;
 using stx.Bools;
 using stx.Anys;
-using stx.Options;
+using stx.Option;
 using stx.Tuples;
 using stx.Assert;
 

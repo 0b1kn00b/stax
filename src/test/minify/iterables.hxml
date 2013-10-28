@@ -1,3 +1,0 @@
--cp ../../main/haxe
--swf ../../../bin/test/iterables.swf
--main IterableExtensionsLoader.hx

@@ -21,7 +21,7 @@ import stx.test.TestCase;
 import stx.test.Assert;
 import stx.net.HttpHeader;
 
-using stx.Options;
+using stx.Option;
 using stx.Tuples;
 
 using stx.net.HttpHeaders;

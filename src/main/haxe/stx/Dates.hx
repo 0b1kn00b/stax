@@ -5,7 +5,7 @@ import Stax.*;
 import stx.time.DateSpan;
 using stx.time.Day;
 
-using stx.Options;
+using stx.Option;
 
 @:thx
 class Dates {
@@ -39,7 +39,7 @@ class Dates {
   static public function sub(d0:Date,d1:Date):Date{
     return Date.fromTime(d0.getTime()-d1.getTime());
   }
-  @doc("snaps `dt` to the nearest `day`.")
+  @doc("snaps `dt` to the nearest `day`")
   static public function day(dt:Date,day:Day):Date{
     return Date.fromTime(dt.getTime() - ((dt.getDay() - day.toInt()) % 7) * 24 * 60 * 60 * 1000);
   }

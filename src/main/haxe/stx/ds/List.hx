@@ -11,7 +11,7 @@ import stx.ds.Foldables;
 import stx.plus.Plus.*;
 
 using stx.Maths;
-using stx.Options;
+using stx.Option;
 using stx.Tuples;
 using stx.Prelude;
 

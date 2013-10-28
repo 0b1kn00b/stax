@@ -12,7 +12,7 @@ import stx.Fail;
 import stx.plus.Plus;
 
 using stx.Compose;
-using stx.Options;
+using stx.Option;
 using stx.Prelude;
 using stx.Iterables;
 

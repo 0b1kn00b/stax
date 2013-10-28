@@ -1,11 +1,10 @@
 package stx;
 
-import stx.Muster;
-import stx.Muster.*;
+using stx.UnitTest;
 import stx.Log.*;
 
 using stx.Arrow;
-using stx.Future;
+using stx.Eventual;
 using stx.Continuation;
 using stx.Functions;
 using stx.Tuples;
@@ -13,10 +12,10 @@ using stx.Tuples;
 class ContinuationTest extends TestCase{
   public function testCC(u:UnitArrow):UnitArrow{
     //pythagoras(3, 4, printer());
-    var square = function(x:Int) return x * x;
+    /*var square = function(x:Int) return x * x;
     var squarec = function(x:Int) return Cont.pure(square(x));
     var out = squarec(2);
-    out.apply(printer());
+    out.apply(printer());*/
     return u;
   }
   function pythagoras(x:Int, y:Int, cont:Int->Void) {
@@ -52,5 +51,9 @@ class ContinuationTest extends TestCase{
     f(cc);
 
     return val;
+  }
+  public function testZip(u:UnitArrow):UnitArrow{
+    
+    return u;
   }
 }

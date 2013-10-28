@@ -3,7 +3,7 @@ package stx.rct;
 import stx.Prelude;
 import stx.Functions;
 
-import stx.Options;
+import stx.Option;
 
 import stx.rct.Propagation;
 import stx.rct.Pulse;

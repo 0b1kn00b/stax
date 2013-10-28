@@ -3,7 +3,7 @@ package stx;
 import stx.Tuples;
 import stx.Tuples;
 import stx.Prelude;
-using stx.Options;
+using stx.Option;
 using Std;
 
 class Iterators {

@@ -10,7 +10,7 @@ import haxe.ds.StringMap;
 import stx.ioc.Injector.*;
 import stx.ioc.Binder;
 
-using stx.Options;
+using stx.Option;
 using stx.Types;
 using stx.Arrays;
 using stx.ValueTypes;

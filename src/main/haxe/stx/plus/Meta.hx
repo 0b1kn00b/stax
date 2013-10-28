@@ -8,7 +8,7 @@ import stx.Tuples;
 using stx.Tuples;
 
 using stx.Maps;
-using stx.Options;
+using stx.Option;
 using stx.Prelude;
 using stx.Objects;
 using stx.plus.Order;

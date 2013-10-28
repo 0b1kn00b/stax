@@ -4,7 +4,7 @@ import stx.rct.events.Events;
 import stx.Prelude;
 import stx.Functions;
 import stx.Anys;
-import stx.Options;
+import stx.Option;
 
 using stx.rct.Streams;
 

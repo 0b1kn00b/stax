@@ -1,7 +1,7 @@
 package stx.rtti;
 
 using stx.Tuples;
-using stx.Options;
+using stx.Option;
 
 using Type;
 

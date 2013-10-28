@@ -15,8 +15,8 @@ import stx.Objects;
 import stx.Prelude;
 
 using stx.Tuples;
-using stx.Eithers;
-using stx.Options;
+using stx.Either;
+using stx.Option;
 using stx.Functions;
 using stx.Fail;
 using stx.Compose;

@@ -10,21 +10,29 @@ using stx.Compose;
 using stx.Anys;
 using stx.States;
 
-class State<S,R>{
-  @:noUsing static public function create<A,B>( opts : ApplyType<A,Tuple2<B,A>> ):State<A,B>{
-    return new State(opts);
+typedef StateType<S,R> = S -> Tuple2<S,A>;
+abstract State<S,R>(StateType<S,R>) from StateType<S,R> to StateType<S,R>{
+  @:noUsing static public function unit<S>():State<S,Unit>{
+    return function(s:S){
+      return tuple2(Unit,s);
+    }
   }
+  public function new(v){
+    this = v;
+  }
+  @:from static public function fromApply<A,B>(opts:ApplyType<A,Tuple2<B,A>>):State<A,B>{
+    return new State(opts.apply);
+  }
+  public function apply(s:S):Tuple2<S,A>{
+    return this(s);
+  }
+}
+class State<S,R>{
+  
   @:noUsing static public function toState<S,A>(value:A):State<S,A>{
     return State.pure(
         function(s:S):Tuple2<A,S>{
           return tuple2(value,s);
-        }
-      );
-  }
-  @:noUsing static public function unit<S>():State<S,Unit>{
-    return State.pure(
-        function(s:S){
-          return tuple2(Unit,s);
         }
       );
   }
@@ -36,33 +44,25 @@ class State<S,R>{
           }
       });
   }
-  dynamic public function apply(s:S):Tuple2<R,S>{return null;}
-  public function new(opts:ApplyType<S,Tuple2<R,S>>){
-    this.apply = opts.apply;
+  static public function apply<S,R>(state:State<S,R>,s:S):Tuple2<R,S>{
+    return state.apply(s);
   }
-  /**
-  * Run `State` with `s`, dropping the result and returning `s`.
-  */
-  public function exec(s:S):S{
+  @doc("Run `State` with `s`, dropping the result and returning `s`.")
+  static public function exec<S,R>(st:State<S,R>,s:S):S{
     return apply(s).snd();
   }
-  /**
-  * Run `State` with `s`, returning the result.
-  */
-  public function eval(s:S):R{
+  @doc("Run `State` with `s`, returning the result.")
+  static public function eval(st:State<S,R>,s:S):R{
     return apply(s).fst();
   }
-  public function map<R1>(fn:R->R1):State<S,R1>{
+  static public function map<S,R,R1>(st:State<S,R>,fn:R->R1):State<S,R1>{
     var fn2 : Tuple2<R,S> -> Tuple2<R1,S> = fn.first();
-    return 
-      State.pure(
-        function(s:S){
-          var o = this.apply(s);
-          return tuple2(fn(o.fst()),o.snd());
-        }
-      );
+    return function(s:S){
+      var o = this.apply(s);
+      return tuple2(fn(o.fst()),o.snd());
+    }
   }
-  public function foreach(fn:R->Void):State<S,R>{
+  static public function foreach(st:State<S,R>,fn:R->Void):State<S,R>{
     return map(
       function(x){
         fn(x);
@@ -70,26 +70,20 @@ class State<S,R>{
       }
     );
   }
-  public function mapSt(fn:S->S):State<S,R>{
-    return
-      State.pure(
-        function(s:S):Tuple2<R,S>{
-          var o = apply(s);
-          return tuple2( o.fst(), fn(o.snd()) );
-        }
-      );
+  static public function transform<S,R>(st:State<S,R>,fn:S->S):State<S,R>{
+    return function(s:S):Tuple2<R,S>{
+      var o = apply(s);
+      return tuple2( o.fst(), fn(o.snd()) );
+    }
   }
-  public function flatMap<R1>(fn:R->State<S,R1>):State<S,R1>{
-    return 
-      State.pure(
-        apply
-        .then( fn.pair(Compose.unit()) )
-        .then(
-          function(t:Tuple2<State<S,R1>,S>) {
-            return t.fst().apply(t.snd());
-          }
-        )
-      );
+  public function flatMap<R1>(st:State<S,R>,fn:R->State<S,R1>):State<S,R1>{
+    return apply
+      .then( fn.pair(Compose.unit()) )
+      .then(
+        function(t:Tuple2<State<S,R1>,S>) {
+          return t.fst().apply(t.snd());
+        }
+      )
   }
   public function getSt():State<S,S>{
     return State.pure(

@@ -12,8 +12,8 @@ import stx.ds.Map;
 
 import stx.Eventual;
 
-import stx.Options;
-using stx.Options;
+import stx.Option;
+using stx.Option;
 
 #if js
 import stx.js.Dom;

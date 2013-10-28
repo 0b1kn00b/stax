@@ -1,6 +1,0 @@
--neko bin/run.n
--main Run
-
--cp tools
--cp src/main/haxe
--cp funk/src/main/haxe

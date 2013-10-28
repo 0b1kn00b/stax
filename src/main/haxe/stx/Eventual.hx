@@ -7,11 +7,11 @@ using stx.Tuples;
 using stx.Fail;            
 using stx.Prelude;
 using stx.Arrays;
-using stx.Options;
+using stx.Option;
 using stx.Anys;
 using stx.Iterables;
 using stx.Eventual;
-using stx.Eithers;
+using stx.Either;
 
 @doc("
   An asynchronous operation that may complete in the future unless

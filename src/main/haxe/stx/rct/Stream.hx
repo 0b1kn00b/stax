@@ -14,7 +14,7 @@ import stx.Compare;
 
 using stx.Arrays;
 using stx.Iterables;
-using stx.Options;
+using stx.Option;
 using stx.ds.List;
 using stx.Tuples;
 using stx.rct.Pulse;

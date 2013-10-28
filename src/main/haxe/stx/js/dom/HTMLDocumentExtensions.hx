@@ -23,8 +23,8 @@ import stx.Prelude;
 
 
 using stx.Maths;
-import stx.Options;
-using stx.Options;
+import stx.Option;
+using stx.Option;
 
 
 /** 

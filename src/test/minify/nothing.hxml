@@ -1,3 +1,0 @@
--cp ../../main/haxe
--swf ../../../bin/test/nothing.swf
--main NothingLoader.hx

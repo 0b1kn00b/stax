@@ -9,7 +9,7 @@ import stx.Objects;
 using Stax;
 using stx.Types;
 using stx.Compose;
-using stx.Options;
+using stx.Option;
 
 enum Kind{
   KNull;

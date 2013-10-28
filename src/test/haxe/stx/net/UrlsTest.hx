@@ -23,7 +23,7 @@ import stx.net.Url;
 
 using stx.net.Urls;
 using stx.ds.Map;
-using stx.Options;
+using stx.Option;
 using stx.Strings;
 using stx.Functions;
 using stx.Compose;

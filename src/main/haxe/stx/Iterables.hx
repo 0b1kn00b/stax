@@ -2,7 +2,8 @@ package stx;
 
 using stx.Prelude;
 
-import stx.Tuples;
+
+import stx.Option;
 
 using stx.Tuples;
 using stx.Functions;

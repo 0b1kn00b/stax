@@ -18,7 +18,7 @@ package stx.math.tween;
 import stx.Prelude;
 using stx.ds.Set;
 using stx.ds.Map;
-using stx.Options;
+using stx.Option;
 using stx.Tuples;
 
 using stx.ds.Foldables;

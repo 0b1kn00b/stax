@@ -8,7 +8,7 @@ import Stax.*;
 import stx.Fail;
 
 using stx.Types;
-using stx.Options;
+using stx.Option;
 
 
 import stx.ioc.Injector.*;

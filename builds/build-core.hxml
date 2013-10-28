@@ -1,7 +1,0 @@
--lib mlib
--main Core
--cp ../tools
--cp ../src/main/haxe
-
--neko ../bin/core.n
--cmd  neko ../bin/core.n

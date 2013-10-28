@@ -1,23 +1,26 @@
 package stx;
 
+import haxe.Constraints;
+
 import Stax.*; 
 import stx.plus.Order;
 import stx.Fail;
 import stx.Prelude;
+import stx.CallStacks;
 
 using stx.Compare;
 
 using stx.Tuples;
-import stx.Options;
+import stx.Option;
 
 using stx.Outcome;
 using stx.Anys;
 using stx.Types;
-using stx.Options;
+using stx.Option;
 using stx.Objects;
 using stx.Arrays;
 using stx.Prelude;
-using stx.Eithers;
+using stx.Either;
 using stx.Compose;
 using stx.Functions;
 

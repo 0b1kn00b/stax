@@ -1,11 +1,12 @@
 package stx.utl;
 
 import stx.plus.Equal;
+import stx.Compare;
 
 using stx.Prelude;
 using stx.Arrays;
 using stx.Tuples;
-using stx.Options;
+using stx.Option;
 using stx.Compose;
 
 typedef SelectorType<I> = Tuple2<I->I->Bool,I>;
@@ -23,6 +24,17 @@ abstract Selector<I>(SelectorType<I>) from SelectorType<I> to SelectorType<I>{
   @:from public static inline function fromString(str:String):Selector<String>{
     return tuple2(stx.Strings.equals,str);
   }
+  @:from public static inline function fromFunction<T>(fn:T->Bool):Selector<T>{
+    return tuple2(
+      function(l,r){
+        return fn(r);
+      },
+      null
+    );
+  }
+  @:from static public inline function fromPredicate<T>(prd:Predicate<T>):Selector<T>{
+    return fromFunction(prd);
+  }
   @:from public static inline function fromT<T>(d:T):Selector<T>{
     return new Selector(tuple2(stx.plus.Equal.getEqualFor(d),d));
   }
@@ -32,7 +44,7 @@ abstract Selector<I>(SelectorType<I>) from SelectorType<I> to SelectorType<I>{
   public function predicate2():I->I->Bool{
     return this.fst();
   }
-  public function test(v:I){
+  public function apply(v:I):Bool{
     return predicate2()(value(),v);
   }
   public function valueEqualsWith(slct:Selector<I>,equal:I->I->Bool):Bool{

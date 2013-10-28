@@ -26,7 +26,7 @@ import stx.net.HttpHeader;
 
 using stx.Strings;
  
-using stx.Options;
+using stx.Option;
 
 typedef HttpHeaders = Map<String, String>
 

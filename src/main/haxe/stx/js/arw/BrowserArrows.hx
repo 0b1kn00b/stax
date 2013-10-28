@@ -8,7 +8,7 @@ import stx.Tuples;
 import stx.Tuples;
 import stx.arw.CallbackArrow;
 
-using stx.Options;
+using stx.Option;
 using stx.Arrow;
 using stx.Functions;
 

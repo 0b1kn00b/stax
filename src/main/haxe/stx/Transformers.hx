@@ -2,7 +2,7 @@ package stx;
 
 import stx.Tuples;
 
-using stx.Options;
+using stx.Option;
 using stx.Tuples;
 
 typedef Tfs 	= Transformers;

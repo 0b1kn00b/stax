@@ -7,7 +7,7 @@ import stx.Fail;
 import stx.Prelude;
 
 using stx.Maths;
-using stx.Options;
+using stx.Option;
 
 using StringTools;
 

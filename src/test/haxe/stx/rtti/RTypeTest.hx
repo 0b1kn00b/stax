@@ -1,6 +1,6 @@
 package stx.rtti;
 
-using stx.Options;
+using stx.Option;
 
 import stx.Muster;
 import stx.Muster.*;

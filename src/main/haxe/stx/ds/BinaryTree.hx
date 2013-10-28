@@ -4,7 +4,7 @@ using Std;
 using stx.Prelude;
 using stx.Arrays;
 using stx.Functions;
-using stx.Options;
+using stx.Option;
 using stx.Prelude;
 using stx.Iterators;
 

@@ -7,7 +7,7 @@ import stx.Fail;
 import stx.Fail;
 
 using stx.Tuples;
-using stx.Eithers;
+using stx.Either;
 using stx.Eventual;
 
 class EitherCombinators{

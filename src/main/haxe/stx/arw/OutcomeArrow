@@ -6,7 +6,7 @@ import stx.Compare.*;
 
 import stx.Outcome;
 import stx.Tuples;
-import stx.Eithers;
+import stx.Either;
 import stx.Prelude;
 using stx.Arrow;
 

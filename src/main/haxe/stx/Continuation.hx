@@ -1,10 +1,10 @@
 package stx;
 
-import stx.Options;
+import stx.Option;
 import stx.Eventual;
 import stx.Prelude;
 
-using stx.Options;
+using stx.Option;
 using stx.Tuples;
 
 typedef ContinuationType<R,A>   = (A -> R) -> R;

@@ -3,7 +3,7 @@ package stx.arw;
 import stx.Tuples;
 import stx.Prelude;
 
-using stx.Options;
+using stx.Option;
 using stx.Arrow;
 using stx.Compose;
 using stx.Tuples;

@@ -1,5 +1,9 @@
 package stx.rtti;
 
+import haxe.rtti.CType;
+
+import stx.Option;
+
 class TypeTrees{
   static public inline function classdef(t:TypeTree):Option<Classdef>{
     return switch (t) {

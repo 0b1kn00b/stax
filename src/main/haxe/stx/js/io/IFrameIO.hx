@@ -37,7 +37,7 @@ using stx.Tuples;
 using stx.Arrays;
 using stx.Strings;
 using stx.Maths;
-using stx.Options;
+using stx.Option;
 using stx.Anys;
 using stx.Iterables;
 

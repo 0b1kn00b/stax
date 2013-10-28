@@ -9,11 +9,15 @@ using stx.Arrays;
 using stx.LogLevel;
 using stx.Types;
 
+@doc("
+  Default Logger implementation, will try to open zebra.txt in the cwd, loads and parses 
+  the list with LogListingParser and appends to the listings.
+")
 class DefaultLogger implements Logger{
   @:noUsing static public function create(?listings:Array<LogListing>,?level) {
     return new DefaultLogger(listings,level);
   }
-  /**Indicates whether non LogItems are traced.*/
+  @doc("Indicates whether non LogItems are traced.")
   private var zebra                       : ZebraListings;
   private var permissive                  : Bool;
   public  var level       (default,null)  : LogLevel;

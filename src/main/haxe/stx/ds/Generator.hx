@@ -1,7 +1,7 @@
 package stx.ds;
 
 import stx.Prelude;
-using stx.Options;
+using stx.Option;
 
 @doc("
   An iterable based on values accumulated on a stack by calling a function.

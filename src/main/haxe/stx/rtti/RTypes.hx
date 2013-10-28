@@ -12,7 +12,7 @@ import stx.Reflects;
 using stx.Compose;
 using stx.Strings;
 using stx.Tuples;
-using stx.Options;
+using stx.Option;
 using stx.Prelude;
 using stx.Arrays;
 using stx.Iterables;

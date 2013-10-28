@@ -1,12 +1,13 @@
 package stx;
 
 import stx.Tuples;
+import stx.Option;
 
 using stx.Compose;
 using stx.Tuples;
 using stx.Prelude;
 using stx.Functions;
-using stx.Eithers;
+using stx.Either;
 
 class ComposeDo{
   @doc("Produces a function that calls `f1` and `f2` in left to right order.")

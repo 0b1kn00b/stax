@@ -6,7 +6,7 @@ import stx.Tuples;
 using stx.Tuples;
 using stx.Prelude;
 using stx.Maths;
-using stx.Options;
+using stx.Option;
 using stx.Functions;
 using stx.Arrays;
 

@@ -12,7 +12,7 @@ using stx.UnitTest;
 using stx.ds.Foldables;
 using stx.ds.Map;
 using stx.Tuples;
-using stx.Options;
+using stx.Option;
 
 class MapTest extends TestCase {
   /*public function testAdd(u:UnitArrow):UnitArrow{

@@ -18,10 +18,10 @@ using stx.UnitTest;
 using stx.Compare;
 using stx.Arrow;
 using stx.Arrays;
-using stx.Options;
+using stx.Option;
 using stx.Strings;
 using stx.Contract;
-using stx.Eithers;
+using stx.Either;
 
 abstract TestRig(Array<Reflection<Dynamic>>) from Array<Reflection<Dynamic>>{
   public function new(?v){

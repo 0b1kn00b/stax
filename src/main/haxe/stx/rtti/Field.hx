@@ -7,9 +7,9 @@ import stx.Fail;
 import stx.Fail.*;
 
 using stx.Compose;
-using stx.Eithers;
+using stx.Either;
 using stx.Iterables;
-using stx.Options;
+using stx.Option;
 using stx.Tuples;
 using stx.Reflects;
 

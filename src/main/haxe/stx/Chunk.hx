@@ -8,8 +8,8 @@ import stx.Outcome;
 
 using stx.Arrays;
 using stx.Prelude;
-using stx.Options;
-using stx.Eithers;
+using stx.Option;
+using stx.Either;
 using stx.Tuples;
 using stx.Compose;
 

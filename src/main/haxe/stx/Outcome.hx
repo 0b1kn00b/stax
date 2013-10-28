@@ -4,8 +4,8 @@ import Stax.*;
 import stx.Tuples;
 import stx.Prelude;
 
-import stx.Eithers;
-using stx.Options;
+import stx.Either;
+using stx.Option;
 
 enum OutcomeType<T>{
   Success(success:T);
