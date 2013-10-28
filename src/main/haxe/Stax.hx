@@ -54,6 +54,7 @@ class Stax{
   @:noUsing static public inline function printer(?p:PosInfos){
     return stx.Log.printer(p);
   }
+  @:noUsing static public var noop = function(){}
   /*@:noUsing static public inline function metadata<T>(v:T):MetaObjectContainer{
     return stx.plus.Meta.metadata(v);
   }*/
