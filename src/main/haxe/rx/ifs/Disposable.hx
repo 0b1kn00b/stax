@@ -1,4 +1,4 @@
-package stx.rx.ifs;
+package rx.ifs;
 
 /**
   Represents an object which can be disposed.

@@ -1,10 +1,10 @@
-package stx.rx.observable;
+package rx.observable;
 
 using stx.Iterables;
 
-import stx.rx.ifs.Observable in IObservable;
+import rx.ifs.Observable in IObservable;
 
-import stx.rx.disposable.CompositeDisposable;
+import rx.disposable.CompositeDisposable;
 
 class IterableObservable<T> implements IObservable<T>{
   private var iterable : Iterable<Chunk<T>>;

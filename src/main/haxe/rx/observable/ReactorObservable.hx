@@ -1,10 +1,10 @@
-package stx.rx.observable;
+package rx.observable;
 
-import stx.rx.ifs.Observable;
+import rx.ifs.Observable;
 import stx.rct.Reactor;
 import stx.rct.Reactors;
 import stx.Chunk;
-import stx.rx.disposable.*;
+import rx.disposable.*;
 
 
 class ReactorObservable<T> implements Observable<T>{

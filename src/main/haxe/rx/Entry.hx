@@ -1,4 +1,4 @@
-package stx.rx.ifs;
+package rx.ifs;
 
 import stx.Tuples;
 typedef EntryType = Tuple2<Task<Dynamic>,Mark>;

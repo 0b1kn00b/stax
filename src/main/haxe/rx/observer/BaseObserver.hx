@@ -1,9 +1,9 @@
-package stx.rx.observer;
+package rx.observer;
 
 import stx.Prelude;
 import stx.Chunk;
 
-import stx.rx.ifs.Observer in IObserver;
+import rx.ifs.Observer in IObserver;
 
 class BaseObserver<T> implements IObserver<T> implements Disposable{
   private var done     : Bool;

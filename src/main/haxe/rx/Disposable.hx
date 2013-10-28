@@ -1,8 +1,8 @@
-package stx.rx;
+package rx;
 
 import stx.Prelude;
-import stx.rx.ifs.Disposable in IDisposable;
-import stx.rx.disposable.AnonymousDisposable;
+import rx.ifs.Disposable in IDisposable;
+import rx.disposable.AnonymousDisposable;
 
 abstract Disposable(IDisposable) from IDisposable to IDisposable{
   @:noUsing static public function unit():Disposable{

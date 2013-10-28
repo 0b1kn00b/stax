@@ -1,7 +1,7 @@
-package stx.rx.observable;
+package rx.observable;
 
 
-import stx.rx.ifs.Observable in IObservable;
+import rx.ifs.Observable in IObservable;
 
 class AnonymousObservable<T> implements IObservable<T>{
   static public inline function create<T>(__underlying__:Observer<T>->Disposable):AnonymousObservable<T>{

@@ -1,6 +1,6 @@
-package stx.rx.subject;
+package rx.subject;
 
-import stx.rx.ifs.Subject in ISubject;
+import rx.ifs.Subject in ISubject;
 
 import stx.ds.List;
 

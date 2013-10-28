@@ -1,4 +1,4 @@
-package stx.rx.observable;
+package rx.observable;
 
 class DelegateObservable{
   private var observable    : Observable<T>;

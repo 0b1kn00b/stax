@@ -1,13 +1,13 @@
-package stx.rx.disposable;
+package rx.disposable;
 
 using stx.Iterables;
 import hx.ds.Set;
 
-import stx.rx.ifs.Disposable in IDisposable;
+import rx.ifs.Disposable in IDisposable;
 
 class CompositeDisposable implements IDisposable{
-  @:allow(stx.rx.disposable)private var set             : Set<Disposable>;
-  @:allow(stx.rx.disposable)private var disposed        : Bool;
+  @:allow(rx.disposable)private var set             : Set<Disposable>;
+  @:allow(rx.disposable)private var disposed        : Bool;
   public function new(){
     this.set      = new Set();
     this.disposed = false;

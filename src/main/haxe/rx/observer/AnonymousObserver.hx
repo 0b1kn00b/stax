@@ -1,9 +1,9 @@
-package stx.rx.observer;
+package rx.observer;
 
 import stx.Prelude;
 import stx.Chunk;
 
-import stx.rx.ifs.Observer in IObserver;
+import rx.ifs.Observer in IObserver;
 
 class AnonymousObserver<T> implements IObserver<T> extends BaseObserver<T>{
   @:noUsing static public function create<T>(fn:Chunk<T>->Void):AnonymousObserver<T>{

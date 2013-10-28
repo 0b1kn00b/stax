@@ -1,8 +1,8 @@
-package stx.rx.observable;
+package rx.observable;
 
 import Stax.*;
 import stx.Chunk;
-import stx.rx.ifs.Observable in IObservable;
+import rx.ifs.Observable in IObservable;
 
 using stx.Arrays;
 

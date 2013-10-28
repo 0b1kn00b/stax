@@ -1,4 +1,4 @@
-package stx.rx.ifs;
+package rx.ifs;
 
 import stx.Prelude;
 import stx.ifs.Apply;

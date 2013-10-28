@@ -1,9 +1,9 @@
-package stx.rx.disposable;
+package rx.disposable;
 
 import stx.Prelude;
-import stx.rx.ifs.*;
+import rx.ifs.*;
 
-import stx.rx.ifs.Disposable in IDisposable;
+import rx.ifs.Disposable in IDisposable;
 
 class AnonymousDisposable implements IDisposable{
   private var disposed        : Bool;

@@ -1,12 +1,12 @@
-package stx.rx;
+package rx;
 
 import stx.Prelude;
 import Stax.*;
 import stx.Chunk;
 
-import stx.rx.disposable.*;
-import stx.rx.observer.*;
-import stx.rx.ifs.Observer in IObserver;
+import rx.disposable.*;
+import rx.observer.*;
+import rx.ifs.Observer in IObserver;
 
 typedef ObserverType<T> = IObserver<T>;
 

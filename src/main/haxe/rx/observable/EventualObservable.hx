@@ -1,9 +1,9 @@
-package stx.rx.observable;
+package rx.observable;
 
-import stx.rx.ifs.Observable;
+import rx.ifs.Observable;
 import stx.Eventual;
 import stx.Chunk;
-import stx.rx.disposable.*;
+import rx.disposable.*;
 
 class EventualObservable<T> implements Observable<T>{
   private var eventual : Eventual<T>;

@@ -1,8 +1,8 @@
-package stx.rx.disposable;
+package rx.disposable;
 
 import stx.Eventual;
 
-import stx.rx.ifs.Disposable in IDisposable;
+import rx.ifs.Disposable in IDisposable;
 
 class EventualDisposable implements IDisposable{
   private var disposed        : Bool;

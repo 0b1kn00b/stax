@@ -1,4 +1,4 @@
-package stx.rx;
+package rx;
 
 import Stax.*;
 
@@ -8,13 +8,13 @@ import stx.Compare;
 import stx.Chunk;
 import stx.Prelude;
 import stx.Continuation;
-import stx.rx.ifs.Observable in IObservable;
+import rx.ifs.Observable in IObservable;
 
 using stx.Iterables;
 using stx.Types;
 
-import stx.rx.observable.*;
-import stx.rx.disposable.*;
+import rx.observable.*;
+import rx.disposable.*;
 
 using stx.Compose;
 

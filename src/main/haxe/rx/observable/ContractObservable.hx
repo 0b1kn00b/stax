@@ -1,11 +1,11 @@
-package stx.rx.observable;
+package rx.observable;
 
 import stx.Outcome;
 import stx.Contract;
 import stx.Chunk;
-import stx.rx.disposable.*;
+import rx.disposable.*;
 
-import stx.rx.ifs.Observable in IObservable;
+import rx.ifs.Observable in IObservable;
 
 @doc("An Observable derived from a `stx.Contract` ")
 class ContractObservable<T> implements IObservable<T>{

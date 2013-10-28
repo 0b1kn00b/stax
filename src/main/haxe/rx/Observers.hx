@@ -1,8 +1,8 @@
-package stx.rx;
+package rx;
 
 import stx.Chunk;
 
-import stx.rx.observer.*;
+import rx.observer.*;
 
 class Observers{
   

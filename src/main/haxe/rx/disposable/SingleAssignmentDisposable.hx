@@ -1,4 +1,4 @@
-package stx.rx.disposable;
+package rx.disposable;
 
 import stx.Fail;
 
