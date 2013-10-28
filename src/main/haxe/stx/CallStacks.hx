@@ -5,6 +5,9 @@ using stx.Arrays;
 import haxe.CallStack;
 
 class CallStacks{
+  
+}
+class StackItems{
   static public function toString(v:StackItem){
     function step(v:StackItem){
       if(v == null){ return '';};
@@ -19,5 +22,5 @@ class CallStacks{
       }
     }
     return step(v);
-  }  
+  }
 }
