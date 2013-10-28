@@ -109,4 +109,10 @@ class Outcomes{
       case Failure(_) : false; 
     }
   }
+  static public function toChunk<A>(oc:Outcome<A>):Chunk<A>{
+    return switch (oc){
+      case Failure(l)  : End(l);
+      case Success(r)  : r == null ? Nil : Val(r);
+    }
+  }
 }

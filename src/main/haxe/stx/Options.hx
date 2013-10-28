@@ -173,4 +173,19 @@ class Options {
       case _: false;
     }
   }
+  static public function toFailChunk<A>(m:Option<Fail>):Chunk<A>{
+    return switch (m){
+      case Some(v)  : End(v);
+      case None     : Nil;
+    }
+  }
+  static public function toVouch<A>(m:Option<A>):Vouch<A>{
+    return Eventual.pure(toChunk(m));
+  }
+  static public function toChunk<A>(m:Option<A>):Chunk<A>{
+    return switch (m){
+      case Some(v)  : Val(v);
+      case None     : Nil;
+    }
+  }
 } 

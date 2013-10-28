@@ -2,7 +2,9 @@ package stx.rx.disposable;
 
 import stx.Fail;
 
-class SingleAssignmentDisposable implements Disposable{
+import stx.ifs.Disposable in IDisposable;
+
+class SingleAssignmentDisposable implements IDisposable{
   private var disposed        : Bool;
   private var __underlying__  : Disposable;
 
