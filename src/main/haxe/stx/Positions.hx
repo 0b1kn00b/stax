@@ -11,7 +11,7 @@ class Positions {
   static public function here(?pos:PosInfos) {
     return pos;
   }
-  @:noUsing static public function create(fileName,className,methodName,lineNumber):PosInfos{
+  @:noUsing static public function create(fileName,className,methodName,lineNumber:Null<Int>):PosInfos{
     return {
       fileName   : fileName,
       className  : className,

@@ -56,7 +56,7 @@ class Floats {
 		"Produce a number based on `n` that is `min` if less than `min`, 
 		`max` if `n` is greater than `max` and is left untouched if
 		between the two."
-	)
+	)  
 	static public inline function clamp(n:Float, min : Float , max : Float) {
 		if (n > max) { n = max; }else if (n < min) { n = min; }
 		return n;

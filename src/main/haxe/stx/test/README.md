@@ -26,6 +26,8 @@ To use `stx.Eventual`
 
 The flatten function turns the `Eventual<TestArrow>` into a `TestArrow`, there is also a version for `Eventual<Array<TestArrow>>`, and they both come with `using stx.UnitTest`.
 
+    u = u.then(evts.flatten());
+
 To do you're own custom tests:
 
     import stx.UnitTest.*;

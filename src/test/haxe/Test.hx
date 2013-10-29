@@ -9,15 +9,15 @@ class Test{
   function new(){
     trace(debug('entry point'));
     Stax.init();//bootstrap bug 
-    trace('here');
     var rig                     = UnitTest.rig();
     var tests : Array<TestCase> = 
     //#if development
       [
-        new hx.sch.TaskTest(),
+        new hx.sch.SchedulerTest(),
         //new stx.ContinuationTest(),
         //new stx.rct.DefaultReactorTest(),
         /*
+        new hx.sch.TaskTest(),
         new stx.UnitTestTest(),  
         new stx.TimeTest(),
         new stx.rx.RxTest(),

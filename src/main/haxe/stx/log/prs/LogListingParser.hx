@@ -24,6 +24,8 @@ using stx.prs.StringParsers;
   @   -> prefix for line number
 
   Not sure how to crank sensible error reporting out of this.
+
+  '#' at the beginning of a line will ignore the line.
 */
 class LogListingParser{
   static public var p_line        = '@'.id()._and(digit.many().token().then(Std.parseInt));

@@ -12,7 +12,7 @@ class LogLevels{
       case Debug    : 0;
       case Info     : 1;
       case Warning  : 2;
-      case Error     : 3;
+      case Error    : 3;
       case Fatal    : 4;
     }
   }

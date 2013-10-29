@@ -1,0 +1,10 @@
+-cp src/main/haxe/
+-cp src/test/haxe/
+
+-neko test/test.n
+
+-main Test
+
+-D debug
+
+--connect 2331

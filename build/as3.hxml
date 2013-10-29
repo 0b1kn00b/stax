@@ -1,0 +1,29 @@
+-cp src/main/haxe
+
+--macro exclude('haxe')
+--macro exclude('flash')
+--macro include('stx',false)
+--macro include('stx.ds')
+--macro include('stx.concurrent')
+--macro include('stx.core')
+--macro include('stx.err')
+--macro include('stx.framework')
+--macro include('stx.functional')
+--macro include('stx.ifs')
+--macro include('stx.io')
+--macro include('stx.math')
+--macro include('stx.net')
+--macro include('stx.plus')
+--macro include('stx.reactive')
+--macro include('stx.rtti')
+--macro include('stx.time')
+--macro include('stx.util')
+--macro include('stx.reactive')
+--macro include('hx')
+
+-D haxe3
+-D pattern_matching
+
+-as3 src/main/as3
+-main Avm2
+

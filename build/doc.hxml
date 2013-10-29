@@ -1,0 +1,7 @@
+--no-output
+
+--macro Doc.build()
+-cp src/main/haxe
+-cp src/test/haxe
+-main Doc
+-xml doc.xml

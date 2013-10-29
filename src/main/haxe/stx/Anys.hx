@@ -59,21 +59,24 @@ class Anys {
     return Options.create(v).getOrElse(fn);
   }
   public static function equals<T1, T2>(value0 : T1, value1 : T2, ?func : T1 -> T2 -> Bool ) : Bool {
-        if (func == null) {
-            func = function(a, b) {
-                var type0 = Type.typeof(a);
-                var type1 = Type.typeof(b);
-                if (Type.enumEq(type0, type1)) {
-                    return switch(type0) {
-                        case TEnum(_): Type.enumEq(cast a, cast b);
-                        case _: cast a == cast b;
-                    }
-                }
-                return false;
-            };
-        }
-        return func(value0, value1);
+    if (func == null) {
+      func = function(a, b) {
+          var type0 = Type.typeof(a);
+          var type1 = Type.typeof(b);
+          if (Type.enumEq(type0, type1)) {
+              return switch(type0) {
+                  case TEnum(_) : 
+                  var _a : EnumValue = cast a;
+                  var _b : EnumValue = cast b;
+                  Type.enumEq(_a,_b);
+                  case _: cast a == cast b;
+              }
+          }
+          return false;
+      };
     }
+    return func(value0, value1);
+  }
 
     public static function getName<T>(value : T)  : String {
         return switch(Type.typeof(value)) {

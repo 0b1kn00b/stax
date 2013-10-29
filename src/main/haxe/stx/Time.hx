@@ -2,9 +2,13 @@ package stx;
 
 using Math;
 
+import stx.time.*;
 abstract Time(TimeInstance) from TimeInstance to TimeInstance{
   public function new(v){
     this = v;
+  }
+  @:from static public function fromFloat(f:Float):Time{
+  	return new TimeInstance().setRaw(f);
   }
   @:from static public function fromDate(dt:Date):Time{
   	return new TimeInstance().setRaw(dt.getTime());
@@ -42,7 +46,7 @@ abstract Time(TimeInstance) from TimeInstance to TimeInstance{
 	static public function now():Time {
 		return TimeInstance.now();
 	}
-	static public function day(m:Int = 1):Time {
+/*	static public function day(m:Int = 1):Time {
 		return TimeInstance.day(m);
 	}
 	static public function hour(m:Int = 1):Time {
@@ -56,7 +60,7 @@ abstract Time(TimeInstance) from TimeInstance to TimeInstance{
 	}
 	static public function millisecond(m:Int = 1):Time {
 		return TimeInstance.millisecond(m);
-	}
+	}*/
 }
 class TimeInstance {
 
@@ -66,7 +70,7 @@ class TimeInstance {
 		this.ready 	= false;
 	}
 	static public function now() {
-		return new TimeInstance().setRaw(haxe.Timer.stamp() * 1000 );
+		return new TimeInstance().setRaw(haxe.Timer.stamp());
 	}
 	public function setRaw(v:Float) {
 		this.raw 		= v;
@@ -152,24 +156,24 @@ class TimeInstance {
 		if (!ready) determine();
 		return days;
 	}
-	static public function week(){
+	/*static public function week(){
 		return day(7);
-	}
-	static public function day(m:Int = 1) {
+	}*/
+	/*static public function day(m:Milliseconds = 1) {
 		return new TimeInstance().setRaw( 1. * 1000 * 60 * 60 * 24 * m);
 	}
-	static public function hour(m:Int = 1) {
+	static public function hour(m:Milliseconds = 1) {
 		return new TimeInstance().setRaw( 1. * 1000 * 60 * 60 * m);
 	}
-	static public function minute(m:Int = 1) {
+	static public function minute(m:Milliseconds = 1) {
 		return new TimeInstance().setRaw( 1. * 1000 * 60 * m);
 	}
-	static public function second(m:Int = 1) {
+	static public function second(m:Milliseconds = 1) {
 		return new TimeInstance().setRaw( 1. * 1000 * m);
 	}
-	static public function millisecond(m:Int = 1) {
+	static public function millisecond(m:Milliseconds = 1) {
 		return new TimeInstance().setRaw( 1. * m);
-	}
+	}*/
 	public function toString() {
 		return '$days#$hours:$minutes:$seconds.$milliseconds';
 	}

@@ -1,0 +1,8 @@
+-cp src/main/haxe/
+-cp src/test/haxe/
+
+-cp funk/src/main/haxe
+
+-php ../bin
+
+-main StaxTestSuite

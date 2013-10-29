@@ -31,7 +31,7 @@ class DefaultLogger implements Logger{
       }
     #end
     this.zebra      = new ZebraListings(listings);
-    this.level      = level == null ? #if test Debug #else Warning #end: level;
+    this.level      = level == null ? #if debug Debug #else Info #end: level;
     this.permissive = permissive;
   }
   public function apply(v:Dynamic, ?pos:PosInfos):Void{

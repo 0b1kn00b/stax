@@ -1,0 +1,11 @@
+-cp src/main/haxe/
+-cp src/test/haxe/
+
+-js test/test.js
+
+-D development
+#-D selector
+
+-main Test
+
+--connect 2331
