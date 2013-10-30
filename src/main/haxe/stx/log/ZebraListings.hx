@@ -34,8 +34,8 @@ class ZebraListings{
           case Exclude(_)  : false;
         }        
       }
-    ) ? listings.forAny(white.bind(_,pos)).and(listings.forAll(black.bind(_,pos).not()))
-      : listings.forAll(black.bind(_,pos).not());
+    ) ? listings.forAny(white.bind(_,pos)).and(!listings.forAny(black.bind(_,pos)))
+      : !listings.forAny(black.bind(_,pos));
   }
   private function white(x:LogListing,pos:PosInfos){
     return switch (x) {
@@ -44,7 +44,7 @@ class ZebraListings{
         (pos0.methodName != null ? pos.methodName == pos0.methodName : true)
         && (pos0.className != null ? pos.className == pos0.className : true) 
         && pos.methodName == pos0.methodName
-        && (pos0.methodName!= null || pos0.className!=null);
+        && (pos0.fileName!= null || pos0.className!=null);
       case Include(tuple2(LClassScope,pos0))   : pos.className == pos0.className;
       case Include(tuple2(LFileScope,pos0))    : pos.fileName  == pos0.fileName;
       case _                                   : false;
@@ -57,7 +57,7 @@ class ZebraListings{
           (pos0.methodName != null ? pos.methodName == pos0.methodName : true)
         && (pos0.className != null ? pos.className == pos0.className : true) 
         && pos.methodName == pos0.methodName
-        && (pos0.methodName!= null || pos0.className!=null); //one of these two must be defined;
+        && (pos0.fileName!= null || pos0.className!=null); //one of these two must be defined;
       case Exclude(tuple2(LClassScope,pos0))   : pos.className == pos0.className;
       case Exclude(tuple2(LFileScope,pos0))    : pos.fileName  == pos0.fileName;
       case _                                   : false;
