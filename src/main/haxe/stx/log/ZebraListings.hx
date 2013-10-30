@@ -1,10 +1,13 @@
 package stx.log;
 
+import stx.Log.*;
+
 import haxe.PosInfos;
 
 import stx.Prelude;
 import stx.Tuples;
 
+using stx.Compare;
 using stx.Arrays;
 using stx.Bools;
 
@@ -31,13 +34,17 @@ class ZebraListings{
           case Exclude(_)  : false;
         }        
       }
-    ) ? listings.forAny(white.bind(_,pos)).and(!listings.forAll(black.bind(_,pos)))
-      : !listings.forAll(black.bind(_,pos));
+    ) ? listings.forAny(white.bind(_,pos)).and(listings.forAll(black.bind(_,pos).not()))
+      : listings.forAll(black.bind(_,pos).not());
   }
   private function white(x:LogListing,pos:PosInfos){
     return switch (x) {
       case Include(tuple2(LLineScope,pos0))    : (pos.className == pos0.className || pos.fileName == pos0.fileName) && pos.lineNumber == pos0.lineNumber;
-      case Include(tuple2(LMethodScope,pos0))  : pos.className == pos0.className && pos.methodName == pos0.methodName;
+      case Include(tuple2(LMethodScope,pos0))  : 
+        (pos0.methodName != null ? pos.methodName == pos0.methodName : true)
+        && (pos0.className != null ? pos.className == pos0.className : true) 
+        && pos.methodName == pos0.methodName
+        && (pos0.methodName!= null || pos0.className!=null);
       case Include(tuple2(LClassScope,pos0))   : pos.className == pos0.className;
       case Include(tuple2(LFileScope,pos0))    : pos.fileName  == pos0.fileName;
       case _                                   : false;
@@ -46,7 +53,11 @@ class ZebraListings{
   private function black(x:LogListing,pos:PosInfos){
     return switch (x) {
       case Exclude(tuple2(LLineScope,pos0))    : (pos.className == pos0.className || pos.fileName == pos0.fileName) && pos.lineNumber == pos0.lineNumber;
-      case Exclude(tuple2(LMethodScope,pos0))  : pos.className == pos0.className && pos.methodName == pos0.methodName;
+      case Exclude(tuple2(LMethodScope,pos0))  : 
+          (pos0.methodName != null ? pos.methodName == pos0.methodName : true)
+        && (pos0.className != null ? pos.className == pos0.className : true) 
+        && pos.methodName == pos0.methodName
+        && (pos0.methodName!= null || pos0.className!=null); //one of these two must be defined;
       case Exclude(tuple2(LClassScope,pos0))   : pos.className == pos0.className;
       case Exclude(tuple2(LFileScope,pos0))    : pos.fileName  == pos0.fileName;
       case _                                   : false;
