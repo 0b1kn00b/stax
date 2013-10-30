@@ -2,6 +2,7 @@ package hx.sch;
 
 import hx.sch.ThreadScheduler.ThreadSchedulerHelper.*;
 
+import hx.utl.RetreatTimer;
 import hx.utl.Id;
 
 import haxe.Timer;
@@ -11,6 +12,7 @@ import Stax.*;
 import stx.Fail;
 import stx.Log.*;
 
+using stx.Option;
 using stx.Iterables;
 using stx.Maths;
 using stx.Arrays;
@@ -23,11 +25,16 @@ import hx.ifs.Scheduler in IScheduler;
 #if neko
 import Sys.*;
 import neko.vm.Thread;
+import neko.vm.Lock;
+import neko.vm.Mutex;
 
 typedef SchedulerRequest = Tuple2<Float,Int>;
 typedef SchedulerEntry   = Tuple3<Float,Run,Int>;
 
-class ThreadScheduler<T> implements IScheduler{
+@doc("
+  Simple thread scheduler. Uses a retreat timer for polling.
+")
+class ThreadScheduler implements IScheduler{
   private var retreat : RetreatTimer;
   private var command : ThreadCommand;
 
@@ -55,17 +62,19 @@ class ThreadScheduler<T> implements IScheduler{
 }
 class ThreadCommand implements ICommand<Id>{
   private var ids         : IdCache;
-  private var scheduler   : ThreadScheduler<Dynamic>;
+  private var scheduler   : ThreadScheduler;
   private var thread      : Thread;
-  private var entries     : Map<Int,SchedulerEntry>;
+  private var entries     : Array<SchedulerEntry>;
+  public var mutex        : Mutex;
 
   public function new(scheduler){
     trace(debug('new ThreadCommand'));
+    this.mutex        = new Mutex();
+    this.entries      = [];
     this.ids          = new IdCache();
     this.scheduler    = scheduler;
     var runner        = new ThreadRun(this);
     this.thread       = Thread.create(runner.run);
-    this.entries      = new Map();
   }
   public function ready(){
     return entries.filter(
@@ -76,17 +85,27 @@ class ThreadCommand implements ICommand<Id>{
   }
   public function add(time:Float,run:Run){
     var id  = ids.next().native();
-    entries.set(id,tuple3(time,run,id));
+    entries.push(tuple3(time,run,id));
     thread.sendMessage(Schedule(time,id));
   }
   public function apply(key:Id):Void{
-      var entry = entries.get(key.native());
-                  entries.remove(key.native());
-          ids.free(key.native());
-          entry.snd().run();
+    entries.search(
+      function(x){
+        return x.thd() == key.native();
+      }
+    ).foreach(
+      function(entry){
+        entries.remove(entry);
+        ids.free(key.native());
+        entry.snd().run();
+      }
+    );
   }
   public function isEmpty(){
-    return entries.size() == 0;
+    mutex.acquire();
+    var o = entries.size() == 0;
+    mutex.release();
+    return o;
   }
 }
 class ThreadRun implements IRun{
@@ -113,8 +132,10 @@ class ThreadRun implements IRun{
   }
   private inline function run_prdct(){
     while(true){
-      var msg : Null<ThreadMessage<SchedulerRequest>> = Thread.readMessage(false);
+      var msg : Null<ThreadMessage<SchedulerRequest>> = null;
+          msg = Thread.readMessage(false);
       if(msg == null){
+        trace(debug('no message $stack'));
         var n     = this.retreat.next();
         var next  = n + Timer.stamp();
         var t     = stack[0];
@@ -122,7 +143,10 @@ class ThreadRun implements IRun{
             time  = time < 0 ? 0 : time;
         command.ready().foreach(
           function(a,b,c){
+            trace(debug("apply"));
+            this.command.mutex.acquire();
             command.apply(c);
+            this.command.mutex.release();
             stack = stack.filter(
               function(l,r){
                 return r!= c;
@@ -132,6 +156,7 @@ class ThreadRun implements IRun{
         );
         sleep(time);
       }else{
+        trace(debug('message $stack'));
         switch (msg) {
           case Schedule(a,b)      : 
             retreat.reset();
@@ -153,29 +178,6 @@ class ThreadRun implements IRun{
         }
       }
     }
-  }
-}
-class RetreatTimer{
-  private var min     : Float;
-  private var max     : Float;
-  private var mul     : Float;
-  private var current : Float;
-
-  public function new(min=0.00001,max=1,mul=1.8){
-    this.current  = min;
-    this.min      = min;
-    this.max      = max;
-    this.mul      = mul;
-  }
-  public function reset(){
-    this.current  = min;
-  }
-  public function step():Void{
-    this.current  = (this.current*mul).clamp(min,max);
-  }
-  public function next():Float{
-    step();
-    return this.current;
   }
 }
 enum ThreadMessage<T>{
