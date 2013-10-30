@@ -25,13 +25,16 @@ using stx.prs.StringParsers;
 
   Not sure how to crank sensible error reporting out of this.
 
-  '#' at the beginning of a line will ignore the line.
+  '#' at the beginning of a line ignores the line.
 */
 class LogListingParser{
   static public var p_line        = '@'.id()._and(digit.many().token().then(Std.parseInt));
   static public var p_method      = '&'.id()._and(alphanum.or('_'.id()).many().token());
   static public var p_type        = "$".id()._and(alphanum.or('_'.id()).or('.'.id()).many().token());
-  static public var p_file        = '*\\'.id()._and(alphanum.or('_'.id()).or('.'.id()).many().token());
+  static public var p_file        = 
+    '*\\'.id()._and(
+      [alphanum,'_'.id(),'.'.id()].ors().many().token()
+    );
   
   /**
     must figure out combinatorials.
@@ -49,8 +52,14 @@ class LogListingParser{
       )
     ).or(
       p_file.and(p_type).then(
-        function(type,file){
+        function(file,type){
           return tuple2(LClassScope,Positions.create(file,type,null,null));
+        }.tupled()
+      )
+    ).or(
+      p_file.and(p_method).then(
+        function(file,method){
+          return tuple2(LMethodScope,Positions.create(file,null,method,null));
         }.tupled()
       )
     ).or(
@@ -93,7 +102,7 @@ class LogListingParser{
   static public var p_include = '+'.id()._and(p_pos).then(Include);
   static public var p_exclude = '-'.id()._and(p_pos).then(Exclude);
   static public var p_ignore  = 
-    '#'.id()._and(anything().many().token().then(
+    '#'.id()._and(nl.not().lookahead()._and(anything()).many().token().then(
       function(spare){
         return LogListings.nil;
       }
@@ -101,15 +110,18 @@ class LogListingParser{
   static public var p_entry   = 
     gap.many()._and(
       p_ignore.or(p_include).or(p_exclude)
+      //p_include.or(p_exclude)
     ).and_(gap.many());
 
-  static public var p_parse   = p_entry.and_(nl.option()).oneMany().and_(whitespace.many()).and_(end);
+  static public var p_parse   = 
+    p_entry.rep1sep(nl).and_(whitespace.many()).and_(end);
 
   static public function parse(str:String):Array<LogListing>{
-    return switch (p_parse()(str.reader())) {
+    var o = p_parse()(str.reader());
+    return switch (o) {
       case Success(match , _)             : match;
       case Fail(errorStack, rest, isFail) :
-        return throw errorStack;
+        return throw ResultObj.toString(o);
     }
   }
 }
