@@ -1,5 +1,7 @@
 package stx.log;
 
+import stx.Log.*;
+
 import haxe.Resource;
 import haxe.PosInfos;
 
@@ -10,7 +12,7 @@ using stx.LogLevel;
 using stx.Types;
 
 @doc("
-  Default Logger implementation, will try to open zebra.txt in the cwd, loads and parses 
+  Default Logger implementation, will try to open log.cnf in the cwd, loads and parses 
   the list with LogListingParser and appends to the listings.
 ")
 class DefaultLogger implements Logger{
@@ -25,9 +27,10 @@ class DefaultLogger implements Logger{
   public function new(?listings:Array<LogListing>, ?level:LogLevel, ?permissive:Bool=true) {
     listings  = listings == null ? [] : listings;
     #if !macro
-      var rsc   = Resource.getString('zebra');
+      var rsc   = Resource.getString('log');
       if(rsc!=null){
-        listings = listings.append(LogListingParser.parse(rsc));
+        var ls = LogListingParser.parse(rsc);
+        listings = listings.append(ls);
       }
     #end
     this.zebra      = new ZebraListings(listings);
