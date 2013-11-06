@@ -1,9 +1,5 @@
-#builds/build-dev-js-haxe3.hxml
-#builds/build-classes.hxml
-#builds/stx-swc.hxml
-#builds/build-swc.hxml
-#builds/build-as3.hxml
-#builds/build-test-js-haxe3.hxml
-#builds/build-test-js-muster.hxml
-build/dev/neko.hxml
-#builds/build-bootstrap.hxml
+build/dev/nodejs.hxml
+#build/test/flash9.hxml
+#--next
+#build/dev/neko.hxml
+#build/doc.hxml

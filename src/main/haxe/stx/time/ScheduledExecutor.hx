@@ -20,7 +20,7 @@ package stx.time;
 import haxe.Timer;
 #end
 
-import stx.Prelude;
+import Prelude;
 import stx.Eventual;
 /** A scheduled executor service, which can be used to execute tasks at 
  * specified times in the future.

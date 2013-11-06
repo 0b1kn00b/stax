@@ -19,7 +19,7 @@ import stx.js.Dom;
 import stx.js.Env;
 using stx.Tuples;
 
-import stx.Prelude;
+import Prelude;
 
 
 using stx.Maths;

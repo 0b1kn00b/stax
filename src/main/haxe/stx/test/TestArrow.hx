@@ -21,7 +21,4 @@ abstract TestArrow(Arrow<TestResult,TestResult>) from Arrow<TestResult,TestResul
   public function msg(m):TestArrow{
     return this.then(TestResult.setMsg.bind(_,m));
   }
-  public function apply(?i){
-    return this.apply(i);
-  }
 }

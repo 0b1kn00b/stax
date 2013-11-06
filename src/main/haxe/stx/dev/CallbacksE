@@ -18,20 +18,20 @@ class CallbacksE{
       }
   }
   static public function onSuccess<A,B>(ft:Callback<Either<A,B>>,fn:B->Void){
-    return ft.foreachR(fn);
+    return ft.eachR(fn);
   }
   static public function onFail<A,B>(ft:Callback<Either<A,B>>,fn:A->Void){
-    return ft.foreachL(fn);
+    return ft.eachL(fn);
   }
   /**
    Does a map if the Either is Left.
   */
-  static public function mapL<A,B,C>(f:Callback<Either<A,B>>,fn:A->C):Callback<Either<C,B>>{
+  static public function mapLeft<A,B,C>(f:Callback<Either<A,B>>,fn:A->C):Callback<Either<C,B>>{
     return 
       f.map(
         function(x:Either<A,B>):Either<C,B>{
           return 
-            x.mapL(
+            x.mapLeft(
               function(y:A){
                 return fn(y);
               }
@@ -42,12 +42,12 @@ class CallbacksE{
   /**
    Does a map if the Either is Right.
   */
-  static public function mapR<A,B,C>(f:Callback<Either<A,B>>,fn:B->C):Callback<Either<A,C>>{
+  static public function mapRight<A,B,C>(f:Callback<Either<A,B>>,fn:B->C):Callback<Either<A,C>>{
     return 
       f.map(
         function(x:Either<A,B>):Either<A,C>{
           return 
-            x.mapR(
+            x.mapRight(
               function(y:B){
                 return fn(y);
               }
@@ -83,7 +83,7 @@ class CallbacksE{
   /**
     flatMaps the right hand value
   */
-  static public function flatMapR<A,B,C>(f0:Callback<Either<A,B>>,fn : B -> Callback<Either<A,C>>):Callback<Either<A,C>>{
+  static public function flatMapRight<A,B,C>(f0:Callback<Either<A,B>>,fn : B -> Callback<Either<A,C>>):Callback<Either<A,C>>{
     return
       f0.flatMap(
         function(x){
@@ -98,7 +98,7 @@ class CallbacksE{
   /**
     Flatmaps the left hand value.
   */
-  static public function flatMapL<A,B,C>(f0:Callback<Either<A,B>>,fn : A -> Callback<Either<C,B>>):Callback<Either<C,B>>{
+  static public function flatMapLeft<A,B,C>(f0:Callback<Either<A,B>>,fn : A -> Callback<Either<C,B>>):Callback<Either<C,B>>{
     return
       f0.flatMap(
         function(x){
@@ -118,13 +118,13 @@ class CallbacksE{
     Resolves as a right hand value.
   */
   static public function right<A,B>(f:Callback<Either<A,B>>,v:B->Void):Void{
-    f.map( Eithers.right ).foreach( Options.foreach.p2(v).enclose() );
+    f.map( Eithers.right ).each( Options.each.p2(v).enclose() );
   }
   /**
     Resolves as a left hand value.
   */
   static public function left<A,B>(f:Callback<Either<A,B>>,v:A->Void):Void{
-    f.map( Eithers.left ).foreach( Options.foreach.p2(v).enclose() );
+    f.map( Eithers.left ).each( Options.each.p2(v).enclose() );
   }
   /**
     Creates a pure Callback and delivers to the right hand side.
@@ -140,15 +140,15 @@ class CallbacksE{
   }
   /**
     Use this with a flatmap fold to wait for parallel futures.
-    vals.map( function_returning_future ).foldl( Callback.pure(Right([])), Promises.waitfold )
+    vals.map( function_returning_future ).foldLeft( Callback.pure(Right([])), Promises.waitfold )
     This op stops when there is a single failure
   */
   static public function waitfold<A,B>(init:Callback<Either<A,Array<B>>>,ft:Callback<Either<A,B>>):Callback<Either<A,Array<B>>>{
     return 
-      init.flatMapR(
+      init.flatMapRight(
         function(arr:Array<B>){
           return 
-            ft.mapR(
+            ft.mapRight(
               function(v:B):Array<B>{
                 return arr.add(v);
               }
@@ -161,7 +161,7 @@ class CallbacksE{
   */
   static public function wait<A,B>(a:Array<Callback<Either<A,B>>>):Callback<Either<A,Array<B>>>{
     return 
-      a.foldl(
+      a.foldLeft(
           CallbacksE.pure(Right([]))
         , waitfold
       );
@@ -169,26 +169,26 @@ class CallbacksE{
   /**
     Applies a function if the result is right
   */
-  static public function foreachR<A,B>(v:Callback<Either<A,B>>,f:B->Void){
+  static public function eachR<A,B>(v:Callback<Either<A,B>>,f:B->Void){
     return 
-      v.foreach(
-        Eithers.right.then( Options.foreach.p2( f ) ).enclose()
+      v.each(
+        Eithers.right.then( Options.each.p2( f ) ).enclose()
       );
   }
   /**
     Applies a function if the result is left.
   */
-  static public function foreachL<A,B>(v:Callback<Either<A,B>>,f:A->Void){
+  static public function eachL<A,B>(v:Callback<Either<A,B>>,f:A->Void){
     return 
-      v.foreach(
-        Eithers.left.then( Options.foreach.p2( f ) ).enclose()
+      v.each(
+        Eithers.left.then( Options.each.p2( f ) ).enclose()
       );
   }
   static public function unzip<A,B,C>(tp:Tuple2<Callback<Either<A,B>>,Callback<Either<A,C>>>):Callback<Either<A,Tuple2<B,C>>>{
     return 
-      tp.fst().flatMapR(
+      tp.fst().flatMapRight(
         function(b:B){
-          return tp.snd().mapR( tuple2.p1(b) );
+          return tp.snd().mapRight( tuple2.p1(b) );
         }
       );
   }
@@ -210,11 +210,11 @@ class CallbacksE{
 class CallbacksEActions {
   public static function chain(a:Array<Void->Callback<Either<Fail,Dynamic>>>):Callback<Outcome<Array<Dynamic>>>{
     return 
-      a.foldl(
+      a.foldLeft(
         Callbacks.pure(Right([]))
       , function(init,fn){
           return 
-            init.flatMapR(function(x) return CallbacksE.mapR(fn(),function(y) return x.add(y)));
+            init.flatMapRight(function(x) return CallbacksE.mapRight(fn(),function(y) return x.add(y)));
         }
     );
   }

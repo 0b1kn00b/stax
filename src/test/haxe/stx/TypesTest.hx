@@ -11,4 +11,3 @@ class TypesTest extends TestCase{
     return u;
   }
 }
-

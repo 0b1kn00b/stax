@@ -1,8 +1,8 @@
 package stx.arw;
 
-import stx.Prelude;
+import Prelude;
 import stx.Continuation.*;
-import stx.Tuples;
+import stx.Tuples.Tuples2.*;
 
 using stx.Tuples;
 using stx.Arrow;
@@ -47,9 +47,7 @@ class StateArrows<S,A>{
   public function exchange<S,A,B>(arw0:ArrowState<S,A>,a:Arrow<S,B>):ArrowState<S,B>{
     return access(
       arw0,
-      function(v:A,s:S):Eventual<B>{
-        return a.apply(s);
-      }
+      tuple2
     );
   }
   static public function access<S,A,B>(arw0:ArrowState<S,A>,arw1:Arrow<Tuple2<A,S>,B>):ArrowState<S,B>{
@@ -61,14 +59,12 @@ class StateArrows<S,A>{
       );
   }
   static public function nextWith<S,A,B,C>(arw0:ArrowState<S,A>,arw1:ArrowState<S,B>,fn:A->B->C):ArrowState<S,C>{
-    return arw0.then(
-      function(v:A,st:S){
-        return arw1.then(
-          function(v0:B,st:S){
-            return tuple2(fn(v,v0),st);
-          }.tupled()
-        ).apply(st);
-      }.tupled()
+    return Arrows.split(arw0,arw1).then(
+      function(tp:Tuple2<Tuple2<A,S>,Tuple2<B,S>>){
+        var tp0 = tp.fst();
+        var tp1 = tp.snd();
+        return tuple2(fn(tp0.fst(),tp1.fst()),tp1.snd());
+      }
     );
   }
   static public function next<S,A,B>(arw0:ArrowState<S,A>,arw1:ArrowState<S,B>):ArrowState<S,Tuple2<A,B>>{
@@ -92,22 +88,32 @@ class StateArrows<S,A>{
     );
   }
   static public function putState<S,A,B>(arw0:ArrowState<S,A>,v:S):ArrowState<S,A>{
-    return arw0.then(
-      Compose.pure(v).second()
+    return Arrows.then(arw0,
+      function(tp:Tuple2<A,S>){
+        return tuple2(tp.fst(),v);
+      }
     );
   }
   static public function ret<S,A>(arw0:ArrowState<S,A>):ArrowState<S,S>{
-    return arw0.then(
+    return Arrows.then(arw0,
       function(tp:Tuple2<A,S>){
         return tuple2(tp.snd(),tp.snd());
       }
     );
   }
   static public function request<S,A>(arw0:ArrowState<S,A>,i:S){
-    return arw0.apply(i).map(Tuples2.fst);
+    return arw0.then(
+      function(t:Tuple2<A,S>){
+        return fst(t);
+      }
+    );
   }
   static public function resolve<S,A>(arw0:ArrowState<S,A>,i:S){
-    return arw0.apply(i).map(Tuples2.snd);
+    return arw0.then(
+      function(t:Tuple2<A,S>){
+        return snd(t);
+      }
+    );
   }
   static public function breakout<S,A>(arw:ArrowState<S,A>):Arrow<S,A>{
     return arw.then(

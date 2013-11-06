@@ -103,7 +103,7 @@ class SchedulerTest extends TestCase{
   public function testInline(u:UnitArrow):UnitArrow{
     var evt = Eventual.unit();
     var a   = new InlineScheduler();
-    0.until(3000).foreach(
+    0.until(3000).each(
       function(i){
         a.wait(i/1000,
           function(){
@@ -142,6 +142,15 @@ class SchedulerTest extends TestCase{
     var sch = inject(hx.ifs.Scheduler);
         sch.latch();
     return u.add(evt.flatten());
+  }
+  public function test_stop_start(u:UnitArrow):UnitArrow{
+    var count = 0;
+    var a = inject(hx.ifs.Scheduler);
+    a.wait(2,function(){count++;});
+    a.latch();
+    a.wait(2,function(){count++;});
+    a.latch();
+    return u.add(isEqual(2,count));
   }
 }
 

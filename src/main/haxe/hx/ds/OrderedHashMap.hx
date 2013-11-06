@@ -11,9 +11,9 @@ import stx.Tuples;
 
 using stx.Compose;
 using stx.Functions;
-using stx.Prelude;
+using Prelude;
 using stx.Bools;
-using stx.Prelude;
+using Prelude;
 using stx.Iterables;
 using stx.Arrays;
 using stx.Option;
@@ -24,9 +24,9 @@ using stx.Strings;
 @:stability(1)
 @:note('#0b1kn00b: How to clone this and maintain equalities?')
 class OrderedHashMap<V>{
-	private var __key_sort__ 	: OrderFunction<Int>;
-	private var __val_sort__ 	: OrderFunction<V>;
-	private var __val_equal__ : EqualFunction<V>;
+	private var __key_sort__ 	: Reduce<Int,Int>;
+	private var __val_sort__ 	: Reduce<V,Int>;
+	private var __val_equal__ : Reduce<V,Bool>;
 	public var impl 					: Array<Tuple2<Int,V>>;
 	public function new(){
 		impl = [];
@@ -38,7 +38,7 @@ class OrderedHashMap<V>{
 				function(t){
 					return impl.findIndexOf(t);
 				}
-			).foreach(
+			).each(
 				function(idx){
 					this.impl = impl.set(idx,tp);
 				}	
@@ -61,7 +61,7 @@ class OrderedHashMap<V>{
 	}
 	public function del(key:Int){
 		lookup(key)
-		 .foreach(
+		 .each(
 		 		function(x){
 		 			impl.remove(x);
 		 		}
@@ -79,7 +79,7 @@ class OrderedHashMap<V>{
 	public function sort(){
 		impl = ArrayOrder.sort(impl);
 	}
-	public function sortWith(fn:OrderFunction<Tuple2<Int,V>>){
+	public function sortWith(fn:Reduce<Tuple2<Int,V>,Int>){
 		impl = impl.sortWith(fn);
 	}
 	public function sortOnKey(){
@@ -149,7 +149,7 @@ class OrderedHashMap<V>{
 					return '$key : ${gsh(val)(val)}';
 				}.tupled()
 			);
-		return vals.foldl('',
+		return vals.foldLeft('',
 			function(memo:String,next:String){
 				return Strings.append(memo,'\n\t').append(next);
 			}

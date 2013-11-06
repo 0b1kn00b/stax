@@ -14,11 +14,11 @@ abstract Enumerates<T>(Enumerator<T>) from Enumerator<T> to Enumerator<T>{
   public function flatMap<U>(fn:T->Enumerator<U>):Enumerator<U>{
     return Iterators.flatMap(this,fn);
   }
-  public function foldl<Z>(memo:Z,fn:Z->T->Z):Z{
-    return Iterators.foldl(this,memo,fn);
+  public function foldLeft<Z>(memo:Z,fn:Z->T->Z):Z{
+    return Iterators.foldLeft(this,memo,fn);
   }
-  public function foldr<Z>(memo:Z,fn:T->Z->Z):Z{
-    return Iterators.foldr(this,memo,fn);
+  public function foldRight<Z>(memo:Z,fn:T->Z->Z):Z{
+    return Iterators.foldRight(this,memo,fn);
   }
   public function toArray():Array<T>{
     return Iterators.toArray(this);

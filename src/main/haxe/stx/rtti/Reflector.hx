@@ -6,7 +6,7 @@ import haxe.rtti.CType;
 import stx.Fail;
 import stx.Fail.*;
 
-using stx.Prelude;
+using Prelude;
 using stx.Compose;
 using stx.Either;
 using stx.Iterables;
@@ -40,7 +40,7 @@ abstract Reflector<C,T>(Tuple2<C,Array<Tuple2<ClassField,T>>>) from Tuple2<C,Arr
   }
   public function toStringMap():StringMap<T>{
     var m = new StringMap();
-    this.snd().foreach(
+    this.snd().each(
       function(l:ClassField,r:T){
         m.set(l.name,r);
       }.tupled()

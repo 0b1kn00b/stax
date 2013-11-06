@@ -1,11 +1,11 @@
 package stx.ds;
 
 using Std;
-using stx.Prelude;
+using Prelude;
 using stx.Arrays;
 using stx.Functions;
 using stx.Option;
-using stx.Prelude;
+using Prelude;
 using stx.Iterators;
 
 //https://gist.github.com/1271891
@@ -20,15 +20,13 @@ class BinaryTrees{
     return Node(el,l,r);
   }
   static public function inOrder<A>(t:BinaryTree<A>):Array<A>{
-    return
-      switch (t) {
+    return switch (t) {
         case Empty          : [];
         case Node(el,l,r)   : inOrder(l).add(el).append( inOrder(r) );
       }
   }
   static public function preOrder<A>(t:BinaryTree<A>):Array<A>{
-    return
-      switch (t) {
+    return switch (t) {
         case Empty          : [];
         case Node(el,l,r)   : [el].append(preOrder(l)).append(preOrder(r));
       }
@@ -68,8 +66,7 @@ class BinaryTrees{
       } 
   }
   static public function height<A>(t:BinaryTree<A>):Int{
-    return
-      switch (t) {
+    return switch (t) {
         case Empty          : 0;
         case Node(_,l,r)    : 1 + Std.int( Math.max( height(l), height(r) ) );
       }

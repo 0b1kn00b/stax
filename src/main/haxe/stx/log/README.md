@@ -16,11 +16,11 @@ And all the sensible combinations of file, classname, method and line are suppor
 
 if using `împort Stax.*` or `import Log.*`, you can also use `printer(pos:PosInfos)`
 
-    [0,1,2,3].foreach(printer());
+    [0,1,2,3].each(printer());
 
 Or with `using stx.Compose` and `import stx.Log.*`
 
-    [0,1,2,3].foreach(warning.then(printer()))
+    [0,1,2,3].each(warning.then(printer()))
 
 `DefaultLogger` also has a `permissive` parameter which, if set to false, filters out all traces which are not LogItems.
 

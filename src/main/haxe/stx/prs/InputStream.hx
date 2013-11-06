@@ -7,7 +7,7 @@ package stx.prs;
 import Type;
 
 import stx.ds.List;
-import stx.prs.Parser;
+import stx.Parser;
 
 import stx.plus.Equal;
 

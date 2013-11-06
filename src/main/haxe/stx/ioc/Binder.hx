@@ -1,6 +1,7 @@
 package stx.ioc;
 
-import stx.Prelude;
+import stx.type.*;
+import Prelude;
 using stx.Tuples;
 
 import stx.ifs.Reply;

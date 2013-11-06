@@ -9,7 +9,7 @@ using stx.Tuples;
 
 using stx.Maps;
 using stx.Option;
-using stx.Prelude;
+using Prelude;
 using stx.Objects;
 using stx.plus.Order;
 using stx.Reflects;

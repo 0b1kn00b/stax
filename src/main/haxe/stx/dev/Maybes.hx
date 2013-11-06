@@ -1,6 +1,6 @@
 package stx;
 
-import stx.Prelude;
+import Prelude;
 
 using stx.Functions;
 using stx.Maybes;
@@ -40,7 +40,7 @@ class Maybes {
   /**
     Performs 'f' on the contents of 'o' if 'o' != None
    */
-  static public function foreach<T>(o: Maybe<T>, f: T -> Void): Maybe<T> {
+  static public function each<T>(o: Maybe<T>, f: T -> Void): Maybe<T> {
     return switch (o) {
       case None     : o;
       case Some(v)  : f(v); o;
@@ -57,7 +57,7 @@ class Maybes {
   */
   static public function get<T>(o: Maybe<T>): T {
     return switch (o) {
-      case None   : Prelude.error()("Fail: Maybe is empty");
+      case None   : except()("Fail: Maybe is empty");
       case Some(v): v;
     }
   }

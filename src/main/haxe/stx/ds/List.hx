@@ -1,7 +1,10 @@
 package stx.ds;
 
+import Stax.*;
+import Prelude;
+
+import stx.type.*;
 import stx.plus.Plus;
-import stx.Prelude;
 
 import stx.Tuples;
 
@@ -13,8 +16,8 @@ import stx.plus.Plus.*;
 using stx.Maths;
 using stx.Option;
 using stx.Tuples;
-using stx.Prelude;
 
+using stx.Iterables;
 using stx.plus.Order; 
 using stx.plus.Hasher;
 using stx.plus.Show; 
@@ -30,7 +33,7 @@ class ArrayToList {
 class FoldableToList {
   public static function toList<A, B>(foldable : Foldable<A,B>) : List<B> {  
     var dest = List.create();
-    return foldable.foldl(dest, function(a, b) {
+    return foldable.foldLeft(dest, function(a, b) {
       return a.add(b);
     });
   }	
@@ -47,46 +50,46 @@ class List<T> implements Collection<List<T>,T> {
   public var firstOption (get_firstOption, null): Option<T>;
   public var lastOption  (get_lastOption, null): Option<T>;
   
-  public var equal (get_equal, null) : EqualFunction<T>;
+  public var equal (get_equal, null) : Reduce<T,Bool>;
   function get_equal() {
     return 
       if (equal == null || equal == NullEqual.equals ){
         headOption.map( Equal.getEqualFor )
-        .foreach(function(x) equal = x)
+        .each(function(x) equal = x)
         .getOrElseC( NullEqual.equals );
       }else{
         equal;
       }
   }  
-  public var order (get_order, null) : OrderFunction<T>;
+  public var order (get_order, null) : Reduce<T,Int>;
   function get_order() {
     return 
       if (order == null || order == Order.nil ){
         headOption.map( Order.getOrderFor )
-        .foreach( function(x) order = x)
+        .each( function(x) order = x)
         .getOrElseC( Order.getOrderFor(null) );
       }else{
         order;
       }
   }  
 
-  public var hash(get_hash, null) : HashFunction<T>;
+  public var hash(get_hash, null) : T->Int;
   function get_hash(){
     return 
       if (hash == null || hash == Hasher.nil ){
         headOption.map( Hasher.getHashFor )
-        .foreach(function(x) hash = x)
+        .each(function(x) hash = x)
         .getOrElseC( Hasher.nil );
       }else{
         hash;
       }
   }
-  public var show  (get_show, null) : ShowFunction<T>;
+  public var show  (get_show, null) : T->String;
   function get_show(){
     return 
       if (show == null || show == NullShow.toString ){
         headOption.map( Show.getShowFor )
-        .foreach(function(x) show = x)
+        .each(function(x) show = x)
         .getOrElseC( NullShow.toString );
       }else{
         show;
@@ -105,7 +108,7 @@ class List<T> implements Collection<List<T>,T> {
   }
 
   /** Creates a factory for lists of the specified type. */
-  public static function factory<T>(?tools:Tool<T> ): Factory<List<T>> {
+  public static function factory<T>(?tools:Tool<T> ): Thunk<List<T>> {
     return function() {
       return List.create(tools);
     }
@@ -152,7 +155,7 @@ class List<T> implements Collection<List<T>,T> {
     return result;
   }
 
-  public function foldl<Z>(z: Z, f: Z -> T -> Z): Z {
+  public function foldLeft<Z>(z: Z, f: Z -> T -> Z): Z {
     var acc = z;
     var cur = this;
 
@@ -168,7 +171,7 @@ class List<T> implements Collection<List<T>,T> {
   /** A right fold. Right folds are much more efficient when folding to
    * another list.
    */
-  public function foldr<Z>(z: Z, f: T -> Z -> Z): Z {
+  public function foldRight<Z>(z: Z, f: T -> Z -> Z): Z {
     var a = this.toArray();
 
     var acc = z;
@@ -197,7 +200,7 @@ class List<T> implements Collection<List<T>,T> {
    * the cons() method should be used to grow the list.
    */
   public function add(t: T): List<T> {
-    return foldr(create(tool(order, equal, hash, show)).cons(t), function(b, a) {
+    return foldRight(create(tool(order, equal, hash, show)).cons(t), function(b, a) {
       return a.cons(b);
     });
   }
@@ -213,7 +216,7 @@ class List<T> implements Collection<List<T>,T> {
 
     for (e in a) r = r.cons(e);
 
-    return foldr(r, function(b, a) {
+    return foldRight(r, function(b, a) {
       return a.cons(b);
     });
   }
@@ -291,23 +294,23 @@ class List<T> implements Collection<List<T>,T> {
 
   /** Override Foldable to provide higher performance: */
   public function map<B>(f: T -> B): List<B> {
-    return foldr(create(), function(e, list) return list.cons(f(e)));
+    return foldRight(create(), function(e, list) return list.cons(f(e)));
   }
 
   /** Override Foldable to provide higher performance: */
   public function flatMap<B>(f: T -> Iterable<B>): List<B> {
-    return foldr(create(), function(e, list) return list.prepend(f(e)));
+    return foldRight(create(), function(e, list) return list.prepend(f(e)));
   }
 
   /** Override Foldable to provide higher performance: */
   public function filter(f: T -> Bool): List<T> {
-    return foldr(create(tool(order, equal, hash, show)), function(e, list) return if (f(e)) list.cons(e) else list);
+    return foldRight(create(tool(order, equal, hash, show)), function(e, list) return if (f(e)) list.cons(e) else list);
   }
 
   /** Returns a list that contains all the elements of this list in reverse
    * order */
   public function reverse(): List<T> {
-    return foldl(create(tool(order, equal, hash, show)), function(a, b) return a.cons(b));
+    return foldLeft(create(tool(order, equal, hash, show)), function(a, b) return a.cons(b));
   }
 
   /** Zips this list and the specified list into a list of tuples. */
@@ -330,7 +333,7 @@ class List<T> implements Collection<List<T>,T> {
    *
    * @param f Called with every two consecutive elements to retrieve a list of gaps.
    */
-  public function gaps<G>(f: T -> T -> List<G>, ?equal: EqualFunction<G>): List<G> {
+  public function gaps<G>(f: T -> T -> List<G>, ?equal: Reduce<G,Bool>): List<G> {
     var l : List<G> 
       = zip(drop(1)).flatMapTo(List.nil(tool(null,equal)), function(tuple) return f(tuple.fst(), tuple.snd()));
     return l;
@@ -355,19 +358,19 @@ class List<T> implements Collection<List<T>,T> {
     return Foldables.iterator(this);
   }
   
-  public function withOrderFunction(order : OrderFunction<T>) {
+  public function withOrderFunction(order : Reduce<T,Int>) {
     return create(tool(order,equal,hash,show)).append(this);
   }
   
-  public function withEqualFunction(equal : EqualFunction<T>) {
+  public function withEqualFunction(equal : Reduce<T,Bool>) {
     return create(tool(order, equal, hash, show)).append(this);
   }
   
-  public function withHashFunction(hash : HashFunction<T>) {
+  public function withHashFunction(hash : T->Int) {
     return create(tool(order, equal, hash, show)).append(this);
   }
   
-  public function withShowFunction(show : ShowFunction<T>) {
+  public function withShowFunction(show : T->String) {
     return create(tool(order, equal, hash, show)).append(this);
   }
 
@@ -381,7 +384,7 @@ class List<T> implements Collection<List<T>,T> {
    
   public function hashCode() : Int { 
     var ha = hash;
-    return foldl(12289, function(a, b) return a * (ha(b) + 12289));
+    return foldLeft(12289, function(a, b) return a * (ha(b) + 12289));
   }
 
   public function toString(): String { 
@@ -393,13 +396,13 @@ class List<T> implements Collection<List<T>,T> {
   }
 
   private function get_head(): T {
-    return Prelude.error()("List has no head element");
+    return except()(Failed("List has no head element"));
   }
   private function get_first(): T {
-    return Prelude.error()("List has no head element");
+    return except()(Failed("List has no head element"));
   }
   private function get_last(): T {
-    return Prelude.error()("List has no last element");
+    return except()(Failed("List has no last element"));
   }
 
   private function get_headOption(): Option<T> {
@@ -414,7 +417,7 @@ class List<T> implements Collection<List<T>,T> {
   }
 
   private function get_tail(): List<T> {
-    return Prelude.error()("List has no head");
+    return except()(Failed("List has no head"));
   }
 }
 

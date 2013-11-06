@@ -1,6 +1,8 @@
 package stx.rct;
 
-import stx.Prelude;
+import hx.sch.Process;
+
+import Prelude;
 import stx.Functions;
 
 import stx.Option;

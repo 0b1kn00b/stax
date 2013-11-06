@@ -2,7 +2,7 @@ package stx.plus;
 
 import haxe.ds.HashMap;
 
-import stx.Prelude;
+import Prelude;
 import stx.Tuples;
 
 import stx.Muster;
@@ -10,7 +10,7 @@ import stx.Muster.*;
 import stx.Log.*;
 import stx.Compare.*;
 
-using stx.Prelude;
+using Prelude;
 using stx.Tuples;
 using stx.Maths;
 
@@ -142,7 +142,7 @@ class OrderTest extends TestCase{
       ] 
     );
   
-		tests.foreach(
+		tests.each(
 				function(test:Tuple2 < Product, Product > ) {
 					var l : Product = test.fst();
 					var r = test.snd();

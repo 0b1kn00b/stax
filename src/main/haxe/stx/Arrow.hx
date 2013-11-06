@@ -1,8 +1,8 @@
 package stx;
 
+import stx.type.*;
 import Stax.*;
 import haxe.Constraints;
-
 
 
 import stx.ifs.Reply;
@@ -14,7 +14,7 @@ import stx.Assert.*;
 import stx.Fail;
 import stx.Log.*;
 import stx.Tuples;
-import stx.Prelude;
+import Prelude;
 import stx.arw.OptionArrow;
 import stx.arw.StateArrow;
 import stx.arw.*;
@@ -24,7 +24,10 @@ import stx.Option;
 
 using stx.Tuples;
 
-typedef Consume<A>      = A -> Void;
+enum Free<A, B>{
+  Cont(v:A);
+  Done(v:B);
+}
 typedef ArrowType<A,B>  = A -> (B->Void) -> Void;
 
 abstract Arrow<I,O>(ArrowType<I,O>) from ArrowType<I,O>{
@@ -44,64 +47,18 @@ abstract Arrow<I,O>(ArrowType<I,O>) from ArrowType<I,O>{
       cont(v);
     }
   }
-  @doc("Produces an `Arrow<Unit,A>` from a `Thunk<Eventual<A>>`")
-  @:from static inline public function fromUnitEventualConstructor<A>(fn:Void->Eventual<A>):Arrow<Unit,A>{
-    return inline function(a:Unit,b:A->Void):Void{
-      fn().foreach(b);
-    }
-  }
-  public function new(v){
+  public function new(v:I -> (O->Void) -> Void){
     this  = v;
   }
-  @doc("Produces an Arrow from a reply")
-  @:bug('#0b1kn00b: why does this not work?')
-  @:from static inline public function fromReplyEventual<A>(rpl:stx.ifs.Reply<Eventual<A>>):Arrow<Unit,A>{
-    //trace('fromReplyEventual');
-    return fromEventualConstructor(function(u:Unit):Eventual<A>{
-      return rpl.reply();
+  @:from static inline public function fromFn<A,B,C,D:(ArrowType<B,C>,Function)>(fn:A -> Tuple2<D,B>):Arrow<A,C>{
+    return new Arrow(function(a:A,cont:C->Void):Void{
+      var cont0 : Tuple2<D,B> -> Void 
+      =
+      function(next:Tuple2<D,B>){
+        Arrows.withInput(next.fst(),next.snd(),cont);
+      }
+      cont0(fn(a));
     });
-  }
-  @:from static inline public function fromEventualConstructor<A,B>(fn:A->Eventual<B>):Arrow<A,B>{
-    //trace('fromEventualConstructor');
-    return inline function(a:A,b:Consume<B>):Void{
-      fn(a).foreach(b);
-    }
-  }
-  @:from static inline public function fromEventualConstructor2<A,B,C>(fn:A->B->Eventual<C>):Arrow<Tuple2<A,B>,C>{
-    //trace('fromEventualConstructor2');
-    return inline function(a:Tuple2<A,B>,b:Consume<C>):Void{
-      fn.tupled()(a).foreach(b);
-    }
-  }
-  @:from static inline public function fromEventualConstructor3<A,B,C,D>(fn:A->B->C->Eventual<D>):Arrow<Tuple3<A,B,C>,D>{
-    //trace('fromEventualConstructor3');
-    return inline function(a:Tuple3<A,B,C>,b:Consume<D>):Void{
-      fn.tupled()(a).foreach(b);
-    }
-  }
-  @:from static inline public function fromEventualConstructor4<A,B,C,D,E>(fn:A->B->C->D->Eventual<E>):Arrow<Tuple4<A,B,C,D>,E>{
-    //trace('fromEventualConstructor4');
-    return inline function(a:Tuple4<A,B,C,D>,b:Consume<E>):Void{
-      fn.tupled()(a).foreach(b);
-    }
-  }
-  @:from static inline public function fromEventualConstructor5<A,B,C,D,E,F>(fn:A->B->C->D->E->Eventual<F>):Arrow<Tuple5<A,B,C,D,E>,F>{
-    //trace('fromEventualConstructor5');
-    return inline function(a:Tuple5<A,B,C,D,E>,b:Consume<F>):Void{
-      fn.tupled()(a).foreach(b);
-    }
-  }
-  @:from static inline public function fromEventualThunk<A>(fn:Void->Eventual<A>):Arrow<Unit,A>{
-    //trace('fromThunk');
-    return inline function(a:Unit,b:A->Void):Void{
-      fn().foreach(b);
-    }
-  }
-  @:from static inline public function fromThunk<A>(fn:Void->A):Arrow<Unit,A>{
-    //trace('fromThunk');
-    return inline function(a:Unit,b:A->Void):Void{
-      b(fn());
-    }
   }
   @:from static inline public function fromFunction<A,B>(fn:A->B):Arrow<A,B>{
     //trace('fromFunction');
@@ -140,7 +97,7 @@ abstract Arrow<I,O>(ArrowType<I,O>) from ArrowType<I,O>{
       b(fn(a));
     }
   }
-  public function asFunction():ArrowType<I,O>{
+  public inline function asFunction():ArrowType<I,O>{
     return this;
   }
 }
@@ -154,24 +111,15 @@ class Arrows{
   static public inline function withInput<I,O>(arw:Arrow<I,O>,i:I,cont:O->Void):Void{
     arw.asFunction()(i,cont);
   }
-  @doc("Applies an Arrow and returns an Eventual that will contain the output.")
-  static public inline function apply<I,O>(arw:Arrow<I,O>,i:I):Eventual<O>{
-    return Continuation.toEventual(withInput.bind(arw,i));
-  }
-  /*@doc("Applies an Arrow, returning a callback consumer.")
-  static public inline function partial<I,O>(arw:Arrow<I,O>,i:I):Future<O>{
+  static public inline function proceed<I,O>(arw:Arrow<I,O>,i:I):Continuation<Void,O>{
     return withInput.bind(arw,i);
-  }*/
-  @doc("Applies an Arrow<Unit,A>, returning an Eventual.")
-  static public inline function reply<A>(arw:Arrow<Unit,A>):Eventual<A>{
-    return apply(arw,Unit);
   }
   @doc("left to right composition of Arrows. Produces an Arrow running `before` and placing it's value in `after`.")
   static public function then<A,B,C>(before:Arrow<A,B>, after:Arrow<B,C>):Arrow<A,C> { 
-    assert(ntnl(),before);
-    assert(ntnl(),after);
-    return function(i : A, cont : Function1<C,Void>) : Void {
-      assert(ntnl(),cont,fail(ArgumentFail('continuation function should not be null')));
+    /*assert(before);
+    assert(after);*/
+    return function(i : A, cont : C->Void) : Void {
+      assert(cont,fail(ArgumentError('continuation function should not be null')));
       function m(reta : B) { 
         withInput(after,reta, cont);
       };
@@ -188,14 +136,14 @@ class Arrows{
   }
   @doc("Takes two Arrows with the same input type, and produces one which applies each Arrow with thesame input.
   ")
-  static public function split<A,B,C>(split_:Arrow<A,B>,_split:Arrow<A,C>):Arrow<A,Tuple2<B,C>> { 
+  static public function split<A, B, C>(split_:Arrow<A, B>, _split:Arrow<A, C>):Arrow<A, Tuple2<B,C>> { 
     return function(i:A, cont:Tuple2<B,C>->Void) : Void{
       return withInput(pair(split_,_split),tuple2(i,i) , cont);
     };
   }
   @doc("Takes two Arrows and produces on that runs them in parallel, waiting for both responses before output.")
-  static public function pair<A,B,C,D>(pair_:Arrow<A,B>,_pair:Arrow<C,D>):Arrow<Tuple2<A,C>,Tuple2<B,D>>{ 
-    return function(i : Tuple2<A,C>, cont : Function1<Tuple2<B,D>,Void> ) : Void{
+  static public function pair<A,B,C,D>(pair_:Arrow<A,B>,_pair:Arrow<C,D>):Arrow<Tuple2<A,C>, Tuple2<B,D>> { 
+    return function(i: Tuple2<A,C>, cont: Tuple2<B,D>->Void ): Void {
         var ol : Option<B>   = null;
         var or : Option<D>   = null;
 
@@ -256,7 +204,7 @@ class Arrows{
     return then( split(Arrow.unit(),bindl) , bindr );
   }
   @doc("Runs an Arrow until it returns Done(out).")
-  static public function repeat<I,O> (a:Arrow<I,FreeM<I,O>>):Arrow<I,O>{
+  static public function repeat<I,O> (a:Arrow<I,Free<I,O>>):Arrow<I,O>{
     return new RepeatArrow(a);
   }
   @doc("Produces an Arrow that will run `or_` if the input is Left(in), or '_or' if the input is Right(in);")
@@ -305,7 +253,7 @@ class Arrows{
   }
   @doc("Print the output of an Arrow")
   static public function printA<A,B>(a:Arrow<A,B>):Arrow<A,B>{
-    var m : Function1<B,B> = function(x:B):B { haxe.Log.trace(x) ; return x;};
+    var m : B->B = function(x:B):B { haxe.Log.trace(x) ; return x;};
     return new ThenArrow( a, m );
   }
   @doc("Runs a `then` operation where the creation of the second arrow requires a function call to produce it.")
@@ -313,27 +261,9 @@ class Arrows{
     return then(a,
       function(x:B){
         var n = b();
-        return apply(n,x);
+        return tuple2(n,x);
       }
     );
-  }
-  @doc("Runs a `then` operation where the creation of the second arrow requires a function call (with `input`) to create it.")
-  static public function invokeWith<B,C,D>(b:Arrow<B,Arrow<C,D>>,inpt:C):Arrow<B,D>{
-    return then(b,
-      function(arw:Arrow<C,D>){
-        return apply(arw,inpt);
-      }
-    );
-  }
-  @doc("Uncurry an Arrow.")
-  static public function uncurry<A,B,C>(a:Arrow<A,Arrow<B,C>>):Arrow<Tuple2<A,B>,C>{
-    return function(tp:Tuple2<A,B>){
-      return apply(a,tp.fst()).flatMap(
-        function(a0){
-          return apply(a0,tp.snd());
-        }
-      );
-    }
   }
   @:noUsing static public function state<S,A>(a:Arrow<S,Tuple2<A,S>>):ArrowState<S,A>{
     return a;
@@ -349,17 +279,6 @@ class Arrows{
         );
       }
   }
-  @doc("Returns an Arrow that memoizes it's output.")
-  static public function memo<T>(arw:Arrow<Unit,T>):Arrow<Unit,T>{
-    var evt : Eventual<T> = null;
-    return Arrow.fromEventualConstructor( function(x:Unit):Eventual<T>{
-      if(evt!=null){
-        return evt;
-      }
-      evt = Arrows.apply(arw,Unit);
-      return evt;
-    });
-  }
   @doc("Delay an Arrow.")
   #if (flash || js)
   static public function delay<A>(ms:Int):Arrow<A,A>{
@@ -373,20 +292,3 @@ class Arrows{
   }
   #end
 }
-class EventualArrows{
-  static public function toArrow<I>(p:Eventual<I>):Arrow<Unit,I>{
-    return function(u:Unit,fn:I->Void){ 
-      p.foreach(fn);
-    }
-  }
-  static public function lift<I,O>(fn:I->Eventual<O>):Arrow<I,O>{
-    return function(i:I,cont:O->Void){
-      fn(i).foreach(cont);
-    }
-  }
-}
-/*class CallbackTypeArrows{
-  static public function lift<A,B>(fn:A->B->Void):Arrow<A,B>{
-    return Arrow.fromCallbackTypeConstructor(fn);
-  }
-}*/

@@ -1,6 +1,6 @@
 package stx.ds;
 
-import stx.Prelude;
+import Prelude;
 using stx.Option;
 
 @doc("

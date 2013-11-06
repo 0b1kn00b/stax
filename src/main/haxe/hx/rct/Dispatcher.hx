@@ -15,7 +15,7 @@
 */
 package hx.rct;
 
-import hx.rct.evt.EventException;
+import hx.evt.EventException;
 
 class Dispatcher<T> {
 

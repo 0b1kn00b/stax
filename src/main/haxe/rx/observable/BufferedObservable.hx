@@ -22,7 +22,7 @@ class BufferedObservable<T> implements IObservable<T>{
   }
   
   public function subscribe(obs:Observer<T>):Disposable{
-    buffer.foreach(obs.apply);
+    buffer.each(obs.apply);
     return __underlying__.subscribe(obs);
   }
 }

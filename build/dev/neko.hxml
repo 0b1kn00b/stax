@@ -5,6 +5,10 @@
 
 -main Test
 
--D debug
+-lib tink
+
+#-D debug
+#-D select
+-resource log.cnf@log
 
 --connect 2331

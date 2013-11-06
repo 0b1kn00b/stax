@@ -4,7 +4,7 @@ import stx.Log.*;
 
 import haxe.PosInfos;
 
-import stx.Prelude;
+import Prelude;
 import stx.Tuples;
 
 using stx.Compare;
@@ -27,15 +27,15 @@ class ZebraListings{
    */
   public function check(pos:PosInfos):Bool{
     if(listings.length == 0) return true;
-    return listings.forAny(
+    return listings.any(
       function(x){
         return switch (x) {
           case Include(_)  : true;
           case Exclude(_)  : false;
         }        
       }
-    ) ? listings.forAny(white.bind(_,pos)).and(!listings.forAny(black.bind(_,pos)))
-      : !listings.forAny(black.bind(_,pos));
+    ) ? listings.any(white.bind(_,pos)).and(!listings.any(black.bind(_,pos)))
+      : !listings.any(black.bind(_,pos));
   }
   private function white(x:LogListing,pos:PosInfos){
     return switch (x) {

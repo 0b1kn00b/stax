@@ -1,20 +1,18 @@
 package stx.plus;
 
+import Stax.*;
 
 import Type;
 import stx.plus.Show;
 
-using stx.Prelude;
+using Prelude;
 using stx.Strings;
 using stx.Tuples;
 using stx.plus.Hasher;
 
-typedef HashFunction<T>         = Function1<T, Int>; 
-
-
 @:note("#0b1kn00b: This is a real magnet for Int overflows, maybe a Hash should be a String, but slow")
 class Hasher {
-	static function __hash__<T>(impl : HashFunction<Dynamic>) {
+	static function __hash__<T>(impl : Dynamic->Int) {
     return function(v : T) {
       return null == v ? 0 : impl(v);
     }
@@ -22,15 +20,15 @@ class Hasher {
   /** 
     Returns a HashFunction (T -> Int). It works for any type. For Custom Classes you should provide a hashCode()
    */
-  public static function getHashFor<T>(t : T) : HashFunction<T> {
+  public static function getHashFor<T>(t : T) : T->Int {
     return getHashForType(Type.typeof(t));
   }
-  public static function getHashForType<T>(v: ValueType) : HashFunction<T> {
+  public static function getHashForType<T>(v: ValueType) : T->Int {
     return switch(v) {
       case TBool            : __hash__(BoolHash.hashCode);
       case TInt             : __hash__(IntHash.hashCode);
       case TFloat           : __hash__(FloatHash.hashCode);
-      case TUnknown         : __hash__(function(v: T) return Prelude.error()("can't retrieve hashcode for TUnknown: " + v));
+      case TUnknown         : __hash__(function(v: T) return except()(ArgumentError("can't retrieve hashcode for TUnknown: $v")));
       case TObject          :
         __hash__(function(v){
         //var s = Show.getShowFor(v)(v);
@@ -59,7 +57,7 @@ class Hasher {
             }
             return hash;
         });
-      case TFunction        : __hash__(function(v : T) return Prelude.error()("function can't provide a hash code"));
+      case TFunction        : __hash__(function(v : T) return except()(IllegalOperationError("function can't provide a hash code")));
       case TNull            : nil;
     }
 	}
@@ -69,7 +67,7 @@ class ArrayHash {
 	public static function hashCode<T>(v: Array<T>) {
     return hashCodeWith(v, Hasher.getHashFor(v[0]));
   }
-	public static function hashCodeWith<T>(v: Array<T>, hash : HashFunction<T>) {
+	public static function hashCodeWith<T>(v: Array<T>, hash : T->Int) {
     var h = 12289;
     if(v.length == 0) return h;
     for (i in 0...v.length) {

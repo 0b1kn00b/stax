@@ -13,7 +13,7 @@ using stx.Compose;
 using stx.Strings;
 using stx.Tuples;
 using stx.Option;
-using stx.Prelude;
+using Prelude;
 using stx.Arrays;
 using stx.Iterables;
 

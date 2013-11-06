@@ -4,10 +4,10 @@ import haxe.ds.StringMap;
 
 import stx.plus.Order;
 import stx.plus.Equal;
-import stx.Prelude;
+import Prelude;
+import stx.rtti.Field;
 
 using stx.Iterables;
-using stx.Arrays;
 using stx.Option;
 using stx.Compose;
 using stx.Tuples;
@@ -21,17 +21,15 @@ class Tables{
       return tuple2(name,f(Reflect.field(d, name)));
     }));
   }*/
-  static public function fields<T>(d: Table<T>): Array<KV<T>> {
-    var keys = Reflect.fields(d);
-    return keys.zip(keys).map(Reflect.field.bind(d).second());
+  static public inline function fields<T>(d: Table<T>): Iterable<Field<T>> {
+    return cast Reflects.fields(d);
   }
   static public function vals<T>(d: Table<T>):Array<T>{
     return Reflect.fields(d).map(Reflects.getValue.bind(d));
   }
-  /**
-    Returns the values of the names
-  */
-  static public function select<T>(d: Table<T>, names: Many<String>): Array<T> {
+  
+  @:doc("Returns the values of the names.")
+  static public function select<T>(d: Table<T>, names: Array<String>): Array<T> {
     var result: Array<T> = [];
     
     for (field in names) {
@@ -42,25 +40,23 @@ class Tables{
     
     return result;
   }
-  /**
-    Report fields missing.
-  */
-  static public function missing<T>(d:Table<T>,fields:Many<String>):Option<Array<String>>{
-    return fields.foldl(
+  @:doc("Report fields missing.")
+  static public function missing<T>(d:Table<T>,fields:Array<String>):Option<Array<String>>{
+    return fields.foldLeft(
         None,
         function(memo:Option<Array<String>>,next:String){
           var hs = Reflect.hasField(d,next);
           return switch (memo){
             case None     : hs ? None     : Some([next]);
-            case Some(v)  : hs ? Some(v)  : Some(v.add(next));
+            case Some(v)  : hs ? Some(v)  : Some(Arrays.add(v,next));
           }
         }
       );
   }
-  static public function has<T>(d:Table<T>,keys:Many<String>):Bool{
+  static public function has<T>(d:Table<T>,keys:Array<String>):Bool{
     return missing(d,keys).isEmpty();
   }
-  static public function only<T>(d:Table<T>,keys:Many<String>):Bool{
+  static public function only<T>(d:Table<T>,keys:Array<String>):Bool{
     var fields  = Reflect.fields(d);
         fields  = ArrayOrder.sort(fields);
     var keys0 : Array<String> = keys;
@@ -68,29 +64,17 @@ class Tables{
 
     return Equal.getEqualFor(fields)(fields,keys0);
   }
-  static public function getOption<T>(d: Table<T>, k: String): Option<T> {
-    return if (Reflect.hasField(d, k)) Some(Reflect.field(d, k)); else None;
-  }
-  static public function replace<T>(d: Table<T>, fields: Many<KV<T>>): Table<T> {
-    for (field in fields) {
-      Reflect.setField(d, field.fst(), field.snd());
-    }
-    return d;
-  }
-  /**
-    Merges the first level of object keys into a new Table, right hand override.
-  */
-  @:non_destructive
+  @:doc("Merges the first level of object keys into a new Table, right hand override.")
   static public function merge<T>(d0:Table<T>,d1:Table<T>):Table<T>{
     var o : Table<T> = {};
     var l = fields(d0);
     var r = fields(d1);
-        l.append(r).foreach(Reflects.setFieldTuple.bind(o));
+        l.append(r).each(Reflects.setFieldTuple.bind(o));
     return o;
   }
   static public function toMap<T>(o:Table<T>):StringMap<T>{
     var map = new StringMap();
-    fields(o).foreach(map.set.tupled());
+    fields(o).each(map.set.tupled());
     return map;
   }
 }

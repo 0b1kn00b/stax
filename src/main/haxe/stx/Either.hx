@@ -1,8 +1,6 @@
 package stx;
 
-import stx.Outcome;
-import stx.Tuples;
-import stx.Prelude;
+import Prelude;
 import stx.Tuples;
 
 using stx.Tuples;
@@ -70,7 +68,7 @@ class Eithers {
     }
   }
   @doc("Transforms the value of an `Either` if it is `Left`.")
-  static public function mapL<A, B, C>(e: Either<A, B>, f: A -> C): Either<C, B> {
+  static public function mapLeft<A, B, C>(e: Either<A, B>, f: A -> C): Either<C, B> {
     return switch (e) {
       case Left(v)  : Left(f(v));
       case Right(v) : Right(v);
@@ -84,7 +82,7 @@ class Eithers {
     }
   }
   @doc("Transforms the value of an `Either` if it is `Right`.")
-  static public function mapR<A, B, D>(e: Either<A, B>, f: B -> D): Either<A, D> {
+  static public function mapRight<A, B, D>(e: Either<A, B>, f: B -> D): Either<A, D> {
     return switch (e) {
       case Left(v)  : Left(v);
       case Right(v) : Right(f(v));
@@ -98,12 +96,12 @@ class Eithers {
     }
   }
   @doc("Creates a new Either if the original is Right.")
-  static public function flatMapR<A, B, C , D>(e: Either<A, B>,f : B -> Either<C,D>):Either<C,D>{
+  static public function flatMapRight<A, B, C , D>(e: Either<A, B>,f : B -> Either<C,D>):Either<C,D>{
     return
       flatMap(e,cast Eithers.toLeft,f);
   }
   @doc("Creates a new Either if the original is Left.")
-  static public function flatMapL<A, B, C , D>(e: Either<A, B>,f : A -> Either<C,D>):Either<C,D>{
+  static public function flatMapLeft<A, B, C , D>(e: Either<A, B>,f : A -> Either<C,D>):Either<C,D>{
     return
       flatMap(e,f,cast Eithers.toRight);
   }
@@ -135,9 +133,9 @@ class Eithers {
     }
   }
   static public function unzip<A,B,C>(tp:Tuple2<Either<A,B>,Either<A,C>>):Either<A,Tuple2<B,C>>{
-    return tp.fst().flatMapR(
+    return tp.fst().flatMapRight(
         function(b:B){
-          return tp.snd().mapR(tuple2.bind(b));
+          return tp.snd().mapRight(tuple2.bind(b));
         }
       );
   }
@@ -180,11 +178,11 @@ class Eithers {
     }
   }
 /*  static public function success<L,R>(e:Either<L,R>,fn:R->Void):Either<L,R>{
-    e.right().foreach(fn);
+    e.right().each(fn);
     return e;
   }
   static public function failure<L,R>(e:Either<L,R>,fn:L->Void):Either<L,R>{
-    e.left().foreach(fn);
+    e.left().each(fn);
     return e;
   }*/
 }

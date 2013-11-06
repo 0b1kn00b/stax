@@ -1,6 +1,6 @@
 package stx;
 
-using stx.Prelude;
+using Prelude;
 
 typedef Tups              = Tuples;
 typedef Tuple2<A,B>         = Tuple2<A,B>;

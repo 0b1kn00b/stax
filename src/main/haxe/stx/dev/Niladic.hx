@@ -1,6 +1,6 @@
 package stx;
 
-import stx.Prelude;
+import Prelude;
 
 abstract Niladic(NiladicType) from NiladicType to NiladicType{
   @:noUsing static public inline function unit(){

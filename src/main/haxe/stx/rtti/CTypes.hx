@@ -1,5 +1,8 @@
 package stx.rtti;
 
+import Type;
+import haxe.rtti.CType;
+
 class CTypes{
   static public function toValueType(ct:CType):ValueType{
     return switch (ct) {

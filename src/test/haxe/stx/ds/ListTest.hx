@@ -20,7 +20,7 @@ import stx.Muster;
 import stx.Muster.*;
 import stx.Log.*;
 
-import stx.Prelude;
+import Prelude;
 
 import stx.plus.Equal;
 

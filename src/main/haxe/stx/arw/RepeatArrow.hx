@@ -1,16 +1,16 @@
 package stx.arw;
 
-import stx.Prelude;
+import Prelude;
 
 using stx.Arrow;
 using stx.arw.RepeatArrow;
 using stx.Compose;
 
 abstract RepeatArrow<I,O>(Arrow<I,O>) to Arrow<I,O> from Arrow<I,O>{
-	public function new(a:Arrow<I,FreeM<I,O>>) {
+	public function new(a: Arrow<I,Free<I,O>>) {
 		this = new Arrow(
 			inline function(?i : I, cont : O->Void) : Void {
-				function withRes(res : FreeM < I, O > ) {
+				function withRes(res: Free<I, O> ) {
 					switch (res) {
 						case Cont(rv): a.withInput(rv, cast withRes#if (flash || js).trampoline()#end); //  break this recursion!
 						case Done(dv): cont(dv);

@@ -6,6 +6,7 @@ import stx.Log.*;
 
 using stx.UnitTest;
 
+using stx.Arrays;
 using stx.Strings;
 using stx.prs.Base;
 using stx.prs.Parser;
@@ -14,12 +15,21 @@ using stx.prs.StringParsers;
 import stx.log.prs.LogListingParser.*;
 
 class LogListingParserTest extends TestCase{
+  public function testASCII(u:UnitArrow):UnitArrow{
+    var tsts = [
+      isEqual([13,10],"
+".chunk().map(Strings.cca.bind(_,0))), //true on windows
+      isEqual(10,'\n'.cca(0)),
+      isEqual(13,"\r".cca(0))
+    ];
+    return u.append(tsts);
+  }
   public function testLogListingParser(u:UnitArrow):UnitArrow{
     var tsts = [];
     var ln0 = '@1239';
     var a = p_line()(ln0.reader());
     tsts.push(isAlike(Success(null,null),a));
-    var ln1 = '&abc_Fo';
+    var ln1 = '&run_prdct';
     var b = p_method()(ln1.reader());
     tsts.push(isAlike(Success(null,null),b));
     var ln2 = '$$sdj.sfg.DF';
@@ -57,18 +67,20 @@ class LogListingParserTest extends TestCase{
       [
         '+$ln4',
         '-$ln7',
-        '#+$ln10'
+        '#+$ln10',
+        '+$ln4',
       ];
     var m = l.map('\n'.prepend).join('');
-    //trace(m);
     var n = p_parse()(m.reader());
-    //trace(n);
     tsts.push(isAlike(Success(null,null),n));
-    var o = p_entry()('+$ln10\n'.reader());
+    
+    var o = p_entry()('+$ln10'.reader());
     tsts.push(isAlike(Success(null,null),o));
+    
     var ln12 = '#ñjfgoihar8923p';
     var p = p_ignore()(ln12.reader());
     tsts.push(isAlike(Success(null,null),p));
+
     var q = parse(m);
     tsts.push(isTrue(true));
     var v = 
@@ -79,6 +91,11 @@ class LogListingParserTest extends TestCase{
       ];
     var r = hasFail(parse.bind(v.join('\n')));
     tsts.push(r);
+    var s = '-*\\A.hx&aaa';
+    tsts.push(isAlike(Success(null,null),p_parse()(s.reader())));
+    var t = "-$ThreadCommand&new
+-*\\ThreadScheduler.hx&run_prdct";
+    tsts.push(isAlike(Success(null,null),p_parse()(t.reader())));
     return u.append(tsts);
   }
 }

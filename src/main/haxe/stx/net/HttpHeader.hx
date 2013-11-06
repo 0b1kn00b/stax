@@ -15,7 +15,7 @@
 */
 package stx.net;
 
-import stx.Prelude;
+import Prelude;
 using stx.Tuples;
 import stx.ds.Map;
 

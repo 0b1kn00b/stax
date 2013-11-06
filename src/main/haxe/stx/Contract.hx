@@ -1,5 +1,6 @@
 package stx;
 
+import stx.type.*;
 import Stax.*;
 import stx.Compare.*;
 import stx.Fail.*;
@@ -7,8 +8,9 @@ import stx.Fail.*;
 import stx.Fail;
 import stx.Tuples;
 
+using stx.Iterables;
 using stx.Outcome;
-using stx.Prelude;
+using Prelude;
 using stx.Tuples;
 using stx.Eventual;
 using stx.Option;
@@ -57,7 +59,7 @@ abstract Contract<A>(Eventual<Outcome<A>>) from Eventual<Outcome<A>> to Eventual
     );
   }
   public function success(fn:A->Void):Contract<A>{
-    return this.foreach(
+    return this.each(
       function(x){
         switch (x) {
           case Success(success) : fn(success);
@@ -67,12 +69,19 @@ abstract Contract<A>(Eventual<Outcome<A>>) from Eventual<Outcome<A>> to Eventual
     );
   }
   public function failure(fn:Fail->Void):Contract<A>{
-    return this.foreach(
+    return this.each(
       function(x){
         switch (x) {
           case Failure(failure) : fn(failure);
           default               : 
         }
+      }
+    );
+  }
+  public function complete(fn:Void->Void):Contract<A>{
+    return this.each(
+      function(x){
+        fn();
       }
     );
   }
@@ -82,11 +91,11 @@ abstract Contract<A>(Eventual<Outcome<A>>) from Eventual<Outcome<A>> to Eventual
   public function valueO(){
     return this.valueO();
   }
-  /**
+  @doc("
     Calls callback, placing a left value in the first parameter or a right in the second.
-  */
+  ")
   public function callback(fn:Fail->A->Void):Contract<A>{
-    return this.foreach(
+    return this.each(
       function(x){
         switch (x){
           case      Failure(l)     : fn(l,null);
@@ -95,9 +104,9 @@ abstract Contract<A>(Eventual<Outcome<A>>) from Eventual<Outcome<A>> to Eventual
       }
     );
   }
-  /**
+  @doc("
    Does a map if the Either is Failure.
-  */
+  ")
   public function map<B>(fn:A->B):Contract<B>{
     return this.map(
       function(x):Outcome<B>{
@@ -112,9 +121,9 @@ abstract Contract<A>(Eventual<Outcome<A>>) from Eventual<Outcome<A>> to Eventual
   public function transform<B>(fn:Outcome<A>->Outcome<B>):Contract<B>{
     return this.map(fn);
   }
-  /**
+  @doc("
     Zips the right hand value with function `fn`
-  */
+  ")
   public function zipWith<B,C>(f1:Contract<B>,fn : A -> B -> C):Contract<C>{
     return this.zipWith(f1,
         function(a,b):Outcome<C>{
@@ -130,31 +139,23 @@ abstract Contract<A>(Eventual<Outcome<A>>) from Eventual<Outcome<A>> to Eventual
           }
       );
   }
-  /**
-    Zips the right hand value.
-  */
+  @doc("Zips the right hand value.")
   public function zip<A,B>(f1:Contract<B>):Contract<Tuple2<A,B>>{
     return zipWith(f1,tuple2);
   }
-  /**
-    flatMaps the right hand value
-  */
+  @doc("flatMaps the right hand value")
   public function flatMap<B>(fn : A -> Contract<B>):Contract<B>{
     return this.flatMap(
         function(x){
-          return
-            switch (x) {
+          return switch (x) {
               case Failure(v1)  : new Contract().deliver(Failure(v1));
               case Success(v2)  : fn(v2);
             }
         }
       );
   }
-  /**
-    Applies a function if the result is right
-  */
-  public function foreach(f:Outcome<A>->Void):Contract<A>{
-    return this.foreach(f);
+  public function each(f:Outcome<A>->Void):Contract<A>{
+    return this.each(f);
   }
   public function asEventual():Eventual<Outcome<A>>{
     return this;
@@ -164,9 +165,9 @@ abstract Contract<A>(Eventual<Outcome<A>>) from Eventual<Outcome<A>> to Eventual
   }
 }
 class Contracts{
-  static public function toContract<A>(e:Eventual<OutcomeType<A>>):Contract<A>{
+  static public function toContract<A>(e:Eventual<Outcome<A>>):Contract<A>{
     var o : Contract<A> = e.map(
-      function(o:OutcomeType<A>):Outcome<A>{
+      function(o:Outcome<A>):Outcome<A>{
         var o2 : Outcome<A> = o;
         return o2;
       }
@@ -179,11 +180,11 @@ class Contracts{
   static public function breach<A>(v:Fail):Contract<A>{
     return Contract.pure(Failure(v));
   }
-    /**
+  @doc("
     Use this with a flatmap fold to wait for parallel futures.
-    vals.map( function_returning_future ).foldl( Eventual.pure(Failure([])), Contracts.waitfold )
+    vals.map( function_returning_future ).foldLeft( Eventual.pure(Failure([])), Contracts.waitfold )
     This op stops when there is a single failure
-  */
+  ")
   static public function waitfold<A>(init:Contract<Array<A>>,ft:Contract<A>):Contract<Array<A>>{
     return 
       init.flatMap(
@@ -197,17 +198,17 @@ class Contracts{
         }
       );
   }
-  /**
+  @doc("
     Returns a single future with an Array of the results, or an Fail.
-  */
+  ")
   static public function wait<A>(a:Array<Contract<A>>):Contract<Array<A>>{
-    return a.foldl(
+    return a.foldLeft(
         intact([])
       , waitfold
     );
   }
   static public function bindFold<A,B>(iter:Iterable<A>,start:B,fm:B->A->Contract<B>):Contract<B>{
-    return iter.foldl(
+    return iter.foldLeft(
       Contract.pure(Success(start)),
       function(memo : Contract<B>, next : A){
         return memo.flatMap(
@@ -228,7 +229,7 @@ class Contracts{
   }
   public static function chain<A>(a:Array<Thunk<Contract<A>>>):Contract<Array<A>>{
     return 
-      a.foldl(
+      a.foldLeft(
         intact([])
       , function(init,fn){
           return 
@@ -241,16 +242,16 @@ class Contracts{
   }
 }
 class Contracts1{
-  /**
+  @doc("
     Returns a Contract where the only result of a function may be an Fail, returning the result of ´success´
     where no Fail is found.
-  */
+  ")
   static public function toContract<A>(f:(String->Void)->Void,success:Void->A):Contract<A>{
     var fut = Contract.unit();
     f(
       function(er){
         if(er!=null){
-          fut.deliver(Failure(fail(NativeFail(er))));
+          fut.deliver(Failure(fail(NativeError(er))));
         }else{
           fut.deliver(Success(success()));
         }
@@ -258,23 +259,23 @@ class Contracts1{
     );
     return fut;
   }
-  /**
+  @doc("
     As with ´toContract´ but using a constant rather than a Thunk.
-  */
+  ")
   static public function toContractC<A>(f:(String->Void)->Void,success:A):Contract<A>{
     return toContract(f,Anys.toThunk(success));
   }
 }
 class Contracts2{
-  /**
+  @doc("
     Creates a Contract from a callback of function (err,res).
-  */  
+  ")
   static public function toContract<A>(f:(Dynamic->A->Void)->Void):Contract<A>{
     var ft = new Contract();
     f( 
       function(a,b){
         if(a!=null){
-          ft.deliver(Failure(fail(NativeFail(a))));
+          ft.deliver(Failure(fail(NativeError(a))));
         }else{
           ft.deliver(Success(b));
         }
@@ -289,7 +290,7 @@ class Contracts3{
     f(
       function(a,b,c){
         if(a!=null){
-          ft.deliver(Failure(fail(NativeFail(a))));
+          ft.deliver(Failure(fail(NativeError(a))));
         }else{
           ft.deliver(Success(tuple2(b,c)));
         }
@@ -304,7 +305,7 @@ class Contracts4{
     f(
       function(e,a,b,c){
         if(e!=null){
-          ft.deliver(Failure(fail(NativeFail(e))));
+          ft.deliver(Failure(fail(NativeError(e))));
         }else{
           ft.deliver(Success(tuple3(a,b,c)));
         }

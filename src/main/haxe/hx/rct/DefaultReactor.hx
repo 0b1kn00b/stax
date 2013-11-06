@@ -1,27 +1,29 @@
 package hx.rct;
 
+import hx.evt.EventException;
+import hx.ifs.Reactor in IReactor;
+
 import stx.utl.Selector;
 
 import stx.plus.Equal;
 
 using stx.Eventual;
 using stx.Arrow;
-using stx.Prelude;
+using Prelude;
 using stx.Arrays;
 using stx.Tuples;
 using stx.Option;
 using stx.Compose;
 using stx.Functions;
 
-class DefaultReactor<I> implements Reactor<I>{
+class DefaultReactor<I> implements IReactor<I>{
   private var equality    : I -> I -> Bool;
-  private var dispatchers : Dispatchers<I,I>;
-
+  @:isVar public var dispatchers(get,null) : Dispatchers<I,I>;
+  private function get_dispatchers(){
+    return dispatchers.copy(); 
+  }
   public function new(){
     this.dispatchers = new Dispatchers();
-  }
-  public function selectors(){
-    return dispatchers.map(Tuples2.fst);
   }
   public function on(slct:Selector<I>, handler:I->Void):Void{
     check(slct);
@@ -42,7 +44,7 @@ class DefaultReactor<I> implements Reactor<I>{
   }
   public function emit(event:I):Bool {
     return try {
-      dispatchers.native().foreach(
+      dispatchers.native().each(
         function(slct:Selector<I>,arr:Array<I->Void>){
           if (slct.apply(event)){
             for (fn in arr){
@@ -58,7 +60,7 @@ class DefaultReactor<I> implements Reactor<I>{
   }
   public function has(slct:Selector<I>):Bool {
     check(slct);
-    return dispatchers.findWith(slct,equality).isDefined();
+    return dispatchers.hasWith(slct,equality);
   }
 /*  public function push(?of:Selector<I>):LazyStream<I>{
     of = of == null ? Reactors.any() : of;

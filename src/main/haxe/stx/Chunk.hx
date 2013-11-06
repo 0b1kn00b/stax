@@ -2,12 +2,12 @@ package stx;
 
 import Stax.*;
 
+import stx.type.*;
 import stx.Tuples.*;
 import stx.Fail;
-import stx.Outcome;
 
 using stx.Arrays;
-using stx.Prelude;
+using Prelude;
 using stx.Option;
 using stx.Either;
 using stx.Tuples;
@@ -27,7 +27,7 @@ class Chunks{
   }
   @doc('Produces a `Chunk` of `Array<A>` only if all chunks are defined.')
   static public inline function all<A>(chks:Array<Chunk<A>>,?nilFail:Fail):Chunk<Array<A>>{
-    return chks.foldl(
+    return chks.foldLeft(
         Val([]),
         function(memo,next){
           return switch ([memo,next]) {
@@ -113,7 +113,7 @@ class Chunks{
     return zipWith(chunk0,chunk1,tuple2);
   }
   static public function zipN<A>(rest:Array<Chunk<A>>):Chunk<Array<A>>{
-    return rest.foldl(
+    return rest.foldLeft(
       Val([]),
       function(memo,next){
         return switch (memo) {

@@ -47,4 +47,7 @@ class Log{
   @:noUsing static public function fatal(v:Dynamic) {
     return new LogItem(LogLevel.Fatal, v);
   }
+  static public function log(d:Dynamic):Void{
+
+  }
 }

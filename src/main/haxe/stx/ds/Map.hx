@@ -30,7 +30,7 @@ import stx.plus.Equal;
 import stx.plus.Plus;
 
 using stx.Tuples;
-using stx.Prelude;
+using Prelude;
 using stx.Bools;
 using stx.PartialFunction;
 using stx.Option;
@@ -70,7 +70,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
   public function unit<C, D>(): Foldable<C, D> {
     return cast create();
   }
-  public function foldl<Z>(z: Z, f: Z -> Tuple2<K, V> -> Z): Z {
+  public function foldLeft<Z>(z: Z, f: Z -> Tuple2<K, V> -> Z): Z {
     var acc = z;
     
     for (e in entries()) {
@@ -265,7 +265,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
       );  
   }
   public function hashCode() {
-    return foldl(786433, function(a, b) return a + (key_tool.getHash(b.fst())(b.fst()) * 49157 + 6151) * val_tool.getHash(b.snd())(b.snd()));
+    return foldLeft(786433, function(a, b) return a + (key_tool.getHash(b.fst())(b.fst()) * 49157 + 6151) * val_tool.getHash(b.snd())(b.snd()));
   }
 
   public function load(): Int {
@@ -273,28 +273,28 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
            else Math.round(this.size() / _buckets.length);
   }
 
-  public function withKeyOrder(order : OrderFunction<K>) {
+  public function withKeyOrder(order : Reduce<K,Int>) {
     return create(key_tool.withOrder(order),val_tool).append(this);
   }
-  public function withKeyEqual(equal : EqualFunction<K>) {
+  public function withKeyEqual(equal : Reduce<K,Bool>) {
     return create(key_tool.withEqual(equal), val_tool).append(this);
   }
-  public function withKeyHash(hash : HashFunction<K>) {
+  public function withKeyHash(hash : K->Int) {
     return create(key_tool.withHash(hash), val_tool).append(this);
   }
-  public function withKeyShow(show : ShowFunction<K>) { 
+  public function withKeyShow(show : K->String) { 
     return create(key_tool.withShow(show),val_tool).append(this);
   }
-  public function withValueOrder(order : OrderFunction<V>) {
+  public function withValueOrder(order : Reduce<V,Int>) {
     return create(key_tool,val_tool.withOrder(order)).append(this);
   }
-  public function withValueEqual(equal : EqualFunction<V>) {
+  public function withValueEqual(equal : Reduce<V,Bool>) {
     return create(key_tool,val_tool.withEqual(equal)).append(this);
   }
-  public function withValueHash(hash : HashFunction<V>) {
+  public function withValueHash(hash : V->Int) {
     return create(key_tool,val_tool.withHash(hash)).append(this);
   }
-  public function withValueShow(show : ShowFunction<V>) { 
+  public function withValueShow(show : V->String) { 
     return create(key_tool, val_tool.withShow(show)).append(this);
   }
 
@@ -425,7 +425,7 @@ class IterableToMap {
 class FoldableToMap {
 	public static function toMap<A, K, V>(foldable : Foldable<A, Tuple2<K, V>>) : Map<K, V> {  
     var dest = Map.create();
-    return foldable.foldl(dest, function(a, b) {
+    return foldable.foldLeft(dest, function(a, b) {
       return a.add(b);
     });
   }	
@@ -437,7 +437,7 @@ class ArrayToMap {
 }
 class MapExtensions {
   public static function toObject<V>(map: Map<String, V>): Dynamic<V> {
-    return map.foldl({}, function(object, tuple) {
+    return map.foldLeft({}, function(object, tuple) {
       Reflect.setField(object, tuple.fst(), tuple.snd());
       
       return object;

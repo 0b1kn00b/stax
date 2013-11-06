@@ -1,6 +1,6 @@
 package stx.io.http;
 
-import stx.Prelude;
+import Prelude;
 import stx.io.http.Http;
 import stx.io.http.HttpString;
 import stx.io.http.HttpTransformer;
@@ -112,19 +112,19 @@ class HttpJValueJsonp implements HttpJValue {
   }
   
   public function post(url: Url, data: JValue, ?params: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<JValue>> {
-    return Prelude.error()('JSONP does not support POST');
+    return except()('JSONP does not support POST');
   }
   
   public function put(url: Url, data: JValue, ?params: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<JValue>> {
-    return Prelude.error()('JSONP does not support PUT');
+    return except()('JSONP does not support PUT');
   }
   
   public function delete(url: Url, ?params: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<JValue>> {
-    return Prelude.error()('JSONP does not support DELETE');
+    return except()('JSONP does not support DELETE');
   }
   
   public function custom(request: String, url: Url, data: JValue, ?params: QueryParameters, ?headers: Map<String, String>): Eventual<HttpResponse<JValue>> {
-    return Prelude.error()('JSONP does not support custom request: ' + request);
+    return except()('JSONP does not support custom request: ' + request);
   }
 }
 

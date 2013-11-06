@@ -1,23 +1,25 @@
 package rx.observer;
 
-import stx.Prelude;
+import stx.Fail;
+import Prelude;
 import stx.Chunk;
 
 import rx.ifs.Observer in IObserver;
+import rx.ifs.Disposable in IDisposable;
 
-class BaseObserver<T> implements IObserver<T> implements Disposable{
-  private var done     : Bool;
+class BaseObserver<T> implements IObserver<T> implements IDisposable{
+  private var disposed     : Bool;
 
   public function new(){
-    done = false;
+    disposed = false;
   }
   public function dispose(){
-    done = true;
+    disposed = true;
   }
   public function apply(chk:Chunk<T>):Void{
     switch(chk){
       case Val(v) : onData(v);
-      case End(e) : onFail(f);
+      case End(e) : onFail(e);
       case Nil    : onDone();
     }
   }

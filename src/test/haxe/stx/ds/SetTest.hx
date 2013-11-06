@@ -16,7 +16,7 @@
 */
 package stx.ds;
 
-import stx.Prelude;
+import Prelude;
 
 import stx.ds.ifs.Foldable;
 

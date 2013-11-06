@@ -1,7 +1,7 @@
 package stx.rct.events;
 
 import stx.rct.events.Events;
-import stx.Prelude;
+import Prelude;
 import stx.Functions;
 import stx.Anys;
 import stx.Option;

@@ -1,6 +1,6 @@
 package stx.rtti;
 
-using stx.Prelude;
+using Prelude;
 using stx.Option;
 using stx.Functions;
 using stx.Compose;

@@ -1,21 +1,21 @@
 package stx.plus;
 
+import Stax.*;
 import Type;
 
 using Std;
 
+import stx.type.*;
 import stx.Maths;
 import stx.Tuples;
 
 using stx.Tuples;
-using stx.Prelude;
+using Prelude;
 using stx.plus.Order;
-
-typedef OrderFunction<T>        = Function2<T, T, Int>;
 
 class Order {
 
-	static function __order__<T>(impl : OrderFunction<T>) : OrderFunction<T> {
+	static function __order__<T>(impl : Reduce<T,Int>) : Reduce<T,Int> {
     return function(a, b) {
     return if(a == b || (a == null && b == null)) 0;
       else if(a == null) -1;
@@ -26,15 +26,15 @@ class Order {
   @:noUsing
   static public function nil<A>(a:A,b:A){
     return 
-      __order__(function(a:A, b:A) { return Prelude.error()("at least one of the arguments should be null"); })(a,b);
+      __order__(function(a:A, b:A) { return except()(ArgumentError("at least one of the arguments should be null")); })(a,b);
   } 
   /** Returns a OrderFunction (T -> T -> Int). It works for any type expect TFunction.
    *  Custom Classes must provide a compare(other : T) : Int method or an exception will be thrown.
    */
-  static public function getOrderFor<T>(t : T) : OrderFunction<T> {
+  static public function getOrderFor<T>(t : T) : Reduce<T,Int> {
     return getOrderForType(Type.typeof(t));
   }
-  static public function getOrderForType<T>(v: ValueType) : OrderFunction<T> {
+  static public function getOrderForType<T>(v: ValueType) : Reduce<T,Int> {
     return switch(v) {
       case TBool    : __order__(cast Bools.compare);
       case TInt     : __order__(cast Ints.compare);
@@ -58,11 +58,11 @@ class Order {
         if(Type.getInstanceFields(c).remove("compare")) {
           __order__(function(a, b) return (cast a).compare(b));
    		  } else {
-          Prelude.error()("class "+Type.getClassName(c)+" is not comparable");
+          except()(IllegalOperationError("class ${vtype(c).name()} is not comparable."));
         }
       case TEnum(_)   : __order__(cast EnumOrder.sort);
       case TNull      :  nil;
-      case TFunction  : Prelude.error()("unable to compare on a function");
+      case TFunction  : except()(IllegalOperationError("unable to compare on a function"));
     }
   }
 }
@@ -86,7 +86,7 @@ class ArrayOrder {
     return sortWith(v, Order.getOrderFor(v[0]));
   }
   
-  static public function sortWith<T>(v : Array<T>, order : OrderFunction<T>) : Array<T> {
+  static public function sortWith<T>(v : Array<T>, order : Reduce<T,Int>) : Array<T> {
     var r = v.copy();
     r.sort(order);
     return r;
@@ -95,7 +95,7 @@ class ArrayOrder {
       return compareWith(v1, v2, Order.getOrderFor(v1[0]));
   } 
   
-  static public function compareWith<T>(v1: Array<T>, v2: Array<T>, order : OrderFunction<T>) {  
+  static public function compareWith<T>(v1: Array<T>, v2: Array<T>, order : Reduce<T,Int>) {  
     var c = v1.length - v2.length;
     if(c != 0)
       return c; 
@@ -122,27 +122,27 @@ class ProductOrder {
   }
 }
 class Orders{
-  static public function greaterThan<T>(order : OrderFunction<T>) : EqualFunction<T> {
+  static public function greaterThan<T>(order : Reduce<T,Int>) : Reduce<T,Bool> {
     return function(v1, v2) return order(v1, v2) > 0;
   }  
    
-  static public function greaterThanOrEqual<T>(order : OrderFunction<T>) : EqualFunction<T> {
+  static public function greaterThanOrEqual<T>(order : Reduce<T,Int>) : Reduce<T,Bool> {
      return function(v1, v2) return order(v1, v2) >= 0;
   }  
 
-  static public function lessThan<T>(order : OrderFunction<T>) : EqualFunction<T> {
+  static public function lessThan<T>(order : Reduce<T,Int>) : Reduce<T,Bool> {
     return function(v1, v2) return order(v1, v2) < 0;
   }  
 
-  static public function lessThanOrEqual<T>(order : OrderFunction<T>) : EqualFunction<T> {
+  static public function lessThanOrEqual<T>(order : Reduce<T,Int>) : Reduce<T,Bool> {
      return function(v1, v2) return order(v1, v2) <= 0;
   }
 
-  static public function equal<T>(order : OrderFunction<T>) : EqualFunction<T> {
+  static public function equal<T>(order : Reduce<T,Int>) : Reduce<T,Bool> {
      return function(v1, v2) return order(v1, v2) == 0;
   }
 
-  static public function notEqual<T>(order : OrderFunction<T>) : EqualFunction<T> {
+  static public function notEqual<T>(order : Reduce<T,Int>) : Reduce<T,Bool> {
      return function(v1, v2) return order(v1, v2) != 0;
   }
 }

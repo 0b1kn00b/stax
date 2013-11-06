@@ -1,16 +1,17 @@
 package rx;
 
-import stx.rct.DefaultReactor;
+import hx.rct.DefaultReactor;
 
+import stx.Eventual;
 import stx.Chunk;
-using stx.Arrays;
+
+import stx.rct.*;
 import Stax.*;
 import stx.Compare.*;
 import stx.Log.*;
 
+using stx.Arrays;
 using stx.UnitTest;
-
-import stx.rct.*;
 
 using rx.Observable;
 
@@ -23,12 +24,12 @@ class RxTest extends TestCase{
     var obs = [1,2,3,4].map(Val).observe();//no terminating value
     var obs0 = [6,7,8,9].map(Val).observe();//similarly
     var obs1 = obs.concat(obs0);
-        //obs1.foreach(printer()); //produces up to 4, no fu
+        //obs1.each(printer()); //produces up to 4, no fu
     var evts = new EventStream();
         //evts.on(Reactors.any(),printer());
     var obs2 = evts.observe();
     var _obs_ = obs2.concat(obs0);
-        _obs_.foreach(printer());
+        _obs_.each(printer());
         _obs_.next(printer());
         _obs_.done(
           function(){
@@ -37,7 +38,7 @@ class RxTest extends TestCase{
           }
         );
     /*var a = Observables.returns(1);
-        a.foreach(printer());*/
+        a.each(printer());*/
     return u.add(evt.flatten());
   }
   public function testTake(u:UnitArrow):UnitArrow{
@@ -48,8 +49,8 @@ class RxTest extends TestCase{
         obs.first().next(printer());
     //var obs1  = obs.first();
 
-        /*obs1.foreach(printer());
-        obs1.foreach(printer());*/
+        /*obs1.each(printer());
+        obs1.each(printer());*/
     /*var 3obs2  = [5,6,7,8].observe();
     var obs3  = obs2.takeWhile(eq(Val(8)).not());
     var obs4  = obs1.concat(obs1);*/

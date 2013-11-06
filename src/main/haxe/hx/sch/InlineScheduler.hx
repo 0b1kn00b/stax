@@ -51,7 +51,7 @@ class InlineScheduler implements IScheduler{
             return Floats.compare(x.fst(),y.fst());
           }
         ).firstOption()
-         .foreach(
+         .each(
           function(x){
             t = x.fst() - time;
           }

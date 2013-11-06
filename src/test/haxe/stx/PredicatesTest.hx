@@ -2,7 +2,7 @@ package stx;
 
 import stx.plus.Equal;
 import stx.plus.Order;
-import stx.Prelude;
+import Prelude;
 import stx.Muster;
 import stx.Muster.*;
 import stx.Log.*;

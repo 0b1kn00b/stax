@@ -1,24 +1,19 @@
 package stx.rtti;
 
-import haxe.rtti.CType;
+import Prelude;
 
-import stx.Prelude;
-import stx.Fail;
-import stx.Fail.*;
-
-using stx.Compose;
-using stx.Either;
-using stx.Iterables;
-using stx.Option;
 using stx.Tuples;
-using stx.Reflects;
 
-abstract Field<T>(Tuple2<T,String>) from Tuple2<T,String>{
+abstract Field<T>(Tuple2<String,T>) from Tuple2<String,T> to Tuple2<String,T>{
   public function new(v){
     this = v;
   }
-  public var value(get,never) : Dynamic;
-  private function get_value() : Dynamic{
-    return Reflect.field(this.fst(),this.snd());
+  public var key(get,never):Dynamic;
+  private inline function get_key() : Dynamic{
+    return this.fst();
+  }
+  public var val(get,never) : Dynamic;
+  private inline function get_val() : Dynamic{
+    return this.snd();
   }
 }

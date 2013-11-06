@@ -24,7 +24,7 @@ class ListJValue<T> extends AbstractTranscode<List<T>,JExtractorFunction<T>>, im
 
           stx.ds.List.create().addAll(xs.map(e));
 
-        default: Prelude.error()("Expected Array but was: " + v);
+        default: except()("Expected Array but was: " + v);
       }
   }
   public function extractAll(v: JValue, e: JExtractorFunction<T>):stx.ds.List<T>{
@@ -34,7 +34,7 @@ class ListJValue<T> extends AbstractTranscode<List<T>,JExtractorFunction<T>>, im
     return switch(v) {
       case JArray(v): List.create(tool).addAll(v.map(e));
 
-      default: Prelude.error()("Expected Array but was: " + v);
+      default: except()("Expected Array but was: " + v);
     }
   }
   static public function extractor(){

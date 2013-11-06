@@ -2,13 +2,14 @@ package stx;
 
 import stx.Option;
 import stx.Eventual;
-import stx.Prelude;
+import Prelude;
 
 using stx.Option;
 using stx.Tuples;
 
 typedef ContinuationType<R,A>   = (A -> R) -> R;
 typedef Cont<R,A>               = Continuation<R,A>;
+typedef FutureType<A>           = Cont<Void,A>;
 
 @doc("
   The mother of all Monads. Rumour has it that only a handful of acolytes understand the true functioning of `cc`.
@@ -42,7 +43,7 @@ abstract Continuation<R,A>(ContinuationType<R,A>) from ContinuationType<R,A> to 
       );
     }
   }
-  public function foreach(k:A->Void):Continuation<R,A>{
+  public function each(k:A->Void):Continuation<R,A>{
     return map(
       function(x){
         k(x);
@@ -54,6 +55,29 @@ abstract Continuation<R,A>(ContinuationType<R,A>) from ContinuationType<R,A> to 
     return new Continuation(
       function(cont : B -> R):R{
         return apply(this, function(a:A):R{ return k(a).apply(cont); });
+      }
+    );
+  }
+  public function zipWith<B,C>(cnt0:Continuation<R,B>,fn:A->B->C):Continuation<R,C>{
+    return new Continuation(
+      function(cont:C->R){
+        return this(function(a){
+          return cnt0.apply(function(b){
+            return cont(fn(a,b));
+          });
+        });
+      }
+    );
+  }
+  static public function bindFold<R,A,B>(arr:Array<A>,init:B,fold:B->A->Cont<R,B>){
+    return stx.Arrays.foldLeft(arr,
+      pure(init),
+      function(memo:Cont<R,B>,next:A){
+        return memo.flatMap(
+          function(b:B){
+            return fold(b,next);
+          }
+        );
       }
     );
   }
@@ -82,7 +106,4 @@ abstract Continuation<R,A>(ContinuationType<R,A>) from ContinuationType<R,A> to 
     );
     return ft;
   }
-  /*static public inline function toFuture<A>(cont:ContinuationType<Void,A>):Future<A>{
-    return Future.ofArrow(cont);
-  }*/
 }

@@ -1,5 +1,6 @@
 package stx;
 
+import stx.plus.Show;
 import Stax.*;
 import stx.Compare.*;
 import stx.Log.*;
@@ -15,14 +16,15 @@ import stx.Fail;
 import stx.plus.Equal;
 import stx.test.*;
 
+using stx.Continuation;
 using stx.ValueTypes;
 using stx.Compare;
 using stx.Strings;
 using stx.Option;
 using stx.Reflects;
 using stx.Either;
-using stx.Eventual;
-using stx.Prelude;
+using stx.Promise;
+using Prelude;
 using stx.Contract;
 using stx.Arrays;
 using stx.Tuples;
@@ -47,17 +49,17 @@ class UnitTest{
     return it('should be equal',eq(val0),val1,pos);
   }
   static public function isNotEqual<T>(val0:T,val1:T,?pos:PosInfos):TestArrow{
-    return it('should be equal',eq(val0).not(),val1,pos);
+    return it('should not be equal',eq(val0).not(),val1,pos);
   }
   static public function hasFail(fn:Void->Void,?type:Class<Dynamic> ,?pos:PosInfos):TestArrow{
     return it('should throw a fail.',throws(type),fn,pos);
   }
   static public function fails(?err:Fail,?pos:PosInfos):TestArrow{
-    err = nl().apply(err) ? fail(AssertionFail('fail called',null,pos)) : err;
+    err = nl().apply(err) ? fail(AssertionError('fail called',null,pos)) : err;
     return TestArrow.unit().val(Some(err)).pos(pos);
   }
   static public function it<T>(msg:String,prd:Predicate<T>,?val:T,?pos:PosInfos):TestArrow{
-    var er = fail(AssertionFail(Std.string(val),msg,pos));
+    var er = fail(AssertionError(Std.string(val),msg,pos));
     return TestArrow.unit()
       .msg(msg)
       .pos(pos)
@@ -65,7 +67,7 @@ class UnitTest{
         function(r:TestResult){
           var v = (
             try{
-              Assert.assert(prd,val,pos);
+              Assert.assert(val,null,prd,pos);
               None;
             }catch(d:Dynamic){
               Some(switch(Type.typeof(d)){
@@ -79,8 +81,8 @@ class UnitTest{
       );
   }
 }
-class MusterEventuals0{
-  static public function flatten(arr:Eventual<Array<TestArrow>>):UnitArrow{
+class MusterPromises0{
+  static public function flatten(arr:Promise<Array<TestArrow>>):UnitArrow{
     return new UnitArrow(
       Arrows.then(UnitArrow.unit(),
       function(arr0:Array<TestArrow>){
@@ -93,8 +95,8 @@ class MusterEventuals0{
     ));
   }
 }
-class MusterEventuals{
-  static public function flatten(t:Eventual<TestArrow>):TestArrow{
+class MusterPromises{
+  static public function flatten(t:Promise<TestArrow>):TestArrow{
     var arw = TestArrow.unit().then( 
         function(r:TestResult){
           return t.flatMap(
@@ -110,12 +112,12 @@ class MusterEventuals{
 }
 class Printers{
   static public function print(arr:Array<KV<Array<TestResult>>>){
-    return arr.foldl('',
+    return arr.foldLeft('',
       function(memo,next){
-        return memo.append('\n\t\t').append(Types.vtype(next.fst()).name()).append('').append(
-          next.snd().foldl('\n',
+        return memo.append('\n\t\t').append(next.fst()).append('').append(
+          next.snd().foldLeft('\n',
             function(memo0,next0){
-              return memo0.append('\t\t\t\t').append(Std.string(next0)).append('\n');
+              return memo0.append('\t\t\t\t').append(Show.getShowFor(next0)(next0)).append('\n');
             }
         ));
       }
@@ -166,13 +168,12 @@ abstract UnitArrow(Arrow<Array<TestArrow>,Array<TestArrow>>) from Arrow<Array<Te
     return this.then(Arrays.append.bind(_,ar));
   }
   public function reply(){
-    return this.apply([]).flatMap(
+    return this.proceed([]).flatMap(
       function(arr){
-        return Eventuals.bindFold(arr,
+        return Continuation.bindFold(arr,
           [],
-          function(arr:Array<Dynamic>,arw:TestArrow){
-            var o = arw.apply(TestResult.unit()).map(arr.add);
-            return o;
+          function(memo:Array<Dynamic>,next){
+            return next.proceed(TestResult.unit()).map(memo.add);
           }
         );
       }

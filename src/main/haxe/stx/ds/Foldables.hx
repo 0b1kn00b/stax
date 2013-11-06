@@ -17,7 +17,7 @@
 package stx.ds;
 
 import stx.Tuples;
-import stx.Prelude;
+import Prelude;
 
 import stx.plus.Show;
 import stx.plus.Equal;
@@ -30,7 +30,7 @@ import stx.ds.ifs.Foldable;
 
 
 class Foldables {
-  public static function foldr<A, B, Z>(foldable: Foldable<A, B>, z: Z, f: B -> Z -> Z): Z {
+  public static function foldRight<A, B, Z>(foldable: Foldable<A, B>, z: Z, f: B -> Z -> Z): Z {
     var a = toArray(foldable);
     
     a.reverse();
@@ -45,13 +45,13 @@ class Foldables {
   }
   
   public static function filter<A, B>(foldable: Foldable<A, B>, f: B -> Bool): A {
-    return cast foldable.foldl(foldable.unit(), function(a, b) {
+    return cast foldable.foldLeft(foldable.unit(), function(a, b) {
       return if (f(b)) cast a.add(b); else a;
     });
   }
   
   public static function partition<A, B>(foldable: Foldable<A, B>, f: B -> Bool): Tuple2<A, A> {
-    return cast foldable.foldl(tuple2(foldable.unit(), foldable.unit()), function(a, b) {
+    return cast foldable.foldLeft(tuple2(foldable.unit(), foldable.unit()), function(a, b) {
       return if (f(b)) tuple2(cast a.fst().add(b), a.snd()); else tuple2(a.fst(), cast a.snd().add(b));
     });
   }
@@ -59,7 +59,7 @@ class Foldables {
   public static function partitionWhile<A, B>(foldable: Foldable<A, B>, f: B -> Bool): Tuple2<A, A> {
     var partitioning = true;
     
-    return cast foldable.foldl(tuple2(foldable.unit(), foldable.unit()), function(a, b) {
+    return cast foldable.foldLeft(tuple2(foldable.unit(), foldable.unit()), function(a, b) {
       return if (partitioning) {
         if (f(b)) {
           tuple2(cast a.fst().add(b), a.snd());
@@ -81,7 +81,7 @@ class Foldables {
   }
   
   public static function mapTo<A, B, C, D>(src: Foldable<A, B>, dest: Foldable<C, D>, f: B -> D): C {
-    return cast src.foldl(dest, function(a, b) {
+    return cast src.foldLeft(dest, function(a, b) {
       return cast a.add(f(b));
     });
   }
@@ -91,15 +91,15 @@ class Foldables {
   }
   
   public static function flatMapTo<A, B, C, D>(src: Foldable<A, B>, dest: Foldable<C, D>, f: B -> Foldable<C, D>): C {
-    return cast src.foldl(dest, function(a, b) {
-      return f(b).foldl(a, function(a, b) {
+    return cast src.foldLeft(dest, function(a, b) {
+      return f(b).foldLeft(a, function(a, b) {
         return cast a.add(b);
       });
     });
   }
   
   public static function take<A, B>(foldable: Foldable<A, B>, n: Int): A {
-    return cast foldable.foldl(foldable.unit(), function(a, b) {
+    return cast foldable.foldLeft(foldable.unit(), function(a, b) {
       return if (n-- > 0) cast a.add(b); else a;
     });
   }
@@ -107,13 +107,13 @@ class Foldables {
   public static function takeWhile<A, B>(foldable: Foldable<A, B>, f: B -> Bool): A {
     var taking = true;
     
-    return cast foldable.foldl(foldable.unit(), function(a, b) {
+    return cast foldable.foldLeft(foldable.unit(), function(a, b) {
       return if (taking) { if (f(b)) cast a.add(b); else { taking = false; a; } } else a;
     });
   }
   
   public static function drop<A, B>(foldable: Foldable<A, B>, n: Int): A {
-    return cast foldable.foldl(foldable.unit(), function(a, b) {
+    return cast foldable.foldLeft(foldable.unit(), function(a, b) {
       return if (n-- > 0) a; else cast a.add(b);
     });
   }
@@ -121,13 +121,13 @@ class Foldables {
   public static function dropWhile<A, B>(foldable: Foldable<A, B>, f: B -> Bool): A {
     var dropping = true;
     
-    return cast foldable.foldl(foldable.unit(), function(a, b) {
+    return cast foldable.foldLeft(foldable.unit(), function(a, b) {
       return if (dropping) { if (f(b)) a; else { dropping = false; cast a.add(b); } } else cast a.add(b);
     });
   }
   
   public static function count<A, B>(foldable: Foldable<A, B>, f: B -> Bool): Int {
-    return foldable.foldl(0, function(a, b) {
+    return foldable.foldLeft(0, function(a, b) {
       return a + (if (f(b)) 1 else 0);
     });
   }
@@ -135,7 +135,7 @@ class Foldables {
   public static function countWhile<A, B>(foldable: Foldable<A, B>, f: B -> Bool): Int {
     var counting = true;
     
-    return foldable.foldl(0, function(a, b) {
+    return foldable.foldLeft(0, function(a, b) {
       return if (!counting) a;
       else {
         if (f(b)) a + 1;
@@ -211,7 +211,7 @@ class Foldables {
   }
   
   public static function concat<A, B>(foldable: Foldable<A, B>, rest: Foldable<A, B>): A {
-    return cast rest.foldl(foldable, function(a, b) {
+    return cast rest.foldLeft(foldable, function(a, b) {
       return cast a.add(b);
     });
   }
@@ -236,14 +236,14 @@ class Foldables {
     return !iterator(foldable).hasNext();
   }
   
-  public static function foreach<A, B>(foldable: Foldable<A, B>, f: B -> Void): Foldable<A, B> {
-    foldable.foldl(1, function(a, b) { f(b); return a; });
+  public static function each<A, B>(foldable: Foldable<A, B>, f: B -> Void): Foldable<A, B> {
+    foldable.foldLeft(1, function(a, b) { f(b); return a; });
         
     return foldable;
   }
   
   public static function find<A, B>(foldable: Foldable<A, B>, f: B -> Bool): Option<B> {
-    return foldable.foldl(None, function(a, b) {
+    return foldable.foldLeft(None, function(a, b) {
       return switch (a) {
         case None     : Options.create(b).filter(f);
         case Some(_)  : a;
@@ -251,8 +251,8 @@ class Foldables {
     });
   }
   
-  public static function forAll<A, B>(foldable: Foldable<A, B>, f: B -> Bool): Bool {
-    return foldable.foldl(true, function(a, b) {
+  public static function all<A, B>(foldable: Foldable<A, B>, f: B -> Bool): Bool {
+    return foldable.foldLeft(true, function(a, b) {
       return switch (a) {
         case true:  f(b);
         case false: false;
@@ -260,8 +260,8 @@ class Foldables {
     });
   }
   
-  public static function forAny<A, B>(foldable: Foldable<A, B>, f: B -> Bool): Bool {
-    return foldable.foldl(false, function(a, b) {
+  public static function any<A, B>(foldable: Foldable<A, B>, f: B -> Bool): Bool {
+    return foldable.foldLeft(false, function(a, b) {
       return switch (a) {
         case false: f(b);
         case true:  true;
@@ -293,7 +293,7 @@ class Foldables {
   }
   
   public static function nubBy<A, B>(foldable:Foldable<A, B>, f: B -> B -> Bool): A {
-    return cast foldable.foldl(foldable.unit(), function(a, b) {
+    return cast foldable.foldLeft(foldable.unit(), function(a, b) {
       return if (existsP(a, b, f)) {
         a;
       }
@@ -310,7 +310,7 @@ class Foldables {
   }
   
   public static function intersectBy<A, B>(foldable1: Foldable<A, B>, foldable2: Foldable<A, B>, f: B -> B -> Bool): A {
-    return cast foldable1.foldl(foldable1.unit(), function(a, b) {
+    return cast foldable1.foldLeft(foldable1.unit(), function(a, b) {
       return if (existsP(foldable2, b, f)) cast a.add(b); else a;
     });
   }
@@ -324,7 +324,7 @@ class Foldables {
   public static function mkString<A, B>(foldable: Foldable<A, B>, ?sep: String = ', ', ?show: B -> String): String {
     var isFirst = true;
     
-    return foldable.foldl('', function(a, b) {
+    return foldable.foldLeft('', function(a, b) {
       var prefix = if (isFirst) { isFirst = false; ''; } else sep;    
       if(null == show)
       show = Show.getShowFor(b);
@@ -335,7 +335,7 @@ class Foldables {
   public static function toArray<A, B>(foldable: Foldable<A, B>): Array<B> {
     var es: Array<B> = [];
     
-    foldable.foldl(foldable.unit(), function(a, b) { es.push(b); return a; });
+    foldable.foldLeft(foldable.unit(), function(a, b) { es.push(b); return a; });
 
     return es;
   }

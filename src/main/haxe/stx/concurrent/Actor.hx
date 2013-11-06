@@ -15,7 +15,7 @@
 */
 package stx.concurrent;
 
-import stx.Prelude;
+import Prelude;
 import stx.Eventual;
 using stx.Tuples;
 

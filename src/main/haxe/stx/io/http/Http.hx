@@ -1,6 +1,6 @@
 package stx.io.http;
 
-import stx.Prelude;
+import Prelude;
 import stx.Eventual;
 import stx.ds.Map;
 import stx.net.Url;

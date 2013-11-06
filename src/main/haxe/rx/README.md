@@ -69,13 +69,13 @@ so:
 
 where:
 
-    typedef CodeBlock  = Void->Void;
-    typedef Observable<T> = (Chunk<T>->CodeBlock) -> CodeBlock;
+    typedef Niladic  = Void->Void;
+    typedef Observable<T> = (Chunk<T>->Niladic) -> Niladic;
 
 and if:
   
     typedef Continuation<A,R> = (A        -> R        ) -> R
-    typedef Observable<T>     = (Chunk<T> -> CodeBlock) -> CodeBlock
+    typedef Observable<T>     = (Chunk<T> -> Niladic) -> Niladic
 
 then:
 

@@ -2,7 +2,8 @@ package stx.prs;
 
 import stx.prs.InputStream;
 
-using stx.prs.Parser;
+using stx.Functions;
+using stx.Parser;
 using stx.prs.StringParsers;
 
 using stx.Iterables;
@@ -16,7 +17,7 @@ class StringParsers {
       } else {
         return Fail((x + " expected and not found").errorAt(input).newStack(), input, false);
       }
-    );
+    ).lazy();
 
   public static function regexParser(r : EReg) : Void -> Parser<String,String>
     return stx.Anys.toThunk(function (input : Input<String>) return
@@ -30,8 +31,7 @@ class StringParsers {
       } else {
         Fail((Std.string(r) + " not matched").errorAt(input).newStack(), input, false);
       }
-    );
-	
+    ).lazy();
 }
 class StringReader {
 	 inline public static function startsWith(r : Input<String>, x : String) : Bool {    

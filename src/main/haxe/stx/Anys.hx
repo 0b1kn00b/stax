@@ -1,7 +1,8 @@
 package stx;
 
+import stx.type.*;
 import stx.Either;
-import stx.Prelude;
+import Prelude;
 import stx.Compare;
 
 using stx.Option;
@@ -15,7 +16,7 @@ class Anys {
 	  @param 	f			Modifier function.
 	  @return 	a			The input value after f(a).
 	 */
-  static public function affect<T>(t: T, f: Function1<T, Void>): T {
+  static public function affect<T>(t: T, f: T->Void): T {
     f(t);
     
     return t;
@@ -196,7 +197,7 @@ class Anys {
         else true;
     }
 
-    public static function toString<T>(value : T, ?func : Function1<T, String>) : String {
+    public static function toString<T>(value : T, ?func : T->String) : String {
         // NOTE (Simon) : Workout if the value has a toString method
         return if(toBool(func)) func(value);
         else Std.string(value);

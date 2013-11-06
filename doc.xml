@@ -6683,10 +6683,10 @@
 </eventualOf></class>
 	<enum path="stx.StaxFail" params="" file="src/main/haxe/stx/Fail.hx" module="stx.Fail">
 		<AbstractMethodFail a="?pos"><t path="haxe.PosInfos"/></AbstractMethodFail>
-		<ArgumentFail a="field:?pos">
+		<ArgumentError a="field:?pos">
 			<c path="String"/>
 			<t path="haxe.PosInfos"/>
-		</ArgumentFail>
+		</ArgumentError>
 		<AssertionFail a="is:?should:?pos">
 			<c path="String"/>
 			<c path="String"/>

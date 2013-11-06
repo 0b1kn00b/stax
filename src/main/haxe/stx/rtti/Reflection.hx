@@ -3,7 +3,7 @@ package stx.rtti;
 import Stax.*;
 import haxe.rtti.CType;
 
-import stx.Prelude;
+import Prelude;
 import stx.Fail;
 import stx.Fail.*;
 
@@ -15,9 +15,7 @@ using stx.rtti.RTypes;
 using stx.Tuples;
 using stx.Reflects;
 
-@doc("
-  A Tuple of the underlying type and an Array of field names.
-")
+@doc("A Tuple of an underlying value and an Array of field names.")
 abstract Reflection<T>(Tuple2<T,Array<String>>) from Tuple2<T,Array<String>>{
   public function new(v){
     this = v;
@@ -42,8 +40,7 @@ abstract Reflection<T>(Tuple2<T,Array<String>>) from Tuple2<T,Array<String>>{
     return Reflects.callSecure(this.fst(),key,args);
   }
   @doc("Produces an Array of non function fields.")
-  @:note('Inconsistency with Reflect')
-  public function fields():Array<Field<T>>{
+  public function nodes():Array<Node<T>>{
     return this.snd()
     .filter(
       function(x){
@@ -51,7 +48,7 @@ abstract Reflection<T>(Tuple2<T,Array<String>>) from Tuple2<T,Array<String>>{
       }
     ).map(
       function(x){
-        return new Field(tuple2(this.fst(),x));
+        return new Node(tuple2(this.fst(),x));
       }
     );
   }

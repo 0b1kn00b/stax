@@ -7,7 +7,7 @@ package stx.plus;
 import stx.ds.ifs.Foldable;
 
 
-using stx.Prelude;
+using Prelude;
 using stx.Arrays;
 using stx.Iterables;
 using stx.ds.Group;
@@ -22,7 +22,7 @@ class IterableGroup {
 }
 class ArrayGroup {
   public static function groupBy<T, K>(arr: Array<T>, grouper: T -> K) : Map<K, Array<T>> { 
-    return arr.foldl(Map.create(), function(map, e) {
+    return arr.foldLeft(Map.create(), function(map, e) {
       var key = grouper(e);
       var result = map.getOrElse(key, function() return []);
       result.push(e);
@@ -33,7 +33,7 @@ class ArrayGroup {
 class FoldableGroup {
   public static function groupBy<C, T, K>(foldable: Foldable<C, T>, grouper: T -> K) : Map<K, C> { 
     var def = foldable.unit();
-    return cast foldable.foldl(Map.create(), function(map, e) {
+    return cast foldable.foldLeft(Map.create(), function(map, e) {
       var key = grouper(e);
       var result = map.getOrElseC(key, def);
       return map.set(key, cast result.add(e));

@@ -1,8 +1,10 @@
 package hx.sch;
 
+
 import haxe.PosInfos;
 
-import stx.Prelude;
+import stx.type.*;
+import Prelude;
 import stx.Option;
 
 #if neko
@@ -25,7 +27,7 @@ class Process{
     #end
 
     #if test dynamic #end
-    public static function start(func : CodeBlock, time : Float = 0) : Option<Task> {
+    public static function start(func : Niladic, time : Float = 0) : Option<Task> {
       return if(func != null) {
         var task = new Task(func, time);
             task.start();

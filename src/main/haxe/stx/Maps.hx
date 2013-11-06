@@ -7,7 +7,7 @@ import haxe.ds.StringMap;
 using stx.Compose;
 using stx.Tuples;
 using stx.Iterators;
-using stx.Prelude;
+using Prelude;
 using stx.Option;
 
 @:note('#0b1kn00b: bubcus')
@@ -60,8 +60,8 @@ class Maps {
 	static public inline function getOption<K,V>(map:Map<K,V>,key:K):Option<V>{
 	 	return Options.create(map.get(key));
 	}
-	static public function foreach<K,V>(map0:Map<K,V>,fn:K->V->Void):Map<K,V>{
-		toArray(map0).foreach(fn.tupled());
+	static public function each<K,V>(map0:Map<K,V>,fn:K->V->Void):Map<K,V>{
+		toArray(map0).each(fn.tupled());
 		return map0;
 	}
 	@:generic static public function mapKeys<K,V,K0>(map0:Map<K,V>,fn:K->K0):Map<K0,V>{
@@ -82,17 +82,17 @@ class StringMaps{
 	@:non_destructive
 	static public function merge<K,V>(map0:Map<String,V>,map1:Map<String,V>):Map<String,V>{
 		var map2 : Map<String,V> = new Map();
-		Maps.toArray(map0).foreach(
+		Maps.toArray(map0).each(
 			map2.set.tupled()
 		);
-		Maps.toArray(map1).foreach(
+		Maps.toArray(map1).each(
 			map2.set.tupled()
 		);
 		return map2;
 	}
 	static public function mapKeys<V,K0>(map0:Map<String,V>,fn:String->K0):Map<K0,V>{
 		var map1 = new Map<K0,V>();
-		Maps.foreach(map0,
+		Maps.each(map0,
 			function(k,v){
 				map1.set(fn(k),v);
 			}
@@ -101,7 +101,7 @@ class StringMaps{
 	}
 	static public function mapVals<V,V0>(map0:Map<String,V>,fn:V->V0):Map<String,V0>{
 		var map1 = new Map<String,V0>();
-		Maps.foreach(map0,
+		Maps.each(map0,
 			function(k,v){
 				map1.set(k,fn(v));
 			}
@@ -112,10 +112,10 @@ class StringMaps{
 /*class IntMaps{
 	static public function merge<K,V>(map0:Map<Int,V>,map1:Map<Int,V>):Map<Int,V>{
 		var map2 : Map<Int,V> = new Map();
-		Maps.toArray(map0).foreach(
+		Maps.toArray(map0).each(
 			map2.set.tupled()
 		);
-		Maps.toArray(map1).foreach(
+		Maps.toArray(map1).each(
 			map2.set.tupled()
 		);
 		return map2;
@@ -124,10 +124,10 @@ class StringMaps{
 class EnumValueMaps{
 	static public function merge<K,V>(map0:Map<EnumValue,V>,map1:Map<EnumValue,V>):Map<EnumValue,V>{
 		var map2 : Map<EnumValue,V> = new Map();
-		Maps.toArray(map0).foreach(
+		Maps.toArray(map0).each(
 			map2.set.tupled()
 		);
-		Maps.toArray(map1).foreach(
+		Maps.toArray(map1).each(
 			map2.set.tupled()
 		);
 		return map2;
@@ -136,10 +136,10 @@ class EnumValueMaps{
 class ObjectMaps{
 	static public function merge<K,V>(map0:Map<{},V>,map1:Map<{},V>):Map<{},V>{
 		var map2 : Map<{},V> = new Map();
-		Maps.toArray(map0).foreach(
+		Maps.toArray(map0).each(
 			map2.set.tupled()
 		);
-		Maps.toArray(map1).foreach(
+		Maps.toArray(map1).each(
 			map2.set.tupled()
 		);
 		return map2;

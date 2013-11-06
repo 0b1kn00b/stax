@@ -3,7 +3,7 @@ package stx.js.arw;
 import js.JQuery;
 import js.Browser;
 
-import stx.Prelude;
+import Prelude;
 import stx.Tuples;
 import stx.Tuples;
 import stx.arw.CallbackArrow;

@@ -1,6 +1,6 @@
 package stx.rct.events;
 
-import stx.Prelude;
+import Prelude;
 import stx.Functions
 import stx.rct.Propagation;
 import stx.rct.Stream;

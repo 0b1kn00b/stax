@@ -4,7 +4,7 @@ import Stax.*;
 
 import stx.Fail;
  
-import stx.Prelude;
+import Prelude;
 
 using stx.Maths;
 using stx.Option;
@@ -109,8 +109,11 @@ class Strings {
   static public function cca(str:String,i:Int){
     return str.charCodeAt(i);
   }
+  static public function at(str:String,i:Int):String{
+    return str.charAt(i);
+  }
   @doc("Returns an Array of `str` divided into sections of length `len`.")
-  static public function chunk(str: String, len: Int): Array<String> {
+  static public function chunk(str: String, len: Int = 1): Array<String> {
     var start = 0;
     var end   = (start + len).min(str.length);
     
@@ -216,7 +219,7 @@ class Strings {
             return if (index < value.length) {
                 value.substr(index++, 1);
             } else {
-                except()(fail(OutOfBoundsFail()));
+                except()(OutOfBoundsError());
             }
         }
     };
@@ -238,7 +241,7 @@ class Strings {
     var c = s.charCodeAt( pos );
     return (c >= 9 && c <= 13) || c == 32;
   }
-  static public function chr(i:Int){
+  static public inline function chr(i:Int){
     return String.fromCharCode(i);
   }
 }

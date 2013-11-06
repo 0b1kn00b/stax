@@ -14,7 +14,7 @@ class DateJValue extends AbstractTranscode<Date,Void> {
       case JNumber(v): Date.fromTime(v);
       case JString(v): Date.fromTime(Std.parseInt(v));
 
-      default: Prelude.error()("Expected Number but found: " + v);
+      default: except()("Expected Number but found: " + v);
     }
   }
   static public function extractor(){

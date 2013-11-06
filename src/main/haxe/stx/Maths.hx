@@ -88,6 +88,10 @@ class Floats {
   static public function toString(v: Float): String {
     return "" + v;
   }
+  @doc("Produce Int of Float.")
+  static public function toInt(v: Float): Int {
+    return Std.int(v);
+  }
   @doc("Add two Floats.")
   static public inline function add(a:Float,b:Float):Float{
 		return a + b;

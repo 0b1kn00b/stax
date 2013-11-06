@@ -14,5 +14,5 @@ interface Foldable<A, B> {
   function add(b: B): A;
   
   /** Left folds over the structure. */
-  function foldl<T>(t: T, f: T -> B -> T): T;
+  function foldLeft<T>(t: T, f: T -> B -> T): T;
 }

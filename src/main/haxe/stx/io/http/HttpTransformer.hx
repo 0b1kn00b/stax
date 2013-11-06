@@ -15,7 +15,7 @@
 */
 package stx.io.http;
 
-import stx.Prelude;
+import Prelude;
 import stx.ds.Map;
 import stx.net.Url;
 import stx.net.HttpResponseCode;

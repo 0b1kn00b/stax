@@ -2,12 +2,14 @@ package stx.rct;
 
 import Stax.*;
 
+import hx.sch.Process;
+import hx.sch.Task;
+
 import stx.Fail;
-import stx.Prelude;
+import Prelude;
 
 import stx.rct.Propagation;
 import stx.rct.Stream;
-import stx.rct.Process;
 
 import stx.Anys;
 import stx.Functions;
@@ -26,21 +28,19 @@ class Streams {
 
     static public function fromAny<T>(any:T):Stream<T> {
       var stream = pure(None);
-      CodeBlocks.trampoline(function() stream.dispatch(any), 1)();
+      Niladics.trampoline(function() stream.dispatch(any), 1)();
       return stream;
     }
-
     static public function fromFunction<T>(func:Function0<T>):Stream<T> {
       var stream = pure(None);
-      CodeBlocks.trampoline(function() stream.dispatch(func()), 1)();
+      Niladics.trampoline(function() stream.dispatch(func()), 1)();
       return stream;
     }
-
     static public function fromIterable<T>(iterable:Iterable<T>):Stream<T> return fromIterator(iterable.iterator());
 
     static public function fromIterator<T>(iterator:Iterator<T>):Stream<T> {
       var stream = pure(None);
-      CodeBlocks.trampoline(function() {
+      Niladics.trampoline(function() {
         while(iterator.hasNext()) {
             stream.dispatch(iterator.next());
           }
@@ -49,7 +49,7 @@ class Streams {
     }
 
     static public function bindTo<T>(func:Function1<T, Void>, stream:Stream<T>):Stream<T> {
-      foreach(stream, function(v) func(v));
+      each(stream, function(v) func(v));
       return stream;
     }
 
@@ -75,7 +75,7 @@ class Streams {
     static public function create<T1, T2>(pulse:Function1<Pulse<T1>, Propagation<T2>>,sources:Array<Stream<T1>>):Stream<T2> {
       var stream = new Stream<T2>(cast pulse);
 
-      sources.foreach(function (source:Stream<T1>) {
+      sources.each(function (source:Stream<T1>) {
         switch(option(source)){
             case Some(val): val.attach(cast stream);
               case _:
@@ -111,10 +111,10 @@ class Streams {
       var out = pure(None);
 
       create(function(pulse:Pulse<T1>):Propagation<T2> {
-        previous.foreach(function(s) s.detach(out));
+        previous.each(function(s) s.detach(out));
 
           previous = option(func(pulse.value()));
-          previous.foreach(function(s) s.attach(out));
+          previous.each(function(s) s.attach(out));
 
           return Negate;
       }, toArray(stream));
@@ -122,7 +122,7 @@ class Streams {
       return out;
     }
 
-    static public function foreach<T>(stream:Stream<T>, func:Function1<T, Void>):Stream<T> {
+    static public function each<T>(stream:Stream<T>, func:Function1<T, Void>):Stream<T> {
       create(function(pulse:Pulse<T>):Propagation<T> {
         func(pulse.value());
 
@@ -240,7 +240,7 @@ class Streams {
 
       var collection = [];
 
-      foreach(stream, function(value:T):Void collection.push(value));
+      each(stream, function(value:T):Void collection.push(value));
 
       return collection;
     }

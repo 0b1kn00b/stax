@@ -1,6 +1,6 @@
 package stx.rct;
 
-import stx.Prelude;
+import Prelude;
 import stx.rct.Pulse;
 import stx.rct.Propagation;
 import stx.rct.Stream;

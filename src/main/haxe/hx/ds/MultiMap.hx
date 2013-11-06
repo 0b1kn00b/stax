@@ -5,11 +5,12 @@ import stx.Compare.*;
 import stx.Option;
 import stx.Tuples;
 
+using stx.Iterables;
 using stx.Functions;
 using stx.Compose;
 using stx.plus.Order;
 using stx.Tuples;
-using stx.Prelude;
+using Prelude;
 using stx.Arrays;
 
 @:stability(0)
@@ -109,7 +110,7 @@ class MultiMap<K,V>{
 	public function sortOnKey(){
 		impl.sortOnKey();
 	}
-	public function sortOnKeyWith(fn:OrderFunction<K>){
+	public function sortOnKeyWith(fn:Reduce<K,Int>){
 		impl.sortOnKeyWith(fn);
 	}
 	public function size(){
@@ -117,7 +118,7 @@ class MultiMap<K,V>{
 	}
 	@:noUsing static public function fromArray<A,B>(v:Array<Tuple2<A,B>>):MultiMap<A,B>{
 		var hash = new MultiMap();
-		v.foreach(hash.put.enclose());
+		v.each(hash.put.enclose());
 		return hash;
 	}
 }

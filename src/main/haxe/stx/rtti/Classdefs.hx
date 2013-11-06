@@ -1,5 +1,6 @@
 package stx.rtti;
 
+import Prelude;
 import Stax.*;
 
 import haxe.rtti.CType;

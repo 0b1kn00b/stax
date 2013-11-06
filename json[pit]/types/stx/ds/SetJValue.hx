@@ -20,7 +20,7 @@ class SetJValue<T> extends AbstractTranscode<Set<T>,JExtractorFunction<T>>{
       switch(v) {
         case JArray(xs)       :
           Set.create().addAll( xs.map(e) );
-        default: Prelude.error()("Expected Array but was: " + v);
+        default: except()("Expected Array but was: " + v);
       }
   }
 }

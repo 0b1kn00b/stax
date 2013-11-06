@@ -16,7 +16,7 @@
 */
 package stx.net;
 
-import stx.Prelude;
+import Prelude;
 import stx.test.TestCase;
 import stx.test.Assert;
 import stx.net.HttpHeader;

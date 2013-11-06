@@ -1,7 +1,7 @@
 package stx.arw;
 
 using stx.Arrow;
-import stx.Prelude;
+import Prelude;
 
 abstract MapArrow <I,O>(Arrow<Iterable<I>,Iterable<O>>){
 	

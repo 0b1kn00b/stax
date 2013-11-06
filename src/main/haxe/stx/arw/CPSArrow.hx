@@ -1,6 +1,6 @@
 package stx.arw;
 
-import stx.Prelude;
+import Prelude;
 using stx.Arrow;
 
 @:note("#0b1kn00b, Doesn't run unless cont filled in, how to fix?")

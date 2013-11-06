@@ -1,13 +1,13 @@
   package stx.io.json;
 
 import haxe.CallStack;
-import stx.Prelude;
+import Prelude;
 
 import stx.plus.Equal;
 
 import Type;
 using stx.Tuples;
-import stx.Prelude;
+import Prelude;
 import stx.test.TestCase;
 import stx.io.json.JValue;
 import stx.ds.Set;

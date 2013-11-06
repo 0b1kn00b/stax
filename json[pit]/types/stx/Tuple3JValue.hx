@@ -14,7 +14,7 @@ class Tuple3JValue<A,B,C> extends AbstractTranscode<Tuple3<A,B,C>,JExtractorFunc
     return switch(v) {
       case JArray(v): JExtractorFunction2(Tuples.t3(v[0],v[1],v[2]));
 
-      default: Prelude.error()("Expected Array but was: " + v);
+      default: except()("Expected Array but was: " + v);
     }
   }
 }

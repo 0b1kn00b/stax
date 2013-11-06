@@ -1,7 +1,7 @@
 import stx.test.TestCase;
 import stx.test.Assert;
 
-using stx.Prelude;
+using Prelude;
 using Stx;
 
 
@@ -31,7 +31,7 @@ class StaxTest extends TestCase{
 		.foldl(
 			Eventual.pure(Right([])),
 			stx.Promises.waitfold
-		).foreach( Log.printer() );
+		).each( Log.printer() );
 
 		trace(
 			['a','b','c'].foldl(

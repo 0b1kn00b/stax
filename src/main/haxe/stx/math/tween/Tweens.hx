@@ -15,7 +15,7 @@
 */
 package stx.math.tween;
 
-import stx.Prelude;
+import Prelude;
 import stx.math.tween.Tween;
 import stx.math.tween.Easing;
 import stx.time.ScheduledExecutor;

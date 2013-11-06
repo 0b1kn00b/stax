@@ -15,7 +15,7 @@ class CompositeDisposable implements IDisposable{
   public function dispose(){
     if(!disposed){
       disposed = true;
-      this.foreach(
+      this.each(
         function(x){
           x.dispose();
         }

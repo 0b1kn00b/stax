@@ -1,6 +1,6 @@
 package stx.rct.behaviours;
 
-import stx.Prelude;
+import Prelude;
 import stx.rct.Behaviour;
 import stx.rct.Propagation;
 import stx.rct.streams.StreamBool;

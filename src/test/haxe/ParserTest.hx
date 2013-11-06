@@ -20,12 +20,6 @@ using Lambda;
 import com.mindrocks.text.ParserMonad;
 using com.mindrocks.text.ParserMonad;
 
-typedef JsEntry = { name : String, value : JsValue}
-enum JsValue {
-  JsObject(fields : Array<JsEntry>);
-  JsArray(elements : Array<JsValue>);
-  JsData(x : String);
-}
 /**
  * Quick n dirty.
  */
@@ -43,79 +37,6 @@ class JsonPrettyPrinter {
     }
     internal(json);
   }
-}
-
-class JsonParser {
-  
-  static function makeField(t : Tuple2<String, JsValue>) return
-    { name : t.a, value : t.b }
-  
-  static var identifierR = ~/[a-zA-Z0-9_-]+/;
-
-  static  var spaceP = " ".identifier();    
-  static  var tabP = "\t".identifier();
-  static  var retP = ("\r".identifier().or("\n".identifier()));
-  
-  static  var spacingP =
-    [
-      spaceP.oneMany(),
-      tabP.oneMany(),
-      retP.oneMany()
-    ].ors().many().lazyF();
-  
-  static  var leftAccP = withSpacing("{".identifier());
-  static  var rightAccP = withSpacing("}".identifier());
-  static  var leftBracketP = withSpacing("[".identifier());
-  static  var rightBracketP = withSpacing("]".identifier());
-  static  var sepP = withSpacing(":".identifier());
-  static  var commaP = withSpacing(",".identifier());
-  static  var equalsP = withSpacing(",".identifier());
-  
-  
-  static function withSpacing<I,T>(p : Void -> Parser<String,T>) return
-    spacingP._and(p)
-
-  static var identifierP =
-    withSpacing(identifierR.regexParser());
-
-  static var jsonDataP =
-    identifierP.then(JsData);
-    
-  static var jsonValueP : Void -> Parser<String,JsValue> =
-    [jsonParser, jsonDataP, jsonArrayP].ors().tag("json value").lazyF();
-
-  static var jsonArrayP2 =
-    leftBracketP._and(jsonValueP.repsep(commaP).and_(rightBracketP).commit()).then(JsArray);
-    
-  static var jsonArrayPM =
-    ParserM.dO({
-      jsons <= ParserM.dO({
-        leftBracketP;
-        jsons <= jsonValueP.repsep(commaP);
-        rightBracketP;
-        ret(jsons);
-      }).commit();
-      ret(JsArray(jsons));
-    });
-    
-  static var jsonArrayP =
-    ParserM.dO({
-      leftBracketP;
-      jsons <= jsonValueP.repsep(commaP);
-      rightBracketP;
-      ret(JsArray(jsons));
-    }).commit();
-
-  static var jsonEntryP =
-    identifierP.and(sepP._and(jsonValueP).commit());
-  
-  static  var jsonEntriesP =
-    jsonEntryP.repsep(commaP).commit();
-
-  public static var jsonParser =
-    leftAccP._and(jsonEntriesP).and_(rightAccP.commit()).then(function (entries)
-      return JsObject(entries.map(makeField).array())
-    );
 }
 
 class LRTest {

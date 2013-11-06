@@ -1,7 +1,8 @@
 package hx.sch;
 
+import stx.type.*;
 import stx.Log.*;
-import stx.Prelude;
+import Prelude;
 
 #if neko
   import neko.vm.Thread;
@@ -15,10 +16,10 @@ import stx.Prelude;
 
 class Task{
   @:isVar public var time(default, null)      : Float;
-  @:isVar public var func(default, null)      : CodeBlock;
+  @:isVar public var func(default, null)      : Niladic;
   @:isVar public var cancelled(default,null)  : Bool;
 
-  public function new(func:CodeBlock, time:Float) {
+  public function new(func:Niladic, time:Float) {
     this.func      = func;
     this.time      = time;
     this.cancelled = false;
@@ -102,5 +103,5 @@ class Task{
     private var id                            : Null<Int>;
   #end
 
-  private var run                             : CodeBlock;
+  private var run                             : Niladic;
 }

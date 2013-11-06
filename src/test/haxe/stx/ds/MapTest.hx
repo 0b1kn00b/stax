@@ -1,7 +1,7 @@
 package stx.ds;
 
 import stx.Tuples;
-import stx.Prelude;
+import Prelude;
 
 import stx.ds.ifs.Foldable;
 import Stax.*;

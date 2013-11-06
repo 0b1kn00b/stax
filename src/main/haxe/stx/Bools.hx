@@ -1,6 +1,7 @@
 package stx;
 
-import stx.Prelude;
+import stx.type.*;
+import Prelude;
 
 class Bools {
   @doc("Returns the Int representation of a Bool.")

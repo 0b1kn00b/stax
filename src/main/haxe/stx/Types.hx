@@ -5,14 +5,14 @@ using Type;
 import Stax.*;
 
 using stx.ValueTypes;
-using stx.Prelude;
+using Prelude;
 using stx.Arrays;
 
 import stx.Fail.*;
  
 
 import stx.Objects;
-import stx.Prelude;
+import Prelude;
 
 using stx.Tuples;
 using stx.Either;
@@ -71,7 +71,7 @@ class Types{
     }catch(e:Fail){
       throw(e);
     }catch(e:Dynamic){
-      throw(fail(ConstructorFail(type,fail(NativeFail(e)))));
+      except()(ConstructorError(type,fail(NativeError(e))));
     }
   }
   @doc("")
@@ -114,8 +114,11 @@ class Types{
       return try{
         (Std.is(value, type) ? cast value : null);
       }catch(e:Dynamic){
-        throw fail(TypeFail('could not cast value to ${name(type)}'));
+        except()(TypeError('could not cast value to ${name(type)}'));
       }
+  }
+  static public inline function as<I,O>(value:I):O{
+    return cast value;
   }
   /*@doc("
     Do the fields of `obj` fit into the schema of `type`. 

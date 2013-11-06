@@ -4,7 +4,7 @@ package hx.ds;
 import Stax.*;
 import stx.Compare.*;
 
-import stx.Prelude;
+import Prelude;
 import stx.plus.Order;
 import stx.plus.Show;
 import stx.plus.Hasher;
@@ -18,10 +18,10 @@ using stx.Compose;
 import stx.plus.Hasher;
 
 class OrderedMap<K,V>{
-  private var __key_sort__  : OrderFunction<K>;
-  private var __val_sort__  : OrderFunction<V>;
-  private var __val_equal__ : OrderFunction<V>;
-  private var __key_hash__  : HashFunction<K>;
+  private var __key_sort__  : Reduce<K,Int>;
+  private var __val_sort__  : Reduce<V,Int>;
+  private var __val_equal__ : Reduce<V,Int>;
+  private var __key_hash__  : K->Int;
 
   private var impl    : OrderedHashMap<Tuple2<K,V>>;
 
@@ -49,7 +49,7 @@ class OrderedMap<K,V>{
   public function sort(){
     impl.impl = ArrayOrder.sort(impl.impl);
   }
-  public function sortWith(fn:OrderFunction<Tuple2<K,V>>){
+  public function sortWith(fn:Reduce<Tuple2<K,V>,Int>){
     impl.sortOnValWith(fn);
   }
   public function sortOnKey(){

@@ -2,7 +2,7 @@ package stx.plus;
 
 import stx.ds.Map;
 
-import stx.Prelude;
+import Prelude;
 import stx.Muster;
 import stx.Muster.*;
 import stx.Compare.*;

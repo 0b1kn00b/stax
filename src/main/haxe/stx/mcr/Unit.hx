@@ -1,6 +1,6 @@
 package stx.macro;
 
-using stx.Prelude;
+using Prelude;
 using stx.Arrays;
 using stx.Compose;
 
@@ -30,7 +30,7 @@ class UnitMacro{
         return x.name == 'new';
       }
     );
-    field.foreach(
+    field.each(
       function(x){
         switch (x.kind) {
           case FFun(f) if (f.args.length == 0 || (f.args.length == 1 && Options.create(f.args[0]).map(function(x) return x.opt).getOrElseC(false))) :

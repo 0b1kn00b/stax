@@ -1,6 +1,7 @@
 package stx;
 
-import stx.Prelude;
+import Prelude;
+
 using stx.Functions;
 using stx.Compose;
 
@@ -17,15 +18,5 @@ class Accessors{
 			get : getter,
 			set : setter
 		}
-	}
-	/**
-		
-	*/
-	static public function getter(s:String):Dynamic->Dynamic{
-		return Reflect.field.p2(s);
-	}
-	static public function setter(s:String):Dynamic->Dynamic->Dynamic{
-		return null;
-		//return Compose.pure().fan().then( Reflect.setField.p2(s).returningC(Unit).first() ).then( Pair.snd);
 	}
 }

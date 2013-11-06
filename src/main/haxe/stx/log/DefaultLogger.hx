@@ -30,6 +30,7 @@ class DefaultLogger implements Logger{
       var rsc   = Resource.getString('log');
       if(rsc!=null){
         var ls = LogListingParser.parse(rsc);
+        //trace(debug(stx.plus.Show.getShowFor(ls)(ls)));
         listings = listings.append(ls);
       }
     #end

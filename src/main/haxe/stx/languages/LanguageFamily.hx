@@ -1,0 +1,29 @@
+package stx.languages;
+
+LanguageFamily{
+  Hamitic
+  IberoCaucasian
+  Germanic
+  Semitic
+  Indian
+  Amerindian
+  Turkic_altaic
+  Slavic
+  Not_given
+  Asian
+  Celtic
+  Romance
+  LatinGreek
+  InternationalAux
+  FinnoUgric
+  Basque
+  Iranian
+  OceanicIndonesian
+  IndoEuropeanOther
+  Eskimo
+  IberoCaucasian
+  Dravidian
+  NegroAfrican
+  Baltic
+  Amerindian
+}

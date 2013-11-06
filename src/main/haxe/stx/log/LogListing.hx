@@ -1,5 +1,7 @@
 package stx.log;
 
+import Prelude;
+
 import haxe.PosInfos;
 
 import stx.Positions;

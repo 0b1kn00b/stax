@@ -1,7 +1,7 @@
 package stx;
 
 import stx.Tuples;
-import stx.Prelude;
+import Prelude;
 import stx.Fail;
 
 import stx.Fail;

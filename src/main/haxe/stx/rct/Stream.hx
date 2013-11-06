@@ -1,12 +1,11 @@
 package stx.rct;
-
  
 import stx.Fail.*;
-import stx.Prelude;
+import Prelude;
 
 import stx.rct.Propagation;
 import stx.rct.Stream;
-import stx.rct.Process;
+import hx.sch.Process;
 
 import stx.Anys;
 import stx.Functions;
@@ -25,7 +24,7 @@ class Stream<T> {
     private var _weakRef            : Bool;
     private var _propagator         : Pulse<T> -> Propagation<T>;
     private var _listeners          : Array<Stream<T>>;
-    private var _finishedListeners  : List<CodeBlock>;
+    private var _finishedListeners  : List<Niladic>;
 
     public function new(propagator : Pulse<T> -> Propagation<T>) {
         _rank = Rank.next();
@@ -116,7 +115,7 @@ class Stream<T> {
             _weakRef = value;
 
             if(_weakRef) {
-                _finishedListeners.foreach(function(func) func());
+                _finishedListeners.each(function(func) func());
                 _finishedListeners = List.create();
             }
         }

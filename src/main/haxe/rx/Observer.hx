@@ -1,35 +1,58 @@
 package rx;
 
-import stx.Prelude;
-import Stax.*;
 import stx.Chunk;
+import stx.Fail;
+import Prelude;
+import Stax.*;
 
 import rx.disposable.*;
 import rx.observer.*;
 import rx.ifs.Observer in IObserver;
 
-typedef ObserverType<T> = IObserver<T>;
-
 @doc("")
-abstract Observer<T>(ObserverType<T>) from ObserverType<T> to ObserverType<T>{
+abstract Observer<T>(IObserver<T>) from IObserver<T> to IObserver<T>{
   public function new(v){
     this = v;
   }
   public function apply(chk:Chunk<T>):Void{
     this.apply(chk);
   }
-  public function data(v:T):Void{
-    this.data(v);
+  public function onData(v:T):Void{
+    this.onData(v);
   }
-  public function fail(v:Fail):Void{
-    this.fail(v);
+  public function onFail(v:Fail):Void{
+    this.onFail(v);
   }
-  public function done():Void{
-    this.done(Nil);
+  public function onDone():Void{
+    this.onDone();
   }
   @:from static public function fromChunkCallback<T>(fn:Chunk<T>->Void):Observer<T>{
     return new AnonymousObserver(function(chk:Chunk<T>):Void{
       fn(chk);
+    });
+  }
+  @:from static public function fromEndCallback<T>(fn:Fail->Void):Observer<T>{
+    return new AnonymousObserver(function(chk:Chunk<T>):Void{
+      switch (chk) {
+        case End(e) : fn(e);
+        default :
+      }
+    });
+  }
+  @:from static public function fromTCallback<T>(fn:T->Void):Observer<T>{
+    return new AnonymousObserver(function(chk:Chunk<T>):Void{
+      switch (chk) {
+        case Val(v) : fn(v);
+        default :
+      }
+    });
+  }
+  @:from static public function fromNilCallback<T>(fn:Void->Void):Observer<T>{
+    return new AnonymousObserver(function(chk:Chunk<T>):Void{
+      switch (chk) {
+        case Nil : fn();
+        default:
+      }
     });
   }
   public function filter(fn:Chunk<T>->Bool):Observer<T>{
@@ -43,9 +66,9 @@ abstract Observer<T>(ObserverType<T>) from ObserverType<T> to ObserverType<T>{
   public function mapi<U>(fn:U->T):Observer<U>{
     return function(chk:Chunk<U>):Void{
       return switch (chk) {
-        case Val(v) : this.data(fn(v));
-        case End(e) : this.fail(e);
-        case Nil    : this.done(Nil);
+        case Val(v) : this.onData(fn(v));
+        case End(e) : this.onFail(e);
+        case Nil    : this.onDone();
       }
     }
   }

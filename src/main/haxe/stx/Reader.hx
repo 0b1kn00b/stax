@@ -1,5 +1,5 @@
 package stx;
-import stx.Prelude;
+import Prelude;
 
 //http://www.youtube.com/watch?v=ZasXwtTRkio
 abstract Reader<C,A>(C->A) from C->A to C->A{

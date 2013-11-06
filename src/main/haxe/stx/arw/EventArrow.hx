@@ -2,7 +2,7 @@ package stx.arw;
 
 import js.html.*;
 
-import stx.Prelude;
+import Prelude;
 import stx.Arrow;
 
 abstract EventArrow0(Arrow<EventTarget,Unit>){

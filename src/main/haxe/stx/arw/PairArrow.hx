@@ -3,7 +3,7 @@ package stx.arw;
 import stx.Tuples;
 
 using stx.Tuples;
-import stx.Prelude;
+import Prelude;
 using stx.Arrow;
 
 typedef ArrowPair<A,B,C,D> = Arrow<Tuple2<A,C>,Tuple2<B,D>>; 

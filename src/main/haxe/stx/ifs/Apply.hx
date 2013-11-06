@@ -3,7 +3,7 @@ package stx.ifs;
 import Stax.*;
 import stx.Fail;
 
-import stx.Prelude;
+import Prelude;
 
 using stx.Option;
 using stx.Functions;
@@ -15,6 +15,12 @@ typedef ApplyType<I,O> = {
 interface Apply<I,O>{
 	public function apply(v:I):O;
 }
+interface Apply2<A,B,O>{
+  public function apply2(a:A,b:B):O;
+}
+interface Apply3<A,B,C,O>{
+  public function apply3(a:A,b:B,c:C):O;
+}
 class DefaultApply<E,A> implements Apply<E,A>{
 	public function new( ){
 
@@ -23,7 +29,7 @@ class DefaultApply<E,A> implements Apply<E,A>{
 		return except()(fail(AbstractMethodFail()));
 	}
 }
-class ApplyDelegate<E,A> implements Apply<E,A>{
+class AnonymousApply<E,A> implements Apply<E,A>{
   private var __apply__ : E -> A;
   public function new(__apply__){
     this.__apply__ = __apply__;

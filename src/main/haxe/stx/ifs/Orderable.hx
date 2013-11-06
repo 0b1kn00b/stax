@@ -3,7 +3,7 @@ package stx.ifs;
 import stx.plus.Order;
 
 interface Orderable<T>{
-  @:allow(stx.ifs)private var __order__ : OrderFunction<T>;
+  @:allow(stx.ifs)private var __order__ : Reduce<T,Int>;
   public function order(ot:T):Int;
 }
 class TypeOrderables{

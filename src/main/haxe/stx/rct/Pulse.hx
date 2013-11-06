@@ -1,6 +1,6 @@
 package stx.rct;
 
-import stx.Prelude;
+import Prelude;
 import stx.Functions;
 
 using stx.Enums;

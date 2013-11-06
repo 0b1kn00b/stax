@@ -15,7 +15,7 @@
 */
 package stx.math.tween;
 
-import stx.Prelude;
+import Prelude;
 using stx.ds.Set;
 using stx.ds.Map;
 using stx.Option;
@@ -40,7 +40,7 @@ class Tween {
     }).toMap();
     
     return function(t: Float): Dynamic<Float> {
-      return data.foldl({}, function(r, tuple) {
+      return data.foldLeft({}, function(r, tuple) {
         var name  = tuple.fst();
         var start = tuple.snd().start;
         var delta = tuple.snd().delta;

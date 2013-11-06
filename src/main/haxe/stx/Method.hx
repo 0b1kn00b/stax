@@ -1,6 +1,6 @@
 package stx;
 
-import stx.Prelude;
+import Prelude;
 import stx.Tuples;
 
 using stx.Tuples;

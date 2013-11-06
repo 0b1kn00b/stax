@@ -1,5 +1,6 @@
 package stx.arw;
 
+import Prelude;
 import stx.Tuples;
 import stx.Continuation.*;
 
@@ -33,15 +34,14 @@ abstract EitherArrow<I,O>(Arrow<I,O>) from Arrow<I,O> to Arrow<I,O>{
 							}
 						}.tupled();
 
-				a_0 = a.apply(i);
-				b_0 = b.apply(i);
+				a_0 = Eventual.unit();
+				a.withInput(i,a_0.deliver);
+				b_0 = Eventual.unit();
+				b.withInput(i,b_0.deliver);
 
-				a_1 = a_0.map(function(x) return tuple2(a_0,x)).foreach(handler);
-				b_1 = b_0.map(function(x) return tuple2(b_0,x)).foreach(handler);
+				a_1 = a_0.map(function(x) return tuple2(a_0,x)).each(handler);
+				b_1 = b_0.map(function(x) return tuple2(b_0,x)).each(handler);
 			}
 		);
-	}
-	public function apply(?i){
-		return this.apply(i);
 	}
 }

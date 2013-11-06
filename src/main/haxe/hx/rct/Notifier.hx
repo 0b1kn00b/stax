@@ -1,18 +1,18 @@
 package hx.rct;
 
-import stx.Prelude;
+import Prelude;
 
 class Notifier {
-  private var handlers : Array<CodeBlock>;
+  private var handlers : Array<Niladic>;
 
   public function new() {
     handlers = new Array();
   }
-  public function add(h : CodeBlock) : CodeBlock {
+  public function add(h : Niladic) : Niladic {
     handlers.push(h);
     return h;
   }
-  public function rem(h : CodeBlock) : CodeBlock {
+  public function rem(h : Niladic) : Niladic {
     for(i in 0...handlers.length)
       if(Reflect.compareMethods(handlers[i], h))
         return handlers.splice(i, 1)[0];

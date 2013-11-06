@@ -1,16 +1,51 @@
 package stx;
 
-using stx.Prelude;
+import Stax.*;
 
-
-import stx.Option;
-
+using Prelude;
+using stx.Option;
 using stx.Tuples;
 using stx.Functions;
 using stx.Iterables;
 using stx.ds.Generator;
 
 class Iterables {
+  static public inline function unfold<T, R>(initial: T, unfolder: T -> Option<Tuple2<T, R>>): Iterable<R> {
+    return {
+      iterator: function(): Iterator<R> {
+        var _next: Option<R> = None;
+        var _progress: T = initial;
+
+        var precomputeNext = function() {
+          switch (unfolder(_progress)) {
+            case None:
+              _progress = null;
+              _next     = None;
+
+            case Some(tuple):
+              _progress = tuple.fst();
+              _next     = Some(tuple.snd());
+          }
+        }
+
+        precomputeNext();
+
+        return {
+          hasNext: function(): Bool {
+            return !_next.isEmpty();
+          },
+
+          next: function(): R {
+            var n = _next.get();
+
+            precomputeNext();
+
+            return n;
+          }
+        }
+      }
+    }
+  }
   @:noUsing static public inline function create<T>(has:Void->Bool,nxt:Void -> T):Iterable<T>{
     return {
       iterator : function() return Iterators.create(has,nxt)
@@ -35,14 +70,14 @@ class Iterables {
   }
   @doc("Applies function `f` to each element in `iter`, returning the results")
   static public function map<T, Z>(iter: Iterable<T>, f: T -> Z): Iterable<Z> {
-    return foldl(iter, [], function(a, b) {
+    return foldLeft(iter, [], function(a, b) {
       a.push(f(b));
       return a;
     });
   }
   @doc("Applies function `f` to each element in `iter`, appending and returning the results.")
   static public function flatMap<T, Z>(iter: Iterable<T>, f: T -> Iterable<Z>): Iterable<Z> {
-    return foldl(iter, [], function(a, b) {
+    return foldLeft(iter, [], function(a, b) {
       for (e in f(b)) a.push(e);
       return a;
     });
@@ -51,17 +86,17 @@ class Iterables {
     Using starting var `z`, run `f` on each element, storing the result, and passing that result 
     into the next call.
     ```
-    [1,2,3,4,5].foldl( 100, function(init,v) return init + v ));//(((((100 + 1) + 2) + 3) + 4) + 5)
+    [1,2,3,4,5].foldLeft( 100, function(init,v) return init + v ));//(((((100 + 1) + 2) + 3) + 4) + 5)
     ```
   ")
-  static public function foldl<T, Z>(iter: Iterable<T>, seed: Z, mapper: Z -> T -> Z): Z {
+  static public function foldLeft<T, Z>(iter: Iterable<T>, seed: Z, mapper: Z -> T -> Z): Z {
     var folded = seed;
     for (e in iter) { folded = mapper(folded, e); }
     return folded;
   }   
   @doc("Call `f` on each element in `iter`, returning a collection where `f(e) == true`.")
   static public function filter<T>(iter: Iterable<T>, f: T -> Bool): Iterable<T> {
-    return SArrays.filter(iter.toArray(), f);
+    return Arrays.filter(iter.toArray(), f);
   }
   @doc("Returns the size of `iter`")
   static public function size<T>(iterable: Iterable<T>): Int {
@@ -72,12 +107,12 @@ class Iterables {
     return size;
   }
   @doc("Apply `f` to each element in `iter`.")
-  static public function foreach<T>(iter : Iterable<T>, f : T-> Void ):Iterable<T> {
+  static public function each<T>(iter : Iterable<T>, f : T-> Void ):Iterable<T> {
     for (e in iter) f(e);
     return iter;
   }
-  @doc("Performs a `foldl`, using the first value as the init value.")
-	 public static function foldl1<T, T>(iter: Iterable<T>, mapper: T -> T -> T): T {
+  @doc("Performs a `foldLeft`, using the first value as the init value.")
+	 public static function foldLeft1<T, T>(iter: Iterable<T>, mapper: T -> T -> T): T {
     var folded = iter.head();
 		switch (iter.tailOption()) {
 			case Some(v) 	:
@@ -90,8 +125,8 @@ class Iterables {
   public static function concat<T>(iter1: Iterable<T>, iter2: Iterable<T>): Iterable<T>
     return iter1.toArray().concat(iter2.toArray());
   @doc("Fold the collection from the right hand side.")
-  public static function foldr<T, Z>(iterable: Iterable<T>, z: Z, f: T -> Z -> Z): Z {
-    return Arrays.foldr(iterable.toArray(), z, f);
+  public static function foldRight<T, Z>(iterable: Iterable<T>, z: Z, f: T -> Z -> Z): Z {
+    return Arrays.foldRight(iterable.toArray(), z, f);
   }
   @doc("Produces the first element of `iter` as an `Option`, `None` if the `Iterable` is empty.")
   public static function headOption<T>(iter: Iterable<T>): Option<T> {
@@ -105,7 +140,7 @@ class Iterables {
   @doc("Produces the first elelment of `iter`, throwing an error if it is empty.")
   public static function head<T>(iter: Iterable<T>): T {
     return switch(headOption(iter)) {
-      case None: Prelude.error()('Iterable has no head');
+      case None:      except()(OutOfBoundsError('Iterable has no head'));
       case Some(h): h;
     }
   }
@@ -121,9 +156,8 @@ class Iterables {
   ")
   public static function tail<T>(iter: Iterable<T>): Iterable<T> {
     return switch (tailOption(iter)) {
-      case None: Prelude.error()('Iterable has no tail');
-      
-      case Some(t): t;
+      case None    : except()(OutOfBoundsError('iterable has no tail')); 
+      case Some(t) : t;
     }
   }
   @doc("Drop `n` values from `iter`")
@@ -138,7 +172,6 @@ class Iterables {
     var result = [];
 		
     while (iterator.hasNext()) {
-			
 			result.push(iterator.next());
 		}
     
@@ -191,7 +224,7 @@ class Iterables {
   }
   @doc("Perform nub using `f` as a comparator.")
   public static function nubBy<T>(iter:Iterable<T>, f: T -> T -> Bool): Iterable<T> {
-    return SIterables.foldl(iter, [], function(a, b) {
+    return foldLeft(iter, [], function(a, b) {
       return if(existsP(a, b, f)) {
         a;
       }
@@ -214,7 +247,7 @@ class Iterables {
   public static function at<T>(iter: Iterable<T>, index: Int): T {
     var result: T = null;
     
-    if (index < 0) index = SIterables.size(iter) - (-1 * index);
+    if (index < 0) index = size(iter) - (-1 * index);
     
     var curIndex  = 0;
     for (e in iter) {
@@ -223,19 +256,19 @@ class Iterables {
       }
       else ++curIndex;
     }
-    return Prelude.error()('Index not found.');
+    return except()(OutOfBoundsError('index "$index" not found.'));
   }
   @doc("flatten an iterable of iterables to an iterable.")
   public static function flatten<T>(iter: Iterable<Iterable<T>>): Iterable<T> {
 		var empty : Iterable<T> = [];
-		return SIterables.foldl(iter, empty, concat);
+		return foldLeft(iter, empty, concat);
   }
   @doc("For each Iterable, take each element and flatten to an output.")
   public static function interleave<T>(iter: Iterable<Iterable<T>>): Iterable<T> {
 		var alls = iter.map(function (it) return it.iterator()).toArray();
 		var res = [];		
-		while (stx.Arrays.forAll(alls, function (iter) return iter.hasNext())) { //alls.forAll(function (iter) return iter.hasNext()))  <- stack overflow!!
-			alls.foreach(function (iter) res.push(iter.next()));
+		while (stx.Arrays.all(alls, function (iter) return iter.hasNext())) { //alls.all(function (iter) return iter.hasNext()))  <- stack overflow!!
+			alls.each(function (iter) res.push(iter.next()));
 		}
 		return res;
   }
@@ -286,7 +319,7 @@ class Iterables {
   }
   @doc("Append `e` to the end of `iter`.")
   public static function add<T>(iter: Iterable<T>, e: T): Iterable<T> {
-    return foldr(iter, [e], function(a, b) {
+    return foldRight(iter, [e], function(a, b) {
       b.unshift(a);
       
       return b;
@@ -294,7 +327,7 @@ class Iterables {
   }
   @doc("Returns an iterable with an element prepended.")
   public static function cons<T>(iter: Iterable<T>, e: T): Iterable<T> {
-    return SIterables.foldl(iter, [e], function(b, a) {
+    return foldLeft(iter, [e], function(b, a) {
       b.push(a);
       
       return b;
@@ -302,7 +335,7 @@ class Iterables {
   }
 	@doc("Returns the Iterable with elements in reverse order.")
   public static function reversed<T>(iter: Iterable<T>): Iterable<T> {
-    return SIterables.foldl(iter, [], function(a, b) {
+    return foldLeft(iter, [], function(a, b) {
       a.unshift(b);
       
       return a;
@@ -375,13 +408,13 @@ class Iterables {
   }
   @doc("Return an Iterable of values contained in both inputs, as decided by `f`")
   public static function intersectBy<T>(iter1: Iterable<T>, iter2: Iterable<T>, f: T -> T -> Bool): Iterable<T> {
-    return SIterables.foldl(iter1, cast [], function(a: Iterable<T>, b: T): Iterable<T> {
+    return foldLeft(iter1, cast [], function(a: Iterable<T>, b: T): Iterable<T> {
       return if (existsP(iter2, b, f)) add(a, b); else a;
     });
   }
   @doc("Return an Iterable of values contained in both inputs.")
   public static function intersect<T>(iter1: Iterable<T>, iter2: Iterable<T>): Iterable<T> {
-    return SIterables.foldl(iter1, cast [], function(a: Iterable<T>, b: T): Iterable<T> {
+    return foldLeft(iter1, cast [], function(a: Iterable<T>, b: T): Iterable<T> {
       return if (existsP(iter2, b, stx.plus.Equal.getEqualFor(iter1.head()))) add(a, b); else a;
     });
   }
@@ -448,12 +481,12 @@ class Iterables {
     return Arrays.search(iter.toArray(),f);
   }
   @doc("Produces `true` if the predicate returns `true` for all elements, `false` otherwise.")
-  public static function forAll<T>(iter: Iterable<T>, f: T -> Bool): Bool {
-    return Arrays.forAll(iter.toArray(),f);
+  public static function all<T>(iter: Iterable<T>, f: T -> Bool): Bool {
+    return Arrays.all(iter.toArray(),f);
   }
   @doc("Produces true if the predicate returns true for any element, false otherwise.")
-  public static function forAny<T>(iter: Iterable<T>, f: T -> Bool): Bool {
-    return Arrays.forAny(iter.toArray(),f);
+  public static function any<T>(iter: Iterable<T>, f: T -> Bool): Bool {
+    return Arrays.any(iter.toArray(),f);
   }
   @doc("Alias for head.")
 	public static function first<T>(iter:Iterable<T>):T{
@@ -499,7 +532,7 @@ class Iterables {
 class Lists{
   static public function toArray<T>(lst:List<T>){
     var itr : Iterable<T> = lst;
-    return SIterables.toArray(itr);
+    return Iterables.toArray(itr);
   }
 }
 class IntIterables {

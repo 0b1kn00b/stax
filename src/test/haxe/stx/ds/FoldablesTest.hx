@@ -9,7 +9,7 @@ using stx.ds.Set;
 
 using stx.ds.Group;
 
-import stx.Prelude;
+import Prelude;
 import stx.test.TestCase;
 import stx.ds.Foldables;
 
@@ -75,8 +75,8 @@ class FoldablesTest extends TestCase {
   }
   
   public function testForAny() {
-    assertFalse([1,2,3].toSet().forAny(function(v) return v > 3));
-    assertTrue([1,2,3].toSet().forAny(function(v) return v < 2));
+    assertFalse([1,2,3].toSet().any(function(v) return v > 3));
+    assertTrue([1,2,3].toSet().any(function(v) return v < 2));
   } 
   
   public function testNubBy() {

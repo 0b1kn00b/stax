@@ -9,7 +9,7 @@ import stx.Log.*;
 using stx.Strings;
 using stx.plus.Order;
 using stx.Option;
-using stx.Prelude;
+using Prelude;
 using stx.Tuples;
 using stx.Compose;
 using stx.ds.Zipper;
@@ -87,7 +87,7 @@ class SelfMacro{
           }
         ).filter(
           function(x){
-            return !news.forAny(
+            return !news.any(
               function(y){
                 return y.name == x.name; //don't include fields overridden in the local class.
               }
@@ -110,7 +110,7 @@ class SelfMacro{
     ).map(
       function(x){
         var xpr     = Context.getTypedExpr(x.expr());
-        var s_rt    = x.meta.get().forAny(function(x) return x.name == "self");
+        var s_rt    = x.meta.get().any(function(x) return x.name == "self");
         /*trace(Printer.print(xpr));
         trace(xpr);
         trace(x.params);*/
@@ -129,7 +129,7 @@ class SelfMacro{
               ret_t = f.ret;
             }
             arg_t   = f.args;
-            xpr_o   = 'super.${x.name}('.append(f.args.length == 0 ? '' : f.args.map(function(x) return x.name).foldl1(
+            xpr_o   = 'super.${x.name}('.append(f.args.length == 0 ? '' : f.args.map(function(x) return x.name).foldLeft1(
               function(memo,next){
                 var o = memo.append(',').append(next);
                 return o;
@@ -163,13 +163,13 @@ class SelfMacro{
       Identifies if superclass has modified this function by locating the function metadata 'self'.
     */
     static function meta(arr:Array<MetadataEntry>):Bool{
-      return arr.forAny(function(x){return x.name == 'self';});
+      return arr.any(function(x){return x.name == 'self';});
     }
     /**
       Identifies if superclass has modified function parameters by locating the type parameter 'SLF'.
     */
     static function idt(f:Function):Bool{
-      return f.params.forAny(function(x){return x.name=="SLF";});
+      return f.params.any(function(x){return x.name=="SLF";});
     }
     /**
       Instigates Self hierarchy by replacing Self references with local type, and leaving marks for subclasses.

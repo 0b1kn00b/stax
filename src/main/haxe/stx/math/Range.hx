@@ -46,7 +46,7 @@ abstract Range(RangeType) from RangeType to RangeType {
 		return this.max > v1.min && v1.max > this.min;
 	}
 	public function within(n:T):Bool {
-		return n > this.min && n < this.max;
+		return n >= this.min && n <= this.max;
 	}
 	public function inside(v1:Range):Bool{
 		return this.min > v1.min && this.max < v1.max;

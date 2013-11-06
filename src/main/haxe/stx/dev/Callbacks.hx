@@ -3,7 +3,7 @@ package stx;
 import stx.Tuples;
 using stx.Compose;
 using stx.Functions;
-using stx.Prelude;
+using Prelude;
 using stx.Arrays;
 using stx.Callbacks;
 using stx.Tuples;
@@ -22,8 +22,8 @@ class Callbacks{
   static public function create<A>():Callback<A>{
     return function(a:A->Void){ };
   }
-	static public function foreach<A>(f:Callback<A>,fn:A->Void):Callback<A>{
-    return f.foreach(fn);
+	static public function each<A>(f:Callback<A>,fn:A->Void):Callback<A>{
+    return f.each(fn);
   }
   static public function map<A,B>(f:Callback<A>,fn:A->B):Callback<B>{
     return f.map(fn);
@@ -33,7 +33,7 @@ class Callbacks{
   }
   static public function bindFold<A,B>(iter:Iterable<A>,start:Callback<B>,fm:B->A->Callback<B>):Callback<B>{
     return 
-      iter.foldl(
+      iter.foldLeft(
         start ,
         function(memo : Callback<B>, next : A){
           return 

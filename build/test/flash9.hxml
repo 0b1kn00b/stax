@@ -1,7 +1,8 @@
 -cp src/main/haxe/
 -cp src/test/haxe/
 
--cp funk/src/main/haxe
+-swf test/test9.swf
+-swf-version 9
+-main Test
 
--swf9 bin/test.swf
--main StaxTestSuite
+-cmd flashplayer_11_sa_debug test/test9.swf

@@ -23,7 +23,7 @@ import stx.js.Dom;
 import stx.js.Env;
 import stx.js.dom.Quirks;
 import stx.js.dom.HTMLElementExtensions;
-import stx.Prelude;
+import Prelude;
 
 using  stx.js.dom.HTMLElementExtensions;
 using  stx.js.dom.HTMLDocumentExtensions;

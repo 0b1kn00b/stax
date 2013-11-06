@@ -5,21 +5,22 @@ import haxe.Constraints;
 import Stax.*; 
 import stx.plus.Order;
 import stx.Fail;
-import stx.Prelude;
+import Prelude;
 import stx.CallStacks;
 
-using stx.Compare;
-
-using stx.Tuples;
+import stx.rtti.Field;
 import stx.Option;
 
+using stx.Iterables;
+using stx.Compare;
+using stx.Tuples;
 using stx.Outcome;
 using stx.Anys;
 using stx.Types;
 using stx.Option;
 using stx.Objects;
 using stx.Arrays;
-using stx.Prelude;
+using Prelude;
 using stx.Either;
 using stx.Compose;
 using stx.Functions;
@@ -42,7 +43,7 @@ class Reflects{
   @doc("Full error handling, any errors raised will be passed back on the left hand side.")
   @:bug('#0b1kn00b: issue with __instanceof in nodejs')
   static public function callSecure<A,B>(v:A,key:String,?args:Array<Dynamic>):Outcome<B>{
-    return option(getValue(v,key)).orFailureC(fail(OutOfBoundsFail())).flatMap(
+    return option(getValue(v,key)).orFailureC(fail(OutOfBoundsError())).flatMap(
       function(x){
         return try{
           Success(callMethod(v,x,args));
@@ -54,11 +55,27 @@ class Reflects{
           #end
           Failure(switch(Type.typeof(d)){
             case TClass(c) if (c.descended(Fail))  : d;
-            default                                : fail(NativeFail(d));
+            default                                : fail(NativeError(d));
           });
         }
       }
     );
+  }
+  static public inline function iterator<T>(d:T):Iterator<T>{
+    var keys = Reflect.fields(d).iterator();
+    return {
+      next : function(){
+        return Reflect.field(d,keys.next());
+      },
+      hasNext : function(){
+        return keys.hasNext();
+      }
+    };
+  }
+  static public inline function iterable<T>(d:T):Iterable<T>{
+    return {
+      iterator : iterator.bind(d)
+    };
   }
   @doc("Convenience method for accumulating fields in folds")
 	static public function setFieldTuple<A,B>(v:A,t:Tuple2<String,B>):A{
@@ -70,7 +87,7 @@ class Reflects{
     return Reflect.field(v,key);
   }
   @doc("Returns the value of fields `key`, null if it does not exist or is null.")
-	static public function getField<A,B>(v:A,key:String):Null<KV<B>>{
+	static public function getField<A,B>(v:A,key:String):Null<Field<B>>{
 		return tuple2(key,Reflect.field(v,key));
 	}
   @doc("Sets the value of field key.")
@@ -87,12 +104,11 @@ class Reflects{
 		return Reflect.field.bind(_,fieldname);
 	}
   @doc("Gets the types fields or the reflected fields from `v`")
-	static public function fields<A>(v:A):Array<KV<Dynamic>>{
-    var u : Object = cast v;
-		return Objects.fields(u);
+	static public function fields<A>(v:A):Iterable<Field<Dynamic>>{
+    return Iterables.zip(keys(v),iterable(v));
 	}
   @doc("Gets the types keys or the reflected fields from `v`")
-  static public function keys<A>(v:A):Array<String>{
+  static public inline function keys<A>(v:A):Array<String>{
     return Reflect.fields(v);
   }
   @doc("
@@ -102,10 +118,10 @@ class Reflects{
   static public function validate<T>(cls:Class<T>,flds:Array<String>):Array<String>{
     var l       = ArrayOrder.sort(cls.locals());
     var r       = ArrayOrder.sort(flds);
-    return l.foldl(
+    return l.foldLeft(
         [],
         function(memo,next){
-          if (!r.forAny(
+          if (!r.any(
             function(x){
               return stx.Strings.equals(x,next);
             }
@@ -118,6 +134,6 @@ class Reflects{
   }
   @doc("Compares the fields of the two objects")
   @:noUsing static public function compare(o0:Dynamic,o1:Dynamic):Int{
-    return ArrayOrder.compare(ArrayOrder.sort(fields(o0)),ArrayOrder.sort(fields(o1)));
+    return ArrayOrder.compare(ArrayOrder.sort(fields(o0).toArray()),ArrayOrder.sort(fields(o1).toArray()));
   }
 }

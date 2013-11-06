@@ -1,17 +1,8 @@
 package stx;
 
-import Stax.*;
-import stx.Tuples;
-import stx.Prelude;
+import Prelude;
 
-import stx.Either;
-using stx.Option;
-
-enum OutcomeType<T>{
-  Success(success:T);
-  Failure(failure:Fail);
-}
-abstract Outcome<T>(OutcomeType<T>) from OutcomeType<T> to OutcomeType<T>{
+abstract Outcome<T>(Prelude.Outcome<T>) from Prelude.Outcome<T> to Prelude.Outcome<T>{
   public function new(v){
     this = v;
   }
@@ -48,45 +39,45 @@ abstract Outcome<T>(OutcomeType<T>) from OutcomeType<T> to OutcomeType<T>{
   }
 }
 class Outcomes{
-  static public function flatMap<A,B>(o:OutcomeType<A>,fn:A->OutcomeType<B>):OutcomeType<B>{
+  static public function flatMap<A,B>(o:Prelude.Outcome<A>,fn:A->Prelude.Outcome<B>):Prelude.Outcome<B>{
     return switch (o) {
       case Success(success) : fn(success);
       case Failure(failure) : Failure(failure);
     }
   }
-  static public function map<A,B>(o:OutcomeType<A>,fn:A->B):OutcomeType<B>{
+  static public function map<A,B>(o:Prelude.Outcome<A>,fn:A->B):Prelude.Outcome<B>{
     return switch (o) {
       case Success(success) : Success(fn(success));
       case Failure(failure) : Failure(failure);
     }
   }
   @:tinkish
-  static public function or<A>(o:OutcomeType<A>,fallback:OutcomeType<A>):OutcomeType<A>{
+  static public function or<A>(o:Prelude.Outcome<A>,fallback:Prelude.Outcome<A>):Prelude.Outcome<A>{
     return switch (o) {
       case Success(success) : o;
       case Failure(failure) : fallback;
     } 
   }
-  static public function retry<A>(o:OutcomeType<A>,fn:Fail->OutcomeType<A>){
+  static public function retry<A>(o:Prelude.Outcome<A>,fn:Fail->Prelude.Outcome<A>){
     return switch (o) {
       case Success(success) : o;
       case Failure(failure) : fn(failure);
     }
   }
-  static public function recover<A>(o:OutcomeType<A>,fn:Fail->A):OutcomeType<A>{
+  static public function recover<A>(o:Prelude.Outcome<A>,fn:Fail->A):Prelude.Outcome<A>{
     return switch (o) {
       case Success(success)               : o;
       case Failure(failure)               : Success(fn(failure));
     }
   }
-  static public function flatten<A>(o:OutcomeType<OutcomeType<A>>):OutcomeType<A>{
+  static public function flatten<A>(o:Prelude.Outcome<Prelude.Outcome<A>>):Prelude.Outcome<A>{
     return switch (o) {
       case Success(Success(success))      : Success(success);
       case Success(Failure(failure))      : Failure(failure);
       case Failure(failure)               : Failure(failure);
     }
   }
-  static public function zipWith<A,B,C>(o:OutcomeType<A>,o0:OutcomeType<B>,fn:A->B->C):OutcomeType<C>{
+  static public function zipWith<A,B,C>(o:Prelude.Outcome<A>,o0:Prelude.Outcome<B>,fn:A->B->C):Prelude.Outcome<C>{
     return switch ([o,o0]) {
       case [Success(v0),Success(v1)]      : Success(fn(v0,v1));
       case [Failure(err),Success(_)]      : Failure(err);
@@ -94,16 +85,16 @@ class Outcomes{
       case [Failure(err0),Failure(err1)]  : Failure(err0.append(err1));
     }
   }
-  static public function zip<A,B>(o:OutcomeType<A>,o0:OutcomeType<B>):OutcomeType<Tuple2<A,B>>{
+  static public function zip<A,B>(o:Prelude.Outcome<A>,o0:Prelude.Outcome<B>):Prelude.Outcome<Tuple2<A,B>>{
     return zipWith(o,o0,tuple2);
   }
-  static public function isFailure<A>(o:OutcomeType<A>):Bool{
+  static public function isFailure<A>(o:Prelude.Outcome<A>):Bool{
     return switch (o) {
       case Success(_) : false;
       case Failure(_) : true;
     }
   }
-  static public function isSuccess<A>(o:OutcomeType<A>):Bool{
+  static public function isSuccess<A>(o:Prelude.Outcome<A>):Bool{
     return switch (o) {
       case Success(_) : true;
       case Failure(_) : false; 

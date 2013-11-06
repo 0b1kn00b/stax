@@ -1,6 +1,6 @@
 package stx.ds;
 
-import stx.Prelude; 
+import Prelude; 
 import stx.Muster;
 import stx.Muster.*;
 import stx.Compare.*;

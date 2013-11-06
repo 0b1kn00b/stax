@@ -17,7 +17,7 @@
 package stx.functional;
 
 import stx.Tuples;
-import stx.Prelude;
+import Prelude;
 import stx.test.TestCase;
 import stx.functional.PartialFunction;
 

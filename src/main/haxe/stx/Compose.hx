@@ -1,11 +1,14 @@
 package stx;
 
+import stx.type.*;
 import stx.Tuples;
 import stx.Option;
 
+import stx.Arrow.Free;
+
 using stx.Compose;
 using stx.Tuples;
-using stx.Prelude;
+using Prelude;
 using stx.Functions;
 using stx.Either;
 
@@ -180,7 +183,7 @@ class Compose{
       }
   }
   @doc("Returns a function that calls `f1` with the output of `f2`.")
-  public static function compose<U, V, W>(f1: Function1<V, W>, f2: Function1<U, V>): Function1<U, W> {
+  public static function compose<U, V, W>(f1: V->W, f2: U->V): U->W {
     return function(u: U): W {
       return f1(f2(u));
     }
@@ -191,7 +194,7 @@ class Compose{
   static public function fromOption<A,B>(fn:A->Option<B>):Option<A>->Option<B>{
     return Options.map.bind(_,fn).then(Options.flatten);
   }
-  static public function repeat<I,O>(fn:I->FreeM<I,O>):I->O{
+  static public function repeat<I,O>(fn:I->Free<I,O>):I->O{
     return function(v:I){
       var i : I = null;
       var o : O = null;
@@ -207,7 +210,7 @@ class Compose{
 }
 class Compose2{
   @doc("Returns a function that calls `f2` with the output of `f1`.")
-  public static function then<U, V, W, X>(f1: Function2<U, V, W>, f2: Function1<W, X>): Function2<U, V, X> {
+  public static function then<U, V, W, X>(f1: U->V->W, f2: W->X): U->V->X {
     return 
       function(u:U,v:V):X{
         return f2(f1(u,v));

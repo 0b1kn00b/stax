@@ -24,7 +24,7 @@ class ContractObservable<T> implements IObservable<T>{
         obs.apply(Nil);//and.. we're done
       }
     }
-    contract.foreach(val);
+    contract.each(val);
     return function(){
       run = false;
     }

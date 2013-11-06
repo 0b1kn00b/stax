@@ -5,7 +5,7 @@ import stx.Compare.*;
 import stx.Fail;
 
 import hx.ds.ifs.*;
-import stx.Prelude;
+import Prelude;
 import stx.plus.Plus;
 import stx.plus.Equal;
 
@@ -13,7 +13,7 @@ using stx.Option;
 using stx.Compose;
 using stx.Iterables;
 using stx.Iterators;
-using stx.Prelude;
+using Prelude;
 
 enum LazyListType<T>{
   Nil;
@@ -55,14 +55,14 @@ abstract LazyList<T>(LazyListInstance<T>) from LazyListInstance<T> to LazyListIn
   public function cons(v:T):LazyList<T>{
     return LazyLists.cons(this.value,v);
   }
-  public function foldl<Z>(memo:Z,fn:Z->T->Z):Z{
-    return LazyLists.foldl(this.value,memo,fn);
+  public function foldLeft<Z>(memo:Z,fn:Z->T->Z):Z{
+    return LazyLists.foldLeft(this.value,memo,fn);
   }
   public function reverse():LazyList<T>{
     return LazyLists.reverse(this.value);
   }
-  public function foldr<Z>(memo:Z,fn:T->Z->Z):Z{
-    return LazyLists.foldr(this.value,memo,fn);
+  public function foldRight<Z>(memo:Z,fn:T->Z->Z):Z{
+    return LazyLists.foldRight(this.value,memo,fn);
   }
   public function hasValues():Bool{
     return LazyLists.hasValues(this.value);
@@ -89,8 +89,8 @@ abstract LazyList<T>(LazyListInstance<T>) from LazyListInstance<T> to LazyListIn
   public function flatMap<U>(fn:T->LazyList<U>):LazyList<U>{
     return this.flatMap(fn);
   }
-  public function foreach(fn:T->Void):LazyList<T>{
-    return this.foreach(fn);
+  public function each(fn:T->Void):LazyList<T>{
+    return this.each(fn);
   }
   public function toString(){
     return this.toString();
@@ -163,7 +163,7 @@ class LazyListInstance<T> implements Enumerable<T>{
         this.size     = it.size();
         this.val_tool = tl(tool);
         this.value    = 
-          it.reversed().foldl(new LazyListInstance(EmptyLazyList(tool)),
+          it.reversed().foldLeft(new LazyListInstance(EmptyLazyList(tool)),
             function(memo,next){
               return memo.cons(next);
             }
@@ -181,14 +181,14 @@ class LazyListInstance<T> implements Enumerable<T>{
   public function cons(v:T):LazyList<T>{
     return new LazyListInstance(LazyListFromListType(Cons(v,value),size+1,val_tool));
   }
-  public function foldl<Z>(memo:Z,fn:Z->T->Z):Z{
-    return LazyLists.foldl(value,memo,fn);
+  public function foldLeft<Z>(memo:Z,fn:Z->T->Z):Z{
+    return LazyLists.foldLeft(value,memo,fn);
   }
   public function reverse():LazyList<T>{
     return new LazyListInstance(LazyListFromListType(LazyLists.reverse(value)));
   }
-  public function foldr<Z>(memo:Z,fn:T->Z->Z):Z{
-    return LazyLists.foldr(value,memo,fn);
+  public function foldRight<Z>(memo:Z,fn:T->Z->Z):Z{
+    return LazyLists.foldRight(value,memo,fn);
   }
   public function hasValues():Bool{
     return LazyLists.hasValues(value);
@@ -219,8 +219,8 @@ class LazyListInstance<T> implements Enumerable<T>{
     var l : LazyList<U>  = LazyLists.flatMap(this.value,fn.then(function(x) return x));
     return l;
   }
-  public function foreach(fn:T->Void){
-    var l : LazyList<T>  = LazyLists.foreach(value,fn);
+  public function each(fn:T->Void){
+    var l : LazyList<T>  = LazyLists.each(value,fn);
     return l;
   }
   public function toString(){
@@ -307,7 +307,7 @@ class LazyLists {
   static public function cons<T>(lst:LazyListType<T>,x:T):LazyListType<T>{
     return prepend(lst,Cons(x,Nil));
   }
-  static public function foldl<Z,T>(lst:LazyListType<T>,memo:Z,fn:Z->T->Z):Z{
+  static public function foldLeft<Z,T>(lst:LazyListType<T>,memo:Z,fn:Z->T->Z):Z{
     var accum = lst;
     var o     = memo;
     while(true){
@@ -318,7 +318,7 @@ class LazyLists {
     }
     return o;
   }
-  static public function foldr<Z,T>(lst:LazyListType<T>,memo:Z,fn:T->Z->Z):Z{
+  static public function foldRight<Z,T>(lst:LazyListType<T>,memo:Z,fn:T->Z->Z):Z{
     var ls : Iterator<T> = new LazyListEnumerator(lst);
     var a   = ls.toArray();
     var acc = memo;
@@ -331,7 +331,7 @@ class LazyLists {
     return acc;
   }
   static public function map<T,U>(lst:LazyListType<T>,fn:T->U):LazyListType<U>{
-    return foldr(lst,
+    return foldRight(lst,
       Nil,
       function(next,memo){
         return Cons(fn(next),memo);
@@ -350,7 +350,7 @@ class LazyLists {
 
     return reverse(memo);
   }
-  static public function foreach<T>(lst:LazyListType<T>,fn:T->Void):LazyListType<T>{
+  static public function each<T>(lst:LazyListType<T>,fn:T->Void):LazyListType<T>{
     return map(lst,
       function(x){
         fn(x);
@@ -359,7 +359,7 @@ class LazyLists {
     );
   }
   static public function show<T>(lst:LazyListType<T>,fn:T->String):String{
-    return foldl(lst,
+    return foldLeft(lst,
       '',
       function(memo,next){
         return '$memo ${fn(next)}';

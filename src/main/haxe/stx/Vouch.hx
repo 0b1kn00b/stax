@@ -1,5 +1,6 @@
 package stx;
 
+import Prelude;
 import Stax.*;
 import stx.Compare.*;
 
@@ -10,7 +11,7 @@ import stx.Anys;
 import stx.Fail;
 import stx.Contract;
 
-using stx.Prelude;
+using stx.Iterables;
 using stx.Arrays;
 using stx.Tuples;
 using stx.Eventual;
@@ -53,8 +54,8 @@ abstract Vouch<T>(Eventual<Chunk<T>>) from Eventual<Chunk<T>> to Eventual<Chunk<
           case End(err) : Vouch.pure(End(err));
     }});
   }
-  public function foreach(fn:T->Void):Vouch<T>{
-    return this.foreach(
+  public function each(fn:T->Void):Vouch<T>{
+    return this.each(
       function(x){
         switch (x){
           case Nil      :
@@ -84,7 +85,7 @@ abstract Vouch<T>(Eventual<Chunk<T>>) from Eventual<Chunk<T>> to Eventual<Chunk<
     return this.value;
   }
   public function success(f:T->Void):Vouch<T>{
-    return this.foreach(
+    return this.each(
       function(x){
         return switch (x){
           case Nil      :
@@ -93,7 +94,7 @@ abstract Vouch<T>(Eventual<Chunk<T>>) from Eventual<Chunk<T>> to Eventual<Chunk<
     }});
   }
   public function failure(f:Null<Fail>->Void):Vouch<T>{
-    return this.foreach(
+    return this.each(
       function(x){
         switch (x){
           case Nil      :
@@ -102,7 +103,7 @@ abstract Vouch<T>(Eventual<Chunk<T>>) from Eventual<Chunk<T>> to Eventual<Chunk<
     }});
   }
   public function nothing(f:Void->Void):Vouch<T>{
-    return this.foreach(
+    return this.each(
       function(x){
         switch (x) {
           case Nil : f();
@@ -112,7 +113,7 @@ abstract Vouch<T>(Eventual<Chunk<T>>) from Eventual<Chunk<T>> to Eventual<Chunk<
     );
   }
   public function complete(f:Chunk<T>->Void){
-    return this.foreach(f);
+    return this.each(f);
   }
   public function orConst<T>(v:T):Vouch<T>{
     return this.map(
@@ -163,9 +164,6 @@ class Vouches{
   static public function map<U,T>(vch:Vouch<T>,fn:T->U):Vouch<U>{
     return vch.map(fn);
   }
-  static public function fromContractConstructor<A,B>(fn:A->stx.Contract<B>):A->Vouch<B>{
-    return fn.then(Eventuals.map.bind(_,Outcomes.toChunk));
-  }
   static public function bindFold<A,B>(it:Array<A>,start:B,fm:B->A->Vouch<B>):Vouch<B>{
     return stx.Eventuals.bindFold(
       it,
@@ -191,7 +189,7 @@ class Vouches{
       );
   }
   static public function wait<A>(it:Array<Vouch<A>>):Vouch<Array<A>>{
-    return it.foldl(intact([]), waitfold);
+    return it.foldLeft(intact([]), waitfold);
   }
   static public function fold<A,Z>(vch:Vouch<A>,val:A->Z,ers:Null<Fail>->Z,nil:Void->Z):Eventual<Z>{
     return vch.asEventual().map(Chunks.fold.bind(_,val,ers,nil));
@@ -199,8 +197,8 @@ class Vouches{
   static public function toContract<A>(vch:Vouch<A>):stx.Contract<A>{
     var p : stx.Contract<A> = Contracts.toContract(fold(vch,
         Success,
-        function(o){return Failure(o == null ? fail(NullReferenceFail('Contract breached without specific error')) : o); },
-        function() return Failure(fail(NullReferenceFail('Empty Contract.')))
+        function(o){return Failure(o == null ? fail(NullReferenceError('Contract breached without specific error')) : o); },
+        function() return Failure(fail(NullReferenceError('Empty Contract.')))
     ));
     return p;
   }
@@ -211,7 +209,7 @@ class Vouches1{
     f(
       function(er){
         if(er!=null){
-          fut.deliver(End(fail(NativeFail(er))));
+          fut.deliver(End(fail(NativeError(er))));
         }else{
           fut.deliver(Chunks.create(success()));
         }
@@ -241,7 +239,7 @@ class Vouches2{
     f( 
       function(a,b){
         if(a!=null){
-          ft.deliver(End(fail(NativeFail(a))));
+          ft.deliver(End(fail(NativeError(a))));
         }else{
           ft.deliver(Chunks.create(b));
         }
@@ -256,7 +254,7 @@ class Vouches3{
     f(
       function(a,b,c){
         if(a!=null){
-          ft.deliver(End(fail(NativeFail(a))));
+          ft.deliver(End(fail(NativeError(a))));
         }else{
           ft.deliver(Chunks.create(tuple2(b,c)));
         }
@@ -271,7 +269,7 @@ class Vouches4{
     f(
       function(e,a,b,c){
         if(e!=null){
-          ft.deliver(End(fail(NativeFail(e))));
+          ft.deliver(End(fail(NativeError(e))));
         }else{
           ft.deliver(Chunks.create(tuple3(a,b,c)));
         }

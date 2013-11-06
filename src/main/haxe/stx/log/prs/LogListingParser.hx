@@ -8,13 +8,13 @@ import stx.log.Listing;
 import stx.log.LogListing;
 import stx.log.LogScope;
 
-import stx.prs.Base.*;
-import stx.prs.Parser.Parsers.*;
+import stx.prs.Ascii.*;
+import stx.Parser.Parsers.*;
 
 using stx.Tuples;
 
-using stx.prs.Base;
-using stx.prs.Parser;
+using stx.prs.Ascii;
+using stx.Parser;
 using stx.prs.StringParsers;
 
 /**

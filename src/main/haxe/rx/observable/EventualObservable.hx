@@ -19,7 +19,7 @@ class EventualObservable<T> implements Observable<T>{
         run=false;
       }
     }
-    eventual.foreach(val);
+    eventual.each(val);
     
     return function(){
       run = false;

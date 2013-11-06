@@ -4,8 +4,8 @@ using stx.Functions;
 using stx.Arrow;
 
 class Boot{
-  @:noUsing static public function boot(main:CodeBlock,?algo:Arrow<Unit,Unit>):Void{
+  @:noUsing static public function boot(main:Niladic,?algo:Arrow<Unit,Unit>):Void{
     algo = algo == null ? Arrows.unit() : algo;
-    algo.apply(Unit).foreach(main.promote());
+    algo.apply(Unit).each(main.promote());
   }
 }

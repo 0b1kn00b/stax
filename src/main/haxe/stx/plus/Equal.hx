@@ -7,12 +7,9 @@ import Type;
 using stx.Tuples;
 using stx.Option;
 using stx.Iterators;
-using stx.Prelude;
+using Prelude;
 using stx.Arrays;
 
-typedef Equality<T> = {
-  function equals(a:T,b:T):Bool;
-}
 @:note('#0b1kn00b: The assumption that the right hand value is of the correct type could be questioned')
 class Equal{
   /*static public function equals<T>(a:T,b:T,?func:T->T->Bool):Bool{
@@ -30,10 +27,10 @@ class Equal{
       __equals__(b.equals)(a,b);
     }
   }*/
-  static public function getEqualFor<T>(v:T):EqualFunction<T>{
+  static public function getEqualFor<T>(v:T):Reduce<T,Bool>{
     return getEqualForType(Type.typeof(v));
   }
-  static public function getEqualForType<T>(v: ValueType):EqualFunction<T>{
+  static public function getEqualForType<T>(v: ValueType):Reduce<T,Bool>{
     return switch (v){
       case TNull                                                        : NullEqual.equals;
       case TInt,TFloat,TBool                                            : __equals__(inline function(x,y) return x == y);
@@ -62,7 +59,7 @@ class Equal{
       );
     }
   }
-  public static inline function  __equals__<A>(impl:EqualFunction<Dynamic>):A->A->Bool {
+  public static inline function  __equals__<A>(impl:Reduce<Dynamic,Bool>):A->A->Bool {
     return inline function(a, b) {
       return if(a == b || (a == null && b == null)) true;
         else if(a == null || b == null) false;
@@ -76,7 +73,7 @@ class UnsupportedClassEqual{
   }
 }
 class NullEqual{
-  @:noUsing static public inline function equals(a:Dynamic,b:Dynamic){
+  @:noUsing static public inline function equals<T:Null<Dynamic>>(a:T,b:T){
     return (a == null) && (b == null);
   }
 }
@@ -154,7 +151,7 @@ class ArrayEqual {
   public static inline function equals<T>(v1: Array<T>, v2: Array<T>) {
     return equalsWith(v1, v2, Equal.getEqualFor(v1[0]));
   }
-  public static inline function equalsWith<T>(v1: Array<T>, v2: Array<T>, equal : EqualFunction<T>) { 
+  public static inline function equalsWith<T>(v1: Array<T>, v2: Array<T>, equal : Reduce<T,Bool>) { 
     var o = (equal != null);
 
     return if(!o){

@@ -19,7 +19,7 @@ using stx.Arrays;
 using stx.Tuples;
 
 import hx.ifs.Run in IRun;
-import hx.ifs.Command in ICommand;
+import hx.ifs.Action in IAction;
 import hx.ifs.Scheduler in IScheduler;
 
 #if neko
@@ -31,21 +31,19 @@ import neko.vm.Mutex;
 typedef SchedulerRequest = Tuple2<Float,Int>;
 typedef SchedulerEntry   = Tuple3<Float,Run,Int>;
 
-@doc("
-  Simple thread scheduler. Uses a retreat timer for polling.
-")
+@doc("Simple thread scheduler. Uses a retreat timer for polling.")
 class ThreadScheduler implements IScheduler{
   private var retreat : RetreatTimer;
-  private var command : ThreadCommand;
+  private var command : ThreadAction;
 
   public function new(){
     trace(debug('new ThreadScheduler'));
-    this.command = new ThreadCommand(this);
+    this.command = new ThreadAction(this);
     this.retreat = new RetreatTimer();
   }
   public inline function when(abs:Float,fn:Run):Void{
     retreat.reset();
-    abs = Time.now().toFloat() > abs ? Time.now() : abs;//in case abs is earlier than now
+    abs = Time.now().toFloat() > abs ? Time.now() : abs;
     command.add(abs,fn);
   }
   public inline function wait(rel:Float,fn:Run):Void{
@@ -58,9 +56,10 @@ class ThreadScheduler implements IScheduler{
     while(!command.isEmpty()){
       sleep(retreat.next());
     }
+    command.stop();
   }
 }
-class ThreadCommand implements ICommand<Id>{
+class ThreadAction implements IAction<Id>{
   private var ids         : IdCache;
   private var scheduler   : ThreadScheduler;
   private var thread      : Thread;
@@ -68,13 +67,21 @@ class ThreadCommand implements ICommand<Id>{
   public var mutex        : Mutex;
 
   public function new(scheduler){
-    trace(debug('new ThreadCommand'));
+    trace(debug('new ThreadAction'));
     this.mutex        = new Mutex();
     this.entries      = [];
     this.ids          = new IdCache();
     this.scheduler    = scheduler;
+    this.thread       = new_thread();
+  }
+  private function new_thread(){
     var runner        = new ThreadRun(this);
-    this.thread       = Thread.create(runner.run);
+    return Thread.create(runner.run);
+  }
+  private function ensure(){
+    if(thread == null){
+      this.thread = new_thread();
+    }
   }
   public function ready(){
     return entries.filter(
@@ -83,17 +90,23 @@ class ThreadCommand implements ICommand<Id>{
       }
     );
   }
+  public inline function stop(){
+    thread.sendMessage(Stop);
+    thread = null;
+  }
   public function add(time:Float,run:Run){
+    ensure();
     var id  = ids.next().native();
     entries.push(tuple3(time,run,id));
     thread.sendMessage(Schedule(time,id));
   }
   public function apply(key:Id):Void{
+    ensure();
     entries.search(
       function(x){
         return x.thd() == key.native();
       }
-    ).foreach(
+    ).each(
       function(entry){
         entries.remove(entry);
         ids.free(key.native());
@@ -110,7 +123,7 @@ class ThreadCommand implements ICommand<Id>{
 }
 class ThreadRun implements IRun{
   private var retreat : RetreatTimer;
-  private var command : ThreadCommand;
+  private var command : ThreadAction;
   private var stack   : Array<SchedulerRequest>;
 
   public function new(command){
@@ -141,7 +154,7 @@ class ThreadRun implements IRun{
         var t     = stack[0];
         var time  = t == null ? n : next > t.fst() ? t.fst() - now() : n;
             time  = time < 0 ? 0 : time;
-        command.ready().foreach(
+        command.ready().each(
           function(a,b,c){
             trace(debug("apply"));
             this.command.mutex.acquire();
@@ -174,7 +187,8 @@ class ThreadRun implements IRun{
               }
               stack = nstack;
             }
-          case Stop : break;
+          case Stop : 
+            break;
         }
       }
     }

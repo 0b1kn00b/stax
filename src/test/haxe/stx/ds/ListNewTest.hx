@@ -13,7 +13,7 @@ import stx.plus.Plus;
 
 using stx.Compose;
 using stx.Option;
-using stx.Prelude;
+using Prelude;
 using stx.Iterables;
 
 using stx.ds.ListNewTest;

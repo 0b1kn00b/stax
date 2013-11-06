@@ -16,7 +16,7 @@
 package stx.js.detect;
 
 import stx.js.Dom;
-import stx.Prelude;
+import Prelude;
 import stx.js.Env;
 import stx.js.dom.Quirks;
 import stx.ds.Map;
@@ -1324,7 +1324,7 @@ class BrowserSupport {
   private static function testAndMemorize(key: String, defaultValue: Bool, testFunction: Thunk<Option<Bool>>): Bool{
     return memorized.get(key).getOrElse(function(){
       var result: Option<Bool> = untyped testFunction.call();
-      result.foreach(function(v){
+      result.each(function(v){
         memorized = memorized.set(key, v);
       });
       return result.getOrElseC(defaultValue);

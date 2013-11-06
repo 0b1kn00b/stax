@@ -1,6 +1,7 @@
 package hx.sch;
 
-import neko.vm.Thread;
+import Prelude;
+
 
 import stx.Log.*;
 import hx.ifs.Scheduler;
@@ -21,17 +22,25 @@ class Timer{
 
   public function start(){
     stopped = false;
-    trace(debug('timer start: stopped? $stopped'));
+    trace(debug('timer start'));
     function _run(){
       run();
       if(!stopped){
-        trace(debug('starting'));
-        scheduler.wait(interval,start);
+        trace(debug('continue'));
+        scheduler.wait(interval,_run);
       }
     }
     scheduler.wait(interval,_run);
   }
   public function stop(){
     stopped = true;
+  }
+  static public function wait(interval:Float,fn:Niladic){
+    var t = new Timer(interval);
+        t.run = function(){
+          fn();
+          t.stop();
+        }
+        t.start();
   }
 }

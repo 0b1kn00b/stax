@@ -1,6 +1,6 @@
 package hx.ds;
 
-import stx.Prelude;
+import Prelude;
 
 class PriorityQueue{
   @:isVar static private var __index__(get___index__,default) : Int;

@@ -6,7 +6,7 @@ import stx.Compare.*;
 
 using stx.Tuples;
 
-using stx.Prelude;
+using Prelude;
 using stx.plus.Show;
 
 using stx.Arrays;
@@ -97,14 +97,14 @@ class ArraysTest extends TestCase {
   }
   
   public function testForAll(u:UnitArrow):UnitArrow {
-    u = u.add(it('should be ok',ok(),[1,2,3].forAll(function(v) return v < 4)));
-    u = u.add(it('should not be ok',no(),[1,2,3].forAll(function(v) return v < 2)));
+    u = u.add(it('should be ok',ok(),[1,2,3].all(function(v) return v < 4)));
+    u = u.add(it('should not be ok',no(),[1,2,3].all(function(v) return v < 2)));
     return u;
   }
   
   public function testForAny(u:UnitArrow):UnitArrow {
-    u = u.add(it('should not be ok',no(),[1,2,3].forAny(function(v) return v > 3)));
-    u = u.add(it('should be ok',ok(),[1,2,3].forAny(function(v) return v < 2)));
+    u = u.add(it('should not be ok',no(),[1,2,3].any(function(v) return v > 3)));
+    u = u.add(it('should be ok',ok(),[1,2,3].any(function(v) return v < 2)));
     return u;
   } 
   

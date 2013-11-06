@@ -4,7 +4,7 @@ using stx.Tuples;
 
 using stx.Arrow;
 
-import stx.Prelude;
+import Prelude;
 import stx.Tuples;
 
 typedef AAIn<I,O> 			= Tuple2<Arrow<I,O>,I>;
@@ -16,7 +16,7 @@ abstract ApplyArrow<I,O>(ArrowApply<I,O>) from ArrowApply<I,O> to ArrowApply<I,O
 	}
 	public function new(){
 		this = new Arrow(
-			inline function(i:Tuple2<Arrow<I,O>,I>,cont : Function1<O,Void>){
+			inline function(i:Tuple2<Arrow<I,O>,I>,cont: O->Void){
 				i.fst().withInput(
 					i.snd(),
 						function(x){
@@ -26,5 +26,4 @@ abstract ApplyArrow<I,O>(ArrowApply<I,O>) from ArrowApply<I,O> to ArrowApply<I,O
 			}
 		);
 	}
-	
 }		

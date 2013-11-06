@@ -2,7 +2,7 @@ package stx.rtti;
 
 import haxe.rtti.CType;
 
-import stx.Prelude;
+import Prelude;
 import stx.Fail;
 import stx.Fail.*;
 

@@ -17,7 +17,7 @@ class StreamTest extends TestCase{
 
 		var tracer = function(y){ trace(y); }
 
-		s0.foreach( tracer );
+		s0.each( tracer );
 		
 		s0.flatMap(
 			function(x:Int){
@@ -30,7 +30,7 @@ class StreamTest extends TestCase{
 				);
 				return s1;
 			}
-		).foreach( tracer );
+		).each( tracer );
 
 		s0.sendEvent(1);
 		s0.sendEvent(2);

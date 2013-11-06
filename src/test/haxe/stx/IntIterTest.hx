@@ -3,7 +3,7 @@ package stx;
 import stx.test.TestCase;
 import stx.test.Assert;
 
-using stx.Prelude;
+using Prelude;
 using stx.Log;
 
 class IntIteratorTest extends TestCase{

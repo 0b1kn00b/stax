@@ -2,7 +2,7 @@ package stx.rtti;
 
 import haxe.rtti.CType;
 
-import stx.Prelude;
+import Prelude;
 import stx.Fail;
 import stx.Fail.*;
 
@@ -29,5 +29,11 @@ abstract Routine<T>(Tuple2<T,String>) from Tuple2<T,String>{
   }
   public function applySecure<T>(?args:Array<Dynamic>):Outcome<T>{
     return Reflects.callSecure(this.fst(),this.snd(),args);
+  }
+  public function key(){
+    return this.snd();
+  }
+  public function val(){
+    return this.fst();
   }
 }

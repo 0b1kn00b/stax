@@ -1,9 +1,11 @@
 package rx.observable;
 
-import rx.ifs.Observable;
-import stx.rct.Reactor;
-import stx.rct.Reactors;
+
+using hx.Reactor;
+
 import stx.Chunk;
+
+import rx.ifs.Observable;
 import rx.disposable.*;
 
 

@@ -16,7 +16,7 @@
 ****/
 package stx.io.json;
 
-using stx.Prelude;
+using Prelude;
 using stx.io.json.JValue;
 using stx.Functions;
 using stx.Compose;
@@ -33,14 +33,14 @@ class Json {
       case JNumber (v):  return v;
       case JBool (v):    return v;
       case JArray (xs):  return xs.map(function (x) {return toObject (x);});
-      case JObject (fs): return fs.foldl({}, function (o: Dynamic, e: JValue) {
+      case JObject (fs): return fs.foldLeft({}, function (o: Dynamic, e: JValue) {
         var field = e.extractField();
         
         Reflect.setField (o, field.fst(), toObject (field.snd())); 
         
         return o;
       });
-      case JField(_, _): return Prelude.error()("Cannot convert JField to object");
+      case JField(_, _): return except()("Cannot convert JField to object");
     }
   }
 
@@ -50,10 +50,10 @@ class Json {
       case TClass(_):      if (Std.is (d, String)) return JString (d);
                       else if (Std.is (d, Map))   return JObject (d.keys.toArray().map (function (k: String): JValue {return JField (k, d.get (k));}));
                       else if (Std.is (d, Array)) return JArray  (cast(d, Array<Dynamic>).map (fromObject));
-                      else return Prelude.error()("Unknown object type: " + d);
+                      else return except()("Unknown object type: " + d);
                       
-      case TEnum (_): return Prelude.error()("Json.fromObject does not support enum conversions.");
-      case TFunction: return Prelude.error()("Json.fromObject does not support function conversions.");
+      case TEnum (_): return except()("Json.fromObject does not support enum conversions.");
+      case TFunction: return except()("Json.fromObject does not support function conversions.");
       case TNull:     return JNull;
       case TBool:     return JBool(d);
       case TInt:      return JNumber(d);
@@ -77,7 +77,7 @@ class Json {
         
         return encode(JString(field.fst())) + ":" + encode (field.snd());
       }).join (",") + "}";
-      case JField(_, _): return Prelude.error()("Cannot encode JField");
+      case JField(_, _): return except()("Cannot encode JField");
     }
   }
 

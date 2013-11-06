@@ -1,6 +1,6 @@
 package stx.arw;
 
-import stx.Prelude;
+import Prelude;
 using stx.Arrow;
 
 typedef ArrowRightSwitch<A,B,C,D> = Arrow<Either<A,B>,Either<A,D>>;

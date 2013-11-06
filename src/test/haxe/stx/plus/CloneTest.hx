@@ -2,8 +2,8 @@ package stx.plus;
 
 import haxe.ds.IntMap;
 
-import stx.Muster;
-import stx.Muster.*;
+using stx.UnitTest;
+
 import stx.Compare.*;
 import stx.Log.*;
 
@@ -15,7 +15,7 @@ class CloneTest extends TestCase{
   /**
     Type.getInstanceFields is redundant (I think).
   */
-  public function test_that_extra_reflected_fields_can_show_up_in_classes(u:UnitArrow):UnitArrow{
+  /*public function test_that_extra_reflected_fields_can_show_up_in_classes(u:UnitArrow):UnitArrow{
     var a = new BothReflectedFieldsAndTypeFieldsTest();
         a.b = 'c';
     var t = Type.getClass(a);
@@ -26,26 +26,37 @@ class CloneTest extends TestCase{
       eq(b).not(),
       c)
     );
-  }
+  }*/
   public function testClone(u:UnitArrow):UnitArrow{
     var a     = new CloneTestClass();
-    var b     = Clone.getCloneFor(a)(cast a,[]);
+    var b     = Clone.getCloneFor(a)(a,[]);
     var tst1  = a == b;
 
-    return u.add(
-      it('should be equal',
-        eq(a),
-        b
-      )
-    ).add(
-      it('should not be the same',
-        no(),
-        tst1
-      )
-    );
+    var tsts = [];
+
+    tsts.push(isEqual(a,a));
+    tsts.push(isTrue(Equal.getEqualFor(a)(a,b)));
+    tsts.push(isFalse(a==b));
+    
+    tsts.push(isEqual(a.cln.inner,b.cln.inner));
+    b.cln.inner = 'nef erf';
+    tsts.push(isNotEqual(a.cln.inner,b.cln.inner));    
+
+    return u.append(tsts);
+  }
+  public function testClone2(u:UnitArrow):UnitArrow{
+    var a     = new CloneTest2();
+    var b     = Clone.getCloneFor(a)(cast a,[]);
+    var tsts  = [];
+
+    tsts.push(isEqual(a.cln.inner,b.cln.inner));
+    b.cln.inner = 'nef erf';
+    tsts.push(isNotEqual(a.cln.inner,b.cln.inner));
+
+    return u.append(tsts);
   }
 }
-class BothReflectedFieldsAndTypeFieldsTest implements Dynamic{
+private class BothReflectedFieldsAndTypeFieldsTest implements Dynamic{
   public var a : String;
   public function new(){
     this.a = 'b';
@@ -54,11 +65,12 @@ class BothReflectedFieldsAndTypeFieldsTest implements Dynamic{
 private typedef Moot = {
   var a : String;
   var b : Int;
-  var c : Date;
+  @:optional var c : Date;
   @:optional var d : Moot;
 }
-class CloneTestClass{
+private class CloneTestClass{
   public var test : Moot;
+  public var cln  : CloneTestInner;
 
   public function new(){
     test = {
@@ -66,6 +78,19 @@ class CloneTestClass{
       b : 1,
       c : Date.now()
     }  
-    test.d = test;
+    test.d      = test;
+    this.cln    = new CloneTestInner();
+  }
+}
+private class CloneTest2{
+  public function new(){
+    cln = new CloneTestInner();
+  }
+  public var cln  : CloneTestInner;
+}
+private class CloneTestInner{
+  public var inner : String;
+  public function new(){
+    this.inner =  'well, heloooo';
   }
 }

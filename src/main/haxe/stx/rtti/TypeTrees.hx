@@ -1,5 +1,7 @@
 package stx.rtti;
 
+import Prelude;
+
 import haxe.rtti.CType;
 
 import stx.Option;

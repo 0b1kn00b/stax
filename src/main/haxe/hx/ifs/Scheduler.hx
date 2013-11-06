@@ -1,6 +1,6 @@
 package hx.ifs;
 
-import stx.Prelude;
+import Prelude;
 
 import hx.sch.Run;
 

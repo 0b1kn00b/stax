@@ -15,7 +15,7 @@
 */
 package stx.js.dom;
 
-import stx.Prelude;
+import Prelude;
 import stx.js.Dom;
 
 using stx.Arrays;

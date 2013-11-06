@@ -1,30 +1,30 @@
 package stx.plus;
 
-import haxe.CallStack;
 import Type;
+import haxe.CallStack;
+
+import Prelude;
 import stx.Maths;
 
 
+using stx.Arrays;
 using stx.Option;
-using stx.Prelude;
 using stx.Tuples;
 using stx.plus.Show;
 using stx.Compose;
-
-typedef ShowFunction<T>         = Function1<T, String>;
 
 class Show {
   static public function show<A>(v:A):String{
     return getShowFor(v)(v);
   }
-  static public function __show__<T>(impl : ShowFunction<Dynamic>) : ShowFunction<T> {
+  static public function __show__<T>(impl : Dynamic->String) : T->String {
     return function(v) return null == v ? 'null' : impl(v);
   }
   /** 
     Returns a ShowFunction (T -> String). It works for any type. For Custom Classes you must provide a toString()
     method, otherwise the full class name is returned.
   */
-  public static function getShowFor<T>(t : T) : ShowFunction<T> {
+  public static function getShowFor<T>(t : T) : T->String {
     return getShowForType(Type.typeof(t));
   }
   
@@ -32,7 +32,7 @@ class Show {
     @:todo Reflect.fields doesn't work consistenly across platforms so we may probably pass to use Type.getInstanceFields. The problem here
     is that we must check if the fields are functions before grabbing the value.
   */
-  public static function getShowForType<T>(v : ValueType) : ShowFunction<T> {
+  public static function getShowForType<T>(v : ValueType) : T->String {
     return switch(v) {
       case TBool                        : __show__(BoolShow.toString);
       case TInt                         : __show__(IntShow.toString);
@@ -89,13 +89,13 @@ class ArrayShow {
 	public static function toString<T>(v: Array<T>) {
     return toStringWith(v, Show.getShowFor(v[0]));
   }
-  public static function toStringWith<T>(v: Array<T>, show : ShowFunction<T>) {
+  public static function toStringWith<T>(v: Array<T>, show : T->String) {
     return "[" + v.map(show).join(", ") + "]";  
   }
 	public static function mkString<T>(arr: Array<T>, ?sep: String = ', ', ?show: T -> String): String {
     var isFirst = true;
     
-    return arr.foldl('', function(a, b) {
+    return arr.foldLeft('', function(a, b) {
       var prefix = if (isFirst) { isFirst = false; ''; } else sep;    
       if(null == show)
       show = Show.getShowFor(b);

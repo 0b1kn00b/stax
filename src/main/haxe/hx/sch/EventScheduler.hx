@@ -5,9 +5,12 @@ import stx.Time;
 import hx.ifs.Scheduler in IScheduler;
 
 class EventScheduler implements IScheduler{ 
-  public function new(){}
+  public function new(){
+
+  }
   public inline function when(abs:Float,fn:Run):Void{
-    var wait = Time.now().toFloat() - abs;
+    var wait = abs - Time.now().toFloat();
+    trace(wait);
     haxe.Timer.delay(fn.run,Std.int(wait*1000));
   }
   public inline function wait(rel:Float,fn:Run):Void{

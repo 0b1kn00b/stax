@@ -1,5 +1,7 @@
 package rx.observable;
 
+import stx.Chunk;
+
 using stx.Iterables;
 
 import rx.ifs.Observable in IObservable;
@@ -13,7 +15,7 @@ class IterableObservable<T> implements IObservable<T>{
     this.iterable = iterable;
   }
   public function subscribe(o:Observer<T>):Disposable{
-    iterable.foreach(o.apply);
+    iterable.each(o.apply);
     return Disposable.unit();
   }
 }

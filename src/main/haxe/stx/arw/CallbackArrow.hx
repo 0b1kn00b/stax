@@ -1,6 +1,6 @@
 package stx.arw;
 
-import stx.Prelude;
+import Prelude;
 import stx.Arrow;
 
 abstract ObserverArrow(Arrow<Unit,Unit>) from Arrow<Unit,Unit> {

@@ -1,7 +1,7 @@
 package stx.arw;
 
 import stx.Tuples;
-import stx.Prelude;
+import Prelude;
 using stx.Arrow;
 
 typedef ArrowLeftChoice<B,C,D> = Arrow<Either<B,D>,Either<C,D>>
@@ -9,7 +9,7 @@ abstract LeftChoiceArrow<B,C,D>(ArrowLeftChoice<B,C,D>) from ArrowLeftChoice<B,C
 
 	public function new(a:Arrow<B,C>){
 		return new Arrow(
-			inline function(?i:Either<B,D>, cont : Function1<Either<C,D>,Void>){
+			inline function(?i: Either<B,D>, cont: Either<C,D>->Void){
 				switch (i) {
 					case Left(v) 	:
 						new ApplyArrow().withInput( tuple2(a,v) ,

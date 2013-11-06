@@ -15,7 +15,7 @@
 */
 package stx.io.http;
 
-import stx.Prelude;
+import Prelude;
 import stx.Eventual;
 import stx.io.http.Http;
 import stx.net.Url;
@@ -99,7 +99,7 @@ class HttpStringAsync implements HttpString {
     }
 
     _headers.toOption().map(function(headers) {
-      headers.foreach(function(header) {
+      headers.each(function(header) {
         request.setRequestHeader(header.fst(), header.snd());
       });
     });

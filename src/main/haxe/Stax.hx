@@ -1,9 +1,13 @@
 import Type;
 
-import stx.Prelude;
+import Prelude;
+
+import hx.sch.*;
+import hx.ifs.Scheduler;
 
 import haxe.PosInfos;
 
+import stx.Chunk;
 import stx.plus.Meta;
 import stx.Method;
 import stx.Types;
@@ -21,18 +25,29 @@ import stx.log.DefaultLogger;
 class Stax{
   @:bug('#0b1kn00b: making __init__ causes BASE64 in Unserializer to be null @25/10/2013')
   public static function init(){
-    injector().bind(Logger,new DefaultLogger());
+    var injector = injector();
+    injector.bind(Logger,new DefaultLogger());
     haxe.Log.trace = inject(Logger).apply;
+    #if(js || flash)
+      injector.bind(Scheduler,new EventScheduler());
+    #elseif neko
+      injector.bind(Scheduler,new ThreadScheduler());
+    #else 
+      injector.bind(Scheduler,new InlineScheduler());
+    #end
   }
-  @:noUsing static public inline function option<T>(v:Null<T>):Option<T>{
+  @:noUsing static public inline function option<T>(?v:Null<T>):Option<T>{
     return Options.create(v);
   }
-  @:noUsing static public inline function fail(cde:EnumValue):Fail{
-    return Fail.fail(cde);
+  @:noUsing static public inline function chunk<T>(?v:Null<T>):Chunk<T>{
+    return Chunks.create(v);
   }
-  @:noUsing static public inline function except<T>(?pos:haxe.PosInfos):Fail -> T{
-    return function(err:Fail):T{
-      throw(err);
+  @:noUsing static public inline function fail(cde:EnumValue,?pos:PosInfos):Fail{
+    return Fail.fail(cde,pos);
+  }
+  @:noUsing static public inline function except<T>(?pos:haxe.PosInfos):Error -> T{
+    return function(err:Error):T{
+      throw(fail(err,pos));
       return null;
     }
   }
@@ -42,8 +57,8 @@ class Stax{
   @:noUsing static public inline function thunk<T>(v:T):Void->T{
     return stx.Anys.toThunk(v);
   }
-  @:noUsing static public inline function assert<T>(prd:Predicate<T>,?v:T,?er:Fail,?pos:PosInfos){
-    return stx.Assert.assert(prd,v,er,pos);
+  @:noUsing static public inline function assert<T>(v:T,?str:String,?prd:Predicate<T>,?er:Fail,?pos:PosInfos){
+    return stx.Assert.assert(v,str,prd,er,pos);
   }
   @:noUsing static public inline function vtype<T>(v:Dynamic):ValueType{
     return Types.vtype(v);
@@ -57,7 +72,7 @@ class Stax{
   @:noUsing static public inline function printer(?p:PosInfos){
     return stx.Log.printer(p);
   }
-  @:noUsing static public var noop = function(){}
+  @:noUsing static public var noop    = function(){}
   /*@:noUsing static public inline function metadata<T>(v:T):MetaObjectContainer{
     return stx.plus.Meta.metadata(v);
   }*/

@@ -15,7 +15,7 @@
 */
 package stx.js.dom;
 
-using stx.Prelude;
+using Prelude;
 
 
 
@@ -267,7 +267,7 @@ class Quirks {
       }
     }
 
-    return Prelude.error()('Invalid rule: ' + rule);
+    return except()('Invalid rule: ' + rule);
   }
 
   /** Retrieves the actual property name for the specified css property.
@@ -422,7 +422,7 @@ class Quirks {
     if (elem == null || elem.ownerDocument == null) return elem;
     else{
       var position = getComputedCssProperty( elem, 'position' );
-      position.foreach(function(v){
+      position.each(function(v){
         if ( v == 'static' ) elem.style.position = 'relative';
       });
 
@@ -574,7 +574,7 @@ class Quirks {
     var val: Int = untyped elem[offsetValueExtract];
 
     if (extra != "border"){
-      which.foreach(function(v) {
+      which.each(function(v) {
         if (extra != ""){
            val -= getCssPropertyIfSet( elem, 'padding-' + v).map(function(s) return s.int(0)).getOrElseC(0);
         }

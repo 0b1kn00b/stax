@@ -17,7 +17,7 @@
 package stx.ds;
 
 using stx.Tuples;
-using stx.Prelude;
+using Prelude;
 
 import stx.ds.ifs.Foldable;
 import stx.ds.ifs.Collection;
@@ -34,7 +34,7 @@ using stx.ds.Foldables;
 class FoldableToSet {
 	public static function toSet<A, B>(foldable : Foldable<A, B>) : Set<B> {  
     var dest = Set.create();
-    return foldable.foldl(dest, function(a, b) {
+    return foldable.foldLeft(dest, function(a, b) {
       return a.add(b);
     });
   }	
@@ -70,7 +70,7 @@ class Set<T> implements Collection<Set<T>, T> {
   public function unit<C, D>(): Foldable<C, D> {
     return cast create();
   }
-  public function foldl<Z>(z: Z, f: Z -> T -> Z): Z {
+  public function foldLeft<Z>(z: Z, f: Z -> T -> Z): Z {
     var acc = z;    
     for (e in _map) {
       acc = f(acc, e.fst());
@@ -109,7 +109,7 @@ class Set<T> implements Collection<Set<T>, T> {
   }
   public function hashCode():Int{
     var ha = _map.val_tool.getHash;
-    return foldl(393241, function(a, b) return a * (ha(b)(b) + 6151));
+    return foldLeft(393241, function(a, b) return a * (ha(b)(b) + 6151));
   }
   public function toString():String{    
     return "Set " + 
@@ -119,16 +119,16 @@ class Set<T> implements Collection<Set<T>, T> {
         }
       );
   } 
-  public function withOrder(order:OrderFunction<T>) {
+  public function withOrder(order:Reduce<T,Int>) {
     return create(_map.val_tool.withOrder(order)).append(this);
   }
-  public function withEqual(equal:EqualFunction<T>) {
+  public function withEqual(equal:Reduce<T,Bool>) {
     return create(_map.val_tool.withEqual(equal)).append(this);
   }
-  public function withHash(hash:HashFunction<T>) {
+  public function withHash(hash:T->Int) {
     return create(_map.val_tool.withHash(hash)).append(this);
   }
-  public function withShow(show:ShowFunction<T>) {  
+  public function withShow(show:T->String) {  
     return create(_map.val_tool.withShow(show)).append(this);
   }
   /**

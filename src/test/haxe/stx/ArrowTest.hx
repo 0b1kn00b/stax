@@ -7,7 +7,7 @@ using stx.UnitTest;
 import haxe.Timer;
 
 import stx.Log.*;
-import stx.Prelude;
+import Prelude;
 import stx.Eventual;
 
 using stx.Tuples;
@@ -35,7 +35,7 @@ class ArrowTest extends TestCase{
     var a = function(x){ trace(x);return x;}
     var b = function(y):Eventual<Dynamic>{ return Eventual.pure(y);}
 
-    arw().then(a).then(b).apply(1).foreach(
+    arw().then(a).then(b).apply(1).each(
       function(y){
         evt.deliver(test().isTrue(true));
       }
@@ -48,7 +48,7 @@ class ArrowTest extends TestCase{
     var a = function(x){ trace(x);return x+0;}
     var b = function(y):Eventual<Dynamic>{ return Eventual.pure(y);}
 
-    arw().then(a).then(b).apply(1).foreach(
+    arw().then(a).then(b).apply(1).each(
       function(y){
         evt.deliver(isTrue(true));
       }

@@ -1,25 +1,19 @@
 package stx;
 
+
+import Prelude;
 import Stax.*;
+
 import stx.Outcome;
-import stx.Prelude;
 import stx.Tuples;
 
+using stx.Arrays;
 using stx.Functions;
 using stx.Option;
 using stx.Either;
 using stx.Anys;
 
 
-@doc("
-    An option represents an optional value -- the value may or may not be
-    present. Option is a much safer alternative to null that often enables
-    reduction in code size and increase in code clarity.
-")
-enum Option<T> {
-  None;
-  Some(v: T);
-}
 
 class Options {
   @doc("Produces Option.Some(t) if `t` is not null, Option.None otherwise.")
@@ -34,7 +28,7 @@ class Options {
     }
   }
   @doc("Performs `f` on the contents of `o` if `o` != None")
-  static public function foreach<T>(o: Option<T>, f: T -> Void): Option<T> {
+  static public function each<T>(o: Option<T>, f: T -> Void): Option<T> {
     return switch (o) {
       case None     : o;
       case Some(v)  : f(v); o;
@@ -47,7 +41,7 @@ class Options {
   @doc("Produces the contents of `o`, throwing an error if `o` is None.")
   static public function get<T>(o: Option<T>): T {
     return switch (o) {
-      case None   : Prelude.error()("Fail: Option is empty");
+      case None   : except()(ArgumentError("Option is empty"));
       case Some(v): v;
     }
   }
@@ -197,5 +191,35 @@ class Options {
       case Some(v)  : Val(v);
       case None     : Nil;
     }
+  }
+  static public function orFirstDefined<T>(opt:Option<T>,arr:Array<Thunk<T>>){
+    return switch (opt) {
+      case None     :
+        arr.foldLeft(
+          None,
+          function(memo,next){
+            return switch (memo) {
+              case Some(v)  : Some(v);
+              case None     : option(next());
+            }
+          }
+        );
+      case Some(v)  : Some(v);
+    }
+  }
+  static public function orFirstDefinedC<T>(opt:Option<T>,arr:Array<T>){
+    return switch (opt) {
+      case None     :
+        arr.foldLeft(
+          None,
+          function(memo,next){
+            return switch (memo) {
+              case Some(v)  : Some(v);
+              case None     : option(next);
+            }
+          }
+        );
+      case Some(v)  : Some(v);
+    } 
   }
 } 

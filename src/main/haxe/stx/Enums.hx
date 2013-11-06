@@ -3,7 +3,7 @@ package stx;
 import Stax.*;
 
 import stx.Fail;
-import stx.Prelude;
+import Prelude;
 
 class Enums {
 	@doc("Creates an Enum.")

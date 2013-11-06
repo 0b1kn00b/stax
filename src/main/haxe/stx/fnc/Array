@@ -1,0 +1,19 @@
+package stx.fnc;
+
+import Array in NativeArray;
+
+abstract Array<T>(NativeArray<T>) from NativeArray<T> to NativeArray<T>{
+  public function new(v:NativeArray<T>){
+    this = v;
+  }
+  @:to public function toMonad():Monad<Array<T>,T>{
+    var m : Monad<Array<T>,T> =  new stx.fnc.mnd.Array(this);
+    return m;
+  }
+  public function pure<U>(v:U):Array<U>{
+    return [v];
+  }
+  public function map<U>(fn:T->U):Array<U>{
+    return this.map(fn);
+  }
+}

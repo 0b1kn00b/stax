@@ -32,13 +32,13 @@ class ArrayJValue<T> implements Transcode<Array<T>,JExtractorFunction<T>> {
             case Some(ex) : extractAll(v,cast ex);
             case None     : [];
           }
-        default         : Prelude.error()("Expected Array but was: " + v);
+        default         : except()("Expected Array but was: " + v);
       }
   }
   public function extractAll(v: JValue, e: JExtractorFunction<T>): Array<T> {
     return switch(v) {
       case JArray(v)  : v.map(e);
-      default         : Prelude.error()("Expected Array but was: " + v);
+      default         : except()("Expected Array but was: " + v);
     }
   }
   static public function extractor(){

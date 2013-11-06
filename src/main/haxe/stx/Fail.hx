@@ -8,56 +8,34 @@ import stx.plus.Show;
 using stx.Option;
 using stx.Either;
 using stx.Arrays;
-using stx.Prelude;
+using Prelude;
 using stx.Enums;
 using stx.Compose;
 using stx.Positions;
 using stx.Functions;
 
-@doc("
-  Underlies all thrown values in Stax, extensible through the use of `FrameworkFail`.
-")
-enum StaxFail{
-  AbstractMethodFail(?pos:PosInfos);
-  ArgumentFail(field:String,?pos:PosInfos);
-  AssertionFail(is:String,?should:String,?pos:PosInfos);
-  FailStack(arr:Array<Fail>);
-  TypeFail(msg:String,?pos:PosInfos);
-  NullReferenceFail(field:String,?pos:PosInfos);
-  OutOfBoundsFail(?pos:PosInfos);
-  NativeFail(err:Dynamic);
-  FrameworkFail(flag:EnumValue,?pos:PosInfos);
-  IllegalOperationFail(msg:String,?pos:PosInfos);
-  InjectionFail(cls:Class<Dynamic>,?err:Fail);
-  ConstructorFail(cls:Class<Dynamic>,?err:Fail);
-}
-
-@doc("
-  Stax's error class, is used to allow typed `try...catch` declarations. Fails can be accumulated through the `append` function.
-")
+@doc("Stax's error class, is used to allow typed `try...catch` declarations. Fails can be accumulated through the `append` function.")
 class Fail{
   @doc("Transforms any `EnumValue` into a Fail")
-	static public function fail(cde:EnumValue){
+	static public function fail(cde:EnumValue,?pos){
 		return new Fail(cde);
 	}
-	static public inline function asFail<E:Fail>(e:E):Fail{
-		return e;
-	}
+	public var cde(default,null) 				: EnumValue;
+	private var pos(default,null) 			: PosInfos;
 
-	public var cde(default,null) 	: EnumValue;
-
-	public function new(cde:EnumValue) {
+	public function new(cde:EnumValue,?pos) {
+		this.pos = pos;
 		//fixes for Dynamics in catch
 		cde = (switch ((Type.typeof(cde))) {
-					case TObject 										: NativeFail(cde);
-					case TClass(c) if (c == String)	: NativeFail(cde);
+					case TObject 										: NativeError(cde);
+					case TClass(c) if (c == String)	: NativeError(cde);
 					default 												: cde;
 				});
 		this.cde 				= cde;
 	}
   @doc('returns the string representation of the parameters of the wrapped enum')
 	public function msg():String{
-		var prm = cde.params().foldl1(
+		var prm = cde.params().foldLeft1(
 			function(memo,next){
 				return '${Show.getShowFor(memo)(memo)},${Show.getShowFor(next)(next)}';
 			}
@@ -76,10 +54,10 @@ class Fail{
 	}
 	public function append(e:Fail):Fail{
 		return fail(switch ([cde,e.cde]) {
-			case [FailStack(errs),FailStack(errs0)] 	: FailStack(errs.append(errs0));
-			case [FailStack(errs),er] 								: FailStack(errs.add(fail(er)));
-			case [er,FailStack(errs)]									: FailStack([fail(er)].append(errs));
-			case [er0,er1] 														: FailStack([fail(er0),fail(er1)]);
+			case [ErrorStack(errs),ErrorStack(errs0)] 	: ErrorStack(errs.append(errs0));
+			case [ErrorStack(errs),er] 									: ErrorStack(errs.add(fail(er)));
+			case [er,ErrorStack(errs)]									: ErrorStack([fail(er)].append(errs));
+			case [er0,er1] 															: ErrorStack([fail(er0),fail(er1)]);
 		});
 	}
 }

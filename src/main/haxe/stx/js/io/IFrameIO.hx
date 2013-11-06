@@ -18,7 +18,7 @@ package stx.js.io;
 
 import stx.Tuples;
 import stx.js.Dom;
-import stx.Prelude;
+import Prelude;
 
 import stx.js.Env;
 import stx.js.dom.Quirks;
@@ -32,7 +32,7 @@ import stx.Log;								using stx.Log;
 import stx.Eventual;
 using stx.Tuples;
 
-using stx.Prelude;
+using Prelude;
 using stx.Tuples;
 using stx.Arrays;
 using stx.Strings;
@@ -128,11 +128,11 @@ class AbstractIFrameIO implements IFrameIO {
   }
   
   public function receive(f: Dynamic -> Void, originUrl: String, ?originWindow: Window): IFrameIO {
-    return Prelude.error()('Not implemented');
+    return except()('Not implemented');
   }
 
   public function receiveWhile(f: Dynamic -> Bool, originUrl: String, ?originWindow: Window): IFrameIO {
-    return Prelude.error()('Not implemented');
+    return except()('Not implemented');
   }
   
   public function receiveRequests(f: Dynamic -> Eventual<Dynamic>, url, window: Window): IFrameIO {
@@ -151,7 +151,7 @@ class AbstractIFrameIO implements IFrameIO {
   }
 
   public function send(data: Dynamic, targetUrl: String, targetWindow: Window): IFrameIO {
-    return Prelude.error()('Not implemented');
+    return except()('Not implemented');
   }
   
   public function request(requestData: Dynamic, targetUrl: String, targetWindow: Window): Eventual<Dynamic> {
@@ -429,7 +429,7 @@ class IFrameIOPollingMaptag extends AbstractIFrameIO implements IFrameIO {
         
         var fragments = fragmentsReceivedFor(messageKey);
         
-        var alreadyReceived = fragments.foldl(false, function(b, f) return b || f.fragmentId == packet.fragmentId);
+        var alreadyReceived = fragments.foldLeft(false, function(b, f) return b || f.fragmentId == packet.fragmentId);
         
         if (!alreadyReceived) {
           fragments.push(packet);
@@ -491,14 +491,14 @@ class IFrameIOPollingMaptag extends AbstractIFrameIO implements IFrameIO {
       // All fragments received -- we can send data to listeners:
       fragments.sort(function(a, b) return a.fragmentId.int() - b.fragmentId.int());
       
-      var fullData = fragments.foldl('', function(a, b) return a + b.data);
+      var fullData = fragments.foldLeft('', function(a, b) return a + b.data);
     
       var message = Json.decodeObject(fullData);
     
       var domain = extractDomain(fragments[0].from);
     
       if (receivers.exists(domain)) {
-        receivers.get(domain).foreach(function(r) r(message));
+        receivers.get(domain).each(function(r) r(message));
       }
     
       fragmentsReceived.removeByKey(messageKey);
@@ -506,7 +506,7 @@ class IFrameIOPollingMaptag extends AbstractIFrameIO implements IFrameIO {
   }
   
   private function findMissingFragments(): List<AddressableFragment> {
-    return fragmentsReceived.values().foldl(List.nil(), function(allMissing, fragments) {
+    return fragmentsReceived.values().foldLeft(List.nil(), function(allMissing, fragments) {
       var firstFrag = fragments[0];
       
       fragments.sort(function(a, b) return a.fragmentId.int() - b.fragmentId.int());

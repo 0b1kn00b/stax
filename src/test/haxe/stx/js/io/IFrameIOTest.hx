@@ -16,7 +16,7 @@
 package js.io;
 
 import stx.js.Dom;
-import stx.Prelude;
+import Prelude;
 import stx.test.Assert;
 import stx.test.TestCase;
 import stx.js.Env;

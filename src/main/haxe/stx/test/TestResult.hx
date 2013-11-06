@@ -3,8 +3,9 @@ package stx.test;
 import Stax.*;
 import haxe.PosInfos;
 
-import stx.Prelude;
+import Prelude;
 import stx.Fail;
+
 class TestResult{
   @:noUsing static public function unit(){
     return create();
@@ -18,7 +19,7 @@ class TestResult{
   public var msg(default,null)      : String;
 
   public function new(?val,?msg,?pos){
-    this.val         = val == null ? Some(fail(IllegalOperationFail('TestResult not set'))) : val;
+    this.val         = val == null ? Some(fail(IllegalOperationError('TestResult not set'))) : val;
     this.msg         = msg;
     this.pos         = pos;
   }
@@ -33,7 +34,7 @@ class TestResult{
   }
   public function toString(){
     return (switch (val){
-      case Some(l)  : msg + ' : ' + Std.string(l);
+      case Some(l)  : msg + ' : ' + stx.plus.Show.getShowFor(l)(l);
       case None     : 'OK';// + msg + ' ' + Positions.toString(pos);
     });
   }

@@ -15,7 +15,7 @@
 */
 package stx.util;
 
-import stx.Prelude;
+import Prelude;
 
 import stx.test.TestCase;
 import stx.util.Guid;

@@ -1,6 +1,6 @@
 package hx;
 
-import stx.Prelude;
+import Prelude;
 
 using stx.Option;
 using stx.Tuples;
@@ -38,7 +38,7 @@ abstract Table<T>(Dynamic<T>) from Dynamic<T> to Dynamic<T>{
     
     extendWith(cast d1, cast d2);
     
-    return names.zip(oldValues).foldl({}, function(o, t) {
+    return names.zip(oldValues).foldLeft({}, function(o, t) {
       Reflect.setField(o, t.fst(), t.snd());
       
       return o;
@@ -49,14 +49,14 @@ abstract Table<T>(Dynamic<T>) from Dynamic<T> to Dynamic<T>{
     var vals    = extract(d);
     var names   = vals.map( Pair.fst );
 
-    return fields.forAll(
+    return fields.all(
       function(x){
-        return names.forAny( function(y) return x == y );
+        return names.any( function(y) return x == y );
       }
     );
   }
   public function missing(fields:Array<String>):Option<String>{
-    return fields.foldl(
+    return fields.foldLeft(
       None,
       function(memo,next){
         return switch (memo){
@@ -76,7 +76,7 @@ abstract Table<T>(Dynamic<T>) from Dynamic<T> to Dynamic<T>{
   }
   public function defined(fields:Array<String>):Bool{
     return extract(this,fields,null)
-      .forAll( function(x) return x != null );
+      .all( function(x) return x != null );
   }
   public function iterator(): Iterator<String> {
     return Reflect.fields(this).iterator();

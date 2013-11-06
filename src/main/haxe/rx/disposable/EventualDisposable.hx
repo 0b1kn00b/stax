@@ -14,7 +14,7 @@ class EventualDisposable implements IDisposable{
   public function dispose(){
     if(!disposed){
       disposed = true;
-      eventual.foreach(
+      eventual.each(
         function(x){
           x.dispose();
         }

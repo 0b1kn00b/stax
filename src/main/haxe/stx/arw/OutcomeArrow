@@ -7,7 +7,7 @@ import stx.Compare.*;
 import stx.Outcome;
 import stx.Tuples;
 import stx.Either;
-import stx.Prelude;
+import Prelude;
 using stx.Arrow;
 
 typedef ArrowOutcome<I,O> = Arrow<Outcome<I>,Outcome<O>>

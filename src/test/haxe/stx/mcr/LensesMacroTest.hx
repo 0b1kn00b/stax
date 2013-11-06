@@ -1,32 +1,50 @@
-package stx.macro;
+package stx.mcr;
 
-import stx.Prelude;
+import stx.Types.*;
+using stx.UnitTest;
+
+import Prelude;
 import stx.Objects;
-import stx.test.TestCase;
 
-import stx.macro.LensesMacro;
+import stx.mcr.LensesMacro;
 
 using stx.Lenses;
 
 class LensesMacroTest extends TestCase {
-  public function testLense(){
-    var c = ABC_.c_;
-    var d = DEF_.d_;
+  public function testLense(u:UnitArrow):UnitArrow{
 
-    var def : DEF = 
-    {
-      d : 'w00t'
+    var v : ABC = {
+      a : { 
+        something : '1'
+      },
+      b : {},
+      c :
+      {
+        d : "hello"
+      }
     }
-    var abc : ABC = 
-    {
-      a   : 'first',
-      b   : 'second',
-      c   : def
-    }
-    var cd = c.then(d);
-    trace(cd.get(abc));
-    assertTrue(true);
+    var a = Lenser.lense(TpTest);
+    var b = new TpTest();
+    /*var c = a.a;
+    var d = c.get(b);
+    trace(d);
+    trace('here');
+    $type(a.b);*/
+    /*var v0 : F = {
+      a : "hello",
+    }*/
+    //var b = Lenser.lense(v0);
+    //Lenser.print(TestLenseEnum.A);
+    return u;
   }
+}
+enum TestLenseEnum{
+  A;
+  B(ot:String);
+  C(arr:Array<String>,?pos:Bool);
+}
+typedef F = {
+  a : String,
 }
 typedef ABC = {
   public var a : Dynamic;
@@ -36,5 +54,3 @@ typedef ABC = {
 typedef DEF = {
   public var d : String;
 }
-class ABC_ implements LensesFor<ABC>{}
-class DEF_ implements LensesFor<DEF>{}

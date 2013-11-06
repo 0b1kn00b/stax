@@ -1,6 +1,6 @@
 package stx;
 
-import stx.Prelude;
+import Prelude;
 using stx.Tuples;
 import stx.Eventual;
 
@@ -28,7 +28,7 @@ class Contract<T>{
 		return this;
 	}
 	public function onIntact(fn:T->Void){
-		this.impl.foreach(
+		this.impl.each(
 			function(e){
 				switch (e){
 					case		Left(_)			:
@@ -39,7 +39,7 @@ class Contract<T>{
 		return this;
 	}
 	public function onBreach(fn:Fail->Void){
-		this.impl.foreach(
+		this.impl.each(
 			function(e){
 				switch (e){
 					case		Left(l)			: fn(l);

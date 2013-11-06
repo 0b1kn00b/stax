@@ -6,7 +6,7 @@ import haxe.ds.IntMap;
 import stx.plus.Hasher;
 
 using stx.Enums;
-using stx.Compare
+using stx.Compare;
 using stx.Arrays;
 using stx.Compose;
 using stx.Tuples;
@@ -59,7 +59,7 @@ class UnsupportedClassClone{
             return Clone.getCloneFor(x)(x,stack);
           }.second()
         );
-    flds.foreach(Reflect.setField.bind(nw).tupled());
+    flds.each(Reflect.setField.bind(nw).tupled());
     return nw;
   }
 }
@@ -86,7 +86,7 @@ class ObjectClone{
             return Clone.getCloneFor(x)(x,stack);
           }.second()
         );
-    flds.foreach(Reflect.setField.bind(nw).tupled());
+    flds.each(Reflect.setField.bind(nw).tupled());
     return nw;
   }
 }

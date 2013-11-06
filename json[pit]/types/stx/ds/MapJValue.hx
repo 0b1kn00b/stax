@@ -29,7 +29,7 @@ class MapJValue<K,V> extends AbstractTranscode<Map<K,V>,JExtractorFunction2<K,V>
                 xs.map( Tuple2JValue.extractWith.p2(e) )
               );
           }
-        default: Prelude.error()("Expected Array but was: " + v);
+        default: except()("Expected Array but was: " + v);
       }
   }
   static public function stringKeyDecompose<V>(v: Map<String, V>): JValue {
@@ -43,13 +43,13 @@ class MapJValue<K,V> extends AbstractTranscode<Map<K,V>,JExtractorFunction2<K,V>
     }
   }
 
-  static public function stringKeyExtract<V>(v: JValue, ve: JExtractorFunction<V>, ?vorder : OrderFunction<V>, ?vequal: EqualFunction<V>, ?vhash: MapFunction<V>, ?vshow : ShowFunction<V>): Map<String, V> {
+  static public function stringKeyExtract<V>(v: JValue, ve: JExtractorFunction<V>, ?vorder : Reduce<V,Int>, ?vequal: Reduce<V,Bool>, ?vhash: MapFunction<V>, ?vshow : V->String): Map<String, V> {
     var extract0 = function(v: Array<JValue>){
       return Map.create(Strings.compare, Strings.equals, StringHasher.hashCode, Strings.toString, vorder, vequal, vhash, vshow).addAll(v.map(function(j) {
         return switch(j) {
           case JField(k, v): tuple2(k, ve(v));
 
-          default: Prelude.error()("Expected field but was: " + v);
+          default: except()("Expected field but was: " + v);
         }
       }));
     }
@@ -58,7 +58,7 @@ class MapJValue<K,V> extends AbstractTranscode<Map<K,V>,JExtractorFunction2<K,V>
       case JObject(v): extract0(v);
       case JArray(v) : extract0(v);
 
-      default: Prelude.error()("Expected either Array or Object but was: " + v);
+      default: except()("Expected either Array or Object but was: " + v);
     }
   }
 }

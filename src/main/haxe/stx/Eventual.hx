@@ -1,11 +1,12 @@
 package stx;
 
+import Stax.*;
 import stx.Tuples;
 
 using stx.Outcome;
 using stx.Tuples;
 using stx.Fail;            
-using stx.Prelude;
+using Prelude;
 using stx.Arrays;
 using stx.Option;
 using stx.Anys;
@@ -61,8 +62,8 @@ class Eventual<T> {
   ")
   public function deliver(t: T): Eventual<T> {
     return if (_isCanceled) this;
-    //else if (_isSet) { Prelude.error()('Eventual already delivered'); }
-    else if (_isSet) Prelude.error()("Eventual :" + this.value + " already delivered");
+    //else if (_isSet) { except()('Eventual already delivered'); }
+    else if (_isSet) except()(IllegalOperationError("Eventual : $value already delivered"));
     else {
       value = t;
       _isSet  = true;
@@ -154,7 +155,7 @@ class Eventual<T> {
     return this;
   }
   @doc("Alias for deliverTo")
-  public function foreach(f:T->Void):Eventual<T> {
+  public function each(f:T->Void):Eventual<T> {
     return deliverTo(f);
   }
   @doc("
@@ -279,15 +280,10 @@ class Eventual<T> {
   public static function create<T>(): Eventual<T> {
     return new Eventual<T>();
   }
-  public static function toEventual<T>(t: T): Eventual<T> {
-    return Eventual.create().deliver(t);
+  @:noUsing static public function pure<A>(v:A):Eventual<A>{
+    return EventualsT.toEventual(v);
   }
-  @:noUsing
-  static public function pure<A>(v:A):Eventual<A>{
-    return toEventual(v);
-  }
-  @:noUsing
-  static public function unit<A>():Eventual<A>{
+  @:noUsing static public function unit<A>():Eventual<A>{
     return new Eventual();
   }
   public function deliverMe(f:Eventual<T>-> Void): Eventual<T> {
@@ -303,10 +299,10 @@ class Eventual<T> {
   }
 }
 class Eventuals{
-  static public function foreach<A>(f:Eventual<A>,fn:A->Void):Eventual<A>{
-    return f.foreach(fn);
+  static public function each<A>(f:Eventual<A>,fn:A->Void):Eventual<A>{
+    return f.each(fn);
   }
-  static public function mapLeft<A,B,C>(f:Eventual<Either<A,B>>,fn:A->C):Eventual<Either<C,B>>{
+  static public function mapLefteft<A,B,C>(f:Eventual<Either<A,B>>,fn:A->C):Eventual<Either<C,B>>{
     return f.map(
       function(x){
         return switch (x){
@@ -316,7 +312,7 @@ class Eventuals{
       }
     );
   }
-  static public function mapR<A,B,C>(f:Eventual<Either<A,B>>,fn:B->C):Eventual<Either<A,C>>{
+  static public function mapRight<A,B,C>(f:Eventual<Either<A,B>>,fn:B->C):Eventual<Either<A,C>>{
     return f.map(
       function(x){
         return switch (x){
@@ -343,7 +339,7 @@ class Eventuals{
 
     return fut;
   }
-  static public function flatMapR<A,B,C>(f:Eventual<Either<A,B>>,fn:B->Eventual<Either<A,C>>):Eventual<Either<A,C>>{
+  static public function flatMapRight<A,B,C>(f:Eventual<Either<A,B>>,fn:B->Eventual<Either<A,C>>):Eventual<Either<A,C>>{
     return flatMap(f,
       function(x){
         return switch (x){
@@ -363,7 +359,7 @@ class Eventuals{
       combined:Array<{seq:Int,val:Dynamic}> = [],
       sequence = 0;
         
-    toJoin.foreach(function(xprm:Dynamic) {
+    toJoin.each(function(xprm:Dynamic) {
         if(!Std.is(xprm,Eventual)) {
           throw "not a Eventual:"+xprm;
         }
@@ -382,7 +378,7 @@ class Eventuals{
     return myprm;
   }
   static public function bindFold<A,B>(iter:Iterable<A>,start:B,fm:B->A->Eventual<B>):Eventual<B>{
-    return iter.foldl(
+    return iter.foldLeft(
       Eventual.pure(start) ,
       function(memo : Eventual<B>, next : A){
         return memo.flatMap(
@@ -409,9 +405,14 @@ class Eventuals{
     return evt.map(Eithers.either);
   }
 }
+class EventualsT{
+  static public function toEventual<T>(t: T): Eventual<T> {
+    return Eventual.create().deliver(t);
+  }
+}
 class Eventuals1{
   @doc("One parameter callback handler, where callback is called exactly once.")
-  static public function eventualOf<A>(f:(A->Void)->Void):Eventual<A>{
+  static public function toEventual<A>(f:(A->Void)->Void):Eventual<A>{
     var fut = new Eventual();
     f(
       function(res){
@@ -423,7 +424,7 @@ class Eventuals1{
 }
 class Eventuals2{
   @doc("Creates a Eventual of Tuple2<A,B> from a callback function(a:A,b:B)")
-  static public function eventualOf<A,B>(f:(A->B->Void)->Void):Eventual<Tuple2<A,B>>{
+  static public function toEventual<A,B>(f:(A->B->Void)->Void):Eventual<Tuple2<A,B>>{
     var ft = new Eventual();
     f(
       function(a,b){
@@ -435,7 +436,7 @@ class Eventuals2{
 }
 class Eventuals3{
   @doc("Creates a Eventual of Tuple2<A,B,C> from a callback function(a:A,b:B,c:C)")
-  static public function eventualOf<A,B,C>(f:(A->B->C->Void)->Void):Eventual<Tuple3<A,B,C>>{
+  static public function toEventual<A,B,C>(f:(A->B->C->Void)->Void):Eventual<Tuple3<A,B,C>>{
     var ft = new Eventual();
     f(
       function(a,b,c){

@@ -4,7 +4,7 @@ import Stax.*;
 import haxe.PosInfos;
 
 import stx.Tuples;
-import stx.Prelude;
+import Prelude;
 import stx.Fail;
  
 import stx.plus.Equal;
@@ -23,8 +23,9 @@ using stx.Assert;
   Use in conjunction with stx.Compare for generating arbitrary assertions.
 ")
 class Assert{
-	@:noUsing static public function assert<T>(prd:Predicate<T>,?v:T,?er:Fail,?pos:PosInfos):Void{
-		er = er == null ? fail(AssertionFail(Std.string(v),'assert failed',pos)) : er;
+	@:noUsing static public inline function assert<T>(?v:Null<T>,?str:String,?prd:Predicate<Null<T>>,?er:Fail,?pos:PosInfos):Void{
+    prd = prd == null ? Compare.ntnl()                                    : prd;
+		er  = er  == null ? fail(AssertionError(str == null ? Std.string(v)   : str,'assert failed',pos)) : er;
 		if(!prd.apply(v)){
 			throw(er);
 		}

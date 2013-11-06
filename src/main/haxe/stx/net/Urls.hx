@@ -15,10 +15,10 @@
 */
 package stx.net;
 
-using stx.Prelude;
+using Prelude;
 
 import stx.Tuples;
-import stx.Prelude;
+import Prelude;
 import stx.net.Url;
 import stx.ds.Map;
 
@@ -202,7 +202,7 @@ class Urls {
               return if (a.length == 0) [];
                      else if (a.length == 1) [tuple2(a[0],'')];
                      else [tuple2(a[0],a[1])];
-           }).foldl(stx.ds.Map.create(), function(m, t) {
+           }).foldLeft(stx.ds.Map.create(), function(m, t) {
              return m.add(t);
            });
   }
@@ -211,7 +211,7 @@ class Urls {
    * query string, beginning with the character '?'.
    */
   public static function toQueryString(query: QueryParameters): String {
-    return query.foldl('?', function(url, tuple) {
+    return query.foldLeft('?', function(url, tuple) {
       var fieldName = tuple.fst();
       var fieldValue = tuple.snd();
       

@@ -1,7 +1,7 @@
 package stx;
 
 import stx.ifs.Apply;
-import stx.Prelude;
+import Prelude;
 import stx.Fail;
 import stx.Eventual;
 

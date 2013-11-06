@@ -1,17 +1,16 @@
 package stx;
 
-import stx.test.TestCase;
-import stx.test.Assert;
+using stx.UnitTest;
 
-													using stx.States;
-													using stx.Functions;
-													using Std;
+using stx.Functions;
+using Std;
+using stx.Tuples;
+
+using stx.State;
+import stx.State.*;
 
 class StateTest extends TestCase{
-	public function new(){
-		super();
-	}
-	public function test(){
+	public function test(u:UnitArrow):UnitArrow{
 		var f 	= 'blah';
 		var sr 	= f.newVar();
 		//$type( sr );
@@ -19,18 +18,21 @@ class StateTest extends TestCase{
 		var sr2 = sr.map( fn );
 		//$type(fn);
 
-		var fn2 = function(x:String):String { return '$x hmm'; }.modifier;
-		var fn3 = function(x:String):String { return '$x rooga'; }.modifier;
+		var fn2 = modifier.bind(function(x) { return '$x hmm'; });
+		var fn3 = modifier.bind(function(x:String):String { return '$x rooga'; });
 
 		//$type( fn2 );
 		//sr.apply(null).then( fn2 );
 		//trace( untyped sr(null).fst() );	}
-		var sr3 = new stx.States.StateRef('pooty');
+		var sr3 = 'pooty'.newVar();
+
 		var val = sr.flatMap( fn2 ).flatMap( fn3 );
 		//$type (val.map) ;
-		trace(val.apply(null).fst());
-		var val2 = sr.flatMap( StateRefs.reader );
-		trace(val2.apply(null));
+		trace(val.eval());
+		var val2 = sr.flatMap( reader );
+		$type(val2);
+		trace(val2.exec(null));
 		trace('___________');
+		return u;
 	}
 }

@@ -1,12 +1,12 @@
 package stx.rtti;
 
+import Prelude;
 import haxe.rtti.CType;
 
 import stx.Fail;
 import stx.Fail.*;
 
 using stx.Arrays;
-using stx.Prelude;
 using stx.Compose;
 using stx.Either;
 using stx.Iterables;
@@ -38,9 +38,9 @@ abstract RClass<T>(Tuple2<T,Classdef>) from Tuple2<T,Classdef> to Tuple2<T,Class
         .flatMap(Compose.unit());
 
         var next : Array<ClassField>= [];
-        all.foreach(
+        all.each(
           function(x:ClassField){
-            if (!next.forAny(function(y) return x.name == y.name)) {
+            if (!next.any(function(y) return x.name == y.name)) {
               next.push(x);
             }
           }
@@ -70,9 +70,9 @@ abstract RClass<T>(Tuple2<T,Classdef>) from Tuple2<T,Classdef> to Tuple2<T,Class
         .flatMap(Compose.unit());
 
         var next : Array<ClassField>= [];
-        all.foreach(
+        all.each(
           function(x:ClassField){
-            if (!next.forAny(function(y) return x.name == y.name)) {
+            if (!next.any(function(y) return x.name == y.name)) {
               next.push(x);
             }
           }

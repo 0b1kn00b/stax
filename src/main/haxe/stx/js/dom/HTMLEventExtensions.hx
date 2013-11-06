@@ -17,7 +17,7 @@ package stx.js.dom;
 
 import stx.js.Dom;
 import stx.js.Env;
-import stx.Prelude;
+import Prelude;
 
 
 

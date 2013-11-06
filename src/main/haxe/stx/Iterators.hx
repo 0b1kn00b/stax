@@ -2,7 +2,7 @@ package stx;
 
 import stx.Tuples;
 import stx.Tuples;
-import stx.Prelude;
+import Prelude;
 using stx.Option;
 using Std;
 
@@ -23,7 +23,7 @@ class Iterators {
 		return o;
 	}
   @doc("")
-	static public function forAll<T>(itr:Iterator<T>,fn:T->Bool):Bool{
+	static public function all<T>(itr:Iterator<T>,fn:T->Bool):Bool{
 		var ok = true;
 		while ( itr.hasNext() ){
 			ok = fn( itr.next() );
@@ -32,7 +32,7 @@ class Iterators {
 		return ok;
 	}
   @doc("")
-	static public function foreach<T>(itr:Iterator<T>,fn:T->Void):Iterator<T>{
+	static public function each<T>(itr:Iterator<T>,fn:T->Void):Iterator<T>{
 		for (o in itr){
 			fn(o);
 		}
@@ -75,19 +75,19 @@ class Iterators {
 		return result.iterator();
 	}
   @doc("")
-	static public function foldl<T, Z>(iter: Iterator<T>, seed: Z, mapper: Z -> T -> Z): Z {
+	static public function foldLeft<T, Z>(iter: Iterator<T>, seed: Z, mapper: Z -> T -> Z): Z {
     var folded = seed;
     for (e in iter) { folded = mapper(folded, e); }
     return folded;
   }
   @doc("")
-  static public function foldl1<T>(iter: Iterator<T>, mapper: T -> T -> T): T {
+  static public function foldLeft1<T>(iter: Iterator<T>, mapper: T -> T -> T): T {
     var folded = iter.next();
     for (e in iter) { folded = mapper(folded, e); }
     return folded;
   }
   @doc("")
-  static public function foldr<T, Z>(itr: Iterator<T>, z: Z, f: T -> Z -> Z): Z {
+  static public function foldRight<T, Z>(itr: Iterator<T>, z: Z, f: T -> Z -> Z): Z {
   	var a 		= toArray(itr);
     var r 		= z;
     var size 	= a.length;
@@ -98,17 +98,18 @@ class Iterators {
     return r;
   }
   @doc("")
+  static public function zipWith<A,B,C>(itr0:Iterator<A>,itr1:Iterator<B>,fn:A->B->C):Iterator<C>{
+    return {
+      next : function(){
+        return fn(itr0.next(),itr1.next());
+      },
+      hasNext : function(){
+        return itr0.hasNext() && itr1.hasNext();
+      }
+    };
+  }
   static public function zip<A,B>(itr0:Iterator<A>,itr1:Iterator<B>):Iterator<Tuple2<A,B>>{
-    var result = [];
-    
-    while (itr0.hasNext() && itr1.hasNext()) {
-      var t1 = itr0.next();
-      var t2 = itr1.next();
-      
-      result.push(tuple2(t1,t2));
-    }
-    
-    return result.iterator();
+    return zipWith(itr0,itr1,tuple2);
   }
 }
 class DirIntIterator {

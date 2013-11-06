@@ -1,9 +1,11 @@
 package rx.ifs;
 
-import stx.Prelude;
-import stx.ifs.Command;
+import stx.Fail;
+import stx.Chunk;
 
-interface Observer<T> extends Command<Chunk<T>>{
+import hx.ifs.Action;
+
+interface Observer<T> extends Action<Chunk<T>>{
   public function onDone():Void;
   public function onFail(f:Fail):Void;
   public function onData(d:T):Void;
