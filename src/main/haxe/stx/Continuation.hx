@@ -81,6 +81,10 @@ abstract Continuation<R,A>(ContinuationType<R,A>) from ContinuationType<R,A> to 
       }
     );
   }
+  // ((A->((B->R)->R))->((A->R)->R)) -> ((A->R)->R)
+  // ((A->((B->Void)->Void))->((A->Void)->Void)) ((A->R)->R)
+  // (Arrow<A,B>->Future<A>)->Future<A>
+
   static public function cc<R,A,B>(f:(A->Continuation<R,B>)->Continuation<R,A>):Continuation<R,A>{
     return new Continuation(
       function(k:A->R):R{

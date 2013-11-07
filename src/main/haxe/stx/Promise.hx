@@ -2,37 +2,28 @@ package stx;
 
 import Prelude;
 import Stax.*;
+
+import stx.fnc.Future;
+
 import stx.Compare.*;
-import stx.Continuation;
+import stx.fnc.mnd.Continuation;
 
 using stx.fnc.Monad;
 using stx.Arrays;
 using stx.Tuples;
 
-typedef PromiseType<A>            = FutureType<Outcome<A>>;
+typedef PromiseType<A>            = Future<Outcome<A>>;
 
 abstract Promise<A>(PromiseType<A>) from PromiseType<A> to PromiseType<A>{
   @:noUsing static public function pure<A>(e:Outcome<A>):Promise<A>{
-    return new Promise().deliver(e);
-  }
-  @:noUsing static public function unit<A>():Promise<A>{
-    return new Promise();
-  }
-  public function deliver<A>(v:Outcome<A>):Promise<A>{
-    return this(v);
-  }
-  public function ok(val:A):Promise<A>{
-    return this.deliver(Success(val));
-  }
-  public function no(err:Fail):Promise<A>{
-    return this.deliver(Failure(err));
+    return Futures.pure(e);
   }
   public function new(p){
     this = p;
   }
   public function retry<B>(fn:Fail->Outcome<A>):Promise<A>{
     return this.map(
-      function(e:Outcome<A>):Outcome<A>{
+      function(e){
         return switch (e){
           case   Success(r)     : Success(r);
           case   Failure(l)     : fn(l);
@@ -77,12 +68,6 @@ abstract Promise<A>(PromiseType<A>) from PromiseType<A> to PromiseType<A>{
       }
     );
   }
-  public function value(){
-    return this.value;
-  }
-  public function valueO(){
-    return this.valueO();
-  }
   @doc("
     Calls callback, placing a left value in the first parameter or a right in the second.
   ")
@@ -99,7 +84,7 @@ abstract Promise<A>(PromiseType<A>) from PromiseType<A> to PromiseType<A>{
   @doc("Does a map if the Either is Failure.")
   public function map<B>(fn:A->B):Promise<B>{
     return this.map(
-      function(x):Outcome<B>{
+      function(x){
         return x.map(
             function(y:A){
               return fn(y);

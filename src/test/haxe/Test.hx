@@ -1,7 +1,8 @@
 import stx.Log.*;
 
-import stx.Future;
-import stx.Promise;
+import stx.fnc.Continuation;
+import stx.fnc.Future;
+import stx.fnc.Promise;
 
 //import stx.Future;
 

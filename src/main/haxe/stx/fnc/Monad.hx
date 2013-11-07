@@ -52,6 +52,9 @@ class Monads{
   static public function each<T>(m: Monad<T>,fn: T->Void):Monad<T>{
     return m.map(inline function(x){fn(x);return x;});
   }
+  static public function box<T>(m : Monad<T>):ABox<Monad<T>>{
+    return m.box();
+  }
 }
 class BindSyntactics{
   static public function _<T,U,V>(fn: Monad<T>->Monad<Monad<U>>->Dynamic->Monad<Monad<U>>){

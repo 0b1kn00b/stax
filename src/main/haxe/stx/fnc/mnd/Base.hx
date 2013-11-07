@@ -23,20 +23,17 @@ class Base<S,T> implements IMonad<S,T> extends DefaultContainer<S>{
   public function iterator():Iterator<T>{
     return except()(AbstractMethodError());
   }
-  public function unbox():Dynamic{
-    return except()(AbstractMethodError());
-  }
   public function pure<U>(v:U):Monad<U>{
     return except()(AbstractMethodError());
   }
   public function flatMap<U>(fn:T->Monad<U>,?self:Dynamic):Monad<U>{
     return except()(AbstractMethodError());
   }
+  public function map<U>(fn:T->U,?self:Dynamic):Monad<U>{
+    return this.flatMap(self,fn.then(pure));
+  }
   public function flatten(?self:Dynamic){
     self = self == null ? this : self;
     return flatMap(self,pure);
-  }
-  public function map<U>(fn:T->U,?self:Dynamic):Monad<U>{
-    return this.flatMap(self,fn.then(pure));
   }
 }
