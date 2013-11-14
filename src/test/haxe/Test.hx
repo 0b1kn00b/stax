@@ -1,9 +1,5 @@
 import stx.Log.*;
 
-import stx.fnc.Continuation;
-import stx.fnc.Future;
-import stx.fnc.Promise;
-
 //import stx.Future;
 
 /*using stx.UnitTest;

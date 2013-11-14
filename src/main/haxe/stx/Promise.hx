@@ -22,55 +22,21 @@ abstract Promise<A>(PromiseType<A>) from PromiseType<A> to PromiseType<A>{
     this = p;
   }
   public function retry<B>(fn:Fail->Outcome<A>):Promise<A>{
-    return this.map(
-      function(e){
-        return switch (e){
-          case   Success(r)     : Success(r);
-          case   Failure(l)     : fn(l);
-        }
-      }
-    );
+    return this.map(Outcomes.fold.bind(_,Success,fn));
   }
   public function verify<B>(fn:A->Outcome<B>):Promise<B>{
-    return this.map(
-      function(e:Outcome<A>):Outcome<B>{
-        return switch (e){
-          case    Failure(l)     : Failure(l);
-          case    Success(r)     : fn(r);
-        }
-      }
-    );
+    return this.map(Outcomes.fold.bind(_,fn,Failure));
   }
   public function success(fn:A->Void):Promise<A>{
-    return this.each(
-      function(x){
-        switch (x) {
-          case Success(success) : fn(success);
-          default               : 
-        }
-      }
-    );
+    return this.each(Outcomes.success.bind(_,fn));
   }
   public function failure(fn:Fail->Void):Promise<A>{
-    return this.each(
-      function(x){
-        switch (x) {
-          case Failure(failure) : fn(failure);
-          default               : 
-        }
-      }
-    );
+    return this.each(Outcomes.failure.bind(_,fn));
   }
   public function complete(fn:Void->Void):Promise<A>{
-    return this.each(
-      function(x){
-        fn();
-      }
-    );
+    return this.each(fn.promote());
   }
-  @doc("
-    Calls callback, placing a left value in the first parameter or a right in the second.
-  ")
+  @doc("Calls callback, placing a left value in the first parameter or a right in the second.")
   public function callback(fn:Fail->A->Void):Promise<A>{
     return this.each(
       function(x){
@@ -81,7 +47,7 @@ abstract Promise<A>(PromiseType<A>) from PromiseType<A> to PromiseType<A>{
       }
     );
   }
-  @doc("Does a map if the Either is Failure.")
+  @doc("Does a map if the Outcome is Success.")
   public function map<B>(fn:A->B):Promise<B>{
     return this.map(
       function(x){
@@ -96,9 +62,7 @@ abstract Promise<A>(PromiseType<A>) from PromiseType<A> to PromiseType<A>{
   public function transform<B>(fn:Outcome<A>->Outcome<B>):Promise<B>{
     return this.map(fn);
   }
-  @doc("
-    Zips the right hand value with function `fn`
-  ")
+  @doc("Zips the right hand value with function `fn`")
   public function zipWith<B,C>(f1:Promise<B>,fn : A -> B -> C):Promise<C>{
     return this.zipWith(f1,
         function(a,b):Outcome<C>{
