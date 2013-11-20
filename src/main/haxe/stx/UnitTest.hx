@@ -6,6 +6,7 @@ import stx.Compare.*;
 import stx.Log.*;
 import stx.rtti.*;
 
+import stx.Future;
 import haxe.rtti.CType;
 import Type;
 
@@ -82,30 +83,29 @@ class UnitTest{
   }
 }
 class MusterPromises0{
-  static public function flatten(arr:Promise<Array<TestArrow>>):UnitArrow{
-    return new UnitArrow(
-      Arrows.then(UnitArrow.unit(),
-      function(arr0:Array<TestArrow>){
-        return arr.map(
+  static public function flatten(arr:Future<Array<TestArrow>>):UnitArrow{
+    return new UnitArrow(new Arrow(
+      function(arr0:Array<TestArrow>,cont:Array<TestArrow>->Void):Void{
+        arr.map(
           function(arr1){
             return arr0.append(arr1);
           }
-        );
+        ).each(cont);
       }
     ));
   }
 }
 class MusterPromises{
-  static public function flatten(t:Promise<TestArrow>):TestArrow{
+  static public function flatten(t:Future<TestArrow>):TestArrow{
     var arw = TestArrow.unit().then( 
-        function(r:TestResult){
-          return t.flatMap(
+        function(r:TestResult,cont:TestResult->Void){
+          t.flatMap(
             function(x:TestArrow){
-              var o = x.apply(r);
+              var o = x.proceed(r);
               return o;
             }
-          );
-        }.lift()
+          ).each(cont);
+        }
       );
     return arw;
   }
@@ -167,12 +167,13 @@ abstract UnitArrow(Arrow<Array<TestArrow>,Array<TestArrow>>) from Arrow<Array<Te
   public function append(ar:Array<TestArrow>):UnitArrow{
     return this.then(Arrays.append.bind(_,ar));
   }
-  public function reply(){
-    return this.proceed([]).flatMap(
+  public function reply():Future<Array<TestResult>>{
+    var prm : Future<Array<TestArrow>> = this.proceed([]);
+    return prm.flatMap(
       function(arr){
-        return Continuation.bindFold(arr,
+        return Futures.bindFold(arr,
           [],
-          function(memo:Array<Dynamic>,next){
+          function(memo:Array<Dynamic>,next:TestArrow){
             return next.proceed(TestResult.unit()).map(memo.add);
           }
         );

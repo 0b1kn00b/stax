@@ -20,9 +20,7 @@ class HaxeTest extends TestCase{
   public function testOr(u:UnitArrow):UnitArrow{
     var a = null;
     var b = "1";
-    var c = "2";
-    //var d = a ^ b ^ c;
-    
+    var c = "2";    
     return u;
   }
   public function testReflectCopy(u:UnitArrow):UnitArrow{

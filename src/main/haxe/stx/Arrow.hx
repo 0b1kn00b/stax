@@ -114,6 +114,9 @@ class Arrows{
   static public inline function proceed<I,O>(arw:Arrow<I,O>,i:I):Continuation<Void,O>{
     return withInput.bind(arw,i);
   }
+  // static public inline function apply<I,O>(arw:Arrow<I,O>,i:I):Future<Void,O>{
+  //   return withInput.bind(arw,i);
+  // }
   @doc("left to right composition of Arrows. Produces an Arrow running `before` and placing it's value in `after`.")
   static public function then<A,B,C>(before:Arrow<A,B>, after:Arrow<B,C>):Arrow<A,C> { 
     /*assert(before);

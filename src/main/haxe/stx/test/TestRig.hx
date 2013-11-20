@@ -2,7 +2,6 @@ package stx.test;
 
 import haxe.rtti.CType;
 
-import stx.Outcome;
 import Prelude;
 import Stax.*;
 import stx.Compare.*;
@@ -12,7 +11,9 @@ import stx.rtti.RTypes;
 import stx.test.*;
 import stx.Tuples;
 import stx.rtti.Routine;
+import stx.Promise;
 
+using stx.Outcome;
 using stx.Continuation;
 using stx.UnitTest;
 using stx.Compare;
@@ -20,7 +21,6 @@ using stx.Arrow;
 using stx.Arrays;
 using stx.Option;
 using stx.Strings;
-using stx.Contract;
 using stx.Either;
 using stx.ValueTypes;
 
@@ -35,9 +35,9 @@ abstract TestRig(Array<Reflection<Dynamic>>) from Array<Reflection<Dynamic>>{
     return this.append(arr.map(parse.bind(_,prefix)));
   }
   public function reply():Promise<Array<KV<Array<TestResult>>>>{
-    return this.bindFold( [],
+    return Promises.bindFold(this,[],
       function(itm,kv){
-        return kv.routines().bindFold( [],
+        return Promises.bindFold(kv.routines(),[],
           function(arr,fld){
             return invoke(fld).map(arr.append);
           }
@@ -46,7 +46,7 @@ abstract TestRig(Array<Reflection<Dynamic>>) from Array<Reflection<Dynamic>>{
     );
   }
   public function run(){
-    reply().map(Printers.print).each(
+    reply().reply().map(Printers.print).each(
       function(e){
         switch (e){
           case Failure(l)   : trace(l);
@@ -79,10 +79,11 @@ abstract TestRig(Array<Reflection<Dynamic>>) from Array<Reflection<Dynamic>>{
         return Success(UnitArrow.unit().add(TestArrow.unit().val(Some(e))));
       }
     );
-    var p : Promise<UnitArrow> = Continuation.pure(o);
+    var p : Promise<UnitArrow> = Promise.pure(o);
     return p.flatMap(
       function(arw:UnitArrow):Promise<Array<TestResult>>{
-        return arw.reply().map(Success);
+        var o : Promise<Array<TestResult>> =  new Promise(arw.reply().map(Success));
+        return o;
       }
     );
   }

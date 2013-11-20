@@ -2,13 +2,12 @@ import stx.Log.*;
 
 //import stx.Future;
 
-/*using stx.UnitTest;
+using stx.UnitTest;
 
-import haxe.macro.Expr;
 import Stax.*;
-*/
 
 import stx.OutcomeTest;
+
 class Test{
   @:bug('#0b1kn00b: UnitTest currently relies on rtti which is empty at macro time.')
   macro static function macros(e:Expr){
@@ -20,23 +19,19 @@ class Test{
       rig.append(tests#if select ,'devtest' #end).run();*/
     return e;
   }
-  public function a<T,U>(v:Array<T>,fn:T->U):Array<U>{
-    return stx.Arrays.map(v,fn);
-  }
   function new(){
     trace(debug('entry point'));
-    var a = new stx.OutcomeTest();
-        a.testOutcome(null);
-    /*Stax.init();//bootstrap bug 
-    ;
-    var rig                     = UnitTest.rig();*/
-    var tests = 
+    Stax.init();//bootstrap bug 
+    var rig                     = UnitTest.rig();
+    var tests : Array<TestCase> = 
     //#if development
       [
-        new stx.OutcomeTest(),
-        /*
-        new stx.ContinuationTest(),
         new HaxeTest(),
+        /*
+        new stx.MonoidTest(),
+        new stx.ContinuationTest(),
+        new stx.ContinuationTest(),
+        
         new stx.UnitTestTest(),  
         new stx.utl.SelectorTest(),
         new hx.rct.ReactorTest(),
@@ -79,8 +74,7 @@ class Test{
         new stx.ArraysTest(),
         new stx.plus.CloneTest(),
         
-        */
-  /*      
+        */  /*      
         new stx.PredicatesTest(),*/
         //new stx.EventualTest(),
         //new stx.ds.ListTest(),
@@ -99,7 +93,7 @@ class Test{
         new stx.ifs.PureTest(),
         new stx.ifs.SemiGroupTest()*/
       ];
-    //rig.append(tests#if select ,'devtest' #end).run();
+    rig.append(tests#if select ,'devtest' #end).run();
   }
   static public function main(){
     var app = new Test();

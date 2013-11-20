@@ -1,4 +1,4 @@
-package stx.fnc.ifs;
+package stx.ifs;
 
 interface Zero<T>{
   public function zero():T;

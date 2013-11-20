@@ -1,17 +1,11 @@
 package stx;
 
 import Prelude;
+import stx.UnitTest;
 
-/*import Stax.*;
-import stx.Compare.*;
-import stx.Log.*;
+using stx.Outcome;
 
-using stx.UnitTest;*/
-
-using stx.fnc.Monad;
-
-class OutcomeTest /*extends TestCase*/{
-  public function new(){}
+class OutcomeTest extends TestCase{
   public function testOutcome(u){
     var a = Success(1);
     var b = a.flatMap(

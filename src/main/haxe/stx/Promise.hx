@@ -3,54 +3,92 @@ package stx;
 import Prelude;
 import Stax.*;
 
-import stx.fnc.Future;
-
+using stx.Outcome;
 import stx.Compare.*;
-import stx.fnc.mnd.Continuation;
+import stx.Continuation;
+import stx.Future;
 
-using stx.fnc.Monad;
+using stx.Iterables;
+using stx.Functions;
 using stx.Arrays;
 using stx.Tuples;
 
-typedef PromiseType<A>            = Future<Outcome<A>>;
+typedef PromiseType<A>            = FutureType<Outcome<A>>;
 
 abstract Promise<A>(PromiseType<A>) from PromiseType<A> to PromiseType<A>{
   @:noUsing static public function pure<A>(e:Outcome<A>):Promise<A>{
-    return Futures.pure(e);
+    return Future.pure(e);
   }
-  public function new(p){
+  @:from static public inline function fromFuture(cnt:Future<Outcome<A>>):Promise<A>{
+    return new Promise(cnt);
+  }
+  @:from static public inline function fromContinuation<A>(cnt:ContinuationType<Void,Outcome<A>>):Promise<A>{
+    return new Promise(cnt);
+  }
+  public function new(p:PromiseType<A>){
     this = p;
   }
+  public function apply(fn:Outcome<A>->Void):Void{
+    Futures.apply(this,fn);
+  }
+  public function reply():Contract<A>{
+    var a = Contract.unit();
+    this(a.deliver);
+    return a;
+  }
   public function retry<B>(fn:Fail->Outcome<A>):Promise<A>{
-    return this.map(Outcomes.fold.bind(_,Success,fn));
+    return Promises.retry(this,fn);
   }
   public function verify<B>(fn:A->Outcome<B>):Promise<B>{
-    return this.map(Outcomes.fold.bind(_,fn,Failure));
+    return Promises.verify(this,fn);
   }
-  public function success(fn:A->Void):Promise<A>{
-    return this.each(Outcomes.success.bind(_,fn));
+  public function onSuccess(fn:A->Void):Promise<A>{
+    return Promises.each(this,Outcomes.onSuccess.bind(_,fn));
   }
-  public function failure(fn:Fail->Void):Promise<A>{
-    return this.each(Outcomes.failure.bind(_,fn));
+  public function onFailure(fn:Fail->Void):Promise<A>{
+    return Promises.each(this,Outcomes.onFailure.bind(_,fn));
   }
-  public function complete(fn:Void->Void):Promise<A>{
-    return this.each(fn.promote());
-  }
-  @doc("Calls callback, placing a left value in the first parameter or a right in the second.")
-  public function callback(fn:Fail->A->Void):Promise<A>{
-    return this.each(
-      function(x){
-        switch (x){
-          case      Failure(l)     : fn(l,null);
-          case      Success(r)     : fn(null,r);
-        }
-      }
-    );
+  public function onComplete(fn:Void->Void):Promise<A>{
+    return Promises.each(this,fn.promote());
   }
   @doc("Does a map if the Outcome is Success.")
   public function map<B>(fn:A->B):Promise<B>{
-    return this.map(
-      function(x){
+    return Promises.map(this,fn);
+  }
+  public function transform<B>(fn:Outcome<A>->Outcome<B>):Promise<B>{
+    return Promises.transform(this,fn);
+  }
+  @doc("Zips the right hand value with function `fn`")
+  public function zipWith<A,B,C>(prm1:Promise<B>,fn : A -> B -> C):Promise<C>{
+    return Promises.zipWith(this,prm1,fn);
+  }
+  @doc("Zips the right hand value.")
+  public function zip<A,B>(f1:Promise<B>):Promise<Tuple2<A,B>>{
+    return zipWith(f1,tuple2);
+  }
+  @doc("flatMaps the right hand value")
+  public function flatMap<B>(fn : A -> Promise<B>):Promise<B>{
+    return Promises.flatMap(this,fn);
+  }
+  public function each(f:Outcome<A>->Void):Promise<A>{
+    return Promises.each(this,f);
+  }
+  static public function intact<A>(v:A){
+    return pure(Success(v));
+  }
+  static public function breach(f:Fail){
+    return pure(Failure(f));
+  }
+}
+
+class Promises{
+  static public function each<A>(prm:Promise<A>,f:Outcome<A>->Void):Promise<A>{
+    return Futures.each(prm,f);
+  }
+  @doc("Does a map if the Outcome is Success.")
+  static public function map<A,B>(prm:Promise<A>,fn:A->B):Promise<B>{
+    return Futures.map(prm,
+      function(x:Outcome<A>){
         return x.map(
             function(y:A){
               return fn(y);
@@ -59,15 +97,14 @@ abstract Promise<A>(PromiseType<A>) from PromiseType<A> to PromiseType<A>{
       }
     );
   }
-  public function transform<B>(fn:Outcome<A>->Outcome<B>):Promise<B>{
-    return this.map(fn);
+  static public function transform<A,B>(prm:Promise<A>,fn:Outcome<A>->Outcome<B>):Promise<B>{
+    return Futures.map(prm,fn);
   }
   @doc("Zips the right hand value with function `fn`")
-  public function zipWith<B,C>(f1:Promise<B>,fn : A -> B -> C):Promise<C>{
-    return this.zipWith(f1,
+  static public function zipWith<A,B,C>(prm:Promise<A>,f1:Promise<B>,fn : A -> B -> C):Promise<C>{
+    return Futures.zipWith(prm,f1,
         function(a,b):Outcome<C>{
-          return 
-            switch (a) {
+          return switch (a) {
               case Failure(v1)       : Failure(v1);
               case Success(v1)       :
                 switch (b) {
@@ -79,39 +116,32 @@ abstract Promise<A>(PromiseType<A>) from PromiseType<A> to PromiseType<A>{
       );
   }
   @doc("Zips the right hand value.")
-  public function zip<A,B>(f1:Promise<B>):Promise<Tuple2<A,B>>{
-    return zipWith(f1,tuple2);
+  static public function zip<A,B>(prm0:Promise<A>,prm1:Promise<B>):Promise<Tuple2<A,B>>{
+    return zipWith(prm0,prm1,tuple2);
   }
   @doc("flatMaps the right hand value")
-  public function flatMap<B>(fn : A -> Promise<B>):Promise<B>{
-    return this.flatMap(
+  static public function flatMap<A,B>(prm:Promise<A>,fn : A -> Promise<B>):Promise<B>{
+    return Futures.flatMap(prm,
         function(x){
           return switch (x) {
-              case Failure(v1)  : new Promise().deliver(Failure(v1));
+              case Failure(v1)  : Promise.pure(Failure(v1));
               case Success(v2)  : fn(v2);
             }
         }
       );
   }
-  public function each(f:Outcome<A>->Void):Promise<A>{
-    return this.each(f);
-  }
-}
-class Promises{
-  static public function toPromise<A>(e:Eventual<Outcome<A>>):Promise<A>{
-    var o : Promise<A> = e.map(
-      function(o:Outcome<A>):Outcome<A>{
-        var o2 : Outcome<A> = o;
-        return o2;
+  static public function retry<A,B>(prm:Promise<A>,fn:Fail->Outcome<A>):Promise<A>{
+    return Futures.map(prm,
+      function(o){
+        return switch (o) {
+          case Failure(e) : fn(e);
+          default         : o;
+        }
       }
     );
-    return o;
   }
-  static public function intact<A>(v:A):Promise<A>{
-    return Promise.pure(Success(v)); 
-  }
-  static public function breach<A>(v:Fail):Promise<A>{
-    return Promise.pure(Failure(v));
+  static public function verify<A,B>(prm:Promise<A>,fn:A->Outcome<B>):Promise<B>{
+    return Futures.map(prm,Outcomes.fold.bind(_,fn,Failure));
   }
   @doc("
     Use this with a flatmap fold to wait for parallel futures.
@@ -119,24 +149,16 @@ class Promises{
     This op stops when there is a single failure
   ")
   static public function waitfold<A>(init:Promise<Array<A>>,ft:Promise<A>):Promise<Array<A>>{
-    return 
-      init.flatMap(
+    return init.flatMap(
         function(arr:Array<A>){
-          return 
-            ft.map(
-              function(v:A):Array<A>{
-                return arr.add(v);
-              }
-            );
+          return ft.map(arr.add);
         }
       );
   }
-  @doc("
-    Returns a single future with an Array of the results, or an Fail.
-  ")
+  @doc("Returns a single future with an Array of the results, or a Fail.")
   static public function wait<A>(a:Array<Promise<A>>):Promise<Array<A>>{
     return a.foldLeft(
-        intact([])
+        Promise.intact([])
       , waitfold
     );
   }
@@ -145,25 +167,23 @@ class Promises{
       Promise.pure(Success(start)),
       function(memo : Promise<B>, next : A){
         return memo.flatMap(
-            function(b: B){
-              return fm(b,next);
-            }
-          );
+          function(x){
+            return fm(x,next);
+          }
+        );
       }
     );
   }
   static public function unzip<A,B,C>(tp:Tuple2<Promise<A>,Promise<B>>):Promise<Tuple2<A,B>>{
-    return 
-      tp.fst().flatMap(
-        function(b:A){
-          return tp.snd().map( tuple2.bind(b) );
-        }
-      );
+    return tp.fst().flatMap(
+      function(b:A){
+        return tp.snd().map( tuple2.bind(b) );
+      }
+    );
   }
   public static function chain<A>(a:Array<Thunk<Promise<A>>>):Promise<Array<A>>{
-    return 
-      a.foldLeft(
-        intact([])
+    return a.foldLeft(
+        Promise.intact([])
       , function(init,fn){
           return 
             init.flatMap(function(x) return fn().map(function(y) return x.add(y)));
@@ -171,54 +191,6 @@ class Promises{
     );
   }
   static public function asPromise<T>(evt:Eventual<Outcome<T>>):Promise<T>{
-    return evt;
-  }
-}
-class Promises2{
-  @doc("
-    Creates a Promise from a callback of function (err,res).
-  ")
-  static public function toPromise<A>(f:(Dynamic->A->Void)->Void):Promise<A>{
-    var ft = new Promise();
-    f( 
-      function(a,b){
-        if(a!=null){
-          ft.deliver(Failure(fail(NativeError(a))));
-        }else{
-          ft.deliver(Success(b));
-        }
-      }
-     );
-    return ft;
-  }
-}
-class Promises3{
-  static public function toPromise<A,B>(f:(String->A->B->Void)->Void):Promise<Tuple2<A,B>>{
-    var ft = new Promise();
-    f(
-      function(a,b,c){
-        if(a!=null){
-          ft.deliver(Failure(fail(NativeError(a))));
-        }else{
-          ft.deliver(Success(tuple2(b,c)));
-        }
-      }
-    );
-    return ft;
-  }
-}
-class Promises4{
-  static public function toPromise<A,B,C>(f:(String->A->B->C->Void)->Void):Promise<Tuple3<A,B,C>>{
-    var ft = Promise.unit();
-    f(
-      function(e,a,b,c){
-        if(e!=null){
-          ft.deliver(Failure(fail(NativeError(e))));
-        }else{
-          ft.deliver(Success(tuple3(a,b,c)));
-        }
-      }
-    );
-    return ft;
+    return new Promise(evt.each);
   }
 }

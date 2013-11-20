@@ -9,15 +9,9 @@ using stx.Tuples;
 
 typedef ContinuationType<R,A>   = (A -> R) -> R;
 typedef Cont<R,A>               = Continuation<R,A>;
-typedef FutureType<A>           = Cont<Void,A>;
 
-@doc("
-  The mother of all Monads. Rumour has it that only a handful of acolytes understand the true functioning of `cc`.
-")
+@doc("The mother of all Monads. Rumour has it that only a handful of acolytes understand the true functioning of `cc`")
 abstract Continuation<R,A>(ContinuationType<R,A>) from ContinuationType<R,A> to ContinuationType<R,A>{
-  static public function cont<R,A>(def:ContinuationType<R,A>):Cont<R,A>{
-    return new Continuation(def);
-  }
   @:noUsing static public function pure<R,A>(a:A):Continuation<R,A>{
     return function(x:A->R){
       return x(a);
@@ -35,39 +29,16 @@ abstract Continuation<R,A>(ContinuationType<R,A>) from ContinuationType<R,A> to 
     return (this)(fn);
   }
   public function map<B>(k:A->B):Continuation<R,B>{
-    return function(cont:B->R):R{
-      return apply(this,
-        function(v:A){
-          return cont(k(v));
-        }
-      );
-    }
+    return Continuations.map(this,k);
   }
   public function each(k:A->Void):Continuation<R,A>{
-    return map(
-      function(x){
-        k(x);
-        return x;
-      }
-    );
+    return Continuations.each(this,k);
   }
   public function flatMap<B>(k:A -> Continuation<R,B>):Continuation<R,B>{
-    return new Continuation(
-      function(cont : B -> R):R{
-        return apply(this, function(a:A):R{ return k(a).apply(cont); });
-      }
-    );
+    return Continuations.flatMap(this,k);
   }
   public function zipWith<B,C>(cnt0:Continuation<R,B>,fn:A->B->C):Continuation<R,C>{
-    return new Continuation(
-      function(cont:C->R){
-        return this(function(a){
-          return cnt0.apply(function(b){
-            return cont(fn(a,b));
-          });
-        });
-      }
-    );
+    return Continuations.zipWith(this,cnt0,fn);
   }
   static public function bindFold<R,A,B>(arr:Array<A>,init:B,fold:B->A->Cont<R,B>){
     return stx.Arrays.foldLeft(arr,
@@ -109,5 +80,46 @@ abstract Continuation<R,A>(ContinuationType<R,A>) from ContinuationType<R,A> to 
       ft.deliver
     );
     return ft;
+  }
+}
+class Continuations{
+  static public function apply<R,A>(cnt:Continuation<R,A>,fn:A->R):R{
+    return cnt.apply(fn);
+  }
+  static public function map<R,A,B>(cnt:Continuation<R,A>,k:A->B):Continuation<R,B>{
+    return function(cont:B->R):R{
+      return apply(cnt,
+        function(v:A){
+          return cont(k(v));
+        }
+      );
+    }
+  }
+  static public function each<R,A>(cnt:Continuation<R,A>,k:A->Void):Continuation<R,A>{
+    return map(
+      cnt,
+      function(x:A):A{
+        k(x);
+        return x;
+      }
+    );
+  }
+  static public function flatMap<R,A,B>(cnt:Continuation<R,A>,k:A -> Continuation<R,B>):Continuation<R,B>{
+    return new Continuation(
+      function(cont : B -> R):R{
+        return apply(cnt, function(a:A):R{ return k(a).apply(cont); });
+      }
+    );
+  }
+  static public function zipWith<R,A,B,C>(cnt:Continuation<R,A>,cnt0:Continuation<R,B>,fn:A->B->C):Continuation<R,C>{
+    return new Continuation(
+      function(cont:C->R){
+        return cnt.apply(function(a){
+          return cnt0.apply(function(b){
+            return cont(fn(a,b));
+          });
+        });
+      }
+    );
   }
 }
