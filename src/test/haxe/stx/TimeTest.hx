@@ -5,17 +5,17 @@ using stx.UnitTest;
 import stx.Compare.*;
 import stx.Log.*;
 
-import stx.Time;
+import stx.Period;
 import stx.time.DateSpan;
-using stx.Dates;
+
+//using stx.Dates;
 
 class TimeTest extends TestCase{
   public function testTime(u:UnitArrow):UnitArrow{
-    var a = Time.now();
+    /*var a = Time.now();
     trace(a.sub(Time.hour(1)).toDate());
     var b = a.toDate().day(Monday).snap(Day).sub(Time.hour());
-    trace(b);
+    trace(b);*/
     return u;
   }
 }
-

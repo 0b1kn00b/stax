@@ -8,8 +8,8 @@ using stx.UnitTest;
 
 using stx.Arrays;
 using stx.Strings;
-using stx.prs.Base;
-using stx.prs.Parser;
+using stx.prs.Ascii;
+using stx.Parser;
 using stx.prs.StringParsers;
 
 import stx.log.prs.LogListingParser.*;

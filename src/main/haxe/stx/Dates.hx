@@ -3,8 +3,8 @@ package stx;
 import Stax.*;
 
 import stx.time.DateSpan;
-using stx.time.Day;
 
+using stx.time.Week;
 using stx.Option;
 
 @:thx
@@ -40,7 +40,8 @@ class Dates {
     return Date.fromTime(d0.getTime()-d1.getTime());
   }
   @doc("snaps `dt` to the nearest `day`")
-  static public function day(dt:Date,day:Day):Date{
+  static public function day(dt:Date,day:Week):Date{
+
     return Date.fromTime(dt.getTime() - ((dt.getDay() - day.toInt()) % 7) * 24 * 60 * 60 * 1000);
   }
   @doc("snaps `dt` to a period `s`.")

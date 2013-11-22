@@ -82,34 +82,6 @@ class UnitTest{
       );
   }
 }
-class MusterPromises0{
-  static public function flatten(arr:Future<Array<TestArrow>>):UnitArrow{
-    return new UnitArrow(new Arrow(
-      function(arr0:Array<TestArrow>,cont:Array<TestArrow>->Void):Void{
-        arr.map(
-          function(arr1){
-            return arr0.append(arr1);
-          }
-        ).each(cont);
-      }
-    ));
-  }
-}
-class MusterPromises{
-  static public function flatten(t:Future<TestArrow>):TestArrow{
-    var arw = TestArrow.unit().then( 
-        function(r:TestResult,cont:TestResult->Void){
-          t.flatMap(
-            function(x:TestArrow){
-              var o = x.proceed(r);
-              return o;
-            }
-          ).each(cont);
-        }
-      );
-    return arw;
-  }
-}
 class Printers{
   static public function print(arr:Array<KV<Array<TestResult>>>){
     return arr.foldLeft('',
@@ -154,6 +126,20 @@ class TestCase extends Introspect{
 abstract UnitArrow(Arrow<Array<TestArrow>,Array<TestArrow>>) from Arrow<Array<TestArrow>,Array<TestArrow>> to Arrow<Array<TestArrow>,Array<TestArrow>>{
   @:noUsing static public function unit():UnitArrow{
     return new UnitArrow();
+  }
+  @:from static public inline function fromFutureTestArrows(arr:Future<Array<TestArrow>>):UnitArrow{
+    return new UnitArrow(new Arrow(
+      function(arr0:Array<TestArrow>,cont:Array<TestArrow>->Void):Void{
+        arr.map(
+          function(arr1){
+            return arr0.append(arr1);
+          }
+        ).each(cont);
+      }
+    ));
+  }
+  @:from static public inline function fromEventualTestArrows(arr:Eventual<Array<TestArrow>>){
+    return fromFutureTestArrows(arr.each);
   }
   public function new(?v){
     this = nl().apply(v) ? Arrow.unit() : v;

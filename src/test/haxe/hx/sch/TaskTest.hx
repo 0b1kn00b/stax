@@ -20,7 +20,7 @@ class TaskTest extends TestCase{
       second(3)
     );
     a.start();
-    return u.add(evt.flatten());
+    return u.add(evt);
   }
 }
 

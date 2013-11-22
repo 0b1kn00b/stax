@@ -28,7 +28,7 @@ abstract Promise<A>(PromiseType<A>) from PromiseType<A> to PromiseType<A>{
   public function new(p:PromiseType<A>){
     this = p;
   }
-  public function apply(fn:Outcome<A>->Void):Void{
+  public function apply(fn:Outcome<A>->Void){
     Futures.apply(this,fn);
   }
   public function reply():Contract<A>{

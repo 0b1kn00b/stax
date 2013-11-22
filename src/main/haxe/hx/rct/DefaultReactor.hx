@@ -20,7 +20,7 @@ class DefaultReactor<I> implements IReactor<I>{
   private var equality    : I -> I -> Bool;
   @:isVar public var dispatchers(get,null) : Dispatchers<I,I>;
   private function get_dispatchers(){
-    return dispatchers.copy(); 
+    return dispatchers; 
   }
   public function new(){
     this.dispatchers = new Dispatchers();
@@ -58,7 +58,7 @@ class DefaultReactor<I> implements IReactor<I>{
       false;
     }
   }
-  public function has(slct:Selector<I>):Bool {
+  public function has(slct:Selector<I>):Bool{
     check(slct);
     return dispatchers.hasWith(slct,equality);
   }

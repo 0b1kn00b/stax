@@ -1,5 +1,8 @@
 package hx.rct;
 
+import stx.Log.*;
+import Stax.*;
+
 import stx.utl.Selector;
 import stx.plus.Equal;
 
@@ -30,10 +33,17 @@ abstract Dispatchers<I,O>(DispatchersType<I,O>) from DispatchersType<I,O> to Dis
   }
   public function addWith(slct:Selector<I>,handler:O->Void,equal:I->I->Bool){
     var val = findWith(slct,handler,equal);
-    if(val.isDefined()){
-      val.get().snd().push(handler);
+    return if(val.isDefined()){
+      var arr = val.get().snd();
+      if(arr.indexOf(handler) != -1){
+        false;
+      }else{
+        arr.push(handler);
+        true;
+      }
     }else{
       this.push(tuple2(slct,[handler]));
+      true;
     }
   }
   public function remWith(slct:Selector<I>,handler:O->Void,equal:I->I->Bool){

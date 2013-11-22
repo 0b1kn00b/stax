@@ -1,12 +1,9 @@
 import stx.Log.*;
 
 //import stx.Future;
-
 using stx.UnitTest;
 
 import Stax.*;
-
-import stx.OutcomeTest;
 
 class Test{
   @:bug('#0b1kn00b: UnitTest currently relies on rtti which is empty at macro time.')
@@ -26,33 +23,40 @@ class Test{
     var tests : Array<TestCase> = 
     //#if development
       [
+        new stx.TimeTest(),
+        /*      
         new HaxeTest(),
-        /*
         new stx.MonoidTest(),
         new stx.ContinuationTest(),
-        new stx.ContinuationTest(),
-        
         new stx.UnitTestTest(),  
+        new hx.rct.ReactorTest(),
+        new hx.rct.DispatchersTest(),
         new stx.utl.SelectorTest(),
         new hx.rct.ReactorTest(),
-        new stx.mcr.TypesTest(),
-        new stx.mcr.LensesMacroTest(),
+        new hx.rct.ReactorTest(),
+                
         new stx.plus.CloneTest(),
         new stx.StateTest(),
-        new stx.prs.JsonTest(),
+        new stx.PositionsTest(),
+        new stx.LogTest(),
         
         new stx.iteratee.IterateeTest(),
         new stx.log.prs.LogListingParserTest(),
         new rx.RxTest(),
-
         new hx.sch.TaskTest(),
-        new stx.TimeTest(),
+        
+
+        new stx.mcr.TypesTest(),
+        new stx.mcr.LensesMacroTest(),
+
+        
+        new stx.prs.JsonTest(),
+        
+        
         
         new stx.ObjectsTest(),
         new stx.plus.MetaTest(),
-        new stx.PositionsTest(),
-        new stx.LogTest(),
-        new stx.ds.LispListTest(),
+        
         new stx.OutcomeTest(),
         new stx.ArrowTest(),
         new stx.ds.MapTest(),
@@ -65,7 +69,7 @@ class Test{
               
         new stx.ioc.IocTest(),
         new stx.ReflectsTest(),
-        new stx.TypesTest(),
+        new stx.TypesTest(),    
         new stx.ds.ListNewTest(),
         new stx.mcr.SelfTest(),new SubclassTest(),
         new stx.math.geom.Point2dTest(),
@@ -74,12 +78,11 @@ class Test{
         new stx.ArraysTest(),
         new stx.plus.CloneTest(),
         
-        */  /*      
-        new stx.PredicatesTest(),*/
-        //new stx.EventualTest(),
-        //new stx.ds.ListTest(),
-        //new stx.ds.LinkTest(),
-        /*
+        new stx.PredicatesTest(),
+        new stx.EventualTest(),
+        new stx.ds.ListTest(),
+        new stx.ds.LinkTest(),
+
 
         new stx.mcr.MacrosTest(),
         new stx.ReturnTest(),

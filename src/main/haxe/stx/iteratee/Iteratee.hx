@@ -1,8 +1,11 @@
 package stx.iteratee;
 
+import Prelude;
 import Stax.*;
+
 import stx.Fail;
 import stx.iteratee.AnonymousIteratee;
+
 import stx.iteratee.ifs.Iteratee in IIteratee;
 
 using stx.Contract;
@@ -33,7 +36,7 @@ class Iteratees{
                 function(step1){
                   return switch (step1) {
                     case Step.Over(a,_)       : Contracts.intact(a);
-                    case Step.Cont(_)         : Contracts.breach(fail(IllegalOperationFail('Divergent Iteratee after Input.End')));
+                    case Step.Cont(_)         : Contracts.breach(fail(IllegalOperationError('Divergent Iteratee after Input.End')));
                     case Step.Fail(err,_)     : Contracts.breach(err);
                   }
                 }

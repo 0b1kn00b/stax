@@ -53,8 +53,7 @@ abstract Arrow<I,O>(ArrowType<I,O>) from ArrowType<I,O>{
   @:from static inline public function fromFn<A,B,C,D:(ArrowType<B,C>,Function)>(fn:A -> Tuple2<D,B>):Arrow<A,C>{
     return new Arrow(function(a:A,cont:C->Void):Void{
       var cont0 : Tuple2<D,B> -> Void 
-      =
-      function(next:Tuple2<D,B>){
+      =  function(next:Tuple2<D,B>){
         Arrows.withInput(next.fst(),next.snd(),cont);
       }
       cont0(fn(a));

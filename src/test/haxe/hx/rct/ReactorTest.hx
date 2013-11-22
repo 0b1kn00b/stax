@@ -1,5 +1,7 @@
 package hx.rct;
 
+import stx.test.TestArrow;
+
 using stx.UnitTest;
 
 import hx.Reactor;
@@ -19,7 +21,7 @@ using stx.Arrow;
 
 import kwv.rct.*;
 
-enum TestEvent{
+private enum TestEvent{
   EventVal(v:Int);
   OtherEventVal(v:Int);
 }
@@ -30,6 +32,7 @@ class ReactorTest extends TestCase{
     var a   = new DefaultReactor();
         a.once(new Selector(tuple2(cast Enums.alike,EventVal(999))),
           function(evt){
+            trace(evt);
             ev.deliver(
               isTrue(true)
             );
@@ -54,10 +57,16 @@ class ReactorTest extends TestCase{
             }
           }
         );
+        a.on(Reactors.any(),printer());
+        trace(a.dispatchers);
         a.emit(EventVal(999));
         a.emit(EventVal(999));
         a.emit(OtherEventVal(1));        
-    return u.append([ev,ev1,ev2].map(MusterEventuals.flatten));
+
+    var tsts : Array<TestArrow> = [];
+        //tsts = tsts;//.add(ev).add(ev1).add(ev2);
+    return u.add(ev).add(ev1).add(ev2);
+
   }
   /*public function testLazyStream(u:UnitArrow):UnitArrow{
     var a   = new DefaultReactor();

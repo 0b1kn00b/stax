@@ -1,6 +1,8 @@
 package stx.time;
+
 import stx.reactive.Reactive;
 #if neko
+
 import neko.vm.Thread;
 #end
 class Timer{

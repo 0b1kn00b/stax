@@ -26,7 +26,7 @@ class JsonTest extends TestCase{
     //trace(identifierP()(d.reader()));
     //trace(jsonValueP()(d.reader()));
     var e = '[0]';
-    trace(jsonArrayP()(e.reader()));
+    //trace(jsonArrayP()(e.reader()));
     var f = '\t\n\r ';
     //trace(spacingP()(f.reader()));
     return u;

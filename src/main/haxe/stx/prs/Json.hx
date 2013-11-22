@@ -1,5 +1,7 @@
 package stx.prs;
 
+import Prelude;
+
 using stx.Functions;
 using stx.Parser;
 using stx.prs.StringParsers;

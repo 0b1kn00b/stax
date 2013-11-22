@@ -1,6 +1,6 @@
 package stx.time;
 
-enum Day{
+enum Week{
   Sunday;
   Monday;
   Tuesday;
@@ -9,8 +9,9 @@ enum Day{
   Friday;
   Saturday;
 }
-class Days{
-  static public function toInt(d:Day):Int{
+
+class Weeks{
+  static public function toInt(d:Week):Int{
     return switch (d) {
       case Sunday    : 0;
       case Monday    : 1;

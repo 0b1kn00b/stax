@@ -25,7 +25,7 @@ abstract Selector<I>(SelectorType<I>) from SelectorType<I> to SelectorType<I>{
   @:noUsing static public function pure(v){
     return new Selector(v);
   }
-  public function new(v){
+  public function new(v:SelectorType<I>){
     this = v;
   }
   @:from public static inline function fromString(str:String):Selector<String>{

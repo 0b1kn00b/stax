@@ -121,7 +121,7 @@ class Stream<T> {
         }
     }
 
-    public function whenFinishedDo(func : Function0<Void>) : Void {
+    public function whenFinishedDo(func : Niladic) : Void {
         if(_weakRef) {
             func();
         } else {

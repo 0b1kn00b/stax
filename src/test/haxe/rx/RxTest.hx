@@ -39,14 +39,14 @@ class RxTest extends TestCase{
         );
     /*var a = Observables.returns(1);
         a.each(printer());*/
-    return u.add(evt.flatten());
+    return u.add(evt);
   }
   public function testTake(u:UnitArrow):UnitArrow{
     var obs   = [1,2,3,4].observe();
-        obs.takeWhile(function(i) return i < 2).next(printer());
+/*        obs.takeWhile(function(i) return i < 2).next(printer());
         obs.takeWhile(function(i) return i > 2).next(printer());
         obs.first().next(printer());
-        obs.first().next(printer());
+        obs.first().next(printer());*/
     //var obs1  = obs.first();
 
         /*obs1.each(printer());

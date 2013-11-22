@@ -9,6 +9,22 @@ abstract TestArrow(Arrow<TestResult,TestResult>) from Arrow<TestResult,TestResul
   @:noUsing static public function unit():TestArrow{
     return new TestArrow(function(r:TestResult){ return r;});
   }
+  /*@:from */static public inline function fromFutureTestArrow(t:Future<TestArrow>):TestArrow{
+    var arw = TestArrow.unit().then( 
+        function(r:TestResult,cont:TestResult->Void){
+          t.flatMap(
+            function(x:TestArrow){
+              var o = x.proceed(r);
+              return o;
+            }
+          ).each(cont);
+        }
+      );
+    return arw;
+  }
+  @:from static public inline function fromEventualTestArrow(evt:Eventual<TestArrow>):TestArrow{
+    return fromFutureTestArrow(evt.each);
+  }
   public function new(?v){
     this = nl().apply(v) ? Arrow.unit() : v;
   }

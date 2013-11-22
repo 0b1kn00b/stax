@@ -28,9 +28,9 @@ class StateTest extends TestCase{
 
 		var val = sr.flatMap( fn2 ).flatMap( fn3 );
 		//$type (val.map) ;
-		trace(val.eval());
+		//trace(val.eval());
 		var val2 = sr.flatMap( reader );
-		$type(val2);
+		//$type(val2);
 		trace(val2.exec(null));
 		trace('___________');
 		return u;

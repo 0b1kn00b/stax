@@ -1,5 +1,7 @@
 package rx.observable;
 
+import Prelude;
+
 import stx.Outcome;
 import stx.Contract;
 import stx.Chunk;
