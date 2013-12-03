@@ -54,7 +54,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
     return new Map<K, V>(key_tool,val_tool, [[]], 0);
   }
   /** Creates a factory for maps of the specified types. */
-  public static function factory<K, V>(?key_tool,?val_tool): Factory<Map<K, V>> {
+  public static function factory<K, V>(?key_tool,?val_tool): Thunk<Map<K, V>> {
     return function() {
       return Map.create(key_tool,val_tool);
     }

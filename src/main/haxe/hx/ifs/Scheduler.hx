@@ -2,7 +2,7 @@ package hx.ifs;
 
 import Prelude;
 
-import hx.sch.Run;
+import hx.Run;
 
 interface Scheduler{
   @doc("Schedule a `Run` in absolute time.")

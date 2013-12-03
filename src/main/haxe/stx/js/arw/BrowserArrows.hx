@@ -6,17 +6,17 @@ import js.Browser;
 import Prelude;
 import stx.Tuples;
 import stx.Tuples;
-import stx.arw.CallbackArrow;
+import stx.arrowlet.CallbackArrowlet;
 
 using stx.Option;
-using stx.Arrow;
+using stx.Arrowlet;
 using stx.Functions;
 
 
-class BrowserArrows{
-  static public function windowSize():Arrow<Unit,Tuple2<Int,Int>>{
+class BrowserArrowlets{
+  static public function windowSize():Arrowlet<Unit,Tuple2<Int,Int>>{
     var jqr                          = new JQuery(Browser.window).resize;
-    var evt : CallbackArrow<Dynamic> = jqr.enclose();
+    var evt : CallbackArrowlet<Dynamic> = jqr.enclose();
     
     return evt.then(
         function(x){

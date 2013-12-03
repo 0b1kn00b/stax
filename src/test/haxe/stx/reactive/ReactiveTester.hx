@@ -3,12 +3,12 @@ package stx.reactive;
 import Prelude;
 
 
-import stx.test.TestCase;
+import stx.test.Suite;
 
 import stx.ds.ifs.Collection;
 using stx.Tuples;
 import stx.reactive.Reactive;
-import stx.reactive.ReactiveTestCase;
+import stx.reactive.ReactiveSuite;
 
 import stx.reactive.SignalCollection;
 import stx.reactive.SignalSignal;
@@ -39,7 +39,7 @@ using stx.ds.Foldables;
 }*/
 
 
-class ReactiveTester extends TestCase {
+class ReactiveTester extends Suite {
     public var counter:         Int;
     var _collectionsToStream:   Array<Int>;
     var _collectionsToStreamB:  Array<Int>;

@@ -9,8 +9,8 @@ using stx.UnitTest;
 import stx.iteratee.Iteratee;
 import stx.iteratee.Enumerator;
 
-class IterateeTest extends TestCase{
-  public function testIteratee(u:UnitArrow):UnitArrow{
+class IterateeTest extends Suite{
+  public function testIteratee(u:TestCase):TestCase{
     return u;
   }
 }

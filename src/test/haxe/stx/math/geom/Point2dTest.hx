@@ -1,13 +1,12 @@
 package stx.math.geom;
 
-import stx.Muster;
-import stx.Muster.*;
+using stx.UnitTest;
 import stx.Log.*;
 
 import stx.math.geom.Point2d;
 
-class Point2dTest extends TestCase{
-  public function testPoint2d(u:UnitArrow):UnitArrow{
+class Point2dTest extends Suite{
+  public function testPoint2d(u:TestCase):TestCase{
     return u;
   }
 }

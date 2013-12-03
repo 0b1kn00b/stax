@@ -42,6 +42,13 @@ class Chunks{
         }
       );
   }
+  static public function sure<A>(chk:Chunk<A>):Option<A>{
+    return switch (chk) {
+      case Val(v) : option(v);
+      case Nil    : None;
+      case End(e) : throw e; None;
+    }
+  }
   static public function fold<A,Z>(chk:Chunk<A>,val:A->Z,ers:Null<Fail>->Z,nil:Void->Z):Z{
     return switch (chk) {
       case Val(v) : val(v);
@@ -131,14 +138,14 @@ class Chunks{
     return switch (chunk0){
       case Nil      :
         switch (chunk1){
-          case Nil      : fn(None,None).map(Chunks.create).getOrElseC(Nil);
-          case Val(v)   : fn(None,Some(v)).map(Chunks.create).getOrElseC(Nil);
+          case Nil      : fn(None,None).map(Chunks.create).valOrUse(Nil);
+          case Val(v)   : fn(None,Some(v)).map(Chunks.create).valOrUse(Nil);
           case End(err) : End(err);
         }
       case Val(v)   :
         switch (chunk1){
-          case Nil      : fn(Some(v),None).map(Chunks.create).getOrElseC(Nil);
-          case Val(v0)  : fn(Some(v),Some(v0)).map(Chunks.create).getOrElseC(Nil);
+          case Nil      : fn(Some(v),None).map(Chunks.create).valOrUse(Nil);
+          case Val(v0)  : fn(Some(v),Some(v0)).map(Chunks.create).valOrUse(Nil);
           case End(err) : End(err);
         }
       case End(err) :

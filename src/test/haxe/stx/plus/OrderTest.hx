@@ -1,12 +1,12 @@
 package stx.plus;
 
+import stx.UnitTest;
+
 import haxe.ds.HashMap;
 
 import Prelude;
 import stx.Tuples;
 
-import stx.Muster;
-import stx.Muster.*;
 import stx.Log.*;
 import stx.Compare.*;
 
@@ -17,8 +17,8 @@ using stx.Maths;
 using stx.plus.Order;
 using stx.plus.Equal;
 
-class OrderTest extends TestCase{
-	public function testOrderForInt(u:UnitArrow):UnitArrow {
+class OrderTest extends Suite{
+	public function testOrderForInt(u:TestCase):TestCase {
     var order = Order.getOrderFor(1);
     u = u.add(isTrue(order(2, 1)  > 0));
     u = u.add(isTrue(order(1, 2)  < 0));
@@ -26,7 +26,7 @@ class OrderTest extends TestCase{
     return u;
   }
 
-  public function testOrderForFloat(u:UnitArrow):UnitArrow {
+  public function testOrderForFloat(u:TestCase):TestCase {
     var order = Order.getOrderFor(1.0);
     u = u.add(isTrue(order(1.2, 1.1)  > 0));
     u = u.add(isTrue(order(1.1, 1.2)  < 0));
@@ -34,7 +34,7 @@ class OrderTest extends TestCase{
     return u;
   }
 
-  public function testOrderForBool(u:UnitArrow):UnitArrow {
+  public function testOrderForBool(u:TestCase):TestCase {
     var order = Order.getOrderFor(true);
     u = u.add(isTrue(order(true,  false)  > 0));
     u = u.add(isTrue(order(false, true)   < 0));
@@ -43,7 +43,7 @@ class OrderTest extends TestCase{
     return u;
   }
 
-  public function testOrderForNull(u:UnitArrow):UnitArrow {   
+  public function testOrderForNull(u:TestCase):TestCase {   
     var order = Order.getOrderFor(null);
     u = u.add(isTrue(order("s", null)   > 0));
     u = u.add(isTrue(order(null, "s")   < 0));
@@ -51,7 +51,7 @@ class OrderTest extends TestCase{
     return u;
   }  
 
-  public function testOrderForString(u:UnitArrow):UnitArrow {
+  public function testOrderForString(u:TestCase):TestCase {
     var order = Order.getOrderFor("s");
     u = u.add(isTrue(order("b", "a")  > 0));
     u = u.add(isTrue(order("a", "b")  < 0));
@@ -61,7 +61,7 @@ class OrderTest extends TestCase{
     return u;
   }             
 
-  public function testOrderForDate(u:UnitArrow):UnitArrow {
+  public function testOrderForDate(u:TestCase):TestCase {
     var a = Date.fromString("1999-12-31");
     var b = Date.fromString("2000-01-01");  
     var c = Date.fromString("1999-12-31");
@@ -74,7 +74,7 @@ class OrderTest extends TestCase{
     return u;
   }   
 
-  public function testOrderForArray(u:UnitArrow):UnitArrow {
+  public function testOrderForArray(u:TestCase):TestCase {
     var a1 = [1,2,3];
     var a2 = [4];
     var a3 = [2,2,3];
@@ -89,7 +89,7 @@ class OrderTest extends TestCase{
     return u;
   }
 
-  /*public function testOrderForComparableClass(u:UnitArrow):UnitArrow {   
+  /*public function testOrderForComparableClass(u:TestCase):TestCase {   
     var c1 = new Comparable(1);
     var c2 = new Comparable(2);  
     var c3 = new Comparable(1);
@@ -100,12 +100,12 @@ class OrderTest extends TestCase{
     return u;
   } 
 
-  public function testOrderForNotComparableClass(u:UnitArrow):UnitArrow {                 
+  public function testOrderForNotComparableClass(u:TestCase):TestCase {                 
     u = u.add(hasFail(function() Order.getOrderFor(new NotComparable())));
     return u;
   }*/
 
-  public function testReflectiveOrderForDynamicComparableClass(u:UnitArrow):UnitArrow {
+  public function testReflectiveOrderForDynamicComparableClass(u:TestCase):TestCase {
     var c1 = new DynamicComparable(1);
     var c2 = new DynamicComparable(2);
     var c3 = new DynamicComparable(1);
@@ -116,7 +116,7 @@ class OrderTest extends TestCase{
     return u;
   }
 
-  public function testReflectiveOrderForDynamicComparableDescendingClass(u:UnitArrow):UnitArrow {
+  public function testReflectiveOrderForDynamicComparableDescendingClass(u:TestCase):TestCase {
     var c1 = new DynamicComparableDescending(1);
     var c2 = new DynamicComparableDescending(2);
     var c3 = new DynamicComparableDescending(1);
@@ -127,11 +127,11 @@ class OrderTest extends TestCase{
     return u;
   }
 
-  public function testOrderForFunction(u:UnitArrow):UnitArrow {                 
+  public function testOrderForFunction(u:TestCase):TestCase {                 
     u = u.add(hasFail(function() Order.getOrderFor(function() trace("hello world"))));
     return u;
   }
-  /*public function testTupleOrder(u:UnitArrow):UnitArrow {    
+  /*public function testTupleOrder(u:TestCase):TestCase {    
     var tests : Array<Dynamic>= cast( 
       [
        tuple2(tuple2("b",0), tuple2("a",0)),
@@ -151,7 +151,7 @@ class OrderTest extends TestCase{
 				}
 		);
   }*/
-   public function testOrderForEnum(u:UnitArrow):UnitArrow { 
+   public function testOrderForEnum(u:TestCase):TestCase { 
     var o1 = None;
     var o2 = Some("a");
     var o3 = Some("b"); 
@@ -167,7 +167,7 @@ class OrderTest extends TestCase{
     u = u.add(isTrue(order(o2, o4) == 0));
     return u;
   }    
-/*  public function testTupleEqual(u:UnitArrow):UnitArrow {    
+/*  public function testTupleEqual(u:TestCase):TestCase {    
     var tests : Array<Dynamic> = cast ([
       tuple2(tuple2("b",0), tuple2("b",0)),
       tuple2(tuple2("a",1), tuple2("a",1)), 
@@ -182,7 +182,7 @@ class OrderTest extends TestCase{
 
     } 
   }*/
-  public function testGreaterThan(u:UnitArrow):UnitArrow {
+  public function testGreaterThan(u:TestCase):TestCase {
     u = u.add(isTrue (Ints.compare.greaterThan()(2, 1)));
     u = u.add(isFalse(Ints.compare.greaterThan()(1, 1)));
 
@@ -206,7 +206,7 @@ class OrderTest extends TestCase{
     return u;
   }
   
-  public function testOrderForAnonymousTyped(u:UnitArrow):UnitArrow {
+  public function testOrderForAnonymousTyped(u:TestCase):TestCase {
     var o1 = { name : "haxe"};                      
     var o2 = { name : "stx"};
     var o3 = { name : "haxe"};

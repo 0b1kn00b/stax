@@ -18,7 +18,7 @@ package stx.functional;
 
 import stx.Tuples;
 import Prelude;
-import stx.test.TestCase;
+import stx.test.Suite;
 import stx.functional.PartialFunction;
 
 using stx.Tuples;
@@ -26,7 +26,7 @@ using stx.Anys;
 
 using stx.PartialFunction;
 
-class PartialFunctionTest extends TestCase {
+class PartialFunctionTest extends Suite {
     public function testIsDefinedAtForPartialFunction1() {
       var f = [tuple2(function(i: Int) return i > 0, function(i: Int) return i * i)].toPartialFunction();
       

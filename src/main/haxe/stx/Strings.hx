@@ -25,19 +25,19 @@ class Strings {
     
     var vLower = v.toLowerCase();
     
-    return (if (vLower == 'false' || v == '0') Some(false) else if (vLower == 'true' || v == '1') Some(true) else None).getOrElseC(d);
+    return (if (vLower == 'false' || v == '0') Some(false) else if (vLower == 'true' || v == '1') Some(true) else None).valOrUse(d);
   }
   @doc("Returns an Int from String format, defaulting to `d`.")
   static public function int(v: String, ?d: Null<Int>): Int {
     if (v == null) return d;
     
-    return option(Std.parseInt(v)).filter(function(i) return !Math.isNaN(i)).getOrElseC(d);
+    return option(Std.parseInt(v)).filter(function(i) return !Math.isNaN(i)).valOrUse(d);
   }
   @doc("Returns a Float from String format, defaulting to `d`.")
   static public function toFloat(v: String, ?d: Null<Float>): Float { 
     if (v == null) return d;
     
-    return option(Std.parseFloat(v)).filter(function(i) return !Math.isNaN(i)).getOrElseC(d);
+    return option(Std.parseFloat(v)).filter(function(i) return !Math.isNaN(i)).valOrUse(d);
   }
   @doc("Returns `true` if `frag` is at the beginning of `v`, `false` otherwise.")
   static public function startsWith(v: String, frag: String): Bool {
@@ -219,7 +219,7 @@ class Strings {
             return if (index < value.length) {
                 value.substr(index++, 1);
             } else {
-                except()(OutOfBoundsError());
+                except()(IllegalOperationError('Index of String out of bounds'));
             }
         }
     };
@@ -246,7 +246,7 @@ class Strings {
   }
 }
 class ERegs{
-  static public function replace(s:String,reg:EReg,with:String):String {
+  static public function replaceReg(s:String,reg:EReg,with:String):String {
     return reg.replace(s,with);
   }
   static public function matches(reg:EReg):Array<String>{

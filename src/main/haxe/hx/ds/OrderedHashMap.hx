@@ -24,9 +24,10 @@ using stx.Strings;
 @:stability(1)
 @:note('#0b1kn00b: How to clone this and maintain equalities?')
 class OrderedHashMap<V>{
-	private var __key_sort__ 	: Reduce<Int,Int>;
-	private var __val_sort__ 	: Reduce<V,Int>;
-	private var __val_equal__ : Reduce<V,Bool>;
+	private var __key_sort__ 	: Ord<Int>;
+	private var __val_sort__ 	: Ord<V>;
+	
+	private var __val_equal__ : Eq<V>;
 	public var impl 					: Array<Tuple2<Int,V>>;
 	public function new(){
 		impl = [];
@@ -54,10 +55,10 @@ class OrderedHashMap<V>{
 		return lookup(key).isDefined();
 	}
 	public function at(i:Int):V{
-		return option(impl[i]).map(Tuples2.snd).getOrElse(thunk(null));
+		return option(impl[i]).map(Tuples2.snd).valOrUse(null);
 	}
 	public function get(key:Int):V{
-		return lookup(key).map(Tuples2.snd).getOrElseC(null);
+		return lookup(key).map(Tuples2.snd).valOrUse(null);
 	}
 	public function del(key:Int){
 		lookup(key)
@@ -74,12 +75,12 @@ class OrderedHashMap<V>{
 				return __val_equal__(v,r);
 			}.tupled()
 		);
-		return impl.remove(val.getOrElse(thunk(null)));
+		return impl.remove(val.valOrUse(null));
 	}
 	public function sort(){
 		impl = ArrayOrder.sort(impl);
 	}
-	public function sortWith(fn:Reduce<Tuple2<Int,V>,Int>){
+	public function sortWith(fn:Ord<Tuple2<Int,V>>){
 		impl = impl.sortWith(fn);
 	}
 	public function sortOnKey(){

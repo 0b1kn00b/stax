@@ -1,15 +1,15 @@
 package stx.ioc;
 
+import stx.UnitTest;
+
 import stx.ioc.Inject.*;
 import stx.ioc.Module;
 
-import stx.Muster;
-import stx.Muster.*;
 import stx.Compare.*;
 import stx.Log.*;
 
-class IocTest extends TestCase{
-  public function testIoc(u:UnitArrow):UnitArrow{
+class IocTest extends Suite{
+  public function testIoc(u:TestCase):TestCase{
                 injector().bind(M0,new M1());
     var tst1 =  inject(M0).huzzah();
 
@@ -23,7 +23,7 @@ class IocTest extends TestCase{
       it('should match',eq('A-roo-gaah'),tst2),
     ]);
   }
-  public function testIoc2(u:UnitArrow):UnitArrow{
+  public function testIoc2(u:TestCase):TestCase{
     var m0 =    injector().inPackage(IocTest);
         m0.bind(N0,function():N0 return new N1());
 

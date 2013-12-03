@@ -39,9 +39,9 @@ class Inject{
             }
           );
         }
-      ).getOrElse(
+      ).valOrTry(
         function(){
-          except()(InjectionError(cls));
+          except()(MatchError(cls));
           return null;
         }
       );

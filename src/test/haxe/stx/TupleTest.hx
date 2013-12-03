@@ -5,10 +5,10 @@ package stx;
  * @author 0b1kn00b
  */
 using stx.Tuples;
-import stx.test.TestCase;
+import stx.test.Suite;
 import stx.test.Assert;		using stx.test.Assert;
 
-class TupleTest extends TestCase{
+class TupleTest extends Suite{
 
 	public function new() {
 		super();

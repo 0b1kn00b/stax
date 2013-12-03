@@ -1,6 +1,6 @@
 package stx.io.json;
 
-import stx.test.TestCase;
+import stx.test.Suite;
 
 import stx.io.json.Json;
 import stx.io.json.JValue;
@@ -9,7 +9,7 @@ import stx.io.json.JsonGenerator;
 using stx.io.json.JValue;
 using Lambda;
 
-class JsonTest extends TestCase {
+class JsonTest extends Suite {
   public function assertIdentity (x: String): Void {
     assertLooksEqual (Json.decode (x), Json.decode (Json.encode (Json.decode (x))));
     assertLooksEqual (Json.decodeObject (x), Json.decodeObject (Json.encodeObject (Json.decodeObject (x))));

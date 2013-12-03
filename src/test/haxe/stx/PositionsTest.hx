@@ -8,8 +8,8 @@ using stx.UnitTest;
 
 using stx.Positions;
 
-class PositionsTest extends TestCase{
-  public function testPositions(u:UnitArrow):UnitArrow{
+class PositionsTest extends Suite{
+  public function testPositions(u:TestCase):TestCase{
     trace(here().toString());
     return u;
   }

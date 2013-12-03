@@ -1,6 +1,6 @@
 package stx;
 import stx.Reader;
-import stx.test.TestCase;
+import stx.test.Suite;
 
-class ReaderTest extends TestCase{
+class ReaderTest extends Suite{
 }

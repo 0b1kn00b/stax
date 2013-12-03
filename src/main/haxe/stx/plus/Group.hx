@@ -1,16 +1,14 @@
 package stx.plus;
 
-/**
- * ...
- * @author 0b1kn00b
- */
+import stx.ds.Map;
 import stx.ds.ifs.Foldable;
 
 
 using Prelude;
 using stx.Arrays;
 using stx.Iterables;
-using stx.ds.Group;
+
+using stx.plus.Group;
 
 class Group {
 	

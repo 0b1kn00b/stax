@@ -43,7 +43,9 @@ class Reflects{
   @doc("Full error handling, any errors raised will be passed back on the left hand side.")
   @:bug('#0b1kn00b: issue with __instanceof in nodejs')
   static public function callSecure<A,B>(v:A,key:String,?args:Array<Dynamic>):Outcome<B>{
-    return option(getValue(v,key)).orFailureC(fail(OutOfBoundsError())).flatMap(
+    return option(getValue(v,key))
+    .orFailureC(fail(ArgumentError('key',IllegalOperationError('no field of name $key.'))))
+    .flatMap(
       function(x){
         return try{
           Success(callMethod(v,x,args));

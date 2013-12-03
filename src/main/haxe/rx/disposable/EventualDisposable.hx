@@ -5,7 +5,7 @@ import stx.Eventual;
 import rx.ifs.Disposable in IDisposable;
 
 class EventualDisposable implements IDisposable{
-  private var disposed        : Bool;
+  public var disposed(default,null):Bool;
   private var eventual  : Eventual<Disposable>;
 
   public function new(eventual){

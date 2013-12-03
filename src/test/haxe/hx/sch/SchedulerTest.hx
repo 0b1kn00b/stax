@@ -24,16 +24,16 @@ import Sys.*;
 import neko.vm.Thread;
 import neko.vm.Deque;
 
-class SchedulerTest extends TestCase{
+class SchedulerTest extends Suite{
   @:note("#0b1kn00b: A `push` for Deque goes on the opposite end from Array.")
-  public function devtest_deque(u:UnitArrow):UnitArrow{
+  public function devtest_deque(u:TestCase):TestCase{
     var a = new Deque();
         a.push(1);
         a.push(2);
     var b = a.pop(false);
     return u.add(isEqual(2,b));
   }
-  public function test_can_i_crash_the_stack(u:UnitArrow):UnitArrow{
+  public function test_can_i_crash_the_stack(u:TestCase):TestCase{
     var evt = Eventual.unit();
     function fn(){
       fn();
@@ -50,7 +50,7 @@ class SchedulerTest extends TestCase{
     sleep(2);
     return u.add(evt.flatten());
   }
-  public function testScheduler(u:UnitArrow):UnitArrow{
+  public function testScheduler(u:TestCase):TestCase{
     trace(info(Date.now()));
 
     var evt = Eventual.unit();
@@ -74,7 +74,7 @@ class SchedulerTest extends TestCase{
         a.latch();
     return u.add(evt.flatten());
   }
-  public function testOrder(u:UnitArrow):UnitArrow{
+  public function testOrder(u:TestCase):TestCase{
     var evt   = Eventual.unit();
     var stack = [];
     var a = new ThreadScheduler();
@@ -100,7 +100,7 @@ class SchedulerTest extends TestCase{
         a.latch();
     return u.add(evt.flatten());
   }
-  public function testInline(u:UnitArrow):UnitArrow{
+  public function testInline(u:TestCase):TestCase{
     var evt = Eventual.unit();
     var a   = new InlineScheduler();
     0.until(3000).each(
@@ -121,11 +121,11 @@ class SchedulerTest extends TestCase{
     a.latch();
     return u.add(evt.flatten());
   }
-  public function testInject(u:UnitArrow):UnitArrow{
+  public function testInject(u:TestCase):TestCase{
     var a = inject(hx.ifs.Scheduler);
     return u;
   }
-  public function testTimer(u:UnitArrow):UnitArrow{
+  public function testTimer(u:TestCase):TestCase{
     var evt   = Eventual.unit();
     var count = 0;
     var a = new hx.sch.Timer(0.01);
@@ -143,7 +143,7 @@ class SchedulerTest extends TestCase{
         sch.latch();
     return u.add(evt.flatten());
   }
-  public function test_stop_start(u:UnitArrow):UnitArrow{
+  public function test_stop_start(u:TestCase):TestCase{
     var count = 0;
     var a = inject(hx.ifs.Scheduler);
     a.wait(2,function(){count++;});

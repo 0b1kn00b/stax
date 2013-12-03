@@ -30,7 +30,7 @@ class Generator<T>{
   private var index : Int;
 
   public function next():T{
-    var o =  fn(index).get();
+    var o =  fn(index).val();
     index++;
     return o;
   }

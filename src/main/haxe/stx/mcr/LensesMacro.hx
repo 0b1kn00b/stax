@@ -12,6 +12,9 @@ import haxe.macro.Type;
 import stx.Compare.*;
 import Stax.*;
 
+using stx.Compose;
+using stx.Enums;
+using stx.Arrays;
 using stx.Option;
 using stx.Strings;
 using stx.mcr.Types;
@@ -29,11 +32,15 @@ class LenseMacroHelper {
     c.fields.get();
   
   inline static function typeName(pack:Array<String>,name : String, params : Array<String>) : String{
-    var str = '';//var str = pack.length > 0 ? pack.join('.') + '.' : '';
-    return if (params.length > 0)
+    var str = pack.length > 0 ? pack.join('.') + '.' : '';
+    var o = 
+     if (params.length > 0)
       str + name + "<" + params.join(",") + ">";
     else
       str + name;
+
+    trace(o);
+    return o;
   }
     
   static public function nameForClassField(cf : ClassField) : String {
@@ -42,10 +49,16 @@ class LenseMacroHelper {
   }
       
   static public function nameForType(x : Type) : String {
+    trace(x);
     if(x == null) return 'Dynamic';
     return switch (x) {
       case TType(t, params) : nameForType(t.get().type);
-      case TInst(t, params) : typeName(t.get().pack,t.get().name, params.map(nameForType));
+      case TInst(t, params) : 
+      trace(t.get().params);
+      typeName(t.get().pack,t.get().name, 
+        params.map(nameForType)
+        .map(Strings.split.bind(_,'.').then(Arrays.last))
+      );
       case TAnonymous(a)    : "{" + a.get().fields.map(nameForClassField).join(",") + "}";
       case TFun(args, ret)  : args.map(function (x) return x.t).concat([ret]).map(nameForType).join(" -> ");
       case TEnum(t, params) : typeName(t.get().pack,t.get().name, params.map(nameForType));
@@ -70,7 +83,7 @@ class LenseMacroHelper {
     }
   }
   static public function lenseForClassField(extensionType : Type, c : ClassField, pos : Position) : Field {
-    //trace(c.name);
+    trace(extensionType);
     var typeName  = nameForType(extensionType);      
     if (typeName  == null) throw ("not supported" + Std.string(extensionType));
     var cname     = c.name;
@@ -79,35 +92,19 @@ class LenseMacroHelper {
     if (cTypeName == null){
       return null;  
     }
-    
-    var params    = '';
-    switch (extensionType.toTInst()) {
-      case TInst(t,params0)  :
-       var params1 = t.get().params;
-       trace(params0);
-       trace(params1);
-      default               :
-    }
-    switch (c.type.toTInst()) {
-      case TInst(t,params0)  :
-       var params1 = t.get().params;
-       trace(params0);
-       trace(params1);
-      default               :
-    }
     var exprString = '
       { 
         get : function (value : $typeName):$cTypeName{ 
           return value==null ? null : value.$cname; 
         },
-        set : function ($cname : $cTypeName, value : $typeName) {
-          var clone         = stx.plus.Clone.getCloneFor(value)(value);
+        set : function ($cname : $cTypeName, value : $typeName): $typeName {
+          var clone         = stx.plus.Clone.getCloneFor(value)(value,[]);
               clone.$cname  = $cname;
           return clone;
         }
       }
     ';
-    //trace(exprString);
+    trace(exprString);
     var expr = Context.parse(exprString, pos);
 
     return {
@@ -121,46 +118,56 @@ class LenseMacroHelper {
   }
     
 }
-
-class LensesMacro<T> {
-
-  static var extensionClassName = "LensesFor";
-  static function isExtension(el) return
-    el.t.get().name == extensionClassName;
-
-  static public function build(): Array<Field> {
-    var tp                = Context.getLocalClass();
-    var cls : ClassType   = tp.get();
-    var extensionType     = cls.interfaces.filter(isExtension).array()[0].params[0];
-    var pos               = Context.currentPos();
-    var classFields       = LenseMacroHelper.classFieldsFor(extensionType);
-    //trace(classFields); 
-    classFields = classFields.filter(
-      function(x){
-        return switch (x.type){
-          case TFun( _, _ ) : false;
-          default           : true;
-        }
-      }
-    );
-    var lenses = 
-      classFields
-      .map(LenseMacroHelper.lenseForClassField.bind(extensionType, _, pos))
-      .filter(ntnl())
-      .array();
-
-    return lenses;
-  }
-}
 #end
 class Lenser{
-  macro static public function lense(e:Expr):Expr{
-    var type                    = Context.typeof(e);
-    var flds                    = LenseMacroHelper.classFieldsFor(type.toTInst());
-    var pack   : Array<String>  = ['stx','mcr','lense'];
-    var name   : String         = "LensesFor" + option(Types.getID(type)).getOrElseC(Strings.uuid('xxxxxx'));
-    var pos    : Position       = Context.currentPos();
-    var params : Array<TypeParamDecl> = [];//
+  #if macro
+  static function getTypeHoles(type:Null<Type>):Array<TypeParameter>{
+    return switch (type) {
+      case TMono( t )            : [];
+      case TEnum(t, params)      : t.get().params;
+      case TInst(t, params )     : t.get().params;
+      case TType(t, params)      : getTypeHoles(stx.mcr.Types.toTInst(type));
+      case TFun(args, ret)       : args.map(function(x) return x.t).flatMap(getTypeHoles).append(getTypeHoles(ret));
+      case TAnonymous(a)         : [];
+      case TDynamic(t)           : getTypeHoles(type);
+      case TLazy(f)              : getTypeHoles(f());
+      case TAbstract(t, params)  : t.get().params;
+    }
+  }
+  #end
+  @:noUsing macro static public function lenses(e:Expr):Expr{
+    trace('lenses $e');
+    switch (e.expr) {
+      case EConst(CIdent(v)) : 
+        var type      = Context.typeof(e);
+        var flds      = LenseMacroHelper.classFieldsFor(type);
+        var isClass   = type.isClass();
+        var type      = type.toTInst();
+        var hasHoles  = type.hasTypeHoles();
+        if(hasHoles && isClass){
+          var holesAndPegs = type.getHolesAndPegs();
+        }
+      default : 
+    }
+  /*    
+    trace(e);
+    var type                          = Context.typeof(e).toTInst();
+    var holes                         = getTypeHoles(type);
+    var flds                          = LenseMacroHelper.classFieldsFor(type);
+    var pack   : Array<String>        = ['stx','mcr','lense'];
+    var name   : String               = option(Types.getID(type))
+    .map(Strings.replace.bind(_,'.','_'))
+    .map('LensesFor_'.append)
+    .getOrElseC(Strings.uuid('xxxxxx'));
+    trace(name);
+    var pos    : Position             = Context.currentPos();
+
+    var params : Array<TypeParamDecl> = 
+        holes.map(
+          function(x):TypeParamDecl{
+            return {"name":x.name};
+          }
+        );
     var kind   : TypeDefKind    = TDClass();
     var fields : Array<Field>   = 
       flds.map(
@@ -169,19 +176,19 @@ class Lenser{
         }
       ).filter(function (x) return x!=null).array();
 
+    //trace(tink.macro.tools.Printer.printFields('',fields));
     Context.defineType({
       pack   : pack,
       name   : name,
       pos    : pos,
       kind   : kind,
-      fields : fields
+      fields : fields,
+      params : params
     });
-    trace(Context.getType(pack.join('.') + '.$name'));
     var str = '${pack.join(".")}.$name';
-    //trace(str);
-    var o = Context.parse(str,Context.currentPos());
-
-    return o;
+    var o   = Context.parse(str,Context.currentPos());
+    trace(o);*/
+    return e;
   }
   macro static public function print(e:Expr):Expr{
     var type                  = Context.typeof(e);
@@ -192,4 +199,5 @@ class Lenser{
     return e;
   }
 }
+
 @:autoBuild(stx.mcr.LensesMacro.build()) interface LensesFor<T> { } 

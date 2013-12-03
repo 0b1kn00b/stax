@@ -6,7 +6,7 @@ package stx;
  */                 
 using Prelude;
 
-import stx.test.TestCase;
+import stx.test.Suite;
 import stx.test.Assert;             using stx.test.Assert;
 
 using stx.Eventual;
@@ -15,7 +15,7 @@ using stx.Error;
 using stx.Maths;
 using stx.Iterables;
 
-class PromiseTest extends TestCase{
+class PromiseTest extends Suite{
   public function new() {
     super();
   }

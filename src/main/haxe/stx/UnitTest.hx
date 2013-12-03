@@ -29,7 +29,7 @@ using Prelude;
 using stx.Contract;
 using stx.Arrays;
 using stx.Tuples;
-using stx.Arrow;
+using stx.Arrowlet;
 using stx.Compose;
 using stx.Functions;
 
@@ -37,31 +37,31 @@ class UnitTest{
   static public function rig(){
     return new TestRig();
   }
-  static public function isAlike(val0:EnumValue,val1:EnumValue,?pos:PosInfos):TestArrow{
+  static public function isAlike(val0:EnumValue,val1:EnumValue,?pos:PosInfos):Proof{
     return it('should be alike',alike(val0),val1,pos);
   }
-  static public function isTrue(val,?pos:PosInfos):TestArrow{
+  static public function isTrue(val,?pos:PosInfos):Proof{
     return it('should be true',ok(),val,pos);
   }
-  static public function isFalse(val,?pos:PosInfos):TestArrow{
+  static public function isFalse(val,?pos:PosInfos):Proof{
     return it('should be false',no(),val,pos);
   }
-  static public function isEqual<T>(val0:T,val1:T,?pos:PosInfos):TestArrow{
+  static public function isEqual<T>(val0:T,val1:T,?pos:PosInfos):Proof{
     return it('should be equal',eq(val0),val1,pos);
   }
-  static public function isNotEqual<T>(val0:T,val1:T,?pos:PosInfos):TestArrow{
+  static public function isNotEqual<T>(val0:T,val1:T,?pos:PosInfos):Proof{
     return it('should not be equal',eq(val0).not(),val1,pos);
   }
-  static public function hasFail(fn:Void->Void,?type:Class<Dynamic> ,?pos:PosInfos):TestArrow{
+  static public function hasFail(fn:Void->Void,?type:Class<Dynamic> ,?pos:PosInfos):Proof{
     return it('should throw a fail.',throws(type),fn,pos);
   }
-  static public function fails(?err:Fail,?pos:PosInfos):TestArrow{
+  static public function fails(?err:Fail,?pos:PosInfos):Proof{
     err = nl().apply(err) ? fail(AssertionError('fail called',null,pos)) : err;
-    return TestArrow.unit().val(Some(err)).pos(pos);
+    return Proof.unit().val(Some(err)).pos(pos);
   }
-  static public function it<T>(msg:String,prd:Predicate<T>,?val:T,?pos:PosInfos):TestArrow{
+  static public function it<T>(msg:String,prd:Predicate<T>,?val:T,?pos:PosInfos):Proof{
     var er = fail(AssertionError(Std.string(val),msg,pos));
-    return TestArrow.unit()
+    return new Proof(Proof.unit()
       .msg(msg)
       .pos(pos)
       .then(
@@ -79,7 +79,7 @@ class UnitTest{
           );
           return new TestResult(v,r.msg,r.pos);
         }
-      );
+      ));
   }
 }
 class Printers{
@@ -96,40 +96,54 @@ class Printers{
     );
   }
 }
-class TestCase extends Introspect{
+class Suite extends Introspect{
   public function new(){super();}
-  public function isAlike(val0,val1,?pos:PosInfos):TestArrow{
+  public function isAlike(val0,val1,?pos:PosInfos):Proof{
     return UnitTest.isAlike(val0,val1,pos);
   }
-  public function isTrue(val,?pos:PosInfos):TestArrow{
+  public function isTrue(val,?pos:PosInfos):Proof{
     return UnitTest.isTrue(val,pos);
   }
-  public function isFalse(val,?pos:PosInfos):TestArrow{
+  public function isFalse(val,?pos:PosInfos):Proof{
     return UnitTest.isFalse(val,pos);
   }
-  public function isEqual<T>(val0:T,val1:T,?pos:PosInfos):TestArrow{
+  public function isEqual<T>(val0:T,val1:T,?pos:PosInfos):Proof{
     return UnitTest.isEqual(val0,val1,pos);
   }
-  public function isNotEqual<T>(val0:T,val1:T,?pos:PosInfos):TestArrow{
+  public function isNotEqual<T>(val0:T,val1:T,?pos:PosInfos):Proof{
     return UnitTest.isNotEqual(val0,val1,pos);
   }
-  public function hasFail(fn:Void->Void,?type:Class<Dynamic> ,?pos:PosInfos):TestArrow{
+  public function hasFail(fn:Void->Void,?type:Class<Dynamic> ,?pos:PosInfos):Proof{
     return UnitTest.hasFail(fn,type,pos);
   }
-  public function fails(?err:Fail,?pos:PosInfos):TestArrow{
+  public function fails(?err:Fail,?pos:PosInfos):Proof{
     return UnitTest.fails(err,pos);
   }
-  public function it<T>(msg:String,prd:Predicate<T>,?val:T,?pos:PosInfos):TestArrow{
+  public function it<T>(msg:String,prd:Predicate<T>,?val:T,?pos:PosInfos):Proof{
     return UnitTest.it(msg,prd,val,pos);
   }
 }
-abstract UnitArrow(Arrow<Array<TestArrow>,Array<TestArrow>>) from Arrow<Array<TestArrow>,Array<TestArrow>> to Arrow<Array<TestArrow>,Array<TestArrow>>{
-  @:noUsing static public function unit():UnitArrow{
-    return new UnitArrow();
+abstract TestCase(Arrowlet<Array<Proof>,Array<Proof>>) to Arrowlet<Array<Proof>,Array<Proof>>{
+  @:noUsing static public function unit():TestCase{
+    return new TestCase();
   }
-  @:from static public inline function fromFutureTestArrows(arr:Future<Array<TestArrow>>):UnitArrow{
-    return new UnitArrow(new Arrow(
-      function(arr0:Array<TestArrow>,cont:Array<TestArrow>->Void):Void{
+  /*@:from static public inline function fromEventuaProog(evt:Eventual<Proof>){
+    trace('here');
+    return new TestCase(new Arrowlet(
+      function(arr0:Array<Proof>,cont:Array<Proof>->Void):Void{
+        trace('here');
+        evt.each(
+          function(v){
+            cont([v].append(arr0));
+          }
+        );
+      }
+    ));
+  }*/
+  /*
+  static public inline function fromFutureTests(arr:Future<Array<Proof>>):TestCase{
+    return new TestCase(new Arrowlet(
+      function(arr0:Array<Proof>,cont:Array<Proof>->Void):Void{
         arr.map(
           function(arr1){
             return arr0.append(arr1);
@@ -138,28 +152,34 @@ abstract UnitArrow(Arrow<Array<TestArrow>,Array<TestArrow>>) from Arrow<Array<Te
       }
     ));
   }
-  @:from static public inline function fromEventualTestArrows(arr:Eventual<Array<TestArrow>>){
-    return fromFutureTestArrows(arr.each);
-  }
+  
+  @:bug("Hangs compiler")
+  @:from static public inline function fromEventualTests(arr:Eventual<Array<Proof>>){
+    return fromFutureTests(arr.each);
+  }*/
   public function new(?v){
-    this = nl().apply(v) ? Arrow.unit() : v;
+    this = nl().apply(v) ? Arrowlet.unit() : v;
   }
-  public function then(arw:UnitArrow):UnitArrow{
-    return this.then(arw);
+  public function then(arw:TestCase):TestCase{
+    return new TestCase(this.then(arw));
   }
-  public function add(t:TestArrow):UnitArrow{
-    return this.then(Arrays.add.bind(_,t));
+  public function add(t:Proof):TestCase{
+    return new TestCase(
+      this.then(function(x:Array<Proof>):Array<Proof>{
+        return x.add(t);
+      })
+    );
   }
-  public function append(ar:Array<TestArrow>):UnitArrow{
-    return this.then(Arrays.append.bind(_,ar));
+  public function append(ar:Array<Proof>):TestCase{
+    return new TestCase(this.then(Arrays.append.bind(_,ar)));
   }
   public function reply():Future<Array<TestResult>>{
-    var prm : Future<Array<TestArrow>> = this.proceed([]);
+    var prm : Future<Array<Proof>> = this.proceed([]);
     return prm.flatMap(
       function(arr){
         return Futures.bindFold(arr,
           [],
-          function(memo:Array<Dynamic>,next:TestArrow){
+          function(memo:Array<Dynamic>,next:Proof){
             return next.proceed(TestResult.unit()).map(memo.add);
           }
         );

@@ -10,8 +10,8 @@ import stx.mcr.LensesMacro;
 
 using stx.Lenses;
 
-class LensesMacroTest extends TestCase {
-  public function testLense(u:UnitArrow):UnitArrow{
+class LensesMacroTest extends Suite {
+  public function testLense(u:TestCase):TestCase{
 
     var v : ABC = {
       a : { 
@@ -23,8 +23,14 @@ class LensesMacroTest extends TestCase {
         d : "hello"
       }
     }
-    var a = Lenser.lense(TpTest);
-    var b = new TpTest();
+    //
+    //var d = Lenser.lenses(SMTest);
+    Lenser.lenses(v);
+    var inst = new TpTest([1]);
+    Lenser.lenses(inst);
+    Lenser.lenses(TpTest);
+    /*
+    var b = new TpTest();*/
     /*var c = a.a;
     var d = c.get(b);
     trace(d);

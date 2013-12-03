@@ -15,6 +15,8 @@
 */
 package stx.math.geom;
 
+import Prelude;
+
 import stx.Tuples;
 
 typedef Point2dType<T: Float> = {

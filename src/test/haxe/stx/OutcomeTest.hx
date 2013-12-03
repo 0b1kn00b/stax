@@ -5,7 +5,7 @@ import stx.UnitTest;
 
 using stx.Outcome;
 
-class OutcomeTest extends TestCase{
+class OutcomeTest extends Suite{
   public function testOutcome(u){
     var a = Success(1);
     var b = a.flatMap(

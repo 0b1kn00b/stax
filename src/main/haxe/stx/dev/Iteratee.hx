@@ -5,7 +5,7 @@ import Prelude;
 import stx.Fail;
 import stx.Eventual;
 
-using stx.Arrow;
+using stx.Arrowlet;
 using stx.Iteratee;
 using stx.Promise;
 using stx.Functions;  

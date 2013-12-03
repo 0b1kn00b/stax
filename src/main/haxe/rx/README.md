@@ -12,7 +12,7 @@ These statements are equivalent:
 This is the interface of Observer:
 
     interface Observer<T>{
-      public function onNext(v:T) : Void;
+      public function onData(v:T) : Void;
       public function OnError(error:Fail); //@see stx.Fail
       public function OnCompleted():Void;
     }

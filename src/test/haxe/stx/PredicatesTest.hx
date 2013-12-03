@@ -3,8 +3,7 @@ package stx;
 import stx.plus.Equal;
 import stx.plus.Order;
 import Prelude;
-import stx.Muster;
-import stx.Muster.*;
+using stx.UnitTest;
 import stx.Log.*;
 
 import stx.ifs.Reply;
@@ -14,8 +13,8 @@ import stx.Compare.*;
 using stx.Maths;
 using stx.Compose;
 
-class PredicatesTest extends TestCase{
-  public function testPredicates(u:UnitArrow):UnitArrow{
+class PredicatesTest extends Suite{
+  public function testPredicates(u:TestCase):TestCase{
     return u;
   }
 }

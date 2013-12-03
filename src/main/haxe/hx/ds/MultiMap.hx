@@ -110,7 +110,7 @@ class MultiMap<K,V>{
 	public function sortOnKey(){
 		impl.sortOnKey();
 	}
-	public function sortOnKeyWith(fn:Reduce<K,Int>){
+	public function sortOnKeyWith(fn:Ord<K>){
 		impl.sortOnKeyWith(fn);
 	}
 	public function size(){

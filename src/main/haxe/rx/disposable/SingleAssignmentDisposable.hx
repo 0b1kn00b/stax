@@ -1,27 +1,31 @@
 package rx.disposable;
 
+import Prelude;
 import stx.Fail;
 
-import stx.ifs.Disposable in IDisposable;
+import rx.ifs.Disposable in IDisposable;
 
 class SingleAssignmentDisposable implements IDisposable{
-  private var disposed        : Bool;
-  private var __underlying__  : Disposable;
+  public var disposed(default,null)           : Bool;
 
+  @:isVar public var disposable(get,set)      : Disposable;
+  private function get_disposable(){
+    return disposable;
+  }
+  private function set_disposable(v:Disposable):Disposable{
+    if (disposable!=null){
+      throw IllegalOperationError('Can only assign SingleAssignmentDisposable once');
+    }
+    return this.disposable = v;
+  }
   public function new(){
     this.disposed = false;
-  }
-  public function set(v:Disposable){
-    if (__underlying__!=null){
-      throw IllegalOperationFail('Can only assign SingleAssignmentDisposable once');
-    }
-    this.__underlying__ = v;
   }
   public function dispose(){
     if(!disposed){
       disposed = true;
-      __underlying__.dispose();
-      __underlying__ = null;
+      disposable.dispose();
+      disposable = null;
     }
   }
 }

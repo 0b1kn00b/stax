@@ -1,8 +1,8 @@
 package stx.plus;
 
-import stx.test.TestCase;
+import stx.test.Suite;
 import stx.test.Assert;
-class ShowTest extends TestCase{
+class ShowTest extends Suite{
 	public function testShowFor() {         
     assertEquals("null",  getShow(null));
     assertEquals("true",  getShow(true));

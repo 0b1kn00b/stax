@@ -8,7 +8,7 @@ import hx.utl.RetreatTimer;
 import hx.utl.Id;
 
 import haxe.Timer;
-import stx.Time;
+import stx.Period;
 import Stax.*;
 
 import stx.Fail;
@@ -45,11 +45,11 @@ class ThreadScheduler implements IScheduler{
   }
   public inline function when(abs:Float,fn:Run):Void{
     retreat.reset();
-    abs = Time.now().toFloat() > abs ? Time.now() : abs;
+    abs = Period.now().toFloat() > abs ? Period.now() : abs;
     command.add(abs,fn);
   }
   public inline function wait(rel:Float,fn:Run):Void{
-    when(Time.now().add(rel),fn);
+    when(Period.now().add(rel),fn);
   }
   public inline function now(fn:Run):Void{
     wait(0,fn);
@@ -203,7 +203,7 @@ enum ThreadMessage<T>{
 #end
 class ThreadSchedulerHelper{
   static inline public function now():Float{
-    return Time.now();
+    return Period.now();
   }
   static public inline function delta(f:Float){
     return f - now();

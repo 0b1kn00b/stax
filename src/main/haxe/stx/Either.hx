@@ -8,14 +8,6 @@ using stx.Either;
 using stx.Option;
 using stx.Functions;
 
-@doc("
-  Either represents a type that is either a 'left' value or a 'right' value,
-  but not both.
-")
-enum Either<A, B> {
-  Left(v: A);
-  Right(v: B);
-}
 class Eithers {
   @doc("Creates a Left from any value")
   static public function toLeft<A, B>(v: A): Either<A, B> {

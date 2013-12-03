@@ -6,11 +6,9 @@ import stx.Log.*;
 
 using stx.UnitTest;
 
-import stx.ds.LispList;
-import stx.ds.LazyList;
 
-class LispListTest extends TestCase{
-  public function testLispList(u:UnitArrow):UnitArrow{
+class LispListTest extends Suite{
+  public function testLispList(u:TestCase):TestCase{
     return u;
   }
 }

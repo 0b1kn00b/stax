@@ -30,6 +30,27 @@ abstract Future<T>(FutureType<T>) from FutureType<T> to FutureType<T>{
       cb(fn);
     }
   }
+  @:from static public function fromNativeCallbackAndReturn<T,S>(cb:(T->Void)->S){
+   return function(x:T->Void){
+      var fn = function(y:T){
+        x(y);
+      };
+      cb(fn);
+    }
+  }
+  /*@:from static public function fromNativeCallbackAndReturn3<T,U,V>(cb:(T->U->V->Void)->Void){
+    return function(x:T->U->V->Void){
+      var fn = function(x:Tuple3<T,U,V>){
+        x.tupled(y);
+      };
+      cb(fn);
+    }
+  }*/
+  @:to public function toEventual():Eventual<T>{
+    var evt = Eventual.unit();
+        apply(evt.deliver);
+    return evt;
+  }
   public inline function apply(fn:T->Void){
     this(fn);
   }
@@ -63,7 +84,7 @@ abstract Future<T>(FutureType<T>) from FutureType<T> to FutureType<T>{
   public function flatMap<B>(next:T->Future<B>):Future<B> {
     return Futures.flatMap(this,next);
   }
-  @:noUsing static public function ofArrow<A>(f:(A->Void)->Void):Future<A> {
+  @:noUsing static public function ofArrowlet<A>(f:(A->Void)->Void):Future<A> {
     return new Future(f);
   }
 }

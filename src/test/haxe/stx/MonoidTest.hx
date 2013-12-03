@@ -6,8 +6,8 @@ import stx.Log.*;
 
 using stx.UnitTest;
 
-class MonoidTest extends TestCase{
-  public function testMonoid(u:UnitArrow):UnitArrow{
+class MonoidTest extends Suite{
+  public function testMonoid(u:TestCase):TestCase{
     return u;
   }
 }

@@ -56,7 +56,7 @@ class Set<T> implements Collection<Set<T>, T> {
     return new Set<T>(Map.create(val_tool,val_tool));
   }
   /** Creates a factory for sets of the specified type. */
-  public static function factory<T>(val_tool): Factory<Set<T>> {
+  public static function factory<T>(val_tool): Thunk<Set<T>> {
     return function() {
       return Set.create(val_tool);
     }

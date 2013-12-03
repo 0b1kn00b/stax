@@ -5,7 +5,7 @@ using stx.Tuples;
 
 import stx.plus.Equal;
 
-import stx.test.TestCase;
+import stx.test.Suite;
 import stx.io.json.JValue;
 import stx.ds.Set;
 import stx.ds.Map;
@@ -34,7 +34,7 @@ import stx.io.json.types.stx.ds.SetJValue;
 import stx.io.json.types.stx.ds.MapJValue;
 import stx.io.json.types.stx.ds.ListJValue;
 
-class JValueTest extends TestCase {
+class JValueTest extends Suite {
   public function testBool() {
     doTest(BoolJValue.decomposer(), function(v){return BoolJValue.extractor()(v);}, [true, false]);
   }

@@ -15,7 +15,7 @@ using stx.plus.Order;
 
 class Order {
 
-	static function __order__<T>(impl : Reduce<T,Int>) : Reduce<T,Int> {
+	static function __order__<T>(impl: Ord<T>): Ord<T> {
     return function(a, b) {
     return if(a == b || (a == null && b == null)) 0;
       else if(a == null) -1;
@@ -26,15 +26,15 @@ class Order {
   @:noUsing
   static public function nil<A>(a:A,b:A){
     return 
-      __order__(function(a:A, b:A) { return except()(ArgumentError("at least one of the arguments should be null")); })(a,b);
+      __order__(function(a:A, b:A) { return except()(IllegalOperationError("at least one of the arguments should be null")); })(a,b);
   } 
   /** Returns a OrderFunction (T -> T -> Int). It works for any type expect TFunction.
-   *  Custom Classes must provide a compare(other : T) : Int method or an exception will be thrown.
+   *  Custom Classes must provide a compare(other : T): Int method or an exception will be thrown.
    */
-  static public function getOrderFor<T>(t : T) : Reduce<T,Int> {
+  static public function getOrderFor<T>(t : T): Ord<T> {
     return getOrderForType(Type.typeof(t));
   }
-  static public function getOrderForType<T>(v: ValueType) : Reduce<T,Int> {
+  static public function getOrderForType<T>(v: ValueType): Ord<T> {
     return switch(v) {
       case TBool    : __order__(cast Bools.compare);
       case TInt     : __order__(cast Ints.compare);
@@ -51,10 +51,10 @@ class Order {
           }
           return 0;
         });
-      case TClass(c) if (c == String) : __order__(cast Strings.compare);
+      case TClass(c) if (c == String): __order__(cast Strings.compare);
       case TClass(c) if (c == Date)   : __order__(cast Dates.compare);
       case TClass(c) if (c == Array)  : __order__(cast ArrayOrder.compare);
-      case TClass(c) :
+      case TClass(c):
         if(Type.getInstanceFields(c).remove("compare")) {
           __order__(function(a, b) return (cast a).compare(b));
    		  } else {
@@ -82,11 +82,11 @@ class EnumOrder{
   }
 }
 class ArrayOrder {
-	static public function sort<T>(v : Array<T>) : Array<T> {
+	static public function sort<T>(v : Array<T>): Array<T> {
     return sortWith(v, Order.getOrderFor(v[0]));
   }
   
-  static public function sortWith<T>(v : Array<T>, order : Reduce<T,Int>) : Array<T> {
+  static public function sortWith<T>(v : Array<T>, order : Ord<T>): Array<T> {
     var r = v.copy();
     r.sort(order);
     return r;
@@ -95,7 +95,7 @@ class ArrayOrder {
       return compareWith(v1, v2, Order.getOrderFor(v1[0]));
   } 
   
-  static public function compareWith<T>(v1: Array<T>, v2: Array<T>, order : Reduce<T,Int>) {  
+  static public function compareWith<T>(v1: Array<T>, v2: Array<T>, order : Ord<T>) {  
     var c = v1.length - v2.length;
     if(c != 0)
       return c; 
@@ -122,27 +122,27 @@ class ProductOrder {
   }
 }
 class Orders{
-  static public function greaterThan<T>(order : Reduce<T,Int>) : Reduce<T,Bool> {
+  static public function greaterThan<T>(order : Ord<T>): Eq<T> {
     return function(v1, v2) return order(v1, v2) > 0;
   }  
    
-  static public function greaterThanOrEqual<T>(order : Reduce<T,Int>) : Reduce<T,Bool> {
+  static public function greaterThanOrEqual<T>(order : Ord<T>): Eq<T> {
      return function(v1, v2) return order(v1, v2) >= 0;
   }  
 
-  static public function lessThan<T>(order : Reduce<T,Int>) : Reduce<T,Bool> {
+  static public function lessThan<T>(order : Ord<T>): Eq<T> {
     return function(v1, v2) return order(v1, v2) < 0;
   }  
 
-  static public function lessThanOrEqual<T>(order : Reduce<T,Int>) : Reduce<T,Bool> {
+  static public function lessThanOrEqual<T>(order : Ord<T>): Eq<T> {
      return function(v1, v2) return order(v1, v2) <= 0;
   }
 
-  static public function equal<T>(order : Reduce<T,Int>) : Reduce<T,Bool> {
+  static public function equal<T>(order : Ord<T>): Eq<T> {
      return function(v1, v2) return order(v1, v2) == 0;
   }
 
-  static public function notEqual<T>(order : Reduce<T,Int>) : Reduce<T,Bool> {
+  static public function notEqual<T>(order : Ord<T>): Eq<T> {
      return function(v1, v2) return order(v1, v2) != 0;
   }
 }

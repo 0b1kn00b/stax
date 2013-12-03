@@ -59,7 +59,7 @@ abstract PartialFunction<A,Z>(PartialFunctionType<A,Z>) from PartialFunctionType
       method1(function(k) {
         return switch(map.get(k)) {
           case Some(v): v;
-          case None:    except()("No value for this key");
+          case None:    except()(IllegalOperationError("No value for this key"));
         }
       })
     )];
@@ -100,7 +100,7 @@ class PartialFunctions<A, Z>{
     for (d in pf) {
       if (d.fst().apply(a)) return d.snd().apply(a);
     }
-    return except()("Function undefined at " + a);
+    return except()(IllegalOperationError("Function undefined at " + a));
   } 
   static public function toFunction<A,Z>(pf:PartialFunctionType<A,Z>): A -> Option<Z> {
     var self = pf;

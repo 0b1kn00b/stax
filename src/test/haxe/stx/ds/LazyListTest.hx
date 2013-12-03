@@ -12,8 +12,8 @@ import stx.ds.LispList;
 using stx.ds.LispList;
 
 
-class LazyListTest extends TestCase{
-  public function testLispList(u:UnitArrow):UnitArrow{
+class LazyListTest extends Suite{
+  public function testLispList(u:TestCase):TestCase{
     var itr                         = 0.until(3);
     var l  : LispList<Int>          = itr;//constructor
     var l2 : LispList<Int>          = 3.until(5);
@@ -31,7 +31,7 @@ class LazyListTest extends TestCase{
       it('should be equal',eq(t),l6)
     );
   }
-  public function testEquality(u:UnitArrow):UnitArrow{
+  public function testEquality(u:TestCase):TestCase{
     var l  : LispList<Int>        = Cons(1,Nil);
     var r                         = 1;
     var o                         = l.equals(r);

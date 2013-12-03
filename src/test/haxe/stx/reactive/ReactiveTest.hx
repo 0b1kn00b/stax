@@ -5,7 +5,7 @@ using Prelude;
 import stx.Tuples;
 using stx.Tuples;
 import Prelude;
-import stx.test.TestCase;
+import stx.test.Suite;
 import stx.reactive.Reactive;
 import stx.ds.List;
 import stx.ds.ifs.Collection;
@@ -40,7 +40,7 @@ class TimeoutBundle {
 }
 
 
-class ReactiveTest extends TestCase {
+class ReactiveTest extends Suite {
   public var counter:         Int;
 //    var _collectionsToStream:   Array<Int>;
 //    var _collectionsToStreamB:  Array<Int>;

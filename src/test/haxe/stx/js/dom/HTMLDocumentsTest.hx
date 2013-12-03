@@ -30,9 +30,9 @@ using  stx.js.dom.HTMLDocumentExtensions;
 
 using stx.Tuples;
 
-import stx.test.TestCase;
+import stx.test.Suite;
 
-class HTMLDocumentsTest extends TestCase {
+class HTMLDocumentsTest extends Suite {
     var _doc:           HTMLDocument;
     var _testElements:  HTMLElement;
 

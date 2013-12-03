@@ -17,7 +17,7 @@
 package stx.net;
 
 import Prelude;
-import stx.test.TestCase;
+import stx.test.Suite;
 import stx.test.Assert;
 import stx.net.HttpHeader;
 
@@ -26,7 +26,7 @@ using stx.Tuples;
 
 using stx.net.HttpHeaders;
 
-class HttpHeadersTest extends TestCase {
+class HttpHeadersTest extends Suite {
   public function new() {
     super();
   }

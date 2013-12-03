@@ -4,14 +4,13 @@ import haxe.macro.Expr;
 import haxe.macro.Context;
 import haxe.macro.Type;
 
-import stx.Muster;
-import stx.Muster.*;
+using stx.UnitTest;
 import stx.Log.*;
 
 import stx.mcr.Macros;
 
-class MacrosTest extends TestCase{
-  public function testMacros(u:UnitArrow):UnitArrow{
+class MacrosTest extends Suite{
+  public function testMacros(u:TestCase):TestCase{
     var a : McrTypedef = {
       a : 'boot'
     };
@@ -27,7 +26,7 @@ class MacrosTest extends TestCase{
     switch (e.expr) {
       case EConst(CIdent(str)) :
         var t = Context.typeof(e);
-        trace(t);
+        //trace(t);
         switch (t) {
           case TType(tp,_) :
             switch(tp.get().type){

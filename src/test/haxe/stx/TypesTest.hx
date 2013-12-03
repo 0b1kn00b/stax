@@ -1,13 +1,13 @@
 package stx;
 
-import stx.Muster;
+import stx.UnitTest;
+
 import Stax.*;
-import stx.Muster.*;
 import stx.Compare.*;
 import stx.Log.*;
 
-class TypesTest extends TestCase{
-  public function testTypes(u:UnitArrow):UnitArrow{
+class TypesTest extends Suite{
+  public function testTypes(u:TestCase):TestCase{
     return u;
   }
 }

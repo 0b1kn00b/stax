@@ -8,8 +8,8 @@ using stx.UnitTest;
 
 import stx.mcr.Types;
 
-class TypesTest extends TestCase{
-  public function testTypes(u:UnitArrow):UnitArrow{
+class TypesTest extends Suite{
+  public function testTypes(u:TestCase):TestCase{
     var t0 = new Test();
         Types.test(t0);
     return u;

@@ -9,8 +9,8 @@ using stx.Tuples;
 using stx.State;
 import stx.State.*;
 
-class StateTest extends TestCase{
-	public function test(u:UnitArrow):UnitArrow{
+class StateTest extends Suite{
+	public function test(u:TestCase):TestCase{
 		var f 	= 'blah';
 		var sr 	= f.newVar();
 		//$type( sr );

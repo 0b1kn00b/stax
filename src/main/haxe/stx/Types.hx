@@ -71,7 +71,7 @@ class Types{
     }catch(e:Fail){
       throw(e);
     }catch(e:Dynamic){
-      except()(ConstructorError(type,fail(NativeError(e))));
+      except()(NativeError(e));
     }
   }
   @doc("")
@@ -79,7 +79,7 @@ class Types{
   static public function build<A>(name:String,?args:Array<Dynamic>):A{
     return option(classify(name)).flatMap(
       construct.bind(_,args).then(option)
-    ).getOrElse(thunk(null));
+    ).valOrUse(null);
   }
   @doc("Create `type`, bypassing constructor.")
   static public inline function instantiate<A>(type:Class<A>):A{
@@ -114,7 +114,7 @@ class Types{
       return try{
         (Std.is(value, type) ? cast value : null);
       }catch(e:Dynamic){
-        except()(TypeError('could not cast value to ${name(type)}'));
+        except()(IllegalOperationError('could not cast value to ${name(type)}'));
       }
   }
   static public inline function as<I,O>(value:I):O{

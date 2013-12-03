@@ -1,0 +1,16 @@
+-cp src/main/haxe/
+-cp funk/src/boot/haxe
+
+-cp src/boot/haxe/
+
+-js test/boot.js
+
+-lib tink
+
+-resource log.cnf@log
+-main Test
+
+-D nodejs
+-D debug
+-D development 
+--connect 2331

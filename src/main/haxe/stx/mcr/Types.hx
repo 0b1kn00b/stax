@@ -1,5 +1,7 @@
 package stx.mcr;
 
+import Prelude;
+
 import haxe.macro.Context;
 import haxe.macro.Type;
 import haxe.macro.Expr;
@@ -7,6 +9,7 @@ import haxe.macro.Expr;
 import stx.Accessors;
 import stx.State;
 
+using stx.Arrays;
 using stx.Strings;
 
 class Types{
@@ -34,12 +37,49 @@ class Types{
       case _                     : [];
     } 
   }*/
+  static public function isClass(t:Type):Bool{
+    return switch (t) {
+      case TType(t,params) : return new EReg('#','g').match(t.toString());
+      default : false;
+    }
+  }
+  static public function hasTypeHoles(t:Null<Type>):Bool{
+    return switch (t) {
+      case TMono( t )            : hasTypeHoles(t.get());
+      case TEnum(t, params)      : t.get().params.length > 0;
+      case TInst(t, params )     : t.get().params.length > 0;
+      case TType(t, params)      : t.get().params.length > 0;
+      case TFun(args, ret)       : args.map(function(x) return x.t).add(t).any(hasTypeHoles);
+      case TAnonymous(a)         : false;//not sure about contextual type annotations.
+      case TDynamic(t)           : hasTypeHoles(t);
+      case TLazy(f)              : hasTypeHoles(f());
+      case TAbstract(t, params)  : t.get().params.length > 0;
+      case _                     : false;
+    }
+  }
+  static public function getHolesAndPegs(t:Type):Array<Tuple2<TypeParameter,Type>>{
+    return switch (t) {
+      case TType(t,p)   :
+        var holes = t.get().params;
+        var pegs  = p;
+        holes.zip(pegs.pad(holes.length));
+      case TInst(t, p)  :
+        var holes = t.get().params;
+        var pegs  = p;
+        holes.zip(pegs.pad(holes.length));
+      case TEnum(t, p)  :
+        var holes = t.get().params;
+        var pegs  = p;
+        holes.zip(pegs.pad(holes.length));
+      default           : [];
+    }
+  }
   @doc('Produces the instance type of a class.')
   static public function toTInst(t:Type):Type{
     return switch (t) {
       case TType(t,params) :
         if(new EReg('#','g').match(t.toString())){
-          var pth = t.toString().replace(new EReg('#','g'),'');
+          var pth = t.toString().replaceReg(new EReg('#','g'),'');
           var ins = Context.getType(pth);
           ins;
         }else{
@@ -71,14 +111,14 @@ class Types{
         var value_params  = arr.map(function(x){
           return getParamsOfTypeDeclaration(x.type);
         });
-        trace(decl_params);
+/*        trace(decl_params);
         trace(field_params);
-        trace(value_params);
+        trace(value_params);*/
 
         var field_types   = arr;
-        trace(field_types.map(function(x){
+        /*trace(field_types.map(function(x){
           return x.type;
-        }));
+        }));*/
         return arr;
       }
     );

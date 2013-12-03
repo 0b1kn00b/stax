@@ -8,7 +8,7 @@ import stx.plus.Equal;
 import Type;
 using stx.Tuples;
 import Prelude;
-import stx.test.TestCase;
+import stx.test.Suite;
 import stx.io.json.JValue;
 import stx.ds.Set;
 import stx.ds.Map;
@@ -19,7 +19,7 @@ import stx.io.json.Transcode;
 
 typedef UnionOfSimpleFeedTypes = Dynamic
 
-class TranscodeJValuesTest extends TestCase {
+class TranscodeJValuesTest extends Suite {
   public function new() {
     super();
   }

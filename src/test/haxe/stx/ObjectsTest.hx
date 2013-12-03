@@ -1,10 +1,10 @@
 package stx;
 
+import Stax.*;
+import stx.UnitTest;
 import Prelude;
 
 import stx.Tuples;
-import stx.Muster;
-import stx.Muster.*;
 import stx.Compare.*;
 import stx.Log.*;
 
@@ -12,14 +12,14 @@ using stx.Option;
 
 using stx.Objects;
 
-class ObjectsTest extends TestCase {
+class ObjectsTest extends Suite {
   public function new() {
     super();
   }
   
-  public function testGet(u:UnitArrow):UnitArrow {
+  public function testGet(u:TestCase):TestCase {
     var o     = { foo: "bar" };
-    var tst0  = o.getOption("foo").get();
+    var tst0  = option("foo").get();
 
     return u.add(
       it(
@@ -30,9 +30,9 @@ class ObjectsTest extends TestCase {
     );
   }
   
-  public function testSet(u:UnitArrow):UnitArrow {
-    var o : Object  = { foo: "bar" };
-    var tst0        = o.setField("foo", "baz").getOption("foo").get();
+  public function testSet(u:TestCase):TestCase {
+    var o : Dynamic   = { foo: "bar" };
+    var tst0          = option(o.setField("foo", "baz").foo).get();
 
     return u.add(
       it(
@@ -43,7 +43,7 @@ class ObjectsTest extends TestCase {
     );
   }
   
-  public function testMerge(u:UnitArrow):UnitArrow{
+  public function testMerge(u:TestCase):TestCase{
     var o        = { foo: "bar", bar: "foo" };    
     var replaced = o.merge({foo: "foo"});
     var tst0     = replaced.getOption("foo").get();
@@ -57,7 +57,7 @@ class ObjectsTest extends TestCase {
     ]);
   }
   //Test retired with honourable distinction after proving 'safeCopy' was a crock of sh*\t.
-  public function testCopyWithLoop(u:UnitArrow):UnitArrow{
+  public function testCopyWithLoop(u:TestCase):TestCase{
     /*
     var obj = {
       a : {
@@ -78,7 +78,7 @@ class ObjectsTest extends TestCase {
     */
     return u.add(it('wins',always()));
   }
-  public function testOnly(u:UnitArrow):UnitArrow{
+  public function testOnly(u:TestCase):TestCase{
     var a = {
       a : 1,
       b : true,
@@ -99,7 +99,7 @@ class ObjectsTest extends TestCase {
       )
     ]);
   }
-  public function testObjectTyping(u:UnitArrow):UnitArrow{
+  public function testObjectTyping(u:TestCase):TestCase{
     var a = {
       b : 1
     }

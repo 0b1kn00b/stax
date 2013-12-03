@@ -2,14 +2,14 @@
 
 import Prelude;
 import stx.test.Assert;
-import stx.test.TestCase;
+import stx.test.Suite;
 import stx.time.ScheduledExecutor;
 
 using stx.framework.Injector;
 
 import stx.Eventual;
 
-class ScheduledExecutorTest extends TestCase {
+class ScheduledExecutorTest extends Suite {
   var _executor: ScheduledExecutor;
   
   override public function beforeAll() {

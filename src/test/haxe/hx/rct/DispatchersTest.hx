@@ -10,8 +10,8 @@ using stx.UnitTest;
 
 import stx.utl.Selector;
 
-class DispatchersTest extends TestCase{
-  public function testDispatchers(u:UnitArrow):UnitArrow{
+class DispatchersTest extends Suite{
+  public function testDispatchers(u:TestCase):TestCase{
     var tsts = [];
     var a : Selector<String> = 'a';
     var b : Selector<String> = 'b';

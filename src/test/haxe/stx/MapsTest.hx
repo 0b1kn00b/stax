@@ -1,15 +1,15 @@
 package stx;
 
-import stx.Muster;
+import stx.UnitTest;
+
 import Stax.*;
-import stx.Muster.*;
 import stx.Compare.*;
 import stx.Log.*;
 
 using stx.Maps;
 
-class MapsTest extends TestCase{
-  public function testMaps(u:UnitArrow):UnitArrow{
+class MapsTest extends Suite{
+  public function testMaps(u:TestCase):TestCase{
     return u;
   }
 }

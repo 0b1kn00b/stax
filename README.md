@@ -78,7 +78,7 @@ If you need fast, go to polygonal, magic to tinkerbell, higher-types to scuts or
     - Notifier
     - Reactor
     - Process
-  - Arrows (stx.arw.*)
+  - Arrows (stx.arrowlet.*)
   - Continuations (stx.Continuations)
   - Partial Functions (stx.PartialFunction)
 
@@ -93,7 +93,7 @@ If you need fast, go to polygonal, magic to tinkerbell, higher-types to scuts or
 Base functional namespace, only the Stax helper class is outside this. I consider it good ettiquette (I'm looking at you, franco).
 ###### hx
 Base imperative namespace, mostly for the distinction between `hx.ds` : mutable datastructures and `stx.ds` : immutable datastructures.
-###### stx.arw
+###### stx.arrowlet
 Arrow instances, normally unnecessary as most is imported by `stx.Arrow`
 ###### stx.ds
 Immutable Datastructures
@@ -254,7 +254,7 @@ Returns `true` if `v` is `true`, `false` otherwise.
 ##### Dispatcher
 ##### Notifier
 ##### Reactor
-#### Arrows (stx.arw.*)
+#### Arrows (stx.arrowlet.*)
 #### Continuations (stx.Continuations)
 #### Partial Functions (stx.PartialFunction)
 

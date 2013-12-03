@@ -103,7 +103,7 @@ import haxe.PosInfos;
         function(x:Module){
           return eq(x.scope).apply(key);
         }
-      ).getOrElse(thunk(null));
+      ).valOrUse(null);
     }else{
       new DefaultPublicModule(key);
     }
@@ -122,7 +122,7 @@ import haxe.PosInfos;
             }
           );
         }
-      ).getOrElse(thunk(null));
+      ).valOrUse(null);
     }else{
       new DefaultPublicModule(key);
     }

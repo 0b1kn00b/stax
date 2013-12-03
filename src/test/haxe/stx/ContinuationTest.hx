@@ -3,14 +3,14 @@ package stx;
 using stx.UnitTest;
 import stx.Log.*;
 
-using stx.Arrow;
+using stx.Arrowlet;
 using stx.Eventual;
 using stx.Continuation;
 using stx.Functions;
 using stx.Tuples;
 
-class ContinuationTest extends TestCase{
-  public function testCC(u:UnitArrow):UnitArrow{
+class ContinuationTest extends Suite{
+  public function testCC(u:TestCase):TestCase{
     //pythagoras(3, 4, printer());
     /*var square = function(x:Int) return x * x;
     var squarec = function(x:Int) return Cont.pure(square(x));
@@ -52,7 +52,7 @@ class ContinuationTest extends TestCase{
 
     return val;
   }
-  public function testZip(u:UnitArrow):UnitArrow{
+  public function testZip(u:TestCase):TestCase{
     
     return u;
   }

@@ -1,7 +1,7 @@
 package hx;
 
 import stx.rct.Stream;
-import stx.Arrow;
+import stx.Arrowlet;
 import stx.utl.Selector;
 
 import hx.rct.DefaultReactor;
@@ -44,9 +44,9 @@ class Reactors{
   @:noUsing static public function any<T>():Selector<T>{
     return tuple2(function(x,y) return true,null);
   }
-  @:noUsing static public function arrow<I,O>(?of:Selector<I>):Arrow<Reactor<I>,I>{
+  @:noUsing static public function arrow<I,O>(?of:Selector<I>):Arrowlet<Reactor<I>,I>{
     of = of == null ? any() : of;
-    var arw : Arrow<Reactor<I>,I> = function(x:Reactor<I>,cont:I->Void):Void{
+    var arw : Arrowlet<Reactor<I>,I> = function(x:Reactor<I>,cont:I->Void):Void{
       x.once(of,cont);
     }
     return arw;

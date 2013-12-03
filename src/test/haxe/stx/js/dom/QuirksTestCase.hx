@@ -5,12 +5,12 @@ import stx.js.Dom;
 import stx.js.Env;
 import stx.js.dom.Quirks;
 
-import stx.test.TestCase;
+import stx.test.Suite;
 using stx.js.dom.Quirks;
 
 using stx.Option;
 
-class QuirksTestCase extends TestCase {
+class QuirksSuite extends Suite {
   var element: HTMLElement;
 
   override public function beforeAll(): Void {

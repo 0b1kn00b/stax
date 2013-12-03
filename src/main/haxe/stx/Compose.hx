@@ -4,7 +4,7 @@ import stx.type.*;
 import stx.Tuples;
 import stx.Option;
 
-import stx.Arrow.Free;
+import Prelude.Free;
 
 using stx.Compose;
 using stx.Tuples;
@@ -75,7 +75,7 @@ class Compose0{
       }
   }
 }
-@doc("Arrow class for Functions.")
+@doc("Arrowlet class for Functions.")
 class Compose{
   @:noUsing static public function apply<I,O>(fn:I->O,v:I):O{
     return fn(v);

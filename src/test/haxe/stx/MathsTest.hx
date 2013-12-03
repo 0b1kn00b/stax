@@ -1,9 +1,9 @@
 package stx;
-import stx.test.TestCase;
+import stx.test.Suite;
 using stx.test.Assert;
 using stx.Maths;
 
-class MathsTest extends TestCase{
+class MathsTest extends Suite{
 	public function testNormalize(){
 		Assert.equals(-0.5,-10.normalize(5,15));
 	}

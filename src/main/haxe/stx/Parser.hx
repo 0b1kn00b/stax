@@ -272,7 +272,7 @@ class FailObj {
     
     var stack = input.memo.lrStack;
 
-    var h = recDetect.head.get(); // valid (see above)
+    var h = recDetect.head.val(); // valid (see above)
     while (stack.head.rule != p) {
       var head = stack.head;
       head.head = recDetect.head;
@@ -285,7 +285,7 @@ class FailObj {
     //store the head into the recursionHeads
     rest.setRecursionHead(head);
     var oldRes =
-      switch (rest.getFromCache(genKey).get()) {
+      switch (rest.getFromCache(genKey).val()) {
         case MemoParsed(ans): ans;
         default : throw "impossible match";
       };
@@ -302,7 +302,7 @@ class FailObj {
         } else {
           //we're done with growing, we can remove data from recursion head
           rest.removeRecursionHead();
-          switch (rest.getFromCache(genKey).get()) {
+          switch (rest.getFromCache(genKey).val()) {
             case MemoParsed(ans): return cast(ans);
             default: throw "impossible match";
           }

@@ -15,11 +15,12 @@ using stx.UnitTest;
 
 using rx.Observable;
 
+import rx.Future;
 import rx.Observers;
 import rx.observable.BufferedObservable;
 
-class RxTest extends TestCase{
-  public function tstRx(u:UnitArrow):UnitArrow{
+class RxTest extends Suite{
+  public function tstRx(u:TestCase):TestCase{
     var evt = Eventual.unit();
     var obs = [1,2,3,4].map(Val).observe();//no terminating value
     var obs0 = [6,7,8,9].map(Val).observe();//similarly
@@ -41,7 +42,7 @@ class RxTest extends TestCase{
         a.each(printer());*/
     return u.add(evt);
   }
-  public function testTake(u:UnitArrow):UnitArrow{
+  public function testTake(u:TestCase):TestCase{
     var obs   = [1,2,3,4].observe();
 /*        obs.takeWhile(function(i) return i < 2).next(printer());
         obs.takeWhile(function(i) return i > 2).next(printer());

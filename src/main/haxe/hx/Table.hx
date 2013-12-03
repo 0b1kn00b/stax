@@ -66,9 +66,6 @@ abstract Table<T>(Dynamic<T>) from Dynamic<T> to Dynamic<T>{
       }
     );
   }
-  public function getO(k: String): Option<T> {
-    return if (Reflect.hasField(this, k)) Some(Reflect.field(this, k)); else None;
-  }
   public function mapValues<S>(f: T -> S): Table<S> {
     return patch({}, Reflect.fields(this).map(function(name) {
       return tuple2(name,f(Reflect.field(this, name)));

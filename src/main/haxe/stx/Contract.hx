@@ -23,6 +23,11 @@ abstract Contract<A>(Eventual<Outcome<A>>) from Eventual<Outcome<A>> to Eventual
   @:noUsing static public function pure<A>(e:Outcome<A>):Contract<A>{
     return new Contract().deliver(e);
   }
+  @:to public function toPromise():Promise<A>{
+    return function(fn:Outcome<A>->Void):Void{
+      this.each(fn);
+    }
+  }
   @:noUsing static public function unit<A>():Contract<A>{
     return new Contract();
   }
@@ -91,9 +96,7 @@ abstract Contract<A>(Eventual<Outcome<A>>) from Eventual<Outcome<A>> to Eventual
   public function valueO(){
     return this.valueO();
   }
-  @doc("
-    Calls callback, placing a left value in the first parameter or a right in the second.
-  ")
+  @doc("Calls callback, placing a left value in the first parameter or a right in the second.")
   public function callback(fn:Fail->A->Void):Contract<A>{
     return this.each(
       function(x){
@@ -104,9 +107,7 @@ abstract Contract<A>(Eventual<Outcome<A>>) from Eventual<Outcome<A>> to Eventual
       }
     );
   }
-  @doc("
-   Does a map if the Either is Failure.
-  ")
+  @doc("Does a map if the Either is Failure.")
   public function map<B>(fn:A->B):Contract<B>{
     return this.map(
       function(x):Outcome<B>{
@@ -121,9 +122,7 @@ abstract Contract<A>(Eventual<Outcome<A>>) from Eventual<Outcome<A>> to Eventual
   public function transform<B>(fn:Outcome<A>->Outcome<B>):Contract<B>{
     return this.map(fn);
   }
-  @doc("
-    Zips the right hand value with function `fn`
-  ")
+  @doc("Zips the right hand value with function `fn`")
   public function zipWith<B,C>(f1:Contract<B>,fn : A -> B -> C):Contract<C>{
     return this.zipWith(f1,
         function(a,b):Outcome<C>{

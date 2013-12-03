@@ -33,8 +33,6 @@ using stx.Tuples;
 **/
 class Set<T> implements Collection<T> {
     
-    public var length(get_length, null) : Int;
-    
     private var list : List<Null<T>>;
     
     /**
@@ -122,7 +120,7 @@ class Set<T> implements Collection<T> {
         return list.iterator();
     }
 
-    private function get_length() : Int {
+    public function size() : Int {
         return list.length;
     }
 

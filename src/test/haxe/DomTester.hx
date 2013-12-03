@@ -23,10 +23,10 @@ import js.dom.Quirks;
 using  js.dom.HTMLElementExtensions;
 using  js.dom.HTMLDocumentExtensions;
 
-import stx.unit.TestCase;
+import stx.unit.Suite;
 import stx.unit.TestRunner;
 
-class DomTest extends TestCase {
+class DomTest extends Suite {
   var _doc: Env.HTMLDocument;
 
   public function new():Void {

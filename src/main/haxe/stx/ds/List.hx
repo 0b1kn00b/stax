@@ -50,24 +50,24 @@ class List<T> implements Collection<List<T>,T> {
   public var firstOption (get_firstOption, null): Option<T>;
   public var lastOption  (get_lastOption, null): Option<T>;
   
-  public var equal (get_equal, null) : Reduce<T,Bool>;
+  public var equal (get_equal, null) : Eq<T>;
   function get_equal() {
     return 
       if (equal == null || equal == NullEqual.equals ){
         headOption.map( Equal.getEqualFor )
         .each(function(x) equal = x)
-        .getOrElseC( NullEqual.equals );
+        .valOrUse( NullEqual.equals );
       }else{
         equal;
       }
   }  
-  public var order (get_order, null) : Reduce<T,Int>;
+  public var order (get_order, null) : Ord<T>;
   function get_order() {
     return 
       if (order == null || order == Order.nil ){
         headOption.map( Order.getOrderFor )
         .each( function(x) order = x)
-        .getOrElseC( Order.getOrderFor(null) );
+        .valOrUse( Order.getOrderFor(null) );
       }else{
         order;
       }
@@ -79,7 +79,7 @@ class List<T> implements Collection<List<T>,T> {
       if (hash == null || hash == Hasher.nil ){
         headOption.map( Hasher.getHashFor )
         .each(function(x) hash = x)
-        .getOrElseC( Hasher.nil );
+        .valOrUse( Hasher.nil );
       }else{
         hash;
       }
@@ -90,7 +90,7 @@ class List<T> implements Collection<List<T>,T> {
       if (show == null || show == NullShow.toString ){
         headOption.map( Show.getShowFor )
         .each(function(x) show = x)
-        .getOrElseC( NullShow.toString );
+        .valOrUse( NullShow.toString );
       }else{
         show;
       }
@@ -333,7 +333,7 @@ class List<T> implements Collection<List<T>,T> {
    *
    * @param f Called with every two consecutive elements to retrieve a list of gaps.
    */
-  public function gaps<G>(f: T -> T -> List<G>, ?equal: Reduce<G,Bool>): List<G> {
+  public function gaps<G>(f: T -> T -> List<G>, ?equal: Eq<G>): List<G> {
     var l : List<G> 
       = zip(drop(1)).flatMapTo(List.nil(tool(null,equal)), function(tuple) return f(tuple.fst(), tuple.snd()));
     return l;
@@ -358,11 +358,11 @@ class List<T> implements Collection<List<T>,T> {
     return Foldables.iterator(this);
   }
   
-  public function withOrderFunction(order : Reduce<T,Int>) {
+  public function withOrderFunction(order : Ord<T>) {
     return create(tool(order,equal,hash,show)).append(this);
   }
   
-  public function withEqualFunction(equal : Reduce<T,Bool>) {
+  public function withEqualFunction(equal : Eq<T>) {
     return create(tool(order, equal, hash, show)).append(this);
   }
   
@@ -396,13 +396,13 @@ class List<T> implements Collection<List<T>,T> {
   }
 
   private function get_head(): T {
-    return except()(Failed("List has no head element"));
+    return except()(IllegalOperationError("List has no head element"));
   }
   private function get_first(): T {
-    return except()(Failed("List has no head element"));
+    return except()(IllegalOperationError("List has no head element"));
   }
   private function get_last(): T {
-    return except()(Failed("List has no last element"));
+    return except()(IllegalOperationError("List has no last element"));
   }
 
   private function get_headOption(): Option<T> {
@@ -417,7 +417,7 @@ class List<T> implements Collection<List<T>,T> {
   }
 
   private function get_tail(): List<T> {
-    return except()(Failed("List has no head"));
+    return except()(IllegalOperationError("List has no head"));
   }
 }
 

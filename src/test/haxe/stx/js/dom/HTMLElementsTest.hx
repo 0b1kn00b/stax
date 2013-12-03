@@ -23,9 +23,9 @@ import stx.js.dom.Quirks;
 import stx.js.dom.HTMLElementExtensions;
 using  stx.js.dom.HTMLElementExtensions;
 
-import stx.test.TestCase;
+import stx.test.Suite;
 
-class HTMLElementsTest extends TestCase {
+class HTMLElementsTest extends Suite {
     var _doc: HTMLDocument;
 
     public function new():Void {

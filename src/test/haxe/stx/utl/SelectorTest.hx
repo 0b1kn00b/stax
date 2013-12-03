@@ -15,8 +15,8 @@ private enum TestEvent{
   OtherEventVal(v:Int);
 }
 
-class SelectorTest extends TestCase{
-  public function testSelector(u:UnitArrow):UnitArrow{
+class SelectorTest extends Suite{
+  public function testSelector(u:TestCase):TestCase{
     var a   = new Selector(tuple2(cast Enums.alike,EventVal(999)));
     var t0  = a.apply(EventVal(3));
     return u;

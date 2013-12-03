@@ -1,15 +1,15 @@
 package hx.ds;
 
+import stx.UnitTest;
+
 import hx.ds.PriorityQueue;
 
-import stx.Muster;
 import Stax.*;
-import stx.Muster.*;
 import stx.Compare.*;
 import stx.Log.*;
 
-class PriorityQueueTest extends TestCase{
-  public function testPriorityQueue(u:UnitArrow):UnitArrow{
+class PriorityQueueTest extends Suite{
+  public function testPriorityQueue(u:TestCase):TestCase{
     return u;
   }
 }

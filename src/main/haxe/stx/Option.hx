@@ -39,22 +39,22 @@ class Options {
     return flatten(map(o, f));
   }
   @doc("Produces the contents of `o`, throwing an error if `o` is None.")
-  static public function get<T>(o: Option<T>): T {
+  static public function val<T>(o: Option<T>): T {
     return switch (o) {
-      case None   : except()(ArgumentError("Option is empty"));
+      case None   : except()(IllegalOperationError("Option is empty"));
       case Some(v): v;
     }
   }
   @doc("Produces the value of `o` if not None, the result of `thunk` otherwise.")
-  static public function getOrElse<T>(o: Option<T>, thunk: Thunk<T>): T {
+  static public function valOrTry<T>(o: Option<T>, thunk: Thunk<T>): T {
     return switch(o) {
       case None: thunk();
       case Some(v): v;
     }
   }
   @doc("Produces the value of `o` if not None, `c` otherwise.")
-  static public function getOrElseC<T>(o: Option<T>, c: T): T {
-    return Options.getOrElse(o, c.toThunk());
+  static public function valOrUse<T>(o: Option<T>, c: T): T {
+    return Options.valOrTry(o, thunk(c));
   }
   @doc("Produces `o1` if it is Some, the result of `thunk` otherwise.")
   static public function orElse<T>(o1: Option<T>, thunk: Thunk<Option<T>>): Option<T> {

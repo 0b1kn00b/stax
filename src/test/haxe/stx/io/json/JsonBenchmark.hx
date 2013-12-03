@@ -1,6 +1,6 @@
 package stx.io.json;
 
-import stx.test.TestCase;
+import stx.test.Suite;
 
 
 import stx.io.json.JValue;
@@ -9,7 +9,7 @@ import stx.io.json.JsonGenerator;
 
 using stx.io.json.JValueSignal;
 
-class JsonBenchmarkCase extends TestCase {
+class JsonBenchmarkCase extends Suite {
   public static function timed<T> (name: String, f: T -> Void): T -> Float {
     return function (x: T) {
       var start = Date.now ().getTime ();

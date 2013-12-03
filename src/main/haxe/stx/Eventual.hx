@@ -241,7 +241,7 @@ class Eventual<T> {
       if (f1.isDelivered() && f2.isDelivered() && !sent ) {
         sent = true;
         zipped.deliver(
-          fn(f1.valueO().get(), f2.valueO().get())
+          fn(f1.valueO().val(), f2.valueO().val())
         );
       }
     }

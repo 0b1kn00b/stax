@@ -5,8 +5,8 @@ import stx.Log.*;
 
 using stx.PartialFunction;
 
-class PartialFunctionTest extends TestCase{
-  public function testPartialFunction(u:UnitArrow):UnitArrow{
+class PartialFunctionTest extends Suite{
+  public function testPartialFunction(u:TestCase):TestCase{
     return u;
   }
 }

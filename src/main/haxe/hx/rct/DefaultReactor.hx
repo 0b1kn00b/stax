@@ -8,7 +8,7 @@ import stx.utl.Selector;
 import stx.plus.Equal;
 
 using stx.Eventual;
-using stx.Arrow;
+using stx.Arrowlet;
 using Prelude;
 using stx.Arrays;
 using stx.Tuples;

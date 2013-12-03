@@ -1,12 +1,12 @@
 package stx;
 
-import stx.test.TestCase;
+import stx.test.Suite;
 import stx.test.Assert;
 
 using Prelude;
 using stx.Log;
 
-class IntIteratorTest extends TestCase{
+class IntIteratorTest extends Suite{
 	public function testNone(){
 		var a = 0.until(0);
 		Assert.isTrue(true);

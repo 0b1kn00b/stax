@@ -1,7 +1,7 @@
-import stx.test.TestCase;
+import stx.test.Suite;
 import stx.test.Assert;
 
-class StringsTest extends TestCase{
+class StringsTest extends Suite{
 	  public function testChunk() {
     var result = 'foobarblah'.chunk(3);
     

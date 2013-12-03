@@ -14,13 +14,13 @@ using stx.ds.Map;
 using stx.Tuples;
 using stx.Option;
 
-class MapTest extends TestCase {
-  /*public function testAdd(u:UnitArrow):UnitArrow{
+class MapTest extends Suite {
+  /*public function testAdd(u:TestCase):TestCase{
     var m   = Map.create();
     var m2  = m.set( tuple2('a',1) );
     trace(m2);
   }*/
-  public function testSizeGrowsWhenAddingUniqueKeys(u:UnitArrow):UnitArrow {
+  public function testSizeGrowsWhenAddingUniqueKeys(u:TestCase):TestCase {
     var m = map();
     
     for (i in 0...100) {
@@ -33,7 +33,7 @@ class MapTest extends TestCase {
     return u;
   }
   
-  public function testSizeGrowsWhenAddingDuplicateKeys(u:UnitArrow):UnitArrow {
+  public function testSizeGrowsWhenAddingDuplicateKeys(u:TestCase):TestCase {
     var m = map().set(0, "foo");
     
     for (i in 0...100) m = m.set(0, "foo");
@@ -42,7 +42,7 @@ class MapTest extends TestCase {
     return u;
   }
   
-  public function testCanRetrieveValuesForKeys(u:UnitArrow):UnitArrow {
+  public function testCanRetrieveValuesForKeys(u:TestCase):TestCase {
     var m = defaultMap();
     
     for (i in 0...100) {
@@ -51,7 +51,7 @@ class MapTest extends TestCase {
     return u;
   }
   
-  public function testSizeShrinksWhenRemovingKeys(u:UnitArrow):UnitArrow {
+  public function testSizeShrinksWhenRemovingKeys(u:TestCase):TestCase {
     var m = defaultMap();
     
     for (i in 0...100) {
@@ -64,7 +64,7 @@ class MapTest extends TestCase {
     return u;
   }
   
-  public function testLoadNeverExceedsMax(u:UnitArrow):UnitArrow {
+  public function testLoadNeverExceedsMax(u:TestCase):TestCase {
     var m = map();
     
     for (i in 0...100) {
@@ -75,7 +75,7 @@ class MapTest extends TestCase {
     return u;
   }
   
-  public function testContainsKeys(u:UnitArrow):UnitArrow {
+  public function testContainsKeys(u:TestCase):TestCase {
     var m = map();
     
     for (i in 0...100) {
@@ -88,7 +88,7 @@ class MapTest extends TestCase {
     return u;
   }
   
-  public function devtestAddingSameKeysAndSameValueDoesNotChangeMap(u:UnitArrow):UnitArrow {
+  public function devtestAddingSameKeysAndSameValueDoesNotChangeMap(u:TestCase):TestCase {
     var m = defaultMap();
     
     for (i in 0...100) {
@@ -102,7 +102,7 @@ class MapTest extends TestCase {
     return u;
   }
   
-  public function testAddingSameKeyButDifferentValueUpdatesMap(u:UnitArrow):UnitArrow {
+  public function testAddingSameKeyButDifferentValueUpdatesMap(u:TestCase):TestCase {
     var m = defaultMap();
     
     for (i in 0...100) {
@@ -114,7 +114,7 @@ class MapTest extends TestCase {
     return u;
   }
   
-  public function testCanIterateThroughKeys(u:UnitArrow):UnitArrow {
+  public function testCanIterateThroughKeys(u:TestCase):TestCase {
     var m = defaultMap();
     
     var count = 4950;
@@ -131,7 +131,7 @@ class MapTest extends TestCase {
     return u;
   }
   
-  public function testCanIterateThroughValues(u:UnitArrow):UnitArrow {
+  public function testCanIterateThroughValues(u:TestCase):TestCase {
     var m = defaultMap();
     
     for (v in m.values()) {
@@ -140,14 +140,14 @@ class MapTest extends TestCase {
     return u;
   }
   
-  public function testFilter(u:UnitArrow):UnitArrow {
+  public function testFilter(u:TestCase):TestCase {
     var m = defaultMap().filter(function(t) { return t.fst() < 50; });
     
     u = u.add(isEqual(50, m.size()));
     return u;
   }  
 
-  public function testEquals(u:UnitArrow):UnitArrow { 
+  public function testEquals(u:TestCase):TestCase { 
     u.add(isTrue (map().equals(map())));
     u.add(isTrue (map([tuple2(1, "a")]).equals(map([tuple2(1, "a")]))));
     u.add(isFalse(map([tuple2(1, "a")]).equals(map([tuple2(2, "a")]))));
@@ -156,7 +156,7 @@ class MapTest extends TestCase {
     return u;
   }
 
-  public function testCompare(u:UnitArrow):UnitArrow {  
+  public function testCompare(u:TestCase):TestCase {  
     u.add(isTrue(map().compare(map()) == 0));
     u.add(isTrue(map([tuple2(1, "a")]).compare(map([tuple2(1, "a")])) == 0)); 
     u.add(isTrue(map([tuple2(1, "a")]).compare(map([tuple2(2, "a")])) < 0));
@@ -166,13 +166,13 @@ class MapTest extends TestCase {
     return u;
   }
 
-  public function testToString(u:UnitArrow):UnitArrow {    
+  public function testToString(u:TestCase):TestCase {    
     u = u.add(isEqual("Map ()", map().toString()));
     u = u.add(isEqual("Map (1 -> a, 2 -> a)", map([tuple2(1, "a"), tuple2(2, "a")]).toString()));
     return u;
   }     
 
-  public function testMapCode(u:UnitArrow):UnitArrow {     
+  public function testMapCode(u:TestCase):TestCase {     
     u = u.add(isNotEqual(0, map().hashCode()));
     u = u.add(isNotEqual(0, map([tuple2(1, "a"), tuple2(2, "a")]).hashCode()));
     return u;

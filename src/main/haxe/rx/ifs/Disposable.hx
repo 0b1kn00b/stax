@@ -4,6 +4,6 @@ package rx.ifs;
   Represents an object which can be disposed.
 */
 interface Disposable{
-  private var disposed : Bool;
+  public var disposed(default,null) : Bool;
   public function dispose():Void;
 }

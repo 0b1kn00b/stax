@@ -10,8 +10,8 @@ using stx.prs.StringParsers;
 
 import stx.prs.Json.*;
 
-class JsonTest extends TestCase{
-  public function testJson(u:UnitArrow):UnitArrow{
+class JsonTest extends Suite{
+  public function testJson(u:TestCase):TestCase{
     var a = '
       {
         a : true,

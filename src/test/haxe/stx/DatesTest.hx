@@ -6,8 +6,8 @@ import stx.Log.*;
 
 using stx.UnitTest;
 
-class DatesTest extends TestCase{
-  public function testDates(u:UnitArrow):UnitArrow{
+class DatesTest extends Suite{
+  public function testDates(u:TestCase):TestCase{
     return u;
   }
 }

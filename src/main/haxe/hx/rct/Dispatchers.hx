@@ -34,7 +34,7 @@ abstract Dispatchers<I,O>(DispatchersType<I,O>) from DispatchersType<I,O> to Dis
   public function addWith(slct:Selector<I>,handler:O->Void,equal:I->I->Bool){
     var val = findWith(slct,handler,equal);
     return if(val.isDefined()){
-      var arr = val.get().snd();
+      var arr = val.val().snd();
       if(arr.indexOf(handler) != -1){
         false;
       }else{
@@ -49,7 +49,7 @@ abstract Dispatchers<I,O>(DispatchersType<I,O>) from DispatchersType<I,O> to Dis
   public function remWith(slct:Selector<I>,handler:O->Void,equal:I->I->Bool){
     var val = findWith(slct,handler,equal);
     if(val.isDefined()){
-      var arr = val.get().snd();
+      var arr = val.val().snd();
       for(i in 0...arr.length){
         if(Reflect.compareMethods(arr[i], handler)){
           arr.splice(i, 1)[0];

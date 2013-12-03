@@ -3,16 +3,15 @@ package stx.plus;
 import stx.ds.Map;
 
 import Prelude;
-import stx.Muster;
-import stx.Muster.*;
+using stx.UnitTest;
 import stx.Compare.*;
 import stx.Log.*;
 
 using stx.Tuples;
 
 
-class HashTest extends TestCase{
-  public function testTupleMapCode(u:UnitArrow):UnitArrow {    
+class HashTest extends Suite{
+  public function testTupleMapCode(u:TestCase):TestCase {    
     //var p /*: Product */= tuple5("a",0,0.1,"a",1);
     var tests : Array<Int> = [
       Hasher.getHashFor(tuple2("b",0))(tuple2("b",0)),
@@ -46,7 +45,7 @@ class HashTest extends TestCase{
   public function assertMapCodeForIsNotZero<T>(v : T) {
     return eq(0).not().apply(Hasher.getHashFor(v)(v));
   }
-  public function testMap(u:UnitArrow):UnitArrow {
+  public function testMap(u:TestCase):TestCase {
     var msg = function(x) return 'it should not produce 0 for $x';
 
     return u.append([

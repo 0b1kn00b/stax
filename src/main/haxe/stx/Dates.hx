@@ -25,12 +25,12 @@ class Dates {
   }
   static public function copier(d0:Date,?year, ?month, ?day, ?hour, ?min, ?sec):Date{
     return new Date(
-      option(year).getOrElseC(d0.getFullYear()),
-      option(month).getOrElseC(d0.getMonth()),
-      option(day).getOrElseC(d0.getDay()),
-      option(hour).getOrElseC(d0.getHours()),
-      option(min).getOrElseC(d0.getMinutes()),
-      option(sec).getOrElseC(d0.getSeconds())
+      option(year).valOrTry(d0.getFullYear),
+      option(month).valOrTry(d0.getMonth),
+      option(day).valOrTry(d0.getDay),
+      option(hour).valOrTry(d0.getHours),
+      option(min).valOrTry(d0.getMinutes),
+      option(sec).valOrTry(d0.getSeconds)
     );
   }
   static public function add(d0:Date,d1:Date):Date{

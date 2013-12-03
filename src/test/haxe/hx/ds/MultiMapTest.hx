@@ -2,13 +2,12 @@ package hx.ds;
 
 import hx.ds.MultiMap;
 
-import stx.Muster;
-import stx.Muster.*;
+using stx.UnitTest;
 import stx.Predicates.*;
 import stx.Log.*;
 
-class MultiMapTest extends TestCase{
-  public function MultiMapTest(u:UnitArrow):UnitArrow{
+class MultiMapTest extends Suite{
+  public function MultiMapTest(u:TestCase):TestCase{
     return u;
   }
 }

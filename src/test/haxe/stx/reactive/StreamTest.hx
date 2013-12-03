@@ -1,5 +1,5 @@
 package stx.reactive;
-import stx.test.TestCase;
+import stx.test.Suite;
 using stx.test.Assert;
 
 import stx.reactive.Streams;
@@ -7,7 +7,7 @@ import stx.reactive.Reactive;
 
 import haxe.Timer;
 
-class StreamTest extends TestCase{
+class StreamTest extends Suite{
 	public function testFlatMap(){
 		trace('start');
 		var as = Assert.createAsync(function(){},1200);

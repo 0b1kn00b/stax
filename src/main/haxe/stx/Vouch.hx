@@ -197,8 +197,8 @@ class Vouches{
   static public function toContract<A>(vch:Vouch<A>):stx.Contract<A>{
     var p : stx.Contract<A> = Contracts.toContract(fold(vch,
         Success,
-        function(o){return Failure(o == null ? fail(NullReferenceError('Contract breached without specific error')) : o); },
-        function() return Failure(fail(NullReferenceError('Empty Contract.')))
+        function(o){return Failure(o == null ? fail(IllegalOperationError('Contract breached without specific error')) : o); },
+        function() return Failure(fail(NullError()))
     ));
     return p;
   }

@@ -18,7 +18,7 @@ package js.io;
 import stx.js.Dom;
 import Prelude;
 import stx.test.Assert;
-import stx.test.TestCase;
+import stx.test.Suite;
 import stx.js.Env;
 import stx.js.dom.Quirks;
 import stx.js.io.IFrameIO;
@@ -26,7 +26,7 @@ using stx.Log;
 
 using stx.js.dom.HTMLDocumentExtensions;
 
-class IFrameIOTest extends TestCase {
+class IFrameIOTest extends Suite {
   var window1: Window;
   var window2: Window;
 

@@ -1,15 +1,14 @@
 package stx.ds;
 
 import Prelude; 
-import stx.Muster;
-import stx.Muster.*;
+using stx.UnitTest;
 import stx.Compare.*;
 import stx.Log.*;
 
 using stx.ds.Zipper;
 
-class ZipperTest extends TestCase{
-	public function testSomething(u:UnitArrow){
+class ZipperTest extends Suite{
+	public function testSomething(u:TestCase){
     var a = {
       b : {},
        c : {

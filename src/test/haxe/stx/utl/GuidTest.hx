@@ -17,12 +17,12 @@ package stx.util;
 
 import Prelude;
 
-import stx.test.TestCase;
+import stx.test.Suite;
 import stx.util.Guid;
 
 
 
-class GuidTest extends TestCase {
+class GuidTest extends Suite {
   public function new() {
     super();
   }

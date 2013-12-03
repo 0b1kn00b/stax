@@ -1,5 +1,5 @@
 package stx.plus;
-class EqualTest extends TestCase{
+class EqualTest extends Suite{
 	public function testEqualForInt() {
     var equal = Equal.getEqualFor(1);
     assertFalse(equal(2, 1));
@@ -71,7 +71,7 @@ class EqualTest extends TestCase{
   }
 
   public function testEqualForNotClassWithoutEquals() {                 
-    this.assertThrowsException(function() Equal.getEqualFor(new TestCase()));
+    this.assertThrowsException(function() Equal.getEqualFor(new Suite()));
   } 
 
   public function testEqualForEnum() { 

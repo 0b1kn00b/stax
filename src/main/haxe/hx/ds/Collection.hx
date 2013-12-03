@@ -31,9 +31,7 @@ package hx.ds;
 interface Collection<T> {
     
     @doc("The total number of items.")
-    var length(get_length, null) : Int;
-    
-    private function get_length() : Int;
+    public function size() : Int;
     
     @doc("Returns true if this collection contains the object given.")
     function contains(obj : Null<T>) : Bool;

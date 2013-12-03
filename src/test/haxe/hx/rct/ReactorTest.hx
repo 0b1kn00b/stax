@@ -1,7 +1,5 @@
 package hx.rct;
 
-import stx.test.TestArrow;
-
 using stx.UnitTest;
 
 import hx.Reactor;
@@ -17,7 +15,7 @@ import stx.utl.Selector;
 using stx.Compare;
 using stx.Tuples;
 using stx.Arrays;
-using stx.Arrow;
+using stx.Arrowlet;
 
 import kwv.rct.*;
 
@@ -25,14 +23,13 @@ private enum TestEvent{
   EventVal(v:Int);
   OtherEventVal(v:Int);
 }
-class ReactorTest extends TestCase{
-  public function test_that_once_works_and_that_all_events_can_be_caught(u:UnitArrow):UnitArrow{
+class ReactorTest extends Suite{
+  public function test_that_once_works_and_that_all_events_can_be_caught(u:TestCase):TestCase{
     var ev  = Eventual.unit();
     var ev1 = Eventual.unit();
     var a   = new DefaultReactor();
         a.once(new Selector(tuple2(cast Enums.alike,EventVal(999))),
           function(evt){
-            trace(evt);
             ev.deliver(
               isTrue(true)
             );
@@ -58,24 +55,23 @@ class ReactorTest extends TestCase{
           }
         );
         a.on(Reactors.any(),printer());
-        trace(a.dispatchers);
         a.emit(EventVal(999));
         a.emit(EventVal(999));
         a.emit(OtherEventVal(1));        
 
-    var tsts : Array<TestArrow> = [];
+    var tsts : Array<TestCase> = [];
         //tsts = tsts;//.add(ev).add(ev1).add(ev2);
     return u.add(ev).add(ev1).add(ev2);
 
   }
-  /*public function testLazyStream(u:UnitArrow):UnitArrow{
+  /*public function testLazyStream(u:TestCase):TestCase{
     var a   = new DefaultReactor();
     var str = a.push();
 
     a.emit(EventVal(1));
     return u;
   }*/
-  /*public function testMergeProperties(u:UnitArrow):UnitArrow{
+  /*public function testMergeProperties(u:TestCase):TestCase{
     var a   = new DefaultReactor();
     var b   = new DefaultReactor();
 

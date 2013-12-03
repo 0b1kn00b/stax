@@ -10,8 +10,8 @@ import stx.time.DateSpan;
 
 //using stx.Dates;
 
-class TimeTest extends TestCase{
-  public function testTime(u:UnitArrow):UnitArrow{
+class TimeTest extends Suite{
+  public function testTime(u:TestCase):TestCase{
     /*var a = Time.now();
     trace(a.sub(Time.hour(1)).toDate());
     var b = a.toDate().day(Monday).snap(Day).sub(Time.hour());

@@ -1,7 +1,6 @@
 package stx.ds;
 
-import stx.Muster;
-import stx.Muster.*;
+using stx.UnitTest;
 import stx.Log.*;
 
 import stx.ds.Size;
@@ -16,8 +15,8 @@ using stx.Iterables;
 
 using stx.ds.ListNewTest;
 
-class ListNewTest extends TestCase{
-  public function testListNew(u:UnitArrow):UnitArrow{
+class ListNewTest extends Suite{
+  public function testListNew(u:TestCase):TestCase{
     var itr                         = 0.until(3);
     var l  : List<Int>              = itr;//constructor
     var l2 : List<Int>              = 3.until(5);

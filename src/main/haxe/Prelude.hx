@@ -8,8 +8,12 @@ class Prelude{
 typedef Callback<A>   = A->Void;
 typedef Thunk<T>      = Void->T;
 typedef Endo<T>       = T->T;
-typedef Reduce<A,Z>   = A->A->Z;
-typedef Semi<T>       = Reduce<T,T>;
+
+typedef Ord<T>        = T->T->Int;
+typedef Eq<T>         = T->T->Bool;
+
+typedef Reduce<A,Z>   = Z->A->Z;
+typedef Semi<T>       = T->T->T;
 typedef Niladic       = Void->Void;
 typedef Pair<A>       = Tuple2<A,A>;
 
@@ -20,6 +24,14 @@ typedef Lense<A,B>    = {
 enum Outcome<T>{
   Success(success:T);
   Failure(failure:stx.Fail);
+}
+@doc("
+  Either represents a type that is either a 'left' value or a 'right' value,
+  but not both.
+")
+enum Either<A, B> {
+  Left(v: A);
+  Right(v: B);
 }
 enum Unit{
   Unit;
@@ -37,19 +49,16 @@ enum FieldOrder {
 }
 @doc("Underlies all thrown values in Stax, extensible through the use of `FrameworkError`.")
 enum Error{
-  Failed(?reason:String,?pos:PosInfos);
-  AbstractMethodError(?pos:PosInfos);
-  ArgumentError(field:String,?pos:PosInfos);
-  AssertionError(is:String,?should:String,?pos:PosInfos);
   ErrorStack(arr:Array<stx.Fail>);
-  TypeError(msg:String,?pos:PosInfos);
-  NullReferenceError(field:String,?pos:PosInfos);
-  OutOfBoundsError(?msg:String,?pos:PosInfos);
   NativeError(err:Dynamic);
   FrameworkError(flag:EnumValue,?pos:PosInfos);
-  IllegalOperationError(msg:String,?pos:PosInfos);
-  InjectionError(cls:Class<Dynamic>,?err:stx.Fail);
-  ConstructorError(cls:Class<Dynamic>,?err:stx.Fail);
+  MatchError<S,T>(is:S,?should:T,?pos:PosInfos);
+
+  AssertionError<T>(is:T,?should:T,?pos:PosInfos);
+  ArgumentError(field:String,e:Error,?pos:PosInfos);
+
+  IllegalOperationError(reason:String);
+  NullError(?pos:PosInfos);
 }
 @doc("
     An option represents an optional value -- the value may or may not be
@@ -78,4 +87,8 @@ enum Tuple5<T1, T2, T3, T4, T5> {
 @:funk
 enum Wildcard{
   _;
+}
+enum Free<A, B>{
+  Cont(v:A);
+  Done(v:B);
 }

@@ -26,7 +26,7 @@ class DefaultApply<E,A> implements Apply<E,A>{
 
 	}
 	public function apply(v:E):A{
-		return except()(AbstractMethodError());
+		return except()(ArgumentError('apply',NullError() ));
 	}
 }
 class AnonymousApply<E,A> implements Apply<E,A>{

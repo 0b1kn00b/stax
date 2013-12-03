@@ -17,7 +17,7 @@
 package stx.math.tween;
 
 import Prelude;
-import stx.test.TestCase;
+import stx.test.Suite;
 import stx.test.Assert;
 import stx.math.tween.Tween;
 import stx.math.tween.Easing;
@@ -25,7 +25,7 @@ import stx.math.tween.Easing;
 
 using stx.math.tween.Tweens;
 
-class TweensTest extends TestCase {
+class TweensTest extends Suite {
   static var Start = {
     x: 0.0,
     y: 2.0

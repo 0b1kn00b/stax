@@ -17,14 +17,14 @@
 package stx.math.geom;
 
 import Prelude;
-import stx.test.TestCase;
+import stx.test.Suite;
 import stx.test.Assert;
 import stx.math.geom.Point;
 
 
 using stx.math.geom.Points;
 
-class PointTest extends TestCase {
+class PointTest extends Suite {
   static var cmpInt = function(p1: Point2d<Int>, p2: Point2d<Int>) {
     return p1.x == p2.x && p1.y == p2.y;
   }

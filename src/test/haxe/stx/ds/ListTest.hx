@@ -16,12 +16,12 @@
 */
 package stx.ds;
 
-import stx.Muster;
-import stx.Muster.*;
+using stx.UnitTest;
 import stx.Log.*;
 
 import Prelude;
 
+import stx.plus.Plus;
 import stx.plus.Equal;
 
 import stx.ds.ifs.Foldable;
@@ -30,56 +30,61 @@ import stx.ds.List;
 
 using stx.ds.Foldables;
 
+using stx.Iterables;
 using stx.Tuples;
 using stx.Maths;
 
 
-class ListTest extends TestCase {
-  public function testSizeGrowsWhenAddingUniqueElements(): Void {
+class ListTest extends Suite {
+  public function testSizeGrowsWhenAddingUniqueElements(u:TestCase):TestCase{
     var l = newList();
     
     for (i in 0...100) {
-      assertEquals(i, l.size());
+      u = u.add(isEqual(i, l.size()));
       
       l = l.add(i);
     }
     
-    assertEquals(100, l.size());
+    u = u.add(isEqual(100, l.size()));
+    return u;
   }
   
-  public function testSizeGrowsWhenAddingDuplicateElements(): Void {
+  public function testSizeGrowsWhenAddingDuplicateElements(u:TestCase):TestCase {
     var l = newList().add(0);
     
     for (i in 0...100) l = l.add(0);
     
-    assertEquals(101, l.size());
+    u = u.add(isEqual(101, l.size()));
+    return u;
   }
   
-  public function testSizeShrinksWhenRemovingElements(): Void {
+  public function testSizeShrinksWhenRemovingElements(u:TestCase):TestCase {
     var l = defaultList();
     
     for (i in 0...100) {
-      assertEquals(100 - i, l.size());
+      u = u.add(isEqual(100 - i, l.size()));
       
       l = l.remove(i);
     }
     
-    assertEquals(0, l.size());
+    u = u.add(isEqual(0, l.size()));
+    return u;
   }
   
-  public function testContainsElements(): Void {
+  public function testContainsElements(u:TestCase):TestCase {
     var l = newList();
     
     for (i in 0...100) {
-      assertFalse(l.contains(i));
+      u = u.add(isFalse(l.contains(i)));
       
       l = l.add(i);
       
-      assertTrue(l.contains(i));
+      u = u.add(isTrue(l.contains(i)));
     }
+    return u;
   }
   
-  public function testCanIterateThroughElements(): Void {
+  public function testCanIterateThroughElements(u:TestCase):TestCase {
     var l = defaultList();
     
     var count = 4950;
@@ -91,24 +96,28 @@ class ListTest extends TestCase {
       ++iterated;
     }
 
-    assertEquals(100, iterated);
-    assertEquals(0,   count);
+    u = u.add(isEqual(100, iterated));
+    u = u.add(isEqual(0,   count));
+
+    return u;
   }
   
-  public function testFilter(): Void {
+  public function testFilter(u:TestCase):TestCase {
     var l = defaultList().filter(function(e) { return e < 50; });
     
-    assertEquals(50, l.size());
+    u = u.add(isEqual(50, l.size()));
+    return u;
   }
   
-  public function testSort(): Void {
+  public function testSort(u:TestCase):TestCase {
     var ul = newList().append([9, 2, 1, 100]);
     var ol = newList().append([1, 2, 9, 100]);
     
-    assertListEquals(ol, ul.sort());
+    u = assertListEquals(ol, ul.sort(),u);
+    return u;
   }  
   
-  public function testSortWith(): Void {
+  public function testSortWith(u:TestCase):TestCase {
      var ul = newList().append([9, 2, 1, 100]);
      var ol = newList().append([1, 9, 2, 100]);
      
@@ -124,109 +133,122 @@ class ListTest extends TestCase {
        else
          return -1;
      };
-     assertListEquals(ol, ul.withOrderFunction(oddsfirst).sort());
+     u = assertListEquals(ol, ul.withOrderFunction(oddsfirst).sort(),u);
+     return u;
   }
   
-  public function testReverse(): Void {
+  public function testReverse(u:TestCase):TestCase {
     var l = newList().append([9, 2, 1, 100]);
     var rl = newList().append([100, 1, 2, 9]);
     
-    assertListEquals(rl, l.reverse());
+    u = assertListEquals(rl, l.reverse(),u);
+    return u;
   }
   
-  public function testFoldr(): Void {
-    assertEquals(4950, defaultList().foldr(0, function(b, a) {
+  public function testFoldRight(u:TestCase):TestCase {
+    u = u.add(isEqual(4950, defaultList().foldRight(0, function(b, a){
       return a + b;
-    }));
+    })));
+    return u;
   }
   
-  public function testLast(): Void {
-    assertEquals(99, defaultList().last);
+  public function testLast(u:TestCase):TestCase {
+    u = u.add(isEqual(99, defaultList().last));
+    return u;
   }
   
-  public function testLastOption(): Void {
+  public function testLastOption(u:TestCase):TestCase {
     switch (defaultList().lastOption) {
-      case Some(v): assertEquals(99, v);
+      case Some(v): u = u.add(isEqual(99, v));
       
-      default: assertTrue(false);
+      default: u = u.add(isTrue(false));
     }
+    return u;
   }
   
-  public function testHead(): Void {
-    assertEquals(0, defaultList().head);
+  public function testHead(u:TestCase):TestCase {
+    u = u.add(isEqual(0, defaultList().head));
+    return u;
   }
   
-  public function testHeadOption(): Void {
+  public function testHeadOption(u:TestCase):TestCase {
     switch (defaultList().headOption) {
-      case Some(v): assertEquals(0, v);
+      case Some(v): u = u.add(isEqual(0, v));
       
-      default: assertTrue(false);
+      default: u = u.add(isTrue(false));
     }
+    return u;
   }
   
-  public function testZip(): Void {
+  public function testZip(u:TestCase):TestCase {
     var l = defaultList().zip(defaultList().drop(1));
     
     var i1 = 0, i2 = 1;
 
     for (z in l) {
-      assertEquals(z, tuple2(i1,i2));
+      u = u.add(isEqual(z, tuple2(i1,i2)));
       
       ++i1; ++i2;
     }
     
-    assertEquals(99, l.size());
+    u = u.add(isEqual(99, l.size()));
+    return u;
   }    
 
-  public function testEquals() { 
-  assertTrue (newList().equals(newList())); 
-    assertTrue (newList([1,2,3]).equals(newList([1,2,3])));
-    assertFalse(newList([1,2,3]).equals(newList([2,2,3])));
-    assertFalse(newList([1,2,3]).equals(newList([1])));  
+  public function testEquals(u:TestCase): TestCase {
+    u = u.add(isTrue (newList().equals(newList()))); 
+    u = u.add(isTrue (newList([1,2,3]).equals(newList([1,2,3]))));
+    u = u.add(isFalse(newList([1,2,3]).equals(newList([2,2,3]))));
+    u = u.add(isFalse(newList([1,2,3]).equals(newList([1]))));
     
     var list = List.create( 
-			Prelude.tool(
+			Plus.tool(
 				function(a : Float, b : Float) return Math.abs(a - b) < 0.25
 			)
 		).append([1.0, 2.1]);
 
-    assertTrue (list.equals(newList([0.9, 2.0])));
-  assertFalse(list.equals(newList([0.9, 2.4]))); 
-  assertFalse(list.equals(newList([0.7, 2.0]))); 
+    u = u.add(isTrue (list.equals(newList([0.9, 2.0]))));
+    u = u.add(isFalse(list.equals(newList([0.9, 2.4])))); 
+    u = u.add(isFalse(list.equals(newList([0.7, 2.0])))); 
+    return u;
   }
 
-  public function testCompare() {  
-    assertTrue(newList().compare(newList()) == 0);
-  assertTrue(newList([1,2,3]).compare(newList([1,2,3])) == 0);  
+  public function testCompare(u:TestCase): TestCase{
+    u = u.add(isTrue(newList().compare(newList()) == 0));
+    u = u.add(isTrue(newList([1,2,3]).compare(newList([1,2,3])) == 0));
 
-    assertTrue(newList([1,2,3]).compare(newList([2,2,3])) < 0);
-    assertTrue(newList([1,2,3]).compare(newList([1])) > 0);  
+    u = u.add(isTrue(newList([1,2,3]).compare(newList([2,2,3])) < 0));
+    u = u.add(isTrue(newList([1,2,3]).compare(newList([1])) > 0));
     
-    var list = List.create(Prelude.tool(function(a : Float, b : Float) return Math.abs(a-b) < 0.25 ? 0 : (a > b ? 1 : -1))).append([1.0, 2.1]);
+    var list = List.create(Plus.tool(function(a : Float, b : Float) return Math.abs(a-b) < 0.25 ? 0 : (a > b ? 1 : -1))).append([1.0, 2.1]);
 
-    assertTrue(list.compare(newList([0.9, 2.0])) == 0);
-  assertTrue(list.compare(newList([0.9, 2.4])) < 0); 
-  assertTrue(list.compare(newList([0.7, 2.0])) > 0); 
+    u = u.add(isTrue(list.compare(newList([0.9, 2.0])) == 0));
+    u = u.add(isTrue(list.compare(newList([0.9, 2.4])) < 0)); 
+    u = u.add(isTrue(list.compare(newList([0.7, 2.0])) > 0));
+    return u;
   }
 
-  public function testToString() { 
-  assertEquals("List []", newList().toString()); 
-    assertEquals("List [a, b]", newList(["a", "b"]).toString());
+  public function testToString(u:TestCase): TestCase { 
+    u = u.add(isEqual("List []", newList().toString())); 
+    u = u.add(isEqual("List [a, b]", newList(["a", "b"]).toString()));
 
-    var list = List.create(Prelude.tool(function(a : String) return '"' + a +'"')).append(["a", "b"]);
+    var list = List.create(Plus.tool(function(a : String) return '"' + a +'"')).append(["a", "b"]);
 
-    assertEquals('List ["a", "b"]', list.toString());
+    u = u.add(isEqual('List ["a", "b"]', list.toString()));
+    return u;
   }     
 
-  public function testMapCode() {
-  assertNotEquals(0, newList().hashCode());
-  assertNotEquals(0, newList([1,2]).hashCode());
+  public function testMapCode(u:TestCase): TestCase {
+    u = u.add(isNotEqual(0, newList().hashCode()));
+    u = u.add(isNotEqual(0, newList([1,2]).hashCode()));
+    return u;
   }
   
-  public function testIntListMapToString() {
+  public function testIntListMapToString(u:TestCase): TestCase{
     var list = List.create().append([1,2,3]);
     var slist : Foldable<List<String>, String> = list.map(function(i) return i.toString());
-    assertEquals(["1", "2", "3"], slist.toArray()); 
+    u = u.add(isEqual(["1", "2", "3"], slist.toArray())); 
+    return u;
   }
      
 
@@ -238,9 +260,10 @@ class ListTest extends TestCase {
       return list;
   }
   
-  function assertListEquals(l1: List<Int>, l2: List<Int>, ?pos : haxe.PosInfos) {
-    assertTrue(l1.equals(l2), pos); 
-    assertTrue(Equal.getEqualFor(l1)(l1, l2), pos); 
+  function assertListEquals(l1: List<Int>, l2: List<Int>, ?pos : haxe.PosInfos, u: TestCase): TestCase{
+    u = u.add(isTrue(l1.equals(l2), pos)); 
+    u = u.add(isTrue(Equal.getEqualFor(l1)(l1, l2), pos)); 
+    return u;
   }
   
   function defaultList(): List<Int> {

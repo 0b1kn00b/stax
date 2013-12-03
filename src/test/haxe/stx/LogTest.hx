@@ -16,8 +16,8 @@ import stx.log.LogListing.LogListings.*;
 
 using stx.Types;
 
-class LogTest extends TestCase{
-  public function testLog(u:UnitArrow):UnitArrow{
+class LogTest extends Suite{
+  public function testLog(u:TestCase):TestCase{
     var ll = new LogListings();
     var b = new ZebraListings([ll.include(ll.type(this.type()))]);
     u = u.add(isTrue(b.check(here())));
@@ -37,11 +37,11 @@ class LogTest extends TestCase{
     //ll.abstracted(e); no typed workaround
     return u;
   }
-  public function testResource(u:UnitArrow):UnitArrow{
+  public function testResource(u:TestCase):TestCase{
     Further.something();
     return u;
   }
-  public function testInjection(u:UnitArrow):UnitArrow{
+  public function testInjection(u:TestCase):TestCase{
     return u;
   }
 }

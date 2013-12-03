@@ -8,10 +8,10 @@ import stx.Eventual;
 using stx.UnitTest;
 
 import hx.sch.Task;
-import stx.Time.*;
+import stx.Period.*;
 
-class TaskTest extends TestCase{
-  public function testTask(u:UnitArrow):UnitArrow{
+class TaskTest extends Suite{
+  public function testTask(u:TestCase):TestCase{
     var evt = new Eventual();
     var a = new Task(
       function(){

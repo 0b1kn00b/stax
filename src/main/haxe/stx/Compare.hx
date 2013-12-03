@@ -132,8 +132,8 @@ abstract Predicate<T>(PredicateType<T>) from PredicateType<T> to PredicateType<T
 }
 @doc("Caches function lookup for value.")
 class Predicator<T>{
-  private var __eq__ : Reduce<T,Bool>;
-  private var __od__ : Reduce<T,Int>;
+  private var __eq__ : Eq<T>;
+  private var __od__ : Ord<T>;
   private var __dt__ : T;
 
   public function new(v:T){

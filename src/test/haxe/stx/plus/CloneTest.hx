@@ -11,11 +11,11 @@ using stx.Maths;
 
 import stx.plus.Clone;
 
-class CloneTest extends TestCase{
+class CloneTest extends Suite{
   /**
     Type.getInstanceFields is redundant (I think).
   */
-  /*public function test_that_extra_reflected_fields_can_show_up_in_classes(u:UnitArrow):UnitArrow{
+  /*public function test_that_extra_reflected_fields_can_show_up_in_classes(u:TestCase):TestCase{
     var a = new BothReflectedFieldsAndTypeFieldsTest();
         a.b = 'c';
     var t = Type.getClass(a);
@@ -27,7 +27,7 @@ class CloneTest extends TestCase{
       c)
     );
   }*/
-  public function testClone(u:UnitArrow):UnitArrow{
+  public function testClone(u:TestCase):TestCase{
     var a     = new CloneTestClass();
     var b     = Clone.getCloneFor(a)(a,[]);
     var tst1  = a == b;
@@ -44,7 +44,7 @@ class CloneTest extends TestCase{
 
     return u.append(tsts);
   }
-  public function testClone2(u:UnitArrow):UnitArrow{
+  public function testClone2(u:TestCase):TestCase{
     var a     = new CloneTest2();
     var b     = Clone.getCloneFor(a)(cast a,[]);
     var tsts  = [];

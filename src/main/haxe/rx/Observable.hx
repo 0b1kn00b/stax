@@ -18,13 +18,10 @@ using stx.Iterables;
 using stx.Types;
 using stx.Compose;
 
-
 import rx.ifs.Observable in IObservable;
 
 import rx.observable.*;
 import rx.disposable.*;
-
-
 
 typedef ObservableType<T> = IObservable<T>;
 
@@ -49,6 +46,12 @@ abstract Observable<T>(ObservableType<T>) from ObservableType<T> to ObservableTy
   public function subscribe(obs:Observer<T>):Disposable{
     return this.subscribe(obs);
   }
+  @:from static public function fromIterableChunk<T>(itr:Iterable<Chunk<T>>):Observable<T>{
+    return new IterableChunkObservable(itr);
+  }
+  @:from static public function fromIterable<T>(itr:Iterable<T>):Observable<T>{
+    return new IterableObservable(itr);
+  }
   @:from static public function fromAnonymousObservable<T>(fn:Observer<T> -> Disposable){
     return new AnonymousObservable(fn);
   }
@@ -65,9 +68,6 @@ abstract Observable<T>(ObservableType<T>) from ObservableType<T> to ObservableTy
       var ot : ObservableType<T>                      = new ObservableDelegate(ct);
     return new Observable(ot);
   }*/
-  @:to public function toContinuation<T>():Continuation<Disposable,Chunk<T>>{
-    return new Continuation(this.subscribe);
-  }
   /*
   public function map<U>(fn:T->U):Observable<U>{
     return Observables.map(this,fn);
@@ -92,122 +92,8 @@ abstract Observable<T>(ObservableType<T>) from ObservableType<T> to ObservableTy
   }
 }
 class Observables{
-  /*static public function first<A>(obs0:Observable<A>):Observable<A>{
-    return take(obs0,1);    
-  }*/
-  /*static public function takeWhile<A>(obs0:Observable<A>,running:Selector<A>):Observable<A>{
-    return function(observer:Observer<A>){
-      return obs0.next(
-        function(chk:A):Void{
-          var done = !running.apply(chk);
-          if(!done){
-            observer.onData(chk);
-          }else{
-            observer.onDone();
-          }
-        }
-      );
-    }
-  }*/
-/*  static public function take<A>(obs:Observable<A>,num:Int):Observable<A>{
-    var count = 0;
-    return takeWhile(obs, function(x):Bool{
-      count++;
-      return count <= num;
-    });
-  }*/
-  @noUsing static public function returns<A>(v:A):Observable<A>{
-    return function (observer:Observer<A>) {
-      observer.onData(v);
-      observer.onDone();
-      return Disposable.unit();
-    };
-  }
-  static public function buffer<A>(obs:Observable<A>):Observable<A>{
-    return new BufferedObservable(obs);
-  }
-  @:note("This doesn't belong here")
-  @:bug("0b1kn00b: obs2 is replaced by observer in lambda, name change fixes: could be aliasing with auto renaming.")
-  static public function concat<A>(obs0:Observable<A>,obs1:Observable<A>):Observable<A>{
-    var obs2_ : Observable<A> = buffer(obs0);
-    var obs3_ : Observable<A> = buffer(obs1);
-
-    return function(x:Observer<A>):Disposable{
-      var ev : Eventual<Disposable> = Eventual.unit();
-      var d0 = obs2_.subscribe(
-        function(chk:Chunk<A>):Void{
-          switch (chk) {
-            case Nil  :
-              var dsp = 
-                obs3_.subscribe(
-                  function(chk:Chunk<A>):Void{
-                    x.apply(chk);
-                  }
-                );
-              if(!ev.isDelivered()){
-                ev.deliver(dsp);
-              }
-            default   : x.apply(chk);
-          }
-        }
-      );
-      var d1 = new EventualDisposable(ev);
-      var c  = new CompositeDisposable();
-          c.add(d0);
-          c.add(d1);
-      return c;
-    }
-  }
-  /*static public function merge<A>(obs0:Observable<A>,obs1:Observable<A>):Observable<A>{
-    return function(ob:Observer<A>){
-
-    }
-  }*/
-  static public function each<A>(obs:Observable<A>,fn:Chunk<A>->Void):Disposable{
-    return obs.subscribe(
-      function(chk:Chunk<A>){
-        fn(chk);
-      }
-    );
-  }
-  static public function next<A>(obs:Observable<A>,fn:A->Void):Disposable{
-    return each(obs,Chunks.success.bind(_,fn));
-  }
-  static public function fail<A>(obs:Observable<A>,fn:Fail->Void):Disposable{
-    return each(obs,Chunks.failure.bind(_,fn));
-  }
-  static public function done<A>(obs:Observable<A>,fn:Niladic):Disposable{
-    return each(obs,Chunks.nothing.bind(_,fn));
-  }
-  static public function map<A,B>(obs:Observable<A>,fn:A->B):Observable<B>{
-    return function(cont: Observer<B>){
-      return obs.subscribe(
-        function(chk:Chunk<A>){
-          switch (chk) {
-            case Val(v) : cont.apply(Val(fn(v)));
-            case End(e) : noop;
-            case Nil    : noop;
-          }
-        }
-      );
-    }
-  }
-  static public function flatMap<A,B>(obs:Observable<A>,fn:A->Observable<B>):Observable<B>{
-    return new AnonymousObservable(
-      function(cont : Observer<B>){
-        var ot = null;
-            ot = obs.subscribe(
-          function(chk:Chunk<A>):Disposable{ 
-            return switch(chk){
-              case Val(v) : (fn(v).subscribe(cont)); 
-              case End(e) : ot == null ? noop : ot;
-              case Nil    : ot == null ? noop : ot;
-            }
-          }
-        );
-        return ot;
-      }
-    );
+  static public function materialize<T>(observer:Observer<T>){
+    return new Materialize()
   }
 }
 @doc("Observe an Eventual value")
@@ -223,24 +109,18 @@ class ContractObservables{
   } 
 }
 @doc("Observe values emitted by a Reactor.")
-class ReactorObservables{
-  static public function observe<T>(rct:Reactor<T>):Observable<T>{
-    return new ReactorObservable(rct.map(Val));
+class ReactorChunkObservables{
+  static public function observe<T>(rct:Reactor<Chunk<T>>):Observable<T>{
+    return new ReactorChunkObservable(rct);
   }
 }
-@doc("Observe values emitted by a Reactor.")
-class ChunkReactorObservables{
-  static public function observe<T>(rct:Reactor<Chunk<T>>):Observable<T>{
-    return new ReactorObservable(rct);
+class IterableChunkObservables{
+  static public function observe<T>(itr:Iterable<Chunk<T>>):Observable<T>{
+    return new IterableChunkObservable(itr);
   }
 }
 class IterableObservables{
   static public function observe<T>(itr:Iterable<T>):Observable<T>{
-    return new IterableObservable(itr.map(Val).add(Nil));
-  }
-}
-class ChunkIterableObservables{
-  static public function observe<T>(itr:Iterable<Chunk<T>>):Observable<T>{
     return new IterableObservable(itr);
   }
 }

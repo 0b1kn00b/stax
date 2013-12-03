@@ -1,13 +1,12 @@
-import stx.Muster;
-import stx.Muster.*;
+using stx.UnitTest;
 import stx.Compare.*;
 import stx.Log.*;
 
 /**
   Proves that subclasses can specify type for a Dynamic parameter found in the superclass
 */
-class SubclassTest extends TestCase{
-  public function testSubclass(u:UnitArrow):UnitArrow{
+class SubclassTest extends Suite{
+  public function testSubclass(u:TestCase):TestCase{
     var c = new SomethingSomethingSomething();
     return u.add(it('should compile',always()));
   }

@@ -17,7 +17,7 @@
 package stx.io.http;
 
 import Prelude;
-import stx.test.TestCase;
+import stx.test.Suite;
 import stx.test.Assert;
 import stx.io.http.Http;
 import stx.io.http.HttpJValue;
@@ -28,7 +28,7 @@ using stx.io.json.JValue;
 using stx.Option;
 using stx.ds.Map;
 
-class HttpJValueJsonpTest extends TestCase {
+class HttpJValueJsonpTest extends Suite {
   var h: HttpJValue;
   
   public function new() {

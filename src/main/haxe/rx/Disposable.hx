@@ -17,4 +17,14 @@ abstract Disposable(IDisposable) from IDisposable to IDisposable{
   @:from static public function fromNiladic(d:Niladic):Disposable{
     return new AnonymousDisposable(d);
   }
+  public var disposed(get,never) : Bool;
+  
+  private function get_disposed(){
+    return this.disposed;
+  }
+}
+class Disposables{
+  static public function dispose(d:Disposable):Void{
+    d.dispose();
+  }
 }

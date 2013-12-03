@@ -1,14 +1,13 @@
 package stx;
 
-import stx.Muster;
-import stx.Muster.*;
+import stx.UnitTest;
 import stx.Compare.*;
 import stx.Log.*;
 
 import stx.Reflects;
 
-class ReflectsTest extends TestCase{
-  public function testReflects(u:UnitArrow):UnitArrow{
+class ReflectsTest extends Suite{
+  public function testReflects(u:TestCase):TestCase{
     var a = {
       a : 1,
     }

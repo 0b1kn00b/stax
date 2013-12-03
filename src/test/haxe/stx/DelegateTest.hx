@@ -1,11 +1,10 @@
 package stx;
 
-import stx.Muster;
-import stx.Muster.*;
+using stx.UnitTest;
 import stx.Log.*;
 
-class DelegateTest extends TestCase{
-  public function testDelegate(u:UnitArrow):UnitArrow{
+class DelegateTest extends Suite{
+  public function testDelegate(u:TestCase):TestCase{
     return u;
   }
     

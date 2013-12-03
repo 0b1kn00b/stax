@@ -27,10 +27,10 @@ class Equal{
       __equals__(b.equals)(a,b);
     }
   }*/
-  static public function getEqualFor<T>(v:T):Reduce<T,Bool>{
+  static public function getEqualFor<T>(v:T):Eq<T>{
     return getEqualForType(Type.typeof(v));
   }
-  static public function getEqualForType<T>(v: ValueType):Reduce<T,Bool>{
+  static public function getEqualForType<T>(v: ValueType):Eq<T>{
     return switch (v){
       case TNull                                                        : NullEqual.equals;
       case TInt,TFloat,TBool                                            : __equals__(inline function(x,y) return x == y);
@@ -39,7 +39,6 @@ class Equal{
       case TClass( c ) if ( c == Array  )                               : __equals__(ArrayEqual.equals);
       case TClass( c ) if ( c == Date   )                               : __equals__(stx.Dates.equals);
       case TClass( c ) if ( c == String )                               : __equals__(stx.Strings.equals);
-      //case TClass( c ) if (stx.Types.descended(c,AbstractProduct))  : __equals__(ProductEquals.equals);
       case TEnum(_)                                                     : __equals__(EnumEqual.equals);
       case TClass( c )                                                  :
         if(Type.getInstanceFields(c).remove("equals")){
@@ -59,7 +58,7 @@ class Equal{
       );
     }
   }
-  public static inline function  __equals__<A>(impl:Reduce<Dynamic,Bool>):A->A->Bool {
+  public static inline function  __equals__<A>(impl:Eq<Dynamic>):Eq<A> {
     return inline function(a, b) {
       return if(a == b || (a == null && b == null)) true;
         else if(a == null || b == null) false;
@@ -95,7 +94,7 @@ class OptionEqual{
       function(l:A,r:A){
         return Equal.getEqualFor(l)(l,r);
       }.tupled()
-    ).getOrElse(
+    ).valOrTry(
       function(){
         return op0.isEmpty() && op1.isEmpty();
       }
@@ -151,7 +150,7 @@ class ArrayEqual {
   public static inline function equals<T>(v1: Array<T>, v2: Array<T>) {
     return equalsWith(v1, v2, Equal.getEqualFor(v1[0]));
   }
-  public static inline function equalsWith<T>(v1: Array<T>, v2: Array<T>, equal : Reduce<T,Bool>) { 
+  public static inline function equalsWith<T>(v1: Array<T>, v2: Array<T>, equal : Eq<T>) { 
     var o = (equal != null);
 
     return if(!o){

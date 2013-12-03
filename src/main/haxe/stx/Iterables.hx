@@ -36,7 +36,7 @@ class Iterables {
           },
 
           next: function(): R {
-            var n = _next.get();
+            var n = _next.val();
 
             precomputeNext();
 
@@ -140,7 +140,7 @@ class Iterables {
   @doc("Produces the first elelment of `iter`, throwing an error if it is empty.")
   public static function head<T>(iter: Iterable<T>): T {
     return switch(headOption(iter)) {
-      case None:      except()(OutOfBoundsError('Iterable has no head'));
+      case None:      except()(IllegalOperationError('Iterable has no head'));
       case Some(h): h;
     }
   }
@@ -156,7 +156,7 @@ class Iterables {
   ")
   public static function tail<T>(iter: Iterable<T>): Iterable<T> {
     return switch (tailOption(iter)) {
-      case None    : except()(OutOfBoundsError('iterable has no tail')); 
+      case None    : except()(IllegalOperationError('iterable has no tail')); 
       case Some(t) : t;
     }
   }
@@ -256,7 +256,7 @@ class Iterables {
       }
       else ++curIndex;
     }
-    return except()(OutOfBoundsError('index "$index" not found.'));
+    return except()(IllegalOperationError('index "$index" not found.'));
   }
   @doc("flatten an iterable of iterables to an iterable.")
   public static function flatten<T>(iter: Iterable<Iterable<T>>): Iterable<T> {

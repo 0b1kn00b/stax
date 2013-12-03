@@ -7,6 +7,7 @@ import hx.ifs.Scheduler;
 
 import haxe.PosInfos;
 
+import stx.Arrowlet;
 import stx.Chunk;
 import stx.plus.Meta;
 import stx.Method;
@@ -74,4 +75,7 @@ class Stax{
   /*@:noUsing static public inline function metadata<T>(v:T):MetaObjectContainer{
     return stx.plus.Meta.metadata(v);
   }*/
+  @:noUsing static public function aconstant<T>(v:T){
+    return Arrowlet.pure(v);
+  }
 }

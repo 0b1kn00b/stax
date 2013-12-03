@@ -28,8 +28,8 @@ import stx.ds.Set;
 
 using stx.ds.Foldables;
 
-class SetTest extends TestCase {
-  public function testSizeGrowsWhenAddingUniqueElements(u:UnitArrow):UnitArrow {
+class SetTest extends Suite {
+  public function testSizeGrowsWhenAddingUniqueElements(u:TestCase):TestCase {
     var s = set();
     
     for (i in 0...100) {
@@ -40,7 +40,7 @@ class SetTest extends TestCase {
     u = u.add(isEqual(100, s.size()));
     return u;
   }
-  public function testSizeDoesNotGrowWhenAddingDuplicateElements(u:UnitArrow):UnitArrow {
+  public function testSizeDoesNotGrowWhenAddingDuplicateElements(u:TestCase):TestCase {
     var s = set().add(0);
     
     for (i in 0...100) s = s.add(0);
@@ -48,7 +48,7 @@ class SetTest extends TestCase {
     u = u.add(isEqual(1, s.size()));
     return u;
   }
-  public function testSizeShrinksWhenRemovingElements(u:UnitArrow):UnitArrow {
+  public function testSizeShrinksWhenRemovingElements(u:TestCase):TestCase {
     var s = defaultSet();
     
     for (i in 0...100) {
@@ -60,7 +60,7 @@ class SetTest extends TestCase {
     u = u.add(isEqual(0, s.size()));
     return u;
   }
-  public function testContainsElements(u:UnitArrow):UnitArrow {
+  public function testContainsElements(u:TestCase):TestCase {
     var s = set();
     
     for (i in 0...100) {
@@ -72,7 +72,7 @@ class SetTest extends TestCase {
     }
     return u;
   }
-  public function testAddingSameElementDoesNotChangeSet(u:UnitArrow):UnitArrow {
+  public function testAddingSameElementDoesNotChangeSet(u:TestCase):TestCase {
     var s = defaultSet();
     
     for (i in 0...100) {
@@ -85,7 +85,7 @@ class SetTest extends TestCase {
     }
     return u;
   }
-  public function testCanIterateThroughElements(u:UnitArrow):UnitArrow {
+  public function testCanIterateThroughElements(u:TestCase):TestCase {
     var s = defaultSet();
     
     var count = 4950;
@@ -102,14 +102,14 @@ class SetTest extends TestCase {
     return u;
   }
   
-  public function testFilter(u:UnitArrow):UnitArrow {
+  public function testFilter(u:TestCase):TestCase {
     var s = defaultSet().filter(function(e) { return e < 50; });
     
     u = u.add(isEqual(50, s.size()));
     return u;
   } 
 
-  public function testEquals(u:UnitArrow):UnitArrow {  
+  public function testEquals(u:TestCase):TestCase {  
     u = u.add(isTrue(set().equals(set())));
     u = u.add(isTrue(set([1,2,3]).equals(set([1,2,3]))));
     u = u.add(isTrue(set([2,1]).equals(set([1,2]))));
@@ -119,7 +119,7 @@ class SetTest extends TestCase {
     return u;
   }
 
-  public function testCompare(u:UnitArrow):UnitArrow {                
+  public function testCompare(u:TestCase):TestCase {                
     u = u.add(isTrue(set().compare(set()) == 0));
     u = u.add(isTrue(set([1,2,3]).compare(set([1,2,3])) == 0));
     u = u.add(isTrue(set().compare(set([1])) < 0));
@@ -128,14 +128,14 @@ class SetTest extends TestCase {
     return u;
   }
 
-  public function testToString(u:UnitArrow):UnitArrow {           
+  public function testToString(u:TestCase):TestCase {           
     trace(set());
     u = u.add(isEqual("Set ()", set().toString()));
     u = u.add(isEqual("Set (1, 2, 3)", set([1,2,3]).toString())); 
     return u;
   }     
 
-  public function testMapCode(u:UnitArrow):UnitArrow {       
+  public function testMapCode(u:TestCase):TestCase {       
     u = u.add(isNotEqual(0, set().hashCode()));
     u = u.add(isNotEqual(0, set([1,2]).hashCode())) ;
     return u;

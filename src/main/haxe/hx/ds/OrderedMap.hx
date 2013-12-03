@@ -18,9 +18,10 @@ using stx.Compose;
 import stx.plus.Hasher;
 
 class OrderedMap<K,V>{
-  private var __key_sort__  : Reduce<K,Int>;
-  private var __val_sort__  : Reduce<V,Int>;
-  private var __val_equal__ : Reduce<V,Int>;
+  private var __key_sort__  : Ord<K>;
+  private var __val_sort__  : Ord<V>;
+  private var __val_equal__ : Eq<V>;
+  
   private var __key_hash__  : K->Int;
 
   private var impl    : OrderedHashMap<Tuple2<K,V>>;
@@ -35,10 +36,10 @@ class OrderedMap<K,V>{
     return impl.has(encode(key));
   }
   public function at(i:Int):V{
-    return option(impl.at(i)).map(Tuples2.snd).getOrElse(thunk(null));
+    return option(impl.at(i)).map(Tuples2.snd).valOrUse(null);
   }
   public function get(key:K):V{
-    return option(impl.get(encode(key))).map(Tuples2.snd).getOrElse(thunk(null));
+    return option(impl.get(encode(key))).map(Tuples2.snd).valOrUse(null);
   }
   public function del(key:K){
     return impl.del(encode(key)); 
@@ -49,7 +50,7 @@ class OrderedMap<K,V>{
   public function sort(){
     impl.impl = ArrayOrder.sort(impl.impl);
   }
-  public function sortWith(fn:Reduce<Tuple2<K,V>,Int>){
+  public function sortWith(fn:Ord<Tuple2<K,V>>){
     impl.sortOnValWith(fn);
   }
   public function sortOnKey(){

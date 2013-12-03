@@ -12,8 +12,8 @@ import kwv.rct.*;
 
 using kwv.rct.Reactors;
 
-class VariableReactorTest extends TestCase{
-  public function testVariableReactor(u:UnitArrow):UnitArrow{
+class VariableReactorTest extends Suite{
+  public function testVariableReactor(u:TestCase):TestCase{
     var ft  = Eventual.unit();
     var a   = new VariableReactor(1);
     a.all(

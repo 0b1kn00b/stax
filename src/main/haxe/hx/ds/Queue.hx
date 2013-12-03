@@ -29,12 +29,14 @@ package hx.ds;
 
 /**
     A standard FIFO queue. 
-    IMPORTANT: Items are added to the tail and removed at the head.
+    Items are added to the tail and removed at the head.
 **/
 class Queue<T> implements Collection<T> {
     
-    public var length(get_length, null) : Int;
     
+    public function peek():T{
+      return this.getHead();
+    }
     private var list : List<Null<T>>;
     
     /**
@@ -79,11 +81,8 @@ class Queue<T> implements Collection<T> {
         return list.pop();
     }
     
-    /**
-        Removes the object from the queue. Returns true if it was actually in
-        the queue.
-    **/
-    public function remove(obj : Null<T>) : Bool {
+    @doc("Removes the object from the queue. Returns true if it was actually in the queue.")
+    public function rem(obj : Null<T>) : Bool {
         return list.remove(obj);
     }
     
@@ -91,7 +90,7 @@ class Queue<T> implements Collection<T> {
         list = new List();
     }
     
-    private function get_length() {
+    public function size() {
         return list.length;
     }
     

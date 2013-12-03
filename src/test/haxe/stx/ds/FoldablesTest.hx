@@ -10,7 +10,7 @@ using stx.ds.Set;
 using stx.ds.Group;
 
 import Prelude;
-import stx.test.TestCase;
+import stx.test.Suite;
 import stx.ds.Foldables;
 
 using stx.Tuples;
@@ -19,7 +19,7 @@ using stx.Maths;
 
 using stx.ds.Foldables;
 
-class FoldablesTest extends TestCase {
+class FoldablesTest extends Suite {
   public function testIntSetMapToString() {
     var seta = Set.create().append([1,2,3]);
     var setb = seta.map(function(i) return i.toString());

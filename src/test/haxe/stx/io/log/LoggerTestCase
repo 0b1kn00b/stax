@@ -17,12 +17,12 @@
 package stx.io.log;
 
 import Prelude;
-import stx.test.TestCase;
+import stx.test.Suite;
 import stx.io.log.Logger;
 
 
 
-class LoggerTestCase extends TestCase {
+class LoggerSuite extends Suite {
   public function testLogDebug() {
     Logger.defaultLevel = Debug;
     

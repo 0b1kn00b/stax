@@ -1,22 +1,24 @@
 package rx.disposable;
 
+import Stax.*;
 import Prelude;
 import rx.ifs.*;
 
 import rx.ifs.Disposable in IDisposable;
 
 class AnonymousDisposable implements IDisposable{
-  private var disposed        : Bool;
-  private var dispose_method  : Niladic;
+  public var disposed(default,null):Bool;
 
-  public function new(dispose_method){
-    this.dispose_method = dispose_method;
+  public function new(_dispose){
+    this._dispose = _dispose;
   }
-
+  private dynamic function _dispose(){
+    except()(ArgumentError('dispose',NullError()));
+  }
   public function dispose(){
     if(!disposed){
       disposed = true;
-      dispose_method();
+      _dispose();
     }
   }
 }

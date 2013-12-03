@@ -17,7 +17,7 @@ package stx.net;
 
 import Prelude;
 
-import stx.test.TestCase;
+import stx.test.Suite;
 
 import stx.net.Url;
 
@@ -28,7 +28,7 @@ using stx.Strings;
 using stx.Functions;
 using stx.Compose;
 
-class UrlsTest extends TestCase {
+class UrlsTest extends Suite {
   public function testParseUrl1() {
     var p = 'ftp://eau.ww.eesd.gov.calgary/home/smith/budget.wk1?foo=bar#top'.toParsedUrl().get();
 

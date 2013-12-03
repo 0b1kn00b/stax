@@ -4,13 +4,13 @@ package stx.io.log;
  * @author 0b1kn00b
  */
 import stx.test.Assert;					using stx.test.Assert;
-import stx.test.TestCase;
+import stx.test.Suite;
 import stx.Log;									using stx.Log;
 import stx.framework.Injector; 	using stx.framework.Injector;
 																using stx.Functions;
 																using stx.Anys;
 																
-class LogTest extends TestCase{
+class LogTest extends Suite{
 
 	public function new() {
 		super();

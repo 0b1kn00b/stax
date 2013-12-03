@@ -28,7 +28,7 @@ class Hasher {
       case TBool            : __hash__(BoolHash.hashCode);
       case TInt             : __hash__(IntHash.hashCode);
       case TFloat           : __hash__(FloatHash.hashCode);
-      case TUnknown         : __hash__(function(v: T) return except()(ArgumentError("can't retrieve hashcode for TUnknown: $v")));
+      case TUnknown         : __hash__(function(v: T) return except()(IllegalOperationError("can't retrieve hashcode for TUnknown: $v")));
       case TObject          :
         __hash__(function(v){
         //var s = Show.getShowFor(v)(v);

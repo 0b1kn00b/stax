@@ -1,11 +1,11 @@
-import stx.test.TestCase;
+import stx.test.Suite;
 import stx.test.Assert;
 
 using Prelude;
 using Stx;
 
 
-class StaxTest extends TestCase{
+class StaxTest extends Suite{
 	public function testUsings<T>(){
 		trace('start');
 		//def(c);//constant

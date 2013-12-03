@@ -1,18 +1,16 @@
 package stx;
 
 import stx.Log.*;
-import stx.Muster;
-import stx.Muster.*;
+using stx.UnitTest;
 
 using stx.Method;
 
-class MethodTest extends TestCase{
-  public function testConstruct(u:UnitArrow):UnitArrow{
+class MethodTest extends Suite{
+  public function testConstruct(u:TestCase):TestCase{
     var a : Method<Int,Int> = function(x:Int):Int {
       trace(x);
       return x;
     }
-    $type(a);
     var b = function(x:Int):Int{ 
       trace(x);
       return x + 3;

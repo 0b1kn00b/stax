@@ -1,11 +1,11 @@
 package stx.io;
 
-import stx.test.TestCase;
+import stx.test.Suite;
 using stx.test.Assert;
 
 import stx.io.FileSystem;
 
-class FileSystemTest extends TestCase{
+class FileSystemTest extends Suite{
 	public function testPlatform(){
 		trace(FileSystem.platform());
 	}

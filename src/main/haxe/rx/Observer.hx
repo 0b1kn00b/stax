@@ -11,6 +11,9 @@ import rx.ifs.Observer in IObserver;
 
 @doc("")
 abstract Observer<T>(IObserver<T>) from IObserver<T> to IObserver<T>{
+  static public function unit<T>(){
+    return function(chk:Chunk<T>){}
+  }
   public function new(v){
     this = v;
   }

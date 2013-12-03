@@ -12,12 +12,12 @@ using stx.Functions;
 
 import stx.rct.*;
 
-using stx.Arrow;
+using stx.Arrowlet;
 using stx.rx.Observable;
 using stx.rx.Observer;
 
-class DefaultReactorTest extends TestCase{
-  public function testDefaultReactor(u:UnitArrow):UnitArrow{
+class DefaultReactorTest extends Suite{
+  public function testDefaultReactor(u:TestCase):TestCase{
     var evt   = Eventual.unit();
     var a     = new DefaultReactor<Chunk<Int>>();
     var b     = a.observe();

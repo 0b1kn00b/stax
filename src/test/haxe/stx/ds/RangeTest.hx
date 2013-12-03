@@ -3,7 +3,7 @@ import stx.ds.Range;
 using stx.Functions;
 using stx.Anys;
 
-class RangeTest extends stx.test.TestCase{
+class RangeTest extends stx.test.Suite{
 	
 	public function testDefaultInitialisation(){
 		var range = Range.create();

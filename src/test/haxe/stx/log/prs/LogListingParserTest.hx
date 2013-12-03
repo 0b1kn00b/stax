@@ -14,8 +14,8 @@ using stx.prs.StringParsers;
 
 import stx.log.prs.LogListingParser.*;
 
-class LogListingParserTest extends TestCase{
-  public function testASCII(u:UnitArrow):UnitArrow{
+class LogListingParserTest extends Suite{
+  public function testASCII(u:TestCase):TestCase{
     var tsts = [
       isEqual([13,10],"
 ".chunk().map(Strings.cca.bind(_,0))), //true on windows
@@ -24,7 +24,7 @@ class LogListingParserTest extends TestCase{
     ];
     return u.append(tsts);
   }
-  public function testLogListingParser(u:UnitArrow):UnitArrow{
+  public function testLogListingParser(u:TestCase):TestCase{
     var tsts = [];
     var ln0 = '@1239';
     var a = p_line()(ln0.reader());
