@@ -1,10 +1,11 @@
 package hx.sch;
 
+import Prelude;
 import Type;
 
 import stx.ioc.Inject.*;
 
-import stx.Time;
+import stx.Period;
 import stx.Eventual;
 import Stax.*;
 import stx.Compare.*;
@@ -18,11 +19,13 @@ using stx.UnitTest;
 import hx.sch.ThreadScheduler;
 import hx.sch.InlineScheduler;
 
-import stx.Time.*;
+import stx.Period.*;
 import Sys.*;
 
+#if neko
 import neko.vm.Thread;
 import neko.vm.Deque;
+#end
 
 class SchedulerTest extends Suite{
   @:note("#0b1kn00b: A `push` for Deque goes on the opposite end from Array.")
@@ -33,7 +36,7 @@ class SchedulerTest extends Suite{
     var b = a.pop(false);
     return u.add(isEqual(2,b));
   }
-  public function test_can_i_crash_the_stack(u:TestCase):TestCase{
+  public function _test_can_i_crash_the_stack(u:TestCase):TestCase{
     var evt = Eventual.unit();
     function fn(){
       fn();
@@ -48,91 +51,92 @@ class SchedulerTest extends Suite{
       }
     );
     sleep(2);
-    return u.add(evt.flatten());
+    return u.add(evt);
   }
   public function testScheduler(u:TestCase):TestCase{
     trace(info(Date.now()));
 
     var evt = Eventual.unit();
     var a = new ThreadScheduler();
-        a.now(
+        a.immediate(
           function(){
             trace(info(Date.now()));
           }
         );
-        a.wait(3,
+        a.wait(
           function(){
             trace(info(Date.now()));
             evt.deliver(isTrue(true));
           }
-        );
-        a.wait(2,
+        ,3);
+        a.wait(
           function(){
             trace(info(Date.now()));
           }
-        );
-        a.latch();
-    return u.add(evt.flatten());
+        ,2);
+        a.run();
+    return u.add(evt);
   }
+  @:note('undefined order not ideal')
   public function testOrder(u:TestCase):TestCase{
     var evt   = Eventual.unit();
     var stack = [];
     var a = new ThreadScheduler();
-        a.now(
+        a.immediate(
           function(){
             stack.push(0);
             trace(info(Date.now()));
           }
         );
-        a.now(
+        a.immediate(
           function(){
             stack.push(1);
             trace(info(Date.now()));
           }
         );
-        a.now(
+        a.immediate(
           function(){
             stack.push(2);
-            evt.deliver(isEqual([0,1,2],stack));
+            evt.deliver(isEqual([0,2,1],stack));
             trace(info(Date.now()));
           }
         );
-        a.latch();
-    return u.add(evt.flatten());
+        a.run();
+    return u.add(evt);
   }
   public function testInline(u:TestCase):TestCase{
     var evt = Eventual.unit();
     var a   = new InlineScheduler();
     0.until(3000).each(
       function(i){
-        a.wait(i/1000,
+        a.wait(
           function(){
           }
-        );
+        ,i/1000);
         
       }
     );
     
-    a.wait(10,
+    a.wait(
       function(){
         evt.deliver(isTrue(true));
       }
-    );
-    a.latch();
-    return u.add(evt.flatten());
+    ,10);
+    a.run();
+    return u.add(evt);
   }
   public function testInject(u:TestCase):TestCase{
     var a = inject(hx.ifs.Scheduler);
     return u;
   }
-  public function testTimer(u:TestCase):TestCase{
+ public function testTimer(u:TestCase):TestCase{
     var evt   = Eventual.unit();
     var count = 0;
     var a = new hx.sch.Timer(0.01);
         a.run = 
           function(){
             count++;
-            if(count == 100){
+            if(count == 3){
               //trace('done');
               a.stop();
               evt.deliver(isTrue(true));
@@ -140,17 +144,32 @@ class SchedulerTest extends Suite{
           };
         a.start();
     var sch = inject(hx.ifs.Scheduler);
-        sch.latch();
-    return u.add(evt.flatten());
+        sch.run();
+    return u.add(evt);
   }
   public function test_stop_start(u:TestCase):TestCase{
     var count = 0;
     var a = inject(hx.ifs.Scheduler);
-    a.wait(2,function(){count++;});
-    a.latch();
-    a.wait(2,function(){count++;});
-    a.latch();
+    a.wait(function(){count++;},0.3);
+    a.run();
+    a.wait(function(){count++;},0.6);
+    a.run();
     return u.add(isEqual(2,count));
+  }
+  public function test_arrowlet_in_thread_scheduler(u:TestCase):TestCase{
+    var a = function(u:Unit,cont:Unit->Void):Void{
+      trace('here0');
+      hx.sch.Timer.wait(
+        function(){
+          trace('here');
+          cont(Unit);
+        }
+      ,3);
+    }
+    var sch = inject(hx.ifs.Scheduler);
+    sch.immediate(a);
+    sch.run();
+    return u;
   }
 }
 

@@ -24,8 +24,9 @@ class Test{
 
     //#if development
     [
-        new rx.RxTest(),    
+        new hx.sch.SchedulerTest(),
         /*  
+        new rx.RxTest(),    
         new stx.UnitTestTest(),
         new stx.StaxTest(),
         new stx.mcr.LensesMacroTest(),

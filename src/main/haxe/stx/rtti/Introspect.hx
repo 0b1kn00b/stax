@@ -16,8 +16,8 @@ using stx.rtti.RTypes;
   public function new(){}
 
   public function introspect():RClass<Dynamic>{
-    var rtype : RType<Dynamic> = cast new RType(tuple2(this,Type.getClass(this).typetree().get()));
-    return rtype.getClass().get();
+    var rtype : RType<Dynamic> = cast new RType(tuple2(this,Type.getClass(this).typetree().val()));
+    return rtype.getClass().val();
   }
 }
 class Introspects{

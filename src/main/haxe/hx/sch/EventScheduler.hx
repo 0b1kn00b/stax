@@ -1,25 +1,35 @@
 package hx.sch;
 
+import hx.sch.Task;
+
 import stx.Period;
 
 import hx.ifs.Scheduler in IScheduler;
 
-class EventScheduler implements IScheduler{ 
+class EventScheduler extends BaseScheduler{ 
   public function new(){
 
   }
-  public inline function when(abs:Float,fn:Run):Void{
-    var wait = abs - Period.now().toFloat();
-    trace(wait);
-    haxe.Timer.delay(fn.run,Std.int(wait*1000));
+  override public function scheduleProcessImmediate(prc:Run):Void{
+    haxe.Timer.delay(prc.run,0); 
+  }  
+  override public inline function scheduleProcessWhen(prc:Run,abs:Float):Void{
+    var wait = abs - now();
+    haxe.Timer.delay(prc.run,Std.int(wait*1000));
   }
-  public inline function wait(rel:Float,fn:Run):Void{
-    when(Period.now().add(rel),fn);
+  override public function scheduleProcessWait(prc:Run,rel:Float):Void{
+    scheduleProcessWhen(prc,Period.now().add(rel));
   }
-  public inline function now(fn:Run):Void{
-    wait(0,fn);
+  override public function scheduleServiceImmediate(svc:NetEffect):Void{
+    haxe.Timer.delay(svc.invoke,0); 
   }
-  public inline function latch(){
+  override public function scheduleServiceWhen(svc:NetEffect,abs:Float):Void{
+     scheduleProcessWhen(svc.invoke,abs);
+  }
+  override public function scheduleServiceWait(svc:NetEffect,rel:Float):Void{
+    scheduleProcessWait(svc.invoke,rel); 
+  }
+  override public inline function latch(){
 
   }
 }

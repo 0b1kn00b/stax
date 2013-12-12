@@ -24,11 +24,11 @@ class RxTest extends Suite{
     var evt = Eventual.unit();
     var obs = [1,2,3,4].map(Val).observe();//no terminating value
     var obs0 = [6,7,8,9].map(Val).observe();//similarly
-    var obs1 = obs.concat(obs0);
+    //var obs1 = obs.concat(obs0);
         //obs1.each(printer()); //produces up to 4, no fu
-    var evts = new EventStream();
+    //var evts = new EventStream();
         //evts.on(Reactors.any(),printer());
-    var obs2 = evts.observe();
+    /*var obs2 = evts.observe();
     var _obs_ = obs2.concat(obs0);
         _obs_.each(printer());
         _obs_.next(printer());
@@ -37,9 +37,7 @@ class RxTest extends Suite{
             trace('done');
             evt.deliver(isTrue(true));
           }
-        );
-    /*var a = Observables.returns(1);
-        a.each(printer());*/
+        );*/
     return u.add(evt);
   }
   public function testTake(u:TestCase):TestCase{

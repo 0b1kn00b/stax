@@ -68,7 +68,7 @@ class Stax{
   @:noUsing static public inline function here(?p:PosInfos):PosInfos{
     return p;
   }
-  @:noUsing static public inline function printer(?p:PosInfos){
+  @:noUsing static public inline function printer<A>(?p:PosInfos):A->A{
     return stx.Log.printer(p);
   }
   @:noUsing static public var noop    = function(){}

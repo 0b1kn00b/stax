@@ -7,22 +7,22 @@ import rx.ifs.Observable in IObservable;
 using stx.Arrays;
 
 class BufferedObservable<T> implements IObservable<T>{
-  private var __underlying__    : Observable<T>;
-  private var buffer            : Array<Chunk<T>>;
+  private var observable    : Observable<T>;
+  private var buffer        : Array<Chunk<T>>;
 
   public function new(obs:Observable<T>){
-    buffer = [];
-    this.__underlying__ = obs;
-    this.__underlying__.subscribe(
+    buffer              = [];
+    this.observable     = obs;
+    this.observable.subscribe(
       function(chk:Chunk<T>):Void{
         buffer.push(chk);
       }
     );
-    this.buffer         =  [];
+    this.buffer         = [];
   }
   
   public function subscribe(obs:Observer<T>):Disposable{
     buffer.each(obs.apply);
-    return __underlying__.subscribe(obs);
+    return observable.subscribe(obs);
   }
 }

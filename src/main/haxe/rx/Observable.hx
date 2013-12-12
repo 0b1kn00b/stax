@@ -14,6 +14,7 @@ import stx.Chunk;
 import Prelude;
 import stx.Continuation;
 
+using stx.Option;
 using stx.Iterables;
 using stx.Types;
 using stx.Compose;
@@ -62,6 +63,9 @@ abstract Observable<T>(ObservableType<T>) from ObservableType<T> to ObservableTy
       return Disposable.unit();
     }
   }
+  public function each(fn:Chunk<T>->Void):Disposable{
+    return Observables.each(this,fn);
+  }
   /*
     @:from static public function fromContinuation<T>(cnt:Continuation<Disposable,Chunk<T>>):Observable<T>{
       var ct : ContinuationType<Disposable,Chunk<T>>  = cnt;
@@ -81,19 +85,107 @@ abstract Observable<T>(ObservableType<T>) from ObservableType<T> to ObservableTy
     return Observables.each(this,fn);
   }
   */
-  public function next(fn:T->Void){
-    return Observables.next(this,fn);
-  }
-  public function fail(fn:Fail->Void){
-    return Observables.fail(this,fn);
-  }
-  public function done(fn:Niladic){
-    return Observables.done(this,fn);
-  }
 }
 class Observables{
-  static public function materialize<T>(observer:Observer<T>){
-    return new Materialize()
+  static public function each<A>(source:Observable<A>,fn:Chunk<A>->Void){
+    return source.subscribe(fn);
+  }
+  static public function scan<A>(source:Observable<A>,accumulator:Reduce<A,A>,?seed:A):Observable<A>{
+    var hasSeed = option(seed).isDefined();
+    return function(observer:Observer<A>):Disposable{
+      var hasAccumulation = false, accumulation = null  , hasValue = false;
+      return source.subscribe(
+        function(chk:Chunk<A>):Void{
+          switch(chk){
+            case Val(v) : 
+              try{
+                if(!hasValue){
+                  hasValue = true;
+                }
+                if(hasAccumulation){
+                  accumulation    = accumulator(accumulation,v);
+                }else{
+                  accumulation    = hasSeed ? accumulator(seed,v) : v; 
+                  hasAccumulation = true;
+                }
+              }catch(f:Fail){
+                observer.onFail(f); return;
+              }catch(e:Dynamic){
+                observer.onFail(fail(NativeError(e))); return;
+              }
+              observer.onData(accumulation);
+            case End(e) : 
+              observer.onFail(e);
+            case Nil    : 
+              if (!hasValue && hasSeed) {
+                observer.onData(seed);
+              }
+              observer.onDone();
+          }
+        }
+      );
+    }
+  }
+  static public function aggregate<T,U>(source:Observable<T>,?seed:U){
+    /**
+    observableProto.startWith = function () {
+        var values, scheduler, start = 0;
+        if (!!arguments.length && 'now' in Object(arguments[0])) {
+            scheduler = arguments[0];
+            start = 1;
+        } else {
+            scheduler = immediateScheduler;
+        }
+        values = slice.call(arguments, start);
+        return enumerableFor([observableFromArray(values, scheduler), this]).concat();
+    };
+
+    */
+  }
+  //static public function startWith<T>(source:Observable<T>,values:Array<T>,?scheduler)
+  static public function finalValue<T>(source:Observable<T>){
+    return function(observer){
+      var value = None;
+      return source.subscribe(function(chk:Chunk<T>)
+        switch(chk){
+          case Val(v) : value = Some(v);
+          case End(e) : 
+            observer.onFail(e);
+          case Nil    : 
+            switch (value) {
+                case None     : 
+                  observer.onFail(fail(NullError()));
+                case Some(v)  : 
+                  observer.onData(v);
+                  observer.onDone();
+              }
+        }
+      );
+    }
+  }
+  /*static public function fromArray<T>(fn:Array<T>,sch:Scheduler){
+    
+  }*/
+  /*static public function startWith(source:Observable){
+    var values = [], start = 0;
+  }*/
+  static public function materialize<T>(source:Observable<T>):Observable<Chunk<T>>{
+    return function(observer) {
+      return source.subscribe(
+        function(x:Chunk<T>){
+          switch (x) {
+            case Val(v) : 
+              observer.onData(Val(v));
+            case End(e) :
+              observer.onData(End(e));
+              observer.onDone();
+            case Nil    : 
+              observer.onData(Nil);
+              observer.onDone();
+          }
+        }
+      );
+    }
   }
 }
 @doc("Observe an Eventual value")

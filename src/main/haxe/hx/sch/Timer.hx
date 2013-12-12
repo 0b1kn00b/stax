@@ -27,15 +27,15 @@ class Timer{
       run();
       if(!stopped){
         trace(debug('continue'));
-        scheduler.wait(interval,_run);
+        scheduler.wait(_run,interval);
       }
     }
-    scheduler.wait(interval,_run);
+    scheduler.wait(_run,interval);
   }
   public function stop(){
     stopped = true;
   }
-  static public function wait(interval:Float,fn:Niladic){
+  static public function wait(fn:Niladic,interval:Float){
     var t = new Timer(interval);
         t.run = function(){
           fn();

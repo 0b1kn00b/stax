@@ -33,7 +33,7 @@ abstract RClass<T>(Tuple2<T,Classdef>) from Tuple2<T,Classdef> to Tuple2<T,Class
   public function reflector(?recursive:Bool):Reflector<T,Dynamic>{
     return tuple2(this.fst(),
       recursive ? {
-        var all = Classdefs.ancestors(this.snd()).get()
+        var all = Classdefs.ancestors(this.snd()).val()
         .map(function(x) return x.fields.toArray())
         .flatMap(Compose.unit());
 
@@ -62,10 +62,10 @@ abstract RClass<T>(Tuple2<T,Classdef>) from Tuple2<T,Classdef> to Tuple2<T,Class
       function(x){
         return x.name == 'new';
       }
-    ).get();
+    ).val();
   }
   public function fields(?recursive):Array<ClassField>{
-    var all = Classdefs.ancestors(this.snd()).get()
+    var all = Classdefs.ancestors(this.snd()).val()
         .map(function(x) return x.fields.toArray())
         .flatMap(Compose.unit());
 

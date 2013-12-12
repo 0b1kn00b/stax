@@ -1,0 +1,3 @@
+package rx;
+
+enum RxError{}

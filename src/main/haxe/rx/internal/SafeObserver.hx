@@ -32,4 +32,9 @@ class SafeObserver<T> implements IObserver{
       trace(error(e));
     }
   }
+  public function onDone(){
+    try{
+      
+    }
+  }
 }

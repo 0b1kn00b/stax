@@ -8,7 +8,7 @@ import Prelude;
 import stx.Tuples;
 
 typedef AAIn<I,O> 			= Tuple2<Arrowlet<I,O>,I>;
-typedef TApply<I,O> = Arrowlet<AAIn<I,O>,O>;
+typedef TApply<I,O> 		= Arrowlet<AAIn<I,O>,O>;
 
 abstract Apply<I,O>(TApply<I,O>) from TApply<I,O> to TApply<I,O>{
 	static public inline function app(){

@@ -1,10 +1,12 @@
 package hx.sch;
 
+import Prelude;
 using stx.plus.Order;
 
+import stx.Chunk;
 import stx.Maths;
 import Sys.*;
-import stx.Time;
+import stx.Period;
 import hx.utl.RetreatTimer;
 
 using stx.Option;
@@ -13,28 +15,37 @@ using stx.Tuples;
 
 import hx.ifs.Scheduler in IScheduler;
 
-class InlineScheduler implements IScheduler{ 
+class InlineScheduler extends BaseScheduler{ 
   private var retreat : RetreatTimer;
-  private var stack   : Array<Tuple2<Float,Run>>;
+  private var stack   : Array<Tuple2<Float,Task>>;
+  private var count   : Int;
+
   public function new(){
     this.retreat  = new RetreatTimer();
     this.stack    = [];
+    this.count    = 0;
   }
-  public inline function when(abs:Float,fn:Run):Void{
-    stack.push(tuple2(abs,fn));
+  override public function when(tsk:Task,abs:Float):Void{
+    stack.push(tuple2(abs,tsk));
   }
-  public inline function wait(rel:Float,fn:Run):Void{
-    when(Time.now().add(rel),fn);
+  override public function wait(tsk:Task,rel:Float):Void{
+    when(tsk,now() + rel);
   }
-  public inline function now(fn:Run):Void{
-    wait(0,fn);
-  }
-  public inline function latch(){
-    while(stack.length > 0){
-      var time = Time.now().toFloat();
+  override public inline function run(){
+    while( (stack.length > 0 && count > 0) || stack.length > 0){
+      var time = now();
       var nstack = [];
       for (val in stack){
         if(val.fst() <= time){
+          count++;
+          val.snd().subscribe(
+            function(chk:Chunk<Unit>){
+              switch (chk) {
+                case Nil  : count--;
+                default   :
+              }
+            }
+          );
           val.snd().run();
         }else{
           nstack.push(val);

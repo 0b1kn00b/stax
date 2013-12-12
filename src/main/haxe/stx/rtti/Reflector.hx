@@ -33,7 +33,7 @@ abstract Reflector<C,T>(Tuple2<C,Array<Tuple2<ClassField,T>>>) from Tuple2<C,Arr
             function(fn0){
               return tuple2(tp.fst(),fn0(tp.snd()));
             }
-          ).getOrElseC(tp);
+          ).valOrUse(tp);
         }
       )
     );

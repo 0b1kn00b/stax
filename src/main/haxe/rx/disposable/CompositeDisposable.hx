@@ -1,23 +1,20 @@
 package rx.disposable;
 
+using stx.Arrays;
 using stx.Iterables;
 
 import hx.ds.Set;
 
+import rx.Disposable;
 import rx.ifs.Disposable in IDisposable;
 
 @doc("Represents a group of disposable resources that are disposed together.")
 class CompositeDisposable implements IDisposable{
+  public var disposed(default,null) : Bool;
   private var disposables : Array<Disposable>;
 
   public function new(?disposables){
     this.disposables = disposables == null ? [] : disposables;  
-  }
-  @:allow(rx.disposable)private var set             : Set<Disposable>;
-  public var disposed(default,null):Bool;
-  public function new(){
-    this.set      = new Set();
-    this.disposed = false;
   }
   public function dispose(){
     if(!disposed){
@@ -36,30 +33,24 @@ class CompositeDisposable implements IDisposable{
         disposables.add(disposable);
     }
     if(shouldDispose){
-      disposable.dispose;
+      disposable.dispose();
     }
   }
   public function rem(disposable:Disposable){
     var shouldDispose = disposed;
 
     if (!disposed){
-      shouldDispose = disposables.rem(disposable);
+      shouldDispose = disposables.remove(disposable);
     }
     if(shouldDispose){
-      disposable.dispose;
+      disposable.dispose();
     }
   }
   public function size():Int{
     return disposables.length;
   }
-  public function add(d:Disposable):Void{
-    set.add(d);
-  }
-  public function rem(d:Disposable):Void{
-    set.rem(d);
-  }
   public function clear(){
-    disposables.each(Disposables.dispose)
+    disposables.each(Disposables.dispose);
     disposables = [];
   }
   public function contains(v:Disposable):Bool{

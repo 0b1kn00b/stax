@@ -1,107 +1,31 @@
 package hx.sch;
 
-import stx.type.*;
-import stx.Log.*;
+import hx.sch.task.ArrowletTask;
+import hx.sch.task.AnonymousRunTask;
+import hx.ifs.Task in ITask;
+
 import Prelude;
+import stx.Fail;
+import stx.Chunk;
 
-#if neko
-  import neko.vm.Thread;
-#elseif cpp
-  import cpp.vm.Thread;
-#elseif java
-  import java.vm.Thread;
-#elseif cs
-  import cs.system.threading.Thread;
-#end
+import rx.Disposable;
+import rx.Observer;
+import rx.Observable;
 
-class Task{
-  @:isVar public var time(default, null)      : Float;
-  @:isVar public var func(default, null)      : Niladic;
-  @:isVar public var cancelled(default,null)  : Bool;
-
-  public function new(func:Niladic, time:Float) {
-    this.func      = func;
-    this.time      = time;
-    this.cancelled = false;
+abstract Task(ITask) from ITask to ITask{
+  public function new(v){
+    this = v;
   }
-  public function start():Void{
-    if (time <= 0) {
-        stop();
-        func();
-    }else{
-      run = function() {
-        stop();
-        func();
-      };
-      var scope = this;
-      #if flash9
-          id = untyped __global__["flash.utils.setInterval"](function() scope.run(), time);
-      #elseif js
-          id = untyped __js__("setInterval")(function() scope.run(), time);
-      #elseif (neko || cpp || java)
-          id = Thread.create(function() scope.loop(Std.int(time)));
-      #elseif cs
-          //id = 
-      #end
-    }
+  @:from static public function fromFunction(fn:Niladic){
+    return new AnonymousRunTask(fn);
   }
-  public function stop():Void{
-    if (id == null) return;
-
-    cancelled = true;
-    
-    run = function() {};
-
-    #if flash9
-      untyped __global__["flash.utils.clearInterval"](id);
-    #elseif js
-      untyped __js__("clearInterval")(id);
-    #elseif cs
-      //id.SetData('stop');
-    #elseif (neko || cpp || java)
-      id.sendMessage("stop");
-    #end
-
-    #if (flash || js)
-      id = null;
-    #end
+  @:from static public function fromArrowletType(fn:Unit->(Unit->Void)->Void){
+    return new ArrowletTask(fn);
   }
-  #if (neko || cpp || java)
-    private function loop(time_ms:Int):Void{
-      var shouldStop = false;
-      while (!shouldStop) {
-        Sys.sleep(time_ms / 1000);
-        // Don't catch any errors here.            
-        #if debug(
-          try{
-            run();
-          }catch(e:Dynamic){
-            trace(fatal(e));
-          }
-        );
-        #else
-          run();
-        #end
-        var msg = Thread.readMessage(false);
-        trace(msg);
-        if (msg == "stop") {
-            shouldStop  = true;
-            id          = null;
-        }
-      }
-    }
-  #elseif cs
-    #error
-  #end
-
-  #if (cs)
-    private var slot                          : cs.system.LocalDataStoreSlot;
-  #end
-  #if (neko||cpp||java||cs)
-    private var id                            : Thread;
-  #else
-    private var id                            : Null<Int>;
-  #end
-
-  private var run                             : Niladic;
+  public function run():Void{
+    this.run();
+  }
+  public function subscribe(obs:Observer<Unit>):Disposable{
+    return this.subscribe(obs);
+  }
 }

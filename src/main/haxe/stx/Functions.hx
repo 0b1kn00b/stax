@@ -12,12 +12,12 @@ using stx.Functions;
 using stx.Anys;
 
 class Niladics {
-  static public function trampoline(func : Niladic, ?bounce : Int = 0) : Niladic {
+  /*static public function trampoline(func : Niladic, ?bounce : Int = 0) : Niladic {
     return function() : Void {
       if (bounce < 1) func();
       else hx.sch.Process.start(function() : Void func(), bounce);
     };
-  }
+  }*/
   @doc("Compare function identity.")
   public static function equals(a:Niladic,b:Niladic){
     return Reflect.compareMethods(a,b);

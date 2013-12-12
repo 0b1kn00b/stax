@@ -15,8 +15,8 @@ class IterableObservable<T> implements IObservable<T>{
     this.iterable = iterable.map(Val);
   }
   public function subscribe(o:Observer<T>):Disposable{
-    iterable.each(o.apply);
-    o.apply(End());
+    Iterables.each(iterable,o.apply);
+    o.apply(Nil);
     return Disposable.unit();
   }
 }

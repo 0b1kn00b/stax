@@ -12,26 +12,26 @@ class AnonymousObserver<T> implements IObserver<T> extends ObserverBase<T>{
   @:noUsing static public function create<T>(fn:Chunk<T>->Void):AnonymousObserver<T>{
     return new AnonymousObserver(fn);
   }  
-  private var observe_method  : Chunk<T> -> Void;
-
-  public function new(observe_method){
+  public function new(_apply){
     super();
-    this.observe_method = observe_method; 
+    this._apply         = _apply; 
     this.stopped        = false;
+  }
+  private dynamic function _apply(chk:Chunk<T>):Void{
+
   }
   override public inline function apply(chk:Chunk<T>):Void{
     if(!stopped){
-      observe_method(chk);
+      _apply(chk);
     }
-    super.apply(chk);
   }
   override public inline function onData(v:T){
-    observe_method(Val(v));
+    _apply(Val(v));
   }
   override public inline function onFail(e:Fail){
-    observe_method(End(e));
+    _apply(End(e));
   }
   override public inline function onDone(){
-    observe_method(Nil);
+    _apply(Nil);
   }
 }

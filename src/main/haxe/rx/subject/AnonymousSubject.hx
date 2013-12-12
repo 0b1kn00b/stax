@@ -12,4 +12,16 @@ class AnonymousSubject<T> implements ISubject<T>{
     this.observer     = observer;
     this.observable   = observable;
   }
+  public function onData(d:T):Void{
+    this.observer.onData(d);
+  }
+  public function onFail(f:Fail):Void{
+    this.observer.onFail(f);
+  }
+  public function onDone():Void{
+    this.observer.onDone();
+  }
+  public function subscribe(obs:Observer<T>):Disposable{
+    return obs.subscribe(obs);
+  }
 }

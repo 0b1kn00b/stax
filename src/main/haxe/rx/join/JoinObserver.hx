@@ -3,8 +3,6 @@ package rx.join;
 import stx.Fail;
 import stx.Chunk;
 
-using stx.Iterables;
-
 import hx.Run;
 import hx.Action;
 import hx.ds.Queue;
@@ -14,7 +12,10 @@ import rx.observer.*;
 import rx.ifs.JoinObserver in IJoinObserver;
 import rx.join.ActivePlan;
 
+using rx.Observable;
 using rx.internal.SubscribeSafe;
+
+using stx.Iterables;
 
 class JoinObserver<T> extends ObserverBase<Chunk<T>> implements IJoinObserver{
   public var disposed(default,null) : Bool;

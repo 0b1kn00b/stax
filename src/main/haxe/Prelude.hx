@@ -33,6 +33,8 @@ enum Either<A, B> {
   Left(v: A);
   Right(v: B);
 }
+typedef Pick<A> = Either<A,A>;
+
 enum Unit{
   Unit;
 }

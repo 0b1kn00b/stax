@@ -1,7 +1,7 @@
 #-v
-build/boot/nodejs.hxml
+#build/boot/nodejs.hxml
 #build/dev/nodejs.hxml
 #build/test/flash9.hxml
 #--next
-#build/dev/neko.hxml
+build/dev/neko.hxml
 #build/doc.hxml

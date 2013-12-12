@@ -5,7 +5,6 @@ import Prelude;
 
 import stx.rct.Propagation;
 import stx.rct.Stream;
-import hx.sch.Process;
 
 import stx.Anys;
 import stx.Functions;
@@ -71,7 +70,7 @@ class Stream<T> {
     }
 
     public function dispatch(value : T) : Stream<T> {
-        var time = Process.stamp();
+        var time = haxe.Timer.stamp();
         var pulse = Pulse(time, value);
 
         // This will propagate through all listeners
