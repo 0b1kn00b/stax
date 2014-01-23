@@ -21,7 +21,7 @@ import haxe.Timer;
 #end
 
 import Prelude;
-import stx.Eventual;
+import stx.async.Eventual;
 /** A scheduled executor service, which can be used to execute tasks at 
  * specified times in the future.
  */

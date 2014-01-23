@@ -3,9 +3,9 @@ package hx.ds;
 import Stax.*;
 import stx.Compare.*;
 
-import stx.plus.Show;
-import stx.plus.Equal;
-using stx.plus.Order;
+import stx.Show;
+import stx.Equal;
+using stx.Order;
 
 import stx.Tuples;
 
@@ -29,6 +29,7 @@ class OrderedHashMap<V>{
 	
 	private var __val_equal__ : Eq<V>;
 	public var impl 					: Array<Tuple2<Int,V>>;
+
 	public function new(){
 		impl = [];
 	}
@@ -55,10 +56,10 @@ class OrderedHashMap<V>{
 		return lookup(key).isDefined();
 	}
 	public function at(i:Int):V{
-		return option(impl[i]).map(Tuples2.snd).valOrUse(null);
+		return option(impl[i]).map(Tuples2.snd).valOrC(null);
 	}
 	public function get(key:Int):V{
-		return lookup(key).map(Tuples2.snd).valOrUse(null);
+		return lookup(key).map(Tuples2.snd).valOrC(null);
 	}
 	public function del(key:Int){
 		lookup(key)
@@ -75,7 +76,7 @@ class OrderedHashMap<V>{
 				return __val_equal__(v,r);
 			}.tupled()
 		);
-		return impl.remove(val.valOrUse(null));
+		return impl.remove(val.valOrC(null));
 	}
 	public function sort(){
 		impl = ArrayOrder.sort(impl);
@@ -113,8 +114,8 @@ class OrderedHashMap<V>{
 			}
 		);
 	}
-	public function iterator(){
-		return impl.iterator();
+	public function iterator():Iterator<Int>{
+		return impl.map(fst).iterator();
 	}
 	public function vals():Iterator<V>{
 		return impl.map(Tuples2.snd).iterator();

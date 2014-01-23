@@ -138,14 +138,14 @@ class Chunks{
     return switch (chunk0){
       case Nil      :
         switch (chunk1){
-          case Nil      : fn(None,None).map(Chunks.create).valOrUse(Nil);
-          case Val(v)   : fn(None,Some(v)).map(Chunks.create).valOrUse(Nil);
+          case Nil      : fn(None,None).map(Chunks.create).valOrC(Nil);
+          case Val(v)   : fn(None,Some(v)).map(Chunks.create).valOrC(Nil);
           case End(err) : End(err);
         }
       case Val(v)   :
         switch (chunk1){
-          case Nil      : fn(Some(v),None).map(Chunks.create).valOrUse(Nil);
-          case Val(v0)  : fn(Some(v),Some(v0)).map(Chunks.create).valOrUse(Nil);
+          case Nil      : fn(Some(v),None).map(Chunks.create).valOrC(Nil);
+          case Val(v0)  : fn(Some(v),Some(v0)).map(Chunks.create).valOrC(Nil);
           case End(err) : End(err);
         }
       case End(err) :
@@ -235,8 +235,5 @@ class Chunks{
       default     : 
     }
     return chk;
-  }
-  static public function toVouch<A>(chk:Chunk<A>):Vouch<A>{
-    return stx.Eventual.pure(chk);
   }
 }

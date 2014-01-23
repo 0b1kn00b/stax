@@ -1,41 +1,36 @@
 package stx;
 
-/**
- * ...
- * @author 0b1kn00b
- */
+
+import Prelude;
 using stx.Tuples;
-import stx.test.Suite;
-import stx.test.Assert;		using stx.test.Assert;
+
+import stx.UnitTest;
 
 class TupleTest extends Suite{
 
-	public function new() {
-		super();
-	}
 	/**
 	 * Shows one can get arity/length from the typedef.
 	 */
-	public function testConstructor() {
+	public function testConstructor(u:TestCase):TestCase {
 		var a = tuple2( null , 32 );
-		Assert.isTrue(Reflect.hasField( a, '_2') );
+		return u.add(isTrue(Reflect.hasField( a, '_2') ));
 	}
 	/**
 	 * 
 	 */
-	public function testArity() {
+	public function testArity(u:TestCase):TestCase {
 		var a = tuple5( null , null , null , null , null );
 		var b : Product = a;
-		Assert.equals( 5 , b.length );
+		return u.add(isEqual( 5 , b.length ));
 	}
-	public function testElement() {
+	public function testElement(u:TestCase):TestCase {
 		var a = tuple2( 1 , 2 );
 		var b : Product = a;
-		2.equals( b.element(1) );
+		return u.add(isEqual(2,b.element(1)));
 	}
-	public function testElements() {
+	public function testElements(u:TestCase):TestCase {
 		var a = tuple2( 1, 2);
 		var b : Product = a;
-		[1, 2].equals(cast b.elements());
+		return u.add(isEqual([1, 2],cast b.elements()));
 	}
 }

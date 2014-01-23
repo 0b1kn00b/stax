@@ -1,7 +1,7 @@
 package stx;
 
 using stx.Functions;
-using stx.Arrowlet;
+using stx.async.Arrowlet;
 
 class Boot{
   @:noUsing static public function boot(main:Niladic,?algo:Arrowlet<Unit,Unit>):Void{

@@ -2,8 +2,8 @@ package stx;
 
 import stx.Method;
 import Prelude;
-import stx.plus.Equal;
-import stx.plus.Order;
+import stx.Equal;
+import stx.Order;
 
 using stx.Strings;
 using stx.Functions;
@@ -12,7 +12,7 @@ using stx.Maths;
 using stx.Compose;
 
 @doc("
-  This is a good class to use in conjuncture with stx.UnitTest, stx.Assert and filters.
+  This is a good class to use in conjuncture with stx.UnitTest, stx.test.Assert and filters.
 
   ```
   import stx.Compare;.*;

@@ -1,6 +1,6 @@
 package stx.ifs;
 
-import stx.plus.Order;
+import stx.Order;
 
 interface Orderable<T>{
   @:allow(stx.ifs)private var __order__ : Reduce<T,Int>;

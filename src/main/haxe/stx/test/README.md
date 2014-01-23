@@ -12,7 +12,7 @@
 The interesting thing is that the only thing resolved in the above is `true`. The `add` function is a deferred `stx.Arrays.add`, and
 the `isTrue` function produces a function to be run later on with `true`. This allows for complete parallelism on a function-by-function basis.
 
-To use `stx.Eventual`
+To use `stx.async.Eventual`
 
     public function testDeferred(u:TestCase):TestCase{
       var evt = Eventual.unit();

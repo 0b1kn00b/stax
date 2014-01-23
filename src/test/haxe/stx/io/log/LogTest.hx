@@ -5,7 +5,7 @@ package stx.io.log;
  */
 import stx.test.Assert;					using stx.test.Assert;
 import stx.test.Suite;
-import stx.Log;									using stx.Log;
+import stx.io.Log;									using stx.io.Log;
 import stx.framework.Injector; 	using stx.framework.Injector;
 																using stx.Functions;
 																using stx.Anys;

@@ -46,11 +46,11 @@ class MapTest extends Suite {
     var m = defaultMap();
     
     for (i in 0...100) {
-      u = u.add(isEqual("foo", m.get(i).getOrElse(function() return "bar")));
+      u = u.add(isEqual("foo", m.get(i).valOrUse(function() return "bar")));
     }
     return u;
   }
-  
+
   public function testSizeShrinksWhenRemovingKeys(u:TestCase):TestCase {
     var m = defaultMap();
     
@@ -108,7 +108,7 @@ class MapTest extends Suite {
     for (i in 0...100) {
       m = m.set(i, "bar");
 
-      u = u.add(isEqual("bar", m.get(i).get()));
+      u = u.add(isEqual("bar", m.get(i).val()));
       u = u.add(isEqual(100, m.size()));
     }
     return u;

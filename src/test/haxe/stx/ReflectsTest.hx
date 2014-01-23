@@ -2,7 +2,7 @@ package stx;
 
 import stx.UnitTest;
 import stx.Compare.*;
-import stx.Log.*;
+import stx.io.Log.*;
 
 import stx.Reflects;
 
@@ -23,5 +23,7 @@ class ReflectsTest extends Suite{
       )
     );
   }
+  public function testFieldListings(u:TestCase):TestCase{
+    return u;
+  }
 }
-

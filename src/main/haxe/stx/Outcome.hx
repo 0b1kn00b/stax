@@ -78,6 +78,12 @@ class Outcomes{
       case Failure(failure)               : Success(fn(failure));
     }
   }
+  static public function orUse<A>(o:EOutcome<A>,fn:Fail->A):A{
+    return switch (o) {
+      case Success(success)               : success;
+      case Failure(failure)               : fn(failure);
+    } 
+  }
   static public function flatten<A>(o:EOutcome<EOutcome<A>>):EOutcome<A>{
     return switch (o) {
       case Success(Success(success))      : Success(success);

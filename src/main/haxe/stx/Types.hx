@@ -23,7 +23,7 @@ using stx.Compose;
 using stx.Types;
 
 class Types{
-  static public inline function type(v:Dynamic):Class<Dynamic>{
+  @:noUsing static public inline function definition(v:Dynamic):Class<Dynamic>{
     return Type.getClass(v);
   }
   @doc("returns `ValueType` of `v`.")
@@ -79,8 +79,9 @@ class Types{
   static public function build<A>(name:String,?args:Array<Dynamic>):A{
     return option(classify(name)).flatMap(
       construct.bind(_,args).then(option)
-    ).valOrUse(null);
+    ).valOrC(null);
   }
+
   @doc("Create `type`, bypassing constructor.")
   static public inline function instantiate<A>(type:Class<A>):A{
     return Type.createEmptyInstance(type);
@@ -120,6 +121,9 @@ class Types{
   static public inline function as<I,O>(value:I):O{
     return cast value;
   }
+  /*static public inline function is( v : Dynamic, t : Dynamic ) : Bool{
+    return Std.is(v,t);
+  }*/
   /*@doc("
     Do the fields of `obj` fit into the schema of `type`. 
     Specifically, are the fields in `obj` a match or subset of the fields found in `type`.

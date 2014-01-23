@@ -1,6 +1,6 @@
 using stx.UnitTest;
 import stx.Compare.*;
-import stx.Log.*;
+import stx.io.Log.*;
 
 /**
   Proves that subclasses can specify type for a Dynamic parameter found in the superclass

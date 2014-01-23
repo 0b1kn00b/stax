@@ -25,19 +25,19 @@ class Strings {
     
     var vLower = v.toLowerCase();
     
-    return (if (vLower == 'false' || v == '0') Some(false) else if (vLower == 'true' || v == '1') Some(true) else None).valOrUse(d);
+    return (if (vLower == 'false' || v == '0') Some(false) else if (vLower == 'true' || v == '1') Some(true) else None).valOrC(d);
   }
   @doc("Returns an Int from String format, defaulting to `d`.")
   static public function int(v: String, ?d: Null<Int>): Int {
     if (v == null) return d;
     
-    return option(Std.parseInt(v)).filter(function(i) return !Math.isNaN(i)).valOrUse(d);
+    return option(Std.parseInt(v)).filter(function(i) return !Math.isNaN(i)).valOrC(d);
   }
   @doc("Returns a Float from String format, defaulting to `d`.")
   static public function toFloat(v: String, ?d: Null<Float>): Float { 
     if (v == null) return d;
     
-    return option(Std.parseFloat(v)).filter(function(i) return !Math.isNaN(i)).valOrUse(d);
+    return option(Std.parseFloat(v)).filter(function(i) return !Math.isNaN(i)).valOrC(d);
   }
   @doc("Returns `true` if `frag` is at the beginning of `v`, `false` otherwise.")
   static public function startsWith(v: String, frag: String): Bool {

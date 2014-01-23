@@ -3,7 +3,7 @@ package stx.rtti;
 using stx.Option;
 
 using stx.UnitTest;
-import stx.Log.*;
+import stx.io.Log.*;
 
 import stx.rtti.*;
 import stx.rtti.Introspect;

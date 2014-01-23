@@ -23,11 +23,11 @@ import stx.Tuples;
 import stx.ds.ifs.Foldable;
 import stx.ds.ifs.Collection;
 
-import stx.plus.Order; 
-import stx.plus.Hasher;
-import stx.plus.Show;
-import stx.plus.Equal;
-import stx.plus.Plus;
+import stx.Order; 
+import stx.Hasher;
+import stx.Show;
+import stx.Equal;
+import stx.Plus;
 
 using stx.Tuples;
 using Prelude;
@@ -250,8 +250,8 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
     if(!keys1.equals(keys2)) return false;
 
     for(key in keys1) {
-      var v1 = this.get(key).get();
-      var v2 = other.get(key).get();
+      var v1 = this.get(key).val();
+      var v2 = other.get(key).val();
       if (!val_tool.getEqual(v1)(v1, v2)) return false;
     }
     return true;
@@ -273,10 +273,10 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
            else Math.round(this.size() / _buckets.length);
   }
 
-  public function withKeyOrder(order : Reduce<K,Int>) {
+  public function withKeyOrder(order : Ord<K>) {
     return create(key_tool.withOrder(order),val_tool).append(this);
   }
-  public function withKeyEqual(equal : Reduce<K,Bool>) {
+  public function withKeyEqual(equal : Eq<K>) {
     return create(key_tool.withEqual(equal), val_tool).append(this);
   }
   public function withKeyHash(hash : K->Int) {
@@ -285,10 +285,10 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
   public function withKeyShow(show : K->String) { 
     return create(key_tool.withShow(show),val_tool).append(this);
   }
-  public function withValueOrder(order : Reduce<V,Int>) {
+  public function withValueOrder(order : Ord<V>) {
     return create(key_tool,val_tool.withOrder(order)).append(this);
   }
-  public function withValueEqual(equal : Reduce<V,Bool>) {
+  public function withValueEqual(equal : Eq<V>) {
     return create(key_tool,val_tool.withEqual(equal)).append(this);
   }
   public function withValueHash(hash : V->Int) {
@@ -332,7 +332,7 @@ class Map<K, V> implements Collection<Map<K, V>, Tuple2<K, V>> {
             
             nextValue = computeNextValue();
             
-            return value.get();
+            return value.val();
           }
         }
       }

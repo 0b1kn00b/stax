@@ -1,6 +1,6 @@
 package stx.utl;
 
-import stx.plus.Plus;
+import stx.Plus;
 
 class TaggedValue<K,V>{
   public var tag(default,null)    : K;

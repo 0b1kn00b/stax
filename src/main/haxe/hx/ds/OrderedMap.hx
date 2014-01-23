@@ -5,17 +5,17 @@ import Stax.*;
 import stx.Compare.*;
 
 import Prelude;
-import stx.plus.Order;
-import stx.plus.Show;
-import stx.plus.Hasher;
+import stx.Order;
+import stx.Show;
+import stx.Hasher;
 
 using stx.Iterators;
-using stx.plus.Order;
+using stx.Order;
 using stx.Option;
 using stx.Tuples;
 using stx.Compose;
 
-import stx.plus.Hasher;
+import stx.Hasher;
 
 class OrderedMap<K,V>{
   private var __key_sort__  : Ord<K>;
@@ -36,10 +36,10 @@ class OrderedMap<K,V>{
     return impl.has(encode(key));
   }
   public function at(i:Int):V{
-    return option(impl.at(i)).map(Tuples2.snd).valOrUse(null);
+    return option(impl.at(i)).map(Tuples2.snd).valOrC(null);
   }
   public function get(key:K):V{
-    return option(impl.get(encode(key))).map(Tuples2.snd).valOrUse(null);
+    return option(impl.get(encode(key))).map(Tuples2.snd).valOrC(null);
   }
   public function del(key:K){
     return impl.del(encode(key)); 
@@ -83,8 +83,8 @@ class OrderedMap<K,V>{
       }
     );
   }
-  public function iterator(){
-    return impl.iterator();
+  public function iterator():Iterator<K>{
+    return impl.vals().map(fst);
   }
   public function vals():Iterator<V>{
     return impl.vals().map(Tuples2.snd);

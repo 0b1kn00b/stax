@@ -6,8 +6,8 @@ import stx.Fail;
 
 import hx.ds.ifs.*;
 import Prelude;
-import stx.plus.Plus;
-import stx.plus.Equal;
+import stx.Plus;
+import stx.Equal;
 
 using stx.Option;
 using stx.Compose;
@@ -130,7 +130,7 @@ class LazyListEnumerator<T> implements Enumerator<T>{
   }
   public function next():T{
     return switch (memo) {
-      case Nil          : except()(fail(OutOfBoundsFail()));
+      case Nil          : except()(NullError());
       case Cons(x,xs)   : 
         memo = xs;
         x;
@@ -153,7 +153,7 @@ class LazyListInstance<T> implements Enumerable<T>{
   @:isVar public var size(default,null) : Int;
 
   public function new(opts:LazyListConstructorOptions<T>){
-    var tl = Options.create.then( Options.getOrElse.bind(_,function()return new Plus()));
+    var tl = Options.create.then(Options.valOrUse.bind(_,function()return new Plus()));
     switch (opts) {
       case EmptyLazyList(tool)              :
         this.size     = 0;
@@ -204,7 +204,7 @@ class LazyListInstance<T> implements Enumerable<T>{
     return lst.setValTool(val_tool);
   }
   public function add(x:T):LazyListInstance<T>{
-    var l : LazyList<T>  = LazyLists.add(this.value, untyped xs.value);
+    var l : LazyList<T>  = LazyLists.add(this.value, x);
     return l.setValTool(val_tool);
   }
   public function prepend(ls:LazyList<T>):LazyListInstance<T>{
@@ -272,7 +272,7 @@ class LazyLists {
     }
   }
   static public inline function head<T>(lst:LazyListType<T>):Null<T>{
-    return headOption(lst).getOrElseC(null);
+    return headOption(lst).valOrC(null);
   }
   static public inline function tail<T>(lst:LazyListType<T>):LazyListType<T>{
     return switch (lst) {

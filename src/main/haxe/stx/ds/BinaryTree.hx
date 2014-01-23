@@ -9,9 +9,38 @@ using Prelude;
 using stx.Iterators;
 
 //https://gist.github.com/1271891
-enum BinaryTree<T>{
+enum BinaryTreeType<T>{
   Empty;
   Node(el:T,left:BinaryTree<T>,right:BinaryTree<T>);
+}
+abstract BinaryTree<T>(BinaryTreeType<T>) from BinaryTreeType<T> to BinaryTreeType<T>{
+  public function new(v){
+    this = v;
+  }
+  @:noUsing static public function create(el:A,?l:BinaryTree<A>,?r:BinaryTree<A>){
+    return BinaryTree.btree(el,l,r);
+  }
+  public function inOrder():Array<T>{
+    return BinaryTrees.inOrder(this);
+  }
+  public function preOrder():Array<T>{
+    return BinaryTrees.preOrder(this);
+  }
+  public function postOrder():Array<T>{
+    return BinaryTrees.postOrder(this);
+  }
+  public function size():Int{
+    return BinaryTrees.size(this);
+  }
+  public function leafCount():Int{
+    return BinaryTrees.leafCount(this);
+  }
+  public function leaves():Array<T>{
+    return BinaryTrees.leaves(this);
+  }
+  public function height():Int{
+    return BinaryTrees.height(this);
+  }
 }
 class BinaryTrees{
   static public function btree<A>(el:A,?l:BinaryTree<A>,?r:BinaryTree<A>){

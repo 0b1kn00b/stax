@@ -1,13 +1,13 @@
 -cp src/main/haxe/
--cp funk/src/main/haxe
-
 -cp src/test/haxe/
 
--js test/test.js
+-js test/testnode.js
 
--lib tink
--lib traits
--resource zebra.txt@zebra
+--remap sys:sys
+--macro allowPackage("sys")
+
+-lib hx_node  
+-resource log.cnf@log
 -main Test
 
 -D nodejs

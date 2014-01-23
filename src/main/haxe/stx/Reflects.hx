@@ -3,7 +3,7 @@ package stx;
 import haxe.Constraints;
 
 import Stax.*; 
-import stx.plus.Order;
+import stx.Order;
 import stx.Fail;
 import Prelude;
 import stx.CallStacks;
@@ -50,7 +50,6 @@ class Reflects{
         return try{
           Success(callMethod(v,x,args));
         }catch(d:Dynamic){
-          trace(d);
           #if debug
             trace('CALLSTACK  :\n' + haxe.CallStack.callStack().map(stx.StackItems.toString).map(stx.Strings.append.bind(_,'\n')));
             trace('ERRORSTACK :\n' + haxe.CallStack.exceptionStack().map(stx.StackItems.toString).map(stx.Strings.append.bind(_,'\n')));

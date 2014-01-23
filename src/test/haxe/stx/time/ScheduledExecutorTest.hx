@@ -7,7 +7,7 @@ import stx.time.ScheduledExecutor;
 
 using stx.framework.Injector;
 
-import stx.Eventual;
+import stx.async.Eventual;
 
 class ScheduledExecutorTest extends Suite {
   var _executor: ScheduledExecutor;

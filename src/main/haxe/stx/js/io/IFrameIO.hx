@@ -27,9 +27,9 @@ import stx.ds.Map;
 import stx.time.ScheduledExecutor;
 import stx.io.json.Json;
 import stx.net.Url;
-import stx.Log;								using stx.Log;
+import stx.io.Log;								using stx.io.Log;
 
-import stx.Eventual;
+import stx.async.Eventual;
 using stx.Tuples;
 
 using Prelude;
@@ -41,7 +41,7 @@ using stx.Option;
 using stx.Anys;
 using stx.Iterables;
 
-using stx.plus.Hasher;
+using stx.Hasher;
 
 using stx.ds.Map;
 using stx.ds.List;

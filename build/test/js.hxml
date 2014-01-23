@@ -1,10 +1,9 @@
 -cp src/main/haxe/
--cp funk/src/main/haxe
 -cp src/test/haxe/
 
--js bin/test.js
+-js test/test.js
 
--main StaxTestSuite
+-main Test
 
 -D type_all
 

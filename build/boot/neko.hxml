@@ -1,0 +1,15 @@
+-cp src/main/haxe/
+-cp funk/src/boot/haxe
+
+-cp src/boot/haxe/
+
+-neko test/boot.n
+
+-lib tink
+
+-resource log.cnf@log
+-main Test
+
+-D debug
+-D development 
+--connect 2331

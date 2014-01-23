@@ -20,7 +20,7 @@ import stx.math.tween.Tween;
 import stx.math.tween.Easing;
 import stx.time.ScheduledExecutor;
 
-import stx.Eventual;
+import stx.async.Eventual;
 using stx.Maths;
 
 using stx.framework.Injector;

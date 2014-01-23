@@ -216,7 +216,7 @@ class Iterables {
   }
   @doc("Returns true if any `eq` returns true, using `value`.")
   public static function has<T>(iter:Iterable<T>,value:T,?eq : T -> T -> Bool){
-    if(eq==null)eq = stx.plus.Equal.getEqualFor(value);
+    if(eq==null)eq = stx.Equal.getEqualFor(value);
     for (el in iter){
       if( eq(value,el) ){ return true;}
     }
@@ -239,7 +239,7 @@ class Iterables {
     var result = [];
 
     for (element in iter)
-      if (!has(result, element, stx.plus.Equal.getEqualFor(iter.head()))) { result.push(element); };
+      if (!has(result, element, stx.Equal.getEqualFor(iter.head()))) { result.push(element); };
     
     return result;
   }
@@ -415,7 +415,7 @@ class Iterables {
   @doc("Return an Iterable of values contained in both inputs.")
   public static function intersect<T>(iter1: Iterable<T>, iter2: Iterable<T>): Iterable<T> {
     return foldLeft(iter1, cast [], function(a: Iterable<T>, b: T): Iterable<T> {
-      return if (existsP(iter2, b, stx.plus.Equal.getEqualFor(iter1.head()))) add(a, b); else a;
+      return if (existsP(iter2, b, stx.Equal.getEqualFor(iter1.head()))) add(a, b); else a;
     });
   }
   @doc("Returns an Iterable of all distinct values in `iter1` and `iter2`, as decided by `f`")
@@ -439,7 +439,7 @@ class Iterables {
   }
   @doc("Returns an Iterable of all distinct values in `iter1` and `iter2`.")
   public static function union<T>(iter1: Iterable<T>, iter2: Iterable<T>): Iterable<T> {
-    return unionBy(iter1, iter2, stx.plus.Equal.getEqualFor(iter1.head()));
+    return unionBy(iter1, iter2, stx.Equal.getEqualFor(iter1.head()));
   }
   @doc("
    Produces a Tuple2 containing two Arrays, the left being elements where `f(e) == true`, 
@@ -510,7 +510,7 @@ class Iterables {
         var val = stack[index];
         index++;
         return Options.create(val);
-      }.yield();
+      }.yielding();
   }
   static public function patch<A>(iter:Iterable<A>,start:Int,iter2:Iterable<A>,?length:Int = 0):Iterable<A>{
     var na      = [];

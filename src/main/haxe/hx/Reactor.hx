@@ -1,10 +1,9 @@
 package hx;
 
-import stx.rct.Stream;
-import stx.Arrowlet;
+import stx.async.Arrowlet;
 import stx.utl.Selector;
 
-import hx.rct.DefaultReactor;
+import hx.reactive.DefaultReactor;
 import hx.ifs.Reactor in IReactor;
 
 abstract Reactor<I>(IReactor<I>) from IReactor<I> to IReactor<I>{

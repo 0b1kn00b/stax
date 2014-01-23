@@ -5,8 +5,8 @@ import Prelude;
 import stx.Fail.*;
 import stx.err.*;
 
-import stx.plus.Equal;
-import stx.plus.Show;
+import stx.Equal;
+import stx.Show;
 
 using stx.Tuples;
 using stx.Compare;

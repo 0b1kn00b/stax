@@ -3,7 +3,7 @@ package stx.io.json;
 import Prelude;
 using stx.Tuples;
 
-import stx.plus.Equal;
+import stx.Equal;
 
 import stx.test.Suite;
 import stx.io.json.JValue;

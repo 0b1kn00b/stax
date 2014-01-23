@@ -51,7 +51,7 @@ class Enums {
 		return Type.resolveEnum(name);
 	}
 	@doc("Top level enum comparison, doesn't compare contents.")
-	static public function alike(e1:EnumValue,e2:EnumValue):Bool{
+	static public function alike<T:EnumValue>(e1:T,e2:T):Bool{
 		return Enums.toIndex(e1) == Enums.toIndex(e2);
 	}
 	@doc('Produces parameter at index `i`.')

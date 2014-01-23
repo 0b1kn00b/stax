@@ -8,7 +8,7 @@ import stx.Tuples;
 using stx.Iterables;
 using stx.Functions;
 using stx.Compose;
-using stx.plus.Order;
+using stx.Order;
 using stx.Tuples;
 using Prelude;
 using stx.Arrays;
@@ -67,38 +67,43 @@ class MultiMap<K,V>{
 			}
 		);
 	}
-	public function vals():Iterator<V>{
-		var idx 		: Int 			= 0;
-		var current : Array<V>  = at(idx);
-		var idx0 		: Int 			= 0;
+	public function vals():Iterable<V>{
+		return { 
+			iterator : 
+			function(){
+				var idx 		: Int 			= 0;
+				var current : Array<V>  = at(idx);
+				var idx0 		: Int 			= 0;
 
-		return {
-			next : function(){
-				if(idx0 == current.length){
-					idx0 = 0;
-					idx  +=1;
-					current = at(idx);
-				}
-				var o = current[idx0];
-				idx0+=1;
-				return o;
-			},
-			hasNext : function(){
-				return if(nl().apply(current)){
-					false;
-				}else{
-					if(idx0 == current.length){
-						if(nl().apply(at(idx+1))){
+				return {
+					next : function(){
+						if(idx0 == current.length){
+							idx0 = 0;
+							idx  +=1;
+							current = at(idx);
+						}
+						var o = current[idx0];
+						idx0+=1;
+						return o;
+					},
+					hasNext : function(){
+						return if(nl().apply(current)){
 							false;
 						}else{
-							true;
+							if(idx0 == current.length){
+								if(nl().apply(at(idx+1))){
+									false;
+								}else{
+									true;
+								}
+							}else{
+								true;
+							}
 						}
-					}else{
-						true;
 					}
 				}
 			}
-		}
+		};
 	}
 	public function find(v:V):Option<Tuple2<Int,Tuple2<K,Array<V>>>>{
 		var eq = eq(v);

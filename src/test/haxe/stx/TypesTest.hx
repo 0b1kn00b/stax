@@ -4,7 +4,7 @@ import stx.UnitTest;
 
 import Stax.*;
 import stx.Compare.*;
-import stx.Log.*;
+import stx.io.Log.*;
 
 class TypesTest extends Suite{
   public function testTypes(u:TestCase):TestCase{

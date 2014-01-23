@@ -1,7 +1,11 @@
 #-v
-#build/boot/nodejs.hxml
-#build/dev/nodejs.hxml
+build/test.hxml
+#build/test/cpp.hxml
+#build/boot/neko.hxml
+#build/boot.hxml
+##using stx.Functions;--next
+#build/test/nodejs.hxml
 #build/test/flash9.hxml
 #--next
-build/dev/neko.hxml
+#build/test/neko.hxml
 #build/doc.hxml

@@ -37,7 +37,7 @@ using stx.Maths;
 
 import stx.Anys;
 
-using stx.Log;
+using stx.io.Log;
 using stx.js.dom.DomExtensions;
 using stx.Strings;
 using stx.Objects;

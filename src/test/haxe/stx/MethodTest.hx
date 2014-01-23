@@ -1,6 +1,6 @@
 package stx;
 
-import stx.Log.*;
+import stx.io.Log.*;
 using stx.UnitTest;
 
 using stx.Method;

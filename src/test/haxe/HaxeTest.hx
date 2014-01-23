@@ -4,7 +4,7 @@ import stx.utl.CompileTarget;
 import Prelude;
 import Stax.*;
 import stx.Compare.*;
-import stx.Log.*;
+import stx.io.Log.*;
 
 using stx.Arrays;
 
@@ -16,13 +16,13 @@ abstract Nullish(Null<Dynamic>) from Null<Dynamic> to Null<Dynamic>{
   }
 }
 class HaxeTest extends Suite{
-  @:note('#0b1kn00b: Would like general or operators.')
+  /*@:note('#0b1kn00b: Would like general or operators.')
   public function testOr(u:TestCase):TestCase{
     var a = null;
     var b = "1";
     var c = "2";    
     return u;
-  }
+  }*/
   public function testReflectCopy(u:TestCase):TestCase{
     var a       = new CopyTarget();
     var tsts    = [];
@@ -43,6 +43,12 @@ class HaxeTest extends Suite{
       }
     }
     return u.append(tsts);
+  }
+  public function testReflectionAndTypedIntrospection(u:TestCase):TestCase{
+    var a = new CopyTarget();
+    var type_fields     = Type.getInstanceFields(Type.getClass(a));
+    var reflect_fields  = Reflect.fields(a);
+    return u;
   }
 }
 private class CopyTarget{

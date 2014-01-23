@@ -67,7 +67,7 @@ abstract PartialFunction<A,Z>(PartialFunctionType<A,Z>) from PartialFunctionType
 } 
 class PartialFunctions<A, Z>{
   @:noUsing static public function unit<A,Z>():PartialFunctionType<A,Z>{
-    return create([tuple2(never().toMethod(),null)]);
+    return create([tuple2(never().toMethod(),cast noop)]);
   }  
   static public function toPartialFunctionType<A, Z>(def: Array<Tuple2<Method<A,Bool>, Method<A,Z>>>):PartialFunctionType<A, Z> {
     return def;

@@ -22,7 +22,7 @@ import stx.test.Suite;
 import stx.js.Env;
 import stx.js.dom.Quirks;
 import stx.js.io.IFrameIO;
-using stx.Log;
+using stx.io.Log;
 
 using stx.js.dom.HTMLDocumentExtensions;
 

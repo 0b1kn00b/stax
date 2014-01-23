@@ -2,17 +2,17 @@ package stx.log.prs;
 
 import Stax.*;
 import stx.Compare.*;
-import stx.Log.*;
+import stx.io.Log.*;
 
 using stx.UnitTest;
 
 using stx.Arrays;
 using stx.Strings;
-using stx.prs.Ascii;
+using stx.parser.Ascii;
 using stx.Parser;
-using stx.prs.StringParsers;
+using stx.parser.StringParsers;
 
-import stx.log.prs.LogListingParser.*;
+import stx.io.log.prs.LogListingParser.*;
 
 class LogListingParserTest extends Suite{
   public function testASCII(u:TestCase):TestCase{

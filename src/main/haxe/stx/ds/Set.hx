@@ -22,12 +22,12 @@ using Prelude;
 import stx.ds.ifs.Foldable;
 import stx.ds.ifs.Collection;
 import stx.ds.Foldables;
-import stx.plus.Plus;
+import stx.Plus;
 
-using stx.plus.Order; 
-using stx.plus.Hasher;
-using stx.plus.Show;
-using stx.plus.Equal;
+using stx.Order; 
+using stx.Hasher;
+using stx.Show;
+using stx.Equal;
 
 using stx.ds.Foldables;
 
@@ -119,10 +119,10 @@ class Set<T> implements Collection<Set<T>, T> {
         }
       );
   } 
-  public function withOrder(order:Reduce<T,Int>) {
+  public function withOrder(order:Ord<T>) {
     return create(_map.val_tool.withOrder(order)).append(this);
   }
-  public function withEqual(equal:Reduce<T,Bool>) {
+  public function withEqual(equal:Eq<T>) {
     return create(_map.val_tool.withEqual(equal)).append(this);
   }
   public function withHash(hash:T->Int) {

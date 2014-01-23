@@ -69,7 +69,7 @@ class Set<T> implements Collection<T> {
     /**
         Adds all of the objects in the array minus the repeats.
     **/
-    public function addAll(objs : Array<Null<T>>) {
+    public function append(objs : Array<Null<T>>) {
         //repeated for speed
         for (obj in objs) {
             var found = false;

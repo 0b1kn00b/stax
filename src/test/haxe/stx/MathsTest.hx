@@ -1,18 +1,22 @@
 package stx;
-import stx.test.Suite;
-using stx.test.Assert;
+
+import stx.UnitTest;
+
 using stx.Maths;
 
 class MathsTest extends Suite{
-	public function testNormalize(){
-		Assert.equals(-0.5,-10.normalize(5,15));
+	public function testNormalize(u:TestCase):TestCase{
+		u = u.add(isEqual(-0.5,-10.normalize(5,15)));
+		return u;
 	}
-	public function testInterpolate(){
-		Assert.equals(6., 1.interpolate(5,6) );
-		Assert.equals(5.5, 0.5.interpolate(5,6) );
+	public function testInterpolate(u:TestCase):TestCase{
+		u = u.add(isEqual(6., 1.interpolate(5,6)));
+		u = u.add(isEqual(5.5, 0.5.interpolate(5,6)));
+		return u;
 	}
-	public function testSgn(){
-		Assert.equals(-1.,(-0.6.sgn()));
-		Assert.equals(1.,(0.6.sgn()));
+	public function testSgn(u:TestCase):TestCase{
+		u = u.add(isEqual(-1.,(-0.6.sgn())));
+		u = u.add(isEqual(1.,(0.6.sgn())));
+		return u;
 	}
 }

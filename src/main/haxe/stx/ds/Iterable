@@ -1,0 +1,12 @@
+package stx.ds;
+
+import stx.ds.iter.AnonymousIterable;
+
+abstract Iterable<T>(StdTypes.Iterable<T>) from StdTypes.Iterable<T> to StdTypes.Iterable<T>{
+  public function new(v){
+    this = v;
+  }
+  @:from static public function fromFunction(fn:Void->Iterator<T>):Iterable<T>{
+    return new AnonymousIterable(fn);
+  }
+}

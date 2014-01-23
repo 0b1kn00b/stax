@@ -1,0 +1,6 @@
+-cp src/main/haxe/
+
+-cp src/boot/haxe/
+-swf test/test8.swf
+
+-main Test

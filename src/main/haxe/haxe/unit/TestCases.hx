@@ -1,6 +1,6 @@
 package haxe.unit;
 
-import stx.plus.Equal;
+import stx.Equal;
 
 import Prelude;
 import haxe.PosInfos;

@@ -1,8 +1,8 @@
 -cp src/main/haxe/
 -cp src/test/haxe/
 
--cp funk/src/main/haxe
+-php test/php
 
--php ../bin
+--connect 2331
 
--main StaxTestSuite
+-main Test

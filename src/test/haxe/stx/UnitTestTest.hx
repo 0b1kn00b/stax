@@ -1,12 +1,15 @@
 package stx;
 
+import stx.async.Future;
+
 import stx.test.Proof;
-import stx.Eventual;
+import stx.async.Eventual;
 
 import Stax.*;
 import stx.Compare.*;
-import stx.Log.*;
+import stx.io.Log.*;
 
+using stx.Iterables;
 using stx.UnitTest;
 
 class UnitTestTest extends Suite{
@@ -20,4 +23,7 @@ class UnitTestTest extends Suite{
     u =  u.add(evt).add(fut);
     return u;
   }
+  /*public function testLoadsOfTests(u:TestCase):TestCase{
+    return u.append(0.to(100).map(function(x) return true).map(isTrue.bind(_,here())).toArray());
+  }*/
 }

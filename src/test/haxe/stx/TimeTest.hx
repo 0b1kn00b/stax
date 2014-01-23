@@ -3,7 +3,7 @@ package stx;
 using stx.UnitTest;
 
 import stx.Compare.*;
-import stx.Log.*;
+import stx.io.Log.*;
 
 import stx.Period;
 import stx.time.DateSpan;

@@ -3,6 +3,12 @@
 
 -swf test/test9.swf
 -swf-version 9
+--flash-strict
+
 -main Test
 
+-swf-header 1100:700:30:ffffff
 -cmd flashplayer_11_sa_debug test/test9.swf
+
+-D network-sandbox 
+--connect 2331

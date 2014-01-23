@@ -1,9 +1,12 @@
 package stx.test;
 
+import stx.async.Future;
+import stx.async.Eventual;
+
 import Stax.*;
 import stx.Compare.*;
 
-using stx.Arrowlet;
+using stx.async.Arrowlet;
 
 abstract Proof(Arrowlet<TestResult,TestResult>) to Arrowlet<TestResult,TestResult>{
   @:noUsing static public function unit():Proof{
@@ -36,5 +39,8 @@ abstract Proof(Arrowlet<TestResult,TestResult>) to Arrowlet<TestResult,TestResul
   }
   public function msg(m):Proof{
     return new Proof(this.then(TestResult.setMsg.bind(_,m)));
+  }
+  public function augure(tr:TestResult):Future<TestResult>{
+    return this.augure(tr).timeout(thunk(new TestResult()),3);
   }
 }

@@ -8,7 +8,7 @@ import stx.Fail;
 
 using stx.Tuples;
 using stx.Either;
-using stx.Eventual;
+using stx.async.Eventual;
 
 class EitherCombinators{
 	static public function or<A,B,C>(a:A->Either<B,C>,b:A->Either<B,C>):A-> Either<B,C>{

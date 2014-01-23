@@ -50,14 +50,15 @@ enum FieldOrder {
   Ignore;
 }
 @doc("Underlies all thrown values in Stax, extensible through the use of `FrameworkError`.")
-enum Error{
+@:note("#0b1kn00b: omfg, Error overridden by flash, all sorts of misery")
+enum ErrorType{
   ErrorStack(arr:Array<stx.Fail>);
   NativeError(err:Dynamic);
-  FrameworkError(flag:EnumValue,?pos:PosInfos);
+  FrameworkError(flag:EnumValue);
   MatchError<S,T>(is:S,?should:T,?pos:PosInfos);
 
   AssertionError<T>(is:T,?should:T,?pos:PosInfos);
-  ArgumentError(field:String,e:Error,?pos:PosInfos);
+  ArgumentError(field:String,e:ErrorType,?pos:PosInfos);
 
   IllegalOperationError(reason:String);
   NullError(?pos:PosInfos);

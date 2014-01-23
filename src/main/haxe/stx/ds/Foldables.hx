@@ -19,8 +19,8 @@ package stx.ds;
 import stx.Tuples;
 import Prelude;
 
-import stx.plus.Show;
-import stx.plus.Equal;
+import stx.Show;
+import stx.Equal;
 
 using stx.Tuples;
 using stx.Option;

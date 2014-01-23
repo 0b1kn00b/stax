@@ -1,8 +1,13 @@
 -cp src/main/haxe/
 -cp src/test/haxe/
 
--cp funk/src/main/haxe
+-neko test/test.n
 
--neko ../bin/test.n
+-main Test
 
--main StaxTestSuite
+-lib tink
+
+-D debug
+-resource log.cnf@log
+
+--connect 2331

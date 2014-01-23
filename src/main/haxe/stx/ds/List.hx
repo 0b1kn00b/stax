@@ -4,24 +4,24 @@ import Stax.*;
 import Prelude;
 
 import stx.type.*;
-import stx.plus.Plus;
+import stx.Plus;
 
 import stx.Tuples;
 
 import stx.ds.ifs.Foldable;
 import stx.ds.ifs.Collection;
 import stx.ds.Foldables;
-import stx.plus.Plus.*;
+import stx.Plus.*;
 
 using stx.Maths;
 using stx.Option;
 using stx.Tuples;
 
 using stx.Iterables;
-using stx.plus.Order; 
-using stx.plus.Hasher;
-using stx.plus.Show; 
-using stx.plus.Equal;
+using stx.Order; 
+using stx.Hasher;
+using stx.Show; 
+using stx.Equal;
 
 using stx.ds.Foldables;
 
@@ -56,7 +56,7 @@ class List<T> implements Collection<List<T>,T> {
       if (equal == null || equal == NullEqual.equals ){
         headOption.map( Equal.getEqualFor )
         .each(function(x) equal = x)
-        .valOrUse( NullEqual.equals );
+        .valOrC( NullEqual.equals );
       }else{
         equal;
       }
@@ -67,7 +67,7 @@ class List<T> implements Collection<List<T>,T> {
       if (order == null || order == Order.nil ){
         headOption.map( Order.getOrderFor )
         .each( function(x) order = x)
-        .valOrUse( Order.getOrderFor(null) );
+        .valOrC( Order.getOrderFor(null) );
       }else{
         order;
       }
@@ -79,7 +79,7 @@ class List<T> implements Collection<List<T>,T> {
       if (hash == null || hash == Hasher.nil ){
         headOption.map( Hasher.getHashFor )
         .each(function(x) hash = x)
-        .valOrUse( Hasher.nil );
+        .valOrC( Hasher.nil );
       }else{
         hash;
       }
@@ -90,7 +90,7 @@ class List<T> implements Collection<List<T>,T> {
       if (show == null || show == NullShow.toString ){
         headOption.map( Show.getShowFor )
         .each(function(x) show = x)
-        .valOrUse( NullShow.toString );
+        .valOrC( NullShow.toString );
       }else{
         show;
       }

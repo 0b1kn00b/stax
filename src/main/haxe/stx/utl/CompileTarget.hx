@@ -1,6 +1,6 @@
 package stx.utl;
 
-import stx.plus.Equal;
+import stx.Equal;
 
 enum CompileTarget{
   Avm1;
@@ -46,7 +46,7 @@ class CompileTargets{
   @:noUsing static public function is(c:CompileTarget):Bool{
     return switch (c) {
       case Avm2(vsr,sub) if (vsr == null) : stx.Enums.alike(get(),c);
-      default                             : stx.plus.Equal.getEqualFor(c)(c,get());
+      default                             : stx.Equal.getEqualFor(c)(c,get());
     }
   }
   @:noUsing static public function typed():Bool{

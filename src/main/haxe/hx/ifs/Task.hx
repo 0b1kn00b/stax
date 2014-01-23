@@ -3,7 +3,7 @@ package hx.ifs;
 import Prelude;
 
 import hx.ifs.Run in IRun;
-import rx.ifs.Observable in IObservable;
+import stx.reactive.ifs.Observable in IObservable;
 
 @doc("Represents an identifyable process.")
 interface Task extends IRun extends IObservable<Unit>{

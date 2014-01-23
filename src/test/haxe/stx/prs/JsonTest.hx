@@ -2,13 +2,13 @@ package stx.prs;
 
 import Stax.*;
 import stx.Compare.*;
-import stx.Log.*;
+import stx.io.Log.*;
 
 using stx.UnitTest;
 using stx.Parser;
-using stx.prs.StringParsers;
+using stx.parser.StringParsers;
 
-import stx.prs.Json.*;
+import stx.parser.Json.*;
 
 class JsonTest extends Suite{
   public function testJson(u:TestCase):TestCase{

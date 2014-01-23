@@ -65,7 +65,7 @@ class CommonModule implements Module{
           case Factory(fn)            : fn();
         }
       }
-    ).valOrUse(null);
+    ).valOrC(null);
     injector.pop();
     return o;
   }

@@ -1,6 +1,6 @@
 package stx.utl;
 
-import stx.plus.Equal;
+import stx.Equal;
 import stx.Compare;
 
 using Prelude;

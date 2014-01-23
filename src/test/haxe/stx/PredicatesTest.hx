@@ -1,10 +1,10 @@
 package stx;
 
-import stx.plus.Equal;
-import stx.plus.Order;
+import stx.Equal;
+import stx.Order;
 import Prelude;
 using stx.UnitTest;
-import stx.Log.*;
+import stx.io.Log.*;
 
 import stx.ifs.Reply;
 

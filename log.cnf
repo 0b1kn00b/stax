@@ -1,5 +1,3 @@
-#-*\ThreadScheduler.hx
-#-$hx.sch.Timer
-#-$hx.sch.ThreadCommand&new
-#-$hx.sch.ThreadRun&new
-#-*\ThreadScheduler.hx&run_prdct
+-*\ThreadScheduler.hx
+-$hx.Timer
+-*\ThreadScheduler.hx&run_prdct

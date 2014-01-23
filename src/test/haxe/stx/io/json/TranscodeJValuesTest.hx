@@ -3,7 +3,7 @@
 import haxe.CallStack;
 import Prelude;
 
-import stx.plus.Equal;
+import stx.Equal;
 
 import Type;
 using stx.Tuples;

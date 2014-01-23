@@ -6,14 +6,14 @@ import stx.Compare.*;
 using stx.Tuples;
 
 using Prelude;
-using stx.plus.Show;
+using stx.Show;
 
 using stx.Arrays;
 using stx.ds.Set;
 using stx.ds.List;
 using stx.ds.Map;
 
-using stx.plus.Group;
+using stx.Group;
  
 using stx.Tuples;
 

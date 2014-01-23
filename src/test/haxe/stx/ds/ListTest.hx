@@ -17,12 +17,12 @@
 package stx.ds;
 
 using stx.UnitTest;
-import stx.Log.*;
+import stx.io.Log.*;
 
 import Prelude;
 
-import stx.plus.Plus;
-import stx.plus.Equal;
+import stx.Plus;
+import stx.Equal;
 
 import stx.ds.ifs.Foldable;
 

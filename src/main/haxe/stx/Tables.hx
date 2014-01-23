@@ -2,8 +2,8 @@ package stx;
 
 import haxe.ds.StringMap;
 
-import stx.plus.Order;
-import stx.plus.Equal;
+import stx.Order;
+import stx.Equal;
 import Prelude;
 import stx.rtti.Field;
 

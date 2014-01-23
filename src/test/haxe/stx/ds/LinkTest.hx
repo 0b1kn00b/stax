@@ -1,7 +1,7 @@
 package stx.ds;
 
 using stx.UnitTest;
-import stx.Log.*;
+import stx.io.Log.*;
 
 using stx.ds.Link;
 

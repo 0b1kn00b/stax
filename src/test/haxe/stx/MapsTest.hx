@@ -4,9 +4,8 @@ import stx.UnitTest;
 
 import Stax.*;
 import stx.Compare.*;
-import stx.Log.*;
+import stx.io.Log.*;
 
-using stx.Maps;
 
 class MapsTest extends Suite{
   public function testMaps(u:TestCase):TestCase{

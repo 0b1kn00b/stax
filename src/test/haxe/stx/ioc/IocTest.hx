@@ -6,7 +6,7 @@ import stx.ioc.Inject.*;
 import stx.ioc.Module;
 
 import stx.Compare.*;
-import stx.Log.*;
+import stx.io.Log.*;
 
 class IocTest extends Suite{
   public function testIoc(u:TestCase):TestCase{

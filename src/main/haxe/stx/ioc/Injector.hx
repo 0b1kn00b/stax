@@ -11,7 +11,7 @@ using stx.Option;
 using stx.Iterables;
 using stx.Iterators;
 using stx.Arrays;
-using stx.plus.Order;
+using stx.Order;
 using stx.ValueTypes;
 using stx.Types;
 
@@ -103,7 +103,7 @@ import haxe.PosInfos;
         function(x:Module){
           return eq(x.scope).apply(key);
         }
-      ).valOrUse(null);
+      ).valOrC(null);
     }else{
       new DefaultPublicModule(key);
     }
@@ -122,7 +122,7 @@ import haxe.PosInfos;
             }
           );
         }
-      ).valOrUse(null);
+      ).valOrC(null);
     }else{
       new DefaultPublicModule(key);
     }

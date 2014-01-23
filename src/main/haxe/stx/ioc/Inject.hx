@@ -39,7 +39,7 @@ class Inject{
             }
           );
         }
-      ).valOrTry(
+      ).valOrUse(
         function(){
           except()(MatchError(cls));
           return null;

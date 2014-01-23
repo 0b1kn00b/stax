@@ -15,7 +15,7 @@ class Niladics {
   /*static public function trampoline(func : Niladic, ?bounce : Int = 0) : Niladic {
     return function() : Void {
       if (bounce < 1) func();
-      else hx.sch.Process.start(function() : Void func(), bounce);
+      else hx.schedulerProcess.start(function() : Void func(), bounce);
     };
   }*/
   @doc("Compare function identity.")
@@ -136,10 +136,18 @@ class Functions0 {
     return result;   
   } 
   @doc("Compares function identity.")
-  public static function equals<A>(a:Thunk<A>,b:Thunk<A>){     
+  public static function equals<  A>(a:Thunk<A>,b:Thunk<A>){     
     return Reflect.compareMethods(a,b);   
   } 
 } 
+class Callbacks{
+  static public function action<T>(fn:Callback<T>):Endo<T>{
+    return function(x:T):T{
+      fn(x);
+      return x;
+    }
+  }
+}
 class Endos{
   
 }

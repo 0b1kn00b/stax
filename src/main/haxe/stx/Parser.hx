@@ -9,7 +9,7 @@ using stx.Arrays;
 using stx.Tuples;
 using stx.Option;
 										
-import stx.prs.InputStream;
+import stx.parser.InputStream;
 
 using stx.Parser; 
 using Lambda;

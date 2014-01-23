@@ -4,7 +4,7 @@ import stx.Strings;
 
 import Stax.*;
 import stx.Compare.*;
-import stx.Log.*;
+import stx.io.Log.*;
 
 using stx.UnitTest;
 

@@ -1,29 +1,28 @@
 package rx;
 
-import hx.rct.DefaultReactor;
+import hx.reactive.DefaultReactor;
 
-import stx.Eventual;
+import stx.async.Eventual;
 import stx.Chunk;
 
 import stx.rct.*;
 import Stax.*;
 import stx.Compare.*;
-import stx.Log.*;
+import stx.io.Log.*;
 
 using stx.Arrays;
 using stx.UnitTest;
+using stx.reactive.Observable;
 
-using rx.Observable;
-
-import rx.Future;
-import rx.Observers;
-import rx.observable.BufferedObservable;
+import stx.async.Future;
+import stx.reactive.Observer;
+import stx.reactive.observable.BufferedObservable;
 
 class RxTest extends Suite{
   public function tstRx(u:TestCase):TestCase{
     var evt = Eventual.unit();
-    var obs = [1,2,3,4].map(Val).observe();//no terminating value
-    var obs0 = [6,7,8,9].map(Val).observe();//similarly
+    var obs = [1,2,3,4].map(Val).observable();//no terminating value
+    var obs0 = [6,7,8,9].map(Val).observable();//similarly
     //var obs1 = obs.concat(obs0);
         //obs1.each(printer()); //produces up to 4, no fu
     //var evts = new EventStream();
@@ -41,7 +40,7 @@ class RxTest extends Suite{
     return u.add(evt);
   }
   public function testTake(u:TestCase):TestCase{
-    var obs   = [1,2,3,4].observe();
+    var obs   = [1,2,3,4].observable();
 /*        obs.takeWhile(function(i) return i < 2).next(printer());
         obs.takeWhile(function(i) return i > 2).next(printer());
         obs.first().next(printer());
@@ -63,7 +62,7 @@ private class EventStream extends DefaultReactor<Chunk<Int>>{
     super();
     var count = 0;
     var max   = 5;
-    var t     = new haxe.Timer(1000);
+    var t     = new hx.Timer(1000);
         t.run = (
           function(){
             if(count<=max){

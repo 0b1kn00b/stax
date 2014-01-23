@@ -5,9 +5,8 @@ import haxe.macro.Context;
 import haxe.macro.Type;
 
 using stx.UnitTest;
-import stx.Log.*;
+import stx.io.Log.*;
 
-import stx.mcr.Macros;
 
 class MacrosTest extends Suite{
   public function testMacros(u:TestCase):TestCase{

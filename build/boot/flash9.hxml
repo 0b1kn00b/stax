@@ -1,0 +1,13 @@
+-cp src/main/haxe/
+-cp src/boot/haxe/
+
+-swf test/boot.swf
+
+-lib tink
+
+#-reource log.cnf@log
+-main Test
+
+-D debug
+-D development 
+--connect 2331

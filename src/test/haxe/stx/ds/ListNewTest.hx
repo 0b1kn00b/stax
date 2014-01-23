@@ -6,10 +6,10 @@ import hx.ds.ifs.Enumerator;
 
 import stx.UnitTest;
 
-import stx.Log.*;
+import stx.io.Log.*;
 import stx.Fail;
 
-import stx.plus.Plus;
+import stx.Plus;
 
 using stx.Compose;
 using stx.Option;

@@ -6,7 +6,7 @@ import Prelude;
 
 import stx.Tuples;
 import stx.Compare.*;
-import stx.Log.*;
+import stx.io.Log.*;
 
 using stx.Option;
 
@@ -19,7 +19,7 @@ class ObjectsTest extends Suite {
   
   public function testGet(u:TestCase):TestCase {
     var o     = { foo: "bar" };
-    var tst0  = option("foo").get();
+    var tst0  = option("foo").val();
 
     return u.add(
       it(
@@ -32,7 +32,7 @@ class ObjectsTest extends Suite {
   
   public function testSet(u:TestCase):TestCase {
     var o : Dynamic   = { foo: "bar" };
-    var tst0          = option(o.setField("foo", "baz").foo).get();
+    var tst0          = option(o.setField("foo", "baz").foo).val();
 
     return u.add(
       it(

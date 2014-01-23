@@ -4,7 +4,7 @@ import stx.Muster;
 import Stax.*;
 import stx.Muster.*;
 import stx.Compare.*;
-import stx.Log.*;
+import stx.io.Log.*;
 
 using stx.Iterables;
 

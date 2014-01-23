@@ -1,12 +1,12 @@
 package stx;
 
 import Prelude;
-import stx.test.Suite;
+import stx.UnitTest;
 
 using stx.Bools;
 
 class BoolsTest extends Suite{
-	public function testIfTrue(){
-		this.assertEquals( Some(true), true.ifTrue(function()return true) );
+	public function testIfTrue(u:TestCase):TestCase{
+    return u.add(isEqual(Some(true), true.ifTrue(function()return true)));
 	}
 }

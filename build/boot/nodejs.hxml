@@ -1,16 +1,22 @@
 -cp src/main/haxe/
--cp funk/src/boot/haxe
-
 -cp src/boot/haxe/
 
 -js test/boot.js
 
+--macro define('sys')
+--remap sys:sys
+--macro allowPackage("sys")
+
 -lib tink
+-lib hx_node
 
 -resource log.cnf@log
 -main Test
 
+-D test
 -D nodejs
 -D debug
--D development 
---connect 2331
+-D development
+
+#-v
+#--connect 2331

@@ -3,7 +3,7 @@ package stx.ds;
 import Prelude; 
 using stx.UnitTest;
 import stx.Compare.*;
-import stx.Log.*;
+import stx.io.Log.*;
 
 using stx.ds.Zipper;
 

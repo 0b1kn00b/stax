@@ -57,7 +57,7 @@ class Anys {
     Check if ´v´ is null, returns result of ´fn´ if not.
   */
   static public function orIfNull<A>(v:A,fn:Thunk<A>):A{
-    return Options.create(v).valOrTry(fn);
+    return Options.create(v).valOrUse(fn);
   }
   public static function equals<T1, T2>(value0 : T1, value1 : T2, ?func : T1 -> T2 -> Bool ) : Bool {
     if (func == null) {

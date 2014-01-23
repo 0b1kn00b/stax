@@ -46,15 +46,15 @@ class Options {
     }
   }
   @doc("Produces the value of `o` if not None, the result of `thunk` otherwise.")
-  static public function valOrTry<T>(o: Option<T>, thunk: Thunk<T>): T {
+  static public function valOrUse<T>(o: Option<T>, thunk: Thunk<T>): T {
     return switch(o) {
       case None: thunk();
       case Some(v): v;
     }
   }
   @doc("Produces the value of `o` if not None, `c` otherwise.")
-  static public function valOrUse<T>(o: Option<T>, c: T): T {
-    return Options.valOrTry(o, thunk(c));
+  static public function valOrC<T>(o: Option<T>, c: T): T {
+    return Options.valOrUse(o, thunk(c));
   }
   @doc("Produces `o1` if it is Some, the result of `thunk` otherwise.")
   static public function orElse<T>(o1: Option<T>, thunk: Thunk<Option<T>>): Option<T> {
@@ -182,9 +182,6 @@ class Options {
       case Some(v)  : End(v);
       case None     : Nil;
     }
-  }
-  static public function toVouch<A>(m:Option<A>):Vouch<A>{
-    return Eventual.pure(toChunk(m));
   }
   static public function toChunk<A>(m:Option<A>):Chunk<A>{
     return switch (m){

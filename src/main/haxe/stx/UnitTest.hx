@@ -1,12 +1,13 @@
 package stx;
 
-import stx.plus.Show;
+import stx.Show;
 import Stax.*;
 import stx.Compare.*;
-import stx.Log.*;
+import stx.io.Log.*;
 import stx.rtti.*;
+import stx.test.TestErrors;
 
-import stx.Future;
+import stx.async.Future;
 import haxe.rtti.CType;
 import Type;
 
@@ -14,22 +15,22 @@ import haxe.PosInfos;
 
 import stx.Fail;
 
-import stx.plus.Equal;
+import stx.Equal;
 import stx.test.*;
 
-using stx.Continuation;
+using stx.async.Continuation;
 using stx.ValueTypes;
 using stx.Compare;
 using stx.Strings;
 using stx.Option;
 using stx.Reflects;
 using stx.Either;
-using stx.Promise;
+using stx.async.Promise;
 using Prelude;
-using stx.Contract;
+using stx.async.Contract;
 using stx.Arrays;
 using stx.Tuples;
-using stx.Arrowlet;
+using stx.async.Arrowlet;
 using stx.Compose;
 using stx.Functions;
 
@@ -77,7 +78,7 @@ class UnitTest{
               });
             }
           );
-          return new TestResult(v,r.msg,r.pos);
+          return new TestResult(r.suite,r.name,v,r.msg,r.pos);
         }
       ));
   }
@@ -96,8 +97,8 @@ class Printers{
     );
   }
 }
-class Suite extends Introspect{
-  public function new(){super();}
+class Suite{
+  public function new(){}
   public function isAlike(val0,val1,?pos:PosInfos):Proof{
     return UnitTest.isAlike(val0,val1,pos);
   }
@@ -124,39 +125,10 @@ class Suite extends Introspect{
   }
 }
 abstract TestCase(Arrowlet<Array<Proof>,Array<Proof>>) to Arrowlet<Array<Proof>,Array<Proof>>{
+  public static var nil : TestCase = new TestCase();
   @:noUsing static public function unit():TestCase{
-    return new TestCase();
+    return nil;
   }
-  /*@:from static public inline function fromEventuaProog(evt:Eventual<Proof>){
-    trace('here');
-    return new TestCase(new Arrowlet(
-      function(arr0:Array<Proof>,cont:Array<Proof>->Void):Void{
-        trace('here');
-        evt.each(
-          function(v){
-            cont([v].append(arr0));
-          }
-        );
-      }
-    ));
-  }*/
-  /*
-  static public inline function fromFutureTests(arr:Future<Array<Proof>>):TestCase{
-    return new TestCase(new Arrowlet(
-      function(arr0:Array<Proof>,cont:Array<Proof>->Void):Void{
-        arr.map(
-          function(arr1){
-            return arr0.append(arr1);
-          }
-        ).each(cont);
-      }
-    ));
-  }
-  
-  @:bug("Hangs compiler")
-  @:from static public inline function fromEventualTests(arr:Eventual<Array<Proof>>){
-    return fromFutureTests(arr.each);
-  }*/
   public function new(?v){
     this = nl().apply(v) ? Arrowlet.unit() : v;
   }
@@ -174,13 +146,17 @@ abstract TestCase(Arrowlet<Array<Proof>,Array<Proof>>) to Arrowlet<Array<Proof>,
     return new TestCase(this.then(Arrays.append.bind(_,ar)));
   }
   public function reply():Future<Array<TestResult>>{
-    var prm : Future<Array<Proof>> = this.proceed([]);
-    return prm.flatMap(
-      function(arr){
+    var self = this;
+    if(this == nil){
+      self = add(UnitTest.fails(fail(FrameworkError(NoTestError))));
+    }
+    var prm : Future<Array<Proof>> = self.augure([]);
+    return prm.flatMap(  
+      function(arr){ 
         return Futures.bindFold(arr,
           [],
           function(memo:Array<Dynamic>,next:Proof){
-            return next.proceed(TestResult.unit()).map(memo.add);
+            return next.augure(new TestResult()).map(memo.add);
           }
         );
       }

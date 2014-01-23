@@ -1,12 +1,16 @@
-import stx.Log.*;
+import stx.io.Log.*;
 
 using stx.UnitTest;
+
+import stx.io.Log.*;
+import stx.io.log.Logger;
+import stx.io.log.logger.HttpLogger;
+import stx.ioc.Inject.*;
 import stx.*;
 
 import Stax.*;
 
 class Test{
-  @:bug('#0b1kn00b: UnitTest currently relies on rtti which is empty at macro time.')
   macro static function macros(e:Expr){
   /*  var rig                     = UnitTest.rig();
       var tests : Array<Suite> = 
@@ -17,89 +21,131 @@ class Test{
     return e;
   }
   function new(){
-    trace(debug('entry point'));
+    trace('entry point');
+    #if flash
+        flash.system.Security.allowDomain('*');
+    #end
     Stax.init();//bootstrap bug 
+    #if flash
+        /*var logger = new HttpLogger();
+        injector().unbind(Logger);
+        injector().bind(Logger,logger);*/
+    #end
+
     var rig                     = UnitTest.rig();
     var tests : Array<Suite> = 
-
-    //#if development
     [
-        new hx.sch.SchedulerTest(),
-        /*  
-        new rx.RxTest(),    
-        new stx.UnitTestTest(),
-        new stx.StaxTest(),
-        new stx.mcr.LensesMacroTest(),
-        new stx.mcr.LensesMacroTest(),
+        //new stx.ReaderTest(),
+        new stx.ds.LinkTest(),
+    ];
+    var tests : Array<Suite> = 
+    [
+        new stx.ArraysTest(),
+        new stx.BoolsTest(),
+        new stx.CloneTest(),
+        new stx.ContractTest(),
+        new stx.DatesTest(),
+        new stx.EqualTest(),
+        new stx.HashTest(),
+        new stx.IntIterTest(),
+        new stx.MapsTest(),
+        new stx.MathsTest(),
+        new stx.MetaTest(),
+        new stx.MethodTest(),
+        new stx.ObjectsTest(),
+        new stx.OrderTest(),
+        new stx.OutcomeTest(),
+        new stx.PartialFunctionTest(),
+        new stx.PositionsTest(),
+        new stx.PredicatesTest(),
+        new stx.ReflectsTest(),
+        new stx.ShowTest(),
+        new stx.StateTest(),
+        new stx.TimeTest(),
+        new stx.TupleTest(),
+        new stx.TypesTest(),
+        /*,
+        new HaxeTest(),
+        ,
+        */
+
+        //new stx.ds.MapTest(),
         
 
-        new stx.LogTest(),   
-        new hx.rct.ReactorTest(),
+        #if flash9
+            //new stx.async.arrowlet.avm2.EventTest(),
+        #end
+        /*
+        new stx.UnitTestTest(), 
+        new stx.ces.CESTest(),
+        
+        new stx.reactive.ObservableTest(),
+        
+        new stx.async.FutureTest(),
+        new stx.async.ArrowletTest(),
+        new hx.scheduler.SchedulerTest(),
+        new stx.io.LogTest(),
+        new rx.RxTest(),    
+        
+        new hx.reactive.ReactorTest(),
         new stx.UnitTestTest(),
         new stx.TimeTest(),
-
-        new stx.ArrowletTest(),
         
         
-        new stx.ds.MapTest(),
-        new HaxeTest(),
         new stx.MonoidTest(),
-        new stx.ContinuationTest(),
+        new stx.async.ContinuationTest(),
         
-        new hx.rct.DispatchersTest(),
+        new hx.reactive.DispatchersTest(),
         new stx.utl.SelectorTest(),
                 
-        new stx.plus.CloneTest(),
         new stx.StateTest(),
         new stx.PositionsTest(),
         
-        
-        
+                
         new stx.log.prs.LogListingParserTest(),
-        new hx.sch.TaskTest(),
+        new hx.scheduler.TaskTest(),
         
 
         new stx.mcr.TypesTest(),
         new stx.prs.JsonTest(),
         
         
-        
         new stx.ObjectsTest(),
-        new stx.plus.MetaTest(),
+        new stx.MetaTest(),
         
         new stx.OutcomeTest(),
         new stx.ds.SetTest(),
         new stx.PartialFunctionTest(),
-        new stx.plus.OrderTest(),
+        new stx.OrderTest(),
         new stx.ds.LispListTest(),
         new stx.MapsTest(),
         new hx.ds.PriorityQueueTest(),
               
         new stx.ioc.IocTest(),
-        new stx.ReflectsTest(),
         new stx.TypesTest(),    
         new stx.ds.ListNewTest(),
         new SubclassTest(),
         new stx.math.geom.Point2dTest(),
         new stx.ds.ZipperTest(),
-        new stx.plus.HashTest(),
-        new stx.ArraysTest(),
-        new stx.plus.CloneTest(),
+        new stx.HashTest(),
+        new stx.CloneTest(),
         
         new stx.PredicatesTest(),
-        new stx.EventualTest(),
+        new stx.async.EventualTest(),
         new stx.ds.ListTest(),
-        new stx.ds.LinkTest(),
+        
 
 
         new stx.mcr.MacrosTest(),
         new stx.MethodTest(),
         new stx.rtti.IntrospectTest(),
         
-        new stx.rtti.RTypeTest(),
-        */
-      ];
-    rig.append(tests#if select ,'devtest' #end).run();
+        new stx.rtti.RTypeTest(),*/
+      ];/*.filter(
+        Std.is.bind(_,stx.async.ArrowletTest)
+       ); */
+    var name = #if select 'devtest' #else 'test' #end;
+    rig.append(tests,name).run();
   }
   static public function main(){
     var app = new Test();

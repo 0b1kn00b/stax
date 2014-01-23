@@ -1,6 +1,7 @@
 package stx;
+
 import stx.Reader;
-import stx.test.Suite;
+import stx.UnitTest;
 
 class ReaderTest extends Suite{
 }

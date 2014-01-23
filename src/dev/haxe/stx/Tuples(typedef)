@@ -1,0 +1,190 @@
+package stx;
+
+/**
+ * ...
+ * @author 0b1kn00b
+ */
+import Prelude;
+import stx.Show;				using stx.Show;
+
+typedef Product = {
+	
+}
+typedef Tuple2<A,B> = { >Product,
+	_1 : Null<A>,
+	_2 : Null<B>,
+}
+typedef Tuple3<A,B,C> = { > Tuple2<A,B>,
+	_3 : Null<C>,
+}
+typedef Tuple4<A,B,C,D> = { > Tuple3<A,B,C>,
+	_4 : Null<D>,
+}
+typedef Tuple5<A,B,C,D,E> = { > Tuple4<A,B,C,D>,
+	_5 : Null<E>,
+}
+class Products {
+	/**
+	 * Returns the number of parameters in the Tuple. 
+	 * @param	p
+	 */
+	static public function arity(p:Product) {
+		return 
+				if ( Reflect.hasField( p , '_5' ) ) {
+					5;
+				}else if ( Reflect.hasField( p , '_4' ) ) {
+					4;
+				}else if ( Reflect.hasField( p , '_3' ) ) {
+					3;
+				}else if ( Reflect.hasField( p , '_2' ) ) {
+					2;
+				}else {
+					1;
+				}
+	}
+	static public function element(p:Product, index:Int) {
+		return switch (index) {
+			case 5	: cast(p).fth();
+			case 4	: cast(p).frt();
+			case 3	: cast(p).thd();
+			case 2	: cast(p).snd();
+			case 1	: cast(p).fst();
+		}
+	}
+	static public function elements(p:Product):Array<Dynamic> {
+		return switch (arity(p)) {
+			case 5 	: 
+					var p : Tuple5<Dynamic,Dynamic,Dynamic,Dynamic,Dynamic> = cast(p);
+					[ p.fst() , p.snd() , p.thd() , p.frt(), p.fth() ];
+			case 4	:
+					var p : Tuple4<Dynamic,Dynamic,Dynamic,Dynamic> = cast(p);
+					[ p.fst() , p.snd() , p.thd() , p.frt() ];
+			case 3	:
+					var p : Tuple3<Dynamic,Dynamic,Dynamic> = cast(p);
+					[ p.fst() , p.snd() , p.thd() ];
+			case 2	:
+					var p : Tuple2<Dynamic,Dynamic> = cast(p);
+					[ p.fst() , p.snd() ];
+		}
+	}
+	/*static public function toString(p:Product): String {
+    var s = "Tuple" + arity(p) + "(" + p.getProductShow(0)(element(p,1));
+    for(i in 1...arity(p))
+      s += ", " + p.getProductShow(i)(element(p,i));
+    return s + ")";
+  }*/
+}
+class Tuples {
+	public static inline function t2<A,B>(_1:A,_2:B):stx.Tuple2<A,B>{
+		return { _1 : _1, _2 : _2 };
+	}
+	public static inline function t3<A,B,C>(_1:A,_2:B,_3:C):stx.Tuple3<A,B,C>{
+		return { _1 : _1, _2 : _2, _3 : _3};
+	}
+	public static inline function t4<A,B,C,D>(_1:A,_2:B,_3:C,_4:D):stx.Tuple4<A,B,C,D>{
+		return { _1 : _1, _2 : _2, _3 : _3, _4 : _4 };
+	}
+	public static inline function t5<A,B,C,D,E>(_1:A,_2:B,_3:C,_4:D,_5:E):stx.Tuple5<A,B,C,D,E>{
+		return { _1 : _1, _2 : _2, _3 : _3, _4 : _4, _5 : _5 };
+	}
+}
+class T2 {
+	public static function map<A,B,C,D>(t:Tuple2<A,B>,fn:Tuple2<A,B> -> Tuple2<C,D>):stx.Tuple2<C,D>{
+		return fn(t);
+	}
+	public static function first<A,B>(t:Tuple2<A,B>):A{
+		return t.fst();
+	}
+	public static function second<A,B>(t:Tuple2<A,B>):B{
+		return t.snd();
+	}
+	public static function entuple<A,B>(_1:A,_2:B):stx.Tuple2<A,B>{
+		return tuple2(_1, _2);
+	}
+	public static function apply<A,B,C>(args:stx.Tuple2<A,B>,f:A->B->C):C{
+		return f(args.fst(), args.snd());
+	}
+	public static function call<A,B,C>(f:A->B->C,args:stx.Tuple2<A,B>):C{
+		return f(args.fst(), args.snd());
+	}
+	public static function patch<A,B>(t0:stx.Tuple2<A,B>,t1:stx.Tuple2<A,B>):stx.Tuple2<A,B>{
+		var _1 = t1.fst() == null ? t0.fst() : t1.fst();
+		var _2 = t1.snd() == null ? t0.snd() : t1.snd();
+		return tuple2(_1, _2);
+	}
+	public static function toArray(v:stx.Tuple2<Dynamic,Dynamic>):Array<Dynamic>{
+		return cast [v.fst(), v.snd()];
+	}
+	public static function fromArray(arr:Array<Dynamic>):stx.Tuple2<Dynamic,Dynamic>{
+		return tuple2(arr[0], arr[1]);
+	}
+	/**
+	 * Returns a function that takes two parameters and returns a Tuple2
+	 */
+	public static function from<A,B>():Function2<A,B,Tuple2<A,B>>{
+		return 
+				function(a:A, b:B) {
+					return tuple2(a, b);
+				}
+	}
+}
+class T3 {
+	public static function entuple<A,B,C>(a:stx.Tuple2<A,B>,c:C):stx.Tuple3<A,B,C>{
+		return stx.Tuples.t3(a.fst(), a.snd() , c);
+	}
+	public static function apply<A,B,C,D>(args:stx.Tuple3<A,B,C>,f:A->B->C->D):D{
+		return f(args.fst(), args.snd(), args.thd());
+	}
+	public static function call<A,B,C,D>(f:A->B->C->D,args:stx.Tuple3<A,B,C>):D{
+		return f(args.fst(), args.snd(), args.thd());
+	}
+	public static function patch<A,B,C>(t0:stx.Tuple3<A,B,C>,t1:stx.Tuple3<A,B,C>):stx.Tuple3<A,B,C>{
+		var _1 = t1.fst() == null ? t0.fst() : t1.fst();
+		var _2 = t1.snd() == null ? t0.snd() : t1.snd();
+		var _3 = t1.thd() == null ? t0.thd() : t1.thd();
+		return stx.Tuples.t3(_1, _2, _3);
+	}
+}
+class T4 {
+	public static function entuple<A,B,C,D>(a:stx.Tuple3<A,B,C>,b:D):stx.Tuple4<A,B,C,D>{
+		return stx.Tuples.t4(a.fst(), a.snd(), a.thd(), b);
+	}
+	public static function call<A,B,C,D,E>(f:A->B->C->D->E,args:stx.Tuple4<A,B,C,D>):E{
+		return f(args.fst(), args.snd(), args.thd(), args.frt());
+	}
+	public static function apply<A,B,C,D,E>(args:stx.Tuple4<A,B,C,D>,f:A->B->C->D->E):E{
+		return f(args.fst(), args.snd(), args.thd(),args.frt());
+	}
+	public static function patch<A,B,C,D>(t0:stx.Tuple4<A,B,C,D>,t1:stx.Tuple4<A,B,C,D>):stx.Tuple4<A,B,C,D>{
+		var _1 = t1.fst() == null ? t0.fst() : t1.fst();
+		var _2 = t1.snd() == null ? t0.snd() : t1.snd();
+		var _3 = t1.thd() == null ? t0.thd() : t1.thd();
+		var _4 = t1.frt() == null ? t0.frt() : t1.frt();
+		return stx.Tuples.t4(_1, _2, _3, _4);
+	}
+}
+class T5 {
+	public static function first<A,B,C,D,E>(t:Tuple5<A,B,C,D,E>):A{
+		return t.fst();
+	}
+	public static function second<A,B,C,D,E>(t:Tuple5<A,B,C,D,E>):B{
+		return t.snd();
+	}
+	public static function entuple<A,B,C,D,E>(a:stx.Tuple4<A,B,C,D>,b:E):stx.Tuple5<A,B,C,D,E>{
+		return stx.Tuples.t5(a.fst(), a.snd() , a.thd(), a.frt() ,b);
+	}
+	public static function call<A,B,C,D,E,F>(f:A->B->C->D->E->F,args:stx.Tuple5<A,B,C,D,E>):F{
+		return f(args.fst(), args.snd(), args.thd(), args.frt(), args.fth());
+	}	
+	public static function apply<A,B,C,D,E,F>(args:stx.Tuple5<A,B,C,D,E>,f:A->B->C->D->E->F):F{
+		return f(args.fst(), args.snd(), args.thd(), args.frt(), args.fth());
+	}
+	public static function patch<A,B,C,D,E>(t0:stx.Tuple5<A,B,C,D,E>,t1:stx.Tuple5<A,B,C,D,E>):stx.Tuple5<A,B,C,D,E>{
+		var _1 = t1.fst() == null ? t0.fst() : t1.fst();
+		var _2 = t1.snd() == null ? t0.snd() : t1.snd();
+		var _3 = t1.thd() == null ? t0.thd() : t1.thd();
+		var _4 = t1.frt() == null ? t0.frt() : t1.frt();
+		var _5 = t1.fth() == null ? t0.fth() : t1.fth();
+		return stx.Tuples.t5(_1, _2, _3, _4, _5);
+	}
+}

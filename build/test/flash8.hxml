@@ -1,8 +1,6 @@
 -cp src/main/haxe/
 
--cp funk/src/main/haxe
-
 -cp src/test/haxe/
--swf bin/test.8.swf
+-swf test/test8.swf
 
--main StaxTestSuite
+-main Test

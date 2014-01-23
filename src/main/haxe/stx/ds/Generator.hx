@@ -49,7 +49,7 @@ class Generator<T>{
     }
   }
   @doc("Creates an Iterable by calling fn until it returns None, caching the results.")
-  static public function yield<A>(fn : Void -> Option<A>):Iterable<A>{
+  static public function yielding<A>(fn : Void -> Option<A>):Iterable<A>{
     var stack = [];    
     return cast {
       iterator : function() return Generator.create(cast fn,stack).iterator()

@@ -4389,7 +4389,7 @@
 		<getOutcomeOrC public="1" params="A" set="method" line="151" static="1"><f a="chk:n">
 	<e path="stx.Chunk"><c path="getOutcomeOrC.A"/></e>
 	<c path="getOutcomeOrC.A"/>
-	<x path="stx.Outcome"><c path="getOutcomeOrC.A"/></x>
+	<x path="stx.extend.Outcome"><c path="getOutcomeOrC.A"/></x>
 </f></getOutcomeOrC>
 		<orChunkErrC public="1" params="A" set="method" line="158" static="1"><f a="myb:err">
 	<e path="stx.Option"><c path="orChunkErrC.A"/></e>
@@ -5322,166 +5322,166 @@
 	</f>
 	<meta><m n="doc"><e>"Returns a function that calls `f2` with the output of `f1`."</e></m></meta>
 </then></class>
-	<abstract path="stx.Contract" params="A" file="src/main/haxe/stx/Contract.hx">
-		<from><icast><c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c></icast></from>
-		<this><c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c></this>
-		<to><icast><c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c></icast></to>
-		<impl><class path="stx._Contract.Contract_Impl_" params="" file="src/main/haxe/stx/Contract.hx" private="1" module="stx.Contract">
+	<abstract path="stx.async.Contract" params="A" file="src/main/haxe/stx.async.Contract.hx">
+		<from><icast><c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c></icast></from>
+		<this><c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c></this>
+		<to><icast><c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c></icast></to>
+		<impl><class path="stx._Contract.Contract_Impl_" params="" file="src/main/haxe/stx.async.Contract.hx" private="1" module="stx.async.Contract">
 	<pure public="1" params="A" set="method" line="21" static="1">
 		<f a="e">
-			<x path="stx.Outcome"><c path="pure.A"/></x>
-			<x path="stx.Contract"><c path="pure.A"/></x>
+			<x path="stx.extend.Outcome"><c path="pure.A"/></x>
+			<x path="stx.async.Contract"><c path="pure.A"/></x>
 		</f>
 		<meta><m n=":noUsing"/></meta>
 	</pure>
 	<unit public="1" params="A" set="method" line="24" static="1">
-		<f a=""><x path="stx.Contract"><c path="unit.A"/></x></f>
+		<f a=""><x path="stx.async.Contract"><c path="unit.A"/></x></f>
 		<meta><m n=":noUsing"/></meta>
 	</unit>
 	<deliver public="1" params="A" set="method" line="27" static="1">
 		<f a="this:v">
-			<c path="stx.Eventual"><x path="stx.Outcome"><c path="deliver.A"/></x></c>
-			<x path="stx.Outcome"><c path="deliver.A"/></x>
-			<x path="stx.Contract"><c path="deliver.A"/></x>
+			<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="deliver.A"/></x></c>
+			<x path="stx.extend.Outcome"><c path="deliver.A"/></x>
+			<x path="stx.async.Contract"><c path="deliver.A"/></x>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</deliver>
 	<ok public="1" set="method" line="30" static="1">
 		<f a="this:val">
-			<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
-			<c path="stx.Contract.A"/>
-			<x path="stx.Contract"><c path="stx.Contract.A"/></x>
+			<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
+			<c path="stx.async.Contract.A"/>
+			<x path="stx.async.Contract"><c path="stx.async.Contract.A"/></x>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</ok>
 	<no public="1" set="method" line="33" static="1">
 		<f a="this:err">
-			<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+			<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 			<c path="stx.Fail"/>
-			<x path="stx.Contract"><c path="stx.Contract.A"/></x>
+			<x path="stx.async.Contract"><c path="stx.async.Contract.A"/></x>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</no>
 	<_new public="1" set="method" line="36" static="1">
 		<f a="?p">
-			<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
-			<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+			<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
+			<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</_new>
 	<retry public="1" params="B" set="method" line="39" static="1">
 		<f a="this:fn">
-			<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+			<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 			<f a="">
 				<c path="stx.Fail"/>
-				<x path="stx.Outcome"><c path="stx.Contract.A"/></x>
+				<x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x>
 			</f>
-			<x path="stx.Contract"><c path="stx.Contract.A"/></x>
+			<x path="stx.async.Contract"><c path="stx.async.Contract.A"/></x>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</retry>
 	<verify public="1" params="B" set="method" line="49" static="1">
 		<f a="this:fn">
-			<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+			<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 			<f a="">
-				<c path="stx.Contract.A"/>
-				<x path="stx.Outcome"><c path="verify.B"/></x>
+				<c path="stx.async.Contract.A"/>
+				<x path="stx.extend.Outcome"><c path="verify.B"/></x>
 			</f>
-			<x path="stx.Contract"><c path="verify.B"/></x>
+			<x path="stx.async.Contract"><c path="verify.B"/></x>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</verify>
 	<success public="1" set="method" line="59" static="1">
 		<f a="this:fn">
-			<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+			<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 			<f a="">
-				<c path="stx.Contract.A"/>
+				<c path="stx.async.Contract.A"/>
 				<x path="Void"/>
 			</f>
-			<x path="stx.Contract"><c path="stx.Contract.A"/></x>
+			<x path="stx.async.Contract"><c path="stx.async.Contract.A"/></x>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</success>
 	<failure public="1" set="method" line="69" static="1">
 		<f a="this:fn">
-			<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+			<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 			<f a="">
 				<c path="stx.Fail"/>
 				<x path="Void"/>
 			</f>
-			<x path="stx.Contract"><c path="stx.Contract.A"/></x>
+			<x path="stx.async.Contract"><c path="stx.async.Contract.A"/></x>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</failure>
 	<value public="1" set="method" line="79" static="1">
 		<f a="this">
-			<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
-			<x path="stx.Outcome"><c path="stx.Contract.A"/></x>
+			<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
+			<x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</value>
 	<valueO public="1" set="method" line="82" static="1">
 		<f a="this">
-			<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
-			<e path="stx.Option"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></e>
+			<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
+			<e path="stx.Option"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></e>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</valueO>
 	<callback public="1" set="method" line="88" static="1">
 		<f a="this:fn">
-			<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+			<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 			<f a=":">
 				<c path="stx.Fail"/>
-				<c path="stx.Contract.A"/>
+				<c path="stx.async.Contract.A"/>
 				<x path="Void"/>
 			</f>
-			<x path="stx.Contract"><c path="stx.Contract.A"/></x>
+			<x path="stx.async.Contract"><c path="stx.async.Contract.A"/></x>
 		</f>
 		<meta><m n=":impl"/></meta>
 		<haxe_doc>Calls callback, placing a left value in the first parameter or a right in the second.</haxe_doc>
 	</callback>
 	<map public="1" params="B" set="method" line="101" static="1">
 		<f a="this:fn">
-			<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+			<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 			<f a="">
-				<c path="stx.Contract.A"/>
+				<c path="stx.async.Contract.A"/>
 				<c path="map.B"/>
 			</f>
-			<x path="stx.Contract"><c path="map.B"/></x>
+			<x path="stx.async.Contract"><c path="map.B"/></x>
 		</f>
 		<meta><m n=":impl"/></meta>
 		<haxe_doc>Does a map if the Either is Failure.</haxe_doc>
 	</map>
 	<transform public="1" params="B" set="method" line="112" static="1">
 		<f a="this:fn">
-			<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+			<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 			<f a="">
-				<x path="stx.Outcome"><c path="stx.Contract.A"/></x>
-				<x path="stx.Outcome"><c path="transform.B"/></x>
+				<x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x>
+				<x path="stx.extend.Outcome"><c path="transform.B"/></x>
 			</f>
-			<x path="stx.Contract"><c path="transform.B"/></x>
+			<x path="stx.async.Contract"><c path="transform.B"/></x>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</transform>
 	<zipWith public="1" params="B:C" set="method" line="118" static="1">
 		<f a="this:f1:fn">
-			<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
-			<x path="stx.Contract"><c path="zipWith.B"/></x>
+			<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
+			<x path="stx.async.Contract"><c path="zipWith.B"/></x>
 			<f a=":">
-				<c path="stx.Contract.A"/>
+				<c path="stx.async.Contract.A"/>
 				<c path="zipWith.B"/>
 				<c path="zipWith.C"/>
 			</f>
-			<x path="stx.Contract"><c path="zipWith.C"/></x>
+			<x path="stx.async.Contract"><c path="zipWith.C"/></x>
 		</f>
 		<meta><m n=":impl"/></meta>
 		<haxe_doc>Zips the right hand value with function `fn`</haxe_doc>
 	</zipWith>
 	<zip public="1" params="A:B" set="method" line="136" static="1">
 		<f a="this:f1">
-			<c path="stx.Eventual"><x path="stx.Outcome"><c path="zip.A"/></x></c>
-			<x path="stx.Contract"><c path="zip.B"/></x>
-			<x path="stx.Contract"><e path="stx.Tuple2">
+			<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="zip.A"/></x></c>
+			<x path="stx.async.Contract"><c path="zip.B"/></x>
+			<x path="stx.async.Contract"><e path="stx.Tuple2">
 	<c path="zip.A"/>
 	<c path="zip.B"/>
 </e></x>
@@ -5491,200 +5491,200 @@
 	</zip>
 	<flatMap public="1" params="B" set="method" line="142" static="1">
 		<f a="this:fn">
-			<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+			<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 			<f a="">
-				<c path="stx.Contract.A"/>
-				<x path="stx.Contract"><c path="flatMap.B"/></x>
+				<c path="stx.async.Contract.A"/>
+				<x path="stx.async.Contract"><c path="flatMap.B"/></x>
 			</f>
-			<x path="stx.Contract"><c path="flatMap.B"/></x>
+			<x path="stx.async.Contract"><c path="flatMap.B"/></x>
 		</f>
 		<meta><m n=":impl"/></meta>
 		<haxe_doc>flatMaps the right hand value</haxe_doc>
 	</flatMap>
 	<foreach public="1" set="method" line="156" static="1">
 		<f a="this:f">
-			<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+			<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 			<f a="">
-				<x path="stx.Outcome"><c path="stx.Contract.A"/></x>
+				<x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x>
 				<x path="Void"/>
 			</f>
-			<x path="stx.Contract"><c path="stx.Contract.A"/></x>
+			<x path="stx.async.Contract"><c path="stx.async.Contract.A"/></x>
 		</f>
 		<meta><m n=":impl"/></meta>
 		<haxe_doc>Applies a function if the result is right</haxe_doc>
 	</foreach>
 	<asEventual public="1" set="method" line="159" static="1">
 		<f a="this">
-			<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
-			<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+			<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
+			<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</asEventual>
 	<isDelivered public="1" set="method" line="162" static="1">
 		<f a="this">
-			<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+			<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 			<x path="Bool"/>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</isDelivered>
 </class></impl>
 	</abstract>
-	<class path="stx._Contract.Contract_Impl_" params="" file="src/main/haxe/stx/Contract.hx" private="1" module="stx.Contract">
+	<class path="stx._Contract.Contract_Impl_" params="" file="src/main/haxe/stx.async.Contract.hx" private="1" module="stx.async.Contract">
 		<pure public="1" params="A" set="method" line="21" static="1">
 			<f a="e">
-				<x path="stx.Outcome"><c path="pure.A"/></x>
-				<x path="stx.Contract"><c path="pure.A"/></x>
+				<x path="stx.extend.Outcome"><c path="pure.A"/></x>
+				<x path="stx.async.Contract"><c path="pure.A"/></x>
 			</f>
 			<meta><m n=":noUsing"/></meta>
 		</pure>
 		<unit public="1" params="A" set="method" line="24" static="1">
-			<f a=""><x path="stx.Contract"><c path="unit.A"/></x></f>
+			<f a=""><x path="stx.async.Contract"><c path="unit.A"/></x></f>
 			<meta><m n=":noUsing"/></meta>
 		</unit>
 		<deliver public="1" params="A" set="method" line="27" static="1">
 			<f a="this:v">
-				<c path="stx.Eventual"><x path="stx.Outcome"><c path="deliver.A"/></x></c>
-				<x path="stx.Outcome"><c path="deliver.A"/></x>
-				<x path="stx.Contract"><c path="deliver.A"/></x>
+				<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="deliver.A"/></x></c>
+				<x path="stx.extend.Outcome"><c path="deliver.A"/></x>
+				<x path="stx.async.Contract"><c path="deliver.A"/></x>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</deliver>
 		<ok public="1" set="method" line="30" static="1">
 			<f a="this:val">
-				<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
-				<c path="stx.Contract.A"/>
-				<x path="stx.Contract"><c path="stx.Contract.A"/></x>
+				<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
+				<c path="stx.async.Contract.A"/>
+				<x path="stx.async.Contract"><c path="stx.async.Contract.A"/></x>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</ok>
 		<no public="1" set="method" line="33" static="1">
 			<f a="this:err">
-				<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+				<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 				<c path="stx.Fail"/>
-				<x path="stx.Contract"><c path="stx.Contract.A"/></x>
+				<x path="stx.async.Contract"><c path="stx.async.Contract.A"/></x>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</no>
 		<_new public="1" set="method" line="36" static="1">
 			<f a="?p">
-				<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
-				<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+				<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
+				<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</_new>
 		<retry public="1" params="B" set="method" line="39" static="1">
 			<f a="this:fn">
-				<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+				<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 				<f a="">
 					<c path="stx.Fail"/>
-					<x path="stx.Outcome"><c path="stx.Contract.A"/></x>
+					<x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x>
 				</f>
-				<x path="stx.Contract"><c path="stx.Contract.A"/></x>
+				<x path="stx.async.Contract"><c path="stx.async.Contract.A"/></x>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</retry>
 		<verify public="1" params="B" set="method" line="49" static="1">
 			<f a="this:fn">
-				<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+				<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 				<f a="">
-					<c path="stx.Contract.A"/>
-					<x path="stx.Outcome"><c path="verify.B"/></x>
+					<c path="stx.async.Contract.A"/>
+					<x path="stx.extend.Outcome"><c path="verify.B"/></x>
 				</f>
-				<x path="stx.Contract"><c path="verify.B"/></x>
+				<x path="stx.async.Contract"><c path="verify.B"/></x>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</verify>
 		<success public="1" set="method" line="59" static="1">
 			<f a="this:fn">
-				<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+				<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 				<f a="">
-					<c path="stx.Contract.A"/>
+					<c path="stx.async.Contract.A"/>
 					<x path="Void"/>
 				</f>
-				<x path="stx.Contract"><c path="stx.Contract.A"/></x>
+				<x path="stx.async.Contract"><c path="stx.async.Contract.A"/></x>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</success>
 		<failure public="1" set="method" line="69" static="1">
 			<f a="this:fn">
-				<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+				<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 				<f a="">
 					<c path="stx.Fail"/>
 					<x path="Void"/>
 				</f>
-				<x path="stx.Contract"><c path="stx.Contract.A"/></x>
+				<x path="stx.async.Contract"><c path="stx.async.Contract.A"/></x>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</failure>
 		<value public="1" set="method" line="79" static="1">
 			<f a="this">
-				<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
-				<x path="stx.Outcome"><c path="stx.Contract.A"/></x>
+				<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
+				<x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</value>
 		<valueO public="1" set="method" line="82" static="1">
 			<f a="this">
-				<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
-				<e path="stx.Option"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></e>
+				<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
+				<e path="stx.Option"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></e>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</valueO>
 		<callback public="1" set="method" line="88" static="1">
 			<f a="this:fn">
-				<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+				<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 				<f a=":">
 					<c path="stx.Fail"/>
-					<c path="stx.Contract.A"/>
+					<c path="stx.async.Contract.A"/>
 					<x path="Void"/>
 				</f>
-				<x path="stx.Contract"><c path="stx.Contract.A"/></x>
+				<x path="stx.async.Contract"><c path="stx.async.Contract.A"/></x>
 			</f>
 			<meta><m n=":impl"/></meta>
 			<haxe_doc>Calls callback, placing a left value in the first parameter or a right in the second.</haxe_doc>
 		</callback>
 		<map public="1" params="B" set="method" line="101" static="1">
 			<f a="this:fn">
-				<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+				<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 				<f a="">
-					<c path="stx.Contract.A"/>
+					<c path="stx.async.Contract.A"/>
 					<c path="map.B"/>
 				</f>
-				<x path="stx.Contract"><c path="map.B"/></x>
+				<x path="stx.async.Contract"><c path="map.B"/></x>
 			</f>
 			<meta><m n=":impl"/></meta>
 			<haxe_doc>Does a map if the Either is Failure.</haxe_doc>
 		</map>
 		<transform public="1" params="B" set="method" line="112" static="1">
 			<f a="this:fn">
-				<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+				<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 				<f a="">
-					<x path="stx.Outcome"><c path="stx.Contract.A"/></x>
-					<x path="stx.Outcome"><c path="transform.B"/></x>
+					<x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x>
+					<x path="stx.extend.Outcome"><c path="transform.B"/></x>
 				</f>
-				<x path="stx.Contract"><c path="transform.B"/></x>
+				<x path="stx.async.Contract"><c path="transform.B"/></x>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</transform>
 		<zipWith public="1" params="B:C" set="method" line="118" static="1">
 			<f a="this:f1:fn">
-				<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
-				<x path="stx.Contract"><c path="zipWith.B"/></x>
+				<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
+				<x path="stx.async.Contract"><c path="zipWith.B"/></x>
 				<f a=":">
-					<c path="stx.Contract.A"/>
+					<c path="stx.async.Contract.A"/>
 					<c path="zipWith.B"/>
 					<c path="zipWith.C"/>
 				</f>
-				<x path="stx.Contract"><c path="zipWith.C"/></x>
+				<x path="stx.async.Contract"><c path="zipWith.C"/></x>
 			</f>
 			<meta><m n=":impl"/></meta>
 			<haxe_doc>Zips the right hand value with function `fn`</haxe_doc>
 		</zipWith>
 		<zip public="1" params="A:B" set="method" line="136" static="1">
 			<f a="this:f1">
-				<c path="stx.Eventual"><x path="stx.Outcome"><c path="zip.A"/></x></c>
-				<x path="stx.Contract"><c path="zip.B"/></x>
-				<x path="stx.Contract"><e path="stx.Tuple2">
+				<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="zip.A"/></x></c>
+				<x path="stx.async.Contract"><c path="zip.B"/></x>
+				<x path="stx.async.Contract"><e path="stx.Tuple2">
 	<c path="zip.A"/>
 	<c path="zip.B"/>
 </e></x>
@@ -5694,61 +5694,61 @@
 		</zip>
 		<flatMap public="1" params="B" set="method" line="142" static="1">
 			<f a="this:fn">
-				<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+				<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 				<f a="">
-					<c path="stx.Contract.A"/>
-					<x path="stx.Contract"><c path="flatMap.B"/></x>
+					<c path="stx.async.Contract.A"/>
+					<x path="stx.async.Contract"><c path="flatMap.B"/></x>
 				</f>
-				<x path="stx.Contract"><c path="flatMap.B"/></x>
+				<x path="stx.async.Contract"><c path="flatMap.B"/></x>
 			</f>
 			<meta><m n=":impl"/></meta>
 			<haxe_doc>flatMaps the right hand value</haxe_doc>
 		</flatMap>
 		<foreach public="1" set="method" line="156" static="1">
 			<f a="this:f">
-				<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+				<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 				<f a="">
-					<x path="stx.Outcome"><c path="stx.Contract.A"/></x>
+					<x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x>
 					<x path="Void"/>
 				</f>
-				<x path="stx.Contract"><c path="stx.Contract.A"/></x>
+				<x path="stx.async.Contract"><c path="stx.async.Contract.A"/></x>
 			</f>
 			<meta><m n=":impl"/></meta>
 			<haxe_doc>Applies a function if the result is right</haxe_doc>
 		</foreach>
 		<asEventual public="1" set="method" line="159" static="1">
 			<f a="this">
-				<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
-				<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+				<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
+				<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</asEventual>
 		<isDelivered public="1" set="method" line="162" static="1">
 			<f a="this">
-				<c path="stx.Eventual"><x path="stx.Outcome"><c path="stx.Contract.A"/></x></c>
+				<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="stx.async.Contract.A"/></x></c>
 				<x path="Bool"/>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</isDelivered>
 	</class>
-	<class path="stx.Contracts" params="" file="src/main/haxe/stx/Contract.hx" module="stx.Contract">
+	<class path="stx.async.Contracts" params="" file="src/main/haxe/stx.async.Contract.hx" module="stx.async.Contract">
 		<toContract public="1" params="A" set="method" line="167" static="1"><f a="e">
-	<c path="stx.Eventual"><e path="stx.OutcomeType"><c path="toContract.A"/></e></c>
-	<x path="stx.Contract"><c path="toContract.A"/></x>
+	<c path="stx.async.Eventual"><e path="stx.extend.OutcomeType"><c path="toContract.A"/></e></c>
+	<x path="stx.async.Contract"><c path="toContract.A"/></x>
 </f></toContract>
 		<intact public="1" params="A" set="method" line="176" static="1"><f a="v">
 	<c path="intact.A"/>
-	<x path="stx.Contract"><c path="intact.A"/></x>
+	<x path="stx.async.Contract"><c path="intact.A"/></x>
 </f></intact>
 		<breach public="1" params="A" set="method" line="179" static="1"><f a="v">
 	<c path="stx.Fail"/>
-	<x path="stx.Contract"><c path="breach.A"/></x>
+	<x path="stx.async.Contract"><c path="breach.A"/></x>
 </f></breach>
 		<waitfold public="1" params="A" set="method" line="187" static="1">
 			<f a="init:ft">
-				<x path="stx.Contract"><c path="Array"><c path="waitfold.A"/></c></x>
-				<x path="stx.Contract"><c path="waitfold.A"/></x>
-				<x path="stx.Contract"><c path="Array"><c path="waitfold.A"/></c></x>
+				<x path="stx.async.Contract"><c path="Array"><c path="waitfold.A"/></c></x>
+				<x path="stx.async.Contract"><c path="waitfold.A"/></x>
+				<x path="stx.async.Contract"><c path="Array"><c path="waitfold.A"/></c></x>
 			</f>
 			<haxe_doc>Use this with a flatmap fold to wait for parallel futures.
     vals.map( function_returning_future ).foldl( Eventual.pure(Failure([])), Contracts.waitfold )
@@ -5756,8 +5756,8 @@
 		</waitfold>
 		<wait public="1" params="A" set="method" line="203" static="1">
 			<f a="a">
-				<c path="Array"><x path="stx.Contract"><c path="wait.A"/></x></c>
-				<x path="stx.Contract"><c path="Array"><c path="wait.A"/></c></x>
+				<c path="Array"><x path="stx.async.Contract"><c path="wait.A"/></x></c>
+				<x path="stx.async.Contract"><c path="Array"><c path="wait.A"/></c></x>
 			</f>
 			<haxe_doc>Returns a single future with an Array of the results, or an Fail.</haxe_doc>
 		</wait>
@@ -5767,30 +5767,30 @@
 	<f a=":">
 		<c path="bindFold.B"/>
 		<c path="bindFold.A"/>
-		<x path="stx.Contract"><c path="bindFold.B"/></x>
+		<x path="stx.async.Contract"><c path="bindFold.B"/></x>
 	</f>
-	<x path="stx.Contract"><c path="bindFold.B"/></x>
+	<x path="stx.async.Contract"><c path="bindFold.B"/></x>
 </f></bindFold>
 		<unzip public="1" params="A:B:C" set="method" line="221" static="1"><f a="tp">
 	<e path="stx.Tuple2">
-		<x path="stx.Contract"><c path="unzip.A"/></x>
-		<x path="stx.Contract"><c path="unzip.B"/></x>
+		<x path="stx.async.Contract"><c path="unzip.A"/></x>
+		<x path="stx.async.Contract"><c path="unzip.B"/></x>
 	</e>
-	<x path="stx.Contract"><e path="stx.Tuple2">
+	<x path="stx.async.Contract"><e path="stx.Tuple2">
 	<c path="unzip.A"/>
 	<c path="unzip.B"/>
 </e></x>
 </f></unzip>
 		<chain public="1" params="A" set="method" line="229" static="1"><f a="a">
-	<c path="Array"><t path="stx.Thunk"><x path="stx.Contract"><c path="chain.A"/></x></t></c>
-	<x path="stx.Contract"><c path="Array"><c path="chain.A"/></c></x>
+	<c path="Array"><t path="stx.Thunk"><x path="stx.async.Contract"><c path="chain.A"/></x></t></c>
+	<x path="stx.async.Contract"><c path="Array"><c path="chain.A"/></c></x>
 </f></chain>
 		<asContract public="1" params="T" set="method" line="239" static="1"><f a="evt">
-	<c path="stx.Eventual"><x path="stx.Outcome"><c path="asContract.T"/></x></c>
-	<x path="stx.Contract"><c path="asContract.T"/></x>
+	<c path="stx.async.Eventual"><x path="stx.extend.Outcome"><c path="asContract.T"/></x></c>
+	<x path="stx.async.Contract"><c path="asContract.T"/></x>
 </f></asContract>
 	</class>
-	<class path="stx.Contracts1" params="" file="src/main/haxe/stx/Contract.hx" module="stx.Contract">
+	<class path="stx.async.Contracts1" params="" file="src/main/haxe/stx.async.Contract.hx" module="stx.async.Contract">
 		<toContract public="1" params="A" set="method" line="248" static="1">
 			<f a="f:success">
 				<f a="">
@@ -5801,7 +5801,7 @@
 					<x path="Void"/>
 				</f>
 				<f a=""><c path="toContract.A"/></f>
-				<x path="stx.Contract"><c path="toContract.A"/></x>
+				<x path="stx.async.Contract"><c path="toContract.A"/></x>
 			</f>
 			<haxe_doc>Returns a Contract where the only result of a function may be an Fail, returning the result of ´success´
     where no Fail is found.</haxe_doc>
@@ -5816,12 +5816,12 @@
 					<x path="Void"/>
 				</f>
 				<c path="toContractC.A"/>
-				<x path="stx.Contract"><c path="toContractC.A"/></x>
+				<x path="stx.async.Contract"><c path="toContractC.A"/></x>
 			</f>
 			<haxe_doc>As with ´toContract´ but using a constant rather than a Thunk.</haxe_doc>
 		</toContractC>
 	</class>
-	<class path="stx.Contracts2" params="" file="src/main/haxe/stx/Contract.hx" module="stx.Contract"><toContract public="1" params="A" set="method" line="272" static="1">
+	<class path="stx.async.Contracts2" params="" file="src/main/haxe/stx.async.Contract.hx" module="stx.async.Contract"><toContract public="1" params="A" set="method" line="272" static="1">
 	<f a="f">
 		<f a="">
 			<f a=":">
@@ -5831,11 +5831,11 @@
 			</f>
 			<x path="Void"/>
 		</f>
-		<x path="stx.Contract"><c path="toContract.A"/></x>
+		<x path="stx.async.Contract"><c path="toContract.A"/></x>
 	</f>
 	<haxe_doc>Creates a Contract from a callback of function (err,res).</haxe_doc>
 </toContract></class>
-	<class path="stx.Contracts3" params="" file="src/main/haxe/stx/Contract.hx" module="stx.Contract"><toContract public="1" params="A:B" set="method" line="287" static="1"><f a="f">
+	<class path="stx.async.Contracts3" params="" file="src/main/haxe/stx.async.Contract.hx" module="stx.async.Contract"><toContract public="1" params="A:B" set="method" line="287" static="1"><f a="f">
 	<f a="">
 		<f a="::">
 			<c path="String"/>
@@ -5845,12 +5845,12 @@
 		</f>
 		<x path="Void"/>
 	</f>
-	<x path="stx.Contract"><e path="stx.Tuple2">
+	<x path="stx.async.Contract"><e path="stx.Tuple2">
 	<c path="toContract.A"/>
 	<c path="toContract.B"/>
 </e></x>
 </f></toContract></class>
-	<class path="stx.Contracts4" params="" file="src/main/haxe/stx/Contract.hx" module="stx.Contract"><toContract public="1" params="A:B:C" set="method" line="302" static="1"><f a="f">
+	<class path="stx.async.Contracts4" params="" file="src/main/haxe/stx.async.Contract.hx" module="stx.async.Contract"><toContract public="1" params="A:B:C" set="method" line="302" static="1"><f a="f">
 	<f a="">
 		<f a=":::">
 			<c path="String"/>
@@ -5861,7 +5861,7 @@
 		</f>
 		<x path="Void"/>
 	</f>
-	<x path="stx.Contract"><e path="stx.Tuple3">
+	<x path="stx.async.Contract"><e path="stx.Tuple3">
 	<c path="toContract.A"/>
 	<c path="toContract.B"/>
 	<c path="toContract.C"/>
@@ -6258,7 +6258,7 @@
 		<c path="stx.Fail"/>
 		<c path="toOutcome.A"/>
 	</e>
-	<x path="stx.Outcome"><c path="toOutcome.A"/></x>
+	<x path="stx.extend.Outcome"><c path="toOutcome.A"/></x>
 </f></toOutcome>
 	</class>
 	<class path="stx.Enums" params="" file="src/main/haxe/stx/Enums.hx">
@@ -6356,38 +6356,38 @@
 			<meta><m n="doc"><e>"Produces parameter at index `i`."</e></m></meta>
 		</param>
 	</class>
-	<class path="stx.Eventual" params="T" file="src/main/haxe/stx/Eventual.hx">
+	<class path="stx.async.Eventual" params="T" file="src/main/haxe/stx.async.Eventual.hx">
 		<dead public="1" params="T" set="method" line="52" static="1">
-			<f a=""><c path="stx.Eventual"><c path="dead.T"/></c></f>
+			<f a=""><c path="stx.async.Eventual"><c path="dead.T"/></c></f>
 			<meta><m n="doc"><e>"Creates a 'dead' future that is canceled and will never be delivered."</e></m></meta>
 		</dead>
-		<create public="1" params="T" set="method" line="279" static="1"><f a=""><c path="stx.Eventual"><c path="create.T"/></c></f></create>
+		<create public="1" params="T" set="method" line="279" static="1"><f a=""><c path="stx.async.Eventual"><c path="create.T"/></c></f></create>
 		<toEventual public="1" params="T" set="method" line="282" static="1"><f a="t">
 	<c path="toEventual.T"/>
-	<c path="stx.Eventual"><c path="toEventual.T"/></c>
+	<c path="stx.async.Eventual"><c path="toEventual.T"/></c>
 </f></toEventual>
 		<pure public="1" params="A" set="method" line="286" static="1">
 			<f a="v">
 				<c path="pure.A"/>
-				<c path="stx.Eventual"><c path="pure.A"/></c>
+				<c path="stx.async.Eventual"><c path="pure.A"/></c>
 			</f>
 			<meta><m n=":noUsing"/></meta>
 		</pure>
 		<unit public="1" params="A" set="method" line="290" static="1">
-			<f a=""><c path="stx.Eventual"><c path="unit.A"/></c></f>
+			<f a=""><c path="stx.async.Eventual"><c path="unit.A"/></c></f>
 			<meta><m n=":noUsing"/></meta>
 		</unit>
 		<value public="1" get="accessor" set="accessor">
-			<c path="stx.Eventual.T"/>
+			<c path="stx.async.Eventual.T"/>
 			<meta><m n=":isVar"/></meta>
 		</value>
-		<get_value set="method" line="27"><f a=""><c path="stx.Eventual.T"/></f></get_value>
+		<get_value set="method" line="27"><f a=""><c path="stx.async.Eventual.T"/></f></get_value>
 		<set_value set="method" line="30"><f a="value">
-	<c path="stx.Eventual.T"/>
-	<c path="stx.Eventual.T"/>
+	<c path="stx.async.Eventual.T"/>
+	<c path="stx.async.Eventual.T"/>
 </f></set_value>
 		<_listeners><c path="Array"><f a="">
-	<c path="stx.Eventual.T"/>
+	<c path="stx.async.Eventual.T"/>
 	<x path="Void"/>
 </f></c></_listeners>
 		<_isSet><x path="Bool"/></_isSet>
@@ -6397,22 +6397,22 @@
 		<isEmpty public="1" set="method" line="48"><f a=""><x path="Bool"/></f></isEmpty>
 		<deliver public="1" set="method" line="62">
 			<f a="t">
-				<c path="stx.Eventual.T"/>
-				<c path="stx.Eventual"><c path="stx.Eventual.T"/></c>
+				<c path="stx.async.Eventual.T"/>
+				<c path="stx.async.Eventual"><c path="stx.async.Eventual.T"/></c>
 			</f>
 			<meta><m n="doc"><e>"\r\n    Delivers the value of the future to anyone awaiting it. If the value has\r\n    already been delivered, this method will throw an exception.\r\n  "</e></m></meta>
 		</deliver>
 		<allowCancelOnlyIf public="1" set="method" line="86">
 			<f a="f">
 				<f a=""><x path="Bool"/></f>
-				<c path="stx.Eventual"><c path="stx.Eventual.T"/></c>
+				<c path="stx.async.Eventual"><c path="stx.async.Eventual.T"/></c>
 			</f>
 			<meta><m n="doc"><e>"\r\n    Installs the specified canceler on the future. Under ordinary\r\n    circumstances, the future will not be canceled unless all cancelers\r\n    return true. If the future is already done, this method has no effect.\r\n    \r\n    This method does not normally need to be called. It's provided primarily\r\n    for the implementation of future primitives.\r\n  "</e></m></meta>
 		</allowCancelOnlyIf>
 		<ifCanceled public="1" set="method" line="102">
 			<f a="f">
 				<f a=""><x path="Void"/></f>
-				<c path="stx.Eventual"><c path="stx.Eventual.T"/></c>
+				<c path="stx.async.Eventual"><c path="stx.async.Eventual.T"/></c>
 			</f>
 			<meta><m n="doc"><e>"\r\n    Installs a handler that will be called if and only if the future is\r\n    canceled.\r\n    \r\n    This method does not normally need to be called, since there is no\r\n    difference between a future being canceled and a future taking an\r\n    arbitrarily long amount of time to evaluate. It's provided primarily\r\n    for implementation of future primitives to save resources when it's\r\n    explicitly known the result of a future will not be used.\r\n  "</e></m></meta>
 		</ifCanceled>
@@ -6435,114 +6435,114 @@
 		<deliverTo public="1" set="method" line="149">
 			<f a="f">
 				<f a="">
-					<c path="stx.Eventual.T"/>
+					<c path="stx.async.Eventual.T"/>
 					<x path="Void"/>
 				</f>
-				<c path="stx.Eventual"><c path="stx.Eventual.T"/></c>
+				<c path="stx.async.Eventual"><c path="stx.async.Eventual.T"/></c>
 			</f>
 			<meta><m n="doc"><e>"Delivers the result of the future to the specified handler as soon as it is delivered."</e></m></meta>
 		</deliverTo>
 		<foreach public="1" set="method" line="157">
 			<f a="f">
 				<f a="">
-					<c path="stx.Eventual.T"/>
+					<c path="stx.async.Eventual.T"/>
 					<x path="Void"/>
 				</f>
-				<c path="stx.Eventual"><c path="stx.Eventual.T"/></c>
+				<c path="stx.async.Eventual"><c path="stx.async.Eventual.T"/></c>
 			</f>
 			<meta><m n="doc"><e>"Alias for deliverTo"</e></m></meta>
 		</foreach>
 		<map public="1" params="S" set="method" line="166">
 			<f a="f">
 				<f a="">
-					<c path="stx.Eventual.T"/>
+					<c path="stx.async.Eventual.T"/>
 					<c path="map.S"/>
 				</f>
-				<c path="stx.Eventual"><c path="map.S"/></c>
+				<c path="stx.async.Eventual"><c path="map.S"/></c>
 			</f>
 			<meta><m n="doc"><e>"\r\n    Uses the specified function to transform the result of this future into\r\n    a different value, returning a future of that value.\r\n    \r\n    urlLoader.load('image.png').map(function(data) return new Image(data)).deliverTo(function(image) imageContainer.add(image));\r\n  "</e></m></meta>
 		</map>
 		<flatMap public="1" params="B" set="method" line="187">
 			<f a="fn">
 				<f a="">
-					<c path="stx.Eventual.T"/>
-					<c path="stx.Eventual"><c path="flatMap.B"/></c>
+					<c path="stx.async.Eventual.T"/>
+					<c path="stx.async.Eventual"><c path="flatMap.B"/></c>
 				</f>
-				<c path="stx.Eventual"><c path="flatMap.B"/></c>
+				<c path="stx.async.Eventual"><c path="flatMap.B"/></c>
 			</f>
 			<meta><m n="doc"><e>"\r\n    Maps the result of this future to another future, and returns a future\r\n    of the result of that future. Useful when chaining together multiple\r\n    asynchronous operations that must be completed sequentia\r\n    lly.\r\n    ```\r\n    urlLoader.load('config.xml').flatMap(function(xml){\r\n      return urlLoader.load(parse(xml).mediaUrl);\r\n    }).deliverTo(function(loadedMedia){\r\n      container.add(loadedMedia);\r\n    });\r\n    ```\r\n  "</e></m></meta>
 		</flatMap>
 		<then public="1" params="S" set="method" line="204">
 			<f a="f">
-				<c path="stx.Eventual"><c path="then.S"/></c>
-				<c path="stx.Eventual"><c path="then.S"/></c>
+				<c path="stx.async.Eventual"><c path="then.S"/></c>
+				<c path="stx.async.Eventual"><c path="then.S"/></c>
 			</f>
 			<meta><m n="doc"><e>"Drop this future, returning `f`."</e></m></meta>
 		</then>
 		<filter public="1" set="method" line="214">
 			<f a="f">
 				<f a="">
-					<c path="stx.Eventual.T"/>
+					<c path="stx.async.Eventual.T"/>
 					<x path="Bool"/>
 				</f>
-				<c path="stx.Eventual"><c path="stx.Eventual.T"/></c>
+				<c path="stx.async.Eventual"><c path="stx.async.Eventual.T"/></c>
 			</f>
 			<meta><m n="doc"><e>"\r\n    Returns a new future that will be delivered only if the result of this\r\n    future is accepted by the specified filter (otherwise, the new future\r\n    will be canceled).\r\n  "</e></m></meta>
 		</filter>
 		<zip public="1" params="A" set="method" line="230">
 			<f a="f2">
-				<c path="stx.Eventual"><c path="zip.A"/></c>
-				<c path="stx.Eventual"><e path="stx.Tuple2">
-	<c path="stx.Eventual.T"/>
+				<c path="stx.async.Eventual"><c path="zip.A"/></c>
+				<c path="stx.async.Eventual"><e path="stx.Tuple2">
+	<c path="stx.async.Eventual.T"/>
 	<c path="zip.A"/>
 </e></c>
 			</f>
 			<meta><m n="doc"><e>"\r\n    Zips this future and the specified future into another future, whose\r\n    result is a tuple of the individual results of the futures. Useful when\r\n    an operation requires the result of two futures, but each future may\r\n    execute independently of the other.\r\n  "</e></m></meta>
 		</zip>
 		<zipWith public="1" params="A:B" set="method" line="233"><f a="f2:fn">
-	<c path="stx.Eventual"><c path="zipWith.A"/></c>
+	<c path="stx.async.Eventual"><c path="zipWith.A"/></c>
 	<f a=":">
-		<c path="stx.Eventual.T"/>
+		<c path="stx.async.Eventual.T"/>
 		<c path="zipWith.A"/>
 		<c path="zipWith.B"/>
 	</f>
-	<c path="stx.Eventual"><c path="zipWith.B"/></c>
+	<c path="stx.async.Eventual"><c path="zipWith.B"/></c>
 </f></zipWith>
 		<valueO public="1" set="method" line="258">
-			<f a=""><e path="stx.Option"><c path="stx.Eventual.T"/></e></f>
+			<f a=""><e path="stx.Option"><c path="stx.async.Eventual.T"/></e></f>
 			<meta><m n="doc"><e>"Retrieves the value of the future, as an `Option`."</e></m></meta>
 		</valueO>
-		<toOption public="1" set="method" line="261"><f a=""><e path="stx.Option"><c path="stx.Eventual.T"/></e></f></toOption>
-		<toArray public="1" set="method" line="265"><f a=""><c path="Array"><c path="stx.Eventual.T"/></c></f></toArray>
-		<forceCancel set="method" line="269"><f a=""><c path="stx.Eventual"><c path="stx.Eventual.T"/></c></f></forceCancel>
+		<toOption public="1" set="method" line="261"><f a=""><e path="stx.Option"><c path="stx.async.Eventual.T"/></e></f></toOption>
+		<toArray public="1" set="method" line="265"><f a=""><c path="Array"><c path="stx.async.Eventual.T"/></c></f></toArray>
+		<forceCancel set="method" line="269"><f a=""><c path="stx.async.Eventual"><c path="stx.async.Eventual.T"/></c></f></forceCancel>
 		<deliverMe public="1" set="method" line="293"><f a="f">
 	<f a="">
-		<c path="stx.Eventual"><c path="stx.Eventual.T"/></c>
+		<c path="stx.async.Eventual"><c path="stx.async.Eventual.T"/></c>
 		<x path="Void"/>
 	</f>
-	<c path="stx.Eventual"><c path="stx.Eventual.T"/></c>
+	<c path="stx.async.Eventual"><c path="stx.async.Eventual.T"/></c>
 </f></deliverMe>
 		<equals public="1" set="method" line="301"><f a="f">
-	<c path="stx.Eventual"><c path="stx.Eventual.T"/></c>
+	<c path="stx.async.Eventual"><c path="stx.async.Eventual.T"/></c>
 	<x path="Bool"/>
 </f></equals>
 		<new public="1" set="method" line="39"><f a="?v">
-	<c path="stx.Eventual.T"/>
+	<c path="stx.async.Eventual.T"/>
 	<x path="Void"/>
 </f></new>
 		<meta><m n="doc"><e>"\r\n  An asynchronous operation that may complete in the future unless\r\n  successfully canceled.\r\n  \r\n  Eventuals can be combined and chained together to form complicated\r\n  asynchronous control flows. Often used operations are `map()` and\r\n  `flatMap()`.\r\n"</e></m></meta>
 	</class>
-	<class path="stx.Eventuals" params="" file="src/main/haxe/stx/Eventual.hx" module="stx.Eventual">
+	<class path="stx.async.Eventuals" params="" file="src/main/haxe/stx.async.Eventual.hx" module="stx.async.Eventual">
 		<foreach public="1" params="A" set="method" line="306" static="1"><f a="f:fn">
-	<c path="stx.Eventual"><c path="foreach.A"/></c>
+	<c path="stx.async.Eventual"><c path="foreach.A"/></c>
 	<f a="">
 		<c path="foreach.A"/>
 		<x path="Void"/>
 	</f>
-	<c path="stx.Eventual"><c path="foreach.A"/></c>
+	<c path="stx.async.Eventual"><c path="foreach.A"/></c>
 </f></foreach>
 		<mapLeft public="1" params="A:B:C" set="method" line="309" static="1"><f a="f:fn">
-	<c path="stx.Eventual"><e path="stx.Either">
+	<c path="stx.async.Eventual"><e path="stx.Either">
 	<c path="mapLeft.A"/>
 	<c path="mapLeft.B"/>
 </e></c>
@@ -6550,13 +6550,13 @@
 		<c path="mapLeft.A"/>
 		<c path="mapLeft.C"/>
 	</f>
-	<c path="stx.Eventual"><e path="stx.Either">
+	<c path="stx.async.Eventual"><e path="stx.Either">
 	<c path="mapLeft.C"/>
 	<c path="mapLeft.B"/>
 </e></c>
 </f></mapLeft>
 		<mapR public="1" params="A:B:C" set="method" line="319" static="1"><f a="f:fn">
-	<c path="stx.Eventual"><e path="stx.Either">
+	<c path="stx.async.Eventual"><e path="stx.Either">
 	<c path="mapR.A"/>
 	<c path="mapR.B"/>
 </e></c>
@@ -6564,55 +6564,55 @@
 		<c path="mapR.B"/>
 		<c path="mapR.C"/>
 	</f>
-	<c path="stx.Eventual"><e path="stx.Either">
+	<c path="stx.async.Eventual"><e path="stx.Either">
 	<c path="mapR.A"/>
 	<c path="mapR.C"/>
 </e></c>
 </f></mapR>
 		<map public="1" params="A:B" set="method" line="329" static="1"><f a="f:fn">
-	<c path="stx.Eventual"><c path="map.A"/></c>
+	<c path="stx.async.Eventual"><c path="map.A"/></c>
 	<f a="">
 		<c path="map.A"/>
 		<c path="map.B"/>
 	</f>
-	<c path="stx.Eventual"><c path="map.B"/></c>
+	<c path="stx.async.Eventual"><c path="map.B"/></c>
 </f></map>
 		<flatMap public="1" params="A:B" set="method" line="332" static="1"><f a="f:fn">
-	<c path="stx.Eventual"><c path="flatMap.A"/></c>
+	<c path="stx.async.Eventual"><c path="flatMap.A"/></c>
 	<f a="">
 		<c path="flatMap.A"/>
-		<c path="stx.Eventual"><c path="flatMap.B"/></c>
+		<c path="stx.async.Eventual"><c path="flatMap.B"/></c>
 	</f>
-	<c path="stx.Eventual"><c path="flatMap.B"/></c>
+	<c path="stx.async.Eventual"><c path="flatMap.B"/></c>
 </f></flatMap>
 		<flatMapR public="1" params="A:B:C" set="method" line="346" static="1"><f a="f:fn">
-	<c path="stx.Eventual"><e path="stx.Either">
+	<c path="stx.async.Eventual"><e path="stx.Either">
 	<c path="flatMapR.A"/>
 	<c path="flatMapR.B"/>
 </e></c>
 	<f a="">
 		<c path="flatMapR.B"/>
-		<c path="stx.Eventual"><e path="stx.Either">
+		<c path="stx.async.Eventual"><e path="stx.Either">
 	<c path="flatMapR.A"/>
 	<c path="flatMapR.C"/>
 </e></c>
 	</f>
-	<c path="stx.Eventual"><e path="stx.Either">
+	<c path="stx.async.Eventual"><e path="stx.Either">
 	<c path="flatMapR.A"/>
 	<c path="flatMapR.C"/>
 </e></c>
 </f></flatMapR>
 		<zip public="1" params="A:B" set="method" line="356" static="1"><f a="f:f2">
-	<c path="stx.Eventual"><c path="zip.A"/></c>
-	<c path="stx.Eventual"><c path="zip.B"/></c>
-	<c path="stx.Eventual"><e path="stx.Tuple2">
+	<c path="stx.async.Eventual"><c path="zip.A"/></c>
+	<c path="stx.async.Eventual"><c path="zip.B"/></c>
+	<c path="stx.async.Eventual"><e path="stx.Tuple2">
 	<c path="zip.A"/>
 	<c path="zip.B"/>
 </e></c>
 </f></zip>
 		<waitFor public="1" params="A" set="method" line="359" static="1"><f a="toJoin">
-	<c path="Array"><c path="stx.Eventual"><c path="waitFor.A"/></c></c>
-	<c path="stx.Eventual"><c path="Array"><c path="waitFor.A"/></c></c>
+	<c path="Array"><c path="stx.async.Eventual"><c path="waitFor.A"/></c></c>
+	<c path="stx.async.Eventual"><c path="Array"><c path="waitFor.A"/></c></c>
 </f></waitFor>
 		<bindFold public="1" params="A:B" set="method" line="384" static="1"><f a="iter:start:fm">
 	<t path="Iterable"><c path="bindFold.A"/></t>
@@ -6620,19 +6620,19 @@
 	<f a=":">
 		<c path="bindFold.B"/>
 		<c path="bindFold.A"/>
-		<c path="stx.Eventual"><c path="bindFold.B"/></c>
+		<c path="stx.async.Eventual"><c path="bindFold.B"/></c>
 	</f>
-	<c path="stx.Eventual"><c path="bindFold.B"/></c>
+	<c path="stx.async.Eventual"><c path="bindFold.B"/></c>
 </f></bindFold>
 		<either public="1" params="A" set="method" line="408" static="1"><f a="evt">
-	<c path="stx.Eventual"><e path="stx.Either">
+	<c path="stx.async.Eventual"><e path="stx.Either">
 	<c path="either.A"/>
 	<c path="either.A"/>
 </e></c>
-	<c path="stx.Eventual"><c path="either.A"/></c>
+	<c path="stx.async.Eventual"><c path="either.A"/></c>
 </f></either>
 	</class>
-	<class path="stx.Eventuals1" params="" file="src/main/haxe/stx/Eventual.hx" module="stx.Eventual"><eventualOf public="1" params="A" set="method" line="414" static="1">
+	<class path="stx.async.Eventuals1" params="" file="src/main/haxe/stx.async.Eventual.hx" module="stx.async.Eventual"><eventualOf public="1" params="A" set="method" line="414" static="1">
 	<f a="f">
 		<f a="">
 			<f a="">
@@ -6641,11 +6641,11 @@
 			</f>
 			<x path="Void"/>
 		</f>
-		<c path="stx.Eventual"><c path="eventualOf.A"/></c>
+		<c path="stx.async.Eventual"><c path="eventualOf.A"/></c>
 	</f>
 	<meta><m n="doc"><e>"One parameter callback handler, where callback is called exactly once."</e></m></meta>
 </eventualOf></class>
-	<class path="stx.Eventuals2" params="" file="src/main/haxe/stx/Eventual.hx" module="stx.Eventual"><eventualOf public="1" params="A:B" set="method" line="426" static="1">
+	<class path="stx.async.Eventuals2" params="" file="src/main/haxe/stx.async.Eventual.hx" module="stx.async.Eventual"><eventualOf public="1" params="A:B" set="method" line="426" static="1">
 	<f a="f">
 		<f a="">
 			<f a=":">
@@ -6655,14 +6655,14 @@
 			</f>
 			<x path="Void"/>
 		</f>
-		<c path="stx.Eventual"><e path="stx.Tuple2">
+		<c path="stx.async.Eventual"><e path="stx.Tuple2">
 	<c path="eventualOf.A"/>
 	<c path="eventualOf.B"/>
 </e></c>
 	</f>
 	<meta><m n="doc"><e><![CDATA["Creates a Eventual of Tuple2<A,B> from a callback function(a:A,b:B)"]]></e></m></meta>
 </eventualOf></class>
-	<class path="stx.Eventuals3" params="" file="src/main/haxe/stx/Eventual.hx" module="stx.Eventual"><eventualOf public="1" params="A:B:C" set="method" line="438" static="1">
+	<class path="stx.async.Eventuals3" params="" file="src/main/haxe/stx.async.Eventual.hx" module="stx.async.Eventual"><eventualOf public="1" params="A:B:C" set="method" line="438" static="1">
 	<f a="f">
 		<f a="">
 			<f a="::">
@@ -6673,7 +6673,7 @@
 			</f>
 			<x path="Void"/>
 		</f>
-		<c path="stx.Eventual"><e path="stx.Tuple3">
+		<c path="stx.async.Eventual"><e path="stx.Tuple3">
 	<c path="eventualOf.A"/>
 	<c path="eventualOf.B"/>
 	<c path="eventualOf.C"/>
@@ -6782,7 +6782,7 @@
 		<catching public="1" params="A:B" set="method" line="32" static="1">
 			<f a="c">
 				<t path="stx.Thunk"><c path="catching.A"/></t>
-				<t path="stx.Thunk"><x path="stx.Outcome"><c path="catching.A"/></x></t>
+				<t path="stx.Thunk"><x path="stx.extend.Outcome"><c path="catching.A"/></x></t>
 			</f>
 			<meta><m n="doc"><e>"Applies a `Thunk` and returns an `Outcome`"</e></m></meta>
 		</catching>
@@ -6866,7 +6866,7 @@
 				</f>
 				<f a="">
 					<c path="catching.A"/>
-					<x path="stx.Outcome"><c path="catching.B"/></x>
+					<x path="stx.extend.Outcome"><c path="catching.B"/></x>
 				</f>
 			</f>
 			<meta><m n="doc"><e>"Applies a Thunk and returns Either an error or it's result"</e></m></meta>
@@ -10021,7 +10021,7 @@
 			<f a="o1:thunk">
 				<e path="stx.Option"><c path="stx.Fail"/></e>
 				<t path="stx.Thunk"><c path="orSuccess.T"/></t>
-				<x path="stx.Outcome"><c path="orSuccess.T"/></x>
+				<x path="stx.extend.Outcome"><c path="orSuccess.T"/></x>
 			</f>
 			<meta><m n="doc"><e>"If `o1` is None, produce the result of `thunk`."</e></m></meta>
 		</orSuccess>
@@ -10029,7 +10029,7 @@
 			<f a="o1:thunk">
 				<e path="stx.Option"><c path="orFailure.T"/></e>
 				<t path="stx.Thunk"><c path="stx.Fail"/></t>
-				<x path="stx.Outcome"><c path="orFailure.T"/></x>
+				<x path="stx.extend.Outcome"><c path="orFailure.T"/></x>
 			</f>
 			<meta><m n="doc"><e>"If `o1` is None, produce the result of `thunk`."</e></m></meta>
 		</orFailure>
@@ -10047,12 +10047,12 @@
 		<orSuccessC public="1" params="T" set="method" line="174" static="1"><f a="o0:v">
 	<e path="stx.Option"><c path="stx.Fail"/></e>
 	<c path="orSuccessC.T"/>
-	<x path="stx.Outcome"><c path="orSuccessC.T"/></x>
+	<x path="stx.extend.Outcome"><c path="orSuccessC.T"/></x>
 </f></orSuccessC>
 		<orFailureC public="1" params="T" set="method" line="177" static="1"><f a="o0:v">
 	<e path="stx.Option"><c path="orFailureC.T"/></e>
 	<c path="stx.Fail"/>
-	<x path="stx.Outcome"><c path="orFailureC.T"/></x>
+	<x path="stx.extend.Outcome"><c path="orFailureC.T"/></x>
 </f></orFailureC>
 		<toBool public="1" params="T" set="method" line="180" static="1"><f a="option">
 	<e path="stx.Option"><c path="toBool.T"/></e>
@@ -10071,53 +10071,53 @@
 	<e path="stx.Chunk"><c path="toChunk.A"/></e>
 </f></toChunk>
 	</class>
-	<enum path="stx.OutcomeType" params="T" file="src/main/haxe/stx/Outcome.hx" module="stx.Outcome">
-		<Success a="success"><c path="stx.OutcomeType.T"/></Success>
+	<enum path="stx.extend.OutcomeType" params="T" file="src/main/haxe/stx.extend.Outcome.hx" module="stx.extend.Outcome">
+		<Success a="success"><c path="stx.extend.OutcomeType.T"/></Success>
 		<Failure a="failure"><c path="stx.Fail"/></Failure>
 	</enum>
-	<abstract path="stx.Outcome" params="T" file="src/main/haxe/stx/Outcome.hx">
-		<from><icast><e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e></icast></from>
-		<this><e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e></this>
-		<to><icast><e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e></icast></to>
-		<impl><class path="stx._Outcome.Outcome_Impl_" params="" file="src/main/haxe/stx/Outcome.hx" private="1" module="stx.Outcome">
+	<abstract path="stx.extend.Outcome" params="T" file="src/main/haxe/stx.extend.Outcome.hx">
+		<from><icast><e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e></icast></from>
+		<this><e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e></this>
+		<to><icast><e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e></icast></to>
+		<impl><class path="stx._Outcome.Outcome_Impl_" params="" file="src/main/haxe/stx.extend.Outcome.hx" private="1" module="stx.extend.Outcome">
 	<_new public="1" set="method" line="15" static="1">
 		<f a="v">
-			<e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e>
-			<e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e>
+			<e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e>
+			<e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</_new>
 	<fromFail public="1" params="T" set="method" line="18" static="1"><f a="f">
 	<c path="stx.Fail"/>
-	<x path="stx.Outcome"><c path="fromFail.T"/></x>
+	<x path="stx.extend.Outcome"><c path="fromFail.T"/></x>
 </f></fromFail>
 	<flatMap public="1" params="U" set="method" line="21" static="1">
 		<f a="this:fn">
-			<e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e>
+			<e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e>
 			<f a="">
-				<c path="stx.Outcome.T"/>
-				<x path="stx.Outcome"><c path="flatMap.U"/></x>
+				<c path="stx.extend.Outcome.T"/>
+				<x path="stx.extend.Outcome"><c path="flatMap.U"/></x>
 			</f>
-			<x path="stx.Outcome"><c path="flatMap.U"/></x>
+			<x path="stx.extend.Outcome"><c path="flatMap.U"/></x>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</flatMap>
 	<map public="1" params="U" set="method" line="24" static="1">
 		<f a="this:fn">
-			<e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e>
+			<e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e>
 			<f a="">
-				<c path="stx.Outcome.T"/>
+				<c path="stx.extend.Outcome.T"/>
 				<c path="map.U"/>
 			</f>
-			<x path="stx.Outcome"><c path="map.U"/></x>
+			<x path="stx.extend.Outcome"><c path="map.U"/></x>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</map>
 	<or public="1" set="method" line="28" static="1">
 		<f a="this:fallback">
-			<e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e>
-			<x path="stx.Outcome"><c path="stx.Outcome.T"/></x>
-			<x path="stx.Outcome"><c path="stx.Outcome.T"/></x>
+			<e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e>
+			<x path="stx.extend.Outcome"><c path="stx.extend.Outcome.T"/></x>
+			<x path="stx.extend.Outcome"><c path="stx.extend.Outcome.T"/></x>
 		</f>
 		<meta>
 			<m n=":impl"/>
@@ -10126,45 +10126,45 @@
 	</or>
 	<retry public="1" set="method" line="31" static="1">
 		<f a="this:fn">
-			<e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e>
+			<e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e>
 			<f a="">
 				<c path="stx.Fail"/>
-				<x path="stx.Outcome"><c path="stx.Outcome.T"/></x>
+				<x path="stx.extend.Outcome"><c path="stx.extend.Outcome.T"/></x>
 			</f>
-			<e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e>
+			<e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</retry>
 	<recover public="1" set="method" line="34" static="1">
 		<f a="this:fn">
-			<e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e>
+			<e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e>
 			<f a="">
 				<c path="stx.Fail"/>
-				<c path="stx.Outcome.T"/>
+				<c path="stx.extend.Outcome.T"/>
 			</f>
-			<x path="stx.Outcome"><c path="stx.Outcome.T"/></x>
+			<x path="stx.extend.Outcome"><c path="stx.extend.Outcome.T"/></x>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</recover>
 	<zipWith public="1" params="U:V" set="method" line="37" static="1">
 		<f a="this:oc:fn">
-			<e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e>
-			<x path="stx.Outcome"><c path="zipWith.U"/></x>
+			<e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e>
+			<x path="stx.extend.Outcome"><c path="zipWith.U"/></x>
 			<f a=":">
-				<c path="stx.Outcome.T"/>
+				<c path="stx.extend.Outcome.T"/>
 				<c path="zipWith.U"/>
 				<c path="zipWith.V"/>
 			</f>
-			<x path="stx.Outcome"><c path="zipWith.V"/></x>
+			<x path="stx.extend.Outcome"><c path="zipWith.V"/></x>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</zipWith>
 	<zip public="1" params="U" set="method" line="40" static="1">
 		<f a="this:oc">
-			<e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e>
-			<x path="stx.Outcome"><c path="zip.U"/></x>
-			<x path="stx.Outcome"><e path="stx.Tuple2">
-	<c path="stx.Outcome.T"/>
+			<e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e>
+			<x path="stx.extend.Outcome"><c path="zip.U"/></x>
+			<x path="stx.extend.Outcome"><e path="stx.Tuple2">
+	<c path="stx.extend.Outcome.T"/>
 	<c path="zip.U"/>
 </e></x>
 		</f>
@@ -10172,52 +10172,52 @@
 	</zip>
 	<success public="1" set="method" line="43" static="1">
 		<f a="this">
-			<e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e>
-			<e path="stx.Option"><c path="stx.Outcome.T"/></e>
+			<e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e>
+			<e path="stx.Option"><c path="stx.extend.Outcome.T"/></e>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</success>
 </class></impl>
 	</abstract>
-	<class path="stx._Outcome.Outcome_Impl_" params="" file="src/main/haxe/stx/Outcome.hx" private="1" module="stx.Outcome">
+	<class path="stx._Outcome.Outcome_Impl_" params="" file="src/main/haxe/stx.extend.Outcome.hx" private="1" module="stx.extend.Outcome">
 		<_new public="1" set="method" line="15" static="1">
 			<f a="v">
-				<e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e>
-				<e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e>
+				<e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e>
+				<e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</_new>
 		<fromFail public="1" params="T" set="method" line="18" static="1"><f a="f">
 	<c path="stx.Fail"/>
-	<x path="stx.Outcome"><c path="fromFail.T"/></x>
+	<x path="stx.extend.Outcome"><c path="fromFail.T"/></x>
 </f></fromFail>
 		<flatMap public="1" params="U" set="method" line="21" static="1">
 			<f a="this:fn">
-				<e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e>
+				<e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e>
 				<f a="">
-					<c path="stx.Outcome.T"/>
-					<x path="stx.Outcome"><c path="flatMap.U"/></x>
+					<c path="stx.extend.Outcome.T"/>
+					<x path="stx.extend.Outcome"><c path="flatMap.U"/></x>
 				</f>
-				<x path="stx.Outcome"><c path="flatMap.U"/></x>
+				<x path="stx.extend.Outcome"><c path="flatMap.U"/></x>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</flatMap>
 		<map public="1" params="U" set="method" line="24" static="1">
 			<f a="this:fn">
-				<e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e>
+				<e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e>
 				<f a="">
-					<c path="stx.Outcome.T"/>
+					<c path="stx.extend.Outcome.T"/>
 					<c path="map.U"/>
 				</f>
-				<x path="stx.Outcome"><c path="map.U"/></x>
+				<x path="stx.extend.Outcome"><c path="map.U"/></x>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</map>
 		<or public="1" set="method" line="28" static="1">
 			<f a="this:fallback">
-				<e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e>
-				<x path="stx.Outcome"><c path="stx.Outcome.T"/></x>
-				<x path="stx.Outcome"><c path="stx.Outcome.T"/></x>
+				<e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e>
+				<x path="stx.extend.Outcome"><c path="stx.extend.Outcome.T"/></x>
+				<x path="stx.extend.Outcome"><c path="stx.extend.Outcome.T"/></x>
 			</f>
 			<meta>
 				<m n=":impl"/>
@@ -10226,45 +10226,45 @@
 		</or>
 		<retry public="1" set="method" line="31" static="1">
 			<f a="this:fn">
-				<e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e>
+				<e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e>
 				<f a="">
 					<c path="stx.Fail"/>
-					<x path="stx.Outcome"><c path="stx.Outcome.T"/></x>
+					<x path="stx.extend.Outcome"><c path="stx.extend.Outcome.T"/></x>
 				</f>
-				<e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e>
+				<e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</retry>
 		<recover public="1" set="method" line="34" static="1">
 			<f a="this:fn">
-				<e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e>
+				<e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e>
 				<f a="">
 					<c path="stx.Fail"/>
-					<c path="stx.Outcome.T"/>
+					<c path="stx.extend.Outcome.T"/>
 				</f>
-				<x path="stx.Outcome"><c path="stx.Outcome.T"/></x>
+				<x path="stx.extend.Outcome"><c path="stx.extend.Outcome.T"/></x>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</recover>
 		<zipWith public="1" params="U:V" set="method" line="37" static="1">
 			<f a="this:oc:fn">
-				<e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e>
-				<x path="stx.Outcome"><c path="zipWith.U"/></x>
+				<e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e>
+				<x path="stx.extend.Outcome"><c path="zipWith.U"/></x>
 				<f a=":">
-					<c path="stx.Outcome.T"/>
+					<c path="stx.extend.Outcome.T"/>
 					<c path="zipWith.U"/>
 					<c path="zipWith.V"/>
 				</f>
-				<x path="stx.Outcome"><c path="zipWith.V"/></x>
+				<x path="stx.extend.Outcome"><c path="zipWith.V"/></x>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</zipWith>
 		<zip public="1" params="U" set="method" line="40" static="1">
 			<f a="this:oc">
-				<e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e>
-				<x path="stx.Outcome"><c path="zip.U"/></x>
-				<x path="stx.Outcome"><e path="stx.Tuple2">
-	<c path="stx.Outcome.T"/>
+				<e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e>
+				<x path="stx.extend.Outcome"><c path="zip.U"/></x>
+				<x path="stx.extend.Outcome"><e path="stx.Tuple2">
+	<c path="stx.extend.Outcome.T"/>
 	<c path="zip.U"/>
 </e></x>
 			</f>
@@ -10272,85 +10272,85 @@
 		</zip>
 		<success public="1" set="method" line="43" static="1">
 			<f a="this">
-				<e path="stx.OutcomeType"><c path="stx.Outcome.T"/></e>
-				<e path="stx.Option"><c path="stx.Outcome.T"/></e>
+				<e path="stx.extend.OutcomeType"><c path="stx.extend.Outcome.T"/></e>
+				<e path="stx.Option"><c path="stx.extend.Outcome.T"/></e>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</success>
 	</class>
-	<class path="stx.Outcomes" params="" file="src/main/haxe/stx/Outcome.hx" module="stx.Outcome">
+	<class path="stx.extend.Outcomes" params="" file="src/main/haxe/stx.extend.Outcome.hx" module="stx.extend.Outcome">
 		<flatMap public="1" params="A:B" set="method" line="51" static="1"><f a="o:fn">
-	<e path="stx.OutcomeType"><c path="flatMap.A"/></e>
+	<e path="stx.extend.OutcomeType"><c path="flatMap.A"/></e>
 	<f a="">
 		<c path="flatMap.A"/>
-		<e path="stx.OutcomeType"><c path="flatMap.B"/></e>
+		<e path="stx.extend.OutcomeType"><c path="flatMap.B"/></e>
 	</f>
-	<e path="stx.OutcomeType"><c path="flatMap.B"/></e>
+	<e path="stx.extend.OutcomeType"><c path="flatMap.B"/></e>
 </f></flatMap>
 		<map public="1" params="A:B" set="method" line="57" static="1"><f a="o:fn">
-	<e path="stx.OutcomeType"><c path="map.A"/></e>
+	<e path="stx.extend.OutcomeType"><c path="map.A"/></e>
 	<f a="">
 		<c path="map.A"/>
 		<c path="map.B"/>
 	</f>
-	<e path="stx.OutcomeType"><c path="map.B"/></e>
+	<e path="stx.extend.OutcomeType"><c path="map.B"/></e>
 </f></map>
 		<or public="1" params="A" set="method" line="64" static="1">
 			<f a="o:fallback">
-				<e path="stx.OutcomeType"><c path="or.A"/></e>
-				<e path="stx.OutcomeType"><c path="or.A"/></e>
-				<e path="stx.OutcomeType"><c path="or.A"/></e>
+				<e path="stx.extend.OutcomeType"><c path="or.A"/></e>
+				<e path="stx.extend.OutcomeType"><c path="or.A"/></e>
+				<e path="stx.extend.OutcomeType"><c path="or.A"/></e>
 			</f>
 			<meta><m n=":tinkish"/></meta>
 		</or>
 		<retry public="1" params="A" set="method" line="70" static="1"><f a="o:fn">
-	<e path="stx.OutcomeType"><c path="retry.A"/></e>
+	<e path="stx.extend.OutcomeType"><c path="retry.A"/></e>
 	<f a="">
 		<c path="stx.Fail"/>
-		<e path="stx.OutcomeType"><c path="retry.A"/></e>
+		<e path="stx.extend.OutcomeType"><c path="retry.A"/></e>
 	</f>
-	<e path="stx.OutcomeType"><c path="retry.A"/></e>
+	<e path="stx.extend.OutcomeType"><c path="retry.A"/></e>
 </f></retry>
 		<recover public="1" params="A" set="method" line="76" static="1"><f a="o:fn">
-	<e path="stx.OutcomeType"><c path="recover.A"/></e>
+	<e path="stx.extend.OutcomeType"><c path="recover.A"/></e>
 	<f a="">
 		<c path="stx.Fail"/>
 		<c path="recover.A"/>
 	</f>
-	<e path="stx.OutcomeType"><c path="recover.A"/></e>
+	<e path="stx.extend.OutcomeType"><c path="recover.A"/></e>
 </f></recover>
 		<flatten public="1" params="A" set="method" line="82" static="1"><f a="o">
-	<e path="stx.OutcomeType"><e path="stx.OutcomeType"><c path="flatten.A"/></e></e>
-	<e path="stx.OutcomeType"><c path="flatten.A"/></e>
+	<e path="stx.extend.OutcomeType"><e path="stx.extend.OutcomeType"><c path="flatten.A"/></e></e>
+	<e path="stx.extend.OutcomeType"><c path="flatten.A"/></e>
 </f></flatten>
 		<zipWith public="1" params="A:B:C" set="method" line="89" static="1"><f a="o:o0:fn">
-	<e path="stx.OutcomeType"><c path="zipWith.A"/></e>
-	<e path="stx.OutcomeType"><c path="zipWith.B"/></e>
+	<e path="stx.extend.OutcomeType"><c path="zipWith.A"/></e>
+	<e path="stx.extend.OutcomeType"><c path="zipWith.B"/></e>
 	<f a=":">
 		<c path="zipWith.A"/>
 		<c path="zipWith.B"/>
 		<c path="zipWith.C"/>
 	</f>
-	<e path="stx.OutcomeType"><c path="zipWith.C"/></e>
+	<e path="stx.extend.OutcomeType"><c path="zipWith.C"/></e>
 </f></zipWith>
 		<zip public="1" params="A:B" set="method" line="97" static="1"><f a="o:o0">
-	<e path="stx.OutcomeType"><c path="zip.A"/></e>
-	<e path="stx.OutcomeType"><c path="zip.B"/></e>
-	<e path="stx.OutcomeType"><e path="stx.Tuple2">
+	<e path="stx.extend.OutcomeType"><c path="zip.A"/></e>
+	<e path="stx.extend.OutcomeType"><c path="zip.B"/></e>
+	<e path="stx.extend.OutcomeType"><e path="stx.Tuple2">
 	<c path="zip.A"/>
 	<c path="zip.B"/>
 </e></e>
 </f></zip>
 		<isFailure public="1" params="A" set="method" line="100" static="1"><f a="o">
-	<e path="stx.OutcomeType"><c path="isFailure.A"/></e>
+	<e path="stx.extend.OutcomeType"><c path="isFailure.A"/></e>
 	<x path="Bool"/>
 </f></isFailure>
 		<isSuccess public="1" params="A" set="method" line="106" static="1"><f a="o">
-	<e path="stx.OutcomeType"><c path="isSuccess.A"/></e>
+	<e path="stx.extend.OutcomeType"><c path="isSuccess.A"/></e>
 	<x path="Bool"/>
 </f></isSuccess>
 		<toChunk public="1" params="A" set="method" line="112" static="1"><f a="oc">
-	<x path="stx.Outcome"><c path="toChunk.A"/></x>
+	<x path="stx.extend.Outcome"><c path="toChunk.A"/></x>
 	<e path="stx.Chunk"><c path="toChunk.A"/></e>
 </f></toChunk>
 	</class>
@@ -10750,7 +10750,7 @@
 				<c path="callSecure.A"/>
 				<c path="String"/>
 				<c path="Array"><d/></c>
-				<x path="stx.Outcome"><c path="callSecure.B"/></x>
+				<x path="stx.extend.Outcome"><c path="callSecure.B"/></x>
 			</f>
 			<meta>
 				<m n="doc"><e>"Full error handling, any errors raised will be passed back on the left hand side."</e></m>
@@ -12161,11 +12161,11 @@
 	</class>
 	<abstract path="stx.Vouch" params="T" file="src/main/haxe/stx/Vouch.hx">
 		<from>
-			<icast><c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c></icast>
-			<icast field="fromContract"><x path="stx.Contract"><c path="fromContract.A"/></x></icast>
+			<icast><c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c></icast>
+			<icast field="fromContract"><x path="stx.async.Contract"><c path="fromContract.A"/></x></icast>
 		</from>
-		<this><c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c></this>
-		<to><icast><c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c></icast></to>
+		<this><c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c></this>
+		<to><icast><c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c></icast></to>
 		<impl><class path="stx._Vouch.Vouch_Impl_" params="" file="src/main/haxe/stx/Vouch.hx" private="1" module="stx.Vouch">
 	<unit public="1" params="A" set="method" line="23" static="1">
 		<f a=""><x path="stx.Vouch"><c path="unit.A"/></x></f>
@@ -12184,21 +12184,21 @@
 	</create>
 	<fromContract public="1" params="A" set="method" line="32" static="1">
 		<f a="prm">
-			<x path="stx.Contract"><c path="fromContract.A"/></x>
+			<x path="stx.async.Contract"><c path="fromContract.A"/></x>
 			<x path="stx.Vouch"><c path="fromContract.A"/></x>
 		</f>
 		<meta><m n=":from"/></meta>
 	</fromContract>
 	<_new public="1" set="method" line="35" static="1">
 		<f a="?v">
-			<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
-			<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+			<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+			<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</_new>
 	<map public="1" params="U" set="method" line="38" static="1">
 		<f a="this:fn">
-			<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+			<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 			<f a="">
 				<c path="stx.Vouch.T"/>
 				<c path="map.U"/>
@@ -12209,7 +12209,7 @@
 	</map>
 	<flatMap public="1" params="U" set="method" line="47" static="1">
 		<f a="this:fn">
-			<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+			<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 			<f a="">
 				<c path="stx.Vouch.T"/>
 				<x path="stx.Vouch"><c path="flatMap.U"/></x>
@@ -12220,7 +12220,7 @@
 	</flatMap>
 	<foreach public="1" set="method" line="56" static="1">
 		<f a="this:fn">
-			<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+			<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 			<f a="">
 				<c path="stx.Vouch.T"/>
 				<x path="Void"/>
@@ -12231,7 +12231,7 @@
 	</foreach>
 	<recover public="1" set="method" line="65" static="1">
 		<f a="this:fn">
-			<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+			<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 			<f a="">
 				<c path="stx.Fail"/>
 				<e path="stx.Chunk"><c path="stx.Vouch.T"/></e>
@@ -12242,7 +12242,7 @@
 	</recover>
 	<verify public="1" params="U" set="method" line="74" static="1">
 		<f a="this:fn">
-			<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+			<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 			<f a="">
 				<c path="stx.Vouch.T"/>
 				<e path="stx.Chunk"><c path="verify.U"/></e>
@@ -12253,14 +12253,14 @@
 	</verify>
 	<value public="1" set="method" line="83" static="1">
 		<f a="this">
-			<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+			<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 			<e path="stx.Chunk"><c path="stx.Vouch.T"/></e>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</value>
 	<success public="1" set="method" line="86" static="1">
 		<f a="this:f">
-			<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+			<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 			<f a="">
 				<c path="stx.Vouch.T"/>
 				<x path="Void"/>
@@ -12271,7 +12271,7 @@
 	</success>
 	<failure public="1" set="method" line="95" static="1">
 		<f a="this:f">
-			<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+			<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 			<f a="">
 				<t path="Null"><c path="stx.Fail"/></t>
 				<x path="Void"/>
@@ -12282,7 +12282,7 @@
 	</failure>
 	<nothing public="1" set="method" line="104" static="1">
 		<f a="this:f">
-			<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+			<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 			<f a=""><x path="Void"/></f>
 			<x path="stx.Vouch"><c path="stx.Vouch.T"/></x>
 		</f>
@@ -12290,18 +12290,18 @@
 	</nothing>
 	<complete public="1" set="method" line="114" static="1">
 		<f a="this:f">
-			<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+			<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 			<f a="">
 				<e path="stx.Chunk"><c path="stx.Vouch.T"/></e>
 				<x path="Void"/>
 			</f>
-			<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+			<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</complete>
 	<orConst public="1" params="T" set="method" line="117" static="1">
 		<f a="this:v">
-			<c path="stx.Eventual"><e path="stx.Chunk"><c path="orConst.T"/></e></c>
+			<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="orConst.T"/></e></c>
 			<c path="orConst.T"/>
 			<x path="stx.Vouch"><c path="orConst.T"/></x>
 		</f>
@@ -12309,7 +12309,7 @@
 	</orConst>
 	<val public="1" set="method" line="128" static="1">
 		<f a="this:val">
-			<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+			<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 			<c path="stx.Vouch.T"/>
 			<x path="stx.Vouch"><c path="stx.Vouch.T"/></x>
 		</f>
@@ -12317,7 +12317,7 @@
 	</val>
 	<end public="1" set="method" line="131" static="1">
 		<f a="this:?err">
-			<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+			<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 			<c path="stx.Fail"/>
 			<x path="stx.Vouch"><c path="stx.Vouch.T"/></x>
 		</f>
@@ -12325,30 +12325,30 @@
 	</end>
 	<nil public="1" set="method" line="134" static="1">
 		<f a="this">
-			<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+			<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 			<x path="stx.Vouch"><c path="stx.Vouch.T"/></x>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</nil>
 	<deliver public="1" set="method" line="137" static="1">
 		<f a="this:v">
-			<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+			<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 			<e path="stx.Chunk"><c path="stx.Vouch.T"/></e>
-			<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+			<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</deliver>
 	<isDelivered public="1" set="method" line="140" static="1">
 		<f a="this">
-			<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+			<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 			<x path="Bool"/>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</isDelivered>
 	<asEventual public="1" set="method" line="143" static="1">
 		<f a="this">
-			<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
-			<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+			<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+			<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 		</f>
 		<meta><m n=":impl"/></meta>
 	</asEventual>
@@ -12372,21 +12372,21 @@
 		</create>
 		<fromContract public="1" params="A" set="method" line="32" static="1">
 			<f a="prm">
-				<x path="stx.Contract"><c path="fromContract.A"/></x>
+				<x path="stx.async.Contract"><c path="fromContract.A"/></x>
 				<x path="stx.Vouch"><c path="fromContract.A"/></x>
 			</f>
 			<meta><m n=":from"/></meta>
 		</fromContract>
 		<_new public="1" set="method" line="35" static="1">
 			<f a="?v">
-				<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
-				<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+				<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+				<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</_new>
 		<map public="1" params="U" set="method" line="38" static="1">
 			<f a="this:fn">
-				<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+				<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 				<f a="">
 					<c path="stx.Vouch.T"/>
 					<c path="map.U"/>
@@ -12397,7 +12397,7 @@
 		</map>
 		<flatMap public="1" params="U" set="method" line="47" static="1">
 			<f a="this:fn">
-				<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+				<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 				<f a="">
 					<c path="stx.Vouch.T"/>
 					<x path="stx.Vouch"><c path="flatMap.U"/></x>
@@ -12408,7 +12408,7 @@
 		</flatMap>
 		<foreach public="1" set="method" line="56" static="1">
 			<f a="this:fn">
-				<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+				<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 				<f a="">
 					<c path="stx.Vouch.T"/>
 					<x path="Void"/>
@@ -12419,7 +12419,7 @@
 		</foreach>
 		<recover public="1" set="method" line="65" static="1">
 			<f a="this:fn">
-				<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+				<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 				<f a="">
 					<c path="stx.Fail"/>
 					<e path="stx.Chunk"><c path="stx.Vouch.T"/></e>
@@ -12430,7 +12430,7 @@
 		</recover>
 		<verify public="1" params="U" set="method" line="74" static="1">
 			<f a="this:fn">
-				<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+				<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 				<f a="">
 					<c path="stx.Vouch.T"/>
 					<e path="stx.Chunk"><c path="verify.U"/></e>
@@ -12441,14 +12441,14 @@
 		</verify>
 		<value public="1" set="method" line="83" static="1">
 			<f a="this">
-				<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+				<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 				<e path="stx.Chunk"><c path="stx.Vouch.T"/></e>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</value>
 		<success public="1" set="method" line="86" static="1">
 			<f a="this:f">
-				<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+				<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 				<f a="">
 					<c path="stx.Vouch.T"/>
 					<x path="Void"/>
@@ -12459,7 +12459,7 @@
 		</success>
 		<failure public="1" set="method" line="95" static="1">
 			<f a="this:f">
-				<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+				<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 				<f a="">
 					<t path="Null"><c path="stx.Fail"/></t>
 					<x path="Void"/>
@@ -12470,7 +12470,7 @@
 		</failure>
 		<nothing public="1" set="method" line="104" static="1">
 			<f a="this:f">
-				<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+				<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 				<f a=""><x path="Void"/></f>
 				<x path="stx.Vouch"><c path="stx.Vouch.T"/></x>
 			</f>
@@ -12478,18 +12478,18 @@
 		</nothing>
 		<complete public="1" set="method" line="114" static="1">
 			<f a="this:f">
-				<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+				<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 				<f a="">
 					<e path="stx.Chunk"><c path="stx.Vouch.T"/></e>
 					<x path="Void"/>
 				</f>
-				<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+				<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</complete>
 		<orConst public="1" params="T" set="method" line="117" static="1">
 			<f a="this:v">
-				<c path="stx.Eventual"><e path="stx.Chunk"><c path="orConst.T"/></e></c>
+				<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="orConst.T"/></e></c>
 				<c path="orConst.T"/>
 				<x path="stx.Vouch"><c path="orConst.T"/></x>
 			</f>
@@ -12497,7 +12497,7 @@
 		</orConst>
 		<val public="1" set="method" line="128" static="1">
 			<f a="this:val">
-				<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+				<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 				<c path="stx.Vouch.T"/>
 				<x path="stx.Vouch"><c path="stx.Vouch.T"/></x>
 			</f>
@@ -12505,7 +12505,7 @@
 		</val>
 		<end public="1" set="method" line="131" static="1">
 			<f a="this:?err">
-				<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+				<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 				<c path="stx.Fail"/>
 				<x path="stx.Vouch"><c path="stx.Vouch.T"/></x>
 			</f>
@@ -12513,30 +12513,30 @@
 		</end>
 		<nil public="1" set="method" line="134" static="1">
 			<f a="this">
-				<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+				<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 				<x path="stx.Vouch"><c path="stx.Vouch.T"/></x>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</nil>
 		<deliver public="1" set="method" line="137" static="1">
 			<f a="this:v">
-				<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+				<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 				<e path="stx.Chunk"><c path="stx.Vouch.T"/></e>
-				<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+				<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</deliver>
 		<isDelivered public="1" set="method" line="140" static="1">
 			<f a="this">
-				<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+				<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 				<x path="Bool"/>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</isDelivered>
 		<asEventual public="1" set="method" line="143" static="1">
 			<f a="this">
-				<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
-				<c path="stx.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+				<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
+				<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="stx.Vouch.T"/></e></c>
 			</f>
 			<meta><m n=":impl"/></meta>
 		</asEventual>
@@ -12580,7 +12580,7 @@
 		<fromContractConstructor public="1" params="A:B" set="method" line="166" static="1"><f a="fn">
 	<f a="">
 		<c path="fromContractConstructor.A"/>
-		<x path="stx.Contract"><c path="fromContractConstructor.B"/></x>
+		<x path="stx.async.Contract"><c path="fromContractConstructor.B"/></x>
 	</f>
 	<f a="">
 		<c path="fromContractConstructor.A"/>
@@ -12617,11 +12617,11 @@
 		<c path="fold.Z"/>
 	</f>
 	<f a=""><c path="fold.Z"/></f>
-	<c path="stx.Eventual"><c path="fold.Z"/></c>
+	<c path="stx.async.Eventual"><c path="fold.Z"/></c>
 </f></fold>
 		<toContract public="1" params="A" set="method" line="199" static="1"><f a="vch">
 	<x path="stx.Vouch"><c path="toContract.A"/></x>
-	<x path="stx.Contract"><c path="toContract.A"/></x>
+	<x path="stx.async.Contract"><c path="toContract.A"/></x>
 </f></toContract>
 	</class>
 	<class path="stx.Vouches1" params="" file="src/main/haxe/stx/Vouch.hx" module="stx.Vouch">
@@ -12651,11 +12651,11 @@
 			<haxe_doc>As with ´vouchOf´ but using a constant rather than a Thunk.</haxe_doc>
 		</vouchOfC>
 		<asVouch public="1" params="A" set="method" line="228" static="1"><f a="ft">
-	<c path="stx.Eventual"><e path="stx.Chunk"><c path="asVouch.A"/></e></c>
+	<c path="stx.async.Eventual"><e path="stx.Chunk"><c path="asVouch.A"/></e></c>
 	<x path="stx.Vouch"><c path="asVouch.A"/></x>
 </f></asVouch>
 		<toVouch public="1" params="A" set="method" line="231" static="1"><f a="p">
-	<x path="stx.Contract"><c path="toVouch.A"/></x>
+	<x path="stx.async.Contract"><c path="toVouch.A"/></x>
 	<x path="stx.Vouch"><c path="toVouch.A"/></x>
 </f></toVouch>
 	</class>

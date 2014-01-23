@@ -5,6 +5,6 @@ interface Range<T>{
   public function done():Bool;
   @doc("What is the next thing")
   public function peek():T;
-  @doc("Increment the iteration")
-  public function next():Range<T>;
+  @doc("give me the next thing.")
+  public function step():Void;
 }

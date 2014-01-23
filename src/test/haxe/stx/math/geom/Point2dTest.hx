@@ -1,7 +1,7 @@
 package stx.math.geom;
 
 using stx.UnitTest;
-import stx.Log.*;
+import stx.io.Log.*;
 
 import stx.math.geom.Point2d;
 

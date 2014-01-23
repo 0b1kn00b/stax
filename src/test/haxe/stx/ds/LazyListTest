@@ -1,12 +1,12 @@
 package stx.ds;
 
 using stx.UnitTest;
-import stx.Log.*;
+import stx.io.Log.*;
 
 import stx.ds.Size;
 import stx.ds.Enumerable;
 
-import stx.plus.Plus;
+import stx.Plus;
 
 using stx.Compose;
 using stx.Option;

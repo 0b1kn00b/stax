@@ -3,7 +3,7 @@ package stx;
 import haxe.CallStack;
 import haxe.PosInfos;
 
-import stx.plus.Show;
+import stx.Show;
 
 using stx.Option;
 using stx.Either;
@@ -17,11 +17,12 @@ using stx.Functions;
 @doc("Stax's error class, is used to allow typed `try...catch` declarations. Fails can be accumulated through the `append` function.")
 class Fail{
   @doc("Transforms any `EnumValue` into a Fail")
-	static public function fail(cde:EnumValue,?pos){
-		return new Fail(cde);
+	@:noUsing static public function fail(cde:EnumValue,?pos){
+		return new Fail(cde,pos);
 	}
 	public var cde(default,null) 				: EnumValue;
 	private var pos(default,null) 			: PosInfos;
+	private var stack(default,null) 		: Array<StackItem>;
 
 	public function new(cde:EnumValue,?pos) {
 		this.pos = pos;
@@ -32,6 +33,7 @@ class Fail{
 					default 												: cde;
 				});
 		this.cde 				= cde;
+		this.stack 			= CallStack.callStack();
 	}
   @doc('returns the string representation of the parameters of the wrapped enum')
 	public function msg():String{

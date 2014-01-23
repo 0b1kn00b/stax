@@ -1,0 +1,10 @@
+-cp src/main/haxe/
+-cp src/boot/haxe/
+
+-js test/test.js
+
+-main Test
+
+-D type_all
+
+--connect 2331
